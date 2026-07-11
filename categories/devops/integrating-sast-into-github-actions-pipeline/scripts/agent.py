@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Agent for running Semgrep SAST scans and generating SARIF for GitHub Advanced Security."""
 
-import subprocess
-import json
 import argparse
-import sys
+import json
 import os
-from datetime import datetime
+import subprocess
+import sys
 
 
 def run_semgrep_scan(target_dir, config="auto", output_format="json"):
@@ -42,7 +41,7 @@ def parse_semgrep_results(scan_data):
         }
         findings.append(finding)
         severity_counts[severity] = severity_counts.get(severity, 0) + 1
-    print(f"\n[*] Severity breakdown:")
+    print("\n[*] Severity breakdown:")
     for sev, count in sorted(severity_counts.items()):
         print(f"  {sev}: {count}")
     return findings
@@ -55,19 +54,34 @@ def generate_sarif(findings, output_path):
     for f in findings:
         rid = f["rule_id"]
         if rid not in seen_rules:
-            rules.append({"id": rid, "shortDescription": {"text": f["message"][:200]},
-                           "defaultConfiguration": {"level": "warning"}})
+            rules.append(
+                {
+                    "id": rid,
+                    "shortDescription": {"text": f["message"][:200]},
+                    "defaultConfiguration": {"level": "warning"},
+                }
+            )
             seen_rules.add(rid)
-        results.append({
-            "ruleId": rid, "message": {"text": f["message"][:500]},
-            "level": "error" if f["severity"] == "ERROR" else "warning",
-            "locations": [{"physicalLocation": {
-                "artifactLocation": {"uri": f["file"]},
-                "region": {"startLine": f["line"]}}}],
-        })
-    sarif = {"$schema": "https://json.schemastore.org/sarif-2.1.0.json", "version": "2.1.0",
-             "runs": [{"tool": {"driver": {"name": "Semgrep", "rules": rules}},
-                        "results": results}]}
+        results.append(
+            {
+                "ruleId": rid,
+                "message": {"text": f["message"][:500]},
+                "level": "error" if f["severity"] == "ERROR" else "warning",
+                "locations": [
+                    {
+                        "physicalLocation": {
+                            "artifactLocation": {"uri": f["file"]},
+                            "region": {"startLine": f["line"]},
+                        }
+                    }
+                ],
+            }
+        )
+    sarif = {
+        "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+        "version": "2.1.0",
+        "runs": [{"tool": {"driver": {"name": "Semgrep", "rules": rules}}, "results": results}],
+    }
     with open(output_path, "w") as f:
         json.dump(sarif, f, indent=2)
     print(f"[*] SARIF report: {output_path}")

@@ -7,18 +7,16 @@ assigning reviewers, tracking certification decisions, generating
 compliance reports, and identifying SOD violations.
 """
 
-import json
 import datetime
-import csv
-import io
-from typing import Dict, List, Optional, Set, Tuple
-from dataclasses import dataclass, field
 from collections import defaultdict
+from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass
 class UserEntitlement:
     """A user-to-entitlement mapping for review."""
+
     user_id: str
     user_name: str
     department: str
@@ -37,6 +35,7 @@ class UserEntitlement:
 @dataclass
 class SODRule:
     """Separation of Duties conflict rule."""
+
     rule_id: str
     description: str
     entitlement_a: str
@@ -49,12 +48,13 @@ class SODRule:
 @dataclass
 class CampaignConfig:
     """Access review campaign configuration."""
+
     campaign_id: str
     name: str
     start_date: str
     end_date: str
     review_model: str  # manager, app_owner, hybrid
-    scope_applications: List[str] = field(default_factory=list)
+    scope_applications: list[str] = field(default_factory=list)
     escalation_days: int = 21
     auto_revoke_unreviewed: bool = False
 
@@ -64,19 +64,21 @@ class AccessReviewEngine:
 
     def __init__(self, config: CampaignConfig):
         self.config = config
-        self.entitlements: List[UserEntitlement] = []
-        self.sod_rules: List[SODRule] = []
-        self.sod_violations: List[Dict] = []
+        self.entitlements: list[UserEntitlement] = []
+        self.sod_rules: list[SODRule] = []
+        self.sod_violations: list[dict] = []
 
-    def load_entitlements(self, entitlements: List[Dict]):
+    def load_entitlements(self, entitlements: list[dict]):
         """Load user-entitlement data for review."""
         for e in entitlements:
             ue = UserEntitlement(**e)
-            if not self.config.scope_applications or \
-               ue.application in self.config.scope_applications:
+            if (
+                not self.config.scope_applications
+                or ue.application in self.config.scope_applications
+            ):
                 self.entitlements.append(ue)
 
-    def load_sod_rules(self, rules: List[Dict]):
+    def load_sod_rules(self, rules: list[dict]):
         """Load SOD conflict rules."""
         for r in rules:
             self.sod_rules.append(SODRule(**r))
@@ -96,7 +98,7 @@ class AccessReviewEngine:
                 else:
                     ent.reviewer = ent.manager
 
-    def detect_sod_violations(self) -> List[Dict]:
+    def detect_sod_violations(self) -> list[dict]:
         """Detect separation of duties violations."""
         self.sod_violations = []
         user_entitlements = defaultdict(list)
@@ -116,19 +118,21 @@ class AccessReviewEngine:
                 )
                 if has_a and has_b:
                     user_name = next(e.user_name for e in ents)
-                    self.sod_violations.append({
-                        "user_id": user_id,
-                        "user_name": user_name,
-                        "rule_id": rule.rule_id,
-                        "description": rule.description,
-                        "severity": rule.severity,
-                        "entitlement_a": f"{rule.application_a}:{rule.entitlement_a}",
-                        "entitlement_b": f"{rule.application_b}:{rule.entitlement_b}"
-                    })
+                    self.sod_violations.append(
+                        {
+                            "user_id": user_id,
+                            "user_name": user_name,
+                            "rule_id": rule.rule_id,
+                            "description": rule.description,
+                            "severity": rule.severity,
+                            "entitlement_a": f"{rule.application_a}:{rule.entitlement_a}",
+                            "entitlement_b": f"{rule.application_b}:{rule.entitlement_b}",
+                        }
+                    )
 
         return self.sod_violations
 
-    def identify_stale_access(self, days_threshold: int = 90) -> List[UserEntitlement]:
+    def identify_stale_access(self, days_threshold: int = 90) -> list[UserEntitlement]:
         """Identify entitlements not used within threshold."""
         stale = []
         now = datetime.datetime.now()
@@ -146,22 +150,31 @@ class AccessReviewEngine:
 
         return stale
 
-    def identify_orphaned_access(self, active_users: Set[str]) -> List[UserEntitlement]:
+    def identify_orphaned_access(self, active_users: set[str]) -> list[UserEntitlement]:
         """Identify entitlements belonging to inactive/terminated users."""
         return [e for e in self.entitlements if e.user_id not in active_users]
 
-    def process_decision(self, user_id: str, application: str, entitlement: str,
-                         decision: str, justification: str = ""):
+    def process_decision(
+        self,
+        user_id: str,
+        application: str,
+        entitlement: str,
+        decision: str,
+        justification: str = "",
+    ):
         """Process a reviewer's certification decision."""
         for ent in self.entitlements:
-            if (ent.user_id == user_id and ent.application == application and
-                    ent.entitlement == entitlement):
+            if (
+                ent.user_id == user_id
+                and ent.application == application
+                and ent.entitlement == entitlement
+            ):
                 ent.review_status = decision
                 ent.decision_date = datetime.datetime.now().isoformat()
                 ent.justification = justification
                 break
 
-    def get_campaign_metrics(self) -> Dict:
+    def get_campaign_metrics(self) -> dict:
         """Calculate campaign progress metrics."""
         total = len(self.entitlements)
         if total == 0:
@@ -191,7 +204,7 @@ class AccessReviewEngine:
             "revocation_rate": round(revocation_rate, 1),
             "by_risk": dict(by_risk),
             "sod_violations": len(self.sod_violations),
-            "reviewer_progress": {k: v for k, v in by_reviewer.items()}
+            "reviewer_progress": {k: v for k, v in by_reviewer.items()},
         }
 
     def generate_compliance_report(self) -> str:
@@ -219,7 +232,7 @@ class AccessReviewEngine:
             f"  Revocation Rate: {metrics['revocation_rate']}%",
             f"  Stale Access Items: {len(stale)}",
             f"  SOD Violations: {metrics['sod_violations']}",
-            ""
+            "",
         ]
 
         if self.sod_violations:
@@ -264,34 +277,79 @@ def main():
         start_date="2026-01-01",
         end_date="2026-03-31",
         review_model="hybrid",
-        scope_applications=["SAP", "Salesforce", "AWS", "GitHub"]
+        scope_applications=["SAP", "Salesforce", "AWS", "GitHub"],
     )
 
     engine = AccessReviewEngine(config)
 
     sample_entitlements = [
-        {"user_id": "U001", "user_name": "Alice Johnson", "department": "Finance",
-         "manager": "Bob Smith", "application": "SAP", "entitlement": "AP_Create",
-         "risk_level": "high", "last_used": "2026-02-20", "granted_date": "2024-06-15"},
-        {"user_id": "U001", "user_name": "Alice Johnson", "department": "Finance",
-         "manager": "Bob Smith", "application": "SAP", "entitlement": "AP_Approve",
-         "risk_level": "critical", "last_used": "2026-02-18", "granted_date": "2025-01-10"},
-        {"user_id": "U002", "user_name": "Charlie Brown", "department": "Engineering",
-         "manager": "Diana Prince", "application": "AWS", "entitlement": "AdminAccess",
-         "risk_level": "critical", "last_used": "2025-10-01", "granted_date": "2024-03-20"},
-        {"user_id": "U003", "user_name": "Eve Wilson", "department": "Sales",
-         "manager": "Frank Castle", "application": "Salesforce", "entitlement": "Standard_User",
-         "risk_level": "low", "last_used": "2026-02-22", "granted_date": "2025-08-01"},
-        {"user_id": "U004", "user_name": "Grace Lee", "department": "Engineering",
-         "manager": "Diana Prince", "application": "GitHub", "entitlement": "Org_Admin",
-         "risk_level": "high", "last_used": "2026-02-21", "granted_date": "2025-05-15"},
+        {
+            "user_id": "U001",
+            "user_name": "Alice Johnson",
+            "department": "Finance",
+            "manager": "Bob Smith",
+            "application": "SAP",
+            "entitlement": "AP_Create",
+            "risk_level": "high",
+            "last_used": "2026-02-20",
+            "granted_date": "2024-06-15",
+        },
+        {
+            "user_id": "U001",
+            "user_name": "Alice Johnson",
+            "department": "Finance",
+            "manager": "Bob Smith",
+            "application": "SAP",
+            "entitlement": "AP_Approve",
+            "risk_level": "critical",
+            "last_used": "2026-02-18",
+            "granted_date": "2025-01-10",
+        },
+        {
+            "user_id": "U002",
+            "user_name": "Charlie Brown",
+            "department": "Engineering",
+            "manager": "Diana Prince",
+            "application": "AWS",
+            "entitlement": "AdminAccess",
+            "risk_level": "critical",
+            "last_used": "2025-10-01",
+            "granted_date": "2024-03-20",
+        },
+        {
+            "user_id": "U003",
+            "user_name": "Eve Wilson",
+            "department": "Sales",
+            "manager": "Frank Castle",
+            "application": "Salesforce",
+            "entitlement": "Standard_User",
+            "risk_level": "low",
+            "last_used": "2026-02-22",
+            "granted_date": "2025-08-01",
+        },
+        {
+            "user_id": "U004",
+            "user_name": "Grace Lee",
+            "department": "Engineering",
+            "manager": "Diana Prince",
+            "application": "GitHub",
+            "entitlement": "Org_Admin",
+            "risk_level": "high",
+            "last_used": "2026-02-21",
+            "granted_date": "2025-05-15",
+        },
     ]
 
     sod_rules = [
-        {"rule_id": "SOD-001", "description": "AP Create and AP Approve conflict",
-         "entitlement_a": "AP_Create", "application_a": "SAP",
-         "entitlement_b": "AP_Approve", "application_b": "SAP",
-         "severity": "critical"}
+        {
+            "rule_id": "SOD-001",
+            "description": "AP Create and AP Approve conflict",
+            "entitlement_a": "AP_Create",
+            "application_a": "SAP",
+            "entitlement_b": "AP_Approve",
+            "application_b": "SAP",
+            "severity": "critical",
+        }
     ]
 
     engine.load_entitlements(sample_entitlements)
@@ -300,9 +358,15 @@ def main():
     engine.detect_sod_violations()
 
     # Simulate some decisions
-    engine.process_decision("U001", "SAP", "AP_Create", "approved", "Required for daily AP processing")
-    engine.process_decision("U002", "AWS", "AdminAccess", "revoked", "Stale access - user no longer needs admin")
-    engine.process_decision("U003", "Salesforce", "Standard_User", "approved", "Active sales team member")
+    engine.process_decision(
+        "U001", "SAP", "AP_Create", "approved", "Required for daily AP processing"
+    )
+    engine.process_decision(
+        "U002", "AWS", "AdminAccess", "revoked", "Stale access - user no longer needs admin"
+    )
+    engine.process_decision(
+        "U003", "Salesforce", "Standard_User", "approved", "Active sales team member"
+    )
 
     report = engine.generate_compliance_report()
     print(report)

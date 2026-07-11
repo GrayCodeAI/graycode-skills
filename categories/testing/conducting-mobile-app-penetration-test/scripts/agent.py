@@ -2,9 +2,9 @@
 # For authorized penetration testing and lab environments only
 """Mobile App Penetration Testing Agent - Tests Android/iOS apps for OWASP MASTG vulnerabilities."""
 
+import argparse
 import json
 import logging
-import argparse
 import subprocess
 from datetime import datetime
 
@@ -30,8 +30,13 @@ def extract_strings_from_apk(apk_path):
     cmd = ["strings", apk_path]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
     sensitive_patterns = {
-        "api_key": [], "password": [], "secret": [], "token": [],
-        "http://": [], "aws_access": [], "private_key": [],
+        "api_key": [],
+        "password": [],
+        "secret": [],
+        "token": [],
+        "http://": [],
+        "aws_access": [],
+        "private_key": [],
     }
     for line in result.stdout.split("\n"):
         line_lower = line.strip().lower()
@@ -46,24 +51,26 @@ def extract_strings_from_apk(apk_path):
 def check_android_manifest(manifest_path):
     """Analyze AndroidManifest.xml for security misconfigurations."""
     findings = []
-    with open(manifest_path, "r", errors="ignore") as f:
+    with open(manifest_path, errors="ignore") as f:
         content = f.read()
     checks = [
-        ("android:debuggable=\"true\"", "App is debuggable - allows runtime manipulation"),
-        ("android:allowBackup=\"true\"", "Backup allowed - data extractable via adb backup"),
-        ("android:exported=\"true\"", "Components exported without permission protection"),
-        ("android:usesCleartextTraffic=\"true\"", "Cleartext HTTP traffic allowed"),
+        ('android:debuggable="true"', "App is debuggable - allows runtime manipulation"),
+        ('android:allowBackup="true"', "Backup allowed - data extractable via adb backup"),
+        ('android:exported="true"', "Components exported without permission protection"),
+        ('android:usesCleartextTraffic="true"', "Cleartext HTTP traffic allowed"),
         ("android:networkSecurityConfig", None),
     ]
     for pattern, description in checks:
         if description and pattern in content:
             findings.append({"check": pattern, "finding": description, "severity": "Medium"})
     if "android:networkSecurityConfig" not in content:
-        findings.append({
-            "check": "Missing networkSecurityConfig",
-            "finding": "No custom network security configuration - may trust user-installed CAs",
-            "severity": "Medium",
-        })
+        findings.append(
+            {
+                "check": "Missing networkSecurityConfig",
+                "finding": "No custom network security configuration - may trust user-installed CAs",
+                "severity": "Medium",
+            }
+        )
     logger.info("Manifest analysis: %d findings", len(findings))
     return findings
 
@@ -71,7 +78,7 @@ def check_android_manifest(manifest_path):
 def test_certificate_pinning(target_url):
     """Test if the app enforces certificate pinning via mitmproxy check."""
     try:
-        resp = requests.get(target_url, timeout=10, verify=False)
+        resp = requests.get(target_url, timeout=10, verify=True)
         return {
             "url": target_url,
             "status": resp.status_code,
@@ -94,11 +101,13 @@ def check_insecure_storage_adb():
         cmd = ["adb", "shell"] + adb_cmd.split()
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
         if result.returncode == 0 and result.stdout.strip():
-            findings.append({
-                "check": check_name,
-                "files_found": result.stdout.strip().split("\n"),
-                "severity": "High" if check_name == "external_storage" else "Medium",
-            })
+            findings.append(
+                {
+                    "check": check_name,
+                    "files_found": result.stdout.strip().split("\n"),
+                    "severity": "High" if check_name == "external_storage" else "Medium",
+                }
+            )
     logger.info("Storage checks: %d findings", len(findings))
     return findings
 
@@ -112,13 +121,13 @@ def test_api_endpoints(base_url, endpoints, auth_token=None):
     for endpoint in endpoints:
         url = f"{base_url}{endpoint}"
         try:
-            resp = requests.get(url, headers=headers, timeout=10, verify=False)
+            resp = requests.get(url, headers=headers, timeout=10, verify=True)
             result = {
                 "endpoint": endpoint,
                 "status": resp.status_code,
                 "response_size": len(resp.content),
             }
-            no_auth_resp = requests.get(url, timeout=10, verify=False)
+            no_auth_resp = requests.get(url, timeout=10, verify=True)
             if no_auth_resp.status_code == 200 and resp.status_code == 200:
                 result["auth_bypass"] = True
                 result["severity"] = "Critical"
@@ -153,7 +162,11 @@ def generate_report(apk_analysis, manifest_findings, storage_findings, api_resul
         "api_security": api_results,
         "certificate_pinning": cert_pinning,
     }
-    total = len(manifest_findings) + len(storage_findings) + len([r for r in api_results if r.get("auth_bypass")])
+    total = (
+        len(manifest_findings)
+        + len(storage_findings)
+        + len([r for r in api_results if r.get("auth_bypass")])
+    )
     print(f"MOBILE PENTEST REPORT - {total} findings")
     return report
 

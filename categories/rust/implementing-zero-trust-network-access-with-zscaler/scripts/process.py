@@ -7,16 +7,12 @@ implementation, validates existing configurations, and generates deployment
 readiness reports.
 """
 
-import json
 import csv
+import ipaddress
+import json
 import socket
 import ssl
-import subprocess
-import sys
-import ipaddress
 from datetime import datetime
-from pathlib import Path
-from typing import Optional
 
 
 def check_dns_resolution(fqdn: str) -> dict:
@@ -94,10 +90,9 @@ def validate_app_segment_config(config: dict) -> list:
     domains = config.get("domains", [])
     ips = config.get("ip_addresses", [])
     if not domains and not ips:
-        issues.append({
-            "severity": "critical",
-            "message": "No domains or IP addresses defined for segment"
-        })
+        issues.append(
+            {"severity": "critical", "message": "No domains or IP addresses defined for segment"}
+        )
 
     ports = config.get("tcp_ports", []) + config.get("udp_ports", [])
     if not ports:
@@ -107,33 +102,41 @@ def validate_app_segment_config(config: dict) -> list:
         if "-" in str(port_range):
             start, end = port_range.split("-")
             if int(end) - int(start) > 100:
-                issues.append({
-                    "severity": "warning",
-                    "message": f"Wide port range {port_range} violates least-privilege. Consider narrowing."
-                })
+                issues.append(
+                    {
+                        "severity": "warning",
+                        "message": f"Wide port range {port_range} violates least-privilege. Consider narrowing.",
+                    }
+                )
 
     if not config.get("server_group"):
-        issues.append({
-            "severity": "warning",
-            "message": "No server group assigned. High availability not configured."
-        })
+        issues.append(
+            {
+                "severity": "warning",
+                "message": "No server group assigned. High availability not configured.",
+            }
+        )
 
     for ip in ips:
         try:
             network = ipaddress.ip_network(ip, strict=False)
             if network.prefixlen < 24:
-                issues.append({
-                    "severity": "warning",
-                    "message": f"Broad IP range {ip} (/{network.prefixlen}). Consider narrowing to specific hosts."
-                })
+                issues.append(
+                    {
+                        "severity": "warning",
+                        "message": f"Broad IP range {ip} (/{network.prefixlen}). Consider narrowing to specific hosts.",
+                    }
+                )
         except ValueError:
             pass
 
     if config.get("bypass_type") == "always":
-        issues.append({
-            "severity": "critical",
-            "message": "Bypass is set to 'always'. Traffic will not be inspected."
-        })
+        issues.append(
+            {
+                "severity": "critical",
+                "message": "Bypass is set to 'always'. Traffic will not be inspected.",
+            }
+        )
 
     return issues
 
@@ -146,36 +149,46 @@ def validate_access_policy(policy: dict) -> list:
         issues.append({"severity": "critical", "message": "Policy name is missing"})
 
     if not policy.get("conditions"):
-        issues.append({
-            "severity": "critical",
-            "message": "No conditions defined. Policy grants unrestricted access."
-        })
+        issues.append(
+            {
+                "severity": "critical",
+                "message": "No conditions defined. Policy grants unrestricted access.",
+            }
+        )
 
     conditions = policy.get("conditions", {})
     if not conditions.get("user_groups") and not conditions.get("users"):
-        issues.append({
-            "severity": "warning",
-            "message": "No user or group conditions. Consider restricting by group."
-        })
+        issues.append(
+            {
+                "severity": "warning",
+                "message": "No user or group conditions. Consider restricting by group.",
+            }
+        )
 
     if not conditions.get("posture_profiles"):
-        issues.append({
-            "severity": "warning",
-            "message": "No device posture profile attached. Unmanaged devices may access."
-        })
+        issues.append(
+            {
+                "severity": "warning",
+                "message": "No device posture profile attached. Unmanaged devices may access.",
+            }
+        )
 
     if policy.get("action") == "allow" and not conditions.get("saml_attributes"):
-        issues.append({
-            "severity": "info",
-            "message": "Consider adding SAML attribute conditions for finer-grained access."
-        })
+        issues.append(
+            {
+                "severity": "info",
+                "message": "Consider adding SAML attribute conditions for finer-grained access.",
+            }
+        )
 
     app_segments = policy.get("app_segments", [])
     if len(app_segments) > 20:
-        issues.append({
-            "severity": "warning",
-            "message": f"Policy covers {len(app_segments)} segments. Consider splitting for manageability."
-        })
+        issues.append(
+            {
+                "severity": "warning",
+                "message": f"Policy covers {len(app_segments)} segments. Consider splitting for manageability.",
+            }
+        )
 
     return issues
 
@@ -183,9 +196,17 @@ def validate_access_policy(policy: dict) -> list:
 def generate_app_inventory_csv(apps: list, output_path: str) -> str:
     """Generate a CSV inventory of applications for ZPA migration planning."""
     fieldnames = [
-        "app_name", "fqdn", "ip_address", "port", "protocol",
-        "user_groups", "criticality", "current_access_method",
-        "migration_wave", "zpa_segment_name", "status"
+        "app_name",
+        "fqdn",
+        "ip_address",
+        "port",
+        "protocol",
+        "user_groups",
+        "criticality",
+        "current_access_method",
+        "migration_wave",
+        "zpa_segment_name",
+        "status",
     ]
     with open(output_path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -207,64 +228,78 @@ def assess_deployment_readiness(config: dict) -> dict:
     # Check IdP configuration
     idp = config.get("identity_provider", {})
     if idp.get("type") in ["saml", "oidc"]:
-        report["checks"].append({
-            "category": "Identity Provider",
-            "check": "IdP type configured",
-            "status": "passed",
-            "details": f"Type: {idp['type']}"
-        })
+        report["checks"].append(
+            {
+                "category": "Identity Provider",
+                "check": "IdP type configured",
+                "status": "passed",
+                "details": f"Type: {idp['type']}",
+            }
+        )
         report["summary"]["passed"] += 1
     else:
-        report["checks"].append({
-            "category": "Identity Provider",
-            "check": "IdP type configured",
-            "status": "critical",
-            "details": "No IdP integration configured"
-        })
+        report["checks"].append(
+            {
+                "category": "Identity Provider",
+                "check": "IdP type configured",
+                "status": "critical",
+                "details": "No IdP integration configured",
+            }
+        )
         report["summary"]["critical"] += 1
 
     if idp.get("scim_enabled"):
-        report["checks"].append({
-            "category": "Identity Provider",
-            "check": "SCIM provisioning enabled",
-            "status": "passed",
-            "details": "Automated user/group sync active"
-        })
+        report["checks"].append(
+            {
+                "category": "Identity Provider",
+                "check": "SCIM provisioning enabled",
+                "status": "passed",
+                "details": "Automated user/group sync active",
+            }
+        )
         report["summary"]["passed"] += 1
     else:
-        report["checks"].append({
-            "category": "Identity Provider",
-            "check": "SCIM provisioning enabled",
-            "status": "warning",
-            "details": "Manual user management required without SCIM"
-        })
+        report["checks"].append(
+            {
+                "category": "Identity Provider",
+                "check": "SCIM provisioning enabled",
+                "status": "warning",
+                "details": "Manual user management required without SCIM",
+            }
+        )
         report["summary"]["warning"] += 1
 
     # Check App Connectors
     connectors = config.get("app_connectors", [])
     if len(connectors) >= 2:
-        report["checks"].append({
-            "category": "App Connectors",
-            "check": "High availability",
-            "status": "passed",
-            "details": f"{len(connectors)} connectors deployed"
-        })
+        report["checks"].append(
+            {
+                "category": "App Connectors",
+                "check": "High availability",
+                "status": "passed",
+                "details": f"{len(connectors)} connectors deployed",
+            }
+        )
         report["summary"]["passed"] += 1
     elif len(connectors) == 1:
-        report["checks"].append({
-            "category": "App Connectors",
-            "check": "High availability",
-            "status": "warning",
-            "details": "Single connector. Deploy at least 2 for HA."
-        })
+        report["checks"].append(
+            {
+                "category": "App Connectors",
+                "check": "High availability",
+                "status": "warning",
+                "details": "Single connector. Deploy at least 2 for HA.",
+            }
+        )
         report["summary"]["warning"] += 1
     else:
-        report["checks"].append({
-            "category": "App Connectors",
-            "check": "High availability",
-            "status": "critical",
-            "details": "No App Connectors configured"
-        })
+        report["checks"].append(
+            {
+                "category": "App Connectors",
+                "check": "High availability",
+                "status": "critical",
+                "details": "No App Connectors configured",
+            }
+        )
         report["summary"]["critical"] += 1
 
     # Check application segments
@@ -272,12 +307,14 @@ def assess_deployment_readiness(config: dict) -> dict:
     for seg in segments:
         seg_issues = validate_app_segment_config(seg)
         for issue in seg_issues:
-            report["checks"].append({
-                "category": f"App Segment: {seg.get('name', 'unknown')}",
-                "check": issue["message"],
-                "status": issue["severity"],
-                "details": ""
-            })
+            report["checks"].append(
+                {
+                    "category": f"App Segment: {seg.get('name', 'unknown')}",
+                    "check": issue["message"],
+                    "status": issue["severity"],
+                    "details": "",
+                }
+            )
             report["summary"][issue["severity"]] += 1
         if not seg_issues:
             report["summary"]["passed"] += 1
@@ -285,22 +322,26 @@ def assess_deployment_readiness(config: dict) -> dict:
     # Check access policies
     policies = config.get("access_policies", [])
     if not policies:
-        report["checks"].append({
-            "category": "Access Policies",
-            "check": "Policies defined",
-            "status": "critical",
-            "details": "No access policies configured"
-        })
+        report["checks"].append(
+            {
+                "category": "Access Policies",
+                "check": "Policies defined",
+                "status": "critical",
+                "details": "No access policies configured",
+            }
+        )
         report["summary"]["critical"] += 1
     for pol in policies:
         pol_issues = validate_access_policy(pol)
         for issue in pol_issues:
-            report["checks"].append({
-                "category": f"Policy: {pol.get('name', 'unknown')}",
-                "check": issue["message"],
-                "status": issue["severity"],
-                "details": ""
-            })
+            report["checks"].append(
+                {
+                    "category": f"Policy: {pol.get('name', 'unknown')}",
+                    "check": issue["message"],
+                    "status": issue["severity"],
+                    "details": "",
+                }
+            )
             report["summary"][issue["severity"]] += 1
         if not pol_issues:
             report["summary"]["passed"] += 1
@@ -308,20 +349,24 @@ def assess_deployment_readiness(config: dict) -> dict:
     # Check SIEM integration
     siem = config.get("siem_integration", {})
     if siem.get("enabled"):
-        report["checks"].append({
-            "category": "Monitoring",
-            "check": "SIEM integration",
-            "status": "passed",
-            "details": f"Streaming to {siem.get('type', 'unknown')}"
-        })
+        report["checks"].append(
+            {
+                "category": "Monitoring",
+                "check": "SIEM integration",
+                "status": "passed",
+                "details": f"Streaming to {siem.get('type', 'unknown')}",
+            }
+        )
         report["summary"]["passed"] += 1
     else:
-        report["checks"].append({
-            "category": "Monitoring",
-            "check": "SIEM integration",
-            "status": "warning",
-            "details": "No SIEM integration. Access events not centrally monitored."
-        })
+        report["checks"].append(
+            {
+                "category": "Monitoring",
+                "check": "SIEM integration",
+                "status": "warning",
+                "details": "No SIEM integration. Access events not centrally monitored.",
+            }
+        )
         report["summary"]["warning"] += 1
 
     if report["summary"]["critical"] > 0:
@@ -347,13 +392,15 @@ def connectivity_scan(targets: list) -> list:
             if port == 443:
                 tls_result = check_tls_certificate(host, port)
 
-            results.append({
-                "host": host,
-                "port": port,
-                "dns": dns_result,
-                "connectivity": conn_result,
-                "tls": tls_result,
-            })
+            results.append(
+                {
+                    "host": host,
+                    "port": port,
+                    "dns": dns_result,
+                    "connectivity": conn_result,
+                    "tls": tls_result,
+                }
+            )
     return results
 
 
@@ -392,24 +439,14 @@ def main():
     """Run the ZTNA deployment readiness assessment."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="ZPA Deployment Readiness Assessment Tool"
-    )
-    parser.add_argument(
-        "--config", type=str, help="Path to ZPA configuration JSON file"
-    )
-    parser.add_argument(
-        "--scan", type=str, help="Path to targets JSON for connectivity scan"
-    )
+    parser = argparse.ArgumentParser(description="ZPA Deployment Readiness Assessment Tool")
+    parser.add_argument("--config", type=str, help="Path to ZPA configuration JSON file")
+    parser.add_argument("--scan", type=str, help="Path to targets JSON for connectivity scan")
     parser.add_argument(
         "--inventory", type=str, help="Path to app inventory JSON for CSV generation"
     )
-    parser.add_argument(
-        "--migrate", type=str, help="Path to app list JSON for migration planning"
-    )
-    parser.add_argument(
-        "--output", type=str, default="report.json", help="Output file path"
-    )
+    parser.add_argument("--migrate", type=str, help="Path to app list JSON for migration planning")
+    parser.add_argument("--output", type=str, default="report.json", help="Output file path")
     args = parser.parse_args()
 
     if args.config:
@@ -448,7 +485,9 @@ def main():
         with open(args.output, "w") as f:
             json.dump(plan, f, indent=2)
         for wave_id, wave in plan["waves"].items():
-            print(f"  {wave_id}: {wave['name']} - {len(wave['apps'])} apps ({wave['duration_weeks']} weeks)")
+            print(
+                f"  {wave_id}: {wave['name']} - {len(wave['apps'])} apps ({wave['duration_weeks']} weeks)"
+            )
         print(f"Migration plan saved to {args.output}")
 
     else:

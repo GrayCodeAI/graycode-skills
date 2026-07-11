@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Agent for building and managing incident response dashboards in Splunk."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime
 
 import splunklib.client as client
@@ -148,9 +148,11 @@ def main():
     parser.add_argument("--password", default=os.getenv("SPLUNK_PASSWORD", ""))
     parser.add_argument("--incident-id", help="Specific incident ID to track")
     parser.add_argument("--output", default="ir_dashboard_report.json")
-    parser.add_argument("--action", choices=[
-        "summary", "systems", "iocs", "metrics", "workload", "timeline", "full_dashboard"
-    ], default="full_dashboard")
+    parser.add_argument(
+        "--action",
+        choices=["summary", "systems", "iocs", "metrics", "workload", "timeline", "full_dashboard"],
+        default="full_dashboard",
+    )
     args = parser.parse_args()
 
     service = connect_splunk(args.host, args.port, args.username, args.password)
@@ -166,7 +168,7 @@ def main():
 
     if args.action in ("metrics", "full_dashboard"):
         report["data"]["soc_metrics"] = get_soc_metrics(service)
-        print(f"[+] SOC metrics calculated")
+        print("[+] SOC metrics calculated")
 
     if args.action in ("workload", "full_dashboard"):
         report["data"]["analyst_workload"] = get_analyst_workload(service)

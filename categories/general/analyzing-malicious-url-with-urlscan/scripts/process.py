@@ -14,17 +14,17 @@ Usage:
 """
 
 import argparse
+import hashlib
 import json
+import os
 import sys
 import time
-import os
-import hashlib
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
-from pathlib import Path
-from dataclasses import dataclass, field, asdict
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -37,6 +37,7 @@ VT_API_KEY = os.environ.get("VT_API_KEY", "")
 @dataclass
 class URLScanResult:
     """Parsed URLScan result."""
+
     uuid: str = ""
     url: str = ""
     effective_url: str = ""
@@ -66,8 +67,7 @@ class URLScanResult:
     risk_indicators: list = field(default_factory=list)
 
 
-def submit_scan(url: str, visibility: str = "private",
-                api_key: str = "") -> dict:
+def submit_scan(url: str, visibility: str = "private", api_key: str = "") -> dict:
     """Submit a URL to URLScan for scanning."""
     if not api_key:
         api_key = URLSCAN_API_KEY
@@ -81,15 +81,13 @@ def submit_scan(url: str, visibility: str = "private",
     data = {"url": url, "visibility": visibility}
 
     try:
-        resp = requests.post(f"{URLSCAN_BASE}/scan/", headers=headers,
-                             json=data, timeout=30)
+        resp = requests.post(f"{URLSCAN_BASE}/scan/", headers=headers, json=data, timeout=30)
         if resp.status_code == 200:
             return resp.json()
         elif resp.status_code == 429:
             print("Rate limited. Waiting 10 seconds...", file=sys.stderr)
             time.sleep(10)
-            resp = requests.post(f"{URLSCAN_BASE}/scan/", headers=headers,
-                                 json=data, timeout=30)
+            resp = requests.post(f"{URLSCAN_BASE}/scan/", headers=headers, json=data, timeout=30)
             return resp.json() if resp.status_code == 200 else {"error": resp.text}
         else:
             return {"error": f"HTTP {resp.status_code}: {resp.text}"}
@@ -106,10 +104,9 @@ def get_result(uuid: str, api_key: str = "", max_wait: int = 60) -> dict:
     if api_key:
         headers["API-Key"] = api_key
 
-    for attempt in range(max_wait // 5):
+    for _attempt in range(max_wait // 5):
         try:
-            resp = requests.get(f"{URLSCAN_BASE}/result/{uuid}/",
-                                headers=headers, timeout=30)
+            resp = requests.get(f"{URLSCAN_BASE}/result/{uuid}/", headers=headers, timeout=30)
             if resp.status_code == 200:
                 return resp.json()
             elif resp.status_code == 404:
@@ -133,8 +130,9 @@ def search_scans(query: str, api_key: str = "", size: int = 10) -> list:
         headers["API-Key"] = api_key
 
     try:
-        resp = requests.get(f"{URLSCAN_BASE}/search/?q={query}&size={size}",
-                            headers=headers, timeout=30)
+        resp = requests.get(
+            f"{URLSCAN_BASE}/search/?q={query}&size={size}", headers=headers, timeout=30
+        )
         if resp.status_code == 200:
             return resp.json().get("results", [])
     except Exception:
@@ -188,7 +186,7 @@ def parse_result(raw_result: dict) -> URLScanResult:
     data = raw_result.get("data", {})
     for request in data.get("requests", [])[:5]:
         req_url = request.get("request", {}).get("request", {}).get("url", "")
-        resp_url = request.get("response", {}).get("response", {}).get("url", "")
+        request.get("response", {}).get("response", {}).get("url", "")
         if req_url != result.url:
             result.redirects.append(req_url)
 
@@ -203,20 +201,23 @@ def parse_result(raw_result: dict) -> URLScanResult:
         resp_data = request.get("response", {}).get("response", {})
         resp_hash = resp_data.get("hash", "")
         if resp_hash:
-            result.resource_hashes.append({
-                "url": resp_data.get("url", ""),
-                "hash": resp_hash,
-                "size": resp_data.get("size", 0),
-                "mimeType": resp_data.get("mimeType", "")
-            })
+            result.resource_hashes.append(
+                {
+                    "url": resp_data.get("url", ""),
+                    "hash": resp_hash,
+                    "size": resp_data.get("size", 0),
+                    "mimeType": resp_data.get("mimeType", ""),
+                }
+            )
 
     # Check for login forms in DOM
     dom_content = raw_result.get("data", {}).get("dom", "")
-    if isinstance(dom_content, str):
-        if ('type="password"' in dom_content.lower() or
-                'input type=password' in dom_content.lower() or
-                '<form' in dom_content.lower()):
-            result.has_login_form = True
+    if isinstance(dom_content, str) and (
+        'type="password"' in dom_content.lower()
+        or "input type=password" in dom_content.lower()
+        or "<form" in dom_content.lower()
+    ):
+        result.has_login_form = True
 
     # Verdicts
     verdicts = raw_result.get("verdicts", {})
@@ -269,8 +270,9 @@ def check_virustotal(url: str, api_key: str = "") -> dict:
     headers = {"x-apikey": api_key}
 
     try:
-        resp = requests.get(f"https://www.virustotal.com/api/v3/urls/{url_id}",
-                            headers=headers, timeout=15)
+        resp = requests.get(
+            f"https://www.virustotal.com/api/v3/urls/{url_id}", headers=headers, timeout=15
+        )
         if resp.status_code == 200:
             data = resp.json().get("data", {}).get("attributes", {})
             stats = data.get("last_analysis_stats", {})
@@ -327,7 +329,7 @@ def format_report(result: URLScanResult) -> str:
             lines.append(f"  - {ind}")
         lines.append("")
 
-    lines.append(f"[INFRASTRUCTURE]")
+    lines.append("[INFRASTRUCTURE]")
     lines.append(f"  Domains contacted: {len(result.domains_contacted)}")
     lines.append(f"  IPs contacted: {len(result.ips_contacted)}")
     lines.append(f"  Resource hashes: {len(result.resource_hashes)}")
@@ -343,8 +345,9 @@ def main():
     scan_parser = subparsers.add_parser("scan", help="Scan a URL")
     scan_parser.add_argument("--url", help="Single URL to scan")
     scan_parser.add_argument("--url-file", help="File with URLs (one per line)")
-    scan_parser.add_argument("--visibility", default="private",
-                             choices=["public", "unlisted", "private"])
+    scan_parser.add_argument(
+        "--visibility", default="private", choices=["public", "unlisted", "private"]
+    )
     scan_parser.add_argument("--wait", action="store_true", help="Wait for results")
 
     result_parser = subparsers.add_parser("result", help="Get scan result")
@@ -419,8 +422,10 @@ def main():
         for r in results:
             task = r.get("task", {})
             page = r.get("page", {})
-            print(f"  {task.get('time', '')} | {task.get('url', '')} | "
-                  f"{page.get('domain', '')} | {page.get('ip', '')}")
+            print(
+                f"  {task.get('time', '')} | {task.get('url', '')} | "
+                f"{page.get('domain', '')} | {page.get('ip', '')}"
+            )
 
     elif args.command == "ioc":
         raw = get_result(args.uuid, api_key)

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Agent for detecting supply chain attacks in CI/CD pipelines."""
 
-import os
-import re
-import json
 import argparse
-from pathlib import Path
+import json
+import re
 from datetime import datetime
+from pathlib import Path
 
-import yaml
 import requests
+import yaml
 
 
 def scan_workflow_file(workflow_path):
@@ -20,16 +19,19 @@ def scan_workflow_file(workflow_path):
         return []
     findings = []
     permissions = workflow.get("permissions", {})
-    if permissions == "write-all" or (isinstance(permissions, dict) and
-                                      permissions.get("contents") == "write"):
-        findings.append({
-            "file": str(workflow_path),
-            "issue": "Overly permissive workflow permissions",
-            "severity": "HIGH",
-            "detail": f"permissions: {permissions}",
-        })
+    if permissions == "write-all" or (
+        isinstance(permissions, dict) and permissions.get("contents") == "write"
+    ):
+        findings.append(
+            {
+                "file": str(workflow_path),
+                "issue": "Overly permissive workflow permissions",
+                "severity": "HIGH",
+                "detail": f"permissions: {permissions}",
+            }
+        )
     for job_name, job in workflow.get("jobs", {}).items():
-        for i, step in enumerate(job.get("steps", [])):
+        for _i, step in enumerate(job.get("steps", [])):
             uses = step.get("uses", "")
             if uses:
                 findings.extend(check_action_pinning(str(workflow_path), job_name, uses))
@@ -40,13 +42,15 @@ def scan_workflow_file(workflow_path):
             for key, val in (env_vars or {}).items():
                 if isinstance(val, str) and "${{" in val and "secrets." in val:
                     if "run" in step:
-                        findings.append({
-                            "file": str(workflow_path),
-                            "job": job_name,
-                            "issue": "Secret passed to environment variable in run step",
-                            "severity": "MEDIUM",
-                            "detail": f"{key}={val[:60]}",
-                        })
+                        findings.append(
+                            {
+                                "file": str(workflow_path),
+                                "job": job_name,
+                                "issue": "Secret passed to environment variable in run step",
+                                "severity": "MEDIUM",
+                                "detail": f"{key}={val[:60]}",
+                            }
+                        )
     return findings
 
 
@@ -56,23 +60,27 @@ def check_action_pinning(filepath, job_name, uses):
     if "@" not in uses:
         return findings
     ref = uses.split("@")[1]
-    if re.match(r'^[0-9a-f]{40}$', ref):
+    if re.match(r"^[0-9a-f]{40}$", ref):
         return findings
     if ref in ("main", "master", "latest"):
-        findings.append({
-            "file": filepath,
-            "job": job_name,
-            "issue": f"Action pinned to mutable branch: {uses}",
-            "severity": "CRITICAL",
-        })
-    elif re.match(r'^v\d+', ref):
-        findings.append({
-            "file": filepath,
-            "job": job_name,
-            "issue": f"Action pinned to mutable tag: {uses}",
-            "severity": "MEDIUM",
-            "recommendation": "Pin to full commit SHA instead of tag",
-        })
+        findings.append(
+            {
+                "file": filepath,
+                "job": job_name,
+                "issue": f"Action pinned to mutable branch: {uses}",
+                "severity": "CRITICAL",
+            }
+        )
+    elif re.match(r"^v\d+", ref):
+        findings.append(
+            {
+                "file": filepath,
+                "job": job_name,
+                "issue": f"Action pinned to mutable tag: {uses}",
+                "severity": "MEDIUM",
+                "recommendation": "Pin to full commit SHA instead of tag",
+            }
+        )
     return findings
 
 
@@ -90,14 +98,16 @@ def check_script_injection(filepath, job_name, run_cmd):
     ]
     for pattern in injection_patterns:
         if re.search(pattern, run_cmd):
-            findings.append({
-                "file": filepath,
-                "job": job_name,
-                "issue": f"Script injection via untrusted input",
-                "severity": "CRITICAL",
-                "pattern": pattern,
-                "detail": run_cmd[:100],
-            })
+            findings.append(
+                {
+                    "file": filepath,
+                    "job": job_name,
+                    "issue": "Script injection via untrusted input",
+                    "severity": "CRITICAL",
+                    "pattern": pattern,
+                    "detail": run_cmd[:100],
+                }
+            )
     return findings
 
 
@@ -143,21 +153,25 @@ def scan_dockerfile(dockerfile_path):
     for i, line in enumerate(lines, 1):
         stripped = line.strip()
         if stripped.startswith("FROM") and ":latest" in stripped:
-            findings.append({
-                "file": str(dockerfile_path),
-                "line": i,
-                "issue": "Using :latest tag in FROM",
-                "severity": "MEDIUM",
-                "detail": stripped,
-            })
+            findings.append(
+                {
+                    "file": str(dockerfile_path),
+                    "line": i,
+                    "issue": "Using :latest tag in FROM",
+                    "severity": "MEDIUM",
+                    "detail": stripped,
+                }
+            )
         if "curl" in stripped and "| sh" in stripped or "| bash" in stripped:
-            findings.append({
-                "file": str(dockerfile_path),
-                "line": i,
-                "issue": "Piping curl output to shell",
-                "severity": "HIGH",
-                "detail": stripped[:100],
-            })
+            findings.append(
+                {
+                    "file": str(dockerfile_path),
+                    "line": i,
+                    "issue": "Piping curl output to shell",
+                    "severity": "HIGH",
+                    "detail": stripped[:100],
+                }
+            )
     return findings
 
 
@@ -166,9 +180,11 @@ def main():
     parser.add_argument("--directory", default=".", help="Repository root to scan")
     parser.add_argument("--check-packages", nargs="*", help="Package names to check for confusion")
     parser.add_argument("--output", default="supply_chain_report.json")
-    parser.add_argument("--action", choices=[
-        "workflows", "dockerfiles", "packages", "full_scan"
-    ], default="full_scan")
+    parser.add_argument(
+        "--action",
+        choices=["workflows", "dockerfiles", "packages", "full_scan"],
+        default="full_scan",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

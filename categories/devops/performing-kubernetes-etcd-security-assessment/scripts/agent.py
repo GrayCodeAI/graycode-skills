@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Agent for performing Kubernetes etcd security assessment."""
 
-import json
 import argparse
-import subprocess
+import json
 import re
+import subprocess
 from datetime import datetime
 
 
@@ -15,7 +15,17 @@ def check_etcd_encryption(kubeconfig=None):
         cmd += ["--kubeconfig", kubeconfig]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        enc_cmd = ["kubectl", "get", "pods", "-n", "kube-system", "-l", "component=kube-apiserver", "-o", "json"]
+        enc_cmd = [
+            "kubectl",
+            "get",
+            "pods",
+            "-n",
+            "kube-system",
+            "-l",
+            "component=kube-apiserver",
+            "-o",
+            "json",
+        ]
         if kubeconfig:
             enc_cmd += ["--kubeconfig", kubeconfig]
         result = subprocess.run(enc_cmd, capture_output=True, text=True, timeout=30)
@@ -30,13 +40,15 @@ def check_etcd_encryption(kubeconfig=None):
                 has_audit = "--audit-log-path" in args_str
                 etcd_servers = re.findall(r"--etcd-servers=([^\s]+)", args_str)
                 uses_tls = all("https" in s for s in etcd_servers) if etcd_servers else False
-                findings.append({
-                    "pod": pod.get("metadata", {}).get("name"),
-                    "encryption_at_rest": has_encryption,
-                    "audit_logging": has_audit,
-                    "etcd_tls": uses_tls,
-                    "etcd_servers": etcd_servers,
-                })
+                findings.append(
+                    {
+                        "pod": pod.get("metadata", {}).get("name"),
+                        "encryption_at_rest": has_encryption,
+                        "audit_logging": has_audit,
+                        "etcd_tls": uses_tls,
+                        "etcd_servers": etcd_servers,
+                    }
+                )
         return {"checks": findings, "timestamp": datetime.utcnow().isoformat()}
     except Exception as e:
         return {"error": str(e)}
@@ -50,7 +62,16 @@ def check_etcd_access(etcd_endpoint="https://127.0.0.1:2379", cert=None, key=Non
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
         healthy = "healthy" in result.stdout.lower()
-        unauth_cmd = ["etcdctl", "get", "/", "--prefix", "--limit", "1", "--endpoints", etcd_endpoint]
+        unauth_cmd = [
+            "etcdctl",
+            "get",
+            "/",
+            "--prefix",
+            "--limit",
+            "1",
+            "--endpoints",
+            etcd_endpoint,
+        ]
         unauth_result = subprocess.run(unauth_cmd, capture_output=True, text=True, timeout=10)
         unauth_access = unauth_result.returncode == 0 and unauth_result.stdout.strip()
         return {
@@ -82,7 +103,10 @@ def dump_secrets_check(kubeconfig=None):
             secret_types[stype] = secret_types.get(stype, 0) + 1
             name = s.get("metadata", {}).get("name", "")
             ns = s.get("metadata", {}).get("namespace", "")
-            if any(kw in name.lower() for kw in ["password", "token", "key", "cert", "credential", "tls"]):
+            if any(
+                kw in name.lower()
+                for kw in ["password", "token", "key", "cert", "credential", "tls"]
+            ):
                 sensitive.append({"name": name, "namespace": ns, "type": stype})
         return {
             "total_secrets": len(secrets),
@@ -106,20 +130,26 @@ def check_etcd_tls_config():
                 args_str = " ".join(c.get("command", []) + c.get("args", []))
                 peer_tls = "--peer-cert-file" in args_str and "--peer-key-file" in args_str
                 client_tls = "--cert-file" in args_str and "--key-file" in args_str
-                client_auth = "--client-cert-auth=true" in args_str or "--client-cert-auth true" in args_str
-                findings.append({
-                    "pod": pod.get("metadata", {}).get("name"),
-                    "peer_tls_enabled": peer_tls,
-                    "client_tls_enabled": client_tls,
-                    "client_cert_auth": client_auth,
-                    "issues": [
-                        i for i in [
-                            "NO_PEER_TLS" if not peer_tls else None,
-                            "NO_CLIENT_TLS" if not client_tls else None,
-                            "NO_CLIENT_CERT_AUTH" if not client_auth else None,
-                        ] if i
-                    ],
-                })
+                client_auth = (
+                    "--client-cert-auth=true" in args_str or "--client-cert-auth true" in args_str
+                )
+                findings.append(
+                    {
+                        "pod": pod.get("metadata", {}).get("name"),
+                        "peer_tls_enabled": peer_tls,
+                        "client_tls_enabled": client_tls,
+                        "client_cert_auth": client_auth,
+                        "issues": [
+                            i
+                            for i in [
+                                "NO_PEER_TLS" if not peer_tls else None,
+                                "NO_CLIENT_TLS" if not client_tls else None,
+                                "NO_CLIENT_CERT_AUTH" if not client_auth else None,
+                            ]
+                            if i
+                        ],
+                    }
+                )
         return {"etcd_tls_checks": findings}
     except Exception as e:
         return {"error": str(e)}

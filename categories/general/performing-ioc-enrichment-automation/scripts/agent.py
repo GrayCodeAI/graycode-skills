@@ -5,11 +5,12 @@ Orchestrates multi-source IOC lookups across VirusTotal, AbuseIPDB,
 Shodan, and GreyNoise to provide contextual scoring and disposition.
 """
 
-import requests
 import json
 import sys
 import time
 from dataclasses import dataclass, field
+
+import requests
 
 
 @dataclass
@@ -36,8 +37,9 @@ class IOCEnrichmentAgent:
     def _vt_lookup(self, endpoint):
         """Query VirusTotal API v3."""
         headers = {"x-apikey": self.vt_key}
-        resp = requests.get(f"https://www.virustotal.com/api/v3/{endpoint}",
-                            headers=headers, timeout=15)
+        resp = requests.get(
+            f"https://www.virustotal.com/api/v3/{endpoint}", headers=headers, timeout=15
+        )
         if resp.status_code == 200:
             return resp.json().get("data", {}).get("attributes", {})
         return {"error": resp.status_code}
@@ -80,7 +82,8 @@ class IOCEnrichmentAgent:
             try:
                 resp = requests.get(
                     f"https://api.shodan.io/shodan/host/{ip_address}",
-                    params={"key": self.shodan_key}, timeout=10,
+                    params={"key": self.shodan_key},
+                    timeout=10,
                 )
                 if resp.status_code == 200:
                     host = resp.json()
@@ -97,7 +100,8 @@ class IOCEnrichmentAgent:
             try:
                 resp = requests.get(
                     f"https://api.greynoise.io/v3/community/{ip_address}",
-                    headers={"key": self.greynoise_key}, timeout=10,
+                    headers={"key": self.greynoise_key},
+                    timeout=10,
                 )
                 gn = resp.json()
                 result.greynoise = {
@@ -143,7 +147,8 @@ class IOCEnrichmentAgent:
                 "total": total,
                 "type": vt_data.get("type_description", "Unknown"),
                 "threat_label": vt_data.get("popular_threat_classification", {}).get(
-                    "suggested_threat_label", "Unknown"),
+                    "suggested_threat_label", "Unknown"
+                ),
             }
             detection_rate = stats.get("malicious", 0) / max(total, 1)
             result.risk_score = min(detection_rate * 100, 100)
@@ -194,16 +199,18 @@ class IOCEnrichmentAgent:
         """Generate enrichment report from results."""
         report = {"iocs": [], "summary": {}}
         for r in results:
-            report["iocs"].append({
-                "value": r.ioc_value,
-                "type": r.ioc_type,
-                "risk_score": r.risk_score,
-                "disposition": r.disposition,
-                "virustotal": r.virustotal,
-                "abuseipdb": r.abuseipdb,
-                "shodan": r.shodan_data,
-                "greynoise": r.greynoise,
-            })
+            report["iocs"].append(
+                {
+                    "value": r.ioc_value,
+                    "type": r.ioc_type,
+                    "risk_score": r.risk_score,
+                    "disposition": r.disposition,
+                    "virustotal": r.virustotal,
+                    "abuseipdb": r.abuseipdb,
+                    "shodan": r.shodan_data,
+                    "greynoise": r.greynoise,
+                }
+            )
         report["summary"] = {
             "total": len(results),
             "malicious": sum(1 for r in results if r.disposition == "MALICIOUS"),

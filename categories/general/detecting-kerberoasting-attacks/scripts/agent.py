@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Kerberoasting Detection Agent - Detects Kerberoasting via Event 4769 TGS-REQ analysis."""
 
+import argparse
 import json
 import logging
-import argparse
 from collections import defaultdict
 from datetime import datetime
 
@@ -36,16 +36,18 @@ def parse_tgs_events(evtx_path):
                     data[elem.get("Name", "")] = elem.text or ""
                 time_elem = root.find(".//evt:System/evt:TimeCreated", NS)
                 timestamp = time_elem.get("SystemTime", "") if time_elem is not None else ""
-                tgs_events.append({
-                    "timestamp": timestamp,
-                    "target_name": data.get("TargetUserName", ""),
-                    "service_name": data.get("ServiceName", ""),
-                    "client_address": data.get("IpAddress", ""),
-                    "ticket_encryption": data.get("TicketEncryptionType", ""),
-                    "ticket_options": data.get("TicketOptions", ""),
-                    "status": data.get("Status", ""),
-                    "logon_guid": data.get("LogonGuid", ""),
-                })
+                tgs_events.append(
+                    {
+                        "timestamp": timestamp,
+                        "target_name": data.get("TargetUserName", ""),
+                        "service_name": data.get("ServiceName", ""),
+                        "client_address": data.get("IpAddress", ""),
+                        "ticket_encryption": data.get("TicketEncryptionType", ""),
+                        "ticket_options": data.get("TicketOptions", ""),
+                        "status": data.get("Status", ""),
+                        "logon_guid": data.get("LogonGuid", ""),
+                    }
+                )
             except Exception:
                 continue
     logger.info("Parsed %d TGS-REQ events from %s", len(tgs_events), evtx_path)
@@ -79,15 +81,17 @@ def detect_high_volume_tgs(tgs_events, threshold=10, window_minutes=5):
         for event in events:
             unique_services.add(event["service_name"])
         if len(unique_services) >= threshold:
-            alerts.append({
-                "source_ip": source,
-                "unique_services_requested": len(unique_services),
-                "total_requests": len(events),
-                "services": list(unique_services)[:20],
-                "first_seen": events[0]["timestamp"],
-                "last_seen": events[-1]["timestamp"],
-                "indicator": "High-volume TGS spray (Kerberoasting)",
-            })
+            alerts.append(
+                {
+                    "source_ip": source,
+                    "unique_services_requested": len(unique_services),
+                    "total_requests": len(events),
+                    "services": list(unique_services)[:20],
+                    "first_seen": events[0]["timestamp"],
+                    "last_seen": events[-1]["timestamp"],
+                    "indicator": "High-volume TGS spray (Kerberoasting)",
+                }
+            )
     logger.info("Found %d high-volume TGS sources", len(alerts))
     return alerts
 

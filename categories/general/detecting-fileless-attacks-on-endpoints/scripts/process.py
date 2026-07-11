@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Fileless Attack Detector - Scans PowerShell logs for fileless attack indicators."""
 
-import json, csv, re, sys, os
+import csv
+import json
+import os
+import re
+import sys
 from collections import Counter
 from datetime import datetime
 
@@ -18,17 +22,19 @@ FILELESS_PATTERNS = {
 
 def scan_powershell_logs(csv_path: str) -> list:
     detections = []
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         for row in csv.DictReader(f):
             script = row.get("ScriptBlockText", row.get("Message", ""))
             for pattern_name, pattern in FILELESS_PATTERNS.items():
                 if re.search(pattern, script):
-                    detections.append({
-                        "timestamp": row.get("TimeCreated", row.get("Date and Time", "")),
-                        "host": row.get("Computer", row.get("MachineName", "")),
-                        "technique": pattern_name,
-                        "script_excerpt": script[:300],
-                    })
+                    detections.append(
+                        {
+                            "timestamp": row.get("TimeCreated", row.get("Date and Time", "")),
+                            "host": row.get("Computer", row.get("MachineName", "")),
+                            "technique": pattern_name,
+                            "script_excerpt": script[:300],
+                        }
+                    )
                     break
     return detections
 

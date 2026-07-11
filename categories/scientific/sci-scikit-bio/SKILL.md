@@ -283,7 +283,7 @@ skbio.io.write(seqs, format='fasta', into='output.fasta')
 - Use generators for large files to avoid memory issues
 - Format can be auto-detected when `into` parameter specified
 - Some objects can be written to multiple formats
-- Support for stdin/stdout piping with `verify=False`
+- Support for stdin/stdout piping with file-like handles
 
 ### 8. Distance Matrices
 

@@ -6,17 +6,18 @@ file access evidence, program execution history, and user activity timelines.
 Uses LnkParse3 for binary parsing and supports LECmd/JLECmd CSV output analysis.
 """
 
-import struct
-import os
-import sys
-import json
-import hashlib
 import datetime
-import re
 import glob as glob_mod
+import hashlib
+import json
+import os
+import re
+import struct
+import sys
 
 try:
     import LnkParse3
+
     HAS_LNKPARSE = True
 except ImportError:
     HAS_LNKPARSE = False
@@ -82,8 +83,8 @@ def parse_lnk_header_raw(filepath):
         return {"error": f"Invalid header size: {header_size:#x} (expected 0x4C)"}
 
     # CLSID check: 00021401-0000-0000-C000-000000000046
-    clsid = data[4:20]
-    expected_clsid = bytes.fromhex("01140200000000c0000000000000046".replace("0", "0"))
+    data[4:20]
+    bytes.fromhex("01140200000000c0000000000000046".replace("0", "0"))
 
     link_flags = struct.unpack_from("<I", data, 20)[0]
     file_attrs = struct.unpack_from("<I", data, 24)[0]
@@ -105,7 +106,9 @@ def parse_lnk_header_raw(filepath):
         "write_time": write_time,
         "target_file_size": file_size,
         "icon_index": icon_index,
-        "show_command": {1: "Normal", 3: "Maximized", 7: "Minimized"}.get(show_command, str(show_command)),
+        "show_command": {1: "Normal", 3: "Maximized", 7: "Minimized"}.get(
+            show_command, str(show_command)
+        ),
         "flags_decoded": decode_link_flags(link_flags),
     }
     return result
@@ -189,15 +192,16 @@ def scan_jump_lists(jump_list_dir):
         app_id = basename.split(".")[0]
         jl_type = "automatic" if "automatic" in basename else "custom"
         app_name = JUMP_LIST_APP_IDS.get(app_id, "Unknown Application")
-        results.append({
-            "file": basename,
-            "app_id": app_id,
-            "app_name": app_name,
-            "type": jl_type,
-            "size": os.path.getsize(jl_file),
-            "modified": datetime.datetime.fromtimestamp(
-                os.path.getmtime(jl_file)).isoformat(),
-        })
+        results.append(
+            {
+                "file": basename,
+                "app_id": app_id,
+                "app_name": app_name,
+                "type": jl_type,
+                "size": os.path.getsize(jl_file),
+                "modified": datetime.datetime.fromtimestamp(os.path.getmtime(jl_file)).isoformat(),
+            }
+        )
     return results
 
 
@@ -234,14 +238,18 @@ def scan_lnk_directory(directory):
     """Scan directory for LNK files and analyze each."""
     results = []
     for lnk_file in sorted(glob_mod.glob(os.path.join(directory, "*.lnk"))):
-        parsed = parse_lnk_with_lnkparse3(lnk_file) if HAS_LNKPARSE else parse_lnk_header_raw(lnk_file)
+        parsed = (
+            parse_lnk_with_lnkparse3(lnk_file) if HAS_LNKPARSE else parse_lnk_header_raw(lnk_file)
+        )
         suspicious = detect_suspicious_lnk(parsed)
-        results.append({
-            "file": os.path.basename(lnk_file),
-            "sha256": compute_hash(lnk_file),
-            "parsed": parsed,
-            "suspicious": suspicious,
-        })
+        results.append(
+            {
+                "file": os.path.basename(lnk_file),
+                "sha256": compute_hash(lnk_file),
+                "parsed": parsed,
+                "suspicious": suspicious,
+            }
+        )
     return results
 
 
@@ -263,10 +271,7 @@ if __name__ == "__main__":
     if os.path.isfile(target) and target.lower().endswith(".lnk"):
         print(f"\n[*] Analyzing: {target}")
         print(f"[*] SHA-256: {compute_hash(target)}")
-        if HAS_LNKPARSE:
-            parsed = parse_lnk_with_lnkparse3(target)
-        else:
-            parsed = parse_lnk_header_raw(target)
+        parsed = parse_lnk_with_lnkparse3(target) if HAS_LNKPARSE else parse_lnk_header_raw(target)
         print("\n--- LNK Properties ---")
         for k, v in parsed.items():
             print(f"  {k}: {v}")
@@ -280,7 +285,9 @@ if __name__ == "__main__":
         lnk_results = scan_lnk_directory(target)
         print(f"[*] Found {len(lnk_results)} LNK files")
         for r in lnk_results[:20]:
-            print(f"  {r['file']}: {r['parsed'].get('target_path', r['parsed'].get('local_base_path', '?'))}")
+            print(
+                f"  {r['file']}: {r['parsed'].get('target_path', r['parsed'].get('local_base_path', '?'))}"
+            )
             for s in r.get("suspicious", []):
                 print(f"    [!] {s['indicator']}")
 
@@ -293,4 +300,6 @@ if __name__ == "__main__":
             for jl in jl_results:
                 print(f"  {jl['app_name']:30s} [{jl['type']}] {jl['app_id']}")
 
-    print(f"\n{json.dumps({'lnk_count': len(lnk_results) if os.path.isdir(target) else 1}, indent=2)}")
+    print(
+        f"\n{json.dumps({'lnk_count': len(lnk_results) if os.path.isdir(target) else 1}, indent=2)}"
+    )

@@ -6,12 +6,11 @@ recording, role-based access policies, vendor co-attendance
 requirements, and CIP-005 compliance auditing.
 """
 
-import json
 import hashlib
-import sys
-from pathlib import Path
-from datetime import datetime, timedelta
+import json
+from datetime import datetime
 from enum import Enum
+from pathlib import Path
 
 
 class SessionState(str, Enum):
@@ -50,8 +49,7 @@ class OTRemoteAccessAgent:
             "requires_co_attendance": role == UserRole.VENDOR,
         }
 
-    def request_session(self, user_id, role, source_ip, target, target_ip,
-                        protocol, purpose):
+    def request_session(self, user_id, role, source_ip, target, target_ip, protocol, purpose):
         """Request a new remote access session."""
         sid = hashlib.sha256(
             f"{user_id}{target_ip}{datetime.utcnow().isoformat()}".encode()
@@ -138,7 +136,9 @@ class OTRemoteAccessAgent:
         issues = []
         for sid, s in self.sessions.items():
             if s["state"] == SessionState.ACTIVE and not s["mfa_verified"]:
-                issues.append({"session": sid, "issue": "Active session without MFA (CIP-005-7 R2.4)"})
+                issues.append(
+                    {"session": sid, "issue": "Active session without MFA (CIP-005-7 R2.4)"}
+                )
             if s["role"] == UserRole.VENDOR:
                 policy = self.policies.get(UserRole.VENDOR, {})
                 if policy.get("requires_co_attendance") and "co_attendant" not in s:
@@ -146,13 +146,15 @@ class OTRemoteAccessAgent:
         return issues
 
     def _log(self, event, user, target, detail):
-        self.audit_log.append({
-            "timestamp": datetime.utcnow().isoformat(),
-            "event": event,
-            "user": user,
-            "target": target,
-            "detail": detail,
-        })
+        self.audit_log.append(
+            {
+                "timestamp": datetime.utcnow().isoformat(),
+                "event": event,
+                "user": user,
+                "target": target,
+                "detail": detail,
+            }
+        )
 
     def generate_report(self):
         compliance = self.audit_compliance()
@@ -175,14 +177,20 @@ class OTRemoteAccessAgent:
 
 def main():
     agent = OTRemoteAccessAgent()
-    agent.define_policy(UserRole.OT_ENGINEER, ["HMI-01", "EWS-01", "HISTORIAN-01"],
-                        ["RDP", "SSH"], 240)
+    agent.define_policy(
+        UserRole.OT_ENGINEER, ["HMI-01", "EWS-01", "HISTORIAN-01"], ["RDP", "SSH"], 240
+    )
     agent.define_policy(UserRole.VENDOR, ["DCS-EWS-01"], ["RDP"], 120)
 
-    sid, msg = agent.request_session("vendor_01", UserRole.VENDOR,
-                                      "203.0.113.50", "DCS-EWS-01",
-                                      "10.30.1.20", "RDP",
-                                      "DCS firmware update CR-2026-0045")
+    sid, msg = agent.request_session(
+        "vendor_01",
+        UserRole.VENDOR,
+        "203.0.113.50",
+        "DCS-EWS-01",
+        "10.30.1.20",
+        "RDP",
+        "DCS firmware update CR-2026-0045",
+    )
     if sid:
         agent.approve_session(sid, "ot_manager_01")
         agent.activate_session(sid)

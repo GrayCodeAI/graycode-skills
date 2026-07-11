@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Agent for performing PLC firmware security analysis."""
 
-import json
 import argparse
-import subprocess
 import hashlib
+import json
 import re
-from pathlib import Path
+import subprocess
 from datetime import datetime
+from pathlib import Path
 
 
 def extract_firmware(firmware_file, output_dir="/tmp/fw_extract"):
@@ -19,7 +19,8 @@ def extract_firmware(firmware_file, output_dir="/tmp/fw_extract"):
         extracted = list(Path(output_dir).rglob("*"))
         files = [str(f.relative_to(output_dir)) for f in extracted if f.is_file()]
         return {
-            "firmware": firmware_file, "output_dir": output_dir,
+            "firmware": firmware_file,
+            "output_dir": output_dir,
             "files_extracted": len(files),
             "file_list": files[:50],
             "binwalk_output": result.stdout[:1000],
@@ -47,6 +48,7 @@ def analyze_firmware_metadata(firmware_file):
 def _calculate_entropy(data):
     """Calculate Shannon entropy of binary data."""
     import math
+
     if not data:
         return 0
     freq = [0] * 256
@@ -65,10 +67,14 @@ def scan_for_credentials(extract_dir):
     """Scan extracted firmware for hardcoded credentials."""
     findings = []
     patterns = {
-        "hardcoded_password": re.compile(r'(?:password|passwd|pwd)\s*[=:]\s*["\']?([^\s"\']{3,})', re.I),
-        "default_credential": re.compile(r'(?:admin|root|user|operator)[:;]\s*([^\s:]{3,})', re.I),
+        "hardcoded_password": re.compile(
+            r'(?:password|passwd|pwd)\s*[=:]\s*["\']?([^\s"\']{3,})', re.I
+        ),
+        "default_credential": re.compile(r"(?:admin|root|user|operator)[:;]\s*([^\s:]{3,})", re.I),
         "private_key": re.compile(r"-----BEGIN (?:RSA |EC |DSA )?PRIVATE KEY-----"),
-        "api_key": re.compile(r"(?:api[_-]?key|apikey|secret[_-]?key)\s*[=:]\s*[\"']?([a-zA-Z0-9_\-]{16,})", re.I),
+        "api_key": re.compile(
+            r"(?:api[_-]?key|apikey|secret[_-]?key)\s*[=:]\s*[\"']?([a-zA-Z0-9_\-]{16,})", re.I
+        ),
         "connection_string": re.compile(r"(?:mysql|postgres|mongodb|redis)://[^\s\"']+", re.I),
     }
     p = Path(extract_dir)
@@ -79,11 +85,16 @@ def scan_for_credentials(extract_dir):
                 for pattern_name, pattern in patterns.items():
                     matches = pattern.findall(content)
                     if matches:
-                        findings.append({
-                            "file": str(f.relative_to(p)),
-                            "type": pattern_name,
-                            "matches": [m[:50] if isinstance(m, str) else str(m)[:50] for m in matches[:5]],
-                        })
+                        findings.append(
+                            {
+                                "file": str(f.relative_to(p)),
+                                "type": pattern_name,
+                                "matches": [
+                                    m[:50] if isinstance(m, str) else str(m)[:50]
+                                    for m in matches[:5]
+                                ],
+                            }
+                        )
             except Exception:
                 continue
     return {
@@ -107,18 +118,24 @@ def scan_for_vulnerabilities(extract_dir):
         "backdoor_indicator": re.compile(r"(?:backdoor|rootkit|reverse.?shell)", re.I),
     }
     for f in p.rglob("*"):
-        if f.is_file() and f.stat().st_size < 1_000_000 and f.suffix in (".c", ".h", ".py", ".sh", ".conf", ".cfg", ".xml", ".json", ".lua", ""):
+        if (
+            f.is_file()
+            and f.stat().st_size < 1_000_000
+            and f.suffix in (".c", ".h", ".py", ".sh", ".conf", ".cfg", ".xml", ".json", ".lua", "")
+        ):
             try:
                 content = f.read_text(encoding="utf-8", errors="replace")
                 for vuln_name, pattern in vuln_patterns.items():
                     matches = pattern.findall(content)
                     if matches:
-                        findings.append({
-                            "file": str(f.relative_to(p)),
-                            "vulnerability": vuln_name,
-                            "count": len(matches),
-                            "samples": matches[:3],
-                        })
+                        findings.append(
+                            {
+                                "file": str(f.relative_to(p)),
+                                "vulnerability": vuln_name,
+                                "count": len(matches),
+                                "samples": matches[:3],
+                            }
+                        )
             except Exception:
                 continue
     config_files = list(p.rglob("*.conf")) + list(p.rglob("*.cfg")) + list(p.rglob("*.ini"))
@@ -144,7 +161,11 @@ def full_analysis(firmware_file, output_dir="/tmp/fw_extract"):
         "extraction": {"files_extracted": extraction["files_extracted"]},
         "credentials": credentials,
         "vulnerabilities": vulnerabilities,
-        "risk_level": "CRITICAL" if credentials["credential_findings"] > 0 else "HIGH" if vulnerabilities["vulnerability_findings"] > 5 else "MEDIUM",
+        "risk_level": "CRITICAL"
+        if credentials["credential_findings"] > 0
+        else "HIGH"
+        if vulnerabilities["vulnerability_findings"] > 5
+        else "MEDIUM",
     }
 
 

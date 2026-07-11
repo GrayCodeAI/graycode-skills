@@ -311,7 +311,7 @@ def push_to_splunk(iocs, splunk_url, hec_token):
             f"{splunk_url}/services/collector/event",
             headers=headers,
             json=event,
-            verify=False,
+            verify=True,
         )
         if resp.status_code != 200:
             print(f"[-] Splunk HEC error: {resp.text}")

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Arkime Network Traffic Analysis Agent - Queries Arkime API for session analysis and anomaly detection."""
 
+import argparse
 import json
 import logging
-import argparse
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 import requests
 from requests.auth import HTTPDigestAuth
@@ -18,7 +18,7 @@ def arkime_request(base_url, endpoint, auth, params=None):
     """Make an authenticated request to Arkime API v3."""
     url = f"{base_url}{endpoint}"
     try:
-        resp = requests.get(url, auth=HTTPDigestAuth(*auth), params=params, verify=False, timeout=30)
+        resp = requests.get(url, auth=HTTPDigestAuth(*auth), params=params, verify=True, timeout=30)
         resp.raise_for_status()
         return resp.json()
     except requests.RequestException as e:
@@ -82,16 +82,18 @@ def detect_beaconing(sessions, interval_threshold=0.15):
         jitter_ratio = std_dev / avg_interval
 
         if jitter_ratio < interval_threshold:
-            beacons.append({
-                "src_ip": src,
-                "dst_ip": dst,
-                "dst_port": port,
-                "session_count": len(timestamps),
-                "avg_interval_sec": round(avg_interval / 1000, 1),
-                "jitter_ratio": round(jitter_ratio, 4),
-                "confidence": "high" if jitter_ratio < 0.05 else "medium",
-                "severity": "critical",
-            })
+            beacons.append(
+                {
+                    "src_ip": src,
+                    "dst_ip": dst,
+                    "dst_port": port,
+                    "session_count": len(timestamps),
+                    "avg_interval_sec": round(avg_interval / 1000, 1),
+                    "jitter_ratio": round(jitter_ratio, 4),
+                    "confidence": "high" if jitter_ratio < 0.05 else "medium",
+                    "severity": "critical",
+                }
+            )
             logger.warning("Beaconing: %s -> %s:%d (jitter: %.4f)", src, dst, port, jitter_ratio)
     return beacons
 
@@ -110,14 +112,16 @@ def detect_dns_tunneling(sessions, query_len_threshold=50):
     for src, stats in src_stats.items():
         avg_bytes = stats["total_bytes"] / max(stats["count"], 1)
         if stats["count"] > 100 and avg_bytes > query_len_threshold:
-            suspicious.append({
-                "src_ip": src,
-                "dns_query_count": stats["count"],
-                "avg_bytes_per_query": round(avg_bytes, 1),
-                "total_bytes": stats["total_bytes"],
-                "severity": "high",
-                "indicator": "DNS tunneling - high volume with large payloads",
-            })
+            suspicious.append(
+                {
+                    "src_ip": src,
+                    "dns_query_count": stats["count"],
+                    "avg_bytes_per_query": round(avg_bytes, 1),
+                    "total_bytes": stats["total_bytes"],
+                    "severity": "high",
+                    "indicator": "DNS tunneling - high volume with large payloads",
+                }
+            )
     return suspicious
 
 
@@ -128,14 +132,16 @@ def detect_large_transfers(sessions, threshold_mb=100):
     for s in sessions:
         total = s.get("srcBytes", 0) + s.get("dstBytes", 0)
         if total > threshold_bytes:
-            large.append({
-                "src_ip": s.get("srcIp", ""),
-                "dst_ip": s.get("dstIp", ""),
-                "dst_port": s.get("dstPort", 0),
-                "total_bytes": total,
-                "total_mb": round(total / (1024 * 1024), 2),
-                "severity": "high",
-            })
+            large.append(
+                {
+                    "src_ip": s.get("srcIp", ""),
+                    "dst_ip": s.get("dstIp", ""),
+                    "dst_port": s.get("dstPort", 0),
+                    "total_bytes": total,
+                    "total_mb": round(total / (1024 * 1024), 2),
+                    "severity": "high",
+                }
+            )
     return large
 
 
@@ -146,25 +152,29 @@ def detect_tls_anomalies(sessions):
         tls = s.get("tls", {})
         if not tls:
             continue
-        ja3 = s.get("srcJa3", "")
+        s.get("srcJa3", "")
         issuer_cn = tls.get("issuerCN", "")
         not_after = tls.get("notAfter", 0)
         if issuer_cn and issuer_cn == tls.get("subjectCN", ""):
-            anomalies.append({
-                "src_ip": s.get("srcIp", ""),
-                "dst_ip": s.get("dstIp", ""),
-                "issue": "self-signed certificate",
-                "issuer": issuer_cn,
-                "severity": "medium",
-            })
+            anomalies.append(
+                {
+                    "src_ip": s.get("srcIp", ""),
+                    "dst_ip": s.get("dstIp", ""),
+                    "issue": "self-signed certificate",
+                    "issuer": issuer_cn,
+                    "severity": "medium",
+                }
+            )
         if not_after and not_after < int(datetime.utcnow().timestamp() * 1000):
-            anomalies.append({
-                "src_ip": s.get("srcIp", ""),
-                "dst_ip": s.get("dstIp", ""),
-                "issue": "expired certificate",
-                "issuer": issuer_cn,
-                "severity": "medium",
-            })
+            anomalies.append(
+                {
+                    "src_ip": s.get("srcIp", ""),
+                    "dst_ip": s.get("dstIp", ""),
+                    "issue": "expired certificate",
+                    "issuer": issuer_cn,
+                    "severity": "medium",
+                }
+            )
     return anomalies
 
 
@@ -182,7 +192,9 @@ def generate_report(beacons, dns_tunneling, large_transfers, tls_anomalies, sess
         "large_transfers": large_transfers,
         "tls_anomalies": tls_anomalies,
     }
-    print(f"ARKIME REPORT: {len(all_findings)} findings ({len(critical)} critical) from {session_count} sessions")
+    print(
+        f"ARKIME REPORT: {len(all_findings)} findings ({len(critical)} critical) from {session_count} sessions"
+    )
     return report
 
 

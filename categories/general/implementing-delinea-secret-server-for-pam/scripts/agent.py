@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Delinea Secret Server PAM agent for privileged credential management."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
@@ -54,8 +54,12 @@ class SecretServerClient:
     def create_secret(self, name, template_id, folder_id, fields):
         """Create a new secret in the vault."""
         items = [{"fieldId": fid, "itemValue": val} for fid, val in fields.items()]
-        data = {"name": name, "secretTemplateId": template_id,
-                "folderId": folder_id, "items": items}
+        data = {
+            "name": name,
+            "secretTemplateId": template_id,
+            "folderId": folder_id,
+            "items": items,
+        }
         resp = self.session.post(f"{self.base_url}/api/v1/secrets", json=data)
         resp.raise_for_status()
         return resp.json()
@@ -77,8 +81,7 @@ class SecretServerClient:
 
     def rotate_secret_password(self, secret_id):
         """Trigger password rotation for a secret (Remote Password Changing)."""
-        resp = self.session.post(
-            f"{self.base_url}/api/v1/secrets/{secret_id}/change-password")
+        resp = self.session.post(f"{self.base_url}/api/v1/secrets/{secret_id}/change-password")
         resp.raise_for_status()
         return resp.json()
 
@@ -90,15 +93,13 @@ class SecretServerClient:
 
     def checkout_secret(self, secret_id):
         """Check out a secret for exclusive access."""
-        resp = self.session.post(
-            f"{self.base_url}/api/v1/secrets/{secret_id}/check-out")
+        resp = self.session.post(f"{self.base_url}/api/v1/secrets/{secret_id}/check-out")
         resp.raise_for_status()
         return resp.json()
 
     def checkin_secret(self, secret_id):
         """Check in a previously checked-out secret."""
-        resp = self.session.post(
-            f"{self.base_url}/api/v1/secrets/{secret_id}/check-in")
+        resp = self.session.post(f"{self.base_url}/api/v1/secrets/{secret_id}/check-in")
         resp.raise_for_status()
         return resp.json()
 
@@ -117,10 +118,10 @@ class SecretServerClient:
 
 def run_pam_audit(client):
     """Run a PAM security audit."""
-    print(f"\n{'='*60}")
-    print(f"  DELINEA SECRET SERVER PAM AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  DELINEA SECRET SERVER PAM AUDIT")
     print(f"  Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     templates = client.get_secret_templates()
     print(f"--- SECRET TEMPLATES ({len(templates)}) ---")
@@ -147,9 +148,14 @@ def run_pam_audit(client):
     for r in roles[:10]:
         print(f"  [{r['id']}] {r['name']}")
 
-    print(f"\n{'='*60}\n")
-    return {"templates": len(templates), "folders": len(folders),
-            "secrets": len(secrets), "users": len(users), "roles": len(roles)}
+    print(f"\n{'=' * 60}\n")
+    return {
+        "templates": len(templates),
+        "folders": len(folders),
+        "secrets": len(secrets),
+        "users": len(users),
+        "roles": len(roles),
+    }
 
 
 def main():

@@ -5,12 +5,12 @@ Parses Windows EVTX, Linux syslog, and web access logs to build
 correlated forensic timelines for incident investigations.
 """
 
-import json
-import sys
 import csv
+import json
 import re
-from datetime import datetime
+import sys
 from collections import defaultdict
+from datetime import datetime
 from pathlib import Path
 
 
@@ -26,8 +26,9 @@ class ForensicLogAnalyzer:
     def parse_evtx(self, evtx_path):
         """Parse Windows EVTX event log files."""
         try:
-            import Evtx.Evtx as evtx
             import xml.etree.ElementTree as ET
+
+            import Evtx.Evtx as evtx
         except ImportError:
             print("Install python-evtx: pip install python-evtx")
             return []
@@ -70,7 +71,7 @@ class ForensicLogAnalyzer:
         syslog_re = re.compile(
             r"^(\w{3}\s+\d+\s+\d{2}:\d{2}:\d{2})\s+(\S+)\s+(\S+?)(?:\[\d+\])?:\s+(.*)"
         )
-        with open(log_path, "r", errors="ignore") as f:
+        with open(log_path, errors="ignore") as f:
             for line in f:
                 match = syslog_re.match(line.strip())
                 if match:
@@ -88,10 +89,8 @@ class ForensicLogAnalyzer:
     def parse_web_access_log(self, log_path):
         """Parse Apache/Nginx combined access log format."""
         records = []
-        access_re = re.compile(
-            r'^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"([^"]+)"\s+(\d{3})\s+(\d+)'
-        )
-        with open(log_path, "r", errors="ignore") as f:
+        access_re = re.compile(r'^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"([^"]+)"\s+(\d{3})\s+(\d+)')
+        with open(log_path, errors="ignore") as f:
             for line in f:
                 match = access_re.match(line.strip())
                 if match:
@@ -120,12 +119,14 @@ class ForensicLogAnalyzer:
             request = event.get("request", "")
             for attack_type, pattern in patterns.items():
                 if pattern.search(request):
-                    findings[attack_type].append({
-                        "timestamp": event["timestamp"],
-                        "client_ip": event.get("client_ip", ""),
-                        "request": request[:200],
-                        "status": event.get("status", ""),
-                    })
+                    findings[attack_type].append(
+                        {
+                            "timestamp": event["timestamp"],
+                            "client_ip": event.get("client_ip", ""),
+                            "request": request[:200],
+                            "status": event.get("status", ""),
+                        }
+                    )
         return dict(findings)
 
     def detect_brute_force(self):
@@ -139,18 +140,18 @@ class ForensicLogAnalyzer:
                 failed_by_source[src]["users"].add(user)
 
         return [
-            {"source_ip": src, "failed_attempts": data["count"],
-             "targeted_users": sorted(data["users"])}
+            {
+                "source_ip": src,
+                "failed_attempts": data["count"],
+                "targeted_users": sorted(data["users"]),
+            }
             for src, data in failed_by_source.items()
             if data["count"] > 5
         ]
 
     def detect_log_clearing(self):
         """Detect audit log clearing events (anti-forensics)."""
-        return [
-            event for event in self.events
-            if event.get("event_id") == "1102"
-        ]
+        return [event for event in self.events if event.get("event_id") == "1102"]
 
     def build_correlated_timeline(self):
         """Build a unified correlated timeline from all log sources."""

@@ -5,16 +5,14 @@ Monitors and analyzes ransomware group leak site data for threat intelligence,
 victim tracking, and TTI (time-to-intelligence) reporting.
 """
 
-import os
-import sys
 import json
-import re
-import hashlib
+import sys
+from collections import Counter, defaultdict
 from datetime import datetime, timedelta
-from collections import defaultdict, Counter
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -40,8 +38,7 @@ def query_ransomwatch_api():
     if not HAS_REQUESTS:
         return []
     try:
-        resp = requests.get("https://api.ransomware.live/recentvictims",
-                           timeout=30)
+        resp = requests.get("https://api.ransomware.live/recentvictims", timeout=30)
         resp.raise_for_status()
         return resp.json()
     except requests.RequestException as e:
@@ -53,8 +50,7 @@ def query_ransomlook_group(group_name):
     if not HAS_REQUESTS:
         return {}
     try:
-        resp = requests.get(f"https://www.ransomlook.io/api/group/{group_name}",
-                           timeout=30)
+        resp = requests.get(f"https://www.ransomlook.io/api/group/{group_name}", timeout=30)
         resp.raise_for_status()
         return resp.json()
     except requests.RequestException:
@@ -179,15 +175,15 @@ if __name__ == "__main__":
     report = generate_intelligence_report(victims, target_org=query)
     analysis = report["analysis"]
 
-    print(f"\n--- Top Groups ---")
+    print("\n--- Top Groups ---")
     for g, c in list(analysis["top_groups"].items())[:5]:
         print(f"  {g:20s} {c} victims")
 
-    print(f"\n--- Top Sectors ---")
+    print("\n--- Top Sectors ---")
     for s, c in list(analysis["top_sectors"].items())[:5]:
         print(f"  {s:30s} {c}")
 
-    print(f"\n--- Top Countries ---")
+    print("\n--- Top Countries ---")
     for co, c in list(analysis["top_countries"].items())[:5]:
         print(f"  {co:20s} {c}")
 

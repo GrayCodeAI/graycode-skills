@@ -7,7 +7,6 @@ checking frame-busting headers and generating proof-of-concept pages.
 WARNING: Only use with explicit written authorization for the target application.
 """
 
-import json
 import sys
 from datetime import datetime, timezone
 from urllib.parse import urlparse
@@ -154,8 +153,12 @@ def check_javascript_frame_busting(url: str) -> dict:
 
     body = resp.text.lower()
     frame_busting_patterns = [
-        "top.location", "self.location", "window.top",
-        "parent.frames", "top !== self", "top != self",
+        "top.location",
+        "self.location",
+        "window.top",
+        "parent.frames",
+        "top !== self",
+        "top != self",
         "window.self !== window.top",
     ]
 
@@ -165,7 +168,9 @@ def check_javascript_frame_busting(url: str) -> dict:
         "url": url,
         "has_js_frame_busting": len(found_patterns) > 0,
         "patterns_found": found_patterns,
-        "note": "JS frame-busting can be bypassed with sandbox attribute on iframe" if found_patterns else "",
+        "note": "JS frame-busting can be bypassed with sandbox attribute on iframe"
+        if found_patterns
+        else "",
     }
 
 
@@ -207,9 +212,17 @@ if __name__ == "__main__":
         sys.exit(1)
 
     target_url = sys.argv[1]
-    extra_paths = sys.argv[2:] if len(sys.argv) > 2 else [
-        "/", "/login", "/settings", "/account", "/admin",
-    ]
+    extra_paths = (
+        sys.argv[2:]
+        if len(sys.argv) > 2
+        else [
+            "/",
+            "/login",
+            "/settings",
+            "/account",
+            "/admin",
+        ]
+    )
 
     print(f"[*] Testing {target_url} for clickjacking vulnerabilities...")
     results = check_multiple_endpoints(target_url, extra_paths)

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Internal network penetration testing agent using nmap and impacket."""
 
-import json
-import sys
 import argparse
-import subprocess
+import json
 import socket
+import subprocess
 from datetime import datetime
 
 
@@ -59,17 +58,26 @@ def enumerate_ad_info(dc_ip, domain, username, password):
     """Enumerate Active Directory information via LDAP."""
     try:
         import ldap3
+
         server = ldap3.Server(dc_ip, get_info=ldap3.ALL)
-        conn = ldap3.Connection(server, user=f"{domain}\\{username}",
-                                password=password, authentication=ldap3.NTLM, auto_bind=True)
+        conn = ldap3.Connection(
+            server,
+            user=f"{domain}\\{username}",
+            password=password,
+            authentication=ldap3.NTLM,
+            auto_bind=True,
+        )
         base_dn = ",".join([f"DC={p}" for p in domain.split(".")])
         conn.search(base_dn, "(objectClass=computer)", attributes=["cn", "operatingSystem"])
         computers = [{"name": str(e.cn), "os": str(e.operatingSystem)} for e in conn.entries]
-        conn.search(base_dn, "(&(objectClass=user)(adminCount=1))",
-                     attributes=["sAMAccountName"])
+        conn.search(base_dn, "(&(objectClass=user)(adminCount=1))", attributes=["sAMAccountName"])
         admins = [str(e.sAMAccountName) for e in conn.entries]
         conn.unbind()
-        return {"computers": computers[:20], "admin_accounts": admins, "total_hosts": len(computers)}
+        return {
+            "computers": computers[:20],
+            "admin_accounts": admins,
+            "total_hosts": len(computers),
+        }
     except Exception as e:
         return {"error": str(e)}
 
@@ -77,8 +85,15 @@ def enumerate_ad_info(dc_ip, domain, username, password):
 def check_common_vulns(target):
     """Check for common internal network vulnerabilities."""
     checks = []
-    for port, service in [(21, "FTP"), (23, "Telnet"), (80, "HTTP"), (3389, "RDP"),
-                          (5900, "VNC"), (1433, "MSSQL"), (3306, "MySQL")]:
+    for port, service in [
+        (21, "FTP"),
+        (23, "Telnet"),
+        (80, "HTTP"),
+        (3389, "RDP"),
+        (5900, "VNC"),
+        (1433, "MSSQL"),
+        (3306, "MySQL"),
+    ]:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(2)
         try:
@@ -93,11 +108,11 @@ def check_common_vulns(target):
 
 def run_pentest(target, dc_ip=None, domain=None, username=None, password=None):
     """Execute internal network penetration test."""
-    print(f"\n{'='*60}")
-    print(f"  INTERNAL NETWORK PENETRATION TEST")
+    print(f"\n{'=' * 60}")
+    print("  INTERNAL NETWORK PENETRATION TEST")
     print(f"  Target: {target}")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     ports = check_common_vulns(target)
     print(f"--- OPEN PORTS ({len(ports)}) ---")
@@ -105,19 +120,19 @@ def run_pentest(target, dc_ip=None, domain=None, username=None, password=None):
         print(f"  Port {p['port']}/{p['service']}: {p['status']}")
 
     smb = check_smb_signing(target)
-    print(f"\n--- SMB SIGNING ---")
+    print("\n--- SMB SIGNING ---")
     print(f"  Signing required: {smb.get('smb_signing_required', 'N/A')}")
     print(f"  Relay vulnerable: {smb.get('vulnerable_to_relay', 'N/A')}")
 
     llmnr = check_llmnr_nbns()
-    print(f"\n--- LLMNR/NBT-NS ---")
+    print("\n--- LLMNR/NBT-NS ---")
     print(f"  Risk: {llmnr['risk']}")
     print(f"  Severity: {llmnr['severity']}")
 
     ad_info = {}
     if dc_ip and domain and username and password:
         ad_info = enumerate_ad_info(dc_ip, domain, username, password)
-        print(f"\n--- AD ENUMERATION ---")
+        print("\n--- AD ENUMERATION ---")
         print(f"  Total hosts: {ad_info.get('total_hosts', 0)}")
         print(f"  Admin accounts: {ad_info.get('admin_accounts', [])}")
 

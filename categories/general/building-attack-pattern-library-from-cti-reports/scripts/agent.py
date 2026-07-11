@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """Attack Pattern Library Builder Agent - Extracts attack patterns from CTI reports and maps to MITRE ATT&CK."""
 
-import json
-import re
-import logging
 import argparse
-from datetime import datetime
+import json
+import logging
+import re
 from collections import Counter, defaultdict
-
-import requests
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -52,7 +50,9 @@ def extract_iocs_from_text(text):
     """Extract IOCs from report text."""
     iocs = {
         "ips": list(set(re.findall(r"\b(?:\d{1,3}\.){3}\d{1,3}\b", text))),
-        "domains": list(set(re.findall(r"\b(?:[a-zA-Z0-9-]+\.)+(?:com|net|org|io|xyz|top|info|ru|cn)\b", text))),
+        "domains": list(
+            set(re.findall(r"\b(?:[a-zA-Z0-9-]+\.)+(?:com|net|org|io|xyz|top|info|ru|cn)\b", text))
+        ),
         "hashes_md5": list(set(re.findall(r"\b[a-fA-F0-9]{32}\b", text))),
         "hashes_sha256": list(set(re.findall(r"\b[a-fA-F0-9]{64}\b", text))),
         "urls": list(set(re.findall(r"hxxps?://[^\s<>\"]+", text))),
@@ -98,7 +98,9 @@ def generate_report(processed_reports, library):
         "library": library,
         "report_details": processed_reports,
     }
-    print(f"PATTERN LIBRARY: {library['total_unique_techniques']} techniques from {library['total_reports_processed']} reports")
+    print(
+        f"PATTERN LIBRARY: {library['total_unique_techniques']} techniques from {library['total_reports_processed']} reports"
+    )
     return report
 
 
@@ -110,7 +112,7 @@ def main():
 
     processed = []
     for filepath in args.report_files:
-        with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+        with open(filepath, encoding="utf-8", errors="ignore") as f:
             text = f.read()
         result = process_report(text, filepath)
         processed.append(result)

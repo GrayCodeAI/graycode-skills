@@ -5,10 +5,10 @@ Analyzes process creation, memory events, and parent-child relationships
 to detect process hollowing (T1055.012) indicators.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -35,10 +35,21 @@ VALID_PARENT_CHILD = {
 
 # Common hollowing target processes
 HOLLOWING_TARGETS = {
-    "svchost.exe", "explorer.exe", "rundll32.exe", "dllhost.exe",
-    "conhost.exe", "taskhost.exe", "taskhostw.exe", "RuntimeBroker.exe",
-    "RegAsm.exe", "MSBuild.exe", "RegSvcs.exe", "vbc.exe",
-    "AppLaunch.exe", "InstallUtil.exe", "aspnet_compiler.exe",
+    "svchost.exe",
+    "explorer.exe",
+    "rundll32.exe",
+    "dllhost.exe",
+    "conhost.exe",
+    "taskhost.exe",
+    "taskhostw.exe",
+    "RuntimeBroker.exe",
+    "RegAsm.exe",
+    "MSBuild.exe",
+    "RegSvcs.exe",
+    "vbc.exe",
+    "AppLaunch.exe",
+    "InstallUtil.exe",
+    "aspnet_compiler.exe",
 }
 
 # Process behavior indicators that suggest hollowing
@@ -64,11 +75,11 @@ def parse_logs(input_path: str) -> list[dict]:
     """Parse log files."""
     path = Path(input_path)
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             return data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             return [dict(row) for row in csv.DictReader(f)]
     return []
 
@@ -271,16 +282,20 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path.mkdir(parents=True, exist_ok=True)
 
     with open(output_path / "hollowing_findings.json", "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-HOLLOW-{datetime.date.today().isoformat()}",
-            "total_events": len(events),
-            "total_findings": len(findings),
-            "statistics": dict(stats),
-            "findings": sorted(findings, key=lambda x: x["risk_score"], reverse=True),
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-HOLLOW-{datetime.date.today().isoformat()}",
+                "total_events": len(events),
+                "total_findings": len(findings),
+                "statistics": dict(stats),
+                "findings": sorted(findings, key=lambda x: x["risk_score"], reverse=True),
+            },
+            f,
+            indent=2,
+        )
 
     with open(output_path / "hunt_report.md", "w", encoding="utf-8") as f:
-        f.write(f"# Process Hollowing Hunt Report\n\n")
+        f.write("# Process Hollowing Hunt Report\n\n")
         f.write(f"**Date**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"**Findings**: {len(findings)}\n\n")
         for finding in sorted(findings, key=lambda x: x["risk_score"], reverse=True)[:20]:
@@ -309,9 +324,11 @@ def main():
     elif args.command == "queries":
         print("=== Sysmon Queries ===")
         print("--- Process Tampering ---")
-        print('index=sysmon EventCode=25\n| table _time Computer User Image Type')
+        print("index=sysmon EventCode=25\n| table _time Computer User Image Type")
         print("\n--- Invalid Parent-Child ---")
-        print('index=sysmon EventCode=1 Image="*\\\\svchost.exe"\n| where NOT match(ParentImage, "(?i)services\\.exe")\n| table _time Computer Image ParentImage CommandLine')
+        print(
+            'index=sysmon EventCode=1 Image="*\\\\svchost.exe"\n| where NOT match(ParentImage, "(?i)services\\.exe")\n| table _time Computer Image ParentImage CommandLine'
+        )
     else:
         parser.print_help()
 

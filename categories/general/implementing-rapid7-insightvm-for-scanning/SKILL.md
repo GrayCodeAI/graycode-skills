@@ -255,7 +255,7 @@ class InsightVMClient:
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}"
         })
-        self.session.verify = False  # Self-signed cert on console
+        self.session.verify = "/path/to/insightvm-ca.pem"
 
     def get_sites(self):
         """List all configured scan sites."""

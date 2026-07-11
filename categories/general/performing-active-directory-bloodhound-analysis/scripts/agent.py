@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """BloodHound Attack Path Analysis Agent - Queries Neo4j for AD attack paths to Domain Admin."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 from neo4j import GraphDatabase
@@ -134,7 +134,9 @@ def assess_ad_risk(da_members, paths, kerberoastable, asrep, unconstrained, gpo_
         score += 15
     if len(gpo_paths) > 0:
         score += 20
-    risk = "Critical" if score >= 60 else "High" if score >= 40 else "Medium" if score >= 20 else "Low"
+    risk = (
+        "Critical" if score >= 60 else "High" if score >= 40 else "Medium" if score >= 20 else "Low"
+    )
     return {"score": score, "risk_level": risk}
 
 
@@ -172,7 +174,9 @@ def main():
     gpo_paths = find_gpo_attack_paths(driver)
     risk = assess_ad_risk(da_members, paths, kerberoastable, asrep, unconstrained, gpo_paths)
 
-    report = generate_report(da_members, paths, kerberoastable, asrep, unconstrained, gpo_paths, risk)
+    report = generate_report(
+        da_members, paths, kerberoastable, asrep, unconstrained, gpo_paths, risk
+    )
     driver.close()
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)

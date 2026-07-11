@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Agent for hunting living-off-the-cloud (LOTC) techniques using cloud service logs."""
 
-import json
 import argparse
+import json
 import re
-from datetime import datetime, timedelta
+from datetime import datetime
 
 try:
     from elasticsearch import Elasticsearch
@@ -12,53 +12,123 @@ except ImportError:
     Elasticsearch = None
 
 CLOUD_C2_DOMAINS = [
-    "*.blob.core.windows.net", "*.s3.amazonaws.com", "*.storage.googleapis.com",
-    "*.azurewebsites.net", "*.cloudfront.net", "*.execute-api.amazonaws.com",
-    "*.cloudfunctions.net", "*.run.app", "*.appspot.com",
-    "pastebin.com", "raw.githubusercontent.com", "gist.githubusercontent.com",
-    "discord.com/api/webhooks", "hooks.slack.com", "api.telegram.org",
-    "notion.so", "docs.google.com", "drive.google.com",
-    "*.firebaseio.com", "*.azureedge.net", "*.ngrok.io",
+    "*.blob.core.windows.net",
+    "*.s3.amazonaws.com",
+    "*.storage.googleapis.com",
+    "*.azurewebsites.net",
+    "*.cloudfront.net",
+    "*.execute-api.amazonaws.com",
+    "*.cloudfunctions.net",
+    "*.run.app",
+    "*.appspot.com",
+    "pastebin.com",
+    "raw.githubusercontent.com",
+    "gist.githubusercontent.com",
+    "discord.com/api/webhooks",
+    "hooks.slack.com",
+    "api.telegram.org",
+    "notion.so",
+    "docs.google.com",
+    "drive.google.com",
+    "*.firebaseio.com",
+    "*.azureedge.net",
+    "*.ngrok.io",
 ]
 
 SUSPICIOUS_PATTERNS = {
     "azure_storage_exfil": {
         "description": "Large uploads to Azure Blob Storage",
-        "query": {"bool": {"must": [
-            {"match": {"event.action": "PutBlob"}},
-            {"range": {"http.request.bytes": {"gte": 10485760}}}
-        ]}},
+        "query": {
+            "bool": {
+                "must": [
+                    {"match": {"event.action": "PutBlob"}},
+                    {"range": {"http.request.bytes": {"gte": 10485760}}},
+                ]
+            }
+        },
     },
     "aws_s3_staging": {
         "description": "Unusual S3 bucket creation or large PutObject",
-        "query": {"bool": {"must": [
-            {"terms": {"event.action": ["CreateBucket", "PutObject"]}},
-            {"range": {"@timestamp": {"gte": "now-24h"}}}
-        ]}},
+        "query": {
+            "bool": {
+                "must": [
+                    {"terms": {"event.action": ["CreateBucket", "PutObject"]}},
+                    {"range": {"@timestamp": {"gte": "now-24h"}}},
+                ]
+            }
+        },
     },
     "saas_c2_channel": {
         "description": "Outbound connections to SaaS APIs used for C2",
-        "query": {"bool": {"must": [
-            {"terms": {"dns.question.name": [
-                "api.telegram.org", "discord.com", "hooks.slack.com",
-                "pastebin.com", "notion.so"
-            ]}},
-            {"match": {"process.name": {"query": "powershell.exe cmd.exe rundll32.exe", "operator": "or"}}}
-        ]}},
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "terms": {
+                            "dns.question.name": [
+                                "api.telegram.org",
+                                "discord.com",
+                                "hooks.slack.com",
+                                "pastebin.com",
+                                "notion.so",
+                            ]
+                        }
+                    },
+                    {
+                        "match": {
+                            "process.name": {
+                                "query": "powershell.exe cmd.exe rundll32.exe",
+                                "operator": "or",
+                            }
+                        }
+                    },
+                ]
+            }
+        },
     },
     "cloud_function_invoke": {
         "description": "Suspicious invocation of cloud functions for payload delivery",
-        "query": {"bool": {"must": [
-            {"regexp": {"url.domain": ".*\\.(cloudfunctions\\.net|execute-api\\.amazonaws\\.com|azurewebsites\\.net)"}},
-            {"terms": {"process.name": ["certutil.exe", "bitsadmin.exe", "curl.exe", "wget.exe"]}}
-        ]}},
+        "query": {
+            "bool": {
+                "must": [
+                    {
+                        "regexp": {
+                            "url.domain": ".*\\.(cloudfunctions\\.net|execute-api\\.amazonaws\\.com|azurewebsites\\.net)"
+                        }
+                    },
+                    {
+                        "terms": {
+                            "process.name": [
+                                "certutil.exe",
+                                "bitsadmin.exe",
+                                "curl.exe",
+                                "wget.exe",
+                            ]
+                        }
+                    },
+                ]
+            }
+        },
     },
     "github_raw_download": {
         "description": "Downloads from raw GitHub content indicating payload staging",
-        "query": {"bool": {"must": [
-            {"wildcard": {"url.domain": "*githubusercontent.com"}},
-            {"terms": {"process.name": ["powershell.exe", "cmd.exe", "wscript.exe", "cscript.exe"]}}
-        ]}},
+        "query": {
+            "bool": {
+                "must": [
+                    {"wildcard": {"url.domain": "*githubusercontent.com"}},
+                    {
+                        "terms": {
+                            "process.name": [
+                                "powershell.exe",
+                                "cmd.exe",
+                                "wscript.exe",
+                                "cscript.exe",
+                            ]
+                        }
+                    },
+                ]
+            }
+        },
     },
 }
 
@@ -79,20 +149,25 @@ def hunt_lotc_elastic(es_host, es_index, api_key=None, hours=24):
         events = []
         for hit in resp["hits"]["hits"]:
             src = hit["_source"]
-            events.append({
-                "timestamp": src.get("@timestamp"),
-                "host": src.get("host", {}).get("name"),
-                "process": src.get("process", {}).get("name"),
-                "command_line": src.get("process", {}).get("command_line"),
-                "destination": src.get("url", {}).get("domain") or src.get("dns", {}).get("question", {}).get("name"),
-                "user": src.get("user", {}).get("name"),
-            })
-        results["hunts"].append({
-            "name": hunt_name,
-            "description": hunt_def["description"],
-            "hits": hits,
-            "events": events,
-        })
+            events.append(
+                {
+                    "timestamp": src.get("@timestamp"),
+                    "host": src.get("host", {}).get("name"),
+                    "process": src.get("process", {}).get("name"),
+                    "command_line": src.get("process", {}).get("command_line"),
+                    "destination": src.get("url", {}).get("domain")
+                    or src.get("dns", {}).get("question", {}).get("name"),
+                    "user": src.get("user", {}).get("name"),
+                }
+            )
+        results["hunts"].append(
+            {
+                "name": hunt_name,
+                "description": hunt_def["description"],
+                "hits": hits,
+                "events": events,
+            }
+        )
         results["total_hits"] += hits
     return results
 
@@ -104,17 +179,20 @@ def analyze_dns_logs(log_file):
         r"(blob\.core\.windows\.net|s3\.amazonaws\.com|storage\.googleapis\.com|"
         r"cloudfunctions\.net|execute-api\.amazonaws\.com|azurewebsites\.net|"
         r"ngrok\.io|firebaseio\.com|pastebin\.com|githubusercontent\.com|"
-        r"api\.telegram\.org|discord\.com|hooks\.slack\.com)", re.I
+        r"api\.telegram\.org|discord\.com|hooks\.slack\.com)",
+        re.I,
     )
-    with open(log_file, "r") as f:
+    with open(log_file) as f:
         for line_num, line in enumerate(f, 1):
             match = cloud_regex.search(line)
             if match:
-                findings.append({
-                    "line": line_num,
-                    "matched_domain": match.group(0),
-                    "raw": line.strip()[:200],
-                })
+                findings.append(
+                    {
+                        "line": line_num,
+                        "matched_domain": match.group(0),
+                        "raw": line.strip()[:200],
+                    }
+                )
     return {
         "file": str(log_file),
         "total_matches": len(findings),

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Kubernetes RBAC Audit Agent - Audits cluster RBAC permissions for security misconfigurations."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 from kubernetes import client, config
@@ -12,7 +12,17 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 DANGEROUS_VERBS = {"*", "create", "delete", "patch", "update", "escalate", "bind", "impersonate"}
-DANGEROUS_RESOURCES = {"secrets", "pods/exec", "pods/attach", "serviceaccounts", "clusterroles", "clusterrolebindings", "roles", "rolebindings", "*"}
+DANGEROUS_RESOURCES = {
+    "secrets",
+    "pods/exec",
+    "pods/attach",
+    "serviceaccounts",
+    "clusterroles",
+    "clusterrolebindings",
+    "roles",
+    "rolebindings",
+    "*",
+}
 
 
 def load_kube_config(kubeconfig=None):
@@ -34,14 +44,29 @@ def audit_cluster_roles(rbac_api):
     for role in roles.items:
         if role.metadata.name.startswith("system:"):
             continue
-        for rule in (role.rules or []):
+        for rule in role.rules or []:
             verbs = set(rule.verbs or [])
             resources = set(rule.resources or [])
-            api_groups = rule.api_groups or [""]
             if "*" in verbs and "*" in resources:
-                findings.append({"role": role.metadata.name, "type": "ClusterRole", "issue": "Full wildcard access (*/*)", "severity": "critical", "rule": {"verbs": list(verbs), "resources": list(resources)}})
+                findings.append(
+                    {
+                        "role": role.metadata.name,
+                        "type": "ClusterRole",
+                        "issue": "Full wildcard access (*/*)",
+                        "severity": "critical",
+                        "rule": {"verbs": list(verbs), "resources": list(resources)},
+                    }
+                )
             elif verbs & DANGEROUS_VERBS and resources & DANGEROUS_RESOURCES:
-                findings.append({"role": role.metadata.name, "type": "ClusterRole", "issue": f"Dangerous permission: {verbs & DANGEROUS_VERBS} on {resources & DANGEROUS_RESOURCES}", "severity": "high", "rule": {"verbs": list(verbs), "resources": list(resources)}})
+                findings.append(
+                    {
+                        "role": role.metadata.name,
+                        "type": "ClusterRole",
+                        "issue": f"Dangerous permission: {verbs & DANGEROUS_VERBS} on {resources & DANGEROUS_RESOURCES}",
+                        "severity": "high",
+                        "rule": {"verbs": list(verbs), "resources": list(resources)},
+                    }
+                )
     logger.info("Audited %d ClusterRoles, %d findings", len(roles.items), len(findings))
     return findings
 
@@ -57,9 +82,28 @@ def audit_role_bindings(rbac_api):
         subjects = binding.subjects or []
         for subject in subjects:
             if role_ref.name in ("cluster-admin", "admin") and subject.kind != "ServiceAccount":
-                findings.append({"binding": binding.metadata.name, "role": role_ref.name, "subject": f"{subject.kind}/{subject.name}", "severity": "critical" if role_ref.name == "cluster-admin" else "high", "issue": f"{subject.kind} bound to {role_ref.name}"})
-            if subject.kind == "Group" and subject.name in ("system:unauthenticated", "system:authenticated"):
-                findings.append({"binding": binding.metadata.name, "role": role_ref.name, "subject": subject.name, "severity": "critical", "issue": f"Broad group {subject.name} bound to {role_ref.name}"})
+                findings.append(
+                    {
+                        "binding": binding.metadata.name,
+                        "role": role_ref.name,
+                        "subject": f"{subject.kind}/{subject.name}",
+                        "severity": "critical" if role_ref.name == "cluster-admin" else "high",
+                        "issue": f"{subject.kind} bound to {role_ref.name}",
+                    }
+                )
+            if subject.kind == "Group" and subject.name in (
+                "system:unauthenticated",
+                "system:authenticated",
+            ):
+                findings.append(
+                    {
+                        "binding": binding.metadata.name,
+                        "role": role_ref.name,
+                        "subject": subject.name,
+                        "severity": "critical",
+                        "issue": f"Broad group {subject.name} bound to {role_ref.name}",
+                    }
+                )
     return findings
 
 
@@ -70,7 +114,14 @@ def audit_service_accounts(core_api, rbac_api):
     for sa in sas.items:
         if sa.metadata.name == "default":
             if sa.automount_service_account_token is not False:
-                findings.append({"namespace": sa.metadata.namespace, "service_account": "default", "issue": "Default SA auto-mounts token", "severity": "medium"})
+                findings.append(
+                    {
+                        "namespace": sa.metadata.namespace,
+                        "service_account": "default",
+                        "issue": "Default SA auto-mounts token",
+                        "severity": "medium",
+                    }
+                )
     return findings
 
 

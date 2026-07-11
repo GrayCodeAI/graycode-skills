@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """Agent for API Security Posture Management - discovery, classification, and risk scoring."""
 
-import json
 import argparse
+import json
 import re
-from datetime import datetime
 from collections import Counter, defaultdict
-from pathlib import Path
+from datetime import datetime
 
 
 def discover_apis_from_traffic(log_path):
     """Discover APIs from network traffic logs."""
-    apis = defaultdict(lambda: {"methods": set(), "consumers": set(), "count": 0,
-                                "status_codes": Counter()})
+    apis = defaultdict(
+        lambda: {"methods": set(), "consumers": set(), "count": 0, "status_codes": Counter()}
+    )
     with open(log_path) as f:
         for line in f:
             try:
@@ -31,14 +31,17 @@ def discover_apis_from_traffic(log_path):
             apis[normalized]["status_codes"][int(status)] += 1
     result = []
     for path, info in sorted(apis.items(), key=lambda x: -x[1]["count"]):
-        result.append({
-            "path": path,
-            "methods": sorted(info["methods"]),
-            "unique_consumers": len(info["consumers"]),
-            "total_requests": info["count"],
-            "error_rate": round(
-                sum(v for k, v in info["status_codes"].items() if k >= 400) / info["count"], 3),
-        })
+        result.append(
+            {
+                "path": path,
+                "methods": sorted(info["methods"]),
+                "unique_consumers": len(info["consumers"]),
+                "total_requests": info["count"],
+                "error_rate": round(
+                    sum(v for k, v in info["status_codes"].items() if k >= 400) / info["count"], 3
+                ),
+            }
+        )
     return result
 
 
@@ -58,8 +61,13 @@ def classify_api_sensitivity(apis):
         for category, patterns in sensitive_patterns.items():
             if any(re.search(p, path, re.IGNORECASE) for p in patterns):
                 categories.append(category)
-        sensitivity = "HIGH" if any(c in categories for c in ["PII", "Financial", "Auth", "Admin"]) \
-            else "LOW" if "Health" in categories else "MEDIUM"
+        sensitivity = (
+            "HIGH"
+            if any(c in categories for c in ["PII", "Financial", "Auth", "Admin"])
+            else "LOW"
+            if "Health" in categories
+            else "MEDIUM"
+        )
         classified.append({**api, "categories": categories, "sensitivity": sensitivity})
     return classified
 
@@ -87,8 +95,9 @@ def score_api_risk(apis):
             risk_score += 10
             factors.append("state_changing_methods")
         severity = "CRITICAL" if risk_score >= 50 else "HIGH" if risk_score >= 30 else "MEDIUM"
-        scored.append({**api, "risk_score": risk_score, "risk_factors": factors,
-                       "risk_level": severity})
+        scored.append(
+            {**api, "risk_score": risk_score, "risk_factors": factors, "risk_level": severity}
+        )
     return sorted(scored, key=lambda x: x["risk_score"], reverse=True)
 
 
@@ -99,6 +108,7 @@ def check_api_security_controls(apis, spec_path=None):
     if spec_path:
         try:
             import yaml
+
             with open(spec_path) as f:
                 spec = yaml.safe_load(f) if spec_path.endswith((".yaml", ".yml")) else json.load(f)
             spec_paths = set(spec.get("paths", {}).keys())
@@ -106,15 +116,22 @@ def check_api_security_controls(apis, spec_path=None):
             pass
     for api in apis:
         if spec_paths and api["path"] not in spec_paths:
-            findings.append({
-                "path": api["path"], "issue": "undocumented_api",
-                "severity": "HIGH", "recommendation": "Add to OpenAPI spec or deprecate",
-            })
+            findings.append(
+                {
+                    "path": api["path"],
+                    "issue": "undocumented_api",
+                    "severity": "HIGH",
+                    "recommendation": "Add to OpenAPI spec or deprecate",
+                }
+            )
         if api.get("sensitivity") == "HIGH" and api.get("error_rate", 0) > 0.05:
-            findings.append({
-                "path": api["path"], "issue": "sensitive_endpoint_high_errors",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "path": api["path"],
+                    "issue": "sensitive_endpoint_high_errors",
+                    "severity": "HIGH",
+                }
+            )
     return findings
 
 
@@ -123,8 +140,9 @@ def main():
     parser.add_argument("--log", help="API traffic log (JSON lines)")
     parser.add_argument("--spec", help="OpenAPI spec for comparison")
     parser.add_argument("--output", default="api_posture_report.json")
-    parser.add_argument("--action", choices=["discover", "classify", "score", "audit", "full"],
-                        default="full")
+    parser.add_argument(
+        "--action", choices=["discover", "classify", "score", "audit", "full"], default="full"
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

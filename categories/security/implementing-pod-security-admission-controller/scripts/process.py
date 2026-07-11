@@ -4,11 +4,10 @@ Pod Security Admission Manager - Audit namespaces for PSA compliance,
 apply labels, and generate migration reports.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
-
 
 PSA_LABELS = {
     "enforce": "pod-security.kubernetes.io/enforce",
@@ -20,8 +19,13 @@ PSA_LABELS = {
 }
 
 SYSTEM_NAMESPACES = {
-    "kube-system", "kube-public", "kube-node-lease",
-    "calico-system", "tigera-operator", "gatekeeper-system", "falco",
+    "kube-system",
+    "kube-public",
+    "kube-node-lease",
+    "calico-system",
+    "tigera-operator",
+    "gatekeeper-system",
+    "falco",
 }
 
 
@@ -53,10 +57,16 @@ def get_namespace_psa_labels() -> list:
 
 def dry_run_enforcement(namespace: str, level: str) -> dict:
     """Test what would happen if PSA enforcement was applied."""
-    stdout, stderr, rc = run_kubectl([
-        "label", "--dry-run=server", "--overwrite", "namespace", namespace,
-        f"pod-security.kubernetes.io/enforce={level}"
-    ])
+    stdout, stderr, rc = run_kubectl(
+        [
+            "label",
+            "--dry-run=server",
+            "--overwrite",
+            "namespace",
+            namespace,
+            f"pod-security.kubernetes.io/enforce={level}",
+        ]
+    )
     violations = []
     if "Warning" in stderr or "Warning" in stdout:
         for line in (stderr + stdout).split("\n"):
@@ -84,20 +94,21 @@ def audit_all_namespaces() -> list:
 
     for ns in ns_info:
         if ns["is_system"]:
-            status = "EXEMPT"
+            pass
         elif ns["enforce"] == "restricted":
-            status = "COMPLIANT"
             compliant += 1
         elif ns["enforce"] == "baseline":
-            status = "PARTIAL"
+            pass
         else:
-            status = "NON-COMPLIANT"
+            pass
 
         if not ns["is_system"]:
             total += 1
 
         system = "Yes" if ns["is_system"] else "No"
-        print(f"{ns['namespace']:<30} {ns['enforce']:<12} {ns['audit']:<12} {ns['warn']:<12} {system}")
+        print(
+            f"{ns['namespace']:<30} {ns['enforce']:<12} {ns['audit']:<12} {ns['warn']:<12} {system}"
+        )
 
     print(f"\n{compliant}/{total} non-system namespaces at restricted level")
     return ns_info
@@ -108,9 +119,9 @@ def apply_psa_labels(namespace: str, level: str, version: str = "latest"):
     labels = [
         f"pod-security.kubernetes.io/enforce={level}",
         f"pod-security.kubernetes.io/enforce-version={version}",
-        f"pod-security.kubernetes.io/audit=restricted",
+        "pod-security.kubernetes.io/audit=restricted",
         f"pod-security.kubernetes.io/audit-version={version}",
-        f"pod-security.kubernetes.io/warn=restricted",
+        "pod-security.kubernetes.io/warn=restricted",
         f"pod-security.kubernetes.io/warn-version={version}",
     ]
     cmd = ["label", "--overwrite", "namespace", namespace] + labels
@@ -133,7 +144,9 @@ def main():
 
     apply_cmd = subparsers.add_parser("apply", help="Apply PSA labels")
     apply_cmd.add_argument("--namespace", "-n", required=True)
-    apply_cmd.add_argument("--level", required=True, choices=["privileged", "baseline", "restricted"])
+    apply_cmd.add_argument(
+        "--level", required=True, choices=["privileged", "baseline", "restricted"]
+    )
     apply_cmd.add_argument("--version", default="latest")
 
     args = parser.parse_args()

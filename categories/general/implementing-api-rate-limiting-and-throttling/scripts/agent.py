@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Agent for implementing and testing API rate limiting and throttling."""
 
-import json
 import argparse
+import json
 import time
+from collections import Counter, defaultdict
 from datetime import datetime
-from collections import defaultdict, Counter
 
 
 class TokenBucket:
     """In-memory token bucket rate limiter."""
+
     def __init__(self, max_tokens=100, refill_rate=10.0):
         self.max_tokens = max_tokens
         self.refill_rate = refill_rate
@@ -26,11 +27,15 @@ class TokenBucket:
         if bucket["tokens"] >= 1:
             bucket["tokens"] -= 1
             return True, {"remaining": int(bucket["tokens"]), "limit": self.max_tokens}
-        return False, {"remaining": 0, "retry_after": round((1 - bucket["tokens"]) / self.refill_rate, 2)}
+        return False, {
+            "remaining": 0,
+            "retry_after": round((1 - bucket["tokens"]) / self.refill_rate, 2),
+        }
 
 
 class SlidingWindow:
     """In-memory sliding window rate limiter."""
+
     def __init__(self, window_seconds=60, max_requests=100):
         self.window = window_seconds
         self.max_requests = max_requests
@@ -44,7 +49,10 @@ class SlidingWindow:
         if current < self.max_requests:
             self.requests[client_id].append(now)
             return True, {"remaining": self.max_requests - current - 1, "window": self.window}
-        return False, {"remaining": 0, "retry_after": round(self.requests[client_id][0] - cutoff, 2)}
+        return False, {
+            "remaining": 0,
+            "retry_after": round(self.requests[client_id][0] - cutoff, 2),
+        }
 
 
 def analyze_rate_limit_effectiveness(log_path):
@@ -69,15 +77,25 @@ def analyze_rate_limit_effectiveness(log_path):
     for ip, total in ip_requests.most_common(20):
         rate_limited = ip_429s.get(ip, 0)
         if total > 1000 and rate_limited == 0:
-            findings.append({
-                "ip": ip, "total_requests": total, "rate_limited": 0,
-                "issue": "high_volume_not_rate_limited", "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "ip": ip,
+                    "total_requests": total,
+                    "rate_limited": 0,
+                    "issue": "high_volume_not_rate_limited",
+                    "severity": "HIGH",
+                }
+            )
         elif rate_limited > 0 and rate_limited < total * 0.1:
-            findings.append({
-                "ip": ip, "total_requests": total, "rate_limited": rate_limited,
-                "issue": "rate_limit_too_permissive", "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "ip": ip,
+                    "total_requests": total,
+                    "rate_limited": rate_limited,
+                    "issue": "rate_limit_too_permissive",
+                    "severity": "MEDIUM",
+                }
+            )
     return findings
 
 
@@ -89,15 +107,17 @@ def simulate_rate_limit_test(algorithm="token_bucket", requests_count=200, rate=
         limiter = SlidingWindow(window_seconds=60, max_requests=rate)
     allowed = 0
     denied = 0
-    for i in range(requests_count):
+    for _i in range(requests_count):
         ok, _ = limiter.allow("test_client")
         if ok:
             allowed += 1
         else:
             denied += 1
     return {
-        "algorithm": algorithm, "total_requests": requests_count,
-        "allowed": allowed, "denied": denied,
+        "algorithm": algorithm,
+        "total_requests": requests_count,
+        "allowed": allowed,
+        "denied": denied,
         "effective_rate": round(allowed / requests_count * 100, 1),
     }
 
@@ -130,12 +150,13 @@ def generate_rate_limit_recommendations(log_path):
 
 def main():
     parser = argparse.ArgumentParser(description="API Rate Limiting Agent")
-    parser.add_argument("--action", choices=[
-        "analyze", "simulate", "recommend", "full"
-    ], default="full")
+    parser.add_argument(
+        "--action", choices=["analyze", "simulate", "recommend", "full"], default="full"
+    )
     parser.add_argument("--log", help="API access log (JSON lines)")
-    parser.add_argument("--algorithm", choices=["token_bucket", "sliding_window"],
-                        default="token_bucket")
+    parser.add_argument(
+        "--algorithm", choices=["token_bucket", "sliding_window"], default="token_bucket"
+    )
     parser.add_argument("--output", default="rate_limiting_report.json")
     args = parser.parse_args()
 

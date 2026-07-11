@@ -9,10 +9,7 @@ import json
 import sys
 from collections import defaultdict
 
-from google.cloud import securitycenter_v1
-from google.cloud import asset_v1
-from google.cloud import storage
-from google.cloud import compute_v1
+from google.cloud import asset_v1, compute_v1, securitycenter_v1, storage
 
 
 class GCPSecurityAssessmentAgent:
@@ -34,13 +31,15 @@ class GCPSecurityAssessmentAgent:
         )
         for finding_result in self.scc_client.list_findings(request=request):
             f = finding_result.finding
-            findings.append({
-                "category": f.category,
-                "severity": securitycenter_v1.Finding.Severity(f.severity).name,
-                "resource": f.resource_name,
-                "event_time": f.event_time.isoformat() if f.event_time else None,
-                "description": f.description[:200] if f.description else "",
-            })
+            findings.append(
+                {
+                    "category": f.category,
+                    "severity": securitycenter_v1.Finding.Severity(f.severity).name,
+                    "resource": f.resource_name,
+                    "event_time": f.event_time.isoformat() if f.event_time else None,
+                    "description": f.description[:200] if f.description else "",
+                }
+            )
         return findings
 
     def audit_iam_policies(self):
@@ -55,11 +54,13 @@ class GCPSecurityAssessmentAgent:
             request = asset_v1.SearchAllIamPoliciesRequest(scope=scope, query=query)
             for result in self.asset_client.search_all_iam_policies(request=request):
                 for binding in result.policy.bindings:
-                    findings[category].append({
-                        "resource": result.resource,
-                        "role": binding.role,
-                        "members": list(binding.members),
-                    })
+                    findings[category].append(
+                        {
+                            "resource": result.resource,
+                            "role": binding.role,
+                            "members": list(binding.members),
+                        }
+                    )
         return findings
 
     def audit_firewall_rules(self):
@@ -79,18 +80,22 @@ class GCPSecurityAssessmentAgent:
             allowed_ports = []
             for allowed in rule.allowed:
                 ports = list(allowed.ports) if allowed.ports else ["all"]
-                allowed_ports.append({
-                    "protocol": allowed.I_p_protocol,
-                    "ports": ports,
-                })
-            risky_rules.append({
-                "name": rule.name,
-                "network": rule.network,
-                "source_ranges": source_ranges,
-                "allowed": allowed_ports,
-                "priority": rule.priority,
-                "disabled": rule.disabled,
-            })
+                allowed_ports.append(
+                    {
+                        "protocol": allowed.I_p_protocol,
+                        "ports": ports,
+                    }
+                )
+            risky_rules.append(
+                {
+                    "name": rule.name,
+                    "network": rule.network,
+                    "source_ranges": source_ranges,
+                    "allowed": allowed_ports,
+                    "priority": rule.priority,
+                    "disabled": rule.disabled,
+                }
+            )
         return risky_rules
 
     def audit_storage_buckets(self):
@@ -111,17 +116,19 @@ class GCPSecurityAssessmentAgent:
                     is_public = True
                     public_roles.append(binding["role"])
 
-            bucket_findings.append({
-                "name": bucket.name,
-                "location": bucket.location,
-                "storage_class": bucket.storage_class,
-                "is_public": is_public,
-                "public_roles": public_roles,
-                "uniform_access": bucket.iam_configuration.get(
-                    "uniformBucketLevelAccess", {}
-                ).get("enabled", False),
-                "versioning": bucket.versioning_enabled,
-            })
+            bucket_findings.append(
+                {
+                    "name": bucket.name,
+                    "location": bucket.location,
+                    "storage_class": bucket.storage_class,
+                    "is_public": is_public,
+                    "public_roles": public_roles,
+                    "uniform_access": bucket.iam_configuration.get(
+                        "uniformBucketLevelAccess", {}
+                    ).get("enabled", False),
+                    "versioning": bucket.versioning_enabled,
+                }
+            )
         return bucket_findings
 
     def get_finding_summary(self):

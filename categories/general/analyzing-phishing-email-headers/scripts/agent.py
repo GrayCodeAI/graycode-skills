@@ -5,18 +5,15 @@ Parses email headers to detect spoofing, authentication failures,
 suspicious routing, and phishing indicators.
 """
 
-import os
-import sys
-import json
-import re
 import email
 import email.utils
-from datetime import datetime
-from collections import OrderedDict
+import os
+import re
+import sys
 
 
 def parse_email_file(filepath):
-    with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+    with open(filepath, encoding="utf-8", errors="replace") as f:
         return email.message_from_string(f.read())
 
 
@@ -109,47 +106,74 @@ def detect_display_name_spoofing(msg):
     reply_to = msg.get("Reply-To", "")
     findings = []
     name, addr = email.utils.parseaddr(from_header)
-    if name and addr:
-        if re.search(r"@", name):
-            findings.append({
+    if name and addr and re.search(r"@", name):
+        findings.append(
+            {
                 "type": "email_in_display_name",
                 "detail": f"Display name contains email: {name}",
-            })
+            }
+        )
     if reply_to:
         _, reply_addr = email.utils.parseaddr(reply_to)
         if reply_addr and addr and reply_addr.lower() != addr.lower():
-            findings.append({
-                "type": "reply_to_mismatch",
-                "detail": f"From: {addr} vs Reply-To: {reply_addr}",
-            })
+            findings.append(
+                {
+                    "type": "reply_to_mismatch",
+                    "detail": f"From: {addr} vs Reply-To: {reply_addr}",
+                }
+            )
     return findings
 
 
 def detect_phishing_indicators(msg, urls):
     indicators = []
     subject = msg.get("Subject", "").lower()
-    urgency = ["urgent", "immediate", "action required", "suspended",
-               "verify", "expires today", "click here", "limited time"]
+    urgency = [
+        "urgent",
+        "immediate",
+        "action required",
+        "suspended",
+        "verify",
+        "expires today",
+        "click here",
+        "limited time",
+    ]
     for word in urgency:
         if word in subject:
-            indicators.append({
-                "type": "urgency_subject", "keyword": word, "severity": "MEDIUM",
-            })
+            indicators.append(
+                {
+                    "type": "urgency_subject",
+                    "keyword": word,
+                    "severity": "MEDIUM",
+                }
+            )
             break
     for url in urls:
         if re.search(r"https?://\d+\.\d+\.\d+\.\d+", url):
-            indicators.append({
-                "type": "ip_url", "url": url[:100], "severity": "HIGH",
-            })
+            indicators.append(
+                {
+                    "type": "ip_url",
+                    "url": url[:100],
+                    "severity": "HIGH",
+                }
+            )
         if len(url) > 200:
-            indicators.append({
-                "type": "long_url", "url_length": len(url), "severity": "MEDIUM",
-            })
+            indicators.append(
+                {
+                    "type": "long_url",
+                    "url_length": len(url),
+                    "severity": "MEDIUM",
+                }
+            )
     x_mailer = msg.get("X-Mailer", "")
     if x_mailer and any(s in x_mailer.lower() for s in ["phpmailer", "swiftmailer"]):
-        indicators.append({
-            "type": "suspicious_mailer", "mailer": x_mailer, "severity": "MEDIUM",
-        })
+        indicators.append(
+            {
+                "type": "suspicious_mailer",
+                "mailer": x_mailer,
+                "severity": "MEDIUM",
+            }
+        )
     return indicators
 
 
@@ -175,8 +199,9 @@ def generate_report(filepath, msg):
         "urls": urls[:20],
         "spoofing_indicators": spoofing,
         "phishing_indicators": phishing,
-        "verdict": "SUSPICIOUS" if (phishing or spoofing or
-                   spf.get("status") == "fail") else "CLEAN",
+        "verdict": "SUSPICIOUS"
+        if (phishing or spoofing or spf.get("status") == "fail")
+        else "CLEAN",
     }
 
 
@@ -200,7 +225,7 @@ if __name__ == "__main__":
     print(f"[*] Received hops: {report['received_hops']}")
 
     auth = report["authentication"]
-    print(f"\n--- Authentication ---")
+    print("\n--- Authentication ---")
     print(f"  SPF:   {auth['spf']['status']}")
     print(f"  DKIM:  {auth['dkim']['status']}")
     print(f"  DMARC: {auth['dmarc']['status']}")
@@ -209,8 +234,10 @@ if __name__ == "__main__":
     for u in report["urls"][:5]:
         print(f"  {u[:80]}")
 
-    print(f"\n--- Indicators ---")
+    print("\n--- Indicators ---")
     for i in report["phishing_indicators"] + report["spoofing_indicators"]:
-        print(f"  [{i.get('severity','INFO')}] {i['type']}: {i.get('detail', i.get('keyword', ''))}")
+        print(
+            f"  [{i.get('severity', 'INFO')}] {i['type']}: {i.get('detail', i.get('keyword', ''))}"
+        )
 
     print(f"\n[*] Verdict: {report['verdict']}")

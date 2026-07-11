@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for auditing Google Workspace phishing and malware protection settings."""
 
-import json
 import argparse
+import json
 import subprocess
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
 
 
 def gam_command(args_list):
@@ -73,24 +73,28 @@ def audit_phishing_protection(config_path):
         },
     }
 
-    for check_name, check_info in checks.items():
+    for _check_name, check_info in checks.items():
         enabled = safety.get(check_info["key"], False)
-        findings.append({
-            "control": check_info["description"],
-            "enabled": enabled,
-            "status": "COMPLIANT" if enabled else "NON_COMPLIANT",
-            "severity": "INFO" if enabled else check_info["severity"],
-        })
+        findings.append(
+            {
+                "control": check_info["description"],
+                "enabled": enabled,
+                "status": "COMPLIANT" if enabled else "NON_COMPLIANT",
+                "severity": "INFO" if enabled else check_info["severity"],
+            }
+        )
 
     quarantine = safety.get("quarantine_action", "")
     if quarantine not in ("quarantine", "reject"):
-        findings.append({
-            "control": "Quarantine action for detected threats",
-            "current": quarantine or "not configured",
-            "status": "NON_COMPLIANT",
-            "severity": "HIGH",
-            "recommendation": "Set action to quarantine or reject",
-        })
+        findings.append(
+            {
+                "control": "Quarantine action for detected threats",
+                "current": quarantine or "not configured",
+                "status": "NON_COMPLIANT",
+                "severity": "HIGH",
+                "recommendation": "Set action to quarantine or reject",
+            }
+        )
 
     return findings
 
@@ -157,8 +161,9 @@ def main():
     parser.add_argument("--config", help="Workspace safety config JSON to audit")
     parser.add_argument("--dmarc-report", help="DMARC aggregate report JSON")
     parser.add_argument("--incidents", help="Phishing incident log JSON")
-    parser.add_argument("--action", choices=["audit", "dmarc", "incidents",
-                                              "recommend", "full"], default="full")
+    parser.add_argument(
+        "--action", choices=["audit", "dmarc", "incidents", "recommend", "full"], default="full"
+    )
     parser.add_argument("--output", default="gws_phishing_report.json")
     args = parser.parse_args()
 

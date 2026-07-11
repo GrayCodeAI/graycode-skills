@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Tailscale zero trust VPN deployment audit agent."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
@@ -22,8 +22,7 @@ class TailscaleClient:
         self.headers = {"Authorization": f"Bearer {api_key}"}
 
     def _get(self, path):
-        resp = requests.get(f"{self.base_url}{path}",
-                            headers=self.headers, timeout=15)
+        resp = requests.get(f"{self.base_url}{path}", headers=self.headers, timeout=15)
         resp.raise_for_status()
         return resp.json()
 
@@ -46,28 +45,34 @@ class TailscaleClient:
 def audit_devices(devices):
     """Audit device compliance: OS versions, key expiry, last seen."""
     findings = []
-    now = datetime.utcnow()
+    datetime.utcnow()
     for dev in devices:
         hostname = dev.get("hostname", "unknown")
         if dev.get("keyExpiryDisabled", False):
-            findings.append({
-                "device": hostname,
-                "issue": "Key expiry disabled — device never requires re-authentication",
-                "severity": "HIGH",
-            })
-        if not dev.get("updateAvailable", False) is False and dev.get("updateAvailable"):
-            findings.append({
-                "device": hostname,
-                "issue": "Tailscale update available but not installed",
-                "severity": "MEDIUM",
-            })
-        os_name = dev.get("os", "")
+            findings.append(
+                {
+                    "device": hostname,
+                    "issue": "Key expiry disabled — device never requires re-authentication",
+                    "severity": "HIGH",
+                }
+            )
+        if dev.get("updateAvailable", False) is not False and dev.get("updateAvailable"):
+            findings.append(
+                {
+                    "device": hostname,
+                    "issue": "Tailscale update available but not installed",
+                    "severity": "MEDIUM",
+                }
+            )
+        dev.get("os", "")
         if dev.get("blocksIncomingConnections", False):
-            findings.append({
-                "device": hostname,
-                "issue": "Device blocks incoming connections (shields up mode)",
-                "severity": "INFO",
-            })
+            findings.append(
+                {
+                    "device": hostname,
+                    "issue": "Device blocks incoming connections (shields up mode)",
+                    "severity": "INFO",
+                }
+            )
     return findings
 
 
@@ -79,28 +84,32 @@ def audit_acl(acl_data):
         src = rule.get("src", [])
         dst = rule.get("dst", [])
         if "*" in src and any("*:*" in d for d in dst):
-            findings.append({
-                "rule_index": i,
-                "issue": "Allow-all rule: src=* dst=*:* — no zero trust segmentation",
-                "severity": "CRITICAL",
-            })
+            findings.append(
+                {
+                    "rule_index": i,
+                    "issue": "Allow-all rule: src=* dst=*:* — no zero trust segmentation",
+                    "severity": "CRITICAL",
+                }
+            )
     ssh_rules = acl_data.get("ssh", []) if isinstance(acl_data, dict) else []
     for rule in ssh_rules:
         if rule.get("action") == "accept" and "*" in rule.get("src", []):
-            findings.append({
-                "rule": "SSH",
-                "issue": "SSH access allowed from all users",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "rule": "SSH",
+                    "issue": "SSH access allowed from all users",
+                    "severity": "HIGH",
+                }
+            )
     return findings
 
 
 def run_audit(api_key, tailnet):
     """Execute Tailscale zero trust audit."""
-    print(f"\n{'='*60}")
-    print(f"  TAILSCALE ZERO TRUST VPN AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  TAILSCALE ZERO TRUST VPN AUDIT")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     client = TailscaleClient(api_key, tailnet)
     report = {}
@@ -109,8 +118,10 @@ def run_audit(api_key, tailnet):
     report["total_devices"] = len(devices)
     print(f"--- DEVICES ({len(devices)}) ---")
     for d in devices[:15]:
-        print(f"  {d.get('hostname','')}: {d.get('os','')}/{d.get('clientVersion','')} "
-              f"({'online' if d.get('online') else 'offline'})")
+        print(
+            f"  {d.get('hostname', '')}: {d.get('os', '')}/{d.get('clientVersion', '')} "
+            f"({'online' if d.get('online') else 'offline'})"
+        )
 
     dev_findings = audit_devices(devices)
     report["device_findings"] = dev_findings
@@ -127,7 +138,7 @@ def run_audit(api_key, tailnet):
 
     dns = client.list_dns()
     report["dns_config"] = dns
-    print(f"\n--- DNS CONFIG ---")
+    print("\n--- DNS CONFIG ---")
     for ns in dns.get("dns", []):
         print(f"  Nameserver: {ns}")
 

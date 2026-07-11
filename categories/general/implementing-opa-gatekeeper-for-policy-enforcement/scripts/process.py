@@ -4,12 +4,12 @@ OPA Gatekeeper Policy Manager - Generate ConstraintTemplates, audit
 constraint violations, and manage policy lifecycle.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
-import yaml
 
+import yaml
 
 CONSTRAINT_TEMPLATES = {
     "required-labels": {
@@ -27,9 +27,7 @@ violation[{"msg": msg, "details": {"missing_labels": missing}}] {
 """,
         "params_schema": {
             "type": "object",
-            "properties": {
-                "labels": {"type": "array", "items": {"type": "string"}}
-            },
+            "properties": {"labels": {"type": "array", "items": {"type": "string"}}},
         },
     },
     "block-privileged": {
@@ -69,9 +67,7 @@ image_matches(image) {
 """,
         "params_schema": {
             "type": "object",
-            "properties": {
-                "repos": {"type": "array", "items": {"type": "string"}}
-            },
+            "properties": {"repos": {"type": "array", "items": {"type": "string"}}},
         },
     },
     "block-latest-tag": {
@@ -132,17 +128,17 @@ def generate_constraint_template(template_name: str) -> str:
                     "names": {"kind": tmpl["kind"]},
                 }
             },
-            "targets": [{
-                "target": "admission.k8s.gatekeeper.sh",
-                "rego": tmpl["rego"].strip(),
-            }],
+            "targets": [
+                {
+                    "target": "admission.k8s.gatekeeper.sh",
+                    "rego": tmpl["rego"].strip(),
+                }
+            ],
         },
     }
 
     if tmpl["params_schema"]:
-        ct["spec"]["crd"]["spec"]["validation"] = {
-            "openAPIV3Schema": tmpl["params_schema"]
-        }
+        ct["spec"]["crd"]["spec"]["validation"] = {"openAPIV3Schema": tmpl["params_schema"]}
 
     return yaml.dump(ct, default_flow_style=False)
 
@@ -151,7 +147,8 @@ def audit_constraints() -> list:
     """Fetch all constraint violations from the cluster."""
     result = subprocess.run(
         ["kubectl", "get", "constraints", "-o", "json"],
-        capture_output=True, text=True,
+        capture_output=True,
+        text=True,
     )
     if result.returncode != 0:
         print(f"Error: {result.stderr}", file=sys.stderr)
@@ -165,13 +162,15 @@ def audit_constraints() -> list:
         enforcement = item.get("spec", {}).get("enforcementAction", "deny")
         violations = item.get("status", {}).get("violations", [])
         total = item.get("status", {}).get("totalViolations", 0)
-        results.append({
-            "name": name,
-            "kind": kind,
-            "enforcement": enforcement,
-            "violation_count": total,
-            "violations": violations[:10],
-        })
+        results.append(
+            {
+                "name": name,
+                "kind": kind,
+                "enforcement": enforcement,
+                "violation_count": total,
+                "violations": violations[:10],
+            }
+        )
     return results
 
 
@@ -199,9 +198,9 @@ def main():
     subparsers = parser.add_subparsers(dest="command")
 
     gen = subparsers.add_parser("generate", help="Generate ConstraintTemplate")
-    gen.add_argument("--template", required=True,
-                    choices=list(CONSTRAINT_TEMPLATES.keys()),
-                    help="Template name")
+    gen.add_argument(
+        "--template", required=True, choices=list(CONSTRAINT_TEMPLATES.keys()), help="Template name"
+    )
 
     subparsers.add_parser("list-templates", help="List available templates")
     subparsers.add_parser("audit", help="Audit all constraint violations")

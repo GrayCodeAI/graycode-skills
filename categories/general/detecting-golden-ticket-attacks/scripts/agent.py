@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Golden Ticket Detection Agent - Detects forged Kerberos TGTs via Event 4624/4672/4768 analysis."""
 
+import argparse
 import json
 import logging
-import argparse
 from collections import defaultdict
 from datetime import datetime
 
@@ -16,9 +16,14 @@ logger = logging.getLogger(__name__)
 NS = {"evt": "http://schemas.microsoft.com/win/2004/08/events/event"}
 
 ADMIN_PRIVILEGES = [
-    "SeDebugPrivilege", "SeTcbPrivilege", "SeBackupPrivilege",
-    "SeRestorePrivilege", "SeTakeOwnershipPrivilege", "SeLoadDriverPrivilege",
-    "SeImpersonatePrivilege", "SeAssignPrimaryTokenPrivilege",
+    "SeDebugPrivilege",
+    "SeTcbPrivilege",
+    "SeBackupPrivilege",
+    "SeRestorePrivilege",
+    "SeTakeOwnershipPrivilege",
+    "SeLoadDriverPrivilege",
+    "SeImpersonatePrivilege",
+    "SeAssignPrimaryTokenPrivilege",
 ]
 
 
@@ -62,14 +67,16 @@ def detect_orphan_logons(events):
         if logon.get("AuthenticationPackageName", "") == "Kerberos":
             account = logon.get("TargetUserName", "").lower()
             if account and account not in tgt_accounts and not account.endswith("$"):
-                orphan_logons.append({
-                    "timestamp": logon["_timestamp"],
-                    "account": logon.get("TargetUserName", ""),
-                    "source_ip": logon.get("IpAddress", ""),
-                    "logon_type": logon.get("LogonType", ""),
-                    "workstation": logon.get("WorkstationName", ""),
-                    "indicator": "Kerberos logon without TGT request (possible golden ticket)",
-                })
+                orphan_logons.append(
+                    {
+                        "timestamp": logon["_timestamp"],
+                        "account": logon.get("TargetUserName", ""),
+                        "source_ip": logon.get("IpAddress", ""),
+                        "logon_type": logon.get("LogonType", ""),
+                        "workstation": logon.get("WorkstationName", ""),
+                        "indicator": "Kerberos logon without TGT request (possible golden ticket)",
+                    }
+                )
     logger.info("Found %d orphan Kerberos logons", len(orphan_logons))
     return orphan_logons
 
@@ -85,13 +92,15 @@ def detect_anomalous_privileges(events, known_admins=None):
         if account.lower() not in known_admins and not account.endswith("$"):
             admin_privs = [p for p in ADMIN_PRIVILEGES if p in privileges]
             if admin_privs:
-                anomalous.append({
-                    "timestamp": priv_event["_timestamp"],
-                    "account": account,
-                    "domain": priv_event.get("SubjectDomainName", ""),
-                    "admin_privileges": admin_privs,
-                    "indicator": "Non-admin account with admin privileges (golden ticket indicator)",
-                })
+                anomalous.append(
+                    {
+                        "timestamp": priv_event["_timestamp"],
+                        "account": account,
+                        "domain": priv_event.get("SubjectDomainName", ""),
+                        "admin_privileges": admin_privs,
+                        "indicator": "Non-admin account with admin privileges (golden ticket indicator)",
+                    }
+                )
     logger.info("Found %d anomalous privilege assignments", len(anomalous))
     return anomalous
 
@@ -108,12 +117,14 @@ def detect_abnormal_tgt_patterns(events):
             continue
         rc4_tgts = [t for t in tgts if t.get("TicketEncryptionType", "") in ("0x17", "0x18")]
         if rc4_tgts and len(rc4_tgts) > len(tgts) * 0.5:
-            anomalies.append({
-                "account": account,
-                "total_tgts": len(tgts),
-                "rc4_tgts": len(rc4_tgts),
-                "indicator": "Majority RC4 TGT requests (possible ticket forging)",
-            })
+            anomalies.append(
+                {
+                    "account": account,
+                    "total_tgts": len(tgts),
+                    "rc4_tgts": len(rc4_tgts),
+                    "indicator": "Majority RC4 TGT requests (possible ticket forging)",
+                }
+            )
     logger.info("Found %d accounts with abnormal TGT patterns", len(anomalies))
     return anomalies
 
@@ -127,20 +138,24 @@ def detect_logon_privilege_correlation(events):
     logon_accounts = defaultdict(list)
     for logon in events["4624"]:
         account = logon.get("TargetUserName", "").lower()
-        logon_accounts[account].append({
-            "timestamp": logon["_timestamp"],
-            "source_ip": logon.get("IpAddress", ""),
-            "logon_type": logon.get("LogonType", ""),
-        })
+        logon_accounts[account].append(
+            {
+                "timestamp": logon["_timestamp"],
+                "source_ip": logon.get("IpAddress", ""),
+                "logon_type": logon.get("LogonType", ""),
+            }
+        )
     correlations = []
     for account in priv_accounts:
         if account in logon_accounts and not account.endswith("$"):
-            correlations.append({
-                "account": account,
-                "privilege_events": len(priv_accounts[account]),
-                "logon_events": len(logon_accounts[account]),
-                "source_ips": list({l["source_ip"] for l in logon_accounts[account]}),
-            })
+            correlations.append(
+                {
+                    "account": account,
+                    "privilege_events": len(priv_accounts[account]),
+                    "logon_events": len(logon_accounts[account]),
+                    "source_ips": list({l["source_ip"] for l in logon_accounts[account]}),
+                }
+            )
     return correlations
 
 

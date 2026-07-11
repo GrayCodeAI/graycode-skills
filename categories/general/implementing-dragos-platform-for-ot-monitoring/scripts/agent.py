@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Agent for implementing Dragos Platform OT network monitoring."""
 
-import json
 import argparse
+import json
 from datetime import datetime
 
 try:
@@ -64,13 +64,15 @@ def analyze_ot_protocols(log_path):
             proto = entry.get("protocol", entry.get("service", ""))
             protocol_counts[proto] = protocol_counts.get(proto, 0) + 1
             if entry.get("anomaly") or entry.get("alert"):
-                anomalies.append({
-                    "timestamp": entry.get("timestamp", ""),
-                    "protocol": proto,
-                    "src": entry.get("src_ip", ""),
-                    "dst": entry.get("dst_ip", ""),
-                    "description": entry.get("description", entry.get("alert", "")),
-                })
+                anomalies.append(
+                    {
+                        "timestamp": entry.get("timestamp", ""),
+                        "protocol": proto,
+                        "src": entry.get("src_ip", ""),
+                        "dst": entry.get("dst_ip", ""),
+                        "description": entry.get("description", entry.get("alert", "")),
+                    }
+                )
     return {"protocols": protocol_counts, "anomalies": anomalies[:100]}
 
 
@@ -102,8 +104,11 @@ def main():
     parser.add_argument("--api-key", help="Dragos API key")
     parser.add_argument("--log", help="OT protocol log (JSON lines)")
     parser.add_argument("--output", default="dragos_monitoring_report.json")
-    parser.add_argument("--action", choices=["assets", "threats", "vulns", "protocols",
-                                              "config", "full"], default="full")
+    parser.add_argument(
+        "--action",
+        choices=["assets", "threats", "vulns", "protocols", "config", "full"],
+        default="full",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

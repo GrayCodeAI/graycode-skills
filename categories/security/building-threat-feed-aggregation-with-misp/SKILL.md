@@ -266,7 +266,7 @@ class MISPSIEMExporter:
             }
             resp = requests.post(
                 f"{splunk_url}/services/collector/event",
-                headers=headers, json=event, verify=False,
+                headers=headers, json=event, verify=True,
             )
             if resp.status_code == 200:
                 exported += 1

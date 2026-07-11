@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Agent for implementing end-to-end encryption (E2EE) for messaging using X25519 + AES-GCM."""
 
-import json
 import argparse
+import json
 import os
-from datetime import datetime
 
 try:
+    from cryptography.hazmat.primitives import hashes, serialization
     from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
     from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-    from cryptography.hazmat.primitives import hashes, serialization
+
     HAS_CRYPTO = True
 except ImportError:
     HAS_CRYPTO = False

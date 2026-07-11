@@ -6,13 +6,12 @@ Performs forensic analysis of SQLite databases including freelist analysis,
 WAL parsing, deleted record recovery, and timestamp decoding.
 """
 
+import json
+import os
 import sqlite3
 import struct
-import os
 import sys
-import json
-from datetime import datetime, timedelta
-from pathlib import Path
+from datetime import datetime
 
 
 class SQLiteForensicAnalyzer:
@@ -111,20 +110,18 @@ class SQLiteForensicAnalyzer:
                 leaf_count = struct.unpack(">I", data[4:8])[0]
                 leaves = []
                 for i in range(min(leaf_count, (page_size - 8) // 4)):
-                    leaf = struct.unpack(">I", data[8 + i * 4:12 + i * 4])[0]
+                    leaf = struct.unpack(">I", data[8 + i * 4 : 12 + i * 4])[0]
                     leaves.append(leaf)
-                freelist_pages.append({
-                    "trunk_page": trunk,
-                    "leaf_count": leaf_count,
-                    "leaves": leaves
-                })
+                freelist_pages.append(
+                    {"trunk_page": trunk, "leaf_count": leaf_count, "leaves": leaves}
+                )
                 trunk = next_trunk
 
         return {
             "total_freelist_pages": total_freelist,
             "trunk_pages": len(freelist_pages),
             "details": freelist_pages,
-            "recoverable": total_freelist > 0
+            "recoverable": total_freelist > 0,
         }
 
     def check_wal(self) -> dict:
@@ -147,11 +144,11 @@ class SQLiteForensicAnalyzer:
 
         return {
             "exists": True,
-            "valid": magic in (0x377f0682, 0x377f0683),
+            "valid": magic in (0x377F0682, 0x377F0683),
             "size_bytes": wal_size,
             "page_size": page_size,
             "checkpoint_sequence": checkpoint,
-            "estimated_frames": frame_count
+            "estimated_frames": frame_count,
         }
 
     def generate_report(self) -> str:

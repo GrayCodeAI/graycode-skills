@@ -6,7 +6,6 @@ import subprocess
 import sys
 from datetime import datetime
 
-
 CRYPTO_FINDING_TYPES = [
     "CryptoCurrency:EC2/BitcoinTool.B!DNS",
     "CryptoCurrency:EC2/BitcoinTool.B",
@@ -46,83 +45,114 @@ def list_crypto_findings(detector_id=None):
     if not detector_id:
         return {"error": "No GuardDuty detector found"}
 
-    criteria = {"Criterion": {"type": {"Eq": CRYPTO_FINDING_TYPES}, "service.archived": {"Eq": ["false"]}}}
-    result = aws_cli([
-        "guardduty", "list-findings",
-        "--detector-id", detector_id,
-        "--finding-criteria", json.dumps(criteria),
-    ])
+    criteria = {
+        "Criterion": {"type": {"Eq": CRYPTO_FINDING_TYPES}, "service.archived": {"Eq": ["false"]}}
+    }
+    result = aws_cli(
+        [
+            "guardduty",
+            "list-findings",
+            "--detector-id",
+            detector_id,
+            "--finding-criteria",
+            json.dumps(criteria),
+        ]
+    )
     finding_ids = result.get("FindingIds", [])
     if not finding_ids:
         return {"detector_id": detector_id, "findings": [], "count": 0}
 
-    details = aws_cli([
-        "guardduty", "get-findings",
-        "--detector-id", detector_id,
-        "--finding-ids"] + finding_ids[:25]
+    details = aws_cli(
+        ["guardduty", "get-findings", "--detector-id", detector_id, "--finding-ids"]
+        + finding_ids[:25]
     )
     findings = []
     for f in details.get("Findings", []):
         resource = f.get("Resource", {})
         instance = resource.get("InstanceDetails", {})
-        findings.append({
-            "id": f.get("Id"),
-            "type": f.get("Type"),
-            "severity": f.get("Severity"),
-            "title": f.get("Title"),
-            "instance_id": instance.get("InstanceId"),
-            "instance_type": instance.get("InstanceType"),
-            "region": f.get("Region"),
-            "updated_at": f.get("UpdatedAt"),
-        })
+        findings.append(
+            {
+                "id": f.get("Id"),
+                "type": f.get("Type"),
+                "severity": f.get("Severity"),
+                "title": f.get("Title"),
+                "instance_id": instance.get("InstanceId"),
+                "instance_type": instance.get("InstanceType"),
+                "region": f.get("Region"),
+                "updated_at": f.get("UpdatedAt"),
+            }
+        )
 
     return {"detector_id": detector_id, "count": len(findings), "findings": findings}
 
 
 def check_ec2_cpu_anomalies(threshold_percent=90):
     """Find EC2 instances with sustained high CPU (potential mining)."""
-    result = aws_cli([
-        "cloudwatch", "get-metric-data",
-        "--metric-data-queries", json.dumps([{
-            "Id": "cpu",
-            "MetricStat": {
-                "Metric": {
-                    "Namespace": "AWS/EC2",
-                    "MetricName": "CPUUtilization",
-                },
-                "Period": 3600,
-                "Stat": "Average",
-            },
-        }]),
-        "--start-time", (datetime.utcnow().replace(hour=0, minute=0, second=0)).isoformat() + "Z",
-        "--end-time", datetime.utcnow().isoformat() + "Z",
-    ])
+    result = aws_cli(
+        [
+            "cloudwatch",
+            "get-metric-data",
+            "--metric-data-queries",
+            json.dumps(
+                [
+                    {
+                        "Id": "cpu",
+                        "MetricStat": {
+                            "Metric": {
+                                "Namespace": "AWS/EC2",
+                                "MetricName": "CPUUtilization",
+                            },
+                            "Period": 3600,
+                            "Stat": "Average",
+                        },
+                    }
+                ]
+            ),
+            "--start-time",
+            (datetime.utcnow().replace(hour=0, minute=0, second=0)).isoformat() + "Z",
+            "--end-time",
+            datetime.utcnow().isoformat() + "Z",
+        ]
+    )
     return result
 
 
 def check_cost_anomalies():
     """Check for cost anomaly detections that may indicate mining."""
-    result = aws_cli([
-        "ce", "get-anomalies",
-        "--date-interval", json.dumps({
-            "StartDate": datetime.utcnow().strftime("%Y-%m-01"),
-            "EndDate": datetime.utcnow().strftime("%Y-%m-%d"),
-        }),
-    ])
+    result = aws_cli(
+        [
+            "ce",
+            "get-anomalies",
+            "--date-interval",
+            json.dumps(
+                {
+                    "StartDate": datetime.utcnow().strftime("%Y-%m-01"),
+                    "EndDate": datetime.utcnow().strftime("%Y-%m-%d"),
+                }
+            ),
+        ]
+    )
     return result
 
 
 def check_vpc_flow_mining_ports(log_group="/aws/vpc/flowlogs"):
     """Query CloudWatch Logs for connections to known mining pool ports."""
     ports_filter = " || ".join([f"dstport = {p}" for p in MINING_POOL_PORTS])
-    query = f'fields @timestamp, srcaddr, dstaddr, dstport, action | filter ({ports_filter}) | sort @timestamp desc | limit 50'
-    result = aws_cli([
-        "logs", "start-query",
-        "--log-group-name", log_group,
-        "--start-time", str(int((datetime.utcnow().replace(hour=0)).timestamp())),
-        "--end-time", str(int(datetime.utcnow().timestamp())),
-        "--query-string", query,
-    ])
+    query = f"fields @timestamp, srcaddr, dstaddr, dstport, action | filter ({ports_filter}) | sort @timestamp desc | limit 50"
+    result = aws_cli(
+        [
+            "logs",
+            "start-query",
+            "--log-group-name",
+            log_group,
+            "--start-time",
+            str(int((datetime.utcnow().replace(hour=0)).timestamp())),
+            "--end-time",
+            str(int(datetime.utcnow().timestamp())),
+            "--query-string",
+            query,
+        ]
+    )
     return result
 
 
@@ -160,4 +190,6 @@ if __name__ == "__main__":
     elif action == "terminate" and len(sys.argv) > 2:
         print(json.dumps(terminate_mining_instance(sys.argv[2]), indent=2, default=str))
     else:
-        print("Usage: agent.py [report|findings|costs|flow-logs [log-group]|terminate <instance-id>]")
+        print(
+            "Usage: agent.py [report|findings|costs|flow-logs [log-group]|terminate <instance-id>]"
+        )

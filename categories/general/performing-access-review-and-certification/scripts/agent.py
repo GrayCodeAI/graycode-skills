@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Agent for conducting access review and certification using identity governance APIs."""
 
-import requests
-import json
 import argparse
 import csv
-from datetime import datetime, timezone, timedelta
+import json
+from datetime import datetime, timedelta, timezone
 
 
 def load_access_data(csv_path):
@@ -22,9 +21,15 @@ def identify_orphaned_accounts(records):
     findings = []
     for r in records:
         if not r.get("manager") or r.get("status", "").lower() == "terminated":
-            findings.append({"user": r.get("username"), "status": r.get("status"),
-                             "manager": r.get("manager", "NONE"), "severity": "HIGH",
-                             "issue": "Orphaned/terminated account with active access"})
+            findings.append(
+                {
+                    "user": r.get("username"),
+                    "status": r.get("status"),
+                    "manager": r.get("manager", "NONE"),
+                    "severity": "HIGH",
+                    "issue": "Orphaned/terminated account with active access",
+                }
+            )
     print(f"\n[*] Orphaned/terminated accounts: {len(findings)}")
     for f in findings[:10]:
         print(f"  [!] {f['user']} (status={f['status']}, manager={f['manager']})")
@@ -42,8 +47,14 @@ def check_sod_violations(records, sod_rules):
     for user, ents in user_entitlements.items():
         for rule in sod_rules:
             if rule["role_a"] in ents and rule["role_b"] in ents:
-                findings.append({"user": user, "conflict": f"{rule['role_a']} + {rule['role_b']}",
-                                 "severity": "CRITICAL", "rule": rule.get("name", "")})
+                findings.append(
+                    {
+                        "user": user,
+                        "conflict": f"{rule['role_a']} + {rule['role_b']}",
+                        "severity": "CRITICAL",
+                        "rule": rule.get("name", ""),
+                    }
+                )
     print(f"\n[*] SoD violations: {len(findings)}")
     for f in findings[:10]:
         print(f"  [!] {f['user']}: {f['conflict']}")
@@ -56,8 +67,11 @@ def identify_excessive_access(records, threshold=10):
     for r in records:
         user = r.get("username", "")
         user_counts[user] = user_counts.get(user, 0) + 1
-    excessive = [{"user": u, "count": c, "severity": "MEDIUM"}
-                 for u, c in user_counts.items() if c > threshold]
+    excessive = [
+        {"user": u, "count": c, "severity": "MEDIUM"}
+        for u, c in user_counts.items()
+        if c > threshold
+    ]
     excessive.sort(key=lambda x: -x["count"])
     print(f"\n[*] Users with >{threshold} entitlements: {len(excessive)}")
     for e in excessive[:10]:
@@ -75,8 +89,14 @@ def check_last_used(records, stale_days=90):
             try:
                 lu_dt = datetime.fromisoformat(last_used.replace("Z", "+00:00"))
                 if lu_dt < cutoff:
-                    stale.append({"user": r.get("username"), "entitlement": r.get("entitlement"),
-                                  "last_used": last_used, "severity": "MEDIUM"})
+                    stale.append(
+                        {
+                            "user": r.get("username"),
+                            "entitlement": r.get("entitlement"),
+                            "last_used": last_used,
+                            "severity": "MEDIUM",
+                        }
+                    )
             except ValueError:
                 pass
     print(f"\n[*] Stale entitlements (>{stale_days} days unused): {len(stale)}")
@@ -85,11 +105,19 @@ def check_last_used(records, stale_days=90):
 
 def generate_report(orphaned, sod, excessive, stale, output_path):
     """Generate access review report."""
-    report = {"review_date": datetime.now(timezone.utc).isoformat(),
-              "summary": {"orphaned_accounts": len(orphaned), "sod_violations": len(sod),
-                          "excessive_access": len(excessive), "stale_entitlements": len(stale)},
-              "orphaned": orphaned, "sod_violations": sod,
-              "excessive_access": excessive[:50], "stale_entitlements": stale[:50]}
+    report = {
+        "review_date": datetime.now(timezone.utc).isoformat(),
+        "summary": {
+            "orphaned_accounts": len(orphaned),
+            "sod_violations": len(sod),
+            "excessive_access": len(excessive),
+            "stale_entitlements": len(stale),
+        },
+        "orphaned": orphaned,
+        "sod_violations": sod,
+        "excessive_access": excessive[:50],
+        "stale_entitlements": stale[:50],
+    }
     with open(output_path, "w") as f:
         json.dump(report, f, indent=2, default=str)
     total = len(orphaned) + len(sod) + len(excessive) + len(stale)

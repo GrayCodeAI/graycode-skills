@@ -5,11 +5,10 @@ Automates file carving from disk images using foremost/scalpel,
 validates carved files, and generates evidence catalogs with hashes.
 """
 
-import subprocess
-import os
-import sys
 import hashlib
 import json
+import subprocess
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -67,8 +66,7 @@ class FileCarvingAgent:
                     continue
 
                 result = subprocess.run(
-                    ["file", "--brief", str(filepath)],
-                    capture_output=True, text=True
+                    ["file", "--brief", str(filepath)], capture_output=True, text=True
                 )
                 file_type = result.stdout.strip().lower()
                 if "data" in file_type or "empty" in file_type:
@@ -90,13 +88,15 @@ class FileCarvingAgent:
                 if not filepath.is_file() or filepath.stat().st_size == 0:
                     continue
                 sha256 = hashlib.sha256(filepath.read_bytes()).hexdigest()
-                hashes.append({
-                    "filename": filepath.name,
-                    "type": subdir.name,
-                    "size": filepath.stat().st_size,
-                    "sha256": sha256,
-                    "path": str(filepath),
-                })
+                hashes.append(
+                    {
+                        "filename": filepath.name,
+                        "type": subdir.name,
+                        "size": filepath.stat().st_size,
+                        "sha256": sha256,
+                        "path": str(filepath),
+                    }
+                )
         return hashes
 
     def build_evidence_catalog(self, carved_dir):
@@ -143,7 +143,7 @@ class FileCarvingAgent:
     def generate_report(self, carved_dir):
         """Generate a file carving summary report."""
         validation = self.validate_carved_files(carved_dir)
-        audit = self.parse_audit_file(carved_dir)
+        self.parse_audit_file(carved_dir)
 
         print("FILE CARVING SUMMARY REPORT")
         print("=" * 50)

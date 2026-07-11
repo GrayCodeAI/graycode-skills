@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Agent for analyzing threat intelligence feeds via TAXII 2.1 and STIX 2.1."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime, timedelta
 
-from taxii2client.v21 import Server, Collection, as_pages
-from stix2 import Filter, MemoryStore, Indicator, Relationship, Bundle
-from stix2 import ThreatActor, Malware
+from stix2 import Bundle, Indicator
+from taxii2client.v21 import Collection, Server, as_pages
 
 
 def discover_taxii_server(url, user=None, password=None):
@@ -18,12 +17,14 @@ def discover_taxii_server(url, user=None, password=None):
     for api_root in server.api_roots:
         root_info = {"title": api_root.title, "collections": []}
         for collection in api_root.collections:
-            root_info["collections"].append({
-                "id": collection.id,
-                "title": collection.title,
-                "can_read": collection.can_read,
-                "can_write": collection.can_write,
-            })
+            root_info["collections"].append(
+                {
+                    "id": collection.id,
+                    "title": collection.title,
+                    "can_read": collection.can_read,
+                    "can_write": collection.can_write,
+                }
+            )
         info["api_roots"].append(root_info)
     return info
 
@@ -63,10 +64,12 @@ def normalize_to_stix(ioc_value, ioc_type, source_name, confidence=50):
         confidence=confidence,
         created_by_ref="identity--f165a29e-a997-5f8a-a63b-4b72b9f2f963",
         labels=["malicious-activity"],
-        external_references=[{
-            "source_name": source_name,
-            "description": f"IOC from {source_name}",
-        }],
+        external_references=[
+            {
+                "source_name": source_name,
+                "description": f"IOC from {source_name}",
+            }
+        ],
     )
     return indicator
 
@@ -92,16 +95,17 @@ def score_feed_quality(indicators, known_good_iocs=None):
     with_labels = sum(1 for i in indicators if i.get("labels"))
     with_refs = sum(1 for i in indicators if i.get("external_references"))
     freshness = sum(
-        1 for i in indicators
-        if i.get("valid_from") and
-        datetime.fromisoformat(i["valid_from"].replace("Z", "+00:00"))
+        1
+        for i in indicators
+        if i.get("valid_from")
+        and datetime.fromisoformat(i["valid_from"].replace("Z", "+00:00"))
         > datetime.now(tz=__import__("datetime").timezone.utc) - timedelta(days=90)
     )
     score = int(
-        (with_confidence / total * 25) +
-        (with_labels / total * 25) +
-        (with_refs / total * 25) +
-        (freshness / total * 25)
+        (with_confidence / total * 25)
+        + (with_labels / total * 25)
+        + (with_refs / total * 25)
+        + (freshness / total * 25)
     )
     return {
         "total": total,
@@ -124,6 +128,7 @@ def export_stix_bundle(indicators, output_path):
 def classify_ioc_type(value):
     """Auto-detect IOC type from value."""
     import re
+
     if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", value):
         return "ipv4"
     elif re.match(r"^[a-fA-F0-9]{64}$", value):
@@ -146,9 +151,11 @@ def main():
     parser.add_argument("--ioc-file", help="File with raw IOCs (one per line) to normalize")
     parser.add_argument("--source", default="custom-feed", help="Source name for IOCs")
     parser.add_argument("--output", default="stix_bundle.json", help="Output STIX bundle path")
-    parser.add_argument("--action", choices=[
-        "discover", "fetch", "normalize", "score", "full_pipeline"
-    ], default="full_pipeline")
+    parser.add_argument(
+        "--action",
+        choices=["discover", "fetch", "normalize", "score", "full_pipeline"],
+        default="full_pipeline",
+    )
     args = parser.parse_args()
 
     if args.action == "discover" and args.taxii_url:
@@ -157,7 +164,9 @@ def main():
         return
 
     if args.action in ("fetch", "full_pipeline") and args.collection_url:
-        indicators = fetch_indicators(args.collection_url, args.user, args.password, args.added_after)
+        indicators = fetch_indicators(
+            args.collection_url, args.user, args.password, args.added_after
+        )
         indicators = deduplicate_indicators(indicators)
         quality = score_feed_quality(indicators)
         print(f"[+] Fetched {len(indicators)} unique indicators")

@@ -16,19 +16,19 @@ Usage:
 """
 
 import argparse
-import json
 import os
 import sys
 import time
 from datetime import datetime
-from pathlib import Path
 
-import requests
 import defusedxml.ElementTree as ET
 import pandas as pd
+import requests
 
 # Suppress SSL warnings for self-signed Nessus certs
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
+requests.packages.urllib3.disable_warnings(
+    requests.packages.urllib3.exceptions.InsecureRequestWarning
+)
 
 
 class NessusScanner:
@@ -82,8 +82,14 @@ class NessusScanner:
             return templates[0]["uuid"]
         raise ValueError(f"No template found matching '{template_name}'")
 
-    def create_scan(self, name: str, targets: str, template_name: str = "advanced",
-                    credentials: dict = None, policy_id: int = None) -> int:
+    def create_scan(
+        self,
+        name: str,
+        targets: str,
+        template_name: str = "advanced",
+        credentials: dict = None,
+        policy_id: int = None,
+    ) -> int:
         """Create a new scan configuration."""
         url = f"{self.host}/scans"
         template_uuid = self.get_template_uuid(template_name)
@@ -93,7 +99,7 @@ class NessusScanner:
             "text_targets": targets,
             "launch": "ON_DEMAND",
             "enabled": True,
-            "description": f"Automated infrastructure scan created {datetime.now().isoformat()}"
+            "description": f"Automated infrastructure scan created {datetime.now().isoformat()}",
         }
 
         if policy_id:
@@ -136,7 +142,7 @@ class NessusScanner:
                 "scanner_name": info.get("scanner_name", ""),
                 "policy": info.get("policy", ""),
                 "hosts": data.get("hosts", []),
-                "vulnerabilities": data.get("vulnerabilities", [])
+                "vulnerabilities": data.get("vulnerabilities", []),
             }
         return {"status": "error"}
 
@@ -166,8 +172,9 @@ class NessusScanner:
         print(f"[-] Scan timed out after {timeout}s")
         return False
 
-    def export_scan(self, scan_id: int, export_format: str = "nessus",
-                    output_dir: str = ".") -> str:
+    def export_scan(
+        self, scan_id: int, export_format: str = "nessus", output_dir: str = "."
+    ) -> str:
         """Export scan results to file."""
         url = f"{self.host}/scans/{scan_id}/export"
         payload = {"format": export_format}
@@ -175,10 +182,19 @@ class NessusScanner:
         if export_format == "csv":
             payload["reportContents"] = {
                 "csvColumns": {
-                    "id": True, "cve": True, "cvss": True, "risk": True,
-                    "hostname": True, "protocol": True, "port": True,
-                    "plugin_name": True, "synopsis": True, "description": True,
-                    "solution": True, "see_also": True, "plugin_output": True
+                    "id": True,
+                    "cve": True,
+                    "cvss": True,
+                    "risk": True,
+                    "hostname": True,
+                    "protocol": True,
+                    "port": True,
+                    "plugin_name": True,
+                    "synopsis": True,
+                    "description": True,
+                    "solution": True,
+                    "see_also": True,
+                    "plugin_output": True,
                 }
             }
 
@@ -201,8 +217,12 @@ class NessusScanner:
         download_url = f"{self.host}/scans/{scan_id}/export/{file_id}/download"
         download_resp = requests.get(download_url, headers=self.headers, verify=self.verify_ssl)
 
-        ext = {"nessus": "nessus", "csv": "csv", "html": "html", "pdf": "pdf"}.get(export_format, "xml")
-        output_path = os.path.join(output_dir, f"scan_{scan_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.{ext}")
+        ext = {"nessus": "nessus", "csv": "csv", "html": "html", "pdf": "pdf"}.get(
+            export_format, "xml"
+        )
+        output_path = os.path.join(
+            output_dir, f"scan_{scan_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.{ext}"
+        )
 
         with open(output_path, "wb") as f:
             f.write(download_resp.content)
@@ -258,7 +278,9 @@ class NessusResultParser:
                         "port": port,
                         "protocol": protocol,
                         "service": svc_name,
-                        "cvss_base": item.findtext("cvss3_base_score", item.findtext("cvss_base_score", "0")),
+                        "cvss_base": item.findtext(
+                            "cvss3_base_score", item.findtext("cvss_base_score", "0")
+                        ),
                         "cve": item.findtext("cve", ""),
                         "synopsis": item.findtext("synopsis", ""),
                         "description": item.findtext("description", ""),
@@ -292,7 +314,7 @@ class NessusResultParser:
             "Total": len(df),
             "Unique Hosts": df["hostname"].nunique(),
             "Unique Plugins": df["plugin_id"].nunique(),
-            "Exploitable": len(df[df["exploit_available"] == "true"])
+            "Exploitable": len(df[df["exploit_available"] == "true"]),
         }
 
     def top_vulnerabilities(self, n: int = 20) -> pd.DataFrame:
@@ -300,11 +322,13 @@ class NessusResultParser:
         df = self.to_dataframe()
         vuln_df = df[df["severity"] >= 2].copy()
 
-        top = (vuln_df.groupby(["plugin_id", "plugin_name", "severity_name", "cvss_base", "cve"])
-               .agg(affected_hosts=("hostname", "nunique"))
-               .reset_index()
-               .sort_values(["severity_name", "affected_hosts"], ascending=[True, False])
-               .head(n))
+        top = (
+            vuln_df.groupby(["plugin_id", "plugin_name", "severity_name", "cvss_base", "cve"])
+            .agg(affected_hosts=("hostname", "nunique"))
+            .reset_index()
+            .sort_values(["severity_name", "affected_hosts"], ascending=[True, False])
+            .head(n)
+        )
 
         return top
 
@@ -314,17 +338,19 @@ class NessusResultParser:
         severity_weights = {4: 10, 3: 5, 2: 2, 1: 0.5, 0: 0}
 
         df["weight"] = df["severity"].map(severity_weights)
-        host_scores = (df.groupby(["hostname", "host_ip", "host_os"])
-                       .agg(
-                           risk_score=("weight", "sum"),
-                           critical=("severity", lambda x: (x == 4).sum()),
-                           high=("severity", lambda x: (x == 3).sum()),
-                           medium=("severity", lambda x: (x == 2).sum()),
-                           low=("severity", lambda x: (x == 1).sum()),
-                           total_findings=("severity", "count")
-                       )
-                       .reset_index()
-                       .sort_values("risk_score", ascending=False))
+        host_scores = (
+            df.groupby(["hostname", "host_ip", "host_os"])
+            .agg(
+                risk_score=("weight", "sum"),
+                critical=("severity", lambda x: (x == 4).sum()),
+                high=("severity", lambda x: (x == 3).sum()),
+                medium=("severity", lambda x: (x == 2).sum()),
+                low=("severity", lambda x: (x == 1).sum()),
+                total_findings=("severity", "count"),
+            )
+            .reset_index()
+            .sort_values("risk_score", ascending=False)
+        )
 
         return host_scores
 
@@ -337,7 +363,7 @@ class NessusResultParser:
         html = f"""<!DOCTYPE html>
 <html>
 <head>
-    <title>Nessus Scan Report - {datetime.now().strftime('%Y-%m-%d')}</title>
+    <title>Nessus Scan Report - {datetime.now().strftime("%Y-%m-%d")}</title>
     <style>
         body {{ font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }}
         .header {{ background: #1a1a2e; color: white; padding: 20px; border-radius: 8px; }}
@@ -360,30 +386,30 @@ class NessusResultParser:
 <body>
     <div class="header">
         <h1>Vulnerability Scan Report</h1>
-        <p>Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | Source: {self.nessus_file}</p>
+        <p>Generated: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")} | Source: {self.nessus_file}</p>
     </div>
 
     <div class="summary">
-        <div class="card critical"><h3>{summary['Critical']}</h3><p>Critical</p></div>
-        <div class="card high"><h3>{summary['High']}</h3><p>High</p></div>
-        <div class="card medium"><h3>{summary['Medium']}</h3><p>Medium</p></div>
-        <div class="card low"><h3>{summary['Low']}</h3><p>Low</p></div>
+        <div class="card critical"><h3>{summary["Critical"]}</h3><p>Critical</p></div>
+        <div class="card high"><h3>{summary["High"]}</h3><p>High</p></div>
+        <div class="card medium"><h3>{summary["Medium"]}</h3><p>Medium</p></div>
+        <div class="card low"><h3>{summary["Low"]}</h3><p>Low</p></div>
     </div>
 
-    <p><strong>Total Findings:</strong> {summary['Total']} |
-       <strong>Unique Hosts:</strong> {summary['Unique Hosts']} |
-       <strong>Exploitable:</strong> {summary['Exploitable']}</p>
+    <p><strong>Total Findings:</strong> {summary["Total"]} |
+       <strong>Unique Hosts:</strong> {summary["Unique Hosts"]} |
+       <strong>Exploitable:</strong> {summary["Exploitable"]}</p>
 
     <h2>Top Vulnerabilities</h2>
     <table>
         <tr><th>Plugin ID</th><th>Name</th><th>Severity</th><th>CVSS</th><th>CVE</th><th>Affected Hosts</th></tr>
-        {''.join(f'<tr><td>{r.plugin_id}</td><td>{r.plugin_name}</td><td>{r.severity_name}</td><td>{r.cvss_base}</td><td>{r.cve}</td><td>{r.affected_hosts}</td></tr>' for r in top_vulns.itertuples())}
+        {"".join(f"<tr><td>{r.plugin_id}</td><td>{r.plugin_name}</td><td>{r.severity_name}</td><td>{r.cvss_base}</td><td>{r.cve}</td><td>{r.affected_hosts}</td></tr>" for r in top_vulns.itertuples())}
     </table>
 
     <h2>Host Risk Scores (Top 20)</h2>
     <table>
         <tr><th>Host</th><th>IP</th><th>OS</th><th>Risk Score</th><th>Critical</th><th>High</th><th>Medium</th><th>Total</th></tr>
-        {''.join(f'<tr><td>{r.hostname}</td><td>{r.host_ip}</td><td>{str(r.host_os)[:50]}</td><td>{r.risk_score:.0f}</td><td>{r.critical}</td><td>{r.high}</td><td>{r.medium}</td><td>{r.total_findings}</td></tr>' for r in host_risks.itertuples())}
+        {"".join(f"<tr><td>{r.hostname}</td><td>{r.host_ip}</td><td>{str(r.host_os)[:50]}</td><td>{r.risk_score:.0f}</td><td>{r.critical}</td><td>{r.high}</td><td>{r.medium}</td><td>{r.total_findings}</td></tr>" for r in host_risks.itertuples())}
     </table>
 </body>
 </html>"""
@@ -399,13 +425,19 @@ def main():
 
     # Scan command
     scan_parser = subparsers.add_parser("scan", help="Create and run a vulnerability scan")
-    scan_parser.add_argument("--host", required=True, help="Nessus server URL (e.g., https://localhost:8834)")
+    scan_parser.add_argument(
+        "--host", required=True, help="Nessus server URL (e.g., https://localhost:8834)"
+    )
     scan_parser.add_argument("--user", required=True, help="Nessus username")
     scan_parser.add_argument("--password", required=True, help="Nessus password")
-    scan_parser.add_argument("--targets", required=True, help="Target IPs/ranges (comma-separated or CIDR)")
+    scan_parser.add_argument(
+        "--targets", required=True, help="Target IPs/ranges (comma-separated or CIDR)"
+    )
     scan_parser.add_argument("--name", default=None, help="Scan name")
     scan_parser.add_argument("--template", default="advanced", help="Scan template name")
-    scan_parser.add_argument("--export-format", default="nessus", choices=["nessus", "csv", "html", "pdf"])
+    scan_parser.add_argument(
+        "--export-format", default="nessus", choices=["nessus", "csv", "html", "pdf"]
+    )
     scan_parser.add_argument("--output-dir", default=".", help="Directory for exported results")
     scan_parser.add_argument("--timeout", type=int, default=7200, help="Scan timeout in seconds")
 
@@ -414,8 +446,13 @@ def main():
     parse_parser.add_argument("--file", required=True, help="Path to .nessus XML file")
     parse_parser.add_argument("--report", default=None, help="Output HTML report path")
     parse_parser.add_argument("--csv-output", default=None, help="Export findings to CSV")
-    parse_parser.add_argument("--min-severity", type=int, default=0, choices=[0, 1, 2, 3, 4],
-                              help="Minimum severity to include (0=Info, 4=Critical)")
+    parse_parser.add_argument(
+        "--min-severity",
+        type=int,
+        default=0,
+        choices=[0, 1, 2, 3, 4],
+        help="Minimum severity to include (0=Info, 4=Critical)",
+    )
 
     args = parser.parse_args()
 
@@ -426,7 +463,9 @@ def main():
             sys.exit(1)
 
         try:
-            scan_name = args.name or f"Infrastructure_Scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            scan_name = (
+                args.name or f"Infrastructure_Scan_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            )
             scan_id = scanner.create_scan(scan_name, args.targets, args.template)
             scanner.launch_scan(scan_id)
 

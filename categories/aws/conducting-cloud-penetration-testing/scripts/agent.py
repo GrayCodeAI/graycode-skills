@@ -2,13 +2,11 @@
 # For authorized penetration testing and lab environments only
 """Cloud Penetration Testing Agent - Enumerates and tests AWS IAM misconfigurations."""
 
+import argparse
 import json
 import logging
-import argparse
 import subprocess
 from datetime import datetime
-
-import requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -21,7 +19,9 @@ def enumerate_iam_users():
     if result.returncode == 0:
         users = json.loads(result.stdout).get("Users", [])
         logger.info("Enumerated %d IAM users", len(users))
-        return [{"username": u["UserName"], "arn": u["Arn"], "created": u["CreateDate"]} for u in users]
+        return [
+            {"username": u["UserName"], "arn": u["Arn"], "created": u["CreateDate"]} for u in users
+        ]
     return []
 
 
@@ -38,11 +38,13 @@ def enumerate_iam_roles():
                 principal = statement.get("Principal", {})
                 aws_principal = principal.get("AWS", "")
                 if isinstance(aws_principal, str) and ":root" in aws_principal:
-                    cross_account.append({
-                        "role": role["RoleName"],
-                        "arn": role["Arn"],
-                        "trusted_account": aws_principal,
-                    })
+                    cross_account.append(
+                        {
+                            "role": role["RoleName"],
+                            "arn": role["Arn"],
+                            "trusted_account": aws_principal,
+                        }
+                    )
         logger.info("Found %d cross-account trust roles", len(cross_account))
         return cross_account
     return []
@@ -51,9 +53,13 @@ def enumerate_iam_roles():
 def check_imds_v1_instances():
     """Check for EC2 instances running with IMDSv1 (vulnerable to SSRF)."""
     cmd = [
-        "aws", "ec2", "describe-instances",
-        "--query", "Reservations[*].Instances[*].[InstanceId,MetadataOptions.HttpTokens,State.Name]",
-        "--output", "json",
+        "aws",
+        "ec2",
+        "describe-instances",
+        "--query",
+        "Reservations[*].Instances[*].[InstanceId,MetadataOptions.HttpTokens,State.Name]",
+        "--output",
+        "json",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -62,7 +68,9 @@ def check_imds_v1_instances():
         for reservation in instances:
             for inst in reservation:
                 if inst[1] == "optional" and inst[2] == "running":
-                    vulnerable.append({"instance_id": inst[0], "imds": "v1 (optional)", "state": inst[2]})
+                    vulnerable.append(
+                        {"instance_id": inst[0], "imds": "v1 (optional)", "state": inst[2]}
+                    )
         logger.info("Found %d instances with IMDSv1 enabled", len(vulnerable))
         return vulnerable
     return []
@@ -77,7 +85,15 @@ def check_public_s3_buckets():
     buckets = result.stdout.strip().split()
     public_buckets = []
     for bucket in buckets:
-        status_cmd = ["aws", "s3api", "get-bucket-policy-status", "--bucket", bucket, "--output", "json"]
+        status_cmd = [
+            "aws",
+            "s3api",
+            "get-bucket-policy-status",
+            "--bucket",
+            bucket,
+            "--output",
+            "json",
+        ]
         r = subprocess.run(status_cmd, capture_output=True, text=True)
         if r.returncode == 0:
             policy_status = json.loads(r.stdout)
@@ -89,19 +105,40 @@ def check_public_s3_buckets():
 
 def check_lambda_env_secrets():
     """Check Lambda functions for secrets in environment variables."""
-    cmd = ["aws", "lambda", "list-functions", "--query", "Functions[*].FunctionName", "--output", "text"]
+    cmd = [
+        "aws",
+        "lambda",
+        "list-functions",
+        "--query",
+        "Functions[*].FunctionName",
+        "--output",
+        "text",
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         return []
     functions = result.stdout.strip().split()
     findings = []
-    sensitive_keys = ["password", "secret", "key", "token", "api_key", "database_url", "connection_string"]
+    sensitive_keys = [
+        "password",
+        "secret",
+        "key",
+        "token",
+        "api_key",
+        "database_url",
+        "connection_string",
+    ]
     for fn in functions:
         env_cmd = [
-            "aws", "lambda", "get-function-configuration",
-            "--function-name", fn,
-            "--query", "Environment.Variables",
-            "--output", "json",
+            "aws",
+            "lambda",
+            "get-function-configuration",
+            "--function-name",
+            fn,
+            "--query",
+            "Environment.Variables",
+            "--output",
+            "json",
         ]
         r = subprocess.run(env_cmd, capture_output=True, text=True)
         if r.returncode == 0 and r.stdout.strip() != "null":
@@ -116,10 +153,15 @@ def check_lambda_env_secrets():
 def test_privesc_create_policy_version(policy_arn):
     """Test if iam:CreatePolicyVersion can be used for privilege escalation."""
     cmd = [
-        "aws", "iam", "simulate-principal-policy",
-        "--policy-source-arn", policy_arn,
-        "--action-names", "iam:CreatePolicyVersion",
-        "--output", "json",
+        "aws",
+        "iam",
+        "simulate-principal-policy",
+        "--policy-source-arn",
+        policy_arn,
+        "--action-names",
+        "iam:CreatePolicyVersion",
+        "--output",
+        "json",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -141,8 +183,10 @@ def generate_report(users, cross_account_roles, imdsv1_instances, public_buckets
         "public_s3_buckets": public_buckets,
         "lambda_env_secrets": lambda_secrets,
         "finding_count": (
-            len(cross_account_roles) + len(imdsv1_instances) +
-            len(public_buckets) + len(lambda_secrets)
+            len(cross_account_roles)
+            + len(imdsv1_instances)
+            + len(public_buckets)
+            + len(lambda_secrets)
         ),
     }
     print(json.dumps(report, indent=2))

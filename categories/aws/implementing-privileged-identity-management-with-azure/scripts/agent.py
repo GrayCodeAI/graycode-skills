@@ -18,11 +18,14 @@ def get_graph_token(tenant_id, client_id, client_secret):
     app = msal.ConfidentialClientApplication(
         client_id,
         authority=f"https://login.microsoftonline.com/{tenant_id}",
-        client_credential=client_secret
+        client_credential=client_secret,
     )
     result = app.acquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
     if "access_token" not in result:
-        print(f"Token acquisition failed: {result.get('error_description', 'Unknown error')}", file=sys.stderr)
+        print(
+            f"Token acquisition failed: {result.get('error_description', 'Unknown error')}",
+            file=sys.stderr,
+        )
         sys.exit(1)
     return result["access_token"]
 
@@ -31,10 +34,7 @@ def graph_request(token, method, endpoint, body=None):
     """Make authenticated request to Microsoft Graph API."""
     import requests
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     url = f"https://graph.microsoft.com/v1.0{endpoint}"
 
     if method == "GET":
@@ -61,16 +61,18 @@ def list_eligible_assignments(token):
         return [response]
 
     for item in response.get("value", []):
-        results.append({
-            "id": item.get("id"),
-            "principal_id": item.get("principalId"),
-            "role_definition_id": item.get("roleDefinitionId"),
-            "directory_scope_id": item.get("directoryScopeId"),
-            "start_date_time": item.get("startDateTime"),
-            "end_date_time": item.get("endDateTime"),
-            "assignment_type": item.get("assignmentType"),
-            "member_type": item.get("memberType")
-        })
+        results.append(
+            {
+                "id": item.get("id"),
+                "principal_id": item.get("principalId"),
+                "role_definition_id": item.get("roleDefinitionId"),
+                "directory_scope_id": item.get("directoryScopeId"),
+                "start_date_time": item.get("startDateTime"),
+                "end_date_time": item.get("endDateTime"),
+                "assignment_type": item.get("assignmentType"),
+                "member_type": item.get("memberType"),
+            }
+        )
     return results
 
 
@@ -84,20 +86,24 @@ def list_active_assignments(token):
         return [response]
 
     for item in response.get("value", []):
-        results.append({
-            "id": item.get("id"),
-            "principal_id": item.get("principalId"),
-            "role_definition_id": item.get("roleDefinitionId"),
-            "directory_scope_id": item.get("directoryScopeId"),
-            "start_date_time": item.get("startDateTime"),
-            "end_date_time": item.get("endDateTime"),
-            "assignment_type": item.get("assignmentType"),
-            "member_type": item.get("memberType")
-        })
+        results.append(
+            {
+                "id": item.get("id"),
+                "principal_id": item.get("principalId"),
+                "role_definition_id": item.get("roleDefinitionId"),
+                "directory_scope_id": item.get("directoryScopeId"),
+                "start_date_time": item.get("startDateTime"),
+                "end_date_time": item.get("endDateTime"),
+                "assignment_type": item.get("assignmentType"),
+                "member_type": item.get("memberType"),
+            }
+        )
     return results
 
 
-def create_eligible_assignment(token, principal_id, role_definition_id, justification, duration_hours=8):
+def create_eligible_assignment(
+    token, principal_id, role_definition_id, justification, duration_hours=8
+):
     """Create an eligible role assignment via PIM eligibility schedule request."""
     body = {
         "action": "adminAssign",
@@ -107,11 +113,8 @@ def create_eligible_assignment(token, principal_id, role_definition_id, justific
         "principalId": principal_id,
         "scheduleInfo": {
             "startDateTime": datetime.now(timezone.utc).isoformat(),
-            "expiration": {
-                "type": "afterDuration",
-                "duration": f"PT{duration_hours}H"
-            }
-        }
+            "expiration": {"type": "afterDuration", "duration": f"PT{duration_hours}H"},
+        },
     }
     endpoint = "/roleManagement/directory/roleEligibilityScheduleRequests"
     return graph_request(token, "POST", endpoint, body)
@@ -127,11 +130,8 @@ def activate_eligible_role(token, role_definition_id, justification, duration_ho
         "principalId": "me",
         "scheduleInfo": {
             "startDateTime": datetime.now(timezone.utc).isoformat(),
-            "expiration": {
-                "type": "afterDuration",
-                "duration": f"PT{duration_hours}H"
-            }
-        }
+            "expiration": {"type": "afterDuration", "duration": f"PT{duration_hours}H"},
+        },
     }
     endpoint = "/roleManagement/directory/roleAssignmentScheduleRequests"
     return graph_request(token, "POST", endpoint, body)
@@ -148,7 +148,7 @@ def list_role_definitions(token):
             "id": r.get("id"),
             "display_name": r.get("displayName"),
             "is_built_in": r.get("isBuiltIn"),
-            "is_enabled": r.get("isEnabled")
+            "is_enabled": r.get("isEnabled"),
         }
         for r in response.get("value", [])
     ]
@@ -157,6 +157,7 @@ def list_role_definitions(token):
 def audit_pim_activations(token, days=7):
     """Query directory audit logs for PIM role activation events."""
     from datetime import timedelta
+
     start_date = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
     endpoint = (
         f"/auditLogs/directoryAudits?"
@@ -169,16 +170,20 @@ def audit_pim_activations(token, days=7):
 
     activations = []
     for entry in response.get("value", []):
-        activations.append({
-            "activity": entry.get("activityDisplayName"),
-            "timestamp": entry.get("activityDateTime"),
-            "initiated_by": entry.get("initiatedBy", {}).get("user", {}).get("userPrincipalName"),
-            "target_resources": [
-                {"display_name": t.get("displayName"), "type": t.get("type")}
-                for t in entry.get("targetResources", [])
-            ],
-            "result": entry.get("result")
-        })
+        activations.append(
+            {
+                "activity": entry.get("activityDisplayName"),
+                "timestamp": entry.get("activityDateTime"),
+                "initiated_by": entry.get("initiatedBy", {})
+                .get("user", {})
+                .get("userPrincipalName"),
+                "target_resources": [
+                    {"display_name": t.get("displayName"), "type": t.get("type")}
+                    for t in entry.get("targetResources", [])
+                ],
+                "result": entry.get("result"),
+            }
+        )
     return activations
 
 
@@ -191,13 +196,15 @@ def get_role_management_policies(token):
 
     policies = []
     for policy in response.get("value", []):
-        policies.append({
-            "id": policy.get("id"),
-            "display_name": policy.get("displayName"),
-            "scope_id": policy.get("scopeId"),
-            "scope_type": policy.get("scopeType"),
-            "last_modified": policy.get("lastModifiedDateTime")
-        })
+        policies.append(
+            {
+                "id": policy.get("id"),
+                "display_name": policy.get("displayName"),
+                "scope_id": policy.get("scopeId"),
+                "scope_type": policy.get("scopeType"),
+                "last_modified": policy.get("lastModifiedDateTime"),
+            }
+        )
     return policies
 
 
@@ -217,27 +224,31 @@ def generate_audit_report(token):
             "eligible_assignments": len(eligible),
             "active_assignments": len(active),
             "permanent_active_assignments": len(permanent_active),
-            "temporary_active_assignments": len(temporary_active)
+            "temporary_active_assignments": len(temporary_active),
         },
         "findings": [],
         "eligible_assignments": eligible,
-        "permanent_active_assignments": permanent_active
+        "permanent_active_assignments": permanent_active,
     }
 
     if len(permanent_active) > 0:
-        report["findings"].append({
-            "severity": "High",
-            "check": "permanent_privileged_assignments",
-            "message": f"{len(permanent_active)} permanent active role assignments found — consider converting to eligible",
-            "count": len(permanent_active)
-        })
+        report["findings"].append(
+            {
+                "severity": "High",
+                "check": "permanent_privileged_assignments",
+                "message": f"{len(permanent_active)} permanent active role assignments found — consider converting to eligible",
+                "count": len(permanent_active),
+            }
+        )
 
     if len(eligible) == 0 and len(active) > 0:
-        report["findings"].append({
-            "severity": "High",
-            "check": "no_eligible_assignments",
-            "message": "No eligible (JIT) assignments configured — all access is permanent"
-        })
+        report["findings"].append(
+            {
+                "severity": "High",
+                "check": "no_eligible_assignments",
+                "message": "No eligible (JIT) assignments configured — all access is permanent",
+            }
+        )
 
     return report
 
@@ -262,12 +273,16 @@ def main():
     create_parser.add_argument("--principal-id", required=True, help="User/group object ID")
     create_parser.add_argument("--role-id", required=True, help="Role definition ID")
     create_parser.add_argument("--justification", required=True, help="Business justification")
-    create_parser.add_argument("--duration", type=int, default=8, help="Duration in hours (default: 8)")
+    create_parser.add_argument(
+        "--duration", type=int, default=8, help="Duration in hours (default: 8)"
+    )
 
     activate_parser = subparsers.add_parser("activate", help="Activate eligible role (JIT)")
     activate_parser.add_argument("--role-id", required=True, help="Role definition ID")
     activate_parser.add_argument("--justification", required=True, help="Activation justification")
-    activate_parser.add_argument("--duration", type=int, default=1, help="Duration in hours (default: 1)")
+    activate_parser.add_argument(
+        "--duration", type=int, default=1, help="Duration in hours (default: 1)"
+    )
 
     subparsers.add_parser("policies", help="List role management policies")
 
@@ -285,7 +300,9 @@ def main():
     elif args.command == "audit-activations":
         result = audit_pim_activations(token, args.days)
     elif args.command == "create-eligible":
-        result = create_eligible_assignment(token, args.principal_id, args.role_id, args.justification, args.duration)
+        result = create_eligible_assignment(
+            token, args.principal_id, args.role_id, args.justification, args.duration
+        )
     elif args.command == "activate":
         result = activate_eligible_role(token, args.role_id, args.justification, args.duration)
     elif args.command == "policies":

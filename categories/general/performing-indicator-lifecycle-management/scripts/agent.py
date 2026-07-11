@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """Agent for performing indicator of compromise (IOC) lifecycle management."""
 
-import json
 import argparse
 import csv
+import json
 import re
-import hashlib
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
-
 
 IOC_PATTERNS = {
     "ipv4": re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b"),
@@ -31,12 +29,17 @@ def extract_iocs(text_file):
         if matches:
             extracted[ioc_type] = matches[:100]
     total = sum(len(v) for v in extracted.values())
-    return {"source": text_file, "total_iocs": total, "by_type": {k: len(v) for k, v in extracted.items()}, "indicators": extracted}
+    return {
+        "source": text_file,
+        "total_iocs": total,
+        "by_type": {k: len(v) for k, v in extracted.items()},
+        "indicators": extracted,
+    }
 
 
 def ingest_ioc_feed(csv_file):
     """Ingest IOC feed from CSV and normalize."""
-    with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(csv_file, encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
     iocs = []
@@ -48,20 +51,22 @@ def ingest_ioc_feed(csv_file):
                 if p.fullmatch(indicator.strip()):
                     ioc_type = t
                     break
-        iocs.append({
-            "indicator": indicator.strip(),
-            "type": ioc_type,
-            "source": row.get("source", row.get("feed", "")),
-            "confidence": row.get("confidence", row.get("score", "")),
-            "first_seen": row.get("first_seen", row.get("date", "")),
-            "tags": row.get("tags", row.get("malware_family", "")),
-        })
+        iocs.append(
+            {
+                "indicator": indicator.strip(),
+                "type": ioc_type,
+                "source": row.get("source", row.get("feed", "")),
+                "confidence": row.get("confidence", row.get("score", "")),
+                "first_seen": row.get("first_seen", row.get("date", "")),
+                "tags": row.get("tags", row.get("malware_family", "")),
+            }
+        )
     return {"total_ingested": len(iocs), "by_type": _count_field(iocs, "type"), "iocs": iocs[:50]}
 
 
 def check_expiration(ioc_db_file, ttl_days=90):
     """Check IOC database for expired indicators based on TTL."""
-    with open(ioc_db_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(ioc_db_file, encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
     now = datetime.utcnow()
@@ -80,14 +85,17 @@ def check_expiration(ioc_db_file, ttl_days=90):
         else:
             active.append(row)
     return {
-        "total": len(rows), "active": len(active), "expired": len(expired),
-        "ttl_days": ttl_days, "expired_indicators": expired[:30],
+        "total": len(rows),
+        "active": len(active),
+        "expired": len(expired),
+        "ttl_days": ttl_days,
+        "expired_indicators": expired[:30],
     }
 
 
 def deduplicate_iocs(csv_file):
     """Deduplicate IOCs and merge metadata from multiple sources."""
-    with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(csv_file, encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
     seen = {}
@@ -97,11 +105,25 @@ def deduplicate_iocs(csv_file):
             seen[key]["sources"].add(row.get("source", ""))
             seen[key]["count"] += 1
         else:
-            seen[key] = {"indicator": key, "type": row.get("type", ""), "sources": {row.get("source", "")}, "count": 1, "first_row": row}
-    unique = [{"indicator": v["indicator"], "type": v["type"], "sources": list(v["sources"]), "occurrences": v["count"]}
-              for v in seen.values()]
+            seen[key] = {
+                "indicator": key,
+                "type": row.get("type", ""),
+                "sources": {row.get("source", "")},
+                "count": 1,
+                "first_row": row,
+            }
+    unique = [
+        {
+            "indicator": v["indicator"],
+            "type": v["type"],
+            "sources": list(v["sources"]),
+            "occurrences": v["count"],
+        }
+        for v in seen.values()
+    ]
     return {
-        "original_count": len(rows), "unique_count": len(unique),
+        "original_count": len(rows),
+        "unique_count": len(unique),
         "duplicates_removed": len(rows) - len(unique),
         "multi_source": [u for u in unique if u["occurrences"] > 1][:20],
         "unique_iocs": unique[:50],

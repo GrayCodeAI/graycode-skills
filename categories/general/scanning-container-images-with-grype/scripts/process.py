@@ -6,10 +6,10 @@ Scans container images using Grype, parses results, and generates
 summary reports with severity breakdowns and remediation guidance.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
 from datetime import datetime
 from pathlib import Path
 
@@ -39,17 +39,19 @@ def parse_vulnerabilities(scan_data: dict) -> list:
         vuln = match.get("vulnerability", {})
         artifact = match.get("artifact", {})
         fix_info = vuln.get("fix", {})
-        vulns.append({
-            "id": vuln.get("id", "UNKNOWN"),
-            "severity": vuln.get("severity", "Unknown"),
-            "package": artifact.get("name", "unknown"),
-            "version": artifact.get("version", "unknown"),
-            "type": artifact.get("type", "unknown"),
-            "fix_versions": fix_info.get("versions", []),
-            "fix_state": fix_info.get("state", "unknown"),
-            "data_source": vuln.get("dataSource", ""),
-            "description": vuln.get("description", ""),
-        })
+        vulns.append(
+            {
+                "id": vuln.get("id", "UNKNOWN"),
+                "severity": vuln.get("severity", "Unknown"),
+                "package": artifact.get("name", "unknown"),
+                "version": artifact.get("version", "unknown"),
+                "type": artifact.get("type", "unknown"),
+                "fix_versions": fix_info.get("versions", []),
+                "fix_state": fix_info.get("state", "unknown"),
+                "data_source": vuln.get("dataSource", ""),
+                "description": vuln.get("description", ""),
+            }
+        )
     return vulns
 
 
@@ -89,16 +91,16 @@ def generate_report(image: str, vulns: list, output_path: str = None) -> str:
 
 | Severity | Count |
 |----------|-------|
-| Critical | {summary['Critical']} |
-| High | {summary['High']} |
-| Medium | {summary['Medium']} |
-| Low | {summary['Low']} |
-| Negligible | {summary['Negligible']} |
+| Critical | {summary["Critical"]} |
+| High | {summary["High"]} |
+| Medium | {summary["Medium"]} |
+| Low | {summary["Low"]} |
+| Negligible | {summary["Negligible"]} |
 
 ## Fix Availability
 
-- **Fixable:** {fix_info['fixable']}
-- **Not Fixable:** {fix_info['not_fixable']}
+- **Fixable:** {fix_info["fixable"]}
+- **Not Fixable:** {fix_info["not_fixable"]}
 
 ## Critical and High Findings
 
@@ -116,10 +118,15 @@ def generate_report(image: str, vulns: list, output_path: str = None) -> str:
     report += "| CVE | Severity | Package | Version | Type | Fix State |\n"
     report += "|-----|----------|---------|---------|------|----------|\n"
 
-    for v in sorted(vulns, key=lambda x: (
-        {"Critical": 0, "High": 1, "Medium": 2, "Low": 3, "Negligible": 4}.get(x["severity"], 5),
-        x["id"]
-    )):
+    for v in sorted(
+        vulns,
+        key=lambda x: (
+            {"Critical": 0, "High": 1, "Medium": 2, "Low": 3, "Negligible": 4}.get(
+                x["severity"], 5
+            ),
+            x["id"],
+        ),
+    ):
         report += f"| {v['id']} | {v['severity']} | {v['package']} | {v['version']} | {v['type']} | {v['fix_state']} |\n"
 
     if output_path:
@@ -152,8 +159,12 @@ def main():
     parser.add_argument("image", help="Container image reference to scan")
     parser.add_argument("--report", "-r", help="Output report file path (markdown)")
     parser.add_argument("--json-output", "-j", help="Output raw JSON results to file")
-    parser.add_argument("--max-critical", type=int, default=0, help="Max allowed critical vulns (default: 0)")
-    parser.add_argument("--max-high", type=int, default=0, help="Max allowed high vulns (default: 0)")
+    parser.add_argument(
+        "--max-critical", type=int, default=0, help="Max allowed critical vulns (default: 0)"
+    )
+    parser.add_argument(
+        "--max-high", type=int, default=0, help="Max allowed high vulns (default: 0)"
+    )
     parser.add_argument("--gate", action="store_true", help="Enable gate check mode")
 
     args = parser.parse_args()
@@ -172,7 +183,9 @@ def main():
         print(report)
 
     summary = severity_summary(vulns)
-    print(f"\nSummary: C={summary['Critical']} H={summary['High']} M={summary['Medium']} L={summary['Low']}")
+    print(
+        f"\nSummary: C={summary['Critical']} H={summary['High']} M={summary['Medium']} L={summary['Low']}"
+    )
 
     if args.gate:
         passed = gate_check(vulns, args.max_critical, args.max_high)

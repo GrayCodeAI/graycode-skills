@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """Agent for building and converting Sigma detection rules."""
 
-import os
-import json
 import argparse
+import json
 from datetime import datetime
 from pathlib import Path
 
-from sigma.rule import SigmaRule
 from sigma.backends.splunk import SplunkBackend
 from sigma.pipelines.splunk import splunk_windows_pipeline
-from sigma.collection import SigmaCollection
+from sigma.rule import SigmaRule
 
 
 def load_sigma_rule(rule_path):
@@ -92,12 +90,14 @@ def generate_attack_navigator_layer(techniques, layer_name="Sigma Detection Cove
         "techniques": [],
     }
     for tid, rule_names in techniques.items():
-        layer["techniques"].append({
-            "techniqueID": tid,
-            "color": "#31a354",
-            "score": len(rule_names),
-            "comment": "; ".join(rule_names[:3]),
-        })
+        layer["techniques"].append(
+            {
+                "techniqueID": tid,
+                "color": "#31a354",
+                "score": len(rule_names),
+                "comment": "; ".join(rule_names[:3]),
+            }
+        )
     return layer
 
 
@@ -109,12 +109,14 @@ def batch_convert(directory, backend_name="splunk"):
         try:
             if backend_name == "splunk":
                 queries = convert_to_splunk(entry["rule"])
-                converted.append({
-                    "file": entry["path"],
-                    "title": str(entry["rule"].title),
-                    "level": str(entry["rule"].level),
-                    "queries": [str(q) for q in queries],
-                })
+                converted.append(
+                    {
+                        "file": entry["path"],
+                        "title": str(entry["rule"].title),
+                        "level": str(entry["rule"].level),
+                        "queries": [str(q) for q in queries],
+                    }
+                )
         except Exception as e:
             converted.append({"file": entry["path"], "error": str(e)})
     return converted
@@ -126,9 +128,11 @@ def main():
     parser.add_argument("--directory", help="Directory of Sigma rules")
     parser.add_argument("--backend", choices=["splunk"], default="splunk")
     parser.add_argument("--output", default="sigma_output.json")
-    parser.add_argument("--action", choices=[
-        "validate", "convert", "batch_convert", "coverage", "full_pipeline"
-    ], default="full_pipeline")
+    parser.add_argument(
+        "--action",
+        choices=["validate", "convert", "batch_convert", "coverage", "full_pipeline"],
+        default="full_pipeline",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat()}

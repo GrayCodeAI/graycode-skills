@@ -8,9 +8,9 @@ generates triage decisions with escalation recommendations.
 
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
 from enum import Enum
+from pathlib import Path
 
 
 class Severity(str, Enum):
@@ -35,32 +35,67 @@ INCIDENT_TYPES = {
         "escalation": "SOC Tier 2",
     },
     "data_exfiltration": {
-        "keywords": ["exfiltration", "data leak", "dlp", "large upload", "dns tunnel", "unusual transfer"],
+        "keywords": [
+            "exfiltration",
+            "data leak",
+            "dlp",
+            "large upload",
+            "dns tunnel",
+            "unusual transfer",
+        ],
         "default_severity": Severity.CRITICAL,
         "playbook": "data-exfiltration-playbook",
         "escalation": "IR Team + CISO",
     },
     "unauthorized_access": {
-        "keywords": ["brute force", "credential stuffing", "privilege escalation", "lateral movement",
-                      "pass-the-hash", "kerberoasting", "golden ticket"],
+        "keywords": [
+            "brute force",
+            "credential stuffing",
+            "privilege escalation",
+            "lateral movement",
+            "pass-the-hash",
+            "kerberoasting",
+            "golden ticket",
+        ],
         "default_severity": Severity.HIGH,
         "playbook": "unauthorized-access-playbook",
         "escalation": "SOC Tier 2 + AD Team",
     },
     "denial_of_service": {
-        "keywords": ["ddos", "dos", "syn flood", "amplification", "volumetric", "resource exhaustion"],
+        "keywords": [
+            "ddos",
+            "dos",
+            "syn flood",
+            "amplification",
+            "volumetric",
+            "resource exhaustion",
+        ],
         "default_severity": Severity.HIGH,
         "playbook": "ddos-response-playbook",
         "escalation": "NOC + SOC Tier 2",
     },
     "insider_threat": {
-        "keywords": ["insider", "policy violation", "unauthorized copy", "after hours", "terminated user"],
+        "keywords": [
+            "insider",
+            "policy violation",
+            "unauthorized copy",
+            "after hours",
+            "terminated user",
+        ],
         "default_severity": Severity.HIGH,
         "playbook": "insider-threat-playbook",
         "escalation": "IR Team + HR + Legal",
     },
     "web_attack": {
-        "keywords": ["sqli", "xss", "rce", "web shell", "injection", "traversal", "deserialization"],
+        "keywords": [
+            "sqli",
+            "xss",
+            "rce",
+            "web shell",
+            "injection",
+            "traversal",
+            "deserialization",
+        ],
         "default_severity": Severity.HIGH,
         "playbook": "web-attack-playbook",
         "escalation": "SOC Tier 2 + AppSec",
@@ -142,27 +177,60 @@ class IncidentTriageAgent:
 
     def _get_immediate_actions(self, inc_type, severity):
         actions = {
-            "malware": ["Isolate affected host from network", "Collect memory dump",
-                        "Block C2 indicators at firewall", "Preserve disk image"],
-            "phishing": ["Block sender domain at email gateway", "Search for other recipients",
-                         "Reset credentials if clicked", "Report to anti-phishing service"],
-            "data_exfiltration": ["Block destination IPs/domains", "Disable compromised account",
-                                  "Preserve DLP logs", "Notify legal/compliance"],
-            "unauthorized_access": ["Disable compromised account", "Reset credentials",
-                                    "Review authentication logs", "Check for persistence"],
-            "denial_of_service": ["Enable DDoS mitigation", "Contact ISP/CDN",
-                                  "Capture traffic sample", "Identify attack vector"],
-            "insider_threat": ["Preserve evidence chain of custody", "Restrict account access",
-                               "Monitor user activity", "Coordinate with HR"],
-            "web_attack": ["Enable WAF blocking mode", "Capture attack payloads",
-                           "Check for web shells", "Review application logs"],
+            "malware": [
+                "Isolate affected host from network",
+                "Collect memory dump",
+                "Block C2 indicators at firewall",
+                "Preserve disk image",
+            ],
+            "phishing": [
+                "Block sender domain at email gateway",
+                "Search for other recipients",
+                "Reset credentials if clicked",
+                "Report to anti-phishing service",
+            ],
+            "data_exfiltration": [
+                "Block destination IPs/domains",
+                "Disable compromised account",
+                "Preserve DLP logs",
+                "Notify legal/compliance",
+            ],
+            "unauthorized_access": [
+                "Disable compromised account",
+                "Reset credentials",
+                "Review authentication logs",
+                "Check for persistence",
+            ],
+            "denial_of_service": [
+                "Enable DDoS mitigation",
+                "Contact ISP/CDN",
+                "Capture traffic sample",
+                "Identify attack vector",
+            ],
+            "insider_threat": [
+                "Preserve evidence chain of custody",
+                "Restrict account access",
+                "Monitor user activity",
+                "Coordinate with HR",
+            ],
+            "web_attack": [
+                "Enable WAF blocking mode",
+                "Capture attack payloads",
+                "Check for web shells",
+                "Review application logs",
+            ],
         }
         return actions.get(inc_type, ["Acknowledge and investigate", "Escalate to Tier 2"])
 
     def prioritize_queue(self, alerts):
         """Prioritize multiple alerts by severity and type."""
-        severity_order = {Severity.CRITICAL: 0, Severity.HIGH: 1, Severity.MEDIUM: 2,
-                          Severity.LOW: 3, Severity.INFO: 4}
+        severity_order = {
+            Severity.CRITICAL: 0,
+            Severity.HIGH: 1,
+            Severity.MEDIUM: 2,
+            Severity.LOW: 3,
+            Severity.INFO: 4,
+        }
         decisions = [self.build_triage_decision(a["text"], a.get("context")) for a in alerts]
         decisions.sort(key=lambda d: severity_order.get(Severity(d["severity"]), 5))
         return decisions

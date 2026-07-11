@@ -11,9 +11,7 @@ Usage:
 import argparse
 import json
 import subprocess
-import sys
 from datetime import datetime
-
 
 ENUMERATE_SCRIPT = """
 if (ObjC.available) {
@@ -73,7 +71,7 @@ def check_binary_protections(app_name: str) -> dict:
         path: main.path
     }));
     """
-    output = run_frida_script(app_name, script)
+    run_frida_script(app_name, script)
     return checks
 
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Agent for analyzing Kubernetes audit logs for security threats."""
 
-import os
-import json
 import argparse
+import json
 from collections import defaultdict
 from datetime import datetime
 
@@ -30,17 +29,19 @@ def detect_pod_exec(events):
         obj_ref = event.get("objectRef", {})
         subresource = obj_ref.get("subresource", "")
         if subresource in ("exec", "attach"):
-            findings.append({
-                "timestamp": event.get("requestReceivedTimestamp", ""),
-                "user": event.get("user", {}).get("username", ""),
-                "groups": event.get("user", {}).get("groups", []),
-                "verb": event.get("verb", ""),
-                "namespace": obj_ref.get("namespace", ""),
-                "pod": obj_ref.get("name", ""),
-                "subresource": subresource,
-                "source_ip": event.get("sourceIPs", [""])[0],
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "timestamp": event.get("requestReceivedTimestamp", ""),
+                    "user": event.get("user", {}).get("username", ""),
+                    "groups": event.get("user", {}).get("groups", []),
+                    "verb": event.get("verb", ""),
+                    "namespace": obj_ref.get("namespace", ""),
+                    "pod": obj_ref.get("name", ""),
+                    "subresource": subresource,
+                    "source_ip": event.get("sourceIPs", [""])[0],
+                    "severity": "HIGH",
+                }
+            )
     return findings
 
 
@@ -54,15 +55,17 @@ def detect_secret_access(events):
         verb = event.get("verb", "")
         if verb not in ("get", "list", "watch", "create", "update", "delete"):
             continue
-        findings.append({
-            "timestamp": event.get("requestReceivedTimestamp", ""),
-            "user": event.get("user", {}).get("username", ""),
-            "verb": verb,
-            "namespace": obj_ref.get("namespace", ""),
-            "secret_name": obj_ref.get("name", ""),
-            "source_ip": event.get("sourceIPs", [""])[0],
-            "severity": "HIGH" if verb in ("list", "delete") else "MEDIUM",
-        })
+        findings.append(
+            {
+                "timestamp": event.get("requestReceivedTimestamp", ""),
+                "user": event.get("user", {}).get("username", ""),
+                "verb": verb,
+                "namespace": obj_ref.get("namespace", ""),
+                "secret_name": obj_ref.get("name", ""),
+                "source_ip": event.get("sourceIPs", [""])[0],
+                "severity": "HIGH" if verb in ("list", "delete") else "MEDIUM",
+            }
+        )
     return findings
 
 
@@ -75,16 +78,18 @@ def detect_rbac_changes(events):
         resource = obj_ref.get("resource", "")
         verb = event.get("verb", "")
         if resource in rbac_resources and verb in ("create", "update", "patch", "delete"):
-            findings.append({
-                "timestamp": event.get("requestReceivedTimestamp", ""),
-                "user": event.get("user", {}).get("username", ""),
-                "verb": verb,
-                "resource": resource,
-                "name": obj_ref.get("name", ""),
-                "namespace": obj_ref.get("namespace", ""),
-                "source_ip": event.get("sourceIPs", [""])[0],
-                "severity": "CRITICAL" if "cluster" in resource else "HIGH",
-            })
+            findings.append(
+                {
+                    "timestamp": event.get("requestReceivedTimestamp", ""),
+                    "user": event.get("user", {}).get("username", ""),
+                    "verb": verb,
+                    "resource": resource,
+                    "name": obj_ref.get("name", ""),
+                    "namespace": obj_ref.get("namespace", ""),
+                    "source_ip": event.get("sourceIPs", [""])[0],
+                    "severity": "CRITICAL" if "cluster" in resource else "HIGH",
+                }
+            )
     return findings
 
 
@@ -103,14 +108,16 @@ def detect_privileged_pods(events):
         for container in containers:
             sc = container.get("securityContext", {})
             if sc.get("privileged"):
-                findings.append({
-                    "timestamp": event.get("requestReceivedTimestamp", ""),
-                    "user": event.get("user", {}).get("username", ""),
-                    "namespace": obj_ref.get("namespace", ""),
-                    "pod": obj_ref.get("name", ""),
-                    "container": container.get("name", ""),
-                    "severity": "CRITICAL",
-                })
+                findings.append(
+                    {
+                        "timestamp": event.get("requestReceivedTimestamp", ""),
+                        "user": event.get("user", {}).get("username", ""),
+                        "namespace": obj_ref.get("namespace", ""),
+                        "pod": obj_ref.get("name", ""),
+                        "container": container.get("name", ""),
+                        "severity": "CRITICAL",
+                    }
+                )
     return findings
 
 
@@ -124,15 +131,17 @@ def detect_anonymous_access(events):
         if user in anon_users or "system:unauthenticated" in groups:
             status_code = event.get("responseStatus", {}).get("code", 0)
             if status_code < 400:
-                findings.append({
-                    "timestamp": event.get("requestReceivedTimestamp", ""),
-                    "user": user,
-                    "verb": event.get("verb", ""),
-                    "resource": event.get("objectRef", {}).get("resource", ""),
-                    "source_ip": event.get("sourceIPs", [""])[0],
-                    "status_code": status_code,
-                    "severity": "CRITICAL",
-                })
+                findings.append(
+                    {
+                        "timestamp": event.get("requestReceivedTimestamp", ""),
+                        "user": user,
+                        "verb": event.get("verb", ""),
+                        "resource": event.get("objectRef", {}).get("resource", ""),
+                        "source_ip": event.get("sourceIPs", [""])[0],
+                        "status_code": status_code,
+                        "severity": "CRITICAL",
+                    }
+                )
     return findings
 
 
@@ -154,14 +163,20 @@ def main():
     parser = argparse.ArgumentParser(description="Kubernetes Audit Log Analyzer")
     parser.add_argument("--audit-log", required=True, help="Path to audit log file")
     parser.add_argument("--output", default="k8s_audit_report.json")
-    parser.add_argument("--action", choices=[
-        "exec", "secrets", "rbac", "privileged", "anonymous", "full_analysis"
-    ], default="full_analysis")
+    parser.add_argument(
+        "--action",
+        choices=["exec", "secrets", "rbac", "privileged", "anonymous", "full_analysis"],
+        default="full_analysis",
+    )
     args = parser.parse_args()
 
     events = parse_audit_log(args.audit_log)
-    report = {"log_file": args.audit_log, "total_events": len(events),
-              "generated_at": datetime.utcnow().isoformat(), "findings": {}}
+    report = {
+        "log_file": args.audit_log,
+        "total_events": len(events),
+        "generated_at": datetime.utcnow().isoformat(),
+        "findings": {},
+    }
     print(f"[+] Parsed {len(events)} audit events")
 
     if args.action in ("exec", "full_analysis"):

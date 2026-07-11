@@ -5,19 +5,18 @@ Queries Windows Event Logs and Sysmon for suspicious LOLBin activity.
 Supports Splunk API, Elastic API, and local Windows Event Log parsing.
 """
 
-import json
-import csv
 import argparse
+import contextlib
+import csv
 import datetime
+import json
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
 
-try:
+with contextlib.suppress(ImportError):
     import xml.etree.ElementTree as ET
-except ImportError:
-    pass
 
 # Known LOLBins and their suspicious argument patterns
 LOLBIN_SIGNATURES = {
@@ -141,10 +140,20 @@ LOLBIN_SIGNATURES = {
 
 # Suspicious parent processes for LOLBins
 SUSPICIOUS_PARENTS = {
-    "winword.exe", "excel.exe", "powerpnt.exe", "outlook.exe",
-    "wmiprvse.exe", "w3wp.exe", "php-cgi.exe", "httpd.exe",
-    "nginx.exe", "tomcat.exe", "sqlservr.exe", "python.exe",
-    "wscript.exe", "cscript.exe",
+    "winword.exe",
+    "excel.exe",
+    "powerpnt.exe",
+    "outlook.exe",
+    "wmiprvse.exe",
+    "w3wp.exe",
+    "php-cgi.exe",
+    "httpd.exe",
+    "nginx.exe",
+    "tomcat.exe",
+    "sqlservr.exe",
+    "python.exe",
+    "wscript.exe",
+    "cscript.exe",
 }
 
 
@@ -174,7 +183,7 @@ def parse_csv_logs(csv_path: str) -> list[dict]:
     """Parse CSV-exported process creation logs."""
     events = []
     try:
-        with open(csv_path, "r", encoding="utf-8-sig") as f:
+        with open(csv_path, encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 events.append(dict(row))
@@ -187,7 +196,7 @@ def parse_json_logs(json_path: str) -> list[dict]:
     """Parse JSON-exported process creation logs."""
     events = []
     try:
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
             if isinstance(data, list):
                 events = data
@@ -205,8 +214,19 @@ def normalize_event(event: dict) -> dict:
     normalized = {}
     field_mappings = {
         "image": ["Image", "image", "process_name", "FileName", "process.executable"],
-        "command_line": ["CommandLine", "command_line", "ProcessCommandLine", "process.command_line", "cmdline"],
-        "parent_image": ["ParentImage", "parent_image", "InitiatingProcessFileName", "process.parent.executable"],
+        "command_line": [
+            "CommandLine",
+            "command_line",
+            "ProcessCommandLine",
+            "process.command_line",
+            "cmdline",
+        ],
+        "parent_image": [
+            "ParentImage",
+            "parent_image",
+            "InitiatingProcessFileName",
+            "process.parent.executable",
+        ],
         "user": ["User", "user", "AccountName", "user.name", "SubjectUserName"],
         "timestamp": ["UtcTime", "timestamp", "Timestamp", "@timestamp", "TimeCreated"],
         "hostname": ["Computer", "hostname", "DeviceName", "host.name", "ComputerName"],
@@ -240,7 +260,9 @@ def analyze_lolbin_event(event: dict) -> dict | None:
         "attack_id": sig["attack_id"],
         "description": sig["description"],
         "command_line": command_line,
-        "parent_process": parent_image.split("\\")[-1].split("/")[-1] if parent_image else "unknown",
+        "parent_process": parent_image.split("\\")[-1].split("/")[-1]
+        if parent_image
+        else "unknown",
         "user": event.get("user", "unknown"),
         "hostname": event.get("hostname", "unknown"),
         "timestamp": event.get("timestamp", "unknown"),
@@ -271,7 +293,14 @@ def analyze_lolbin_event(event: dict) -> dict | None:
         finding["indicators"].append("Contains encoding/decoding operation")
 
     # Check for execution from unusual paths
-    unusual_paths = [r"\\temp\\", r"\\tmp\\", r"\\appdata\\", r"\\programdata\\", r"\\public\\", r"\\downloads\\"]
+    unusual_paths = [
+        r"\\temp\\",
+        r"\\tmp\\",
+        r"\\appdata\\",
+        r"\\programdata\\",
+        r"\\public\\",
+        r"\\downloads\\",
+    ]
     for path_pattern in unusual_paths:
         if re.search(path_pattern, command_line, re.IGNORECASE):
             finding["risk_score"] += 10
@@ -280,9 +309,12 @@ def analyze_lolbin_event(event: dict) -> dict | None:
     # Only return if there are actual indicators
     if finding["indicators"]:
         finding["risk_level"] = (
-            "CRITICAL" if finding["risk_score"] >= 60
-            else "HIGH" if finding["risk_score"] >= 40
-            else "MEDIUM" if finding["risk_score"] >= 20
+            "CRITICAL"
+            if finding["risk_score"] >= 60
+            else "HIGH"
+            if finding["risk_score"] >= 40
+            else "MEDIUM"
+            if finding["risk_score"] >= 20
             else "LOW"
         )
         return finding
@@ -294,7 +326,7 @@ def generate_splunk_queries() -> dict[str, str]:
     queries = {}
 
     # General LOLBin network activity
-    queries["lolbin_network_activity"] = """index=sysmon EventCode=3
+    queries["lolbin_network_activity"] = r"""index=sysmon EventCode=3
 | where match(Image, "(?i)(certutil|mshta|rundll32|regsvr32|msiexec|bitsadmin|cmstp|wmic)\.exe$")
 | stats count values(DestinationIp) as dest_ips values(DestinationPort) as dest_ports by Image Computer User
 | where count > 0
@@ -316,7 +348,7 @@ def generate_splunk_queries() -> dict[str, str]:
 | table _time Computer User CommandLine ParentImage"""
 
     # LOLBin with suspicious parent
-    queries["lolbin_suspicious_parent"] = """index=sysmon EventCode=1
+    queries["lolbin_suspicious_parent"] = r"""index=sysmon EventCode=1
 | where match(Image, "(?i)(certutil|mshta|rundll32|regsvr32|bitsadmin)\.exe$")
 | where match(ParentImage, "(?i)(winword|excel|powerpnt|outlook|wmiprvse|w3wp)\.exe$")
 | table _time Computer User Image CommandLine ParentImage"""
@@ -403,14 +435,18 @@ def run_hunt(input_path: str, output_dir: str, log_format: str = "auto") -> None
     # Write findings JSON
     findings_file = output_path / "lolbin_findings.json"
     with open(findings_file, "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-LOLBIN-{datetime.date.today().isoformat()}",
-            "timestamp": datetime.datetime.now().isoformat(),
-            "total_events_analyzed": len(raw_events),
-            "total_findings": len(findings),
-            "statistics": dict(stats),
-            "findings": findings,
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-LOLBIN-{datetime.date.today().isoformat()}",
+                "timestamp": datetime.datetime.now().isoformat(),
+                "total_events_analyzed": len(raw_events),
+                "total_findings": len(findings),
+                "statistics": dict(stats),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
     print(f"[+] Findings written to {findings_file}")
 
     # Write CSV summary
@@ -428,7 +464,7 @@ def run_hunt(input_path: str, output_dir: str, log_format: str = "auto") -> None
     # Write hunt report
     report_file = output_path / "hunt_report.md"
     with open(report_file, "w", encoding="utf-8") as f:
-        f.write(f"# LOLBin Threat Hunt Report\n\n")
+        f.write("# LOLBin Threat Hunt Report\n\n")
         f.write(f"**Hunt ID**: TH-LOLBIN-{datetime.date.today().isoformat()}\n")
         f.write(f"**Date**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"**Events Analyzed**: {len(raw_events)}\n")
@@ -468,9 +504,13 @@ def main():
 
     # Hunt command
     hunt_parser = subparsers.add_parser("hunt", help="Run LOLBin hunt against log data")
-    hunt_parser.add_argument("--input", "-i", required=True, help="Path to log file (XML, CSV, JSON)")
+    hunt_parser.add_argument(
+        "--input", "-i", required=True, help="Path to log file (XML, CSV, JSON)"
+    )
     hunt_parser.add_argument("--output", "-o", default="./hunt_output", help="Output directory")
-    hunt_parser.add_argument("--format", "-f", default="auto", choices=["auto", "xml", "csv", "json"])
+    hunt_parser.add_argument(
+        "--format", "-f", default="auto", choices=["auto", "xml", "csv", "json"]
+    )
 
     # Queries command
     queries_parser = subparsers.add_parser("queries", help="Generate hunting queries")

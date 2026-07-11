@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Alert fatigue reduction agent for SOC operations using Splunk SDK."""
 
+import argparse
 import json
 import sys
-import argparse
-from datetime import datetime, timedelta
-from collections import defaultdict
+from datetime import datetime
 
 try:
     import splunklib.client as splunk_client
@@ -17,8 +16,7 @@ except ImportError:
 
 def connect_splunk(host, port, username, password):
     """Connect to Splunk instance."""
-    return splunk_client.connect(host=host, port=port,
-                                username=username, password=password)
+    return splunk_client.connect(host=host, port=port, username=username, password=password)
 
 
 def get_alert_quality_metrics(service, days=90):
@@ -47,14 +45,16 @@ def identify_noisy_rules(metrics, fp_threshold=70, volume_threshold=500):
         fp_rate = float(rule.get("fp_rate", 0))
         total = int(rule.get("total_alerts", 0))
         if fp_rate > fp_threshold or total > volume_threshold:
-            noisy.append({
-                "rule_name": rule.get("rule_name", "unknown"),
-                "total_alerts": total,
-                "fp_rate": fp_rate,
-                "tp_rate": float(rule.get("tp_rate", 0)),
-                "signal_to_noise": float(rule.get("snr", 0)),
-                "recommendation": "TUNE" if fp_rate > fp_threshold else "CONSOLIDATE"
-            })
+            noisy.append(
+                {
+                    "rule_name": rule.get("rule_name", "unknown"),
+                    "total_alerts": total,
+                    "fp_rate": fp_rate,
+                    "tp_rate": float(rule.get("tp_rate", 0)),
+                    "signal_to_noise": float(rule.get("snr", 0)),
+                    "recommendation": "TUNE" if fp_rate > fp_threshold else "CONSOLIDATE",
+                }
+            )
     return sorted(noisy, key=lambda x: -x["fp_rate"])
 
 
@@ -73,8 +73,12 @@ def calculate_analyst_capacity(service, num_analysts=6, days=30):
         peak_daily = float(results[0].get("peak_daily", 0))
         per_analyst = round(avg_daily / num_analysts)
         status = "CRITICAL" if per_analyst > 100 else "WARNING" if per_analyst > 50 else "HEALTHY"
-        return {"avg_daily": avg_daily, "peak_daily": peak_daily,
-                "per_analyst": per_analyst, "status": status}
+        return {
+            "avg_daily": avg_daily,
+            "peak_daily": peak_daily,
+            "per_analyst": per_analyst,
+            "status": status,
+        }
     return None
 
 
@@ -82,13 +86,19 @@ def generate_rba_conversion_plan(noisy_rules):
     """Generate a plan to convert threshold alerts to risk-based alerting."""
     plan = []
     for rule in noisy_rules[:15]:
-        plan.append({
-            "rule_name": rule["rule_name"],
-            "current_fp_rate": rule["fp_rate"],
-            "action": "Convert to risk contribution",
-            "risk_score_suggestion": 10 if rule["fp_rate"] > 90 else 20 if rule["fp_rate"] > 70 else 30,
-            "estimated_alert_reduction": f"{int(rule['total_alerts'] * rule['fp_rate'] / 100)} alerts/period",
-        })
+        plan.append(
+            {
+                "rule_name": rule["rule_name"],
+                "current_fp_rate": rule["fp_rate"],
+                "action": "Convert to risk contribution",
+                "risk_score_suggestion": 10
+                if rule["fp_rate"] > 90
+                else 20
+                if rule["fp_rate"] > 70
+                else 30,
+                "estimated_alert_reduction": f"{int(rule['total_alerts'] * rule['fp_rate'] / 100)} alerts/period",
+            }
+        )
     return plan
 
 
@@ -111,17 +121,17 @@ def generate_tuning_recommendations(noisy_rules):
 
 def build_fatigue_report(service, num_analysts=6):
     """Build comprehensive alert fatigue reduction report."""
-    print(f"\n{'='*60}")
-    print(f"  ALERT FATIGUE REDUCTION ANALYSIS")
+    print(f"\n{'=' * 60}")
+    print("  ALERT FATIGUE REDUCTION ANALYSIS")
     print(f"  Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     metrics = get_alert_quality_metrics(service)
     noisy = identify_noisy_rules(metrics)
     capacity = calculate_analyst_capacity(service, num_analysts)
 
     if capacity:
-        print(f"--- ANALYST CAPACITY ---")
+        print("--- ANALYST CAPACITY ---")
         print(f"  Avg Daily Alerts:      {capacity['avg_daily']:.0f}")
         print(f"  Peak Daily Alerts:     {capacity['peak_daily']:.0f}")
         print(f"  Alerts/Analyst/Shift:  {capacity['per_analyst']}")
@@ -130,23 +140,26 @@ def build_fatigue_report(service, num_analysts=6):
     print(f"--- TOP NOISY RULES ({len(noisy)} identified) ---")
     for r in noisy[:10]:
         print(f"  [{r['recommendation']}] {r['rule_name']}")
-        print(f"    Volume: {r['total_alerts']}  FP Rate: {r['fp_rate']}%  SNR: {r['signal_to_noise']}")
+        print(
+            f"    Volume: {r['total_alerts']}  FP Rate: {r['fp_rate']}%  SNR: {r['signal_to_noise']}"
+        )
 
     rba_plan = generate_rba_conversion_plan(noisy)
     print(f"\n--- RBA CONVERSION PLAN ({len(rba_plan)} rules) ---")
-    total_reduction = 0
     for p in rba_plan:
-        print(f"  {p['rule_name']}: risk_score={p['risk_score_suggestion']}, "
-              f"reduction={p['estimated_alert_reduction']}")
+        print(
+            f"  {p['rule_name']}: risk_score={p['risk_score_suggestion']}, "
+            f"reduction={p['estimated_alert_reduction']}"
+        )
 
     tuning = generate_tuning_recommendations(noisy)
-    print(f"\n--- TUNING RECOMMENDATIONS ---")
+    print("\n--- TUNING RECOMMENDATIONS ---")
     for t in tuning[:5]:
         print(f"  {t['rule_name']} (FP: {t['fp_rate']}%):")
         for a in t["actions"]:
             print(f"    -> {a}")
 
-    print(f"\n{'='*60}\n")
+    print(f"\n{'=' * 60}\n")
     return {"metrics": metrics, "noisy_rules": noisy, "rba_plan": rba_plan, "tuning": tuning}
 
 

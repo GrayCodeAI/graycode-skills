@@ -5,10 +5,10 @@ Analyzes Windows event logs for malicious scheduled task creation,
 modification, and execution patterns.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from pathlib import Path
 
@@ -35,11 +35,11 @@ def parse_events(input_path: str) -> list[dict]:
     path = Path(input_path)
     events = []
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             events = data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             events = [dict(row) for row in csv.DictReader(f)]
     return events
 
@@ -66,12 +66,19 @@ def detect_suspicious_tasks(events: list[dict]) -> list[dict]:
 
             for pattern, category, severity in SUSPICIOUS_ACTION_PATTERNS:
                 if re.search(pattern, full_action):
-                    findings.append({
-                        "timestamp": timestamp, "computer": computer, "user": user,
-                        "task_name": task_name, "command": command,
-                        "arguments": arguments, "category": category,
-                        "severity": severity, "technique": "T1053.005",
-                    })
+                    findings.append(
+                        {
+                            "timestamp": timestamp,
+                            "computer": computer,
+                            "user": user,
+                            "task_name": task_name,
+                            "command": command,
+                            "arguments": arguments,
+                            "category": category,
+                            "severity": severity,
+                            "technique": "T1053.005",
+                        }
+                    )
                     break
 
         elif event_code == "1":
@@ -80,16 +87,24 @@ def detect_suspicious_tasks(events: list[dict]) -> list[dict]:
             if "schtasks.exe" in image.lower() and "/create" in cmdline.lower():
                 for pattern, category, severity in SUSPICIOUS_ACTION_PATTERNS:
                     if re.search(pattern, cmdline):
-                        findings.append({
-                            "timestamp": timestamp, "computer": computer, "user": user,
-                            "task_name": "via_schtasks",
-                            "command": image, "arguments": cmdline,
-                            "category": f"schtasks_{category}",
-                            "severity": severity, "technique": "T1053.005",
-                        })
+                        findings.append(
+                            {
+                                "timestamp": timestamp,
+                                "computer": computer,
+                                "user": user,
+                                "task_name": "via_schtasks",
+                                "command": image,
+                                "arguments": cmdline,
+                                "category": f"schtasks_{category}",
+                                "severity": severity,
+                                "technique": "T1053.005",
+                            }
+                        )
                         break
 
-    return sorted(findings, key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2}.get(x["severity"], 3))
+    return sorted(
+        findings, key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2}.get(x["severity"], 3)
+    )
 
 
 def run_hunt(input_path: str, output_dir: str) -> None:
@@ -101,8 +116,11 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     with open(output_path / "schtask_findings.json", "w", encoding="utf-8") as f:
-        json.dump({"hunt_id": f"TH-SCHTASK-{datetime.date.today().isoformat()}",
-                    "findings": findings}, f, indent=2)
+        json.dump(
+            {"hunt_id": f"TH-SCHTASK-{datetime.date.today().isoformat()}", "findings": findings},
+            f,
+            indent=2,
+        )
     print(f"[+] Results written to {output_dir}")
 
 

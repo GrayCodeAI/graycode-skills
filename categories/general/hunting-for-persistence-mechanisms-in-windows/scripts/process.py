@@ -4,10 +4,10 @@ Windows Persistence Mechanism Hunter
 Analyzes logs for registry, service, scheduled task, WMI, and COM persistence.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from collections import defaultdict
 from pathlib import Path
@@ -101,10 +101,20 @@ REGISTRY_PERSISTENCE_KEYS = {
 
 # Suspicious service binary paths
 SUSPICIOUS_SERVICE_PATHS = [
-    r"\\temp\\", r"\\tmp\\", r"\\appdata\\", r"\\programdata\\",
-    r"\\public\\", r"\\downloads\\", r"\\users\\.*\\desktop\\",
-    r"powershell", r"cmd\.exe.*\/c", r"wscript", r"cscript",
-    r"mshta", r"rundll32", r"regsvr32",
+    r"\\temp\\",
+    r"\\tmp\\",
+    r"\\appdata\\",
+    r"\\programdata\\",
+    r"\\public\\",
+    r"\\downloads\\",
+    r"\\users\\.*\\desktop\\",
+    r"powershell",
+    r"cmd\.exe.*\/c",
+    r"wscript",
+    r"cscript",
+    r"mshta",
+    r"rundll32",
+    r"regsvr32",
 ]
 
 # Legitimate system paths for services
@@ -120,11 +130,11 @@ def parse_logs(input_path: str) -> list[dict]:
     """Parse input log files."""
     path = Path(input_path)
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             return data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             return [dict(row) for row in csv.DictReader(f)]
     return []
 
@@ -189,9 +199,13 @@ def analyze_registry_persistence(event: dict) -> dict | None:
                             break
 
                 risk_level = (
-                    "CRITICAL" if risk >= 80 else
-                    "HIGH" if risk >= 60 else
-                    "MEDIUM" if risk >= 40 else "LOW"
+                    "CRITICAL"
+                    if risk >= 80
+                    else "HIGH"
+                    if risk >= 60
+                    else "MEDIUM"
+                    if risk >= 40
+                    else "LOW"
                 )
 
                 return {
@@ -243,9 +257,7 @@ def analyze_service_persistence(event: dict) -> dict | None:
         return None
 
     risk_level = (
-        "CRITICAL" if risk >= 80 else
-        "HIGH" if risk >= 60 else
-        "MEDIUM" if risk >= 40 else "LOW"
+        "CRITICAL" if risk >= 80 else "HIGH" if risk >= 60 else "MEDIUM" if risk >= 40 else "LOW"
     )
 
     return {
@@ -305,9 +317,17 @@ def analyze_scheduled_task(event: dict) -> dict | None:
     indicators = []
 
     suspicious_task_patterns = [
-        r"powershell", r"cmd\.exe", r"wscript", r"cscript",
-        r"mshta", r"http[s]?://", r"-enc\s", r"iex\s",
-        r"downloadstring", r"\\temp\\", r"\\appdata\\",
+        r"powershell",
+        r"cmd\.exe",
+        r"wscript",
+        r"cscript",
+        r"mshta",
+        r"http[s]?://",
+        r"-enc\s",
+        r"iex\s",
+        r"downloadstring",
+        r"\\temp\\",
+        r"\\appdata\\",
     ]
 
     for pattern in suspicious_task_patterns:
@@ -319,9 +339,7 @@ def analyze_scheduled_task(event: dict) -> dict | None:
         return None
 
     risk_level = (
-        "CRITICAL" if risk >= 80 else
-        "HIGH" if risk >= 60 else
-        "MEDIUM" if risk >= 40 else "LOW"
+        "CRITICAL" if risk >= 80 else "HIGH" if risk >= 60 else "MEDIUM" if risk >= 40 else "LOW"
     )
 
     return {
@@ -368,20 +386,26 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path.mkdir(parents=True, exist_ok=True)
 
     with open(output_path / "persistence_findings.json", "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-PERSIST-{datetime.date.today().isoformat()}",
-            "total_events": len(events),
-            "total_findings": len(findings),
-            "statistics": dict(stats),
-            "findings": findings,
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-PERSIST-{datetime.date.today().isoformat()}",
+                "total_events": len(events),
+                "total_findings": len(findings),
+                "statistics": dict(stats),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
 
     with open(output_path / "hunt_report.md", "w", encoding="utf-8") as f:
-        f.write(f"# Windows Persistence Hunt Report\n\n")
+        f.write("# Windows Persistence Hunt Report\n\n")
         f.write(f"**Date**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"**Findings**: {len(findings)}\n\n")
         for finding in sorted(findings, key=lambda x: x.get("risk_score", 0), reverse=True)[:30]:
-            f.write(f"### [{finding['risk_level']}] {finding['persistence_type']} - {finding.get('technique','')}\n")
+            f.write(
+                f"### [{finding['risk_level']}] {finding['persistence_type']} - {finding.get('technique', '')}\n"
+            )
             f.write(f"- **Host**: {finding['hostname']}\n")
             if finding.get("registry_key"):
                 f.write(f"- **Key**: `{finding['registry_key']}`\n")

@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Trivy Container Security Agent - scans images for vulnerabilities, misconfigs, and secrets."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
-import os
 from collections import defaultdict
 from datetime import datetime
 
@@ -16,8 +15,16 @@ logger = logging.getLogger(__name__)
 def run_trivy_scan(image, scanners="vuln,secret", severity="CRITICAL,HIGH,MEDIUM"):
     """Run Trivy image scan and return JSON results."""
     cmd = [
-        "trivy", "image", "--format", "json", "--scanners", scanners,
-        "--severity", severity, "--quiet", image,
+        "trivy",
+        "image",
+        "--format",
+        "json",
+        "--scanners",
+        scanners,
+        "--severity",
+        severity,
+        "--quiet",
+        image,
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
     if result.returncode != 0 and not result.stdout:
@@ -29,8 +36,14 @@ def run_trivy_scan(image, scanners="vuln,secret", severity="CRITICAL,HIGH,MEDIUM
 def run_trivy_misconfig(target_path):
     """Run Trivy misconfiguration scan on Dockerfile/K8s manifests."""
     cmd = [
-        "trivy", "config", "--format", "json", "--severity", "CRITICAL,HIGH,MEDIUM",
-        "--quiet", target_path,
+        "trivy",
+        "config",
+        "--format",
+        "json",
+        "--severity",
+        "CRITICAL,HIGH,MEDIUM",
+        "--quiet",
+        target_path,
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
     return json.loads(result.stdout) if result.stdout else {}
@@ -60,22 +73,26 @@ def analyze_vulnerabilities(scan_results):
             if vuln.get("FixedVersion"):
                 fixable += 1
             if severity in ("CRITICAL", "HIGH"):
-                cve_list.append({
-                    "cve_id": vuln.get("VulnerabilityID", ""),
-                    "package": vuln.get("PkgName", ""),
-                    "installed": vuln.get("InstalledVersion", ""),
-                    "fixed": vuln.get("FixedVersion", ""),
-                    "severity": severity,
-                    "cvss_score": vuln.get("CVSS", {}).get("nvd", {}).get("V3Score", 0),
-                    "title": vuln.get("Title", "")[:100],
-                })
+                cve_list.append(
+                    {
+                        "cve_id": vuln.get("VulnerabilityID", ""),
+                        "package": vuln.get("PkgName", ""),
+                        "installed": vuln.get("InstalledVersion", ""),
+                        "fixed": vuln.get("FixedVersion", ""),
+                        "severity": severity,
+                        "cvss_score": vuln.get("CVSS", {}).get("nvd", {}).get("V3Score", 0),
+                        "title": vuln.get("Title", "")[:100],
+                    }
+                )
     return {
         "total_vulnerabilities": total,
         "by_severity": dict(by_severity),
         "by_package_type": dict(by_pkg_type),
         "fixable_count": fixable,
         "fix_rate": round(fixable / max(total, 1) * 100, 1),
-        "critical_high_cves": sorted(cve_list, key=lambda x: x.get("cvss_score", 0), reverse=True)[:20],
+        "critical_high_cves": sorted(cve_list, key=lambda x: x.get("cvss_score", 0), reverse=True)[
+            :20
+        ],
     }
 
 
@@ -84,13 +101,15 @@ def analyze_secrets(scan_results):
     secrets = []
     for target in scan_results.get("Results", []):
         for secret in target.get("Secrets", []):
-            secrets.append({
-                "rule_id": secret.get("RuleID", ""),
-                "category": secret.get("Category", ""),
-                "title": secret.get("Title", ""),
-                "severity": secret.get("Severity", ""),
-                "target_file": target.get("Target", ""),
-            })
+            secrets.append(
+                {
+                    "rule_id": secret.get("RuleID", ""),
+                    "category": secret.get("Category", ""),
+                    "title": secret.get("Title", ""),
+                    "severity": secret.get("Severity", ""),
+                    "target_file": target.get("Target", ""),
+                }
+            )
     return {"total_secrets": len(secrets), "secrets": secrets[:15]}
 
 
@@ -99,17 +118,23 @@ def analyze_misconfigs(misconfig_results):
     findings = []
     for target in misconfig_results.get("Results", []):
         for mc in target.get("Misconfigurations", []):
-            findings.append({
-                "avd_id": mc.get("AVDID", ""),
-                "title": mc.get("Title", ""),
-                "severity": mc.get("Severity", ""),
-                "target": target.get("Target", ""),
-                "resolution": mc.get("Resolution", "")[:150],
-            })
+            findings.append(
+                {
+                    "avd_id": mc.get("AVDID", ""),
+                    "title": mc.get("Title", ""),
+                    "severity": mc.get("Severity", ""),
+                    "target": target.get("Target", ""),
+                    "resolution": mc.get("Resolution", "")[:150],
+                }
+            )
     by_sev = defaultdict(int)
     for f in findings:
         by_sev[f["severity"]] += 1
-    return {"total_misconfigs": len(findings), "by_severity": dict(by_sev), "findings": findings[:15]}
+    return {
+        "total_misconfigs": len(findings),
+        "by_severity": dict(by_sev),
+        "findings": findings[:15],
+    }
 
 
 def generate_report(image, vuln_analysis, secret_analysis, misconfig_analysis):
@@ -127,7 +152,9 @@ def generate_report(image, vuln_analysis, secret_analysis, misconfig_analysis):
 
 def main():
     parser = argparse.ArgumentParser(description="Trivy Container Security Scanning Agent")
-    parser.add_argument("--image", required=True, help="Container image to scan (e.g., nginx:latest)")
+    parser.add_argument(
+        "--image", required=True, help="Container image to scan (e.g., nginx:latest)"
+    )
     parser.add_argument("--config-path", help="Path to Dockerfile/K8s manifests for misconfig scan")
     parser.add_argument("--severity", default="CRITICAL,HIGH,MEDIUM", help="Severity filter")
     parser.add_argument("--sbom", action="store_true", help="Generate CycloneDX SBOM")
@@ -149,10 +176,14 @@ def main():
     report = generate_report(args.image, vuln_analysis, secret_analysis, misconfig_analysis)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Trivy: %s - %d vulns (%d critical), %d secrets, gate: %s",
-                args.image, vuln_analysis["total_vulnerabilities"],
-                vuln_analysis["by_severity"].get("CRITICAL", 0),
-                secret_analysis["total_secrets"], report["gate_result"])
+    logger.info(
+        "Trivy: %s - %d vulns (%d critical), %d secrets, gate: %s",
+        args.image,
+        vuln_analysis["total_vulnerabilities"],
+        vuln_analysis["by_severity"].get("CRITICAL", 0),
+        secret_analysis["total_secrets"],
+        report["gate_result"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

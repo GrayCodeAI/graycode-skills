@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Agent for performing Linux log forensics investigation."""
 
-import json
 import argparse
-import re
 import gzip
-from datetime import datetime
-from pathlib import Path
+import json
+import re
 from collections import Counter
+from pathlib import Path
 
 
 def analyze_auth_log(log_file):
@@ -21,29 +20,37 @@ def analyze_auth_log(log_file):
         if "Failed password" in line or "authentication failure" in line:
             ip_match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line)
             user_match = re.search(r"for (?:invalid user )?(\S+)", line)
-            failed_logins.append({
-                "user": user_match.group(1) if user_match else "",
-                "source_ip": ip_match.group(1) if ip_match else "",
-                "line": line.strip()[:200],
-            })
+            failed_logins.append(
+                {
+                    "user": user_match.group(1) if user_match else "",
+                    "source_ip": ip_match.group(1) if ip_match else "",
+                    "line": line.strip()[:200],
+                }
+            )
         elif "Accepted" in line:
             ip_match = re.search(r"from (\d+\.\d+\.\d+\.\d+)", line)
             user_match = re.search(r"for (\S+)", line)
-            successful_logins.append({
-                "user": user_match.group(1) if user_match else "",
-                "source_ip": ip_match.group(1) if ip_match else "",
-            })
+            successful_logins.append(
+                {
+                    "user": user_match.group(1) if user_match else "",
+                    "source_ip": ip_match.group(1) if ip_match else "",
+                }
+            )
         elif "sudo:" in line and "COMMAND=" in line:
             cmd_match = re.search(r"COMMAND=(.*)", line)
             user_match = re.search(r"sudo:\s+(\S+)", line)
-            sudo_events.append({
-                "user": user_match.group(1) if user_match else "",
-                "command": cmd_match.group(1)[:200] if cmd_match else "",
-            })
+            sudo_events.append(
+                {
+                    "user": user_match.group(1) if user_match else "",
+                    "command": cmd_match.group(1)[:200] if cmd_match else "",
+                }
+            )
         elif "sshd" in line:
             ssh_events.append(line.strip()[:200])
     brute_force_ips = Counter(f.get("source_ip") for f in failed_logins if f.get("source_ip"))
-    bf_suspects = [{"ip": ip, "attempts": count} for ip, count in brute_force_ips.most_common(10) if count >= 5]
+    bf_suspects = [
+        {"ip": ip, "attempts": count} for ip, count in brute_force_ips.most_common(10) if count >= 5
+    ]
     return {
         "log_file": log_file,
         "failed_logins": len(failed_logins),
@@ -132,7 +139,9 @@ def timeline_analysis(log_files, start_time=None, end_time=None):
                     ts = m.group(1)
                     break
             if ts:
-                events.append({"timestamp": ts, "source": Path(log_file).name, "event": line.strip()[:200]})
+                events.append(
+                    {"timestamp": ts, "source": Path(log_file).name, "event": line.strip()[:200]}
+                )
     events.sort(key=lambda x: x["timestamp"])
     return {
         "sources": log_files,

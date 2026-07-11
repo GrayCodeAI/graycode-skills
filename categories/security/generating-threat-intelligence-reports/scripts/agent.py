@@ -7,13 +7,12 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 try:
-    from jinja2 import Environment, BaseLoader
+    from jinja2 import BaseLoader, Environment
 except ImportError:
     sys.exit("jinja2 required: pip install jinja2")
 
@@ -186,7 +185,9 @@ def render_report(report_type: str, data: dict) -> str:
     """Render a threat intelligence report from template and data."""
     template_str = REPORT_TEMPLATES.get(report_type)
     if not template_str:
-        raise ValueError(f"Unknown report type: {report_type}. Available: {list(REPORT_TEMPLATES.keys())}")
+        raise ValueError(
+            f"Unknown report type: {report_type}. Available: {list(REPORT_TEMPLATES.keys())}"
+        )
 
     data.setdefault("date", datetime.utcnow().strftime("%Y-%m-%d"))
     data.setdefault("org", "Security Operations")
@@ -199,7 +200,7 @@ def render_report(report_type: str, data: dict) -> str:
     return template.render(**data)
 
 
-def validate_report_data(report_type: str, data: dict) -> List[str]:
+def validate_report_data(report_type: str, data: dict) -> list[str]:
     """Validate that required fields are present for the report type."""
     errors = []
     required_all = ["title", "tlp"]
@@ -221,7 +222,7 @@ def validate_report_data(report_type: str, data: dict) -> List[str]:
     return errors
 
 
-def quality_check(rendered: str) -> List[str]:
+def quality_check(rendered: str) -> list[str]:
     """Run quality checks on rendered report."""
     issues = []
     if len(rendered) < 200:
@@ -239,7 +240,7 @@ def quality_check(rendered: str) -> List[str]:
 
 def generate_report(report_type: str, data_path: str, output_dir: str) -> dict:
     """Load data, validate, render, and save the report."""
-    with open(data_path, "r") as f:
+    with open(data_path) as f:
         data = json.load(f)
 
     validation_errors = validate_report_data(report_type, data)
@@ -269,8 +270,12 @@ def generate_report(report_type: str, data_path: str, output_dir: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="Threat Intelligence Report Generator")
-    parser.add_argument("--type", required=True, choices=list(REPORT_TEMPLATES.keys()),
-                        help="Report type: strategic, operational, tactical, flash")
+    parser.add_argument(
+        "--type",
+        required=True,
+        choices=list(REPORT_TEMPLATES.keys()),
+        help="Report type: strategic, operational, tactical, flash",
+    )
     parser.add_argument("--data", required=True, help="Path to JSON data file with report content")
     parser.add_argument("--output-dir", default=".", help="Output directory")
     parser.add_argument("--output", default="report_meta.json")

@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Agent for performing open source intelligence (OSINT) gathering."""
 
-import json
 import argparse
+import json
 import re
-import socket
-from datetime import datetime
 
 try:
     import requests
@@ -14,6 +12,7 @@ except ImportError:
 
 try:
     import dns.resolver
+
     HAS_DNS = True
 except ImportError:
     HAS_DNS = False
@@ -23,12 +22,16 @@ def whois_lookup(domain):
     """Perform WHOIS lookup for domain registration info."""
     try:
         import whois
+
         w = whois.whois(domain)
         return {
-            "domain": domain, "registrar": w.registrar,
+            "domain": domain,
+            "registrar": w.registrar,
             "creation_date": str(w.creation_date),
             "expiration_date": str(w.expiration_date),
-            "name_servers": w.name_servers if isinstance(w.name_servers, list) else [w.name_servers],
+            "name_servers": w.name_servers
+            if isinstance(w.name_servers, list)
+            else [w.name_servers],
             "status": w.status if isinstance(w.status, list) else [w.status],
             "registrant": w.get("org", w.get("name", "")),
         }
@@ -49,8 +52,23 @@ def dns_enumeration(domain):
             records[rtype] = [str(r) for r in answers]
         except Exception:
             pass
-    subs = ["www", "mail", "ftp", "vpn", "api", "dev", "staging", "admin",
-            "portal", "test", "owa", "remote", "webmail", "autodiscover", "sip"]
+    subs = [
+        "www",
+        "mail",
+        "ftp",
+        "vpn",
+        "api",
+        "dev",
+        "staging",
+        "admin",
+        "portal",
+        "test",
+        "owa",
+        "remote",
+        "webmail",
+        "autodiscover",
+        "sip",
+    ]
     found = []
     for sub in subs:
         try:
@@ -67,15 +85,16 @@ def email_harvest(domain):
         return {"error": "requests not installed"}
     emails = set()
     try:
-        resp = requests.get(f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key=demo", timeout=15)
+        resp = requests.get(
+            f"https://api.hunter.io/v2/domain-search?domain={domain}&api_key=demo", timeout=15
+        )
         if resp.status_code == 200:
             data = resp.json()
             for email in data.get("data", {}).get("emails", []):
                 emails.add(email.get("value", ""))
     except Exception:
         pass
-    pattern = re.compile(rf"[a-zA-Z0-9._%+-]+@{re.escape(domain)}", re.I)
-    search_urls = [f"https://www.google.com/search?q=%22%40{domain}%22&num=20"]
+    re.compile(rf"[a-zA-Z0-9._%+-]+@{re.escape(domain)}", re.I)
     return {
         "domain": domain,
         "emails_found": list(emails)[:20],
@@ -103,15 +122,24 @@ def technology_fingerprint(url):
         if "drupal" in resp.text.lower():
             technologies.append({"category": "CMS", "value": "Drupal"})
         security_headers = {}
-        for h in ["Strict-Transport-Security", "Content-Security-Policy", "X-Frame-Options",
-                   "X-Content-Type-Options", "X-XSS-Protection", "Referrer-Policy"]:
+        for h in [
+            "Strict-Transport-Security",
+            "Content-Security-Policy",
+            "X-Frame-Options",
+            "X-Content-Type-Options",
+            "X-XSS-Protection",
+            "Referrer-Policy",
+        ]:
             security_headers[h] = headers.get(h, "MISSING")
         return {
-            "url": url, "status": resp.status_code,
+            "url": url,
+            "status": resp.status_code,
             "technologies": technologies,
             "security_headers": security_headers,
-            "cookies": [{"name": c.name, "secure": c.secure, "httponly": "HttpOnly" in str(c._rest)}
-                        for c in resp.cookies][:10],
+            "cookies": [
+                {"name": c.name, "secure": c.secure, "httponly": "HttpOnly" in str(c._rest)}
+                for c in resp.cookies
+            ][:10],
         }
     except Exception as e:
         return {"url": url, "error": str(e)}

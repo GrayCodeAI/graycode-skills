@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """SQL Injection WAF Log Analysis Agent - Detects SQLi attacks from ModSecurity and WAF logs."""
 
-import json
-import re
-import os
-import logging
 import argparse
-from datetime import datetime
+import json
+import logging
+import re
 from collections import defaultdict
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -62,7 +61,7 @@ def parse_modsecurity_audit_log(log_file):
     current_entry = {}
     current_section = None
 
-    with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
+    with open(log_file, encoding="utf-8", errors="ignore") as f:
         for line in f:
             line = line.rstrip()
             if line.startswith("--") and line.endswith("-A--"):
@@ -86,7 +85,7 @@ def parse_modsecurity_audit_log(log_file):
 def parse_json_waf_log(log_file):
     """Parse JSON-formatted WAF logs (AWS WAF, Cloudflare)."""
     entries = []
-    with open(log_file, "r", encoding="utf-8", errors="ignore") as f:
+    with open(log_file, encoding="utf-8", errors="ignore") as f:
         for line in f:
             try:
                 entry = json.loads(line.strip())
@@ -135,13 +134,21 @@ def analyze_modsecurity_entries(entries):
         sqli_rules = [rid for rid in rule_ids if rid in MODSEC_RULE_MAP]
         if sqli_rules:
             sqli_classes = classify_sqli(request_uri)
-            findings.append({
-                "source_ip": source_ip,
-                "request_uri": request_uri[:500],
-                "rules_triggered": [{"id": r, "desc": MODSEC_RULE_MAP.get(r, "Unknown")} for r in sqli_rules],
-                "sqli_classification": sqli_classes if sqli_classes else [{"type": "WAF rule match", "severity": "high"}],
-                "severity": "critical" if any(c["severity"] == "critical" for c in sqli_classes) else "high",
-            })
+            findings.append(
+                {
+                    "source_ip": source_ip,
+                    "request_uri": request_uri[:500],
+                    "rules_triggered": [
+                        {"id": r, "desc": MODSEC_RULE_MAP.get(r, "Unknown")} for r in sqli_rules
+                    ],
+                    "sqli_classification": sqli_classes
+                    if sqli_classes
+                    else [{"type": "WAF rule match", "severity": "high"}],
+                    "severity": "critical"
+                    if any(c["severity"] == "critical" for c in sqli_classes)
+                    else "high",
+                }
+            )
     return findings
 
 
@@ -158,13 +165,18 @@ def analyze_json_waf_entries(entries):
         sqli_classes = classify_sqli(payload)
 
         if sqli_classes:
-            findings.append({
-                "source_ip": source_ip,
-                "request_uri": payload[:500],
-                "action": action,
-                "sqli_classification": sqli_classes,
-                "severity": max((c["severity"] for c in sqli_classes), key=lambda s: {"critical": 3, "high": 2, "medium": 1}.get(s, 0)),
-            })
+            findings.append(
+                {
+                    "source_ip": source_ip,
+                    "request_uri": payload[:500],
+                    "action": action,
+                    "sqli_classification": sqli_classes,
+                    "severity": max(
+                        (c["severity"] for c in sqli_classes),
+                        key=lambda s: {"critical": 3, "high": 2, "medium": 1}.get(s, 0),
+                    ),
+                }
+            )
     return findings
 
 
@@ -181,14 +193,21 @@ def correlate_campaigns(findings, time_window_sec=300, min_requests=5):
             for f in group:
                 for c in f.get("sqli_classification", []):
                     attack_types.add(c["type"])
-            campaigns.append({
-                "source_ip": ip,
-                "request_count": len(group),
-                "attack_types": list(attack_types),
-                "severity": "critical" if len(attack_types) > 2 else "high",
-                "classification": "automated" if len(group) > 20 else "manual",
-            })
-            logger.warning("SQLi campaign: %s (%d requests, %d attack types)", ip, len(group), len(attack_types))
+            campaigns.append(
+                {
+                    "source_ip": ip,
+                    "request_count": len(group),
+                    "attack_types": list(attack_types),
+                    "severity": "critical" if len(attack_types) > 2 else "high",
+                    "classification": "automated" if len(group) > 20 else "manual",
+                }
+            )
+            logger.warning(
+                "SQLi campaign: %s (%d requests, %d attack types)",
+                ip,
+                len(group),
+                len(attack_types),
+            )
     return campaigns
 
 
@@ -204,7 +223,9 @@ def generate_report(findings, campaigns):
         "campaigns": campaigns,
         "top_findings": findings[:100],
     }
-    print(f"SQLI REPORT: {len(findings)} events, {len(campaigns)} campaigns, {len(critical)} critical")
+    print(
+        f"SQLI REPORT: {len(findings)} events, {len(campaigns)} campaigns, {len(critical)} critical"
+    )
     return report
 
 

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Mimecast Targeted Attack Protection Agent - monitors TAP events and URL/attachment threats."""
 
-import json
 import argparse
-import logging
-import subprocess
+import base64
 import hashlib
 import hmac
-import base64
+import json
+import logging
+import subprocess
 import uuid
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -46,8 +46,9 @@ def get_url_logs(base_url, app_id, app_key, access_key, secret_key, date_from=No
     data = {}
     if date_from:
         data["from"] = date_from
-    return mimecast_request(base_url, app_id, app_key, access_key, secret_key,
-                            "/api/ttp/url/get-logs", data)
+    return mimecast_request(
+        base_url, app_id, app_key, access_key, secret_key, "/api/ttp/url/get-logs", data
+    )
 
 
 def get_impersonation_logs(base_url, app_id, app_key, access_key, secret_key, date_from=None):
@@ -55,8 +56,9 @@ def get_impersonation_logs(base_url, app_id, app_key, access_key, secret_key, da
     data = {}
     if date_from:
         data["from"] = date_from
-    return mimecast_request(base_url, app_id, app_key, access_key, secret_key,
-                            "/api/ttp/impersonation/get-logs", data)
+    return mimecast_request(
+        base_url, app_id, app_key, access_key, secret_key, "/api/ttp/impersonation/get-logs", data
+    )
 
 
 def get_attachment_logs(base_url, app_id, app_key, access_key, secret_key, date_from=None):
@@ -64,8 +66,9 @@ def get_attachment_logs(base_url, app_id, app_key, access_key, secret_key, date_
     data = {}
     if date_from:
         data["from"] = date_from
-    return mimecast_request(base_url, app_id, app_key, access_key, secret_key,
-                            "/api/ttp/attachment/get-logs", data)
+    return mimecast_request(
+        base_url, app_id, app_key, access_key, secret_key, "/api/ttp/attachment/get-logs", data
+    )
 
 
 def analyze_url_threats(url_logs):
@@ -102,7 +105,9 @@ def analyze_impersonation(imp_logs):
     return {
         "total_impersonation_events": len(imp_logs),
         "unique_senders": len(senders),
-        "top_impersonated_senders": dict(sorted(senders.items(), key=lambda x: x[1], reverse=True)[:10]),
+        "top_impersonated_senders": dict(
+            sorted(senders.items(), key=lambda x: x[1], reverse=True)[:10]
+        ),
         "most_targeted_users": dict(sorted(targets.items(), key=lambda x: x[1], reverse=True)[:10]),
     }
 
@@ -113,7 +118,9 @@ def generate_report(url_analysis, imp_analysis, attachment_count):
         "url_protection": url_analysis,
         "impersonation_protection": imp_analysis,
         "attachment_threats": attachment_count,
-        "total_threats": url_analysis["blocked"] + imp_analysis["total_impersonation_events"] + attachment_count,
+        "total_threats": url_analysis["blocked"]
+        + imp_analysis["total_impersonation_events"]
+        + attachment_count,
     }
 
 
@@ -128,11 +135,17 @@ def main():
     parser.add_argument("--output", default="mimecast_tap_report.json")
     args = parser.parse_args()
 
-    url_resp = get_url_logs(args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from)
+    url_resp = get_url_logs(
+        args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from
+    )
     url_logs = url_resp.get("data", [{}])[0].get("clickLogs", [])
-    imp_resp = get_impersonation_logs(args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from)
+    imp_resp = get_impersonation_logs(
+        args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from
+    )
     imp_logs = imp_resp.get("data", [{}])[0].get("impersonationLogs", [])
-    att_resp = get_attachment_logs(args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from)
+    att_resp = get_attachment_logs(
+        args.base_url, args.app_id, args.app_key, args.access_key, args.secret_key, args.date_from
+    )
     att_logs = att_resp.get("data", [{}])[0].get("attachmentLogs", [])
 
     url_analysis = analyze_url_threats(url_logs)
@@ -140,9 +153,13 @@ def main():
     report = generate_report(url_analysis, imp_analysis, len(att_logs))
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Total threats: %d (URL blocked: %d, impersonation: %d, attachments: %d)",
-                report["total_threats"], url_analysis["blocked"],
-                imp_analysis["total_impersonation_events"], len(att_logs))
+    logger.info(
+        "Total threats: %d (URL blocked: %d, impersonation: %d, attachments: %d)",
+        report["total_threats"],
+        url_analysis["blocked"],
+        imp_analysis["total_impersonation_events"],
+        len(att_logs),
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

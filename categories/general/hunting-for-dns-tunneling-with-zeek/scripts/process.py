@@ -5,12 +5,12 @@ Analyzes dns.log for tunneling indicators: query length, entropy,
 unique subdomains, record types, and query volume.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import math
-from collections import defaultdict, Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 
 ENTROPY_THRESHOLD = 3.5
@@ -34,14 +34,14 @@ def parse_zeek_dns(input_path: str) -> list[dict]:
     path = Path(input_path)
     events = []
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             events = data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             events = [dict(row) for row in csv.DictReader(f)]
     elif path.suffix == ".log":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             headers = None
             for line in f:
                 if line.startswith("#fields"):
@@ -56,11 +56,17 @@ def parse_zeek_dns(input_path: str) -> list[dict]:
 
 
 def detect_dns_tunneling(queries: list[dict]) -> list[dict]:
-    domain_stats = defaultdict(lambda: {
-        "queries": 0, "unique_subdomains": set(), "total_length": 0,
-        "max_length": 0, "record_types": Counter(), "sources": set(),
-        "subdomain_entropy_samples": [],
-    })
+    domain_stats = defaultdict(
+        lambda: {
+            "queries": 0,
+            "unique_subdomains": set(),
+            "total_length": 0,
+            "max_length": 0,
+            "record_types": Counter(),
+            "sources": set(),
+            "subdomain_entropy_samples": [],
+        }
+    )
 
     for q in queries:
         query = q.get("query", "")
@@ -121,19 +127,21 @@ def detect_dns_tunneling(queries: list[dict]) -> list[dict]:
             continue
 
         risk_level = "CRITICAL" if risk >= 70 else "HIGH" if risk >= 50 else "MEDIUM"
-        findings.append({
-            "source_ip": src,
-            "base_domain": base_domain,
-            "query_count": stats["queries"],
-            "unique_subdomains": unique_subs,
-            "avg_query_length": round(avg_len, 1),
-            "max_query_length": stats["max_length"],
-            "avg_subdomain_entropy": round(avg_entropy, 3),
-            "record_types": dict(stats["record_types"]),
-            "risk_score": risk,
-            "risk_level": risk_level,
-            "indicators": indicators,
-        })
+        findings.append(
+            {
+                "source_ip": src,
+                "base_domain": base_domain,
+                "query_count": stats["queries"],
+                "unique_subdomains": unique_subs,
+                "avg_query_length": round(avg_len, 1),
+                "max_query_length": stats["max_length"],
+                "avg_subdomain_entropy": round(avg_entropy, 3),
+                "record_types": dict(stats["record_types"]),
+                "risk_score": risk,
+                "risk_level": risk_level,
+                "indicators": indicators,
+            }
+        )
 
     return sorted(findings, key=lambda x: x["risk_score"], reverse=True)
 
@@ -148,8 +156,15 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     with open(output_path / "dns_tunnel_findings.json", "w", encoding="utf-8") as f:
-        json.dump({"hunt_id": f"TH-DNSTUNNEL-{datetime.date.today().isoformat()}",
-                    "total_queries": len(queries), "findings": findings}, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-DNSTUNNEL-{datetime.date.today().isoformat()}",
+                "total_queries": len(queries),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
     print(f"[+] Results written to {output_dir}")
 
 

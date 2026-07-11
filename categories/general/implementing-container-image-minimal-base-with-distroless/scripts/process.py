@@ -6,12 +6,10 @@ Analyzes container images to identify non-minimal base images and
 recommends distroless alternatives based on the application runtime.
 """
 
+import argparse
 import json
 import subprocess
-import sys
-import argparse
 from datetime import datetime
-
 
 DISTROLESS_RECOMMENDATIONS = {
     "golang": "gcr.io/distroless/static-debian12:nonroot",
@@ -76,11 +74,13 @@ def analyze_image_layers(image: str) -> dict:
 def check_shell_exists(image: str) -> bool:
     """Check if the image contains a shell."""
     for shell in ["/bin/sh", "/bin/bash", "/bin/dash"]:
-        output = run_command(["docker", "run", "--rm", "--entrypoint", "",
-                             image, "test", "-f", shell])
+        output = run_command(
+            ["docker", "run", "--rm", "--entrypoint", "", image, "test", "-f", shell]
+        )
         # If command succeeds, shell exists
-    output = run_command(["docker", "run", "--rm", "--entrypoint", "",
-                         image, "ls", "/bin/sh"], timeout=10)
+    output = run_command(
+        ["docker", "run", "--rm", "--entrypoint", "", image, "ls", "/bin/sh"], timeout=10
+    )
     return bool(output)
 
 
@@ -141,23 +141,32 @@ def analyze_kubernetes_images(namespace: str = "") -> list[dict]:
         is_distroless = "distroless" in image or "chiseled" in image
         is_bloated = any(base in image.lower() for base in BLOATED_BASES)
 
-        results.append({
-            "image": image,
-            "is_distroless": is_distroless,
-            "is_bloated_base": is_bloated,
-            "recommendation": "Already minimal" if is_distroless else recommend_distroless(image)
-        })
+        results.append(
+            {
+                "image": image,
+                "is_distroless": is_distroless,
+                "is_bloated_base": is_bloated,
+                "recommendation": "Already minimal"
+                if is_distroless
+                else recommend_distroless(image),
+            }
+        )
 
     return results
 
 
 def generate_report(results: list[dict], output_format: str = "text") -> str:
     if output_format == "json":
-        return json.dumps({"timestamp": datetime.utcnow().isoformat(),
-                          "results": results}, indent=2)
+        return json.dumps(
+            {"timestamp": datetime.utcnow().isoformat(), "results": results}, indent=2
+        )
 
-    lines = ["=" * 70, "CONTAINER IMAGE BASE ANALYSIS REPORT",
-             f"Generated: {datetime.utcnow().isoformat()}", "=" * 70]
+    lines = [
+        "=" * 70,
+        "CONTAINER IMAGE BASE ANALYSIS REPORT",
+        f"Generated: {datetime.utcnow().isoformat()}",
+        "=" * 70,
+    ]
 
     minimal = [r for r in results if r.get("is_distroless")]
     bloated = [r for r in results if r.get("is_bloated_base")]

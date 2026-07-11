@@ -19,7 +19,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
 
-
 SEVERITY_MAP = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}
 
 
@@ -36,17 +35,24 @@ class IaCFinding:
     file_line_range: list = field(default_factory=list)
 
 
-def run_checkov(iac_dir: str, framework: str = "terraform",
-                skip_checks: Optional[list] = None,
-                custom_checks_dir: Optional[str] = None,
-                baseline: Optional[str] = None) -> dict:
+def run_checkov(
+    iac_dir: str,
+    framework: str = "terraform",
+    skip_checks: Optional[list] = None,
+    custom_checks_dir: Optional[str] = None,
+    baseline: Optional[str] = None,
+) -> dict:
     """Run Checkov scan and return JSON results."""
     cmd = [
-        "checkov", "-d", iac_dir,
-        "--framework", framework,
-        "--output", "json",
+        "checkov",
+        "-d",
+        iac_dir,
+        "--framework",
+        framework,
+        "--output",
+        "json",
         "--compact",
-        "--quiet"
+        "--quiet",
     ]
 
     if skip_checks:
@@ -106,17 +112,21 @@ def parse_checkov_results(checkov_json: dict) -> tuple:
                     if not severity or severity == "UNKNOWN":
                         severity = "MEDIUM"
 
-                    findings.append(IaCFinding(
-                        check_id=check.get("check_id", ""),
-                        check_name=check.get("check_result", {}).get("name", check.get("name", "")),
-                        severity=severity.upper(),
-                        resource=check.get("resource", ""),
-                        file_path=check.get("file_path", ""),
-                        guideline=check.get("guideline", ""),
-                        framework=check.get("check_type", "terraform"),
-                        tool="checkov",
-                        file_line_range=check.get("file_line_range", [])
-                    ))
+                    findings.append(
+                        IaCFinding(
+                            check_id=check.get("check_id", ""),
+                            check_name=check.get("check_result", {}).get(
+                                "name", check.get("name", "")
+                            ),
+                            severity=severity.upper(),
+                            resource=check.get("resource", ""),
+                            file_path=check.get("file_path", ""),
+                            guideline=check.get("guideline", ""),
+                            framework=check.get("check_type", "terraform"),
+                            tool="checkov",
+                            file_line_range=check.get("file_line_range", []),
+                        )
+                    )
 
     return findings, passed_count, skipped_count
 
@@ -125,20 +135,22 @@ def parse_tfsec_results(tfsec_json: dict) -> list:
     """Parse tfsec JSON output into findings."""
     findings = []
     for result in tfsec_json.get("results", []):
-        findings.append(IaCFinding(
-            check_id=result.get("rule_id", result.get("long_id", "")),
-            check_name=result.get("rule_description", ""),
-            severity=result.get("severity", "MEDIUM").upper(),
-            resource=result.get("resource", ""),
-            file_path=result.get("location", {}).get("filename", ""),
-            guideline=result.get("resolution", ""),
-            framework="terraform",
-            tool="tfsec",
-            file_line_range=[
-                result.get("location", {}).get("start_line", 0),
-                result.get("location", {}).get("end_line", 0)
-            ]
-        ))
+        findings.append(
+            IaCFinding(
+                check_id=result.get("rule_id", result.get("long_id", "")),
+                check_name=result.get("rule_description", ""),
+                severity=result.get("severity", "MEDIUM").upper(),
+                resource=result.get("resource", ""),
+                file_path=result.get("location", {}).get("filename", ""),
+                guideline=result.get("resolution", ""),
+                framework="terraform",
+                tool="tfsec",
+                file_line_range=[
+                    result.get("location", {}).get("start_line", 0),
+                    result.get("location", {}).get("end_line", 0),
+                ],
+            )
+        )
     return findings
 
 
@@ -164,21 +176,25 @@ def evaluate_quality_gate(findings: list, threshold: str) -> dict:
                 "severity": f.severity,
                 "resource": f.resource,
                 "file": f.file_path,
-                "lines": f.file_line_range
+                "lines": f.file_line_range,
             }
             for f in blocking[:25]
-        ]
+        ],
     }
 
 
 def main():
     parser = argparse.ArgumentParser(description="IaC Security Scanning Pipeline")
     parser.add_argument("--iac-dir", required=True, help="Directory containing IaC files")
-    parser.add_argument("--framework", default="terraform",
-                        choices=["terraform", "cloudformation", "kubernetes", "helm", "all"])
+    parser.add_argument(
+        "--framework",
+        default="terraform",
+        choices=["terraform", "cloudformation", "kubernetes", "helm", "all"],
+    )
     parser.add_argument("--output", default="iac-security-report.json")
-    parser.add_argument("--severity-threshold", default="high",
-                        choices=["critical", "high", "medium", "low"])
+    parser.add_argument(
+        "--severity-threshold", default="high", choices=["critical", "high", "medium", "low"]
+    )
     parser.add_argument("--fail-on-findings", action="store_true")
     parser.add_argument("--skip-checks", nargs="*", help="Check IDs to skip")
     parser.add_argument("--custom-checks-dir", default=None)
@@ -211,18 +227,22 @@ def main():
         "metadata": {
             "directory": iac_dir,
             "framework": args.framework,
-            "scan_date": datetime.now(timezone.utc).isoformat()
+            "scan_date": datetime.now(timezone.utc).isoformat(),
         },
         "quality_gate": quality_gate,
         "findings": [
             {
-                "check_id": f.check_id, "name": f.check_name,
-                "severity": f.severity, "resource": f.resource,
-                "file": f.file_path, "lines": f.file_line_range,
-                "guideline": f.guideline, "tool": f.tool
+                "check_id": f.check_id,
+                "name": f.check_name,
+                "severity": f.severity,
+                "resource": f.resource,
+                "file": f.file_path,
+                "lines": f.file_line_range,
+                "guideline": f.guideline,
+                "tool": f.tool,
             }
             for f in sorted(all_findings, key=lambda x: SEVERITY_MAP.get(x.severity, 3))
-        ]
+        ],
     }
 
     output_path = os.path.abspath(args.output)
@@ -231,7 +251,9 @@ def main():
     print(f"[*] Report: {output_path}")
 
     if quality_gate["passed"]:
-        print(f"\n[PASS] Quality gate passed. {quality_gate['total_findings']} findings, none blocking.")
+        print(
+            f"\n[PASS] Quality gate passed. {quality_gate['total_findings']} findings, none blocking."
+        )
     else:
         print(f"\n[FAIL] {quality_gate['blocking_count']} blocking findings:")
         for d in quality_gate["blocking_details"][:10]:

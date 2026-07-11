@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Agent for performing endpoint forensics investigation on Windows systems."""
 
-import json
 import argparse
-import subprocess
-import os
 import hashlib
+import json
+import os
+import subprocess
 from datetime import datetime
-from pathlib import Path
 
 
 def collect_system_info():
@@ -33,46 +32,57 @@ def collect_running_processes():
     """Collect running processes with parent PIDs and command lines."""
     try:
         result = subprocess.run(
-            ["wmic", "process", "get", "Name,ProcessId,ParentProcessId,CommandLine,ExecutablePath", "/format:csv"],
-            capture_output=True, text=True, timeout=30
+            [
+                "wmic",
+                "process",
+                "get",
+                "Name,ProcessId,ParentProcessId,CommandLine,ExecutablePath",
+                "/format:csv",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
     except Exception as e:
         return {"error": str(e)}
     import csv
     from io import StringIO
+
     processes = []
     reader = csv.DictReader(StringIO(result.stdout))
     for row in reader:
         if row.get("Name"):
-            processes.append({
-                "name": row.get("Name", ""),
-                "pid": row.get("ProcessId", ""),
-                "ppid": row.get("ParentProcessId", ""),
-                "path": row.get("ExecutablePath", ""),
-                "cmdline": row.get("CommandLine", "")[:500],
-            })
+            processes.append(
+                {
+                    "name": row.get("Name", ""),
+                    "pid": row.get("ProcessId", ""),
+                    "ppid": row.get("ParentProcessId", ""),
+                    "path": row.get("ExecutablePath", ""),
+                    "cmdline": row.get("CommandLine", "")[:500],
+                }
+            )
     return {"total": len(processes), "processes": processes}
 
 
 def collect_network_connections():
     """Collect active network connections."""
     try:
-        result = subprocess.run(
-            ["netstat", "-ano"], capture_output=True, text=True, timeout=15
-        )
+        result = subprocess.run(["netstat", "-ano"], capture_output=True, text=True, timeout=15)
     except Exception as e:
         return {"error": str(e)}
     connections = []
     for line in result.stdout.split("\n")[4:]:
         parts = line.split()
         if len(parts) >= 5:
-            connections.append({
-                "protocol": parts[0],
-                "local_addr": parts[1],
-                "remote_addr": parts[2],
-                "state": parts[3] if len(parts) > 4 else "",
-                "pid": parts[-1],
-            })
+            connections.append(
+                {
+                    "protocol": parts[0],
+                    "local_addr": parts[1],
+                    "remote_addr": parts[2],
+                    "state": parts[3] if len(parts) > 4 else "",
+                    "pid": parts[-1],
+                }
+            )
     established = [c for c in connections if c.get("state") == "ESTABLISHED"]
     listening = [c for c in connections if c.get("state") == "LISTENING"]
     return {
@@ -92,12 +102,16 @@ def collect_autoruns():
     ]
     for key in reg_keys:
         try:
-            result = subprocess.run(["reg", "query", key], capture_output=True, text=True, timeout=10)
+            result = subprocess.run(
+                ["reg", "query", key], capture_output=True, text=True, timeout=10
+            )
             autoruns[key] = result.stdout.strip()[:1000]
         except Exception:
             continue
     try:
-        result = subprocess.run(["schtasks", "/query", "/fo", "CSV"], capture_output=True, text=True, timeout=30)
+        result = subprocess.run(
+            ["schtasks", "/query", "/fo", "CSV"], capture_output=True, text=True, timeout=30
+        )
         autoruns["scheduled_tasks_count"] = result.stdout.count("\n") - 1
     except Exception:
         pass

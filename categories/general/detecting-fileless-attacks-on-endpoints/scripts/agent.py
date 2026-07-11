@@ -8,7 +8,6 @@ WMI persistence events, and reflective DLL injection indicators from Sysmon.
 import argparse
 import json
 import re
-import sys
 from datetime import datetime
 
 try:
@@ -56,14 +55,16 @@ def parse_powershell_scriptblock(filepath):
 
             for pattern, (mitre, severity, desc) in SUSPICIOUS_PS_PATTERNS.items():
                 if re.search(pattern, script, re.IGNORECASE):
-                    findings.append({
-                        "event_id": 4104,
-                        "timestamp": time_match.group(1) if time_match else "",
-                        "pattern": desc,
-                        "mitre": mitre,
-                        "severity": severity,
-                        "script_excerpt": script[:300],
-                    })
+                    findings.append(
+                        {
+                            "event_id": 4104,
+                            "timestamp": time_match.group(1) if time_match else "",
+                            "pattern": desc,
+                            "mitre": mitre,
+                            "severity": severity,
+                            "script_excerpt": script[:300],
+                        }
+                    )
     return findings
 
 
@@ -74,7 +75,7 @@ def parse_sysmon_wmi_persistence(filepath):
     with evtx.Evtx(filepath) as log:
         for record in log.records():
             xml = record.xml()
-            event_id_match = re.search(r'<EventID[^>]*>(\d+)</EventID>', xml)
+            event_id_match = re.search(r"<EventID[^>]*>(\d+)</EventID>", xml)
             if not event_id_match:
                 continue
             event_id = int(event_id_match.group(1))
@@ -86,17 +87,19 @@ def parse_sysmon_wmi_persistence(filepath):
             consumer = re.search(r'<Data Name="Destination">([^<]+)', xml)
             user = re.search(r'<Data Name="User">([^<]+)', xml)
 
-            findings.append({
-                "event_id": event_id,
-                "type": WMI_PERSISTENCE_EVENTS[event_id],
-                "timestamp": time_match.group(1) if time_match else "",
-                "name": name.group(1) if name else "",
-                "operation": operation.group(1) if operation else "",
-                "destination": consumer.group(1) if consumer else "",
-                "user": user.group(1) if user else "",
-                "severity": "CRITICAL",
-                "mitre": "T1546.003",
-            })
+            findings.append(
+                {
+                    "event_id": event_id,
+                    "type": WMI_PERSISTENCE_EVENTS[event_id],
+                    "timestamp": time_match.group(1) if time_match else "",
+                    "name": name.group(1) if name else "",
+                    "operation": operation.group(1) if operation else "",
+                    "destination": consumer.group(1) if consumer else "",
+                    "user": user.group(1) if user else "",
+                    "severity": "CRITICAL",
+                    "mitre": "T1546.003",
+                }
+            )
     return findings
 
 
@@ -113,15 +116,17 @@ def parse_sysmon_injection(filepath):
             target = re.search(r'<Data Name="TargetImage">([^<]+)', xml)
             time_match = re.search(r'SystemTime="([^"]+)"', xml)
 
-            findings.append({
-                "event_id": 8,
-                "timestamp": time_match.group(1) if time_match else "",
-                "source_image": source.group(1) if source else "",
-                "target_image": target.group(1) if target else "",
-                "severity": "HIGH",
-                "mitre": "T1055",
-                "description": "CreateRemoteThread - possible reflective injection",
-            })
+            findings.append(
+                {
+                    "event_id": 8,
+                    "timestamp": time_match.group(1) if time_match else "",
+                    "source_image": source.group(1) if source else "",
+                    "target_image": target.group(1) if target else "",
+                    "severity": "HIGH",
+                    "mitre": "T1055",
+                    "description": "CreateRemoteThread - possible reflective injection",
+                }
+            )
     return findings
 
 

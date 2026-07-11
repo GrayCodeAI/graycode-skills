@@ -5,16 +5,15 @@ Parses PST/OST files using pypff (libpff) to extract emails, attachments,
 metadata, and deleted items for forensic investigation.
 """
 
-import os
-import sys
-import json
 import hashlib
+import json
+import os
 import re
-from datetime import datetime
-from collections import defaultdict
+import sys
 
 try:
     import pypff
+
     HAS_PYPFF = True
 except ImportError:
     HAS_PYPFF = False
@@ -54,10 +53,12 @@ def extract_messages(folder, max_messages=1000):
         attachments = []
         for j in range(msg.number_of_attachments):
             att = msg.get_attachment(j)
-            attachments.append({
-                "name": att.name or f"attachment_{j}",
-                "size": att.size,
-            })
+            attachments.append(
+                {
+                    "name": att.name or f"attachment_{j}",
+                    "size": att.size,
+                }
+            )
         entry["attachments"] = attachments
         messages.append(entry)
     return messages
@@ -69,11 +70,13 @@ def walk_folders(folder, path="", results=None):
     current_path = f"{path}/{folder.name}" if folder.name else path or "/Root"
     messages = extract_messages(folder)
     if messages:
-        results.append({
-            "folder": current_path,
-            "message_count": len(messages),
-            "messages": messages,
-        })
+        results.append(
+            {
+                "folder": current_path,
+                "message_count": len(messages),
+                "messages": messages,
+            }
+        )
     for i in range(folder.number_of_sub_folders):
         subfolder = folder.get_sub_folder(i)
         walk_folders(subfolder, current_path, results)
@@ -91,31 +94,52 @@ def extract_email_addresses(messages):
 
 def detect_suspicious_emails(messages):
     findings = []
-    suspicious_exts = [".exe", ".scr", ".bat", ".cmd", ".ps1", ".vbs",
-                       ".js", ".hta", ".lnk", ".iso", ".img"]
+    suspicious_exts = [
+        ".exe",
+        ".scr",
+        ".bat",
+        ".cmd",
+        ".ps1",
+        ".vbs",
+        ".js",
+        ".hta",
+        ".lnk",
+        ".iso",
+        ".img",
+    ]
     for msg in messages:
         for att in msg.get("attachments", []):
             name = (att.get("name") or "").lower()
             for ext in suspicious_exts:
                 if name.endswith(ext):
-                    findings.append({
-                        "type": "suspicious_attachment",
-                        "subject": msg.get("subject", "")[:80],
-                        "attachment": att.get("name"),
-                        "extension": ext,
-                        "severity": "HIGH",
-                    })
+                    findings.append(
+                        {
+                            "type": "suspicious_attachment",
+                            "subject": msg.get("subject", "")[:80],
+                            "attachment": att.get("name"),
+                            "extension": ext,
+                            "severity": "HIGH",
+                        }
+                    )
         subject = (msg.get("subject") or "").lower()
-        urgency_words = ["urgent", "immediate action", "password expired",
-                         "verify your account", "suspended", "click here"]
+        urgency_words = [
+            "urgent",
+            "immediate action",
+            "password expired",
+            "verify your account",
+            "suspended",
+            "click here",
+        ]
         for word in urgency_words:
             if word in subject:
-                findings.append({
-                    "type": "phishing_indicator",
-                    "subject": msg.get("subject", "")[:80],
-                    "keyword": word,
-                    "severity": "MEDIUM",
-                })
+                findings.append(
+                    {
+                        "type": "phishing_indicator",
+                        "subject": msg.get("subject", "")[:80],
+                        "keyword": word,
+                        "severity": "MEDIUM",
+                    }
+                )
                 break
     return findings
 
@@ -135,10 +159,13 @@ def generate_report(filepath, folder_data):
         "unique_addresses": len(addresses),
         "top_addresses": addresses[:20],
         "suspicious_findings": suspicious,
-        "folders": [{
-            "path": f["folder"],
-            "count": f["message_count"],
-        } for f in folder_data],
+        "folders": [
+            {
+                "path": f["folder"],
+                "count": f["message_count"],
+            }
+            for f in folder_data
+        ],
     }
 
 

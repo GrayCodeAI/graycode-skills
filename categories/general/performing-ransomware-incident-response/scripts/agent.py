@@ -11,17 +11,37 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-
 RANSOMWARE_EXTENSIONS = {
-    ".encrypted", ".locked", ".crypt", ".cry", ".crypto", ".enc",
-    ".locky", ".cerber", ".zepto", ".wncry", ".wnry", ".wcry",
-    ".onion", ".aaa", ".abc", ".xyz", ".zzz", ".micro", ".r5a",
+    ".encrypted",
+    ".locked",
+    ".crypt",
+    ".cry",
+    ".crypto",
+    ".enc",
+    ".locky",
+    ".cerber",
+    ".zepto",
+    ".wncry",
+    ".wnry",
+    ".wcry",
+    ".onion",
+    ".aaa",
+    ".abc",
+    ".xyz",
+    ".zzz",
+    ".micro",
+    ".r5a",
 }
 
 RANSOM_NOTE_PATTERNS = [
-    "readme.txt", "how_to_decrypt.txt", "decrypt_instructions.html",
-    "restore_files.txt", "help_decrypt.html", "recovery.txt",
-    "_readme.txt", "how_to_recover.txt",
+    "readme.txt",
+    "how_to_decrypt.txt",
+    "decrypt_instructions.html",
+    "restore_files.txt",
+    "help_decrypt.html",
+    "recovery.txt",
+    "_readme.txt",
+    "how_to_recover.txt",
 ]
 
 
@@ -29,7 +49,7 @@ def scan_encrypted_files(target_dir: str, max_files: int = 5000) -> list[dict]:
     """Scan directory for files with ransomware-associated extensions."""
     findings = []
     count = 0
-    for root, dirs, files in os.walk(target_dir):
+    for root, _dirs, files in os.walk(target_dir):
         for fname in files:
             if count >= max_files:
                 return findings
@@ -38,12 +58,14 @@ def scan_encrypted_files(target_dir: str, max_files: int = 5000) -> list[dict]:
             if ext in RANSOMWARE_EXTENSIONS:
                 try:
                     stat = os.stat(fpath)
-                    findings.append({
-                        "path": fpath,
-                        "extension": ext,
-                        "size_bytes": stat.st_size,
-                        "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                    })
+                    findings.append(
+                        {
+                            "path": fpath,
+                            "extension": ext,
+                            "size_bytes": stat.st_size,
+                            "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        }
+                    )
                 except OSError:
                     pass
                 count += 1
@@ -53,12 +75,12 @@ def scan_encrypted_files(target_dir: str, max_files: int = 5000) -> list[dict]:
 def find_ransom_notes(target_dir: str) -> list[dict]:
     """Search for known ransom note filenames."""
     notes = []
-    for root, dirs, files in os.walk(target_dir):
+    for root, _dirs, files in os.walk(target_dir):
         for fname in files:
             if fname.lower() in RANSOM_NOTE_PATTERNS:
                 fpath = os.path.join(root, fname)
                 try:
-                    with open(fpath, "r", encoding="utf-8", errors="ignore") as fh:
+                    with open(fpath, encoding="utf-8", errors="ignore") as fh:
                         content = fh.read(2048)
                     notes.append({"path": fpath, "preview": content[:500]})
                 except OSError:
@@ -86,33 +108,65 @@ def check_shadow_copies(platform: str = sys.platform) -> dict:
     if platform == "win32":
         try:
             result = subprocess.run(
-                ["vssadmin", "list", "shadows"],
-                capture_output=True, text=True, timeout=30
+                ["vssadmin", "list", "shadows"], capture_output=True, text=True, timeout=30
             )
             shadow_count = result.stdout.count("Shadow Copy ID")
-            return {"platform": "windows", "shadow_copies": shadow_count,
-                    "intact": shadow_count > 0, "raw": result.stdout[:1000]}
+            return {
+                "platform": "windows",
+                "shadow_copies": shadow_count,
+                "intact": shadow_count > 0,
+                "raw": result.stdout[:1000],
+            }
         except (subprocess.SubprocessError, FileNotFoundError):
-            return {"platform": "windows", "shadow_copies": 0, "intact": False, "error": "vssadmin unavailable"}
-    return {"platform": platform, "shadow_copies": -1, "intact": False, "note": "Manual check required"}
+            return {
+                "platform": "windows",
+                "shadow_copies": 0,
+                "intact": False,
+                "error": "vssadmin unavailable",
+            }
+    return {
+        "platform": platform,
+        "shadow_copies": -1,
+        "intact": False,
+        "note": "Manual check required",
+    }
 
 
 def generate_containment_actions(encrypted_count: int, notes_found: int) -> list[dict]:
     """Produce recommended containment actions based on findings."""
     actions = [
-        {"priority": 1, "action": "Isolate affected hosts from network immediately",
-         "detail": "Disable network adapters or move to quarantine VLAN"},
-        {"priority": 2, "action": "Preserve forensic evidence before remediation",
-         "detail": "Create disk images of affected systems"},
-        {"priority": 3, "action": "Reset credentials for all privileged accounts",
-         "detail": "Include krbtgt, service accounts, and domain admins"},
+        {
+            "priority": 1,
+            "action": "Isolate affected hosts from network immediately",
+            "detail": "Disable network adapters or move to quarantine VLAN",
+        },
+        {
+            "priority": 2,
+            "action": "Preserve forensic evidence before remediation",
+            "detail": "Create disk images of affected systems",
+        },
+        {
+            "priority": 3,
+            "action": "Reset credentials for all privileged accounts",
+            "detail": "Include krbtgt, service accounts, and domain admins",
+        },
     ]
     if encrypted_count > 100:
-        actions.append({"priority": 4, "action": "Activate business continuity plan",
-                        "detail": f"{encrypted_count} encrypted files detected — significant data impact"})
+        actions.append(
+            {
+                "priority": 4,
+                "action": "Activate business continuity plan",
+                "detail": f"{encrypted_count} encrypted files detected — significant data impact",
+            }
+        )
     if notes_found > 0:
-        actions.append({"priority": 5, "action": "Collect and analyze ransom notes for variant identification",
-                        "detail": "Submit to ID Ransomware (id-ransomware.malwarehunterteam.com)"})
+        actions.append(
+            {
+                "priority": 5,
+                "action": "Collect and analyze ransom notes for variant identification",
+                "detail": "Submit to ID Ransomware (id-ransomware.malwarehunterteam.com)",
+            }
+        )
     return actions
 
 
@@ -140,8 +194,12 @@ def generate_report(target_dir: str, max_files: int) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="Ransomware Incident Response Agent")
-    parser.add_argument("--target", required=True, help="Directory to scan for ransomware artifacts")
-    parser.add_argument("--max-files", type=int, default=5000, help="Max files to scan (default: 5000)")
+    parser.add_argument(
+        "--target", required=True, help="Directory to scan for ransomware artifacts"
+    )
+    parser.add_argument(
+        "--max-files", type=int, default=5000, help="Max files to scan (default: 5000)"
+    )
     parser.add_argument("--output", help="Output JSON file path")
     args = parser.parse_args()
 

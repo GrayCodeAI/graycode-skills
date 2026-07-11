@@ -4,12 +4,12 @@ Falco Container Escape Rule Manager - Generate, validate, and deploy
 custom Falco rules for container escape detection.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 # Container escape detection rule templates
 ESCAPE_RULES = {
@@ -58,7 +58,7 @@ ESCAPE_RULES = {
     "shadow_file": {
         "rule": "Container Reading Host Shadow File",
         "desc": "Detect container reading /etc/shadow",
-        "condition": 'open_read and container and (fd.name = /etc/shadow or fd.name startswith /host/etc/shadow)',
+        "condition": "open_read and container and (fd.name = /etc/shadow or fd.name startswith /host/etc/shadow)",
         "priority": "CRITICAL",
         "tags": ["container", "credential-access", "T1003"],
     },
@@ -80,14 +80,14 @@ def generate_rule_yaml(rule_key: str, rule_data: dict) -> str:
         "container_name=%container.name image=%container.image.repository "
         "command=%proc.cmdline"
     )
-    return f"""- rule: {rule_data['rule']}
-  desc: {rule_data['desc']}
+    return f"""- rule: {rule_data["rule"]}
+  desc: {rule_data["desc"]}
   condition: >
-    {rule_data['condition']}
+    {rule_data["condition"]}
   output: >
-    {rule_data['desc']}
+    {rule_data["desc"]}
     ({output_fields})
-  priority: {rule_data['priority']}
+  priority: {rule_data["priority"]}
   tags: [{tags_str}]
 """
 
@@ -95,7 +95,7 @@ def generate_rule_yaml(rule_key: str, rule_data: dict) -> str:
 def generate_all_rules() -> str:
     """Generate complete Falco rules file for container escape detection."""
     header = f"""# Container Escape Detection Rules for Falco
-# Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}
+# Generated: {datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")}
 # Deploy to: /etc/falco/rules.d/container-escape.yaml
 
 - list: escape_binaries
@@ -126,15 +126,19 @@ def parse_falco_alerts(log_file: str) -> list:
             continue
         try:
             alert = json.loads(line)
-            alerts.append({
-                "time": alert.get("time", ""),
-                "rule": alert.get("rule", ""),
-                "priority": alert.get("priority", ""),
-                "output": alert.get("output", ""),
-                "tags": alert.get("tags", []),
-                "container_name": alert.get("output_fields", {}).get("container.name", ""),
-                "container_image": alert.get("output_fields", {}).get("container.image.repository", ""),
-            })
+            alerts.append(
+                {
+                    "time": alert.get("time", ""),
+                    "rule": alert.get("rule", ""),
+                    "priority": alert.get("priority", ""),
+                    "output": alert.get("output", ""),
+                    "tags": alert.get("tags", []),
+                    "container_name": alert.get("output_fields", {}).get("container.name", ""),
+                    "container_image": alert.get("output_fields", {}).get(
+                        "container.image.repository", ""
+                    ),
+                }
+            )
         except json.JSONDecodeError:
             continue
 
@@ -160,9 +164,19 @@ def summarize_alerts(alerts: list) -> dict:
 def check_falco_health() -> dict:
     """Check if Falco is running and healthy."""
     result = subprocess.run(
-        ["kubectl", "get", "pods", "-n", "falco", "-l", "app.kubernetes.io/name=falco",
-         "-o", "json"],
-        capture_output=True, text=True,
+        [
+            "kubectl",
+            "get",
+            "pods",
+            "-n",
+            "falco",
+            "-l",
+            "app.kubernetes.io/name=falco",
+            "-o",
+            "json",
+        ],
+        capture_output=True,
+        text=True,
     )
     if result.returncode != 0:
         return {"healthy": False, "error": result.stderr}
@@ -210,14 +224,26 @@ def main():
     elif args.command == "deploy":
         rules_yaml = generate_all_rules()
         proc = subprocess.run(
-            ["kubectl", "create", "configmap", "falco-escape-rules",
-             "-n", args.namespace, "--from-literal=container-escape.yaml=" + rules_yaml,
-             "--dry-run=client", "-o", "yaml"],
-            capture_output=True, text=True,
+            [
+                "kubectl",
+                "create",
+                "configmap",
+                "falco-escape-rules",
+                "-n",
+                args.namespace,
+                "--from-literal=container-escape.yaml=" + rules_yaml,
+                "--dry-run=client",
+                "-o",
+                "yaml",
+            ],
+            capture_output=True,
+            text=True,
         )
         apply = subprocess.run(
             ["kubectl", "apply", "-f", "-"],
-            input=proc.stdout, capture_output=True, text=True,
+            input=proc.stdout,
+            capture_output=True,
+            text=True,
         )
         print(apply.stdout)
         if apply.returncode == 0:

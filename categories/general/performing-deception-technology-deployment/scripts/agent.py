@@ -9,11 +9,10 @@ import hashlib
 import json
 import os
 import secrets
-import socket
 import sys
 import threading
 from datetime import datetime, timezone
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 
 def generate_honeytoken_credentials(count: int = 5) -> list[dict]:
@@ -30,16 +29,18 @@ def generate_honeytoken_credentials(count: int = 5) -> list[dict]:
     for i in range(min(count, len(templates))):
         username, description = templates[i]
         token_id = secrets.token_hex(4)
-        honeytokens.append({
-            "token_id": f"HT-{token_id}",
-            "type": "credential",
-            "username": f"{username}_{token_id[:4]}",
-            "password": secrets.token_urlsafe(24),
-            "description": description,
-            "deployment_location": "Active Directory / LSASS memory",
-            "alert_on": "Any authentication attempt",
-            "created": datetime.now(timezone.utc).isoformat(),
-        })
+        honeytokens.append(
+            {
+                "token_id": f"HT-{token_id}",
+                "type": "credential",
+                "username": f"{username}_{token_id[:4]}",
+                "password": secrets.token_urlsafe(24),
+                "description": description,
+                "deployment_location": "Active Directory / LSASS memory",
+                "alert_on": "Any authentication attempt",
+                "created": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
     return honeytokens
 
@@ -63,7 +64,7 @@ def generate_canary_files(output_dir: str, count: int = 5) -> list[dict]:
         token_id = secrets.token_hex(4)
 
         content = f"# CANARY FILE - Token: {token_id}\n"
-        content += f"# This file is a decoy. Any access triggers a security alert.\n"
+        content += "# This file is a decoy. Any access triggers a security alert.\n"
         content += f"# Description: {description}\n"
         content += f"# Generated: {datetime.now(timezone.utc).isoformat()}\n\n"
 
@@ -77,16 +78,18 @@ def generate_canary_files(output_dir: str, count: int = 5) -> list[dict]:
         with open(filepath, "w") as f:
             f.write(content)
 
-        canary_files.append({
-            "token_id": f"CF-{token_id}",
-            "type": "canary_file",
-            "filename": filename,
-            "filepath": filepath,
-            "description": description,
-            "sha256": hashlib.sha256(content.encode()).hexdigest(),
-            "alert_on": "File open / read access",
-            "created": datetime.now(timezone.utc).isoformat(),
-        })
+        canary_files.append(
+            {
+                "token_id": f"CF-{token_id}",
+                "type": "canary_file",
+                "filename": filename,
+                "filepath": filepath,
+                "description": description,
+                "sha256": hashlib.sha256(content.encode()).hexdigest(),
+                "alert_on": "File open / read access",
+                "created": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
     return canary_files
 
@@ -94,17 +97,19 @@ def generate_canary_files(output_dir: str, count: int = 5) -> list[dict]:
 def generate_dns_canary_tokens(domain: str, count: int = 3) -> list[dict]:
     """Generate DNS canary tokens that alert on resolution."""
     tokens = []
-    for i in range(count):
+    for _i in range(count):
         token_id = secrets.token_hex(8)
         hostname = f"{token_id}.{domain}"
-        tokens.append({
-            "token_id": f"DNS-{token_id[:8]}",
-            "type": "dns_canary",
-            "hostname": hostname,
-            "usage": f"Embed in config files, documents, or network shares",
-            "alert_on": "DNS resolution of hostname",
-            "created": datetime.now(timezone.utc).isoformat(),
-        })
+        tokens.append(
+            {
+                "token_id": f"DNS-{token_id[:8]}",
+                "type": "dns_canary",
+                "hostname": hostname,
+                "usage": "Embed in config files, documents, or network shares",
+                "alert_on": "DNS resolution of hostname",
+                "created": datetime.now(timezone.utc).isoformat(),
+            }
+        )
 
     return tokens
 
@@ -162,9 +167,7 @@ def start_http_honeypot(host: str = "0.0.0.0", port: int = 8888) -> HTTPServer:
     return server
 
 
-def generate_deployment_report(
-    credentials: list, canary_files: list, dns_tokens: list
-) -> str:
+def generate_deployment_report(credentials: list, canary_files: list, dns_tokens: list) -> str:
     """Generate deception technology deployment report."""
     total = len(credentials) + len(canary_files) + len(dns_tokens)
     lines = [

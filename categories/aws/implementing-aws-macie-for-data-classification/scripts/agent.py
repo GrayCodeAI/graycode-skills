@@ -7,7 +7,6 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 try:
     import boto3
@@ -38,38 +37,44 @@ def enable_macie(client) -> dict:
             return {"error": str(exc)}
 
 
-def list_s3_buckets_summary(client) -> List[dict]:
+def list_s3_buckets_summary(client) -> list[dict]:
     """Get Macie's summary of S3 bucket inventory."""
     try:
         resp = client.describe_buckets(criteria={}, maxResults=50)
         buckets = []
         for b in resp.get("buckets", []):
-            buckets.append({
-                "name": b.get("bucketName", ""),
-                "region": b.get("region", ""),
-                "classifiable_objects": b.get("classifiableObjectCount", 0),
-                "classifiable_size": b.get("classifiableSizeInBytes", 0),
-                "encryption": b.get("serverSideEncryption", {}).get("type", "NONE"),
-                "public_access": b.get("publicAccess", {}).get("effectivePermission", "NOT_PUBLIC"),
-                "shared_access": b.get("sharedAccess", "NOT_SHARED"),
-            })
+            buckets.append(
+                {
+                    "name": b.get("bucketName", ""),
+                    "region": b.get("region", ""),
+                    "classifiable_objects": b.get("classifiableObjectCount", 0),
+                    "classifiable_size": b.get("classifiableSizeInBytes", 0),
+                    "encryption": b.get("serverSideEncryption", {}).get("type", "NONE"),
+                    "public_access": b.get("publicAccess", {}).get(
+                        "effectivePermission", "NOT_PUBLIC"
+                    ),
+                    "shared_access": b.get("sharedAccess", "NOT_SHARED"),
+                }
+            )
         return buckets
     except ClientError as exc:
         logger.error("describe_buckets failed: %s", exc)
         return []
 
 
-def create_classification_job(client, bucket_names: List[str], job_name: str) -> dict:
+def create_classification_job(client, bucket_names: list[str], job_name: str) -> dict:
     """Create a one-time sensitive data discovery job for specified buckets."""
     try:
         resp = client.create_classification_job(
             jobType="ONE_TIME",
             name=job_name,
             s3JobDefinition={
-                "bucketDefinitions": [{
-                    "accountId": boto3.client("sts").get_caller_identity()["Account"],
-                    "buckets": bucket_names,
-                }]
+                "bucketDefinitions": [
+                    {
+                        "accountId": boto3.client("sts").get_caller_identity()["Account"],
+                        "buckets": bucket_names,
+                    }
+                ]
             },
             description=f"Scan {len(bucket_names)} buckets for sensitive data",
         )
@@ -95,30 +100,29 @@ def get_finding_statistics(client) -> dict:
         return {"error": str(exc)}
 
 
-def list_findings(client, severity: str = "High", max_results: int = 50) -> List[dict]:
+def list_findings(client, severity: str = "High", max_results: int = 50) -> list[dict]:
     """List recent Macie findings filtered by severity."""
     try:
         resp = client.list_findings(
-            findingCriteria={
-                "criterion": {
-                    "severity.description": {"eq": [severity]}
-                }
-            },
+            findingCriteria={"criterion": {"severity.description": {"eq": [severity]}}},
             maxResults=max_results,
         )
         finding_ids = resp.get("findingIds", [])
         if not finding_ids:
             return []
         details = client.get_findings(findingIds=finding_ids[:20])
-        return [{
-            "id": f.get("id", ""),
-            "type": f.get("type", ""),
-            "severity": f.get("severity", {}).get("description", ""),
-            "title": f.get("title", ""),
-            "bucket": f.get("resourcesAffected", {}).get("s3Bucket", {}).get("name", ""),
-            "count": f.get("count", 0),
-            "created": f.get("createdAt", ""),
-        } for f in details.get("findings", [])]
+        return [
+            {
+                "id": f.get("id", ""),
+                "type": f.get("type", ""),
+                "severity": f.get("severity", {}).get("description", ""),
+                "title": f.get("title", ""),
+                "bucket": f.get("resourcesAffected", {}).get("s3Bucket", {}).get("name", ""),
+                "count": f.get("count", 0),
+                "created": f.get("createdAt", ""),
+            }
+            for f in details.get("findings", [])
+        ]
     except ClientError as exc:
         return [{"error": str(exc)}]
 
@@ -131,8 +135,9 @@ def generate_report(client) -> dict:
     report["finding_statistics"] = get_finding_statistics(client)
     report["high_findings"] = list_findings(client, "High")
     report["critical_findings"] = list_findings(client, "Critical")
-    public_buckets = [b for b in report["bucket_inventory"]
-                      if b.get("public_access") != "NOT_PUBLIC"]
+    public_buckets = [
+        b for b in report["bucket_inventory"] if b.get("public_access") != "NOT_PUBLIC"
+    ]
     report["public_buckets"] = public_buckets
     report["summary"] = {
         "total_buckets": len(report["bucket_inventory"]),

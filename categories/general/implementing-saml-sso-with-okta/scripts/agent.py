@@ -7,12 +7,12 @@ signature algorithms for enterprise SSO deployments.
 """
 
 import json
-import sys
-import ssl
 import socket
+import ssl
+import sys
 import xml.etree.ElementTree as ET
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 try:
     import requests
@@ -53,18 +53,21 @@ class SAMLSSOAgent:
 
     def list_saml_apps(self):
         """List SAML applications configured in Okta."""
-        resp = self._okta_get("/apps?filter=status eq \"ACTIVE\"&limit=50")
+        resp = self._okta_get('/apps?filter=status eq "ACTIVE"&limit=50')
         if not resp or resp.status_code != 200:
             return []
         apps = []
         for app in resp.json():
             sign_on = app.get("signOnMode", "")
             if "SAML" in sign_on.upper():
-                apps.append({
-                    "id": app["id"], "label": app.get("label"),
-                    "sign_on_mode": sign_on,
-                    "status": app.get("status"),
-                })
+                apps.append(
+                    {
+                        "id": app["id"],
+                        "label": app.get("label"),
+                        "sign_on_mode": sign_on,
+                        "status": app.get("status"),
+                    }
+                )
         return apps
 
     def get_saml_metadata(self, app_id):
@@ -82,16 +85,21 @@ class SAMLSSOAgent:
         except ET.ParseError:
             return [{"severity": "high", "issue": "Invalid SAML metadata XML"}]
 
-        ns = {"md": "urn:oasis:names:tc:SAML:2.0:metadata",
-              "ds": "http://www.w3.org/2000/09/xmldsig#"}
+        ns = {
+            "md": "urn:oasis:names:tc:SAML:2.0:metadata",
+            "ds": "http://www.w3.org/2000/09/xmldsig#",
+        }
 
         sig_methods = root.findall(".//ds:SignatureMethod", ns)
         for sm in sig_methods:
             alg = sm.get("Algorithm", "")
             if "sha1" in alg.lower():
-                issues.append({"severity": "high", "issue": "SHA-1 signature detected - upgrade to SHA-256"})
-                self.findings.append({"severity": "high", "type": "Weak Signature",
-                                      "detail": f"Algorithm: {alg}"})
+                issues.append(
+                    {"severity": "high", "issue": "SHA-1 signature detected - upgrade to SHA-256"}
+                )
+                self.findings.append(
+                    {"severity": "high", "type": "Weak Signature", "detail": f"Algorithm: {alg}"}
+                )
 
         slo = root.findall(".//md:SingleLogoutService", ns)
         if not slo:
@@ -119,8 +127,13 @@ class SAMLSSOAgent:
                 not_after = datetime.strptime(cert["notAfter"], "%b %d %H:%M:%S %Y %Z")
                 days_left = (not_after - datetime.utcnow()).days
                 if days_left < 30:
-                    self.findings.append({"severity": "critical", "type": "Certificate Expiring",
-                                          "detail": f"Certificate expires in {days_left} days"})
+                    self.findings.append(
+                        {
+                            "severity": "critical",
+                            "type": "Certificate Expiring",
+                            "detail": f"Certificate expires in {days_left} days",
+                        }
+                    )
                 return {"host": host, "expires": cert["notAfter"], "days_left": days_left}
         except Exception as e:
             return {"error": str(e)}
@@ -132,8 +145,13 @@ class SAMLSSOAgent:
         resp_g = self._okta_get(f"/apps/{app_id}/groups?limit=100")
         groups = resp_g.json() if resp_g and resp_g.status_code == 200 else []
         if len(users) > 50:
-            self.findings.append({"severity": "info", "type": "Large User Assignment",
-                                  "detail": f"App {app_id} has {len(users)} direct user assignments"})
+            self.findings.append(
+                {
+                    "severity": "info",
+                    "type": "Large User Assignment",
+                    "detail": f"App {app_id} has {len(users)} direct user assignments",
+                }
+            )
         return {"users": len(users), "groups": len(groups)}
 
     def check_mfa_policy(self):
@@ -150,8 +168,13 @@ class SAMLSSOAgent:
                     if actions.get("requireFactor"):
                         mfa_enforced = True
         if not mfa_enforced:
-            self.findings.append({"severity": "high", "type": "No MFA",
-                                  "detail": "MFA not enforced in sign-on policies"})
+            self.findings.append(
+                {
+                    "severity": "high",
+                    "type": "No MFA",
+                    "detail": "MFA not enforced in sign-on policies",
+                }
+            )
         return {"mfa_enforced": mfa_enforced}
 
     def generate_report(self):

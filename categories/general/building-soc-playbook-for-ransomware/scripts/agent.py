@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Ransomware Playbook Automation Agent - Automates SOC ransomware response steps."""
 
-import json
-import logging
 import argparse
 import hashlib
+import json
+import logging
 from datetime import datetime
 
 import requests
@@ -25,7 +25,7 @@ def check_id_ransomware(sample_path):
 
 def query_nomoreransom(ransomware_family):
     """Check No More Ransom Project for available decryptors."""
-    url = f"https://www.nomoreransom.org/en/decryption-tools.html"
+    url = "https://www.nomoreransom.org/en/decryption-tools.html"
     resp = requests.get(url, timeout=30)
     if ransomware_family.lower() in resp.text.lower():
         logger.info("Decryptor may be available for %s on No More Ransom", ransomware_family)
@@ -76,7 +76,7 @@ def search_iocs_splunk(splunk_url, session_key, ioc_list):
         f"{splunk_url}/services/search/jobs",
         headers={"Authorization": f"Splunk {session_key}"},
         data={"search": f"search {query}", "output_mode": "json"},
-        verify=False,
+        verify=True,
     )
     return resp.json()
 
@@ -139,16 +139,18 @@ def main():
         query_nomoreransom(variant)
 
     if args.device_id and args.cs_token:
-        isolate_host_crowdstrike(
-            "https://api.crowdstrike.com", args.cs_token, args.device_id
-        )
+        isolate_host_crowdstrike("https://api.crowdstrike.com", args.cs_token, args.device_id)
         containment_actions.append(f"Isolated device {args.device_id} via CrowdStrike")
 
     if args.splunk_url and args.splunk_key and iocs:
         search_iocs_splunk(args.splunk_url, args.splunk_key, [iocs.get("sha256", "")])
 
     report = generate_ir_report(
-        args.incident_id, variant, [args.device_id] if args.device_id else [], containment_actions, iocs
+        args.incident_id,
+        variant,
+        [args.device_id] if args.device_id else [],
+        containment_actions,
+        iocs,
     )
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2)

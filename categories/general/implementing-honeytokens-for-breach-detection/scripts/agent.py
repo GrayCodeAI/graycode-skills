@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for deploying and managing honeytokens for breach detection."""
 
-import os
-import json
-import uuid
-import hashlib
 import argparse
+import hashlib
+import json
+import os
+import uuid
 from datetime import datetime
 
 import requests
@@ -123,16 +123,31 @@ def create_deployment_plan(target_environment):
     plan = {
         "environment": target_environment,
         "tokens": [
-            {"type": "aws_credentials", "location": "/opt/backup/.aws/credentials",
-             "description": "Fake AWS creds in backup directory"},
-            {"type": "dns", "location": "/etc/app/config.yml",
-             "description": "DNS canary in app config"},
-            {"type": "database", "location": "users table",
-             "description": "Honeytoken admin accounts"},
-            {"type": "web_bug", "location": "internal wiki",
-             "description": "Image beacon in sensitive docs"},
-            {"type": "dns", "location": "/root/.ssh/config",
-             "description": "DNS canary in SSH config"},
+            {
+                "type": "aws_credentials",
+                "location": "/opt/backup/.aws/credentials",
+                "description": "Fake AWS creds in backup directory",
+            },
+            {
+                "type": "dns",
+                "location": "/etc/app/config.yml",
+                "description": "DNS canary in app config",
+            },
+            {
+                "type": "database",
+                "location": "users table",
+                "description": "Honeytoken admin accounts",
+            },
+            {
+                "type": "web_bug",
+                "location": "internal wiki",
+                "description": "Image beacon in sensitive docs",
+            },
+            {
+                "type": "dns",
+                "location": "/root/.ssh/config",
+                "description": "DNS canary in SSH config",
+            },
         ],
     }
     return plan
@@ -147,12 +162,14 @@ def check_token_alerts(webhook_log_path):
     alerts = []
     for entry in logs:
         if entry.get("type") == "canarytoken_triggered":
-            alerts.append({
-                "token_memo": entry.get("memo", ""),
-                "source_ip": entry.get("src_ip", ""),
-                "triggered_at": entry.get("time", ""),
-                "token_type": entry.get("token_type", ""),
-            })
+            alerts.append(
+                {
+                    "token_memo": entry.get("memo", ""),
+                    "source_ip": entry.get("src_ip", ""),
+                    "triggered_at": entry.get("time", ""),
+                    "token_type": entry.get("token_type", ""),
+                }
+            )
     return alerts
 
 
@@ -161,9 +178,11 @@ def main():
     parser.add_argument("--email", default=os.getenv("CANARY_EMAIL", "soc@company.com"))
     parser.add_argument("--webhook", default=os.getenv("CANARY_WEBHOOK"))
     parser.add_argument("--output", default="honeytoken_report.json")
-    parser.add_argument("--action", choices=[
-        "create_dns", "create_aws", "create_web", "plan", "full_deploy"
-    ], default="plan")
+    parser.add_argument(
+        "--action",
+        choices=["create_dns", "create_aws", "create_web", "plan", "full_deploy"],
+        default="plan",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "tokens": {}}
@@ -176,17 +195,17 @@ def main():
     if args.action in ("create_dns", "full_deploy"):
         token = create_dns_canarytoken(args.email, "Production honeytoken", args.webhook)
         report["tokens"]["dns"] = token
-        print(f"[+] DNS canary token created")
+        print("[+] DNS canary token created")
 
     if args.action in ("create_aws", "full_deploy"):
         token = create_aws_key_token(args.email, "AWS credential honeytoken", args.webhook)
         report["tokens"]["aws"] = token
-        print(f"[+] AWS credential token created")
+        print("[+] AWS credential token created")
 
     if args.action in ("create_web", "full_deploy"):
         token = create_web_bug_token(args.email, "Web beacon honeytoken", args.webhook)
         report["tokens"]["web_bug"] = token
-        print(f"[+] Web bug token created")
+        print("[+] Web bug token created")
 
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)

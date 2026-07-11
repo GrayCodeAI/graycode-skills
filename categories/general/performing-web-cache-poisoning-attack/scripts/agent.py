@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Web cache poisoning assessment agent using requests and subprocess."""
 
-import sys
 import json
-import hashlib
-import time
 import random
 import string
+import sys
+import time
 
 try:
     import requests
@@ -24,7 +23,7 @@ def generate_cache_buster():
 def identify_cache_layer(target_url):
     """Identify caching infrastructure from response headers."""
     try:
-        resp = requests.get(target_url, timeout=10, verify=False)
+        resp = requests.get(target_url, timeout=10, verify=True)
     except RequestException as e:
         return {"error": str(e)}
     headers = dict(resp.headers)
@@ -61,14 +60,16 @@ def test_cache_hit_miss(target_url):
     results = []
     for i in range(3):
         try:
-            resp = requests.get(test_url, timeout=10, verify=False)
-            results.append({
-                "request": i + 1,
-                "x_cache": resp.headers.get("X-Cache", ""),
-                "cf_cache": resp.headers.get("CF-Cache-Status", ""),
-                "age": resp.headers.get("Age", ""),
-                "status": resp.status_code,
-            })
+            resp = requests.get(test_url, timeout=10, verify=True)
+            results.append(
+                {
+                    "request": i + 1,
+                    "x_cache": resp.headers.get("X-Cache", ""),
+                    "cf_cache": resp.headers.get("CF-Cache-Status", ""),
+                    "age": resp.headers.get("Age", ""),
+                    "status": resp.status_code,
+                }
+            )
         except RequestException:
             pass
         time.sleep(1)
@@ -78,7 +79,6 @@ def test_cache_hit_miss(target_url):
 def test_unkeyed_headers(target_url):
     """Test for unkeyed headers that are reflected in cached responses."""
     cb = generate_cache_buster()
-    base_url = f"{target_url}?{cb}=1"
     unkeyed_headers = [
         ("X-Forwarded-Host", "evil.com"),
         ("X-Forwarded-Scheme", "http"),
@@ -97,19 +97,20 @@ def test_unkeyed_headers(target_url):
         test_url = f"{target_url}?{cb}=1"
         try:
             resp = requests.get(
-                test_url, headers={header_name: header_value},
-                timeout=10, verify=False
+                test_url, headers={header_name: header_value}, timeout=10, verify=True
             )
             if header_value in resp.text:
-                poisoned_resp = requests.get(test_url, timeout=10, verify=False)
+                poisoned_resp = requests.get(test_url, timeout=10, verify=True)
                 cached_poison = header_value in poisoned_resp.text
-                findings.append({
-                    "header": header_name,
-                    "value": header_value,
-                    "reflected": True,
-                    "cached_poison": cached_poison,
-                    "risk": "CRITICAL" if cached_poison else "HIGH",
-                })
+                findings.append(
+                    {
+                        "header": header_name,
+                        "value": header_value,
+                        "reflected": True,
+                        "cached_poison": cached_poison,
+                        "risk": "CRITICAL" if cached_poison else "HIGH",
+                    }
+                )
         except RequestException:
             pass
     return findings
@@ -127,13 +128,16 @@ def test_cache_key_normalization(target_url):
     ]
     for url, desc in variations:
         try:
-            resp = requests.get(url, timeout=10, verify=False)
-            tests.append({
-                "variation": desc, "url": url,
-                "status": resp.status_code,
-                "x_cache": resp.headers.get("X-Cache", ""),
-                "content_length": len(resp.content),
-            })
+            resp = requests.get(url, timeout=10, verify=True)
+            tests.append(
+                {
+                    "variation": desc,
+                    "url": url,
+                    "status": resp.status_code,
+                    "x_cache": resp.headers.get("X-Cache", ""),
+                    "content_length": len(resp.content),
+                }
+            )
         except RequestException:
             pass
     return tests
@@ -152,16 +156,18 @@ def test_cache_deception(target_url):
     for path in deception_paths:
         test_url = f"{target_url.rstrip('/')}{path}?{cb}=1"
         try:
-            resp = requests.get(test_url, timeout=10, verify=False)
+            resp = requests.get(test_url, timeout=10, verify=True)
             cache_status = resp.headers.get("X-Cache", resp.headers.get("CF-Cache-Status", ""))
             if "HIT" in cache_status.upper() or resp.headers.get("Age"):
-                findings.append({
-                    "path": path,
-                    "cached": True,
-                    "status": resp.status_code,
-                    "content_type": resp.headers.get("Content-Type", ""),
-                    "risk": "HIGH",
-                })
+                findings.append(
+                    {
+                        "path": path,
+                        "cached": True,
+                        "status": resp.status_code,
+                        "content_type": resp.headers.get("Content-Type", ""),
+                        "risk": "HIGH",
+                    }
+                )
         except RequestException:
             pass
     return findings
@@ -177,17 +183,17 @@ def run_assessment(target_url):
         "key_normalization": test_cache_key_normalization(target_url),
         "cache_deception": test_cache_deception(target_url),
     }
-    critical_count = sum(
-        1 for f in report["unkeyed_headers"] if f.get("risk") == "CRITICAL"
+    critical_count = sum(1 for f in report["unkeyed_headers"] if f.get("risk") == "CRITICAL")
+    high_count = sum(1 for f in report["unkeyed_headers"] if f.get("risk") == "HIGH") + len(
+        report["cache_deception"]
     )
-    high_count = sum(
-        1 for f in report["unkeyed_headers"] if f.get("risk") == "HIGH"
-    ) + len(report["cache_deception"])
     report["summary"] = {
         "cdn": report["cache_layer"].get("cdn_detected", "Unknown"),
         "critical_findings": critical_count,
         "high_findings": high_count,
-        "poisonable_headers": [f["header"] for f in report["unkeyed_headers"] if f.get("cached_poison")],
+        "poisonable_headers": [
+            f["header"] for f in report["unkeyed_headers"] if f.get("cached_poison")
+        ],
     }
     return report
 
@@ -200,15 +206,17 @@ def print_report(report):
     print(f"Critical: {report['summary']['critical_findings']}")
     print(f"High: {report['summary']['high_findings']}")
     if report["summary"]["poisonable_headers"]:
-        print(f"\nPoisonable Headers:")
+        print("\nPoisonable Headers:")
         for h in report["summary"]["poisonable_headers"]:
             print(f"  - {h}")
-    print(f"\nUnkeyed Header Tests:")
+    print("\nUnkeyed Header Tests:")
     for f in report["unkeyed_headers"]:
-        status = "POISON" if f.get("cached_poison") else ("REFLECTED" if f.get("reflected") else "SAFE")
+        status = (
+            "POISON" if f.get("cached_poison") else ("REFLECTED" if f.get("reflected") else "SAFE")
+        )
         print(f"  {f['header']}: {status} [{f.get('risk', 'N/A')}]")
     if report["cache_deception"]:
-        print(f"\nCache Deception:")
+        print("\nCache Deception:")
         for f in report["cache_deception"]:
             print(f"  {f['path']}: CACHED ({f['content_type']})")
 

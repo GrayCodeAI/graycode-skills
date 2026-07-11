@@ -19,8 +19,8 @@ Usage:
 
 import argparse
 import json
-import sys
 import os
+import sys
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -284,8 +284,7 @@ class OpenCTIEnrichmentPipeline:
             print(f"[-] GreyNoise query failed for {ip}: {e}")
         return None
 
-    def update_opencti_observable(self, observable_value: str,
-                                  enrichment: dict) -> bool:
+    def update_opencti_observable(self, observable_value: str, enrichment: dict) -> bool:
         """Update OpenCTI observable with enrichment results."""
         try:
             # Search for existing observable
@@ -324,9 +323,7 @@ class OpenCTIEnrichmentPipeline:
                     id=obs_id, label_name="enrichment:critical"
                 )
             elif score >= 50:
-                self.client.stix_cyber_observable.add_label(
-                    id=obs_id, label_name="enrichment:high"
-                )
+                self.client.stix_cyber_observable.add_label(id=obs_id, label_name="enrichment:high")
 
             print(f"[+] Updated {observable_value} in OpenCTI (score: {score})")
             return True
@@ -338,17 +335,13 @@ class OpenCTIEnrichmentPipeline:
 
     def bulk_enrich_recent(self, days: int = 1, max_items: int = 100):
         """Bulk enrich recently created observables."""
-        date_from = (datetime.now() - timedelta(days=days)).strftime(
-            "%Y-%m-%dT00:00:00.000Z"
-        )
+        date_from = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%dT00:00:00.000Z")
 
         observables = self.client.stix_cyber_observable.list(
             first=max_items,
             filters={
                 "mode": "and",
-                "filters": [
-                    {"key": "created_at", "values": [date_from], "operator": "gt"}
-                ],
+                "filters": [{"key": "created_at", "values": [date_from], "operator": "gt"}],
                 "filterGroups": [],
             },
         )
@@ -388,21 +381,18 @@ class OpenCTIEnrichmentPipeline:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="OpenCTI IOC Enrichment Pipeline"
-    )
+    parser = argparse.ArgumentParser(description="OpenCTI IOC Enrichment Pipeline")
     parser.add_argument("--url", required=True, help="OpenCTI instance URL")
     parser.add_argument("--token", required=True, help="OpenCTI API token")
     parser.add_argument("--enrich-ip", help="Enrich a single IP address")
     parser.add_argument("--enrich-domain", help="Enrich a single domain")
     parser.add_argument("--enrich-hash", help="Enrich a single file hash")
-    parser.add_argument(
-        "--bulk-enrich", action="store_true", help="Bulk enrich recent observables"
-    )
+    parser.add_argument("--bulk-enrich", action="store_true", help="Bulk enrich recent observables")
     parser.add_argument("--days", type=int, default=1, help="Lookback days for bulk")
     parser.add_argument("--max-items", type=int, default=100, help="Max items for bulk")
     parser.add_argument(
-        "--update-opencti", action="store_true",
+        "--update-opencti",
+        action="store_true",
         help="Update results back to OpenCTI",
     )
     parser.add_argument("--output", help="Output file for enrichment results")

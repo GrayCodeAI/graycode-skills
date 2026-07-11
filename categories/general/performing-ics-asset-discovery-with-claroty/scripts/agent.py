@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Agent for performing ICS asset discovery with Claroty xDome/CTD API."""
 
-import json
 import argparse
+import json
 from datetime import datetime
 
 try:
@@ -17,10 +17,12 @@ class ClarotyClient:
     def __init__(self, base_url, api_token):
         self.base_url = base_url.rstrip("/")
         self.session = requests.Session()
-        self.session.headers.update({
-            "Authorization": f"Bearer {api_token}",
-            "Content-Type": "application/json",
-        })
+        self.session.headers.update(
+            {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json",
+            }
+        )
 
     def get_assets(self, asset_type=None, limit=100):
         """Retrieve discovered OT/IoT assets."""
@@ -42,7 +44,9 @@ class ClarotyClient:
         params = {"limit": limit}
         if severity:
             params["severity"] = severity
-        resp = self.session.get(f"{self.base_url}/api/v1/vulnerabilities", params=params, timeout=30)
+        resp = self.session.get(
+            f"{self.base_url}/api/v1/vulnerabilities", params=params, timeout=30
+        )
         resp.raise_for_status()
         return resp.json()
 
@@ -78,10 +82,18 @@ def discover_assets(base_url, token, asset_type=None, limit=100):
         "by_category": categories,
         "by_vendor": dict(sorted(vendors.items(), key=lambda x: -x[1])[:20]),
         "critical_assets": len(critical),
-        "assets": [{"id": a.get("id"), "name": a.get("name"), "type": a.get("type"),
-                     "ip": a.get("ip_address", a.get("ip")), "vendor": a.get("vendor"),
-                     "firmware": a.get("firmware_version", ""), "criticality": a.get("criticality")}
-                    for a in assets[:50]],
+        "assets": [
+            {
+                "id": a.get("id"),
+                "name": a.get("name"),
+                "type": a.get("type"),
+                "ip": a.get("ip_address", a.get("ip")),
+                "vendor": a.get("vendor"),
+                "firmware": a.get("firmware_version", ""),
+                "criticality": a.get("criticality"),
+            }
+            for a in assets[:50]
+        ],
         "timestamp": datetime.utcnow().isoformat(),
     }
 
@@ -98,10 +110,15 @@ def assess_vulnerabilities(base_url, token, severity=None, limit=100):
     return {
         "total_vulnerabilities": len(vulns),
         "by_severity": by_severity,
-        "vulnerabilities": [{"cve": v.get("cve_id"), "severity": v.get("severity"),
-                             "asset": v.get("asset_name", v.get("asset_id")),
-                             "description": v.get("description", "")[:200]}
-                            for v in vulns[:30]],
+        "vulnerabilities": [
+            {
+                "cve": v.get("cve_id"),
+                "severity": v.get("severity"),
+                "asset": v.get("asset_name", v.get("asset_id")),
+                "description": v.get("description", "")[:200],
+            }
+            for v in vulns[:30]
+        ],
     }
 
 
@@ -118,9 +135,16 @@ def get_alerts_summary(base_url, token, status="active"):
         "total_alerts": len(alerts),
         "status": status,
         "by_type": by_type,
-        "alerts": [{"id": a.get("id"), "type": a.get("alert_type"),
-                     "severity": a.get("severity"), "description": a.get("description", "")[:150],
-                     "asset": a.get("asset_name")} for a in alerts[:20]],
+        "alerts": [
+            {
+                "id": a.get("id"),
+                "type": a.get("alert_type"),
+                "severity": a.get("severity"),
+                "description": a.get("description", "")[:150],
+                "asset": a.get("asset_name"),
+            }
+            for a in alerts[:20]
+        ],
     }
 
 
@@ -131,10 +155,15 @@ def network_topology(base_url, token):
     segments = data.get("segments", data.get("results", []))
     return {
         "total_segments": len(segments),
-        "segments": [{"name": s.get("name"), "subnet": s.get("subnet"),
-                       "asset_count": s.get("asset_count", 0),
-                       "zone": s.get("zone", s.get("purdue_level", ""))}
-                      for s in segments],
+        "segments": [
+            {
+                "name": s.get("name"),
+                "subnet": s.get("subnet"),
+                "asset_count": s.get("asset_count", 0),
+                "zone": s.get("zone", s.get("purdue_level", "")),
+            }
+            for s in segments
+        ],
     }
 
 

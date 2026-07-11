@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Nozomi Networks OT Traffic Analysis Agent - monitors ICS protocols and detects anomalies."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 from collections import defaultdict
@@ -13,7 +13,14 @@ logger = logging.getLogger(__name__)
 
 
 def nozomi_api(base_url, token, endpoint):
-    cmd = ["curl", "-s", "-k", "-H", f"Authorization: Bearer {token}", f"{base_url}/api/v1{endpoint}"]
+    cmd = [
+        "curl",
+        "-s",
+        "-k",
+        "-H",
+        f"Authorization: Bearer {token}",
+        f"{base_url}/api/v1{endpoint}",
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     return json.loads(result.stdout) if result.stdout else {}
 
@@ -38,19 +45,35 @@ def analyze_ot_protocols(sessions):
         proto = session.get("protocol", "").lower()
         protocol_counts[proto] += 1
         if proto in ot_protocols:
-            ot_sessions.append({"source": session.get("source_ip", ""), "destination": session.get("destination_ip", ""),
-                              "protocol": proto, "bytes": session.get("bytes_total", 0)})
-    return {"protocol_distribution": dict(protocol_counts), "ot_sessions": len(ot_sessions), "total_sessions": len(sessions)}
+            ot_sessions.append(
+                {
+                    "source": session.get("source_ip", ""),
+                    "destination": session.get("destination_ip", ""),
+                    "protocol": proto,
+                    "bytes": session.get("bytes_total", 0),
+                }
+            )
+    return {
+        "protocol_distribution": dict(protocol_counts),
+        "ot_sessions": len(ot_sessions),
+        "total_sessions": len(sessions),
+    }
 
 
 def detect_anomalies(alerts):
     anomaly_types = defaultdict(list)
     for alert in alerts:
-        anomaly_types[alert.get("type_id", "unknown")].append({
-            "description": alert.get("description", ""), "risk": alert.get("risk", ""),
-            "source": alert.get("source_ip", ""), "timestamp": alert.get("created_at", ""),
-        })
-    return {cat: {"count": len(items), "samples": items[:3]} for cat, items in anomaly_types.items()}
+        anomaly_types[alert.get("type_id", "unknown")].append(
+            {
+                "description": alert.get("description", ""),
+                "risk": alert.get("risk", ""),
+                "source": alert.get("source_ip", ""),
+                "timestamp": alert.get("created_at", ""),
+            }
+        )
+    return {
+        cat: {"count": len(items), "samples": items[:3]} for cat, items in anomaly_types.items()
+    }
 
 
 def audit_asset_inventory(assets):
@@ -59,14 +82,21 @@ def audit_asset_inventory(assets):
     for asset in assets:
         by_type[asset.get("type", "unknown")] += 1
         by_vendor[asset.get("vendor", "unknown")] += 1
-    return {"total_assets": len(assets), "by_type": dict(by_type),
-            "by_vendor": dict(sorted(by_vendor.items(), key=lambda x: x[1], reverse=True)[:10])}
+    return {
+        "total_assets": len(assets),
+        "by_type": dict(by_type),
+        "by_vendor": dict(sorted(by_vendor.items(), key=lambda x: x[1], reverse=True)[:10]),
+    }
 
 
 def generate_report(alerts, sessions, assets, base_url):
     return {
-        "timestamp": datetime.utcnow().isoformat(), "nozomi_url": base_url,
-        "alert_summary": {"total": len(alerts), "critical": sum(1 for a in alerts if a.get("risk") == "critical")},
+        "timestamp": datetime.utcnow().isoformat(),
+        "nozomi_url": base_url,
+        "alert_summary": {
+            "total": len(alerts),
+            "critical": sum(1 for a in alerts if a.get("risk") == "critical"),
+        },
         "protocol_analysis": analyze_ot_protocols(sessions),
         "anomalies": detect_anomalies(alerts),
         "asset_inventory": audit_asset_inventory(assets),
@@ -85,8 +115,11 @@ def main():
     report = generate_report(alerts, sessions, assets, args.nozomi_url)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Nozomi: %d alerts, %d sessions, %d assets", len(alerts), len(sessions), len(assets))
+    logger.info(
+        "Nozomi: %d alerts, %d sessions, %d assets", len(alerts), len(sessions), len(assets)
+    )
     print(json.dumps(report, indent=2, default=str))
+
 
 if __name__ == "__main__":
     main()

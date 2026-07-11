@@ -19,7 +19,6 @@ Usage:
 
 import argparse
 import json
-import sys
 from datetime import datetime
 
 import requests
@@ -38,12 +37,22 @@ except ImportError:
 class TIPManager:
     """Manage Threat Intelligence Platform operations."""
 
-    def __init__(self, misp_url="", misp_key="", opencti_url="", opencti_token="",
-                 thehive_url="", thehive_key="", cortex_url="", cortex_key=""):
+    def __init__(
+        self,
+        misp_url="",
+        misp_key="",
+        opencti_url="",
+        opencti_token="",
+        thehive_url="",
+        thehive_key="",
+        cortex_url="",
+        cortex_key="",
+    ):
         self.misp = PyMISP(misp_url, misp_key, ssl=False) if PyMISP and misp_url else None
         self.opencti = (
             OpenCTIApiClient(opencti_url, opencti_token)
-            if OpenCTIApiClient and opencti_url else None
+            if OpenCTIApiClient and opencti_url
+            else None
         )
         self.thehive_url = thehive_url
         self.thehive_key = thehive_key
@@ -63,7 +72,7 @@ class TIPManager:
 
         if self.opencti:
             try:
-                about = self.opencti.health.check()
+                self.opencti.health.check()
                 health["opencti"] = {"status": "healthy"}
             except Exception as e:
                 health["opencti"] = {"status": "unhealthy", "error": str(e)}
@@ -88,9 +97,7 @@ class TIPManager:
                     headers={"Authorization": f"Bearer {self.cortex_key}"},
                     timeout=10,
                 )
-                health["cortex"] = {
-                    "status": "healthy" if resp.status_code == 200 else "unhealthy"
-                }
+                health["cortex"] = {"status": "healthy" if resp.status_code == 200 else "unhealthy"}
             except Exception as e:
                 health["cortex"] = {"status": "unreachable", "error": str(e)}
 
@@ -125,9 +132,7 @@ class TIPManager:
                 stats["misp"] = {
                     "events": server_stats.get("event_count", 0),
                     "attributes": server_stats.get("attribute_count", 0),
-                    "active_feeds": len([
-                        f for f in feeds if f.get("Feed", {}).get("enabled")
-                    ]),
+                    "active_feeds": len([f for f in feeds if f.get("Feed", {}).get("enabled")]),
                     "organizations": server_stats.get("org_count", 0),
                 }
             except Exception as e:
@@ -137,9 +142,7 @@ class TIPManager:
             try:
                 connectors = self.opencti.connector.list()
                 stats["opencti"] = {
-                    "active_connectors": len([
-                        c for c in connectors if c.get("active")
-                    ]),
+                    "active_connectors": len([c for c in connectors if c.get("active")]),
                     "total_connectors": len(connectors),
                 }
             except Exception as e:

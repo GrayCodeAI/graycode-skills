@@ -15,22 +15,18 @@ Usage:
     python process.py check-ciphers --host example.com
 """
 
-import os
-import ssl
-import sys
-import json
-import socket
 import argparse
-import logging
-import subprocess
 import datetime
+import json
+import logging
+import socket
+import ssl
 from pathlib import Path
-from typing import Optional, Dict, List
 
 from cryptography import x509
-from cryptography.x509.oid import NameOID, ExtensionOID
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec, rsa
+from cryptography.x509.oid import NameOID
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -51,7 +47,7 @@ RECOMMENDED_TLS_12_CIPHERS = [
 ]
 
 
-def test_tls_connection(host: str, port: int = 443, timeout: int = 10) -> Dict:
+def test_tls_connection(host: str, port: int = 443, timeout: int = 10) -> dict:
     """Test TLS connection to a server and report protocol details."""
     results = {
         "host": host,
@@ -139,7 +135,7 @@ def test_tls_connection(host: str, port: int = 443, timeout: int = 10) -> Dict:
     return results
 
 
-def check_cipher_suites(host: str, port: int = 443, timeout: int = 10) -> Dict:
+def check_cipher_suites(host: str, port: int = 443, timeout: int = 10) -> dict:
     """Check which cipher suites a server supports."""
     results = {"host": host, "port": port, "supported_ciphers": [], "weak_ciphers": []}
 
@@ -171,9 +167,7 @@ def check_cipher_suites(host: str, port: int = 443, timeout: int = 10) -> Dict:
     return results
 
 
-def generate_self_signed_cert(
-    domain: str, output_dir: str, key_type: str = "ecdsa"
-) -> Dict:
+def generate_self_signed_cert(domain: str, output_dir: str, key_type: str = "ecdsa") -> dict:
     """Generate a self-signed TLS certificate for testing."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -187,12 +181,14 @@ def generate_self_signed_cert(
         key_filename = "server-rsa.key"
         cert_filename = "server-rsa.crt"
 
-    subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
-        x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "California"),
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Test Organization"),
-        x509.NameAttribute(NameOID.COMMON_NAME, domain),
-    ])
+    subject = issuer = x509.Name(
+        [
+            x509.NameAttribute(NameOID.COUNTRY_NAME, "US"),
+            x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "California"),
+            x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Test Organization"),
+            x509.NameAttribute(NameOID.COMMON_NAME, domain),
+        ]
+    )
 
     cert = (
         x509.CertificateBuilder()
@@ -203,10 +199,12 @@ def generate_self_signed_cert(
         .not_valid_before(datetime.datetime.utcnow())
         .not_valid_after(datetime.datetime.utcnow() + datetime.timedelta(days=365))
         .add_extension(
-            x509.SubjectAlternativeName([
-                x509.DNSName(domain),
-                x509.DNSName(f"*.{domain}"),
-            ]),
+            x509.SubjectAlternativeName(
+                [
+                    x509.DNSName(domain),
+                    x509.DNSName(f"*.{domain}"),
+                ]
+            ),
             critical=False,
         )
         .add_extension(
@@ -317,9 +315,8 @@ def generate_apache_config(
     domain: str, cert_path: str, key_path: str, enable_tls12: bool = True
 ) -> str:
     """Generate Apache TLS 1.3 configuration."""
-    tls_protocols = "TLSv1.3"
     if enable_tls12:
-        tls_protocols = "TLSv1.2 TLSv1.3"
+        pass
 
     tls12_ciphers = ":".join(RECOMMENDED_TLS_12_CIPHERS)
 

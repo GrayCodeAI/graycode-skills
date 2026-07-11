@@ -19,6 +19,7 @@ import requests
 
 try:
     from anyrun.connectors import SandboxConnector
+
     HAS_ANYRUN_SDK = True
 except ImportError:
     HAS_ANYRUN_SDK = False
@@ -27,8 +28,13 @@ except ImportError:
 ANYRUN_API_BASE = "https://api.any.run/v1"
 
 
-def submit_file(filepath: str, api_key: str, os_version: str = "windows-10",
-                 privacy: str = "private", timeout_seconds: int = 120) -> dict:
+def submit_file(
+    filepath: str,
+    api_key: str,
+    os_version: str = "windows-10",
+    privacy: str = "private",
+    timeout_seconds: int = 120,
+) -> dict:
     """Submit a file to ANY.RUN for dynamic analysis."""
     if not os.path.exists(filepath):
         return {"error": f"File not found: {filepath}"}
@@ -50,7 +56,10 @@ def submit_file(filepath: str, api_key: str, os_version: str = "windows-10",
 
         resp = requests.post(
             f"{ANYRUN_API_BASE}/analysis",
-            headers=headers, files=files, data=data, timeout=60,
+            headers=headers,
+            files=files,
+            data=data,
+            timeout=60,
         )
 
     if resp.status_code in (200, 201):
@@ -78,7 +87,9 @@ def submit_url(url: str, api_key: str, os_version: str = "windows-10") -> dict:
 
     resp = requests.post(
         f"{ANYRUN_API_BASE}/analysis",
-        headers=headers, data=data, timeout=60,
+        headers=headers,
+        data=data,
+        timeout=60,
     )
 
     if resp.status_code in (200, 201):
@@ -97,7 +108,8 @@ def get_task_report(task_id: str, api_key: str) -> dict:
 
     resp = requests.get(
         f"{ANYRUN_API_BASE}/analysis/{task_id}",
-        headers=headers, timeout=30,
+        headers=headers,
+        timeout=30,
     )
 
     if resp.status_code != 200:
@@ -107,21 +119,29 @@ def get_task_report(task_id: str, api_key: str) -> dict:
 
     report = {
         "task_id": task_id,
-        "verdict": data.get("analysis", {}).get("scores", {}).get("verdict", {}).get("verdict", "unknown"),
-        "threat_level": data.get("analysis", {}).get("scores", {}).get("verdict", {}).get("threatLevelText", ""),
+        "verdict": data.get("analysis", {})
+        .get("scores", {})
+        .get("verdict", {})
+        .get("verdict", "unknown"),
+        "threat_level": data.get("analysis", {})
+        .get("scores", {})
+        .get("verdict", {})
+        .get("threatLevelText", ""),
         "tags": data.get("analysis", {}).get("tags", []),
     }
 
     processes = data.get("analysis", {}).get("processes", [])
     report["processes"] = []
     for proc in processes:
-        report["processes"].append({
-            "pid": proc.get("pid", 0),
-            "name": proc.get("fileName", ""),
-            "command_line": proc.get("commandLine", "")[:200],
-            "parent_pid": proc.get("parentPID", 0),
-            "is_malicious": proc.get("scores", {}).get("verdict", {}).get("isMalicious", False),
-        })
+        report["processes"].append(
+            {
+                "pid": proc.get("pid", 0),
+                "name": proc.get("fileName", ""),
+                "command_line": proc.get("commandLine", "")[:200],
+                "parent_pid": proc.get("parentPID", 0),
+                "is_malicious": proc.get("scores", {}).get("verdict", {}).get("isMalicious", False),
+            }
+        )
 
     network = data.get("analysis", {}).get("network", {})
     report["network"] = {
@@ -156,7 +176,8 @@ def wait_for_completion(task_id: str, api_key: str, max_wait: int = 300) -> dict
     while time.time() - start < max_wait:
         resp = requests.get(
             f"{ANYRUN_API_BASE}/analysis/{task_id}",
-            headers=headers, timeout=30,
+            headers=headers,
+            timeout=30,
         )
 
         if resp.status_code == 200:
@@ -229,13 +250,15 @@ def generate_report(submission: dict, report: dict, iocs: dict) -> str:
         if proc.get("command_line"):
             lines.append(f"    CMD: {proc['command_line'][:100]}")
 
-    lines.extend([
-        "",
-        "NETWORK IOCs:",
-        f"  Domains: {len(iocs.get('domains', []))}",
-        f"  IPs: {len(iocs.get('ips', []))}",
-        f"  URLs: {len(iocs.get('urls', []))}",
-    ])
+    lines.extend(
+        [
+            "",
+            "NETWORK IOCs:",
+            f"  Domains: {len(iocs.get('domains', []))}",
+            f"  IPs: {len(iocs.get('ips', []))}",
+            f"  URLs: {len(iocs.get('urls', []))}",
+        ]
+    )
 
     if iocs.get("mitre_techniques"):
         lines.extend(["", "MITRE ATT&CK TECHNIQUES:"])

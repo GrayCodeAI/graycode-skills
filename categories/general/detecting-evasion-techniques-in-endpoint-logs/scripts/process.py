@@ -6,14 +6,13 @@ Analyzes Windows event logs (exported as EVTX/CSV) for common defense
 evasion techniques mapped to MITRE ATT&CK TA0005.
 """
 
-import json
 import csv
+import json
+import os
 import re
 import sys
-import os
 from collections import defaultdict
 from datetime import datetime
-
 
 EVASION_PATTERNS = {
     "T1070.001-log_clearing": {
@@ -85,7 +84,7 @@ def analyze_sysmon_csv(csv_path: str) -> list:
     """Analyze Sysmon events exported as CSV for evasion techniques."""
     detections = []
 
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
             event_id = row.get("Event ID", row.get("EventID", ""))
@@ -120,20 +119,24 @@ def analyze_sysmon_csv(csv_path: str) -> list:
                         if proc_name in image_lower:
                             if not re.match(expected_path, image, re.IGNORECASE):
                                 detected = True
-                                detection_detail = f"Masquerading: {proc_name} from unexpected path {image}"
+                                detection_detail = (
+                                    f"Masquerading: {proc_name} from unexpected path {image}"
+                                )
 
                 if detected:
-                    detections.append({
-                        "timestamp": timestamp,
-                        "technique_id": technique_id.split("-")[0],
-                        "technique_name": technique["name"],
-                        "severity": technique["severity"],
-                        "event_id": event_id,
-                        "process": image,
-                        "command_line": command_line[:300],
-                        "detail": detection_detail,
-                        "host": row.get("Computer", row.get("host", "")),
-                    })
+                    detections.append(
+                        {
+                            "timestamp": timestamp,
+                            "technique_id": technique_id.split("-")[0],
+                            "technique_name": technique["name"],
+                            "severity": technique["severity"],
+                            "event_id": event_id,
+                            "process": image,
+                            "command_line": command_line[:300],
+                            "detail": detection_detail,
+                            "host": row.get("Computer", row.get("host", "")),
+                        }
+                    )
 
     return detections
 
@@ -186,7 +189,7 @@ if __name__ == "__main__":
     generate_detection_report(detections, report_path)
     print(f"Detection report: {report_path}")
 
-    print(f"\n--- Evasion Detection Summary ---")
+    print("\n--- Evasion Detection Summary ---")
     print(f"Total detections: {len(detections)}")
 
     severity_counts = defaultdict(int)
@@ -200,6 +203,6 @@ if __name__ == "__main__":
             print(f"  {sev.upper()}: {severity_counts[sev]}")
 
     if technique_counts:
-        print(f"\nBy technique:")
+        print("\nBy technique:")
         for tid, count in sorted(technique_counts.items(), key=lambda x: -x[1]):
             print(f"  {tid}: {count}")

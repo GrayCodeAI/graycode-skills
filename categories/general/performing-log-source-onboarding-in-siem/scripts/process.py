@@ -6,17 +6,20 @@ Tracks log source onboarding progress, validates data quality,
 and generates configuration templates for common SIEM platforms.
 """
 
-import json
-from datetime import datetime
-from typing import Optional
-
 
 class LogSource:
     """Represents a log source to be onboarded into a SIEM."""
 
-    def __init__(self, name: str, source_type: str, log_format: str,
-                 estimated_eps: int, avg_event_size_bytes: int = 500,
-                 security_tier: str = "medium", collection_method: str = "syslog"):
+    def __init__(
+        self,
+        name: str,
+        source_type: str,
+        log_format: str,
+        estimated_eps: int,
+        avg_event_size_bytes: int = 500,
+        security_tier: str = "medium",
+        collection_method: str = "syslog",
+    ):
         self.name = name
         self.source_type = source_type
         self.log_format = log_format
@@ -122,20 +125,30 @@ class OnboardingTracker:
         for source in self.sources:
             steps = self.step_completion.get(source.name, {})
             completed_steps = sum(1 for v in steps.values() if v)
-            report["sources"].append({
-                "name": source.name,
-                "type": source.source_type,
-                "status": source.status,
-                "progress": f"{completed_steps}/{len(self.ONBOARDING_STEPS)}",
-                "daily_volume_gb": source.estimate_daily_volume_gb(),
-                "security_tier": source.security_tier,
-                "next_step": next((s for s, v in steps.items() if not v), "complete"),
-            })
+            report["sources"].append(
+                {
+                    "name": source.name,
+                    "type": source.source_type,
+                    "status": source.status,
+                    "progress": f"{completed_steps}/{len(self.ONBOARDING_STEPS)}",
+                    "daily_volume_gb": source.estimate_daily_volume_gb(),
+                    "security_tier": source.security_tier,
+                    "next_step": next((s for s, v in steps.items() if not v), "complete"),
+                }
+            )
         return report
 
 
 CIM_REQUIRED_FIELDS = {
-    "Network_Traffic": ["src_ip", "dest_ip", "dest_port", "action", "bytes", "protocol", "transport"],
+    "Network_Traffic": [
+        "src_ip",
+        "dest_ip",
+        "dest_port",
+        "action",
+        "bytes",
+        "protocol",
+        "transport",
+    ],
     "Authentication": ["src_ip", "user", "action", "app", "dest"],
     "Endpoint": ["dest", "process", "process_id", "user", "action"],
     "Web": ["url", "http_method", "status", "src_ip", "dest_ip", "http_user_agent"],
@@ -147,10 +160,24 @@ if __name__ == "__main__":
     tracker = OnboardingTracker()
 
     sources = [
-        LogSource("Palo Alto Firewall", "pan:traffic", "syslog-CEF", 500, 600, "critical", "syslog"),
-        LogSource("Windows Domain Controllers", "WinEventLog:Security", "windows-xml", 200, 800, "critical", "windows_event"),
-        LogSource("Squid Web Proxy", "squid:access", "squid-native", 1000, 400, "high", "file_monitor"),
-        LogSource("Custom App Server", "app:custom", "json", 50, 300, "medium", "http_event_collector"),
+        LogSource(
+            "Palo Alto Firewall", "pan:traffic", "syslog-CEF", 500, 600, "critical", "syslog"
+        ),
+        LogSource(
+            "Windows Domain Controllers",
+            "WinEventLog:Security",
+            "windows-xml",
+            200,
+            800,
+            "critical",
+            "windows_event",
+        ),
+        LogSource(
+            "Squid Web Proxy", "squid:access", "squid-native", 1000, 400, "high", "file_monitor"
+        ),
+        LogSource(
+            "Custom App Server", "app:custom", "json", 50, 300, "medium", "http_event_collector"
+        ),
     ]
 
     for src in sources:
@@ -179,19 +206,23 @@ if __name__ == "__main__":
 
     report = tracker.get_progress_report()
     print(f"\nTotal Sources: {report['total_sources']}")
-    print(f"Completed: {report['completed']} | In Progress: {report['in_progress']} | Pending: {report['pending']}")
+    print(
+        f"Completed: {report['completed']} | In Progress: {report['in_progress']} | Pending: {report['pending']}"
+    )
     print(f"Total Daily Volume: {report['total_daily_volume_gb']} GB")
     print(f"Total Monthly Volume: {report['total_monthly_volume_gb']} GB")
 
     print(f"\n{'Source':<30} {'Status':<15} {'Progress':<10} {'Volume/Day':<12} {'Next Step'}")
     print("-" * 85)
     for s in report["sources"]:
-        print(f"{s['name']:<30} {s['status']:<15} {s['progress']:<10} {s['daily_volume_gb']:<12} {s['next_step']}")
+        print(
+            f"{s['name']:<30} {s['status']:<15} {s['progress']:<10} {s['daily_volume_gb']:<12} {s['next_step']}"
+        )
 
-    print(f"\nCIM Compliance - Palo Alto Firewall:")
+    print("\nCIM Compliance - Palo Alto Firewall:")
     print(f"  Coverage: {cim_result['coverage_pct']}%")
     print(f"  Compliant: {cim_result['compliant']}")
     print(f"  Missing: {cim_result['missing_fields']}")
 
-    print(f"\nSample inputs.conf for Palo Alto Firewall:")
+    print("\nSample inputs.conf for Palo Alto Firewall:")
     print(sources[0].generate_splunk_inputs_conf())

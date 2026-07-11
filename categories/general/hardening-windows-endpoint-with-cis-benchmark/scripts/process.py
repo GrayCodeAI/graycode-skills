@@ -6,13 +6,13 @@ Parses CIS-CAT Pro XML assessment results, calculates compliance scores,
 identifies failed controls, and generates remediation reports.
 """
 
-import xml.etree.ElementTree as ET
-import json
 import csv
-import sys
+import json
 import os
-from datetime import datetime
+import sys
+import xml.etree.ElementTree as ET
 from collections import defaultdict
+from datetime import datetime
 
 
 def parse_ciscat_xccdf_results(xml_path: str) -> dict:
@@ -156,9 +156,7 @@ def generate_compliance_report(results: dict, output_path: str) -> None:
             "errors": results["error"],
         },
         "failed_controls": results["findings"],
-        "compliance_status": "COMPLIANT"
-        if results["score"] >= 95.0
-        else "NON-COMPLIANT",
+        "compliance_status": "COMPLIANT" if results["score"] >= 95.0 else "NON-COMPLIANT",
     }
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -226,7 +224,9 @@ if __name__ == "__main__":
 
     print(f"\nCompliance Score: {results['score']}%")
     print(f"Status: {'COMPLIANT' if results['score'] >= 95.0 else 'NON-COMPLIANT'}")
-    print(f"Passed: {results['passed']} | Failed: {results['failed']} | N/A: {results['not_applicable']}")
+    print(
+        f"Passed: {results['passed']} | Failed: {results['failed']} | N/A: {results['not_applicable']}"
+    )
 
     if len(sys.argv) >= 3:
         prev_path = sys.argv[2]

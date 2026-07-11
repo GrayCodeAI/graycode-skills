@@ -17,8 +17,14 @@ def run_volatility_pslist(memory_dump):
         for line in result.stdout.splitlines():
             parts = line.split()
             if len(parts) >= 4 and parts[0].isdigit():
-                processes.append({"pid": int(parts[0]), "ppid": int(parts[1]),
-                                  "name": parts[2], "threads": parts[3] if len(parts) > 3 else ""})
+                processes.append(
+                    {
+                        "pid": int(parts[0]),
+                        "ppid": int(parts[1]),
+                        "name": parts[2],
+                        "threads": parts[3] if len(parts) > 3 else "",
+                    }
+                )
         return {"method": "pslist", "count": len(processes), "processes": processes}
     except FileNotFoundError:
         return {"error": "Volatility 3 not installed"}
@@ -35,9 +41,14 @@ def run_volatility_psscan(memory_dump):
         for line in result.stdout.splitlines():
             parts = line.split()
             if len(parts) >= 4 and parts[0].startswith("0x"):
-                processes.append({"offset": parts[0], "pid": parts[1],
-                                  "ppid": parts[2] if len(parts) > 2 else "",
-                                  "name": parts[3] if len(parts) > 3 else ""})
+                processes.append(
+                    {
+                        "offset": parts[0],
+                        "pid": parts[1],
+                        "ppid": parts[2] if len(parts) > 2 else "",
+                        "name": parts[3] if len(parts) > 3 else "",
+                    }
+                )
         return {"method": "psscan", "count": len(processes), "processes": processes}
     except FileNotFoundError:
         return {"error": "Volatility 3 not installed"}
@@ -51,24 +62,26 @@ def cross_view_detection(memory_dump):
     psscan = run_volatility_psscan(memory_dump)
 
     if "error" in pslist or "error" in psscan:
-        return {"error": "Could not complete cross-view analysis",
-                "pslist": pslist, "psscan": psscan}
+        return {
+            "error": "Could not complete cross-view analysis",
+            "pslist": pslist,
+            "psscan": psscan,
+        }
 
     pslist_pids = set(str(p["pid"]) for p in pslist.get("processes", []))
     psscan_pids = set(str(p.get("pid", "")) for p in psscan.get("processes", []))
 
     hidden = psscan_pids - pslist_pids
-    hidden_processes = [
-        p for p in psscan.get("processes", [])
-        if str(p.get("pid", "")) in hidden
-    ]
+    hidden_processes = [p for p in psscan.get("processes", []) if str(p.get("pid", "")) in hidden]
 
     return {
         "pslist_count": len(pslist_pids),
         "psscan_count": len(psscan_pids),
         "hidden_processes": hidden_processes,
         "hidden_count": len(hidden_processes),
-        "alert": "ROOTKIT DETECTED - Hidden processes found" if hidden_processes else "No hidden processes detected",
+        "alert": "ROOTKIT DETECTED - Hidden processes found"
+        if hidden_processes
+        else "No hidden processes detected",
     }
 
 
@@ -99,8 +112,9 @@ def check_kernel_modules(memory_dump):
         for line in result.stdout.splitlines():
             parts = line.split()
             if len(parts) >= 3 and parts[0].startswith("0x"):
-                modules.append({"base": parts[0], "size": parts[1],
-                                "name": parts[2] if len(parts) > 2 else ""})
+                modules.append(
+                    {"base": parts[0], "size": parts[1], "name": parts[2] if len(parts) > 2 else ""}
+                )
         return {"modules": modules, "count": len(modules)}
     except FileNotFoundError:
         return {"error": "Volatility 3 not installed"}
@@ -113,7 +127,9 @@ def run_rkhunter():
     try:
         result = subprocess.run(
             ["rkhunter", "--check", "--skip-keypress", "--report-warnings-only"],
-            capture_output=True, text=True, timeout=120
+            capture_output=True,
+            text=True,
+            timeout=120,
         )
         warnings = [line.strip() for line in result.stdout.splitlines() if "Warning" in line]
         return {
@@ -131,11 +147,10 @@ def run_rkhunter():
 def run_chkrootkit():
     """Run chkrootkit for Linux rootkit detection."""
     try:
-        result = subprocess.run(
-            ["chkrootkit", "-q"], capture_output=True, text=True, timeout=120
-        )
-        infected = [line.strip() for line in result.stdout.splitlines()
-                     if "INFECTED" in line.upper()]
+        result = subprocess.run(["chkrootkit", "-q"], capture_output=True, text=True, timeout=120)
+        infected = [
+            line.strip() for line in result.stdout.splitlines() if "INFECTED" in line.upper()
+        ]
         return {
             "tool": "chkrootkit",
             "infected": infected,
@@ -159,11 +174,13 @@ def check_hidden_files_linux():
             for entry in os.listdir(d):
                 if entry.startswith(".") and entry not in (".", ".."):
                     full_path = os.path.join(d, entry)
-                    suspicious.append({
-                        "path": full_path,
-                        "is_dir": os.path.isdir(full_path),
-                        "size": os.path.getsize(full_path) if os.path.isfile(full_path) else 0,
-                    })
+                    suspicious.append(
+                        {
+                            "path": full_path,
+                            "is_dir": os.path.isdir(full_path),
+                            "size": os.path.getsize(full_path) if os.path.isfile(full_path) else 0,
+                        }
+                    )
         except PermissionError:
             continue
     return {"hidden_files": suspicious, "count": len(suspicious)}
@@ -201,4 +218,6 @@ if __name__ == "__main__":
         mem = sys.argv[2] if len(sys.argv) > 2 else None
         print(json.dumps(generate_report(mem), indent=2, default=str))
     else:
-        print("Usage: agent.py [cross-view <mem>|malfind <mem>|ssdt <mem>|rkhunter|chkrootkit|report [mem]]")
+        print(
+            "Usage: agent.py [cross-view <mem>|malfind <mem>|ssdt <mem>|rkhunter|chkrootkit|report [mem]]"
+        )

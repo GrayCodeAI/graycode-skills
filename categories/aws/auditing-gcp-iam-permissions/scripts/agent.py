@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 """Agent for auditing GCP IAM permissions using google-cloud libraries."""
 
-import os
-import json
 import argparse
+import json
 from datetime import datetime
 
-from google.cloud import asset_v1
-from google.cloud import resourcemanager_v3
-from google.iam.v1 import iam_policy_pb2
+from google.cloud import asset_v1, resourcemanager_v3
 
 
 def search_iam_policies(scope, query=""):
@@ -18,11 +15,13 @@ def search_iam_policies(scope, query=""):
     results = []
     for result in client.search_all_iam_policies(request=request):
         for binding in result.policy.bindings:
-            results.append({
-                "resource": result.resource,
-                "role": binding.role,
-                "members": list(binding.members),
-            })
+            results.append(
+                {
+                    "resource": result.resource,
+                    "role": binding.role,
+                    "members": list(binding.members),
+                }
+            )
     return results
 
 
@@ -41,6 +40,7 @@ def find_public_bindings(scope):
 def list_service_accounts(project_id):
     """List all service accounts in a project with key info."""
     from google.cloud import iam_admin_v1
+
     client = iam_admin_v1.IAMClient()
     request = iam_admin_v1.ListServiceAccountsRequest(name=f"projects/{project_id}")
     accounts = []
@@ -57,11 +57,13 @@ def list_service_accounts(project_id):
         )
         keys = client.list_service_account_keys(request=key_request)
         for key in keys.keys:
-            sa_info["user_managed_keys"].append({
-                "name": key.name.split("/")[-1],
-                "valid_after": str(key.valid_after_time),
-                "valid_before": str(key.valid_before_time),
-            })
+            sa_info["user_managed_keys"].append(
+                {
+                    "name": key.name.split("/")[-1],
+                    "valid_after": str(key.valid_after_time),
+                    "valid_before": str(key.valid_before_time),
+                }
+            )
         accounts.append(sa_info)
     return accounts
 
@@ -83,9 +85,7 @@ def analyze_permissions(scope, identity):
     request = asset_v1.AnalyzeIamPolicyRequest(
         analysis_query=asset_v1.IamPolicyAnalysisQuery(
             scope=scope,
-            identity_selector=asset_v1.IamPolicyAnalysisQuery.IdentitySelector(
-                identity=identity
-            ),
+            identity_selector=asset_v1.IamPolicyAnalysisQuery.IdentitySelector(identity=identity),
         )
     )
     response = client.analyze_iam_policy(request=request)
@@ -121,12 +121,21 @@ def main():
     parser = argparse.ArgumentParser(description="GCP IAM Permissions Audit Agent")
     parser.add_argument("--org-id", help="GCP Organization ID")
     parser.add_argument("--project-id", help="GCP Project ID")
-    parser.add_argument("--identity", help="Identity to analyze (user:email or serviceAccount:email)")
+    parser.add_argument(
+        "--identity", help="Identity to analyze (user:email or serviceAccount:email)"
+    )
     parser.add_argument("--output", default="gcp_iam_audit.json")
-    parser.add_argument("--action", choices=[
-        "primitive_roles", "public_access", "service_accounts",
-        "analyze_identity", "full_audit"
-    ], default="full_audit")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "primitive_roles",
+            "public_access",
+            "service_accounts",
+            "analyze_identity",
+            "full_audit",
+        ],
+        default="full_audit",
+    )
     args = parser.parse_args()
 
     scope = f"organizations/{args.org_id}" if args.org_id else f"projects/{args.project_id}"

@@ -4,17 +4,24 @@
 import argparse
 import json
 import os
-import re
 import subprocess
 import sys
 from datetime import datetime, timezone
 
-
 RANSOMWARE_PORTS = {445, 3389, 4444, 5985, 5986, 135, 139, 8443}
 SUSPICIOUS_PROCESSES = [
-    "vssadmin.exe", "wmic.exe", "bcdedit.exe", "wbadmin.exe",
-    "powershell.exe", "cmd.exe", "certutil.exe", "bitsadmin.exe",
-    "mshta.exe", "rundll32.exe", "regsvr32.exe", "cscript.exe",
+    "vssadmin.exe",
+    "wmic.exe",
+    "bcdedit.exe",
+    "wbadmin.exe",
+    "powershell.exe",
+    "cmd.exe",
+    "certutil.exe",
+    "bitsadmin.exe",
+    "mshta.exe",
+    "rundll32.exe",
+    "regsvr32.exe",
+    "cscript.exe",
 ]
 SHADOW_COPY_PATTERNS = [
     r"vssadmin\s+delete\s+shadows",
@@ -33,26 +40,28 @@ def parse_zeek_conn_log(log_path):
     """Parse Zeek conn.log for suspicious network connections."""
     alerts = []
     try:
-        with open(log_path, "r") as f:
+        with open(log_path) as f:
             for line in f:
                 if line.startswith("#"):
                     continue
                 fields = line.strip().split("\t")
                 if len(fields) < 7:
                     continue
-                src_ip, src_port, dst_ip, dst_port = fields[2], fields[3], fields[4], fields[5]
+                src_ip, _src_port, dst_ip, dst_port = fields[2], fields[3], fields[4], fields[5]
                 try:
                     dp = int(dst_port)
                 except ValueError:
                     continue
                 if dp in RANSOMWARE_PORTS:
-                    alerts.append({
-                        "type": "suspicious_port",
-                        "src": src_ip,
-                        "dst": dst_ip,
-                        "port": dp,
-                        "detail": f"Connection to ransomware-associated port {dp}",
-                    })
+                    alerts.append(
+                        {
+                            "type": "suspicious_port",
+                            "src": src_ip,
+                            "dst": dst_ip,
+                            "port": dp,
+                            "detail": f"Connection to ransomware-associated port {dp}",
+                        }
+                    )
     except FileNotFoundError:
         print(f"[!] Log file not found: {log_path}")
     return alerts
@@ -62,20 +71,31 @@ def analyze_event_logs_windows():
     """Check Windows event logs for ransomware precursors."""
     alerts = []
     queries = [
-        ("Shadow copy deletion", "Get-WinEvent -FilterHashtable @{LogName='System';Id=7036} "
-         "| Where-Object {$_.Message -match 'Volume Shadow Copy'} | Select-Object -First 10 "
-         "| ConvertTo-Json"),
-        ("RDP brute force", "Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625} "
-         "| Select-Object -First 20 | Group-Object {$_.Properties[5].Value} "
-         "| Where-Object {$_.Count -gt 5} | ConvertTo-Json"),
-        ("Service installs", "Get-WinEvent -FilterHashtable @{LogName='System';Id=7045} "
-         "| Select-Object -First 10 | ConvertTo-Json"),
+        (
+            "Shadow copy deletion",
+            "Get-WinEvent -FilterHashtable @{LogName='System';Id=7036} "
+            "| Where-Object {$_.Message -match 'Volume Shadow Copy'} | Select-Object -First 10 "
+            "| ConvertTo-Json",
+        ),
+        (
+            "RDP brute force",
+            "Get-WinEvent -FilterHashtable @{LogName='Security';Id=4625} "
+            "| Select-Object -First 20 | Group-Object {$_.Properties[5].Value} "
+            "| Where-Object {$_.Count -gt 5} | ConvertTo-Json",
+        ),
+        (
+            "Service installs",
+            "Get-WinEvent -FilterHashtable @{LogName='System';Id=7045} "
+            "| Select-Object -First 10 | ConvertTo-Json",
+        ),
     ]
     for name, ps_cmd in queries:
         try:
             result = subprocess.check_output(
                 ["powershell", "-NoProfile", "-Command", ps_cmd],
-                text=True, errors="replace", timeout=30
+                text=True,
+                errors="replace",
+                timeout=30,
             )
             if result.strip():
                 data = json.loads(result) if result.strip().startswith(("[", "{")) else result
@@ -99,7 +119,9 @@ def scan_process_list():
                     pname = parts[0].lower()
                     for sp in SUSPICIOUS_PROCESSES:
                         if pname == sp.lower():
-                            suspicious.append({"process": pname, "pid": parts[1] if len(parts) > 1 else "?"})
+                            suspicious.append(
+                                {"process": pname, "pid": parts[1] if len(parts) > 1 else "?"}
+                            )
         except subprocess.SubprocessError:
             pass
     else:
@@ -118,8 +140,18 @@ def scan_process_list():
 
 def check_file_encryption_activity(directory, threshold=50):
     """Detect mass file renaming or new encrypted extensions."""
-    suspicious_exts = {".encrypted", ".locked", ".crypto", ".crypt", ".enc",
-                       ".locky", ".cerber", ".zepto", ".thor", ".aaa"}
+    suspicious_exts = {
+        ".encrypted",
+        ".locked",
+        ".crypto",
+        ".crypt",
+        ".enc",
+        ".locky",
+        ".cerber",
+        ".zepto",
+        ".thor",
+        ".aaa",
+    }
     findings = []
     count = 0
     try:
@@ -134,7 +166,11 @@ def check_file_encryption_activity(directory, threshold=50):
                 break
     except PermissionError:
         pass
-    return {"encrypted_file_count": count, "samples": findings, "threshold_exceeded": count >= threshold}
+    return {
+        "encrypted_file_count": count,
+        "samples": findings,
+        "threshold_exceeded": count >= threshold,
+    }
 
 
 def main():
@@ -172,10 +208,14 @@ def main():
         print(f"[*] Encrypted files found: {enc['encrypted_file_count']}")
 
     total = sum(
-        len(v) if isinstance(v, list) else (1 if isinstance(v, dict) and v.get("threshold_exceeded") else 0)
+        len(v)
+        if isinstance(v, list)
+        else (1 if isinstance(v, dict) and v.get("threshold_exceeded") else 0)
         for v in report["findings"].values()
     )
-    report["risk_level"] = "CRITICAL" if total >= 10 else "HIGH" if total >= 5 else "MEDIUM" if total > 0 else "LOW"
+    report["risk_level"] = (
+        "CRITICAL" if total >= 10 else "HIGH" if total >= 5 else "MEDIUM" if total > 0 else "LOW"
+    )
     print(f"[*] Overall risk: {report['risk_level']}")
 
     if args.output:

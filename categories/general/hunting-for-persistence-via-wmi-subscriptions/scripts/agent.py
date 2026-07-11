@@ -1,38 +1,80 @@
 #!/usr/bin/env python3
 """Agent for hunting WMI event subscription persistence (T1546.003)."""
 
-import json
 import argparse
-import subprocess
+import json
 import re
+import subprocess
 from datetime import datetime
 
 WMI_CLASSES = {
     "EventFilter": {
-        "wmic_cmd": ["wmic", "/namespace:\\\\root\\subscription", "path", "__EventFilter", "get", "/format:list"],
+        "wmic_cmd": [
+            "wmic",
+            "/namespace:\\\\root\\subscription",
+            "path",
+            "__EventFilter",
+            "get",
+            "/format:list",
+        ],
         "description": "WMI event filters that trigger on system events",
     },
     "EventConsumer": {
-        "wmic_cmd": ["wmic", "/namespace:\\\\root\\subscription", "path", "CommandLineEventConsumer", "get", "/format:list"],
+        "wmic_cmd": [
+            "wmic",
+            "/namespace:\\\\root\\subscription",
+            "path",
+            "CommandLineEventConsumer",
+            "get",
+            "/format:list",
+        ],
         "description": "Command-line consumers that execute when filters trigger",
     },
     "ActiveScriptEventConsumer": {
-        "wmic_cmd": ["wmic", "/namespace:\\\\root\\subscription", "path", "ActiveScriptEventConsumer", "get", "/format:list"],
+        "wmic_cmd": [
+            "wmic",
+            "/namespace:\\\\root\\subscription",
+            "path",
+            "ActiveScriptEventConsumer",
+            "get",
+            "/format:list",
+        ],
         "description": "Script-based consumers (VBScript/JScript) for WMI persistence",
     },
     "FilterToConsumerBinding": {
-        "wmic_cmd": ["wmic", "/namespace:\\\\root\\subscription", "path", "__FilterToConsumerBinding", "get", "/format:list"],
+        "wmic_cmd": [
+            "wmic",
+            "/namespace:\\\\root\\subscription",
+            "path",
+            "__FilterToConsumerBinding",
+            "get",
+            "/format:list",
+        ],
         "description": "Bindings linking event filters to consumers",
     },
 }
 
 SUSPICIOUS_WMI_PATTERNS = [
-    r"powershell", r"cmd\.exe", r"mshta", r"rundll32",
-    r"certutil", r"bitsadmin", r"regsvr32",
-    r"base64", r"IEX", r"DownloadString", r"Net\.WebClient",
-    r"invoke-expression", r"new-object.*net\.webclient",
-    r"\\temp\\", r"\\appdata\\", r"\\users\\public\\",
-    r"wscript", r"cscript", r"javascript:", r"vbscript:",
+    r"powershell",
+    r"cmd\.exe",
+    r"mshta",
+    r"rundll32",
+    r"certutil",
+    r"bitsadmin",
+    r"regsvr32",
+    r"base64",
+    r"IEX",
+    r"DownloadString",
+    r"Net\.WebClient",
+    r"invoke-expression",
+    r"new-object.*net\.webclient",
+    r"\\temp\\",
+    r"\\appdata\\",
+    r"\\users\\public\\",
+    r"wscript",
+    r"cscript",
+    r"javascript:",
+    r"vbscript:",
 ]
 
 
@@ -95,15 +137,19 @@ def scan_sysmon_wmi_events(evtx_file):
             for eid in wmi_event_ids:
                 if f"<EventID>{eid}</EventID>" in xml:
                     suspicious = any(re.search(p, xml, re.I) for p in SUSPICIOUS_WMI_PATTERNS)
-                    findings.append({
-                        "record_id": record.record_num(),
-                        "event_id": int(eid),
-                        "event_type": {
-                            "19": "WmiEventFilter", "20": "WmiEventConsumer", "21": "WmiEventBinding"
-                        }[eid],
-                        "suspicious": suspicious,
-                        "xml_snippet": xml[:800],
-                    })
+                    findings.append(
+                        {
+                            "record_id": record.record_num(),
+                            "event_id": int(eid),
+                            "event_type": {
+                                "19": "WmiEventFilter",
+                                "20": "WmiEventConsumer",
+                                "21": "WmiEventBinding",
+                            }[eid],
+                            "suspicious": suspicious,
+                            "xml_snippet": xml[:800],
+                        }
+                    )
                     break
     return {
         "file": evtx_file,
@@ -124,7 +170,9 @@ def query_powershell_wmi():
     try:
         result = subprocess.run(
             ["powershell", "-NoProfile", "-Command", ps_script],
-            capture_output=True, text=True, timeout=30
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
         if result.returncode == 0 and result.stdout.strip():
             return json.loads(result.stdout)

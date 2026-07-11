@@ -3,11 +3,9 @@
 
 import argparse
 import json
-import re
 import subprocess
 import sys
 from datetime import datetime, timezone
-
 
 INJECTION_ACCESS_MASKS = {
     "0x1F0FFF": "PROCESS_ALL_ACCESS",
@@ -19,13 +17,20 @@ INJECTION_ACCESS_MASKS = {
 }
 
 INJECTION_DLLS = [
-    "ntdll.dll", "kernel32.dll", "kernelbase.dll",
+    "ntdll.dll",
+    "kernel32.dll",
+    "kernelbase.dll",
 ]
 
 SUSPICIOUS_API_CALLS = [
-    "VirtualAllocEx", "WriteProcessMemory", "CreateRemoteThread",
-    "NtMapViewOfSection", "QueueUserAPC", "SetWindowsHookEx",
-    "RtlCreateUserThread", "NtQueueApcThread",
+    "VirtualAllocEx",
+    "WriteProcessMemory",
+    "CreateRemoteThread",
+    "NtMapViewOfSection",
+    "QueueUserAPC",
+    "SetWindowsHookEx",
+    "RtlCreateUserThread",
+    "NtQueueApcThread",
 ]
 
 
@@ -44,7 +49,9 @@ def query_sysmon_events(event_id, max_events=500):
     try:
         result = subprocess.check_output(
             ["powershell", "-NoProfile", "-Command", ps_cmd],
-            text=True, errors="replace", timeout=30
+            text=True,
+            errors="replace",
+            timeout=30,
         )
         data = json.loads(result) if result.strip() else []
         return data if isinstance(data, list) else [data]
@@ -67,14 +74,16 @@ def analyze_process_access():
         if any(s in source_img.lower() for s in safe_sources):
             continue
         if access in INJECTION_ACCESS_MASKS:
-            findings.append({
-                "event": "ProcessAccess",
-                "time": evt.get("TimeCreated", ""),
-                "source": source_img,
-                "target": target_img,
-                "access_mask": access,
-                "mask_meaning": INJECTION_ACCESS_MASKS.get(access, "Unknown"),
-            })
+            findings.append(
+                {
+                    "event": "ProcessAccess",
+                    "time": evt.get("TimeCreated", ""),
+                    "source": source_img,
+                    "target": target_img,
+                    "access_mask": access,
+                    "mask_meaning": INJECTION_ACCESS_MASKS.get(access, "Unknown"),
+                }
+            )
     return findings
 
 
@@ -88,13 +97,15 @@ def analyze_create_remote_thread():
             continue
         source_img = str(props[4]) if len(props) > 4 else ""
         target_img = str(props[7]) if len(props) > 7 else ""
-        findings.append({
-            "event": "CreateRemoteThread",
-            "time": evt.get("TimeCreated", ""),
-            "source": source_img,
-            "target": target_img,
-            "severity": "HIGH",
-        })
+        findings.append(
+            {
+                "event": "CreateRemoteThread",
+                "time": evt.get("TimeCreated", ""),
+                "source": source_img,
+                "target": target_img,
+                "severity": "HIGH",
+            }
+        )
     return findings
 
 
@@ -109,13 +120,15 @@ def analyze_image_loads():
         image = str(props[3]) if len(props) > 3 else ""
         loaded = str(props[5]) if len(props) > 5 else ""
         if loaded.lower().endswith("amsi.dll") and "powershell" not in image.lower():
-            findings.append({
-                "event": "SuspiciousImageLoad",
-                "time": evt.get("TimeCreated", ""),
-                "process": image,
-                "loaded_image": loaded,
-                "note": "AMSI DLL loaded by non-PowerShell process",
-            })
+            findings.append(
+                {
+                    "event": "SuspiciousImageLoad",
+                    "time": evt.get("TimeCreated", ""),
+                    "process": image,
+                    "loaded_image": loaded,
+                    "note": "AMSI DLL loaded by non-PowerShell process",
+                }
+            )
     return findings
 
 
@@ -144,7 +157,9 @@ def main():
     print(f"[*] Suspicious image loads: {len(loads)}")
 
     total = len(access) + len(threads) + len(loads)
-    report["risk_level"] = "CRITICAL" if total >= 5 else "HIGH" if total >= 2 else "MEDIUM" if total > 0 else "LOW"
+    report["risk_level"] = (
+        "CRITICAL" if total >= 5 else "HIGH" if total >= 2 else "MEDIUM" if total > 0 else "LOW"
+    )
 
     if args.output:
         with open(args.output, "w") as f:

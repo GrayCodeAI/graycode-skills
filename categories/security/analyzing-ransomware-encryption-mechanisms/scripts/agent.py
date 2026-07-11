@@ -5,13 +5,11 @@ Analyzes encryption algorithms, key management, file encryption routines,
 and assesses decryption feasibility for ransomware samples and encrypted files.
 """
 
+import hashlib
+import json
+import math
 import os
 import sys
-import struct
-import hashlib
-import math
-import json
-import re
 from collections import Counter
 
 
@@ -43,11 +41,21 @@ CRYPTO_CONSTANTS = {
 }
 
 CRYPTO_API_NAMES = [
-    b"CryptAcquireContext", b"CryptGenKey", b"CryptEncrypt", b"CryptDecrypt",
-    b"CryptImportKey", b"CryptExportKey", b"CryptGenRandom", b"CryptDeriveKey",
-    b"BCryptOpenAlgorithmProvider", b"BCryptEncrypt", b"BCryptGenerateKeyPair",
-    b"BCryptGenerateSymmetricKey", b"BCryptCreateHash",
-    b"RtlEncryptMemory", b"RtlDecryptMemory",
+    b"CryptAcquireContext",
+    b"CryptGenKey",
+    b"CryptEncrypt",
+    b"CryptDecrypt",
+    b"CryptImportKey",
+    b"CryptExportKey",
+    b"CryptGenRandom",
+    b"CryptDeriveKey",
+    b"BCryptOpenAlgorithmProvider",
+    b"BCryptEncrypt",
+    b"BCryptGenerateKeyPair",
+    b"BCryptGenerateSymmetricKey",
+    b"BCryptCreateHash",
+    b"RtlEncryptMemory",
+    b"RtlDecryptMemory",
 ]
 
 RANSOMWARE_EXTENSIONS = {
@@ -102,11 +110,13 @@ def scan_crypto_constants(filepath):
     for const_bytes, description in CRYPTO_CONSTANTS.items():
         offset = data.find(const_bytes)
         if offset != -1:
-            findings.append({
-                "constant": description,
-                "offset": f"0x{offset:08X}",
-                "hex": const_bytes[:16].hex(),
-            })
+            findings.append(
+                {
+                    "constant": description,
+                    "offset": f"0x{offset:08X}",
+                    "hex": const_bytes[:16].hex(),
+                }
+            )
     return findings
 
 
@@ -134,7 +144,7 @@ def analyze_encrypted_file(filepath):
     tail_entropy = shannon_entropy(tail_256)
 
     # Check for ECB mode (duplicate 16-byte blocks)
-    blocks_16 = [data[i:i+16] for i in range(0, min(len(data), 65536), 16)]
+    blocks_16 = [data[i : i + 16] for i in range(0, min(len(data), 65536), 16)]
     unique_16 = len(set(blocks_16))
     total_16 = len(blocks_16)
     ecb_ratio = 1.0 - (unique_16 / total_16) if total_16 > 0 else 0
@@ -143,7 +153,9 @@ def analyze_encrypted_file(filepath):
     chunk_size = min(4096, file_size // 4) if file_size > 16 else file_size
     first_entropy = shannon_entropy(data[:chunk_size]) if chunk_size > 0 else 0
     mid_offset = file_size // 2
-    mid_entropy = shannon_entropy(data[mid_offset:mid_offset+chunk_size]) if chunk_size > 0 else 0
+    mid_entropy = (
+        shannon_entropy(data[mid_offset : mid_offset + chunk_size]) if chunk_size > 0 else 0
+    )
     last_entropy = shannon_entropy(data[-chunk_size:]) if chunk_size > 0 else 0
 
     # Detect magic bytes at tail (ransomware markers)
@@ -180,7 +192,11 @@ def xor_key_recovery(encrypted_data, known_plaintext):
             for i in range(min(len(key_stream), key_len * 4))
         )
         if match and key_len < len(key_stream):
-            return {"key_hex": candidate.hex(), "key_length": key_len, "key_ascii": candidate.decode("ascii", errors="replace")}
+            return {
+                "key_hex": candidate.hex(),
+                "key_length": key_len,
+                "key_ascii": candidate.decode("ascii", errors="replace"),
+            }
     return None
 
 
@@ -200,10 +216,16 @@ def check_file_header_known_plaintext(encrypted_filepath):
     with open(encrypted_filepath, "rb") as f:
         header = f.read(16)
     for magic, filetype in KNOWN_HEADERS.items():
-        if header[:len(magic)] == magic:
-            return {"detected": True, "original_type": filetype,
-                    "note": "File header intact - partial encryption or not encrypted"}
-    return {"detected": False, "note": "No known file header found - likely fully encrypted from start"}
+        if header[: len(magic)] == magic:
+            return {
+                "detected": True,
+                "original_type": filetype,
+                "note": "File header intact - partial encryption or not encrypted",
+            }
+    return {
+        "detected": False,
+        "note": "No known file header found - likely fully encrypted from start",
+    }
 
 
 def assess_decryption_feasibility(crypto_constants, crypto_apis, enc_analysis):
@@ -212,7 +234,9 @@ def assess_decryption_feasibility(crypto_constants, crypto_apis, enc_analysis):
     strong_points = []
 
     if enc_analysis.get("ecb_likely"):
-        weaknesses.append("ECB mode detected - block patterns preserved, partial plaintext recovery possible")
+        weaknesses.append(
+            "ECB mode detected - block patterns preserved, partial plaintext recovery possible"
+        )
     if enc_analysis.get("partial_encryption", {}).get("likely_partial"):
         weaknesses.append("Partial encryption detected - unencrypted file regions may aid recovery")
     if enc_analysis.get("overall_entropy", 8) < 6.0:
@@ -220,8 +244,14 @@ def assess_decryption_feasibility(crypto_constants, crypto_apis, enc_analysis):
 
     has_csprng = any("GenRandom" in api for api in crypto_apis)
     has_rsa = any("KeyPair" in api or "ImportKey" in api for api in crypto_apis)
-    has_aes = any("AES" in c.get("constant", "") or "Rijndael" in c.get("constant", "") for c in crypto_constants)
-    has_chacha = any("ChaCha" in c.get("constant", "") or "Salsa" in c.get("constant", "") for c in crypto_constants)
+    has_aes = any(
+        "AES" in c.get("constant", "") or "Rijndael" in c.get("constant", "")
+        for c in crypto_constants
+    )
+    has_chacha = any(
+        "ChaCha" in c.get("constant", "") or "Salsa" in c.get("constant", "")
+        for c in crypto_constants
+    )
 
     if has_csprng:
         strong_points.append("CSPRNG key generation (CryptGenRandom) - keys not predictable")
@@ -235,16 +265,21 @@ def assess_decryption_feasibility(crypto_constants, crypto_apis, enc_analysis):
     if not has_csprng:
         weaknesses.append("No CSPRNG detected - key generation may be predictable")
 
-    feasibility = "NOT POSSIBLE" if len(strong_points) >= 2 and len(weaknesses) == 0 else \
-                  "POSSIBLE" if len(weaknesses) >= 2 else \
-                  "UNLIKELY - check for specific implementation flaws"
+    feasibility = (
+        "NOT POSSIBLE"
+        if len(strong_points) >= 2 and len(weaknesses) == 0
+        else "POSSIBLE"
+        if len(weaknesses) >= 2
+        else "UNLIKELY - check for specific implementation flaws"
+    )
 
     return {
         "feasibility": feasibility,
         "weaknesses": weaknesses,
         "strong_points": strong_points,
-        "recommendation": "Check NoMoreRansom.org and memory forensics" if feasibility != "NOT POSSIBLE"
-                          else "Restore from backups; no cryptographic weakness found",
+        "recommendation": "Check NoMoreRansom.org and memory forensics"
+        if feasibility != "NOT POSSIBLE"
+        else "Restore from backups; no cryptographic weakness found",
     }
 
 
@@ -327,7 +362,7 @@ if __name__ == "__main__":
         print(f"    Possible families: {', '.join(fm.get('families', ['Unknown']))}")
 
         ea = report.get("encryption_analysis", {})
-        print(f"\n--- Encryption Analysis ---")
+        print("\n--- Encryption Analysis ---")
         print(f"  Overall entropy: {ea.get('overall_entropy', 0)}")
         print(f"  Fully encrypted: {ea.get('fully_encrypted', False)}")
         print(f"  ECB mode likely: {ea.get('ecb_likely', False)}")
@@ -335,18 +370,18 @@ if __name__ == "__main__":
         print(f"  Partial encryption: {partial.get('likely_partial', False)}")
 
         hc = report.get("header_check", {})
-        print(f"\n--- Header Check ---")
+        print("\n--- Header Check ---")
         print(f"  Known header: {hc.get('detected', False)}")
         print(f"  Note: {hc.get('note', '')}")
 
     if "feasibility" in report:
         f = report["feasibility"]
-        print(f"\n--- Decryption Feasibility ---")
+        print("\n--- Decryption Feasibility ---")
         print(f"  Assessment: {f['feasibility']}")
-        print(f"  Weaknesses:")
+        print("  Weaknesses:")
         for w in f.get("weaknesses", []):
             print(f"    [!] {w}")
-        print(f"  Strong points:")
+        print("  Strong points:")
         for s in f.get("strong_points", []):
             print(f"    [+] {s}")
         print(f"  Recommendation: {f['recommendation']}")

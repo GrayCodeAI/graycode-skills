@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
 """Agent for Linux memory forensics using LiME acquisition and Volatility 3."""
 
-import os
+import argparse
 import json
 import subprocess
-import argparse
 from datetime import datetime
 from pathlib import Path
 
 
 def acquire_memory_lime(output_path, lime_format="lime"):
     """Acquire memory using LiME kernel module."""
-    kernel_version = subprocess.run(
-        ["uname", "-r"], capture_output=True, text=True
-    ).stdout.strip()
+    kernel_version = subprocess.run(["uname", "-r"], capture_output=True, text=True).stdout.strip()
     lime_module = f"lime-{kernel_version}.ko"
     if not Path(lime_module).exists():
         lime_module = "lime.ko"
@@ -35,7 +32,10 @@ def run_vol3_plugin(image_path, plugin_name, extra_args=None):
         cmd.extend(extra_args)
     try:
         result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=300,
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,
         )
         lines = result.stdout.strip().splitlines()
         return {"plugin": plugin_name, "output": lines, "error": result.stderr.strip()}
@@ -49,11 +49,13 @@ def parse_pslist_output(lines):
     for line in lines:
         parts = line.split()
         if len(parts) >= 4 and parts[0].isdigit():
-            processes.append({
-                "pid": int(parts[0]),
-                "ppid": int(parts[1]) if parts[1].isdigit() else 0,
-                "name": parts[-1],
-            })
+            processes.append(
+                {
+                    "pid": int(parts[0]),
+                    "ppid": int(parts[1]) if parts[1].isdigit() else 0,
+                    "name": parts[-1],
+                }
+            )
     return processes
 
 
@@ -70,12 +72,14 @@ def extract_bash_history(image_path):
     for line in result.get("output", []):
         parts = line.split(None, 3)
         if len(parts) >= 4 and parts[0].isdigit():
-            commands.append({
-                "pid": int(parts[0]),
-                "name": parts[1],
-                "timestamp": parts[2] if len(parts) > 2 else "",
-                "command": parts[3] if len(parts) > 3 else "",
-            })
+            commands.append(
+                {
+                    "pid": int(parts[0]),
+                    "name": parts[1],
+                    "timestamp": parts[2] if len(parts) > 2 else "",
+                    "command": parts[3] if len(parts) > 3 else "",
+                }
+            )
     return commands
 
 
@@ -122,23 +126,33 @@ def detect_hidden_processes(image_path):
 def detect_suspicious_commands(bash_history):
     """Flag suspicious commands in bash history."""
     suspicious_patterns = [
-        "curl.*|.*sh", "wget.*&&.*chmod", "base64.*-d",
-        "nc.*-e", "python.*-c.*import.*socket",
-        "nohup", "rm.*-rf.*/var/log", "history.*-c",
-        "iptables.*-F", "chmod.*777", "chattr.*-i",
+        "curl.*|.*sh",
+        "wget.*&&.*chmod",
+        "base64.*-d",
+        "nc.*-e",
+        "python.*-c.*import.*socket",
+        "nohup",
+        "rm.*-rf.*/var/log",
+        "history.*-c",
+        "iptables.*-F",
+        "chmod.*777",
+        "chattr.*-i",
     ]
     import re
+
     findings = []
     for entry in bash_history:
         cmd = entry.get("command", "")
         for pattern in suspicious_patterns:
             if re.search(pattern, cmd, re.IGNORECASE):
-                findings.append({
-                    "pid": entry["pid"],
-                    "command": cmd,
-                    "pattern": pattern,
-                    "severity": "HIGH",
-                })
+                findings.append(
+                    {
+                        "pid": entry["pid"],
+                        "command": cmd,
+                        "pattern": pattern,
+                        "severity": "HIGH",
+                    }
+                )
                 break
     return findings
 
@@ -154,10 +168,20 @@ def main():
     parser.add_argument("--image", help="Path to memory image")
     parser.add_argument("--acquire", help="Output path for LiME acquisition")
     parser.add_argument("--output", default="memory_forensics_report.json")
-    parser.add_argument("--action", choices=[
-        "acquire", "pslist", "bash", "network", "modules",
-        "hidden", "malfind", "full_analysis"
-    ], default="full_analysis")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "acquire",
+            "pslist",
+            "bash",
+            "network",
+            "modules",
+            "hidden",
+            "malfind",
+            "full_analysis",
+        ],
+        default="full_analysis",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

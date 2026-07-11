@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Cloudflare Access zero trust audit agent using Cloudflare API."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
@@ -47,31 +47,35 @@ def audit_access_config(client):
     apps = client.list_applications()
     for app in apps.get("result", []):
         if not app.get("session_duration"):
-            findings.append({
-                "type": "no_session_timeout",
-                "app": app.get("name", ""),
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "type": "no_session_timeout",
+                    "app": app.get("name", ""),
+                    "severity": "MEDIUM",
+                }
+            )
     tokens = client.list_service_tokens()
     for token in tokens.get("result", []):
         if token.get("expires_at"):
             expiry = datetime.fromisoformat(token["expires_at"].replace("Z", "+00:00"))
             if expiry.replace(tzinfo=None) < datetime.utcnow():
-                findings.append({
-                    "type": "expired_service_token",
-                    "token_name": token.get("name", ""),
-                    "severity": "HIGH",
-                })
+                findings.append(
+                    {
+                        "type": "expired_service_token",
+                        "token_name": token.get("name", ""),
+                        "severity": "HIGH",
+                    }
+                )
     return findings
 
 
 def run_audit(api_token, account_id):
     """Execute Cloudflare Access audit."""
     client = CloudflareAccessClient(api_token, account_id)
-    print(f"\n{'='*60}")
-    print(f"  CLOUDFLARE ACCESS ZERO TRUST AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  CLOUDFLARE ACCESS ZERO TRUST AUDIT")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     apps = client.list_applications()
     app_list = apps.get("result", [])

@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Google Identity-Aware Proxy (IAP) configuration agent using google-cloud-iap."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
-    from google.cloud import iap_v1
-    from google.cloud import resourcemanager_v3
+    from google.cloud import iap_v1, resourcemanager_v3
     from google.iam.v1 import iam_policy_pb2
 except ImportError:
     print("Install: pip install google-cloud-iap google-cloud-resource-manager")
@@ -23,11 +22,13 @@ def list_iap_tunnels(project_id):
     try:
         request = iap_v1.ListTunnelDestGroupsRequest(parent=f"{parent}/iap_tunnel/locations/-")
         for group in client.list_tunnel_dest_groups(request=request):
-            tunnels.append({
-                "name": group.name,
-                "cidrs": list(group.cidrs),
-                "fqdns": list(group.fqdns),
-            })
+            tunnels.append(
+                {
+                    "name": group.name,
+                    "cidrs": list(group.cidrs),
+                    "fqdns": list(group.fqdns),
+                }
+            )
     except Exception as e:
         tunnels.append({"error": str(e)})
     return tunnels
@@ -43,7 +44,9 @@ def get_iap_settings(project_id, resource_type="web"):
         return {
             "name": settings.name,
             "access_settings": {
-                "cors_settings": str(settings.access_settings.cors_settings) if settings.access_settings else "",
+                "cors_settings": str(settings.access_settings.cors_settings)
+                if settings.access_settings
+                else "",
             },
         }
     except Exception as e:
@@ -58,11 +61,13 @@ def audit_iap_iam_policy(project_id):
         policy = client.get_iam_policy(request={"resource": resource})
         bindings = []
         for binding in policy.bindings:
-            bindings.append({
-                "role": binding.role,
-                "members": list(binding.members),
-                "condition": str(binding.condition) if binding.condition else None,
-            })
+            bindings.append(
+                {
+                    "role": binding.role,
+                    "members": list(binding.members),
+                    "condition": str(binding.condition) if binding.condition else None,
+                }
+            )
         return bindings
     except Exception as e:
         return [{"error": str(e)}]
@@ -85,14 +90,14 @@ def check_oauth_consent(project_id):
 
 def run_audit(project_id):
     """Execute IAP configuration audit."""
-    print(f"\n{'='*60}")
-    print(f"  GOOGLE IAP CONFIGURATION AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  GOOGLE IAP CONFIGURATION AUDIT")
     print(f"  Project: {project_id}")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     settings = get_iap_settings(project_id)
-    print(f"--- IAP SETTINGS ---")
+    print("--- IAP SETTINGS ---")
     print(f"  {json.dumps(settings, indent=2)}")
 
     bindings = audit_iap_iam_policy(project_id)
@@ -108,7 +113,7 @@ def run_audit(project_id):
             print(f"  {t['name']}: CIDRs={t['cidrs']}")
 
     consent = check_oauth_consent(project_id)
-    print(f"\n--- OAUTH CONSENT ---")
+    print("\n--- OAUTH CONSENT ---")
     for req in consent["requirements"]:
         print(f"  - {req}")
 

@@ -6,14 +6,15 @@ multi-rule scanning, and structured JSON match output.
 """
 
 import argparse
+import datetime
+import hashlib
 import json
 import os
 import sys
-import hashlib
-import datetime
 
 try:
     import yara
+
     HAS_YARA = True
 except ImportError:
     HAS_YARA = False
@@ -93,7 +94,11 @@ def scan_file(rules, filepath):
                 "rule": m.rule,
                 "meta": m.meta,
                 "strings": [
-                    {"offset": s[0], "identifier": s[1], "data": s[2].decode("utf-8", errors="replace")[:64]}
+                    {
+                        "offset": s[0],
+                        "identifier": s[1],
+                        "data": s[2].decode("utf-8", errors="replace")[:64],
+                    }
                     for s in m.strings
                 ],
                 "tags": list(m.tags),
@@ -127,7 +132,9 @@ def main():
     parser = argparse.ArgumentParser(description="YARA-based threat hunting scanner")
     parser.add_argument("target", nargs="?", help="File or directory to scan")
     parser.add_argument("--rules-dir", help="Directory containing .yar/.yara rule files")
-    parser.add_argument("--max-size", type=int, default=50, help="Max file size in MB (default: 50)")
+    parser.add_argument(
+        "--max-size", type=int, default=50, help="Max file size in MB (default: 50)"
+    )
     parser.add_argument("--output", "-o", help="Output JSON report path")
     args = parser.parse_args()
 

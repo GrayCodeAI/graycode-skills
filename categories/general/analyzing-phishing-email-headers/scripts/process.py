@@ -13,21 +13,19 @@ Usage:
 """
 
 import argparse
-import email
-import re
-import json
-import sys
-import socket
 import hashlib
+import json
+import re
+import socket
+import sys
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from email import policy
-from email.parser import HeaderParser, BytesParser
-from pathlib import Path
-from typing import Optional
-from dataclasses import dataclass, field, asdict
+from email.parser import BytesParser, HeaderParser
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -36,6 +34,7 @@ except ImportError:
 @dataclass
 class ReceivedHop:
     """Represents a single hop in the email routing chain."""
+
     server_from: str = ""
     server_by: str = ""
     ip_address: str = ""
@@ -49,6 +48,7 @@ class ReceivedHop:
 @dataclass
 class AuthenticationResult:
     """Email authentication check results."""
+
     spf: str = "none"
     spf_domain: str = ""
     dkim: str = "none"
@@ -61,6 +61,7 @@ class AuthenticationResult:
 @dataclass
 class PhishingIndicator:
     """A single phishing indicator found in headers."""
+
     category: str = ""
     description: str = ""
     severity: str = "low"  # low, medium, high, critical
@@ -70,6 +71,7 @@ class PhishingIndicator:
 @dataclass
 class HeaderAnalysis:
     """Complete header analysis results."""
+
     message_id: str = ""
     from_address: str = ""
     from_domain: str = ""
@@ -93,17 +95,28 @@ class HeaderAnalysis:
 def extract_ip_from_received(received_value: str) -> str:
     """Extract IP address from a Received header value."""
     ip_patterns = [
-        r'\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]',
-        r'\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)',
-        r'from\s+\S+\s+\(.*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})',
+        r"\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]",
+        r"\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)",
+        r"from\s+\S+\s+\(.*?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})",
     ]
     for pattern in ip_patterns:
         match = re.search(pattern, received_value)
         if match:
             ip = match.group(1)
-            if not ip.startswith(('10.', '172.16.', '172.17.', '172.18.',
-                                  '172.19.', '172.2', '172.30.', '172.31.',
-                                  '192.168.', '127.')):
+            if not ip.startswith(
+                (
+                    "10.",
+                    "172.16.",
+                    "172.17.",
+                    "172.18.",
+                    "172.19.",
+                    "172.2",
+                    "172.30.",
+                    "172.31.",
+                    "192.168.",
+                    "127.",
+                )
+            ):
                 return ip
     return ""
 
@@ -112,7 +125,7 @@ def extract_domain(email_address: str) -> str:
     """Extract domain from an email address."""
     if not email_address:
         return ""
-    match = re.search(r'@([\w.-]+)', email_address)
+    match = re.search(r"@([\w.-]+)", email_address)
     return match.group(1).lower() if match else ""
 
 
@@ -120,22 +133,23 @@ def parse_received_header(received_value: str, hop_num: int) -> ReceivedHop:
     """Parse a single Received header into structured data."""
     hop = ReceivedHop(hop_number=hop_num)
 
-    from_match = re.search(r'from\s+([\w.\-]+)', received_value, re.IGNORECASE)
+    from_match = re.search(r"from\s+([\w.\-]+)", received_value, re.IGNORECASE)
     if from_match:
         hop.server_from = from_match.group(1)
 
-    by_match = re.search(r'by\s+([\w.\-]+)', received_value, re.IGNORECASE)
+    by_match = re.search(r"by\s+([\w.\-]+)", received_value, re.IGNORECASE)
     if by_match:
         hop.server_by = by_match.group(1)
 
     hop.ip_address = extract_ip_from_received(received_value)
 
-    date_match = re.search(r';\s*(.+)$', received_value)
+    date_match = re.search(r";\s*(.+)$", received_value)
     if date_match:
         hop.timestamp = date_match.group(1).strip()
 
-    proto_match = re.search(r'with\s+(ESMTP[SA]*|SMTP[SA]*|HTTP[S]?|LMTP)',
-                            received_value, re.IGNORECASE)
+    proto_match = re.search(
+        r"with\s+(ESMTP[SA]*|SMTP[SA]*|HTTP[S]?|LMTP)", received_value, re.IGNORECASE
+    )
     if proto_match:
         hop.protocol = proto_match.group(1).upper()
 
@@ -146,34 +160,37 @@ def parse_authentication_results(auth_header: str) -> AuthenticationResult:
     """Parse Authentication-Results header."""
     result = AuthenticationResult()
 
-    spf_match = re.search(r'spf=(pass|fail|softfail|neutral|none|temperror|permerror)',
-                          auth_header, re.IGNORECASE)
+    spf_match = re.search(
+        r"spf=(pass|fail|softfail|neutral|none|temperror|permerror)", auth_header, re.IGNORECASE
+    )
     if spf_match:
         result.spf = spf_match.group(1).lower()
 
-    spf_domain_match = re.search(r'smtp\.mailfrom=([\w.\-@]+)', auth_header, re.IGNORECASE)
+    spf_domain_match = re.search(r"smtp\.mailfrom=([\w.\-@]+)", auth_header, re.IGNORECASE)
     if spf_domain_match:
         result.spf_domain = spf_domain_match.group(1)
 
-    dkim_match = re.search(r'dkim=(pass|fail|none|neutral|temperror|permerror)',
-                           auth_header, re.IGNORECASE)
+    dkim_match = re.search(
+        r"dkim=(pass|fail|none|neutral|temperror|permerror)", auth_header, re.IGNORECASE
+    )
     if dkim_match:
         result.dkim = dkim_match.group(1).lower()
 
-    dkim_domain_match = re.search(r'header\.[di]=([\w.\-]+)', auth_header, re.IGNORECASE)
+    dkim_domain_match = re.search(r"header\.[di]=([\w.\-]+)", auth_header, re.IGNORECASE)
     if dkim_domain_match:
         result.dkim_domain = dkim_domain_match.group(1)
 
-    dmarc_match = re.search(r'dmarc=(pass|fail|none|bestguesspass|temperror|permerror)',
-                            auth_header, re.IGNORECASE)
+    dmarc_match = re.search(
+        r"dmarc=(pass|fail|none|bestguesspass|temperror|permerror)", auth_header, re.IGNORECASE
+    )
     if dmarc_match:
         result.dmarc = dmarc_match.group(1).lower()
 
-    dmarc_domain_match = re.search(r'header\.from=([\w.\-]+)', auth_header, re.IGNORECASE)
+    dmarc_domain_match = re.search(r"header\.from=([\w.\-]+)", auth_header, re.IGNORECASE)
     if dmarc_domain_match:
         result.dmarc_domain = dmarc_domain_match.group(1)
 
-    compauth_match = re.search(r'compauth=(\w+)', auth_header, re.IGNORECASE)
+    compauth_match = re.search(r"compauth=(\w+)", auth_header, re.IGNORECASE)
     if compauth_match:
         result.compauth = compauth_match.group(1)
 
@@ -185,9 +202,11 @@ def geolocate_ip(ip_address: str) -> str:
     if not HAS_REQUESTS or not ip_address:
         return "unknown"
     try:
-        resp = requests.get(f"http://ip-api.com/json/{ip_address}",
-                            timeout=5,
-                            params={"fields": "country,city,org,status"})
+        resp = requests.get(
+            f"http://ip-api.com/json/{ip_address}",
+            timeout=5,
+            params={"fields": "country,city,org,status"},
+        )
         if resp.status_code == 200:
             data = resp.json()
             if data.get("status") == "success":
@@ -215,8 +234,9 @@ def check_abuseipdb(ip_address: str, api_key: str = "") -> dict:
     try:
         headers = {"Key": api_key, "Accept": "application/json"}
         params = {"ipAddress": ip_address, "maxAgeInDays": "90"}
-        resp = requests.get("https://api.abuseipdb.com/api/v2/check",
-                            headers=headers, params=params, timeout=10)
+        resp = requests.get(
+            "https://api.abuseipdb.com/api/v2/check", headers=headers, params=params, timeout=10
+        )
         if resp.status_code == 200:
             return resp.json().get("data", {})
     except Exception:
@@ -229,97 +249,126 @@ def analyze_indicators(analysis: HeaderAnalysis) -> list:
     indicators = []
 
     # Check From vs Return-Path mismatch
-    if (analysis.from_domain and analysis.return_path_domain and
-            analysis.from_domain != analysis.return_path_domain):
-        indicators.append(PhishingIndicator(
-            category="sender_mismatch",
-            description=f"From domain ({analysis.from_domain}) differs from "
-                        f"Return-Path domain ({analysis.return_path_domain})",
-            severity="high",
-            raw_value=f"From: {analysis.from_domain}, Return-Path: {analysis.return_path_domain}"
-        ))
+    if (
+        analysis.from_domain
+        and analysis.return_path_domain
+        and analysis.from_domain != analysis.return_path_domain
+    ):
+        indicators.append(
+            PhishingIndicator(
+                category="sender_mismatch",
+                description=f"From domain ({analysis.from_domain}) differs from "
+                f"Return-Path domain ({analysis.return_path_domain})",
+                severity="high",
+                raw_value=f"From: {analysis.from_domain}, Return-Path: {analysis.return_path_domain}",
+            )
+        )
 
     # Check From vs Reply-To mismatch
-    if (analysis.from_domain and analysis.reply_to_domain and
-            analysis.from_domain != analysis.reply_to_domain):
-        indicators.append(PhishingIndicator(
-            category="reply_to_mismatch",
-            description=f"From domain ({analysis.from_domain}) differs from "
-                        f"Reply-To domain ({analysis.reply_to_domain})",
-            severity="high",
-            raw_value=f"From: {analysis.from_domain}, Reply-To: {analysis.reply_to_domain}"
-        ))
+    if (
+        analysis.from_domain
+        and analysis.reply_to_domain
+        and analysis.from_domain != analysis.reply_to_domain
+    ):
+        indicators.append(
+            PhishingIndicator(
+                category="reply_to_mismatch",
+                description=f"From domain ({analysis.from_domain}) differs from "
+                f"Reply-To domain ({analysis.reply_to_domain})",
+                severity="high",
+                raw_value=f"From: {analysis.from_domain}, Reply-To: {analysis.reply_to_domain}",
+            )
+        )
 
     # Check SPF failure
     if analysis.authentication.spf in ("fail", "softfail"):
-        indicators.append(PhishingIndicator(
-            category="authentication_failure",
-            description=f"SPF check returned {analysis.authentication.spf}",
-            severity="high" if analysis.authentication.spf == "fail" else "medium",
-            raw_value=f"spf={analysis.authentication.spf}"
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="authentication_failure",
+                description=f"SPF check returned {analysis.authentication.spf}",
+                severity="high" if analysis.authentication.spf == "fail" else "medium",
+                raw_value=f"spf={analysis.authentication.spf}",
+            )
+        )
 
     # Check DKIM failure
     if analysis.authentication.dkim == "fail":
-        indicators.append(PhishingIndicator(
-            category="authentication_failure",
-            description="DKIM signature verification failed",
-            severity="high",
-            raw_value="dkim=fail"
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="authentication_failure",
+                description="DKIM signature verification failed",
+                severity="high",
+                raw_value="dkim=fail",
+            )
+        )
 
     # Check DMARC failure
     if analysis.authentication.dmarc == "fail":
-        indicators.append(PhishingIndicator(
-            category="authentication_failure",
-            description="DMARC policy check failed",
-            severity="critical",
-            raw_value="dmarc=fail"
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="authentication_failure",
+                description="DMARC policy check failed",
+                severity="critical",
+                raw_value="dmarc=fail",
+            )
+        )
 
     # Check for missing Message-ID
     if not analysis.message_id:
-        indicators.append(PhishingIndicator(
-            category="missing_header",
-            description="Message-ID header is missing",
-            severity="medium",
-            raw_value=""
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="missing_header",
+                description="Message-ID header is missing",
+                severity="medium",
+                raw_value="",
+            )
+        )
 
     # Check for suspicious X-Mailer
     suspicious_mailers = [
-        "PHPMailer", "King Phisher", "GoPhish", "Swaks",
-        "Sendinblue", "Mass Mailer", "Bulk Mailer"
+        "PHPMailer",
+        "King Phisher",
+        "GoPhish",
+        "Swaks",
+        "Sendinblue",
+        "Mass Mailer",
+        "Bulk Mailer",
     ]
     if analysis.x_mailer:
         for mailer in suspicious_mailers:
             if mailer.lower() in analysis.x_mailer.lower():
-                indicators.append(PhishingIndicator(
-                    category="suspicious_mailer",
-                    description=f"Suspicious X-Mailer detected: {analysis.x_mailer}",
-                    severity="high",
-                    raw_value=analysis.x_mailer
-                ))
+                indicators.append(
+                    PhishingIndicator(
+                        category="suspicious_mailer",
+                        description=f"Suspicious X-Mailer detected: {analysis.x_mailer}",
+                        severity="high",
+                        raw_value=analysis.x_mailer,
+                    )
+                )
                 break
 
     # Check for too few received hops (direct injection)
     if len(analysis.received_hops) <= 1:
-        indicators.append(PhishingIndicator(
-            category="routing_anomaly",
-            description="Very few Received hops - possible direct SMTP injection",
-            severity="medium",
-            raw_value=f"Hop count: {len(analysis.received_hops)}"
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="routing_anomaly",
+                description="Very few Received hops - possible direct SMTP injection",
+                severity="medium",
+                raw_value=f"Hop count: {len(analysis.received_hops)}",
+            )
+        )
 
     # Check for missing authentication results
     auth = analysis.authentication
     if auth.spf == "none" and auth.dkim == "none" and auth.dmarc == "none":
-        indicators.append(PhishingIndicator(
-            category="no_authentication",
-            description="No email authentication results found (SPF, DKIM, DMARC all absent)",
-            severity="high",
-            raw_value=""
-        ))
+        indicators.append(
+            PhishingIndicator(
+                category="no_authentication",
+                description="No email authentication results found (SPF, DKIM, DMARC all absent)",
+                severity="high",
+                raw_value="",
+            )
+        )
 
     return indicators
 
@@ -347,8 +396,9 @@ def calculate_risk_score(indicators: list) -> tuple:
     return score, level
 
 
-def analyze_headers(raw_headers: str, enrich: bool = False,
-                    abuseipdb_key: str = "") -> HeaderAnalysis:
+def analyze_headers(
+    raw_headers: str, enrich: bool = False, abuseipdb_key: str = ""
+) -> HeaderAnalysis:
     """
     Main analysis function. Parses raw email headers and produces
     a complete HeaderAnalysis report.
@@ -377,7 +427,7 @@ def analyze_headers(raw_headers: str, enrich: bool = False,
     # Extract X-Originating-IP
     x_orig = msg.get("X-Originating-IP", "")
     if x_orig:
-        ip_match = re.search(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', x_orig)
+        ip_match = re.search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", x_orig)
         if ip_match:
             analysis.x_originating_ip = ip_match.group(1)
 
@@ -418,13 +468,15 @@ def analyze_headers(raw_headers: str, enrich: bool = False,
     if enrich and analysis.x_originating_ip and abuseipdb_key:
         abuse_data = check_abuseipdb(analysis.x_originating_ip, abuseipdb_key)
         if abuse_data and abuse_data.get("abuseConfidenceScore", 0) > 50:
-            analysis.indicators.append(PhishingIndicator(
-                category="threat_intelligence",
-                description=f"IP {analysis.x_originating_ip} has abuse confidence "
-                            f"score of {abuse_data['abuseConfidenceScore']}%",
-                severity="critical",
-                raw_value=json.dumps(abuse_data)
-            ))
+            analysis.indicators.append(
+                PhishingIndicator(
+                    category="threat_intelligence",
+                    description=f"IP {analysis.x_originating_ip} has abuse confidence "
+                    f"score of {abuse_data['abuseConfidenceScore']}%",
+                    severity="critical",
+                    raw_value=json.dumps(abuse_data),
+                )
+            )
             # Recalculate risk
             analysis.risk_score, analysis.risk_level = calculate_risk_score(analysis.indicators)
 
@@ -460,7 +512,9 @@ def format_report(analysis: HeaderAnalysis) -> str:
     # Authentication Results
     lines.append("\n[AUTHENTICATION RESULTS]")
     auth = analysis.authentication
-    spf_icon = "PASS" if auth.spf == "pass" else "FAIL" if auth.spf in ("fail", "softfail") else "NONE"
+    spf_icon = (
+        "PASS" if auth.spf == "pass" else "FAIL" if auth.spf in ("fail", "softfail") else "NONE"
+    )
     dkim_icon = "PASS" if auth.dkim == "pass" else "FAIL" if auth.dkim == "fail" else "NONE"
     dmarc_icon = "PASS" if auth.dmarc == "pass" else "FAIL" if auth.dmarc == "fail" else "NONE"
     lines.append(f"  SPF:   {spf_icon} ({auth.spf}) domain={auth.spf_domain}")
@@ -504,20 +558,19 @@ def format_report(analysis: HeaderAnalysis) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Analyze email headers for phishing indicators"
-    )
+    parser = argparse.ArgumentParser(description="Analyze email headers for phishing indicators")
     input_group = parser.add_mutually_exclusive_group(required=True)
     input_group.add_argument("--file", "-f", help="Path to file containing raw headers")
     input_group.add_argument("--eml", "-e", help="Path to .eml file")
     input_group.add_argument("--stdin", action="store_true", help="Read headers from stdin")
 
-    parser.add_argument("--enrich", action="store_true",
-                        help="Enrich with IP geolocation and reverse DNS")
-    parser.add_argument("--abuseipdb-key", default="",
-                        help="AbuseIPDB API key for threat intelligence")
-    parser.add_argument("--json", action="store_true",
-                        help="Output results as JSON")
+    parser.add_argument(
+        "--enrich", action="store_true", help="Enrich with IP geolocation and reverse DNS"
+    )
+    parser.add_argument(
+        "--abuseipdb-key", default="", help="AbuseIPDB API key for threat intelligence"
+    )
+    parser.add_argument("--json", action="store_true", help="Output results as JSON")
     parser.add_argument("--output", "-o", help="Write report to file")
 
     args = parser.parse_args()
@@ -530,15 +583,11 @@ def main():
             msg = BytesParser(policy=policy.default).parse(f)
             raw_headers = str(msg)
     else:
-        with open(args.file, "r", encoding="utf-8", errors="replace") as f:
+        with open(args.file, encoding="utf-8", errors="replace") as f:
             raw_headers = f.read()
 
     # Analyze
-    analysis = analyze_headers(
-        raw_headers,
-        enrich=args.enrich,
-        abuseipdb_key=args.abuseipdb_key
-    )
+    analysis = analyze_headers(raw_headers, enrich=args.enrich, abuseipdb_key=args.abuseipdb_key)
 
     # Output
     if args.json:

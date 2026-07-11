@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Software-Defined Perimeter (SDP) deployment audit agent."""
 
-import json
-import sys
 import argparse
+import json
 import socket
 import ssl
+import sys
 from datetime import datetime
 
 try:
@@ -23,7 +23,7 @@ def check_spa_port(host, port, timeout=5):
         result = sock.connect_ex((host, port))
         sock.close()
         return {"host": host, "port": port, "open": result == 0}
-    except socket.error as e:
+    except OSError as e:
         return {"host": host, "port": port, "open": False, "error": str(e)}
 
 
@@ -76,11 +76,16 @@ class SDPControllerClient:
         self._authenticate(username, password)
 
     def _authenticate(self, username, password):
-        resp = self.session.post(f"{self.base_url}/admin/login", json={
-            "providerName": "local",
-            "username": username,
-            "password": password,
-        }, timeout=15, verify=True)
+        resp = self.session.post(
+            f"{self.base_url}/admin/login",
+            json={
+                "providerName": "local",
+                "username": username,
+                "password": password,
+            },
+            timeout=15,
+            verify=True,
+        )
         resp.raise_for_status()
         token = resp.json().get("token", "")
         self.session.headers.update({"Authorization": f"Bearer {token}"})
@@ -108,10 +113,10 @@ class SDPControllerClient:
 
 def run_audit(args):
     """Execute SDP deployment audit."""
-    print(f"\n{'='*60}")
-    print(f"  SOFTWARE-DEFINED PERIMETER AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  SOFTWARE-DEFINED PERIMETER AUDIT")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     report = {}
 
@@ -125,10 +130,11 @@ def run_audit(args):
             print(f"  Port {r['port']}: {status} — {r['finding']}")
 
     if args.mtls_host:
-        mtls = check_tls_mutual_auth(args.mtls_host, args.mtls_port or 443,
-                                      args.client_cert, args.client_key)
+        mtls = check_tls_mutual_auth(
+            args.mtls_host, args.mtls_port or 443, args.client_cert, args.client_key
+        )
         report["mtls_check"] = mtls
-        print(f"\n--- MUTUAL TLS CHECK ---")
+        print("\n--- MUTUAL TLS CHECK ---")
         print(f"  Host: {mtls['host']}:{mtls['port']}")
         print(f"  mTLS Enforced: {mtls.get('mtls_enforced', 'unknown')}")
         if mtls.get("tls_version"):

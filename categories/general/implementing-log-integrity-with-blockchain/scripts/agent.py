@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Log Integrity Chain Agent - Implements SHA-256 hash-chained append-only log for tamper detection."""
 
-import json
-import hashlib
-import logging
 import argparse
+import hashlib
+import json
+import logging
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -36,7 +36,7 @@ def create_chain_entry(index, timestamp, content, prev_hash):
 def load_chain(chain_file):
     """Load an existing hash chain from a JSON file."""
     try:
-        with open(chain_file, "r") as f:
+        with open(chain_file) as f:
             chain = json.load(f)
         logger.info("Loaded chain with %d entries from %s", len(chain), chain_file)
         return chain
@@ -55,7 +55,7 @@ def save_chain(chain, chain_file):
 def ingest_log_file(log_file):
     """Read log entries from a file (one entry per line)."""
     entries = []
-    with open(log_file, "r", errors="ignore") as f:
+    with open(log_file, errors="ignore") as f:
         for line in f:
             line = line.strip()
             if line:
@@ -66,7 +66,7 @@ def ingest_log_file(log_file):
 
 def ingest_json_log(json_file):
     """Read structured log entries from a JSON array file."""
-    with open(json_file, "r") as f:
+    with open(json_file) as f:
         data = json.load(f)
     entries = []
     if isinstance(data, list):
@@ -101,19 +101,23 @@ def verify_chain(chain):
         expected_input = f"{prev_hash}{entry['timestamp']}{entry['content_hash']}"
         expected_hash = compute_hash(expected_input)
         if entry["chain_hash"] != expected_hash:
-            breaks.append({
-                "index": entry["index"],
-                "expected_hash": expected_hash,
-                "actual_hash": entry["chain_hash"],
-                "prev_hash_match": entry["prev_hash"] == prev_hash,
-            })
+            breaks.append(
+                {
+                    "index": entry["index"],
+                    "expected_hash": expected_hash,
+                    "actual_hash": entry["chain_hash"],
+                    "prev_hash_match": entry["prev_hash"] == prev_hash,
+                }
+            )
         if entry["prev_hash"] != prev_hash:
-            breaks.append({
-                "index": entry["index"],
-                "issue": "prev_hash mismatch",
-                "expected_prev": prev_hash,
-                "actual_prev": entry["prev_hash"],
-            })
+            breaks.append(
+                {
+                    "index": entry["index"],
+                    "issue": "prev_hash mismatch",
+                    "expected_prev": prev_hash,
+                    "actual_prev": entry["prev_hash"],
+                }
+            )
         prev_hash = entry["chain_hash"]
     valid = len(breaks) == 0
     logger.info("Chain verification: %d entries checked, %d breaks found", len(chain), len(breaks))
@@ -147,13 +151,17 @@ def create_checkpoint(chain, checkpoint_file):
     }
     with open(checkpoint_file, "w") as f:
         json.dump(checkpoint, f, indent=2)
-    logger.info("Created checkpoint at index %d: %s", checkpoint["head_index"], checkpoint["checkpoint_hash"][:16])
+    logger.info(
+        "Created checkpoint at index %d: %s",
+        checkpoint["head_index"],
+        checkpoint["checkpoint_hash"][:16],
+    )
     return checkpoint
 
 
 def verify_checkpoint(chain, checkpoint_file):
     """Verify chain against a previously saved checkpoint."""
-    with open(checkpoint_file, "r") as f:
+    with open(checkpoint_file) as f:
         checkpoint = json.load(f)
     cp_index = checkpoint["head_index"]
     if cp_index >= len(chain):

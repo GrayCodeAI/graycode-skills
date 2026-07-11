@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """pfSense Firewall Configuration Agent - Manages firewall rules via pfSense API."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 import requests
@@ -18,11 +18,13 @@ class PfSenseAPI:
     def __init__(self, base_url, api_key, api_secret):
         self.base_url = base_url.rstrip("/")
         self.session = requests.Session()
-        self.session.headers.update({
-            "Authorization": f"{api_key} {api_secret}",
-            "Content-Type": "application/json",
-        })
-        self.session.verify = False
+        self.session.headers.update(
+            {
+                "Authorization": f"{api_key} {api_secret}",
+                "Content-Type": "application/json",
+            }
+        )
+        self.session.verify = True
 
     def get(self, endpoint):
         resp = self.session.get(f"{self.base_url}/api/v1/{endpoint}")
@@ -53,7 +55,9 @@ def get_firewall_rules(api):
     return rules
 
 
-def create_firewall_rule(api, interface, action, protocol, source, destination, dst_port, description):
+def create_firewall_rule(
+    api, interface, action, protocol, source, destination, dst_port, description
+):
     """Create a new firewall rule on pfSense."""
     rule = {
         "type": action,
@@ -67,8 +71,15 @@ def create_firewall_rule(api, interface, action, protocol, source, destination, 
         "top": False,
     }
     result = api.post("firewall/rule", rule)
-    logger.info("Created rule: %s %s %s -> %s:%s (%s)",
-                action, protocol, source, destination, dst_port, description)
+    logger.info(
+        "Created rule: %s %s %s -> %s:%s (%s)",
+        action,
+        protocol,
+        source,
+        destination,
+        dst_port,
+        description,
+    )
     return result
 
 
@@ -116,7 +127,9 @@ def create_guest_isolation_rules(api, guest_interface="opt2"):
     logger.info("Created %d Guest isolation rules", len(rules))
 
 
-def configure_nat_port_forward(api, interface, external_port, target_ip, target_port, protocol="tcp"):
+def configure_nat_port_forward(
+    api, interface, external_port, target_ip, target_port, protocol="tcp"
+):
     """Create a NAT port forward rule."""
     nat_rule = {
         "interface": interface,
@@ -138,26 +151,32 @@ def audit_firewall_rules(rules):
     findings = []
     for i, rule in enumerate(rules):
         if rule.get("src") == "any" and rule.get("dst") == "any" and rule.get("type") == "pass":
-            findings.append({
-                "rule_index": i,
-                "finding": "Overly permissive rule: any-to-any pass",
-                "severity": "High",
-                "rule": rule.get("descr", "No description"),
-            })
+            findings.append(
+                {
+                    "rule_index": i,
+                    "finding": "Overly permissive rule: any-to-any pass",
+                    "severity": "High",
+                    "rule": rule.get("descr", "No description"),
+                }
+            )
         if not rule.get("descr"):
-            findings.append({
-                "rule_index": i,
-                "finding": "Rule without description",
-                "severity": "Low",
-                "rule": f"Rule #{i}",
-            })
+            findings.append(
+                {
+                    "rule_index": i,
+                    "finding": "Rule without description",
+                    "severity": "Low",
+                    "rule": f"Rule #{i}",
+                }
+            )
         if rule.get("disabled"):
-            findings.append({
-                "rule_index": i,
-                "finding": "Disabled rule should be reviewed or removed",
-                "severity": "Info",
-                "rule": rule.get("descr", "No description"),
-            })
+            findings.append(
+                {
+                    "rule_index": i,
+                    "finding": "Disabled rule should be reviewed or removed",
+                    "severity": "Info",
+                    "rule": rule.get("descr", "No description"),
+                }
+            )
     logger.info("Audit: %d findings across %d rules", len(findings), len(rules))
     return findings
 
@@ -175,8 +194,11 @@ def generate_report(rules, audit_findings, nat_rules=None):
         "total_rules": len(rules),
         "audit_findings": audit_findings,
         "rules_summary": [
-            {"interface": r.get("interface", ""), "type": r.get("type", ""),
-             "description": r.get("descr", "")}
+            {
+                "interface": r.get("interface", ""),
+                "type": r.get("type", ""),
+                "description": r.get("descr", ""),
+            }
             for r in rules
         ],
     }

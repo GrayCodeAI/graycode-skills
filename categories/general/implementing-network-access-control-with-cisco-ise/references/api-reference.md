@@ -6,7 +6,7 @@
 import requests
 resp = requests.get("https://ISE:9060/ers/config/authorizationprofile",
                     auth=("admin", "password"),
-                    headers={"Accept": "application/json"}, verify=False)
+                    headers={"Accept": "application/json"}, verify="/path/to/ise-ca.pem")
 ```
 
 ## Key ERS Endpoints

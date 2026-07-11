@@ -302,7 +302,7 @@ class IOCDistributor:
             f"{misp_url}/events",
             headers=headers,
             json=event,
-            verify=False,
+            verify=True,
         )
         if resp.status_code == 200:
             event_id = resp.json().get("Event", {}).get("id", "")

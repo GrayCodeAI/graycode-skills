@@ -7,12 +7,9 @@ conditional access policies, and generates identity maturity reports.
 """
 
 import json
-import csv
-import sys
-from datetime import datetime, timedelta
-from pathlib import Path
 from collections import defaultdict
-from typing import Optional
+from datetime import datetime
+from pathlib import Path
 
 
 def assess_mfa_strength(mfa_config: dict) -> dict:
@@ -21,57 +18,72 @@ def assess_mfa_strength(mfa_config: dict) -> dict:
     score = 100
 
     methods = mfa_config.get("enabled_methods", [])
-    phishing_resistant = {"fido2", "webauthn", "certificate", "windows_hello", "platform_authenticator"}
+    phishing_resistant = {
+        "fido2",
+        "webauthn",
+        "certificate",
+        "windows_hello",
+        "platform_authenticator",
+    }
     phishable = {"sms", "voice", "email_otp"}
-    moderate = {"totp", "push_notification", "authenticator_app"}
 
     enabled_phishing_resistant = set(methods) & phishing_resistant
     enabled_phishable = set(methods) & phishable
 
     if not enabled_phishing_resistant:
-        findings.append({
-            "severity": "critical",
-            "finding": "No phishing-resistant MFA methods enabled",
-            "recommendation": "Deploy FIDO2 security keys or platform authenticators",
-            "reference": "NIST SP 800-63B AAL3, CISA ZT Identity Pillar (Advanced)"
-        })
+        findings.append(
+            {
+                "severity": "critical",
+                "finding": "No phishing-resistant MFA methods enabled",
+                "recommendation": "Deploy FIDO2 security keys or platform authenticators",
+                "reference": "NIST SP 800-63B AAL3, CISA ZT Identity Pillar (Advanced)",
+            }
+        )
         score -= 40
 
     if enabled_phishable:
-        findings.append({
-            "severity": "high",
-            "finding": f"Phishable MFA methods still enabled: {', '.join(enabled_phishable)}",
-            "recommendation": "Disable SMS, voice, and email OTP methods",
-            "reference": "CISA Phishing-Resistant MFA Guidance"
-        })
+        findings.append(
+            {
+                "severity": "high",
+                "finding": f"Phishable MFA methods still enabled: {', '.join(enabled_phishable)}",
+                "recommendation": "Disable SMS, voice, and email OTP methods",
+                "reference": "CISA Phishing-Resistant MFA Guidance",
+            }
+        )
         score -= 20
 
     if not mfa_config.get("enforced_for_all_users"):
-        findings.append({
-            "severity": "critical",
-            "finding": "MFA not enforced for all users",
-            "recommendation": "Enable MFA requirement for all user accounts",
-            "reference": "CISA ZT Identity Pillar (Initial)"
-        })
+        findings.append(
+            {
+                "severity": "critical",
+                "finding": "MFA not enforced for all users",
+                "recommendation": "Enable MFA requirement for all user accounts",
+                "reference": "CISA ZT Identity Pillar (Initial)",
+            }
+        )
         score -= 30
 
     if not mfa_config.get("number_matching_enabled") and "push_notification" in methods:
-        findings.append({
-            "severity": "high",
-            "finding": "Push notification MFA without number matching",
-            "recommendation": "Enable number matching to prevent MFA fatigue attacks",
-            "reference": "Microsoft MFA fatigue defense guidance"
-        })
+        findings.append(
+            {
+                "severity": "high",
+                "finding": "Push notification MFA without number matching",
+                "recommendation": "Enable number matching to prevent MFA fatigue attacks",
+                "reference": "Microsoft MFA fatigue defense guidance",
+            }
+        )
         score -= 10
 
     enrollment_rate = mfa_config.get("enrollment_rate_percent", 0)
     if enrollment_rate < 95:
-        findings.append({
-            "severity": "warning",
-            "finding": f"MFA enrollment rate is {enrollment_rate}% (target: 95%+)",
-            "recommendation": "Launch enrollment campaign for remaining users",
-            "reference": "CISA ZT Identity Pillar (Advanced)"
-        })
+        findings.append(
+            {
+                "severity": "warning",
+                "finding": f"MFA enrollment rate is {enrollment_rate}% (target: 95%+)",
+                "recommendation": "Launch enrollment campaign for remaining users",
+                "reference": "CISA ZT Identity Pillar (Advanced)",
+            }
+        )
         score -= 10
 
     return {
@@ -80,11 +92,14 @@ def assess_mfa_strength(mfa_config: dict) -> dict:
         "phishable_methods": list(enabled_phishable),
         "findings": findings,
         "maturity_level": (
-            "optimal" if score >= 90 else
-            "advanced" if score >= 70 else
-            "initial" if score >= 50 else
-            "traditional"
-        )
+            "optimal"
+            if score >= 90
+            else "advanced"
+            if score >= 70
+            else "initial"
+            if score >= 50
+            else "traditional"
+        ),
     }
 
 
@@ -128,39 +143,49 @@ def assess_conditional_access(policies: list) -> dict:
             coverage["privileged_access_secured"] = True
 
     if not coverage["legacy_auth_blocked"]:
-        findings.append({
-            "severity": "critical",
-            "finding": "Legacy authentication protocols not blocked",
-            "recommendation": "Create policy blocking basic auth, IMAP, POP3, SMTP AUTH",
-        })
+        findings.append(
+            {
+                "severity": "critical",
+                "finding": "Legacy authentication protocols not blocked",
+                "recommendation": "Create policy blocking basic auth, IMAP, POP3, SMTP AUTH",
+            }
+        )
 
     if not coverage["mfa_required_all"]:
-        findings.append({
-            "severity": "critical",
-            "finding": "MFA not required for all users",
-            "recommendation": "Create policy requiring MFA for all user sign-ins",
-        })
+        findings.append(
+            {
+                "severity": "critical",
+                "finding": "MFA not required for all users",
+                "recommendation": "Create policy requiring MFA for all user sign-ins",
+            }
+        )
 
     if not coverage["device_compliance_required"]:
-        findings.append({
-            "severity": "high",
-            "finding": "Device compliance not required for access",
-            "recommendation": "Require managed and compliant devices for sensitive apps",
-        })
+        findings.append(
+            {
+                "severity": "high",
+                "finding": "Device compliance not required for access",
+                "recommendation": "Require managed and compliant devices for sensitive apps",
+            }
+        )
 
     if not coverage["risk_based_policies"]:
-        findings.append({
-            "severity": "high",
-            "finding": "No risk-based conditional access policies",
-            "recommendation": "Enable user risk and sign-in risk based policies",
-        })
+        findings.append(
+            {
+                "severity": "high",
+                "finding": "No risk-based conditional access policies",
+                "recommendation": "Enable user risk and sign-in risk based policies",
+            }
+        )
 
     if not coverage["session_controls"]:
-        findings.append({
-            "severity": "warning",
-            "finding": "No session lifetime controls configured",
-            "recommendation": "Configure sign-in frequency and browser session persistence",
-        })
+        findings.append(
+            {
+                "severity": "warning",
+                "finding": "No session lifetime controls configured",
+                "recommendation": "Configure sign-in frequency and browser session persistence",
+            }
+        )
 
     covered = sum(1 for v in coverage.values() if v)
     total = len(coverage)
@@ -211,14 +236,16 @@ def analyze_sign_in_logs(logs: list) -> dict:
 
         risk_level = log.get("risk_level", "none")
         if risk_level in ("medium", "high"):
-            stats["risky_sign_ins"].append({
-                "user": log.get("user", "unknown"),
-                "risk_level": risk_level,
-                "risk_detail": log.get("risk_detail", ""),
-                "location": location,
-                "timestamp": log.get("timestamp", ""),
-                "application": app,
-            })
+            stats["risky_sign_ins"].append(
+                {
+                    "user": log.get("user", "unknown"),
+                    "risk_level": risk_level,
+                    "risk_detail": log.get("risk_detail", ""),
+                    "location": location,
+                    "timestamp": log.get("timestamp", ""),
+                    "application": app,
+                }
+            )
 
     stats["locations"] = dict(stats["locations"])
     stats["devices"] = dict(stats["devices"])
@@ -254,12 +281,16 @@ def detect_impossible_travel(sign_ins: list, max_speed_kmh: int = 900) -> list:
             lon2 = curr["location"].get("longitude", 0)
 
             import math
+
             R = 6371
             dlat = math.radians(lat2 - lat1)
             dlon = math.radians(lon2 - lon1)
-            a = (math.sin(dlat / 2) ** 2 +
-                 math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
-                 math.sin(dlon / 2) ** 2)
+            a = (
+                math.sin(dlat / 2) ** 2
+                + math.cos(math.radians(lat1))
+                * math.cos(math.radians(lat2))
+                * math.sin(dlon / 2) ** 2
+            )
             c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
             distance_km = R * c
 
@@ -273,18 +304,20 @@ def detect_impossible_travel(sign_ins: list, max_speed_kmh: int = 900) -> list:
             if time_diff_hours > 0:
                 required_speed = distance_km / time_diff_hours
                 if required_speed > max_speed_kmh and distance_km > 100:
-                    alerts.append({
-                        "user": user,
-                        "severity": "high",
-                        "type": "impossible_travel",
-                        "from_location": prev["location"],
-                        "to_location": curr["location"],
-                        "distance_km": round(distance_km),
-                        "time_diff_hours": round(time_diff_hours, 2),
-                        "required_speed_kmh": round(required_speed),
-                        "from_time": prev.get("timestamp"),
-                        "to_time": curr.get("timestamp"),
-                    })
+                    alerts.append(
+                        {
+                            "user": user,
+                            "severity": "high",
+                            "type": "impossible_travel",
+                            "from_location": prev["location"],
+                            "to_location": curr["location"],
+                            "distance_km": round(distance_km),
+                            "time_diff_hours": round(time_diff_hours, 2),
+                            "required_speed_kmh": round(required_speed),
+                            "from_time": prev.get("timestamp"),
+                            "to_time": curr.get("timestamp"),
+                        }
+                    )
 
     return alerts
 
@@ -305,33 +338,41 @@ def generate_identity_maturity_report(config: dict) -> dict:
 
     governance = config.get("governance", {})
     gov_score = 0
-    if governance.get("automated_provisioning"): gov_score += 25
-    if governance.get("access_reviews_enabled"): gov_score += 25
-    if governance.get("jit_access_enabled"): gov_score += 25
-    if governance.get("lifecycle_automation"): gov_score += 25
+    if governance.get("automated_provisioning"):
+        gov_score += 25
+    if governance.get("access_reviews_enabled"):
+        gov_score += 25
+    if governance.get("jit_access_enabled"):
+        gov_score += 25
+    if governance.get("lifecycle_automation"):
+        gov_score += 25
     report["pillars"]["governance"] = {"score": gov_score}
 
     monitoring = config.get("monitoring", {})
     mon_score = 0
-    if monitoring.get("siem_integration"): mon_score += 25
-    if monitoring.get("ueba_enabled"): mon_score += 25
-    if monitoring.get("identity_threat_detection"): mon_score += 25
-    if monitoring.get("cae_enabled"): mon_score += 25
+    if monitoring.get("siem_integration"):
+        mon_score += 25
+    if monitoring.get("ueba_enabled"):
+        mon_score += 25
+    if monitoring.get("identity_threat_detection"):
+        mon_score += 25
+    if monitoring.get("cae_enabled"):
+        mon_score += 25
     report["pillars"]["monitoring"] = {"score": mon_score}
 
     avg_score = (
-        mfa_assessment["mfa_score"] +
-        ca_assessment["coverage_score"] +
-        gov_score +
-        mon_score
+        mfa_assessment["mfa_score"] + ca_assessment["coverage_score"] + gov_score + mon_score
     ) / 4
 
     report["overall_score"] = round(avg_score)
     report["overall_maturity"] = (
-        "optimal" if avg_score >= 90 else
-        "advanced" if avg_score >= 70 else
-        "initial" if avg_score >= 50 else
-        "traditional"
+        "optimal"
+        if avg_score >= 90
+        else "advanced"
+        if avg_score >= 70
+        else "initial"
+        if avg_score >= 50
+        else "traditional"
     )
 
     return report
@@ -339,11 +380,13 @@ def generate_identity_maturity_report(config: dict) -> dict:
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="Identity Verification Assessment Tool")
     parser.add_argument("--config", type=str, help="Path to identity configuration JSON")
     parser.add_argument("--logs", type=str, help="Path to sign-in logs JSON")
-    parser.add_argument("--action", choices=["assess", "analyze-logs", "detect-travel", "report"],
-                        default="report")
+    parser.add_argument(
+        "--action", choices=["assess", "analyze-logs", "detect-travel", "report"], default="report"
+    )
     parser.add_argument("--output", type=str, default="identity_report.json")
     args = parser.parse_args()
 

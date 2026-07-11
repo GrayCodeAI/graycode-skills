@@ -9,9 +9,7 @@ import argparse
 import json
 import re
 import subprocess
-import sys
 from datetime import datetime
-from pathlib import Path
 
 ESCAPE_VECTORS = {
     "nsenter": {"severity": "CRITICAL", "mitre": "T1611", "desc": "Namespace escape via nsenter"},
@@ -23,15 +21,20 @@ ESCAPE_VECTORS = {
 }
 
 SENSITIVE_PATHS = [
-    "/var/run/docker.sock", "/proc/sysrq-trigger", "/proc/kcore",
-    "/proc/kmsg", "/proc/kallsyms", "/sys/kernel",
-    "/etc/shadow", "/etc/kubernetes/admin.conf",
+    "/var/run/docker.sock",
+    "/proc/sysrq-trigger",
+    "/proc/kcore",
+    "/proc/kmsg",
+    "/proc/kallsyms",
+    "/sys/kernel",
+    "/etc/shadow",
+    "/etc/kubernetes/admin.conf",
 ]
 
 
 def parse_falco_json(filepath):
     alerts = []
-    with open(filepath, "r") as f:
+    with open(filepath) as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -39,13 +42,15 @@ def parse_falco_json(filepath):
             try:
                 evt = json.loads(line)
                 if any(tag in evt.get("tags", []) for tag in ["escape", "container"]):
-                    alerts.append({
-                        "time": evt.get("time", ""),
-                        "rule": evt.get("rule", ""),
-                        "priority": evt.get("priority", ""),
-                        "output": evt.get("output", ""),
-                        "output_fields": evt.get("output_fields", {}),
-                    })
+                    alerts.append(
+                        {
+                            "time": evt.get("time", ""),
+                            "rule": evt.get("rule", ""),
+                            "priority": evt.get("priority", ""),
+                            "output": evt.get("output", ""),
+                            "output_fields": evt.get("output_fields", {}),
+                        }
+                    )
             except json.JSONDecodeError:
                 continue
     return alerts
@@ -53,23 +58,30 @@ def parse_falco_json(filepath):
 
 def parse_auditd_escape_events(filepath):
     findings = []
-    escape_keys = {"container_escape", "container_mount", "kernel_module",
-                   "docker_socket", "process_trace"}
-    with open(filepath, "r") as f:
+    escape_keys = {
+        "container_escape",
+        "container_mount",
+        "kernel_module",
+        "docker_socket",
+        "process_trace",
+    }
+    with open(filepath) as f:
         for line in f:
             for key in escape_keys:
                 if f'key="{key}"' in line or f"key={key}" in line:
-                    timestamp = re.search(r'msg=audit\((\d+\.\d+):', line)
-                    syscall = re.search(r'syscall=(\w+)', line)
+                    timestamp = re.search(r"msg=audit\((\d+\.\d+):", line)
+                    syscall = re.search(r"syscall=(\w+)", line)
                     exe = re.search(r'exe="([^"]+)"', line)
-                    findings.append({
-                        "timestamp": timestamp.group(1) if timestamp else "",
-                        "key": key,
-                        "syscall": syscall.group(1) if syscall else "",
-                        "exe": exe.group(1) if exe else "",
-                        "severity": "CRITICAL",
-                        "raw": line.strip()[:200],
-                    })
+                    findings.append(
+                        {
+                            "timestamp": timestamp.group(1) if timestamp else "",
+                            "key": key,
+                            "syscall": syscall.group(1) if syscall else "",
+                            "exe": exe.group(1) if exe else "",
+                            "severity": "CRITICAL",
+                            "raw": line.strip()[:200],
+                        }
+                    )
     return findings
 
 
@@ -78,7 +90,10 @@ def check_privileged_containers():
     try:
         result = subprocess.run(
             ["docker", "ps", "--format", "{{.ID}} {{.Names}} {{.Image}}"],
-            capture_output=True, text=True, timeout=10)
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
         if result.returncode != 0:
             return containers
         for line in result.stdout.strip().split("\n"):
@@ -87,10 +102,17 @@ def check_privileged_containers():
             parts = line.split(None, 2)
             cid = parts[0]
             inspect = subprocess.run(
-                ["docker", "inspect", "--format",
-                 "{{.HostConfig.Privileged}} {{.HostConfig.PidMode}} "
-                 "{{range .HostConfig.Binds}}{{.}} {{end}}"],
-                capture_output=True, text=True, timeout=10)
+                [
+                    "docker",
+                    "inspect",
+                    "--format",
+                    "{{.HostConfig.Privileged}} {{.HostConfig.PidMode}} "
+                    "{{range .HostConfig.Binds}}{{.}} {{end}}",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
             if inspect.returncode == 0:
                 info = inspect.stdout.strip()
                 findings = []
@@ -101,27 +123,38 @@ def check_privileged_containers():
                 if "/var/run/docker.sock" in info:
                     findings.append("docker_socket_mounted")
                 if findings:
-                    containers.append({
-                        "container_id": cid,
-                        "name": parts[1] if len(parts) > 1 else "",
-                        "image": parts[2] if len(parts) > 2 else "",
-                        "escape_risks": findings,
-                        "severity": "CRITICAL" if "privileged_mode" in findings else "HIGH",
-                    })
+                    containers.append(
+                        {
+                            "container_id": cid,
+                            "name": parts[1] if len(parts) > 1 else "",
+                            "image": parts[2] if len(parts) > 2 else "",
+                            "escape_risks": findings,
+                            "severity": "CRITICAL" if "privileged_mode" in findings else "HIGH",
+                        }
+                    )
     except (subprocess.TimeoutExpired, FileNotFoundError):
         pass
     return containers
 
 
 def check_dangerous_capabilities(container_id):
-    dangerous_caps = {"SYS_ADMIN", "SYS_PTRACE", "NET_ADMIN", "SYS_RAWIO",
-                      "SYS_MODULE", "DAC_READ_SEARCH"}
+    dangerous_caps = {
+        "SYS_ADMIN",
+        "SYS_PTRACE",
+        "NET_ADMIN",
+        "SYS_RAWIO",
+        "SYS_MODULE",
+        "DAC_READ_SEARCH",
+    }
     try:
         result = subprocess.run(
             ["docker", "inspect", "--format", "{{.HostConfig.CapAdd}}", container_id],
-            capture_output=True, text=True, timeout=10)
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
         if result.returncode == 0:
-            caps = set(re.findall(r'\b([A-Z_]+)\b', result.stdout))
+            caps = set(re.findall(r"\b([A-Z_]+)\b", result.stdout))
             found = caps & dangerous_caps
             return [{"capability": c, "severity": "CRITICAL"} for c in found]
     except (subprocess.TimeoutExpired, FileNotFoundError):
@@ -133,8 +166,9 @@ def main():
     parser = argparse.ArgumentParser(description="Container Escape Detector")
     parser.add_argument("--falco-log", help="Path to Falco JSON output log")
     parser.add_argument("--audit-log", help="Path to auditd log file")
-    parser.add_argument("--check-containers", action="store_true",
-                        help="Check running containers for escape risks")
+    parser.add_argument(
+        "--check-containers", action="store_true", help="Check running containers for escape risks"
+    )
     parser.add_argument("--container-id", help="Check specific container capabilities")
     args = parser.parse_args()
 

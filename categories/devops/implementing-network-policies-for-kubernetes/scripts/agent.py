@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Kubernetes Network Policy Agent - audits pod-to-pod communication and network policy coverage."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
-from collections import defaultdict
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -43,12 +42,14 @@ def analyze_policy_coverage(policies, pods):
         spec = item.get("spec", {})
         selector = spec.get("podSelector", {}).get("matchLabels", {})
         policy_types = spec.get("policyTypes", [])
-        policy_selectors.append({
-            "namespace": ns,
-            "selector": selector,
-            "ingress": "Ingress" in policy_types or spec.get("ingress") is not None,
-            "egress": "Egress" in policy_types or spec.get("egress") is not None,
-        })
+        policy_selectors.append(
+            {
+                "namespace": ns,
+                "selector": selector,
+                "ingress": "Ingress" in policy_types or spec.get("ingress") is not None,
+                "egress": "Egress" in policy_types or spec.get("egress") is not None,
+            }
+        )
     covered_pods = set()
     uncovered_pods = []
     for pod in pods.get("items", []):
@@ -90,13 +91,25 @@ def detect_overly_permissive_policies(policies):
             ingress_rules = spec.get("ingress", [])
             for rule in ingress_rules:
                 if not rule.get("from"):
-                    findings.append({"policy": name, "namespace": ns,
-                                   "issue": "allows_all_ingress", "severity": "high"})
+                    findings.append(
+                        {
+                            "policy": name,
+                            "namespace": ns,
+                            "issue": "allows_all_ingress",
+                            "severity": "high",
+                        }
+                    )
             egress_rules = spec.get("egress", [])
             for rule in egress_rules:
                 if not rule.get("to"):
-                    findings.append({"policy": name, "namespace": ns,
-                                   "issue": "allows_all_egress", "severity": "medium"})
+                    findings.append(
+                        {
+                            "policy": name,
+                            "namespace": ns,
+                            "issue": "allows_all_egress",
+                            "severity": "medium",
+                        }
+                    )
     return findings
 
 
@@ -105,8 +118,11 @@ def analyze_namespace_isolation(policies, namespaces):
     ns_with_deny = set()
     for item in policies.get("items", []):
         spec = item.get("spec", {})
-        if (not spec.get("podSelector", {}).get("matchLabels") and
-            not spec.get("ingress") and "Ingress" in spec.get("policyTypes", [])):
+        if (
+            not spec.get("podSelector", {}).get("matchLabels")
+            and not spec.get("ingress")
+            and "Ingress" in spec.get("policyTypes", [])
+        ):
             ns_with_deny.add(item.get("metadata", {}).get("namespace", ""))
     all_ns = [ns.get("metadata", {}).get("name", "") for ns in namespaces.get("items", [])]
     system_ns = {"kube-system", "kube-public", "kube-node-lease"}
@@ -146,10 +162,12 @@ def main():
     report = generate_report(policies, pods, namespaces)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("K8s NetPol: %.1f%% pod coverage, %.1f%% namespace isolation, %d findings",
-                report["pod_coverage"]["coverage_percent"],
-                report["namespace_isolation"]["isolation_percent"],
-                report["total_findings"])
+    logger.info(
+        "K8s NetPol: %.1f%% pod coverage, %.1f%% namespace isolation, %d findings",
+        report["pod_coverage"]["coverage_percent"],
+        report["namespace_isolation"]["isolation_percent"],
+        report["total_findings"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

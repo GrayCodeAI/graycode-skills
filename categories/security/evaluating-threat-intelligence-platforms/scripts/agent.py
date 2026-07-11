@@ -2,10 +2,10 @@
 """Threat Intelligence Platform evaluation agent for MISP, OpenCTI, and ThreatConnect."""
 
 import json
-import sys
-import urllib.request
-import urllib.parse
 import ssl
+import sys
+import urllib.parse
+import urllib.request
 from datetime import datetime
 
 
@@ -17,7 +17,10 @@ class TIPEvaluator:
             "stix_support": {"weight": 10, "description": "STIX 2.1 import/export support"},
             "taxii_server": {"weight": 8, "description": "TAXII 2.1 server capability"},
             "rest_api": {"weight": 9, "description": "RESTful API for automation"},
-            "deduplication": {"weight": 7, "description": "Indicator deduplication and TTL management"},
+            "deduplication": {
+                "weight": 7,
+                "description": "Indicator deduplication and TTL management",
+            },
             "tlp_enforcement": {"weight": 8, "description": "TLP classification enforcement"},
             "attack_mapping": {"weight": 6, "description": "MITRE ATT&CK integration"},
             "graph_viz": {"weight": 5, "description": "Graph visualization of relationships"},
@@ -53,14 +56,16 @@ class TIPEvaluator:
                 weight = info["weight"]
                 total_weight += weight
                 weighted_score += score * weight
-                details.append({
-                    "category": category,
-                    "criterion": criterion,
-                    "description": info["description"],
-                    "score": score,
-                    "weight": weight,
-                    "weighted": score * weight,
-                })
+                details.append(
+                    {
+                        "category": category,
+                        "criterion": criterion,
+                        "description": info["description"],
+                        "score": score,
+                        "weight": weight,
+                        "weighted": score * weight,
+                    }
+                )
 
         final_score = round(weighted_score / total_weight, 1) if total_weight > 0 else 0
         return {
@@ -76,10 +81,12 @@ class TIPEvaluator:
         """Compare multiple TIP platform evaluations side by side."""
         comparison = []
         for eval_result in evaluations:
-            comparison.append({
-                "platform": eval_result["platform"],
-                "overall_score": eval_result["overall_score"],
-            })
+            comparison.append(
+                {
+                    "platform": eval_result["platform"],
+                    "overall_score": eval_result["overall_score"],
+                }
+            )
         comparison.sort(key=lambda x: x["overall_score"], reverse=True)
         return {"ranking": comparison, "count": len(comparison)}
 
@@ -100,10 +107,13 @@ def test_misp_api(misp_url, api_key, verify_ssl=False):
 
     for name, path in endpoints.items():
         url = f"{misp_url.rstrip('/')}{path}"
-        req = urllib.request.Request(url, headers={
-            "Authorization": api_key,
-            "Accept": "application/json",
-        })
+        req = urllib.request.Request(
+            url,
+            headers={
+                "Authorization": api_key,
+                "Accept": "application/json",
+            },
+        )
         try:
             with urllib.request.urlopen(req, context=ctx, timeout=15) as resp:
                 results[name] = {
@@ -166,30 +176,63 @@ def generate_comparison_report():
     evaluator = TIPEvaluator()
 
     misp_scores = {
-        "stix_support": 9, "taxii_server": 7, "rest_api": 9, "deduplication": 7,
-        "tlp_enforcement": 9, "attack_mapping": 6, "graph_viz": 5,
-        "siem_integration": 7, "edr_integration": 5, "soar_integration": 6,
-        "firewall_integration": 7, "feed_ingestion": 9,
-        "analyst_workflow": 5, "reporting": 5, "sharing": 10,
-        "rbac": 6, "audit_logging": 5,
+        "stix_support": 9,
+        "taxii_server": 7,
+        "rest_api": 9,
+        "deduplication": 7,
+        "tlp_enforcement": 9,
+        "attack_mapping": 6,
+        "graph_viz": 5,
+        "siem_integration": 7,
+        "edr_integration": 5,
+        "soar_integration": 6,
+        "firewall_integration": 7,
+        "feed_ingestion": 9,
+        "analyst_workflow": 5,
+        "reporting": 5,
+        "sharing": 10,
+        "rbac": 6,
+        "audit_logging": 5,
     }
 
     opencti_scores = {
-        "stix_support": 10, "taxii_server": 9, "rest_api": 9, "deduplication": 8,
-        "tlp_enforcement": 9, "attack_mapping": 10, "graph_viz": 10,
-        "siem_integration": 7, "edr_integration": 6, "soar_integration": 7,
-        "firewall_integration": 6, "feed_ingestion": 8,
-        "analyst_workflow": 8, "reporting": 7, "sharing": 8,
-        "rbac": 8, "audit_logging": 7,
+        "stix_support": 10,
+        "taxii_server": 9,
+        "rest_api": 9,
+        "deduplication": 8,
+        "tlp_enforcement": 9,
+        "attack_mapping": 10,
+        "graph_viz": 10,
+        "siem_integration": 7,
+        "edr_integration": 6,
+        "soar_integration": 7,
+        "firewall_integration": 6,
+        "feed_ingestion": 8,
+        "analyst_workflow": 8,
+        "reporting": 7,
+        "sharing": 8,
+        "rbac": 8,
+        "audit_logging": 7,
     }
 
     threatconnect_scores = {
-        "stix_support": 8, "taxii_server": 8, "rest_api": 9, "deduplication": 9,
-        "tlp_enforcement": 8, "attack_mapping": 8, "graph_viz": 8,
-        "siem_integration": 9, "edr_integration": 8, "soar_integration": 9,
-        "firewall_integration": 8, "feed_ingestion": 9,
-        "analyst_workflow": 9, "reporting": 9, "sharing": 7,
-        "rbac": 9, "audit_logging": 9,
+        "stix_support": 8,
+        "taxii_server": 8,
+        "rest_api": 9,
+        "deduplication": 9,
+        "tlp_enforcement": 8,
+        "attack_mapping": 8,
+        "graph_viz": 8,
+        "siem_integration": 9,
+        "edr_integration": 8,
+        "soar_integration": 9,
+        "firewall_integration": 8,
+        "feed_ingestion": 9,
+        "analyst_workflow": 9,
+        "reporting": 9,
+        "sharing": 7,
+        "rbac": 9,
+        "audit_logging": 9,
     }
 
     results = [
@@ -208,6 +251,7 @@ def generate_comparison_report():
 
 if __name__ == "__main__":
     import os
+
     action = sys.argv[1] if len(sys.argv) > 1 else "compare"
     if action == "compare":
         print(json.dumps(generate_comparison_report(), indent=2, default=str))

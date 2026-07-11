@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Agent for implementing zero-knowledge proof authentication using Schnorr protocol."""
 
-import hashlib
-import secrets
-import json
 import argparse
-import sys
+import hashlib
+import json
+import secrets
 from datetime import datetime
-
 
 # Safe prime and generator for discrete log ZKP
 SAFE_PRIME = 0xFFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE45B3DC2007CB8A163BF0598DA48361C55D39A69163FA8FD24CF5F83655D23DCA3AD961C62F356208552BB9ED529077096966D670C354E4ABC9804F1746C08CA18217C32905E462E36CE3BE39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9DE2BCBF6955817183995497CEA956AE515D2261898FA051015728E5A8AACAA68FFFFFFFFFFFFFFFF
@@ -18,7 +16,7 @@ def generate_keypair():
     """Generate a ZKP key pair (private key x, public key y = g^x mod p)."""
     x = secrets.randbelow(SAFE_PRIME - 2) + 1
     y = pow(GENERATOR, x, SAFE_PRIME)
-    print(f"[*] Generated key pair")
+    print("[*] Generated key pair")
     print(f"  Public key (y): {hex(y)[:40]}...")
     return x, y
 
@@ -39,7 +37,7 @@ def schnorr_verify(public_key, proof):
     r, c, s = proof["commitment"], proof["challenge"], proof["response"]
     lhs = pow(GENERATOR, s, SAFE_PRIME) * pow(public_key, c, SAFE_PRIME) % SAFE_PRIME
     valid = lhs == r
-    print(f"  [{'+'if valid else '!'}] Verification: {'PASSED' if valid else 'FAILED'}")
+    print(f"  [{'+' if valid else '!'}] Verification: {'PASSED' if valid else 'FAILED'}")
     return valid
 
 
@@ -49,7 +47,7 @@ def zkp_password_register(password):
     pwd_hash = hashlib.pbkdf2_hmac("sha256", password.encode(), salt.encode(), 100000)
     x = int.from_bytes(pwd_hash, "big") % (SAFE_PRIME - 2) + 1
     y = pow(GENERATOR, x, SAFE_PRIME)
-    print(f"[*] Registered user (server stores salt + public key, never the password)")
+    print("[*] Registered user (server stores salt + public key, never the password)")
     return {"salt": salt, "public_key": y, "private_key": x}
 
 
@@ -69,7 +67,7 @@ def run_protocol_demo(rounds=5):
     x, y = generate_keypair()
     successes = 0
     for i in range(rounds):
-        print(f"\n[*] Round {i+1}/{rounds}")
+        print(f"\n[*] Round {i + 1}/{rounds}")
         proof = schnorr_prove(x)
         if schnorr_verify(y, proof):
             successes += 1

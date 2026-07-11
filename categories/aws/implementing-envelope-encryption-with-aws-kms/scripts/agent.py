@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Agent for implementing envelope encryption using AWS KMS."""
 
-import json
 import argparse
-import os
 import base64
-from datetime import datetime
+import json
+import os
 
 try:
     import boto3
@@ -87,7 +86,7 @@ def encrypt_file(input_path, output_path, kms_key_id, region="us-east-1"):
 
 def decrypt_file(input_path, output_path, region="us-east-1"):
     """Decrypt an envelope-encrypted file."""
-    with open(input_path, "r") as f:
+    with open(input_path) as f:
         envelope = json.load(f)
     plaintext = decrypt_data(envelope, region)
     with open(output_path, "wb") as f:
@@ -105,14 +104,16 @@ def list_kms_keys(region="us-east-1"):
             try:
                 desc = kms.describe_key(KeyId=key["KeyId"])
                 meta = desc["KeyMetadata"]
-                keys.append({
-                    "key_id": meta["KeyId"],
-                    "arn": meta["Arn"],
-                    "description": meta.get("Description", ""),
-                    "state": meta["KeyState"],
-                    "key_usage": meta["KeyUsage"],
-                    "origin": meta["Origin"],
-                })
+                keys.append(
+                    {
+                        "key_id": meta["KeyId"],
+                        "arn": meta["Arn"],
+                        "description": meta.get("Description", ""),
+                        "state": meta["KeyState"],
+                        "key_usage": meta["KeyUsage"],
+                        "origin": meta["Origin"],
+                    }
+                )
             except ClientError:
                 keys.append({"key_id": key["KeyId"], "error": "access denied"})
     return {"keys": keys, "total": len(keys)}
@@ -126,11 +127,13 @@ def audit_key_policy(key_id, region="us-east-1"):
     for stmt in policy.get("Statement", []):
         principal = stmt.get("Principal", {})
         if principal == "*" or principal.get("AWS") == "*":
-            findings.append({
-                "severity": "HIGH",
-                "finding": "Key policy allows access to all AWS principals",
-                "statement_id": stmt.get("Sid", "unknown"),
-            })
+            findings.append(
+                {
+                    "severity": "HIGH",
+                    "finding": "Key policy allows access to all AWS principals",
+                    "statement_id": stmt.get("Sid", "unknown"),
+                }
+            )
     return {"key_id": key_id, "policy": policy, "findings": findings}
 
 

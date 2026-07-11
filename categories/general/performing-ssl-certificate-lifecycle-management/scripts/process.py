@@ -16,22 +16,20 @@ Usage:
     python process.py verify-chain --cert ./server.crt --ca-bundle ./ca-bundle.crt
 """
 
-import os
-import ssl
-import sys
-import json
-import socket
 import argparse
-import logging
 import datetime
+import json
+import logging
+import socket
+import ssl
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Optional
 
 from cryptography import x509
-from cryptography.x509.oid import NameOID, ExtensionOID
+from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec, rsa
-from cryptography.hazmat.backends import default_backend
+from cryptography.x509.oid import ExtensionOID, NameOID
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -44,9 +42,9 @@ def generate_csr(
     domain: str,
     output_dir: str,
     key_type: str = "ecdsa",
-    san_domains: Optional[List[str]] = None,
+    san_domains: Optional[list[str]] = None,
     organization: Optional[str] = None,
-) -> Dict:
+) -> dict:
     """Generate a private key and CSR for a domain."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -102,7 +100,7 @@ def generate_csr(
     }
 
 
-def parse_certificate(cert_path: str) -> Dict:
+def parse_certificate(cert_path: str) -> dict:
     """Parse an X.509 certificate and extract key information."""
     cert_data = Path(cert_path).read_bytes()
 
@@ -154,7 +152,7 @@ def parse_certificate(cert_path: str) -> Dict:
     }
 
 
-def check_remote_certificate(host: str, port: int = 443, timeout: int = 10) -> Dict:
+def check_remote_certificate(host: str, port: int = 443, timeout: int = 10) -> dict:
     """Check the TLS certificate of a remote host."""
     result = {
         "host": host,
@@ -212,7 +210,7 @@ def check_remote_certificate(host: str, port: int = 443, timeout: int = 10) -> D
     return result
 
 
-def monitor_domains(domains: List[str], threshold_days: int = 30) -> Dict:
+def monitor_domains(domains: list[str], threshold_days: int = 30) -> dict:
     """Monitor certificate expiration for multiple domains."""
     results = {
         "scan_time": datetime.datetime.utcnow().isoformat() + "Z",
@@ -253,7 +251,7 @@ def monitor_domains(domains: List[str], threshold_days: int = 30) -> Dict:
     return results
 
 
-def verify_certificate_chain(cert_path: str, ca_bundle_path: str) -> Dict:
+def verify_certificate_chain(cert_path: str, ca_bundle_path: str) -> dict:
     """Verify a certificate chain against a CA bundle."""
     cert_data = Path(cert_path).read_bytes()
     ca_data = Path(ca_bundle_path).read_bytes()
@@ -270,17 +268,21 @@ def verify_certificate_chain(cert_path: str, ca_bundle_path: str) -> Dict:
 
     chain = []
     current = cert
-    chain.append({
-        "subject": current.subject.rfc4514_string(),
-        "issuer": current.issuer.rfc4514_string(),
-    })
+    chain.append(
+        {
+            "subject": current.subject.rfc4514_string(),
+            "issuer": current.issuer.rfc4514_string(),
+        }
+    )
 
     for ca in ca_certs:
         if current.issuer == ca.subject:
-            chain.append({
-                "subject": ca.subject.rfc4514_string(),
-                "issuer": ca.issuer.rfc4514_string(),
-            })
+            chain.append(
+                {
+                    "subject": ca.subject.rfc4514_string(),
+                    "issuer": ca.issuer.rfc4514_string(),
+                }
+            )
             current = ca
             if ca.issuer == ca.subject:
                 break

@@ -2,13 +2,10 @@
 """Agent for detecting QR code phishing (quishing) in email attachments and bodies."""
 
 import argparse
-import base64
 import email
-import hashlib
 import json
 import os
 import re
-import sys
 from datetime import datetime, timezone
 from email import policy
 from urllib.parse import urlparse
@@ -16,26 +13,52 @@ from urllib.parse import urlparse
 try:
     from PIL import Image
     from pyzbar.pyzbar import decode as qr_decode
+
     HAS_QR = True
 except ImportError:
     HAS_QR = False
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
 
 
 SUSPICIOUS_TLDS = {
-    ".xyz", ".top", ".club", ".work", ".buzz", ".tk", ".ml", ".ga", ".cf",
-    ".gq", ".info", ".online", ".site", ".icu",
+    ".xyz",
+    ".top",
+    ".club",
+    ".work",
+    ".buzz",
+    ".tk",
+    ".ml",
+    ".ga",
+    ".cf",
+    ".gq",
+    ".info",
+    ".online",
+    ".site",
+    ".icu",
 }
 
 PHISHING_KEYWORDS = [
-    "verify", "account", "suspended", "confirm", "urgent", "expire",
-    "password", "login", "credential", "security", "update", "click",
-    "immediate", "unauthorized", "invoice",
+    "verify",
+    "account",
+    "suspended",
+    "confirm",
+    "urgent",
+    "expire",
+    "password",
+    "login",
+    "credential",
+    "security",
+    "update",
+    "click",
+    "immediate",
+    "unauthorized",
+    "invoice",
 ]
 
 
@@ -60,6 +83,7 @@ def decode_qr_from_bytes(image_data):
     if not HAS_QR:
         return []
     import io
+
     img = Image.open(io.BytesIO(image_data))
     results = qr_decode(img)
     return [r.data.decode("utf-8", errors="replace") for r in results]
@@ -159,9 +183,7 @@ def scan_directory(dir_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Detect QR code phishing (quishing) in emails"
-    )
+    parser = argparse.ArgumentParser(description="Detect QR code phishing (quishing) in emails")
     parser.add_argument("input", help="Path to .eml file or directory of .eml files")
     parser.add_argument("--output", "-o", help="Output JSON report path")
     parser.add_argument("--verbose", "-v", action="store_true")

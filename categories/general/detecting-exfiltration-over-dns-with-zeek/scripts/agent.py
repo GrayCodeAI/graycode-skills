@@ -4,16 +4,25 @@
 import argparse
 import json
 import math
-import sys
 from collections import defaultdict
 
-
 SAFE_DOMAINS = {
-    "in-addr.arpa", "ip6.arpa", "local", "localhost",
-    "google.com", "googleapis.com", "gstatic.com",
-    "microsoft.com", "windows.net", "windowsupdate.com",
-    "apple.com", "icloud.com", "akamai.net", "cloudflare.com",
-    "amazonaws.com", "azure.com",
+    "in-addr.arpa",
+    "ip6.arpa",
+    "local",
+    "localhost",
+    "google.com",
+    "googleapis.com",
+    "gstatic.com",
+    "microsoft.com",
+    "windows.net",
+    "windowsupdate.com",
+    "apple.com",
+    "icloud.com",
+    "akamai.net",
+    "cloudflare.com",
+    "amazonaws.com",
+    "azure.com",
 }
 
 
@@ -35,18 +44,17 @@ def parse_zeek_dns_log(log_path: str) -> list:
     records = []
     field_names = []
     separator = "\t"
-    with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+    with open(log_path, encoding="utf-8", errors="replace") as f:
         for line in f:
             line = line.rstrip("\n")
             if line.startswith("#separator"):
                 sep_value = line.split(" ", 1)[1] if " " in line else "\\x09"
-                if sep_value == "\\x09":
-                    separator = "\t"
-                else:
-                    separator = sep_value
+                separator = "\t" if sep_value == "\\x09" else sep_value
                 continue
             if line.startswith("#fields"):
-                field_names = line.split(separator)[1:] if separator == "\t" else line.split("\t")[1:]
+                field_names = (
+                    line.split(separator)[1:] if separator == "\t" else line.split("\t")[1:]
+                )
                 field_names = [f.strip() for f in field_names]
                 continue
             if line.startswith("#"):
@@ -77,18 +85,21 @@ def extract_subdomain(fqdn: str, levels: int = 2) -> str:
     return ".".join(parts[:-levels])
 
 
-def analyze_dns_log(log_path: str, entropy_threshold: float, subdomain_threshold: int,
-                    label_length_threshold: int) -> dict:
+def analyze_dns_log(
+    log_path: str, entropy_threshold: float, subdomain_threshold: int, label_length_threshold: int
+) -> dict:
     records = parse_zeek_dns_log(log_path)
-    domain_stats = defaultdict(lambda: {
-        "subdomains": set(),
-        "entropies": [],
-        "max_label_len": 0,
-        "source_ips": set(),
-        "query_count": 0,
-        "qtypes": defaultdict(int),
-        "sample_queries": [],
-    })
+    domain_stats = defaultdict(
+        lambda: {
+            "subdomains": set(),
+            "entropies": [],
+            "max_label_len": 0,
+            "source_ips": set(),
+            "query_count": 0,
+            "qtypes": defaultdict(int),
+            "sample_queries": [],
+        }
+    )
 
     total_queries = 0
     for rec in records:
@@ -158,18 +169,20 @@ def analyze_dns_log(log_path: str, entropy_threshold: float, subdomain_threshold
             risk_score += 1.0
         risk_score = min(round(risk_score, 1), 10.0)
 
-        flagged.append({
-            "domain": domain,
-            "unique_subdomains": unique_count,
-            "avg_entropy": avg_entropy,
-            "max_label_length": max_label,
-            "query_count": stats["query_count"],
-            "source_ips": sorted(stats["source_ips"]),
-            "qtypes": dict(stats["qtypes"]),
-            "risk_score": risk_score,
-            "indicators": indicators,
-            "sample_queries": stats["sample_queries"],
-        })
+        flagged.append(
+            {
+                "domain": domain,
+                "unique_subdomains": unique_count,
+                "avg_entropy": avg_entropy,
+                "max_label_length": max_label,
+                "query_count": stats["query_count"],
+                "source_ips": sorted(stats["source_ips"]),
+                "qtypes": dict(stats["qtypes"]),
+                "risk_score": risk_score,
+                "indicators": indicators,
+                "sample_queries": stats["sample_queries"],
+            }
+        )
 
     flagged.sort(key=lambda x: x["risk_score"], reverse=True)
     return {
@@ -189,18 +202,30 @@ def analyze_dns_log(log_path: str, entropy_threshold: float, subdomain_threshold
 def main():
     parser = argparse.ArgumentParser(description="DNS Exfiltration Detection from Zeek dns.log")
     parser.add_argument("--log-file", required=True, help="Path to Zeek dns.log file")
-    parser.add_argument("--entropy-threshold", type=float, default=3.5,
-                        help="Shannon entropy threshold for flagging (default: 3.5)")
-    parser.add_argument("--subdomain-threshold", type=int, default=50,
-                        help="Unique subdomain count threshold (default: 50)")
-    parser.add_argument("--label-length-threshold", type=int, default=52,
-                        help="DNS label length threshold for flagging (default: 52)")
-    parser.add_argument("--output", type=str, default=None,
-                        help="Output JSON file path")
+    parser.add_argument(
+        "--entropy-threshold",
+        type=float,
+        default=3.5,
+        help="Shannon entropy threshold for flagging (default: 3.5)",
+    )
+    parser.add_argument(
+        "--subdomain-threshold",
+        type=int,
+        default=50,
+        help="Unique subdomain count threshold (default: 50)",
+    )
+    parser.add_argument(
+        "--label-length-threshold",
+        type=int,
+        default=52,
+        help="DNS label length threshold for flagging (default: 52)",
+    )
+    parser.add_argument("--output", type=str, default=None, help="Output JSON file path")
     args = parser.parse_args()
 
-    result = analyze_dns_log(args.log_file, args.entropy_threshold,
-                             args.subdomain_threshold, args.label_length_threshold)
+    result = analyze_dns_log(
+        args.log_file, args.entropy_threshold, args.subdomain_threshold, args.label_length_threshold
+    )
     report = json.dumps(result, indent=2)
 
     if args.output:

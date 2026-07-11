@@ -10,10 +10,9 @@ WARNING: Only use with explicit written authorization on isolated test networks.
 import json
 import subprocess
 import sys
-import time
 from datetime import datetime, timezone
 
-from scapy.all import IP, TCP, UDP, Raw, send, RandShort
+from scapy.all import IP, UDP, RandShort, Raw, send
 
 
 def run_cmd(cmd: list[str]) -> dict:
@@ -27,11 +26,24 @@ def run_cmd(cmd: list[str]) -> dict:
 
 def setup_tc_throttle(interface: str, rate: str = "100kbit", latency: str = "200ms") -> dict:
     """Configure tc (traffic control) to throttle bandwidth on an interface."""
-    clear = run_cmd(["tc", "qdisc", "del", "dev", interface, "root"])
-    result = run_cmd([
-        "tc", "qdisc", "add", "dev", interface, "root", "netem",
-        "rate", rate, "delay", latency, "loss", "5%",
-    ])
+    run_cmd(["tc", "qdisc", "del", "dev", interface, "root"])
+    result = run_cmd(
+        [
+            "tc",
+            "qdisc",
+            "add",
+            "dev",
+            interface,
+            "root",
+            "netem",
+            "rate",
+            rate,
+            "delay",
+            latency,
+            "loss",
+            "5%",
+        ]
+    )
     return {
         "interface": interface,
         "rate_limit": rate,
@@ -45,11 +57,15 @@ def setup_tc_throttle(interface: str, rate: str = "100kbit", latency: str = "200
 def remove_tc_throttle(interface: str) -> dict:
     """Remove tc throttling rules from interface."""
     result = run_cmd(["tc", "qdisc", "del", "dev", interface, "root"])
-    return {"removed": result["success"], "error": result["stderr"] if not result["success"] else ""}
+    return {
+        "removed": result["success"],
+        "error": result["stderr"] if not result["success"] else "",
+    }
 
 
-def generate_bandwidth_flood(target_ip: str, target_port: int, packet_count: int = 100,
-                              packet_size: int = 1400) -> dict:
+def generate_bandwidth_flood(
+    target_ip: str, target_port: int, packet_count: int = 100, packet_size: int = 1400
+) -> dict:
     """Generate controlled bandwidth consumption traffic using Scapy."""
     payload = Raw(load=b"X" * packet_size)
     packets_sent = 0
@@ -118,7 +134,11 @@ def generate_report(baseline: dict, throttle: dict, flood: dict, post_baseline: 
 
     if baseline.get("bandwidth_mbps") and post_baseline.get("bandwidth_mbps"):
         degradation = baseline["bandwidth_mbps"] - post_baseline["bandwidth_mbps"]
-        pct = round(degradation / baseline["bandwidth_mbps"] * 100, 1) if baseline["bandwidth_mbps"] > 0 else 0
+        pct = (
+            round(degradation / baseline["bandwidth_mbps"] * 100, 1)
+            if baseline["bandwidth_mbps"] > 0
+            else 0
+        )
         lines.append(f"  Bandwidth Degradation: {degradation:.2f} Mbps ({pct}% reduction)")
 
     return "\n".join(lines)

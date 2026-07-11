@@ -6,10 +6,11 @@ WPA handshake capture, deauthentication testing, and generates
 a wireless security assessment report.
 """
 
-import subprocess
+import contextlib
 import json
-import sys
 import re
+import subprocess
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -27,8 +28,8 @@ class WirelessPentestAgent:
     def enable_monitor_mode(self):
         """Put wireless interface into monitor mode using airmon-ng."""
         result = subprocess.run(
-            ["airmon-ng", "start", self.interface],
-            capture_output=True, text=True, timeout=30)
+            ["airmon-ng", "start", self.interface], capture_output=True, text=True, timeout=30
+        )
         mon_iface = f"{self.interface}mon"
         match = re.search(r"monitor mode.*enabled on (\w+)", result.stdout)
         if match:
@@ -39,13 +40,22 @@ class WirelessPentestAgent:
     def scan_networks(self, duration=30):
         """Scan for wireless networks using airodump-ng."""
         csv_prefix = str(self.output_dir / "scan")
-        try:
+        with contextlib.suppress(subprocess.TimeoutExpired):
             subprocess.run(
-                ["airodump-ng", self.interface, "-w", csv_prefix,
-                 "--output-format", "csv", "--write-interval", "1"],
-                capture_output=True, text=True, timeout=duration)
-        except subprocess.TimeoutExpired:
-            pass
+                [
+                    "airodump-ng",
+                    self.interface,
+                    "-w",
+                    csv_prefix,
+                    "--output-format",
+                    "csv",
+                    "--write-interval",
+                    "1",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=duration,
+            )
 
         csv_file = Path(f"{csv_prefix}-01.csv")
         if csv_file.exists():
@@ -68,18 +78,25 @@ class WirelessPentestAgent:
                     parts = [p.strip() for p in line.split(",")]
                     if len(parts) >= 14:
                         enc = parts[5].strip()
-                        networks.append({
-                            "bssid": parts[0], "channel": parts[3],
-                            "encryption": enc, "essid": parts[13],
-                            "power": parts[8],
-                        })
+                        networks.append(
+                            {
+                                "bssid": parts[0],
+                                "channel": parts[3],
+                                "encryption": enc,
+                                "essid": parts[13],
+                                "power": parts[8],
+                            }
+                        )
                         if enc in ("OPN", "WEP", ""):
-                            self.findings.append({
-                                "type": "Weak Encryption",
-                                "severity": "Critical" if enc in ("OPN", "") else "High",
-                                "bssid": parts[0], "essid": parts[13],
-                                "encryption": enc or "Open",
-                            })
+                            self.findings.append(
+                                {
+                                    "type": "Weak Encryption",
+                                    "severity": "Critical" if enc in ("OPN", "") else "High",
+                                    "bssid": parts[0],
+                                    "essid": parts[13],
+                                    "encryption": enc or "Open",
+                                }
+                            )
         except (IndexError, UnicodeDecodeError):
             pass
         return networks
@@ -87,38 +104,44 @@ class WirelessPentestAgent:
     def capture_handshake(self, bssid, channel, duration=60):
         """Capture WPA/WPA2 4-way handshake."""
         cap_prefix = str(self.output_dir / "handshake")
-        try:
+        with contextlib.suppress(subprocess.TimeoutExpired):
             subprocess.run(
-                ["airodump-ng", self.interface, "--bssid", bssid,
-                 "-c", str(channel), "-w", cap_prefix],
-                capture_output=True, timeout=duration)
-        except subprocess.TimeoutExpired:
-            pass
+                [
+                    "airodump-ng",
+                    self.interface,
+                    "--bssid",
+                    bssid,
+                    "-c",
+                    str(channel),
+                    "-w",
+                    cap_prefix,
+                ],
+                capture_output=True,
+                timeout=duration,
+            )
         cap_file = Path(f"{cap_prefix}-01.cap")
         return {"capture_file": str(cap_file), "exists": cap_file.exists()}
 
     def crack_handshake(self, cap_file, wordlist):
         """Attempt to crack WPA handshake with aircrack-ng."""
         result = subprocess.run(
-            ["aircrack-ng", cap_file, "-w", wordlist],
-            capture_output=True, text=True, timeout=600)
+            ["aircrack-ng", cap_file, "-w", wordlist], capture_output=True, text=True, timeout=600
+        )
         if "KEY FOUND" in result.stdout:
             match = re.search(r"KEY FOUND! \[ (.+?) \]", result.stdout)
             key = match.group(1) if match else "unknown"
-            self.findings.append({"type": "WPA Key Cracked",
-                                  "severity": "Critical", "key": key})
+            self.findings.append({"type": "WPA Key Cracked", "severity": "Critical", "key": key})
             return {"cracked": True, "key": key}
         return {"cracked": False}
 
     def test_wps(self, bssid):
         """Test WPS PIN vulnerability using reaver/wash."""
         result = subprocess.run(
-            ["wash", "-i", self.interface], capture_output=True,
-            text=True, timeout=30)
+            ["wash", "-i", self.interface], capture_output=True, text=True, timeout=30
+        )
         wps_enabled = bssid in result.stdout
         if wps_enabled:
-            self.findings.append({"type": "WPS Enabled", "severity": "High",
-                                  "bssid": bssid})
+            self.findings.append({"type": "WPS Enabled", "severity": "High", "bssid": bssid})
         return {"wps_enabled": wps_enabled}
 
     def generate_report(self):

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Agent for analyzing Cobalt Strike malleable C2 profiles and JARM fingerprinting."""
 
-import os
-import json
-import subprocess
 import argparse
-from pathlib import Path
+import json
+import os
+import subprocess
 from datetime import datetime
+from pathlib import Path
 
 from malleablec2 import Profile
 
@@ -21,8 +21,17 @@ def extract_profile_indicators(profile_path):
         "source_lines": len(content.splitlines()),
         "reconstructed": str(profile),
     }
-    keywords = ["sleeptime", "jitter", "useragent", "pipename", "host_stage",
-                "dns_idle", "dns_sleep", "spawnto_x86", "spawnto_x64"]
+    keywords = [
+        "sleeptime",
+        "jitter",
+        "useragent",
+        "pipename",
+        "host_stage",
+        "dns_idle",
+        "dns_sleep",
+        "spawnto_x86",
+        "spawnto_x64",
+    ]
     options = {}
     for kw in keywords:
         for line in content.splitlines():
@@ -63,10 +72,8 @@ def scan_directory_profiles(directory):
 
 
 KNOWN_CS_JARM = {
-    "07d14d16d21d21d07c42d41d00041d24a458a375eef0c576d23a7bab9a9fb1":
-        "Cobalt Strike (default)",
-    "07d14d16d21d21d00042d41d00041de5fb3038104f457d92ba02e9311512c2":
-        "Cobalt Strike (Java 11)",
+    "07d14d16d21d21d07c42d41d00041d24a458a375eef0c576d23a7bab9a9fb1": "Cobalt Strike (default)",
+    "07d14d16d21d21d00042d41d00041de5fb3038104f457d92ba02e9311512c2": "Cobalt Strike (Java 11)",
 }
 
 
@@ -76,7 +83,9 @@ def compute_jarm_fingerprint(host, port=443):
     try:
         result = subprocess.run(
             ["python3", jarm_script, host, "-p", str(port)],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
         for line in result.stdout.splitlines():
             if len(line.strip()) >= 62:
@@ -112,7 +121,7 @@ def generate_snort_rules(indicators_list):
     for ind in indicators_list:
         for uri in ind.get("uris", []):
             rules.append(
-                f'alert http $HOME_NET any -> $EXTERNAL_NET any '
+                f"alert http $HOME_NET any -> $EXTERNAL_NET any "
                 f'(msg:"CS Beacon URI {uri}"; '
                 f'content:"{uri}"; http_uri; sid:{sid}; rev:1;)'
             )
@@ -120,7 +129,7 @@ def generate_snort_rules(indicators_list):
         ua = ind.get("global_options", {}).get("useragent", "")
         if ua:
             rules.append(
-                f'alert http $HOME_NET any -> $EXTERNAL_NET any '
+                f"alert http $HOME_NET any -> $EXTERNAL_NET any "
                 f'(msg:"CS Beacon User-Agent"; '
                 f'content:"{ua}"; http_header; sid:{sid}; rev:1;)'
             )
@@ -134,9 +143,11 @@ def main():
     parser.add_argument("--directory", help="Directory of malleable profiles")
     parser.add_argument("--jarm-targets", nargs="*", help="Hosts to JARM fingerprint")
     parser.add_argument("--output", default="cs_analysis_report.json")
-    parser.add_argument("--action", choices=[
-        "parse", "scan_dir", "jarm", "generate_rules", "full_analysis"
-    ], default="full_analysis")
+    parser.add_argument(
+        "--action",
+        choices=["parse", "scan_dir", "jarm", "generate_rules", "full_analysis"],
+        default="full_analysis",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Azure Lateral Movement Detection Agent - hunts for lateral movement in Azure AD/Entra ID."""
 
-import json
 import argparse
+import json
 import logging
-import requests
 from collections import defaultdict
 from datetime import datetime, timedelta
+
+import requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -40,7 +41,11 @@ def query_audit_logs(token, hours=24):
     since = (datetime.utcnow() - timedelta(hours=hours)).strftime("%Y-%m-%dT%H:%M:%SZ")
     url = "https://graph.microsoft.com/v1.0/auditLogs/directoryAudits"
     headers = {"Authorization": f"Bearer {token}"}
-    params = {"$filter": f"activityDateTime ge {since}", "$top": 500, "$orderby": "activityDateTime desc"}
+    params = {
+        "$filter": f"activityDateTime ge {since}",
+        "$top": 500,
+        "$orderby": "activityDateTime desc",
+    }
     resp = requests.get(url, headers=headers, params=params, timeout=30)
     resp.raise_for_status()
     return resp.json().get("value", [])
@@ -66,31 +71,44 @@ def detect_oauth_consent_abuse(audit_logs):
             target = log.get("targetResources", [{}])[0]
             app_name = target.get("displayName", "")
             actor = log.get("initiatedBy", {}).get("user", {}).get("userPrincipalName", "")
-            findings.append({
-                "indicator": "oauth_consent_grant", "actor": actor, "application": app_name,
-                "timestamp": log.get("activityDateTime", ""),
-                "severity": "high", "mitre": "T1550.001",
-                "detail": f"OAuth consent granted to '{app_name}' by {actor}",
-            })
+            findings.append(
+                {
+                    "indicator": "oauth_consent_grant",
+                    "actor": actor,
+                    "application": app_name,
+                    "timestamp": log.get("activityDateTime", ""),
+                    "severity": "high",
+                    "mitre": "T1550.001",
+                    "detail": f"OAuth consent granted to '{app_name}' by {actor}",
+                }
+            )
     return findings
 
 
 def detect_service_principal_changes(audit_logs):
     """Detect credential additions to service principals."""
     findings = []
-    suspicious_ops = ["Add service principal credentials", "Add service principal",
-                      "Add app role assignment to service principal"]
+    suspicious_ops = [
+        "Add service principal credentials",
+        "Add service principal",
+        "Add app role assignment to service principal",
+    ]
     for log in audit_logs:
         activity = log.get("activityDisplayName", "")
         if any(op in activity for op in suspicious_ops):
             actor = log.get("initiatedBy", {}).get("user", {}).get("userPrincipalName", "unknown")
             target = log.get("targetResources", [{}])[0].get("displayName", "")
-            findings.append({
-                "indicator": "service_principal_credential_add", "actor": actor,
-                "target_sp": target, "timestamp": log.get("activityDateTime", ""),
-                "severity": "critical", "mitre": "T1098.001",
-                "detail": f"Service principal '{target}' modified by {actor}",
-            })
+            findings.append(
+                {
+                    "indicator": "service_principal_credential_add",
+                    "actor": actor,
+                    "target_sp": target,
+                    "timestamp": log.get("activityDateTime", ""),
+                    "severity": "critical",
+                    "mitre": "T1098.001",
+                    "detail": f"Service principal '{target}' modified by {actor}",
+                }
+            )
     return findings
 
 
@@ -100,14 +118,17 @@ def detect_cross_tenant_signins(signin_logs, home_tenant_id):
     for log in signin_logs:
         resource_tenant = log.get("resourceTenantId", "")
         if resource_tenant and resource_tenant != home_tenant_id:
-            findings.append({
-                "indicator": "cross_tenant_signin",
-                "user": log.get("userPrincipalName", ""),
-                "source_ip": log.get("ipAddress", ""),
-                "resource_tenant": resource_tenant,
-                "timestamp": log.get("createdDateTime", ""),
-                "severity": "high", "mitre": "T1078.004",
-            })
+            findings.append(
+                {
+                    "indicator": "cross_tenant_signin",
+                    "user": log.get("userPrincipalName", ""),
+                    "source_ip": log.get("ipAddress", ""),
+                    "resource_tenant": resource_tenant,
+                    "timestamp": log.get("createdDateTime", ""),
+                    "severity": "high",
+                    "mitre": "T1078.004",
+                }
+            )
     return findings
 
 
@@ -124,12 +145,17 @@ def detect_token_replay(signin_logs):
     for user, sessions in user_sessions.items():
         unique_ips = set(s["ip"] for s in sessions)
         if len(unique_ips) >= 5:
-            findings.append({
-                "indicator": "token_replay", "user": user,
-                "unique_ips": len(unique_ips), "session_count": len(sessions),
-                "severity": "critical", "mitre": "T1528",
-                "detail": f"User {user} signed in from {len(unique_ips)} different IPs",
-            })
+            findings.append(
+                {
+                    "indicator": "token_replay",
+                    "user": user,
+                    "unique_ips": len(unique_ips),
+                    "session_count": len(sessions),
+                    "severity": "critical",
+                    "mitre": "T1528",
+                    "detail": f"User {user} signed in from {len(unique_ips)} different IPs",
+                }
+            )
     return findings
 
 
@@ -169,8 +195,12 @@ def main():
     report = generate_report(findings, args.hours)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Azure lateral movement: %d findings (%d critical) in %dh window",
-                report["total_findings"], report["critical_findings"], args.hours)
+    logger.info(
+        "Azure lateral movement: %d findings (%d critical) in %dh window",
+        report["total_findings"],
+        report["critical_findings"],
+        args.hours,
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

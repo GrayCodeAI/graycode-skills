@@ -5,11 +5,11 @@ Automates access certification campaigns, SOD violation detection,
 and entitlement review reporting via the SailPoint IdentityIQ REST API.
 """
 
-import requests
 import json
 import sys
-from datetime import datetime, timedelta
-from collections import defaultdict
+from datetime import datetime
+
+import requests
 
 
 class SailPointIIQAgent:
@@ -19,10 +19,12 @@ class SailPointIIQAgent:
         self.base_url = base_url.rstrip("/")
         self.session = requests.Session()
         self.session.auth = (username, password)
-        self.session.headers.update({
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        })
+        self.session.headers.update(
+            {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+        )
 
     def get_certifications(self, phase="Active"):
         """Retrieve certification campaigns filtered by phase."""
@@ -122,13 +124,15 @@ class SailPointIIQAgent:
             total_items += items
             total_revoked += revoked
             total_approved += approved
-            report["completed_campaigns"].append({
-                "name": cert.get("name", "Unknown"),
-                "items_reviewed": items,
-                "approved": approved,
-                "revoked": revoked,
-                "signed_off": cert.get("signedOff", False),
-            })
+            report["completed_campaigns"].append(
+                {
+                    "name": cert.get("name", "Unknown"),
+                    "items_reviewed": items,
+                    "approved": approved,
+                    "revoked": revoked,
+                    "signed_off": cert.get("signedOff", False),
+                }
+            )
 
         report["summary"] = {
             "total_campaigns": len(active_certs) + len(completed_certs),

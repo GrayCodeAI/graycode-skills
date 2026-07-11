@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Agent for monitoring and managing Microsoft Defender for Cloud security posture."""
 
-import subprocess
-import json
-import sys
 import argparse
+import json
+import subprocess
 from datetime import datetime
 
 
@@ -92,12 +91,14 @@ def get_security_alerts(days=7):
         if status in ("Active", "InProgress"):
             sev = props.get("severity", "Unknown")
             severity_counts[sev] = severity_counts.get(sev, 0) + 1
-            active_alerts.append({
-                "name": props.get("alertDisplayName", "Unknown"),
-                "severity": sev,
-                "status": status,
-                "timestamp": props.get("timeGeneratedUtc", ""),
-            })
+            active_alerts.append(
+                {
+                    "name": props.get("alertDisplayName", "Unknown"),
+                    "severity": sev,
+                    "status": status,
+                    "timestamp": props.get("timeGeneratedUtc", ""),
+                }
+            )
     for sev, count in severity_counts.items():
         if count > 0:
             print(f"  [{sev}] {count} alerts")
@@ -152,8 +153,18 @@ def generate_posture_report(output_path):
 
 def main():
     parser = argparse.ArgumentParser(description="Microsoft Defender for Cloud Security Agent")
-    parser.add_argument("action", choices=["plans", "score", "assessments", "alerts",
-                                           "contacts", "auto-provision", "full-report"])
+    parser.add_argument(
+        "action",
+        choices=[
+            "plans",
+            "score",
+            "assessments",
+            "alerts",
+            "contacts",
+            "auto-provision",
+            "full-report",
+        ],
+    )
     parser.add_argument("--severity", choices=["high", "medium", "low"], help="Filter by severity")
     parser.add_argument("--days", type=int, default=7, help="Alert lookback in days")
     parser.add_argument("-o", "--output", default="defender_report.json")

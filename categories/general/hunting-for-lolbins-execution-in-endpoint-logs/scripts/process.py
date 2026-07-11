@@ -5,10 +5,10 @@ Analyzes process creation logs to detect suspicious usage of
 Living Off the Land Binaries by matching command-line patterns.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from pathlib import Path
 
@@ -77,9 +77,16 @@ LOLBIN_PATTERNS = {
 }
 
 SUSPICIOUS_PARENTS = {
-    "winword.exe", "excel.exe", "powerpnt.exe", "outlook.exe",
-    "onenote.exe", "w3wp.exe", "httpd.exe", "nginx.exe",
-    "wmiprvse.exe", "svchost.exe",
+    "winword.exe",
+    "excel.exe",
+    "powerpnt.exe",
+    "outlook.exe",
+    "onenote.exe",
+    "w3wp.exe",
+    "httpd.exe",
+    "nginx.exe",
+    "wmiprvse.exe",
+    "svchost.exe",
 }
 
 
@@ -88,11 +95,11 @@ def parse_events(input_path: str) -> list[dict]:
     path = Path(input_path)
     events = []
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             events = data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             events = [dict(row) for row in csv.DictReader(f)]
     return events
 
@@ -102,8 +109,12 @@ def analyze_lolbins(events: list[dict]) -> list[dict]:
     findings = []
     for event in events:
         image = event.get("Image", event.get("FileName", event.get("image", "")))
-        cmdline = event.get("CommandLine", event.get("ProcessCommandLine", event.get("command_line", "")))
-        parent = event.get("ParentImage", event.get("InitiatingProcessFileName", event.get("parent_image", "")))
+        cmdline = event.get(
+            "CommandLine", event.get("ProcessCommandLine", event.get("command_line", ""))
+        )
+        parent = event.get(
+            "ParentImage", event.get("InitiatingProcessFileName", event.get("parent_image", ""))
+        )
         user = event.get("User", event.get("AccountName", event.get("user", "")))
         computer = event.get("Computer", event.get("DeviceName", event.get("host", "")))
         timestamp = event.get("UtcTime", event.get("Timestamp", event.get("_time", "")))
@@ -122,22 +133,27 @@ def analyze_lolbins(events: list[dict]) -> list[dict]:
                     if suspicious_parent:
                         severity = "CRITICAL"
 
-                    findings.append({
-                        "timestamp": timestamp,
-                        "computer": computer,
-                        "user": user,
-                        "lolbin": lolbin,
-                        "image_path": image,
-                        "command_line": cmdline,
-                        "parent_process": parent,
-                        "technique": config["technique"],
-                        "category": category,
-                        "severity": severity,
-                        "suspicious_parent": suspicious_parent,
-                    })
+                    findings.append(
+                        {
+                            "timestamp": timestamp,
+                            "computer": computer,
+                            "user": user,
+                            "lolbin": lolbin,
+                            "image_path": image,
+                            "command_line": cmdline,
+                            "parent_process": parent,
+                            "technique": config["technique"],
+                            "category": category,
+                            "severity": severity,
+                            "suspicious_parent": suspicious_parent,
+                        }
+                    )
                     break
 
-    return sorted(findings, key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}.get(x["severity"], 4))
+    return sorted(
+        findings,
+        key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}.get(x["severity"], 4),
+    )
 
 
 def run_hunt(input_path: str, output_dir: str) -> None:
@@ -153,12 +169,16 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path.mkdir(parents=True, exist_ok=True)
 
     with open(output_path / "lolbin_findings.json", "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-LOLBIN-{datetime.date.today().isoformat()}",
-            "total_events": len(events),
-            "findings_count": len(findings),
-            "findings": findings,
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-LOLBIN-{datetime.date.today().isoformat()}",
+                "total_events": len(events),
+                "findings_count": len(findings),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
 
     with open(output_path / "lolbin_report.md", "w", encoding="utf-8") as f:
         f.write("# LOLBin Execution Hunt Report\n\n")

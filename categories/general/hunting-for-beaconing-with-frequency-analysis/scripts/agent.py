@@ -4,9 +4,6 @@
 import argparse
 import json
 import math
-import os
-import re
-import sys
 from collections import defaultdict
 from datetime import datetime, timezone
 
@@ -15,7 +12,7 @@ def parse_zeek_conn_log(log_path):
     """Parse Zeek conn.log and extract connection timestamps per src-dst pair."""
     connections = defaultdict(list)
     try:
-        with open(log_path, "r") as f:
+        with open(log_path) as f:
             for line in f:
                 if line.startswith("#"):
                     continue
@@ -48,7 +45,7 @@ def detect_beaconing(connections, min_connections=10, max_jitter_percent=15):
         if len(timestamps) < min_connections:
             continue
         timestamps.sort()
-        intervals = [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
+        intervals = [timestamps[i + 1] - timestamps[i] for i in range(len(timestamps) - 1)]
         if not intervals:
             continue
         mean_interval = sum(intervals) / len(intervals)
@@ -59,17 +56,19 @@ def detect_beaconing(connections, min_connections=10, max_jitter_percent=15):
 
         if jitter_percent <= max_jitter_percent:
             parts = key.split("->")
-            src = parts[0]
-            dst_port = parts[1] if len(parts) > 1 else ""
-            beacons.append({
-                "flow": key,
-                "connection_count": len(timestamps),
-                "mean_interval_seconds": round(mean_interval, 2),
-                "jitter_seconds": round(jitter, 2),
-                "jitter_percent": round(jitter_percent, 2),
-                "duration_hours": round((timestamps[-1] - timestamps[0]) / 3600, 2),
-                "confidence": "HIGH" if jitter_percent < 5 else "MEDIUM",
-            })
+            parts[0]
+            parts[1] if len(parts) > 1 else ""
+            beacons.append(
+                {
+                    "flow": key,
+                    "connection_count": len(timestamps),
+                    "mean_interval_seconds": round(mean_interval, 2),
+                    "jitter_seconds": round(jitter, 2),
+                    "jitter_percent": round(jitter_percent, 2),
+                    "duration_hours": round((timestamps[-1] - timestamps[0]) / 3600, 2),
+                    "confidence": "HIGH" if jitter_percent < 5 else "MEDIUM",
+                }
+            )
     return sorted(beacons, key=lambda x: x["jitter_percent"])
 
 
@@ -78,7 +77,8 @@ def parse_csv_log(csv_path):
     connections = defaultdict(list)
     try:
         import csv
-        with open(csv_path, "r") as f:
+
+        with open(csv_path) as f:
             reader = csv.DictReader(f)
             for row in reader:
                 ts = row.get("timestamp") or row.get("ts") or row.get("time")
@@ -90,6 +90,7 @@ def parse_csv_log(csv_path):
                         ts_float = float(ts)
                     except ValueError:
                         from datetime import datetime as dt
+
                         try:
                             ts_float = dt.fromisoformat(ts.replace("Z", "+00:00")).timestamp()
                         except ValueError:
@@ -101,9 +102,7 @@ def parse_csv_log(csv_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Detect C2 beaconing via frequency analysis"
-    )
+    parser = argparse.ArgumentParser(description="Detect C2 beaconing via frequency analysis")
     parser.add_argument("--conn-log", help="Zeek conn.log path")
     parser.add_argument("--csv", help="CSV log with timestamp, src, dst columns")
     parser.add_argument("--min-connections", type=int, default=10)

@@ -25,14 +25,13 @@ import json
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any
 
 try:
     import dns.resolver
     import requests
     from rich.console import Console
-    from rich.table import Table
     from rich.panel import Panel
+    from rich.table import Table
 except ImportError:
     print("[!] Missing dependencies. Install with: pip install requests dnspython rich")
     sys.exit(1)
@@ -213,7 +212,9 @@ def validate_email_authentication(domain: str) -> dict:
                     results["spf"]["issues"].append("Hard fail (-all) - strict configuration")
 
                 if txt.count("include:") > 10:
-                    results["spf"]["issues"].append("Too many includes - may exceed DNS lookup limit")
+                    results["spf"]["issues"].append(
+                        "Too many includes - may exceed DNS lookup limit"
+                    )
     except Exception as e:
         results["spf"]["issues"].append(f"DNS query failed: {e}")
 
@@ -248,7 +249,9 @@ def validate_email_authentication(domain: str) -> dict:
                 if "p=none" in txt:
                     results["dmarc"]["issues"].append("Policy is 'none' - no enforcement")
                 elif "p=quarantine" in txt:
-                    results["dmarc"]["issues"].append("Policy is 'quarantine' - moderate enforcement")
+                    results["dmarc"]["issues"].append(
+                        "Policy is 'quarantine' - moderate enforcement"
+                    )
                 elif "p=reject" in txt:
                     results["dmarc"]["issues"].append("Policy is 'reject' - strict enforcement")
     except Exception as e:
@@ -277,7 +280,7 @@ def generate_email_template(
 
     emails = []
     try:
-        with open(targets_file, "r") as f:
+        with open(targets_file) as f:
             reader = csv.DictReader(f)
             for row in reader:
                 from datetime import timedelta
@@ -336,20 +339,26 @@ def check_domain_reputation(domain: str) -> dict:
     # Check if domain resolves
     try:
         import socket
+
         ip = socket.gethostbyname(domain)
         results["resolves_to"] = ip
     except Exception:
         results["resolves_to"] = "DOES NOT RESOLVE"
 
     # Check Google Safe Browsing (requires API key)
-    results["checks"]["google_safe_browsing"] = "Manual check required: https://transparencyreport.google.com/safe-browsing/search"
+    results["checks"]["google_safe_browsing"] = (
+        "Manual check required: https://transparencyreport.google.com/safe-browsing/search"
+    )
 
     # Check VirusTotal
-    results["checks"]["virustotal"] = f"Manual check required: https://www.virustotal.com/gui/domain/{domain}"
+    results["checks"]["virustotal"] = (
+        f"Manual check required: https://www.virustotal.com/gui/domain/{domain}"
+    )
 
     # Check domain age via WHOIS
     try:
         import whois as python_whois
+
         w = python_whois.whois(domain)
         if w.creation_date:
             creation = w.creation_date
@@ -358,7 +367,9 @@ def check_domain_reputation(domain: str) -> dict:
             age_days = (datetime.now() - creation).days
             results["domain_age_days"] = age_days
             if age_days < 14:
-                results["domain_age_warning"] = "Domain is less than 14 days old - high risk of being blocked"
+                results["domain_age_warning"] = (
+                    "Domain is less than 14 days old - high risk of being blocked"
+                )
             elif age_days < 30:
                 results["domain_age_warning"] = "Domain is less than 30 days old - moderate risk"
             else:
@@ -381,7 +392,7 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
     out_path.mkdir(parents=True, exist_ok=True)
 
     try:
-        with open(results_file, "r") as f:
+        with open(results_file) as f:
             data = json.load(f)
     except Exception as e:
         console.print(f"[red][-] Error loading results: {e}[/red]")
@@ -413,9 +424,9 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
     report = f"""# Spearphishing Campaign Results Report
 
 ## Campaign Overview
-- **Campaign ID:** {data.get('campaign_id', 'N/A')}
-- **Date:** {data.get('date', datetime.now().strftime('%Y-%m-%d'))}
-- **Pretext:** {data.get('pretext', 'N/A')}
+- **Campaign ID:** {data.get("campaign_id", "N/A")}
+- **Date:** {data.get("date", datetime.now().strftime("%Y-%m-%d"))}
+- **Pretext:** {data.get("pretext", "N/A")}
 - **Target Count:** {total_sent}
 
 ## Metrics Summary
@@ -423,21 +434,21 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
 | Metric | Count | Rate |
 |--------|-------|------|
 | Emails Sent | {total_sent} | 100% |
-| Delivered | {delivered} | {metrics['delivery_rate']:.1f}% |
-| Opened | {opened} | {metrics['open_rate']:.1f}% |
-| Clicked Link | {clicked} | {metrics['click_rate']:.1f}% |
-| Submitted Credentials | {submitted} | {metrics['credential_capture_rate']:.1f}% |
-| Reported to SOC | {reported} | {metrics['report_rate']:.1f}% |
+| Delivered | {delivered} | {metrics["delivery_rate"]:.1f}% |
+| Opened | {opened} | {metrics["open_rate"]:.1f}% |
+| Clicked Link | {clicked} | {metrics["click_rate"]:.1f}% |
+| Submitted Credentials | {submitted} | {metrics["credential_capture_rate"]:.1f}% |
+| Reported to SOC | {reported} | {metrics["report_rate"]:.1f}% |
 
 ## Risk Assessment
 
 ### Credential Compromise Risk
-{"CRITICAL" if metrics['credential_capture_rate'] > 20 else "HIGH" if metrics['credential_capture_rate'] > 10 else "MEDIUM" if metrics['credential_capture_rate'] > 5 else "LOW"}
+{"CRITICAL" if metrics["credential_capture_rate"] > 20 else "HIGH" if metrics["credential_capture_rate"] > 10 else "MEDIUM" if metrics["credential_capture_rate"] > 5 else "LOW"}
 - {submitted} out of {delivered} users submitted credentials
 - These credentials could be used for initial access in a real attack
 
 ### Security Awareness Gap
-{"CRITICAL" if metrics['report_rate'] < 5 else "HIGH" if metrics['report_rate'] < 15 else "MEDIUM" if metrics['report_rate'] < 30 else "LOW"}
+{"CRITICAL" if metrics["report_rate"] < 5 else "HIGH" if metrics["report_rate"] < 15 else "MEDIUM" if metrics["report_rate"] < 30 else "LOW"}
 - Only {reported} out of {delivered} users reported the phishing email
 - Industry benchmark for phishing report rate is 20-30%
 
@@ -445,7 +456,7 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
 
 1. {"Mandatory security awareness training for all users who clicked" if clicked > 0 else "Continue current awareness program"}
 2. {"Implement MFA to mitigate credential compromise risk" if submitted > 0 else "Current credential protections appear effective"}
-3. {"Improve phishing report mechanisms - too few users reported" if metrics['report_rate'] < 15 else "Phishing reporting culture is adequate"}
+3. {"Improve phishing report mechanisms - too few users reported" if metrics["report_rate"] < 15 else "Phishing reporting culture is adequate"}
 4. Review email security gateway rules based on successful deliveries
 5. Consider additional technical controls for identified bypass methods
 
@@ -474,7 +485,9 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
     table.add_row("Delivered", str(delivered), f"{metrics['delivery_rate']:.1f}%")
     table.add_row("Opened", str(opened), f"{metrics['open_rate']:.1f}%")
     table.add_row("Clicked", str(clicked), f"{metrics['click_rate']:.1f}%")
-    table.add_row("Credentials Captured", str(submitted), f"{metrics['credential_capture_rate']:.1f}%")
+    table.add_row(
+        "Credentials Captured", str(submitted), f"{metrics['credential_capture_rate']:.1f}%"
+    )
     table.add_row("Reported", str(reported), f"{metrics['report_rate']:.1f}%")
 
     console.print(table)
@@ -483,9 +496,7 @@ def analyze_campaign_results(results_file: str, output_dir: str = "./reports") -
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Spearphishing Simulation Campaign Manager"
-    )
+    parser = argparse.ArgumentParser(description="Spearphishing Simulation Campaign Manager")
     parser.add_argument(
         "--mode",
         required=True,

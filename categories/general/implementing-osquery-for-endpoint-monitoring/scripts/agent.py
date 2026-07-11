@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Osquery Endpoint Monitoring Agent - Generates configs, deploys queries, and analyzes results."""
 
-import json
-import os
-import logging
 import argparse
+import json
+import logging
+import os
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -114,7 +114,7 @@ def parse_osquery_results(results_dir):
         if not filename.endswith(".log"):
             continue
         filepath = os.path.join(results_dir, filename)
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             for line in f:
                 try:
                     entry = json.loads(line.strip())
@@ -133,42 +133,52 @@ def analyze_results(results):
         action = entry.get("action", "")
         columns = entry.get("columns", {})
         if name == "process_not_on_disk" and action == "added":
-            findings.append({
-                "type": "Process without binary",
-                "severity": "critical",
-                "details": columns,
-                "query": name,
-            })
+            findings.append(
+                {
+                    "type": "Process without binary",
+                    "severity": "critical",
+                    "details": columns,
+                    "query": name,
+                }
+            )
         elif name == "listening_ports" and action == "added":
             port = int(columns.get("port", 0))
             if port > 1024:
-                findings.append({
-                    "type": "New listening port",
+                findings.append(
+                    {
+                        "type": "New listening port",
+                        "severity": "high",
+                        "details": columns,
+                        "query": name,
+                    }
+                )
+        elif name == "cron_persistence" and action == "added":
+            findings.append(
+                {
+                    "type": "New cron job",
                     "severity": "high",
                     "details": columns,
                     "query": name,
-                })
-        elif name == "cron_persistence" and action == "added":
-            findings.append({
-                "type": "New cron job",
-                "severity": "high",
-                "details": columns,
-                "query": name,
-            })
+                }
+            )
         elif name == "suid_binaries" and action == "added":
-            findings.append({
-                "type": "New SUID binary",
-                "severity": "critical",
-                "details": columns,
-                "query": name,
-            })
+            findings.append(
+                {
+                    "type": "New SUID binary",
+                    "severity": "critical",
+                    "details": columns,
+                    "query": name,
+                }
+            )
         elif name == "authorized_keys" and action == "added":
-            findings.append({
-                "type": "New SSH authorized key",
-                "severity": "high",
-                "details": columns,
-                "query": name,
-            })
+            findings.append(
+                {
+                    "type": "New SSH authorized key",
+                    "severity": "high",
+                    "details": columns,
+                    "query": name,
+                }
+            )
     logger.info("Analysis: %d security findings from %d results", len(findings), len(results))
     return findings
 

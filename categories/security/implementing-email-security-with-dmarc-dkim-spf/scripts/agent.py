@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Email Security Audit Agent - Validates SPF, DKIM, and DMARC DNS records for domains."""
 
-import json
-import re
-import logging
 import argparse
+import json
+import logging
+import re
 from datetime import datetime
 
 import dns.resolver
@@ -13,9 +13,23 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 DKIM_SELECTORS = [
-    "default", "google", "selector1", "selector2", "k1", "k2",
-    "mail", "dkim", "s1", "s2", "mandrill", "everlytickey1",
-    "smtpapi", "pic", "protonmail", "protonmail2", "protonmail3",
+    "default",
+    "google",
+    "selector1",
+    "selector2",
+    "k1",
+    "k2",
+    "mail",
+    "dkim",
+    "s1",
+    "s2",
+    "mandrill",
+    "everlytickey1",
+    "smtpapi",
+    "pic",
+    "protonmail",
+    "protonmail2",
+    "protonmail3",
 ]
 
 
@@ -29,7 +43,12 @@ def query_txt_records(domain, prefix=""):
             txt = b"".join(rdata.strings).decode("utf-8", errors="ignore")
             records.append(txt)
         return records
-    except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer, dns.resolver.NoNameservers, dns.exception.Timeout):
+    except (
+        dns.resolver.NXDOMAIN,
+        dns.resolver.NoAnswer,
+        dns.resolver.NoNameservers,
+        dns.exception.Timeout,
+    ):
         return []
 
 
@@ -39,7 +58,12 @@ def check_spf(domain):
     spf_records = [r for r in records if r.startswith("v=spf1")]
 
     if not spf_records:
-        return {"status": "missing", "severity": "critical", "issues": ["No SPF record found"], "record": None}
+        return {
+            "status": "missing",
+            "severity": "critical",
+            "issues": ["No SPF record found"],
+            "record": None,
+        }
 
     if len(spf_records) > 1:
         issues = ["Multiple SPF records found (RFC violation, causes permerror)"]
@@ -72,7 +96,11 @@ def check_spf(domain):
         issues.append(f"SPF has {include_count} includes (>10 DNS lookups causes permerror)")
         severity = "high"
 
-    lookup_mechanisms = sum(1 for m in mechanisms if any(m.startswith(p) for p in ("include:", "a:", "mx:", "ptr:", "exists:", "redirect=")))
+    lookup_mechanisms = sum(
+        1
+        for m in mechanisms
+        if any(m.startswith(p) for p in ("include:", "a:", "mx:", "ptr:", "exists:", "redirect="))
+    )
     if lookup_mechanisms > 10:
         issues.append(f"SPF exceeds 10 DNS lookup limit ({lookup_mechanisms} lookups)")
 
@@ -103,15 +131,19 @@ def check_dkim(domain, selectors=None):
             key_length = len(key_match.group(1)) * 6 // 8 if key_match else 0
             issues = []
             if key_length and key_length < 128:
-                issues.append(f"DKIM key too short ({key_length} bytes, minimum 1024 bits recommended)")
+                issues.append(
+                    f"DKIM key too short ({key_length} bytes, minimum 1024 bits recommended)"
+                )
             if "p=" in record and not key_match:
                 issues.append("DKIM public key appears empty (revoked)")
-            found_selectors.append({
-                "selector": selector,
-                "record": record[:200],
-                "key_size_bytes": key_length,
-                "issues": issues,
-            })
+            found_selectors.append(
+                {
+                    "selector": selector,
+                    "record": record[:200],
+                    "key_size_bytes": key_length,
+                    "issues": issues,
+                }
+            )
 
     if not found_selectors:
         return {
@@ -137,7 +169,12 @@ def check_dmarc(domain):
     dmarc_records = [r for r in records if r.startswith("v=DMARC1")]
 
     if not dmarc_records:
-        return {"status": "missing", "severity": "critical", "issues": ["No DMARC record found"], "record": None}
+        return {
+            "status": "missing",
+            "severity": "critical",
+            "issues": ["No DMARC record found"],
+            "record": None,
+        }
 
     dmarc = dmarc_records[0]
     tags = {}
@@ -233,7 +270,9 @@ def generate_report(domain, spf, dkim, dmarc, risk):
         "total_issues": len(all_issues),
         "all_issues": all_issues,
     }
-    print(f"EMAIL SECURITY [{domain}]: Risk={risk['risk_level']} Score={risk['score']} Issues={len(all_issues)}")
+    print(
+        f"EMAIL SECURITY [{domain}]: Risk={risk['risk_level']} Score={risk['score']} Issues={len(all_issues)}"
+    )
     return report
 
 
@@ -248,7 +287,9 @@ def main():
     logger.info("SPF: %s (severity: %s)", spf["status"], spf["severity"])
 
     dkim = check_dkim(args.domain, args.dkim_selectors)
-    logger.info("DKIM: %s (%d selectors found)", dkim["status"], len(dkim.get("selectors_found", [])))
+    logger.info(
+        "DKIM: %s (%d selectors found)", dkim["status"], len(dkim.get("selectors_found", []))
+    )
 
     dmarc = check_dmarc(args.domain)
     logger.info("DMARC: %s (severity: %s)", dmarc["status"], dmarc["severity"])

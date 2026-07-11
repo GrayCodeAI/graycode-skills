@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Social engineering penetration test management agent using GoPhish API."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
     import requests
+
     requests.packages.urllib3.disable_warnings()
 except ImportError:
     print("Install: pip install requests")
@@ -22,13 +23,14 @@ class GoPhishClient:
         self.headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
     def _get(self, endpoint):
-        resp = requests.get(f"{self.base_url}/api/{endpoint}", headers=self.headers, verify=False)
+        resp = requests.get(f"{self.base_url}/api/{endpoint}", headers=self.headers, verify=True)
         resp.raise_for_status()
         return resp.json()
 
     def _post(self, endpoint, data):
-        resp = requests.post(f"{self.base_url}/api/{endpoint}", headers=self.headers,
-                             json=data, verify=False)
+        resp = requests.post(
+            f"{self.base_url}/api/{endpoint}", headers=self.headers, json=data, verify=True
+        )
         resp.raise_for_status()
         return resp.json()
 
@@ -39,22 +41,44 @@ class GoPhishClient:
         return self._get(f"campaigns/{campaign_id}/results")
 
     def create_sending_profile(self, name, host, from_addr, username, password):
-        return self._post("smtp/", {
-            "name": name, "host": host, "from_address": from_addr,
-            "username": username, "password": password, "ignore_cert_errors": True,
-        })
+        return self._post(
+            "smtp/",
+            {
+                "name": name,
+                "host": host,
+                "from_address": from_addr,
+                "username": username,
+                "password": password,
+                "ignore_cert_errors": True,
+            },
+        )
 
     def create_template(self, name, subject, html, text=""):
-        return self._post("templates/", {
-            "name": name, "subject": subject, "html": html, "text": text,
-        })
+        return self._post(
+            "templates/",
+            {
+                "name": name,
+                "subject": subject,
+                "html": html,
+                "text": text,
+            },
+        )
 
     def create_group(self, name, targets):
-        return self._post("groups/", {
-            "name": name,
-            "targets": [{"email": t["email"], "first_name": t.get("first_name", ""),
-                         "last_name": t.get("last_name", "")} for t in targets],
-        })
+        return self._post(
+            "groups/",
+            {
+                "name": name,
+                "targets": [
+                    {
+                        "email": t["email"],
+                        "first_name": t.get("first_name", ""),
+                        "last_name": t.get("last_name", ""),
+                    }
+                    for t in targets
+                ],
+            },
+        )
 
 
 def analyze_campaign_results(results):
@@ -114,10 +138,10 @@ def generate_pretext_scenarios():
 
 def run_assessment(base_url=None, api_key=None, campaign_id=None):
     """Execute social engineering assessment analysis."""
-    print(f"\n{'='*60}")
-    print(f"  SOCIAL ENGINEERING PENETRATION TEST")
+    print(f"\n{'=' * 60}")
+    print("  SOCIAL ENGINEERING PENETRATION TEST")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     if base_url and api_key:
         client = GoPhishClient(base_url, api_key)
@@ -129,7 +153,7 @@ def run_assessment(base_url=None, api_key=None, campaign_id=None):
         if campaign_id:
             results = client.get_campaign_results(campaign_id)
             stats = analyze_campaign_results(results)
-            print(f"\n--- CAMPAIGN METRICS ---")
+            print("\n--- CAMPAIGN METRICS ---")
             for k, v in stats.items():
                 print(f"  {k}: {v}")
 

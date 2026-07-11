@@ -14,9 +14,7 @@ import json
 import logging
 import secrets
 import string
-import sys
 from datetime import datetime, timezone
-from pathlib import Path
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("credential_rotation")
@@ -62,16 +60,14 @@ class CredentialRotator:
         try:
             new_key = iam.create_access_key(UserName=iam_username)
             new_key_id = new_key["AccessKey"]["AccessKeyId"]
-            new_secret = new_key["AccessKey"]["SecretAccessKey"]
+            new_key["AccessKey"]["SecretAccessKey"]
 
             existing_keys = iam.list_access_keys(UserName=iam_username)
             old_keys_deactivated = []
             for key in existing_keys["AccessKeyMetadata"]:
                 if key["AccessKeyId"] != new_key_id and key["Status"] == "Active":
                     iam.update_access_key(
-                        UserName=iam_username,
-                        AccessKeyId=key["AccessKeyId"],
-                        Status="Inactive"
+                        UserName=iam_username, AccessKeyId=key["AccessKeyId"], Status="Inactive"
                     )
                     old_keys_deactivated.append(key["AccessKeyId"])
 
@@ -149,39 +145,37 @@ class CredentialRotator:
             logger.error(f"GCP key rotation failed: {e}")
             return result
 
-    def rotate_database_password(self, db_type, host, port, admin_user,
-                                  admin_password, target_user):
+    def rotate_database_password(
+        self, db_type, host, port, admin_user, admin_password, target_user
+    ):
         """Rotate a database user's password."""
         new_password = self.generate_password()
 
         try:
             if db_type == "postgresql":
                 import psycopg2
+
                 conn = psycopg2.connect(
-                    host=host, port=port,
-                    user=admin_user, password=admin_password,
-                    dbname="postgres"
+                    host=host,
+                    port=port,
+                    user=admin_user,
+                    password=admin_password,
+                    dbname="postgres",
                 )
                 conn.autocommit = True
                 cur = conn.cursor()
-                cur.execute(
-                    f"ALTER USER \"{target_user}\" WITH PASSWORD %s;",
-                    (new_password,)
-                )
+                cur.execute(f'ALTER USER "{target_user}" WITH PASSWORD %s;', (new_password,))
                 cur.close()
                 conn.close()
 
             elif db_type == "mysql":
                 import mysql.connector
+
                 conn = mysql.connector.connect(
-                    host=host, port=port,
-                    user=admin_user, password=admin_password
+                    host=host, port=port, user=admin_user, password=admin_password
                 )
                 cur = conn.cursor()
-                cur.execute(
-                    f"ALTER USER %s@'%%' IDENTIFIED BY %s;",
-                    (target_user, new_password)
-                )
+                cur.execute("ALTER USER %s@'%%' IDENTIFIED BY %s;", (target_user, new_password))
                 cur.execute("FLUSH PRIVILEGES;")
                 cur.close()
                 conn.close()
@@ -215,24 +209,29 @@ class CredentialRotator:
     def verify_service_health(self, health_endpoints):
         """Verify services are healthy after credential rotation."""
         import requests
+
         results = []
         for endpoint in health_endpoints:
             try:
                 resp = requests.get(endpoint["url"], timeout=10)
                 healthy = resp.status_code == 200
-                results.append({
-                    "service": endpoint["name"],
-                    "url": endpoint["url"],
-                    "status_code": resp.status_code,
-                    "healthy": healthy,
-                })
+                results.append(
+                    {
+                        "service": endpoint["name"],
+                        "url": endpoint["url"],
+                        "status_code": resp.status_code,
+                        "healthy": healthy,
+                    }
+                )
             except requests.RequestException as e:
-                results.append({
-                    "service": endpoint["name"],
-                    "url": endpoint["url"],
-                    "healthy": False,
-                    "error": str(e),
-                })
+                results.append(
+                    {
+                        "service": endpoint["name"],
+                        "url": endpoint["url"],
+                        "healthy": False,
+                        "error": str(e),
+                    }
+                )
         return results
 
     def export_rotation_log(self, output_path):

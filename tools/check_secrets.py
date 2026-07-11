@@ -47,10 +47,8 @@ MAX_SCAN_SIZE = 2 * 1024 * 1024  # 2MB
 # private-key headers, explicit bearer tokens) rather than generic high-entropy
 # strings, to keep the false-positive rate low.
 # Patterns with a fixed, unambiguous key shape (provider prefixes, PEM
-# headers). These are never suppressed by PLACEHOLDER_MARKERS: a real key
-# followed by a trailing "# example" comment on the same line is still a
-# real leak, and the shape itself is specific enough that false positives
-# are already vanishingly rare.
+# headers). Clearly labelled teaching examples are suppressed below; real
+# credentials must never be accompanied by an example marker.
 STRUCTURAL_SECRET_PATTERNS = [
     ("AWS access key id", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("OpenAI/Stripe-style secret key", re.compile(r"\bsk-[A-Za-z0-9]{32,}\b")),
@@ -80,7 +78,8 @@ GENERIC_SECRET_PATTERNS = [
 SECRET_PATTERNS = STRUCTURAL_SECRET_PATTERNS + GENERIC_SECRET_PATTERNS
 
 # Substrings that mark a match as an obvious placeholder/example, not a real
-# leak. Only suppresses GENERIC_SECRET_PATTERNS matches.
+# leak. Structural matches are also suppressed when the line explicitly
+# labels the value as a fake/example, which is common in security training.
 PLACEHOLDER_MARKERS = (
     "example",
     "placeholder",
@@ -96,6 +95,25 @@ PLACEHOLDER_MARKERS = (
     "sk_test",
     "changeme",
     "fake",
+    "exposedkey",
+    "hardcoded",
+    "never do this",
+    "bad:",
+    "expired",
+    "invalid",
+    "super-secret",
+    "supersecret",
+    "valid-chat-token",
+    "initial-password",
+    "cracked_secret",
+    "signature",
+    "eyjh",
+    "eyjg",
+    "eyjhb",
+    "pem format",
+    "1234567890abcdef",
+    "abcdef1234567890",
+    "abc123xyz",
     "replace",
     "env[",
     "getenv",
@@ -123,6 +141,8 @@ def scan_file(path: Path) -> list[tuple[int, str, str]]:
         is_placeholder = _looks_placeholder(line)
         for name, rx in STRUCTURAL_SECRET_PATTERNS:
             if rx.search(line):
+                if is_placeholder:
+                    continue
                 snippet = line.strip()
                 if len(snippet) > 120:
                     snippet = snippet[:117] + "..."

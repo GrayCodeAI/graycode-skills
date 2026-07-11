@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Adversary Infrastructure Tracking Agent - Tracks threat actor infrastructure using passive DNS and certificate transparency."""
 
+import argparse
 import json
 import logging
-import argparse
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 import requests
 
@@ -31,7 +31,11 @@ def query_urlhaus(ioc, ioc_type="host"):
 
 def query_threatfox(ioc):
     """Query ThreatFox for IOC intelligence."""
-    resp = requests.post("https://threatfox-api.abuse.ch/api/v1/", json={"query": "search_ioc", "search_term": ioc}, timeout=15)
+    resp = requests.post(
+        "https://threatfox-api.abuse.ch/api/v1/",
+        json={"query": "search_ioc", "search_term": ioc},
+        timeout=15,
+    )
     resp.raise_for_status()
     return resp.json()
 
@@ -48,7 +52,10 @@ def pivot_on_certificate(cert_data):
                 related_domains.add(domain)
         issuer = cert.get("issuer_name", "")
         issuers[issuer].append(cert.get("serial_number", ""))
-    return {"related_domains": sorted(related_domains), "issuers": {k: len(v) for k, v in issuers.items()}}
+    return {
+        "related_domains": sorted(related_domains),
+        "issuers": {k: len(v) for k, v in issuers.items()},
+    }
 
 
 def build_infrastructure_map(seed_iocs, ioc_types):
@@ -63,7 +70,9 @@ def build_infrastructure_map(seed_iocs, ioc_types):
                 node["ct_domains"] = pivot["related_domains"][:20]
                 node["sources"].append("crt.sh")
                 for related in pivot["related_domains"][:5]:
-                    infra_map["edges"].append({"from": ioc, "to": related, "relation": "shared_certificate"})
+                    infra_map["edges"].append(
+                        {"from": ioc, "to": related, "relation": "shared_certificate"}
+                    )
             except requests.RequestException as e:
                 node["ct_error"] = str(e)
         try:

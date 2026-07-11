@@ -6,13 +6,11 @@ for messages, call logs, contacts, and location data from
 iOS and Android file system extractions.
 """
 
-import sqlite3
 import json
+import sqlite3
 import sys
-import csv
-import os
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 
 class MobileForensicsAgent:
@@ -41,18 +39,25 @@ class MobileForensicsAgent:
 
     def extract_sms_android(self):
         """Extract SMS/MMS messages from Android mmssms.db."""
-        db_path = self.extraction_dir / "data/data/com.android.providers.telephony/databases/mmssms.db"
-        return self._query_db(str(db_path), """
+        db_path = (
+            self.extraction_dir / "data/data/com.android.providers.telephony/databases/mmssms.db"
+        )
+        return self._query_db(
+            str(db_path),
+            """
             SELECT address, body, type,
                    datetime(date/1000, 'unixepoch') AS msg_time,
                    read, seen
             FROM sms ORDER BY date DESC LIMIT 5000
-        """)
+        """,
+        )
 
     def extract_sms_ios(self):
         """Extract iMessage/SMS from iOS sms.db."""
         db_path = self.extraction_dir / "HomeDomain/Library/SMS/sms.db"
-        return self._query_db(str(db_path), """
+        return self._query_db(
+            str(db_path),
+            """
             SELECT h.id AS phone_number,
                    CASE WHEN m.is_from_me = 1 THEN 'SENT' ELSE 'RECEIVED' END AS direction,
                    m.text,
@@ -61,24 +66,34 @@ class MobileForensicsAgent:
             FROM message m
             JOIN handle h ON m.handle_id = h.ROWID
             ORDER BY m.date DESC LIMIT 5000
-        """)
+        """,
+        )
 
     def extract_call_log_android(self):
         """Extract call logs from Android contacts2.db."""
-        db_path = self.extraction_dir / "data/data/com.android.providers.contacts/databases/calllog.db"
-        return self._query_db(str(db_path), """
+        db_path = (
+            self.extraction_dir / "data/data/com.android.providers.contacts/databases/calllog.db"
+        )
+        return self._query_db(
+            str(db_path),
+            """
             SELECT number, name,
                    CASE type WHEN 1 THEN 'INCOMING' WHEN 2 THEN 'OUTGOING'
                         WHEN 3 THEN 'MISSED' ELSE 'UNKNOWN' END AS call_type,
                    duration,
                    datetime(date/1000, 'unixepoch') AS call_time
             FROM calls ORDER BY date DESC LIMIT 2000
-        """)
+        """,
+        )
 
     def extract_contacts_android(self):
         """Extract contacts from Android contacts database."""
-        db_path = self.extraction_dir / "data/data/com.android.providers.contacts/databases/contacts2.db"
-        return self._query_db(str(db_path), """
+        db_path = (
+            self.extraction_dir / "data/data/com.android.providers.contacts/databases/contacts2.db"
+        )
+        return self._query_db(
+            str(db_path),
+            """
             SELECT display_name, data1 AS phone_or_email, mimetype
             FROM raw_contacts rc
             JOIN data d ON rc._id = d.raw_contact_id
@@ -86,12 +101,15 @@ class MobileForensicsAgent:
                 'vnd.android.cursor.item/phone_v2',
                 'vnd.android.cursor.item/email_v2'
             ) ORDER BY display_name LIMIT 5000
-        """)
+        """,
+        )
 
     def extract_whatsapp_messages(self):
         """Extract WhatsApp messages from msgstore.db."""
         db_path = self.extraction_dir / "data/data/com.whatsapp/databases/msgstore.db"
-        return self._query_db(str(db_path), """
+        return self._query_db(
+            str(db_path),
+            """
             SELECT key_remote_jid AS contact,
                    CASE WHEN key_from_me = 1 THEN 'SENT' ELSE 'RECEIVED' END AS direction,
                    data AS message_text,
@@ -101,16 +119,20 @@ class MobileForensicsAgent:
             FROM messages
             WHERE data IS NOT NULL
             ORDER BY timestamp DESC LIMIT 5000
-        """)
+        """,
+        )
 
     def extract_browser_history_android(self):
         """Extract Chrome browser history from Android."""
         db_path = self.extraction_dir / "data/data/com.android.chrome/app_chrome/Default/History"
-        return self._query_db(str(db_path), """
+        return self._query_db(
+            str(db_path),
+            """
             SELECT url, title, visit_count,
                    datetime(last_visit_time/1000000 - 11644473600, 'unixepoch') AS visit_time
             FROM urls ORDER BY last_visit_time DESC LIMIT 2000
-        """)
+        """,
+        )
 
     def extract_wifi_history(self):
         """Extract saved WiFi networks."""
@@ -119,6 +141,7 @@ class MobileForensicsAgent:
             if wifi_conf.exists():
                 content = wifi_conf.read_text(errors="ignore")
                 import re
+
                 ssids = re.findall(r'"SSID"[^>]*>([^<]+)', content)
                 return [{"ssid": s} for s in ssids]
         return []
@@ -131,10 +154,12 @@ class MobileForensicsAgent:
             if app_dir.exists():
                 for pkg in sorted(app_dir.iterdir()):
                     if pkg.is_dir():
-                        apps.append({
-                            "package": pkg.name,
-                            "has_databases": (pkg / "databases").exists(),
-                        })
+                        apps.append(
+                            {
+                                "package": pkg.name,
+                                "has_databases": (pkg / "databases").exists(),
+                            }
+                        )
         return apps
 
     def search_keyword(self, keyword):
@@ -153,16 +178,18 @@ class MobileForensicsAgent:
                         for col in columns:
                             cursor.execute(
                                 f"SELECT [{col}] FROM [{table}] WHERE [{col}] LIKE ?",
-                                [f"%{keyword}%"]
+                                [f"%{keyword}%"],
                             )
                             matches = cursor.fetchall()
                             if matches:
-                                hits.append({
-                                    "database": str(db_file.relative_to(self.extraction_dir)),
-                                    "table": table,
-                                    "column": col,
-                                    "match_count": len(matches),
-                                })
+                                hits.append(
+                                    {
+                                        "database": str(db_file.relative_to(self.extraction_dir)),
+                                        "table": table,
+                                        "column": col,
+                                        "match_count": len(matches),
+                                    }
+                                )
                     except sqlite3.Error:
                         continue
                 conn.close()

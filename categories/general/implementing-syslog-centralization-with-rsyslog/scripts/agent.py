@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Rsyslog Centralization Agent - Generates and deploys TLS-secured rsyslog configurations."""
 
+import argparse
 import json
 import logging
-import argparse
 import subprocess
 from datetime import datetime
 
@@ -122,25 +122,69 @@ def generate_tls_certificates(output_dir, server_cn, client_cns):
     """Generate CA, server, and client TLS certificates using OpenSSL."""
     ca_key = f"{output_dir}/ca-key.pem"
     ca_cert = f"{output_dir}/ca.pem"
-    subprocess.run([
-        "openssl", "req", "-x509", "-newkey", "rsa:4096", "-keyout", ca_key,
-        "-out", ca_cert, "-days", "3650", "-nodes",
-        "-subj", f"/CN=Syslog CA/O=SOC/C=US",
-    ], capture_output=True, check=True)
+    subprocess.run(
+        [
+            "openssl",
+            "req",
+            "-x509",
+            "-newkey",
+            "rsa:4096",
+            "-keyout",
+            ca_key,
+            "-out",
+            ca_cert,
+            "-days",
+            "3650",
+            "-nodes",
+            "-subj",
+            "/CN=Syslog CA/O=SOC/C=US",
+        ],
+        capture_output=True,
+        check=True,
+    )
     logger.info("Generated CA certificate: %s", ca_cert)
 
     for cn in [server_cn] + client_cns:
         key_file = f"{output_dir}/{cn}-key.pem"
         cert_file = f"{output_dir}/{cn}-cert.pem"
         csr_file = f"{output_dir}/{cn}.csr"
-        subprocess.run([
-            "openssl", "req", "-newkey", "rsa:2048", "-keyout", key_file,
-            "-out", csr_file, "-nodes", "-subj", f"/CN={cn}/O=SOC/C=US",
-        ], capture_output=True, check=True)
-        subprocess.run([
-            "openssl", "x509", "-req", "-in", csr_file, "-CA", ca_cert,
-            "-CAkey", ca_key, "-CAcreateserial", "-out", cert_file, "-days", "365",
-        ], capture_output=True, check=True)
+        subprocess.run(
+            [
+                "openssl",
+                "req",
+                "-newkey",
+                "rsa:2048",
+                "-keyout",
+                key_file,
+                "-out",
+                csr_file,
+                "-nodes",
+                "-subj",
+                f"/CN={cn}/O=SOC/C=US",
+            ],
+            capture_output=True,
+            check=True,
+        )
+        subprocess.run(
+            [
+                "openssl",
+                "x509",
+                "-req",
+                "-in",
+                csr_file,
+                "-CA",
+                ca_cert,
+                "-CAkey",
+                ca_key,
+                "-CAcreateserial",
+                "-out",
+                cert_file,
+                "-days",
+                "365",
+            ],
+            capture_output=True,
+            check=True,
+        )
         logger.info("Generated certificate for %s", cn)
     return ca_cert
 
@@ -148,6 +192,7 @@ def generate_tls_certificates(output_dir, server_cn, client_cns):
 def deploy_config_ssh(host, config_content, remote_path, username="root", key_file=None):
     """Deploy rsyslog configuration to a remote host via SSH."""
     import paramiko
+
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     connect_kwargs = {"hostname": host, "username": username}
@@ -168,13 +213,19 @@ def deploy_config_ssh(host, config_content, remote_path, username="root", key_fi
 def validate_tls_connection(server_ip, tls_port=6514, ca_cert=None):
     """Validate TLS connectivity to the rsyslog server."""
     cmd = [
-        "openssl", "s_client", "-connect", f"{server_ip}:{tls_port}",
-        "-CAfile", ca_cert or "/etc/ssl/certs/ca-certificates.crt",
+        "openssl",
+        "s_client",
+        "-connect",
+        f"{server_ip}:{tls_port}",
+        "-CAfile",
+        ca_cert or "/etc/ssl/certs/ca-certificates.crt",
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10, input="")
         connected = "Verify return code: 0" in result.stdout
-        logger.info("TLS validation to %s:%d: %s", server_ip, tls_port, "OK" if connected else "FAILED")
+        logger.info(
+            "TLS validation to %s:%d: %s", server_ip, tls_port, "OK" if connected else "FAILED"
+        )
         return connected
     except subprocess.TimeoutExpired:
         return False
@@ -189,7 +240,9 @@ def generate_report(server_config, client_configs, deployments, tls_valid):
         "deployments": deployments,
         "tls_validated": tls_valid,
     }
-    print(f"SYSLOG REPORT: {len(client_configs)} client configs, TLS: {'OK' if tls_valid else 'PENDING'}")
+    print(
+        f"SYSLOG REPORT: {len(client_configs)} client configs, TLS: {'OK' if tls_valid else 'PENDING'}"
+    )
     return report
 
 
@@ -208,6 +261,7 @@ def main():
 
     clients = [c.strip() for c in args.clients.split(",")]
     import os
+
     os.makedirs(args.config_dir, exist_ok=True)
 
     server_config = generate_server_config(
@@ -219,7 +273,8 @@ def main():
     client_configs = {}
     for client_ip in clients:
         config = generate_client_config(
-            args.server_ip, args.ca_cert,
+            args.server_ip,
+            args.ca_cert,
             f"/etc/rsyslog.d/{client_ip}-cert.pem",
             f"/etc/rsyslog.d/{client_ip}-key.pem",
             args.tls_port,

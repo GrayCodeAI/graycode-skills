@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """OT Patch Management Agent - tracks ICS/SCADA patch status and risk assessment."""
 
-import json
 import argparse
+import json
 import logging
-from collections import defaultdict
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -29,8 +28,12 @@ def assess_patch_risk(patch, asset):
     if not patch.get("vendor_validated"):
         risk_factors.append({"factor": "Not vendor validated", "impact": "high"})
     score = sum(3 if r["impact"] == "high" else 1 for r in risk_factors)
-    return {"patch_id": patch.get("id"), "asset": asset.get("name"), "risk_score": score,
-            "risk_level": "high" if score >= 6 else "medium" if score >= 3 else "low"}
+    return {
+        "patch_id": patch.get("id"),
+        "asset": asset.get("name"),
+        "risk_score": score,
+        "risk_level": "high" if score >= 6 else "medium" if score >= 3 else "low",
+    }
 
 
 def check_compliance(assets, patches):
@@ -40,23 +43,32 @@ def check_compliance(assets, patches):
         for patch in patches:
             if patch.get("asset_id") == asset.get("id") and patch.get("status") == "missing":
                 severity = patch.get("severity", "medium").lower()
-                published = datetime.fromisoformat(patch["published_date"].replace("Z", "+00:00")).replace(tzinfo=None)
+                published = datetime.fromisoformat(
+                    patch["published_date"].replace("Z", "+00:00")
+                ).replace(tzinfo=None)
                 age = (now - published).days
                 sla = OT_PATCH_SLA.get(severity, 120)
-                results.append({
-                    "asset": asset.get("name"), "patch_id": patch.get("id"),
-                    "severity": severity, "age_days": age, "sla_days": sla,
-                    "sla_status": "within_sla" if age <= sla else "sla_breached",
-                    "vendor_validated": patch.get("vendor_validated", False),
-                })
+                results.append(
+                    {
+                        "asset": asset.get("name"),
+                        "patch_id": patch.get("id"),
+                        "severity": severity,
+                        "age_days": age,
+                        "sla_days": sla,
+                        "sla_status": "within_sla" if age <= sla else "sla_breached",
+                        "vendor_validated": patch.get("vendor_validated", False),
+                    }
+                )
     return results
 
 
 def generate_report(compliance, assets):
     breached = [c for c in compliance if c["sla_status"] == "sla_breached"]
     return {
-        "timestamp": datetime.utcnow().isoformat(), "total_assets": len(assets),
-        "missing_patches": len(compliance), "sla_breaches": len(breached),
+        "timestamp": datetime.utcnow().isoformat(),
+        "total_assets": len(assets),
+        "missing_patches": len(compliance),
+        "sla_breaches": len(breached),
         "compliance_rate": round((1 - len(breached) / max(len(compliance), 1)) * 100, 1),
         "sla_thresholds": OT_PATCH_SLA,
         "top_overdue": sorted(breached, key=lambda x: x["age_days"], reverse=True)[:15],
@@ -75,9 +87,14 @@ def main():
     report = generate_report(compliance, assets)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("OT patches: %d missing, %d breaches, %.1f%% compliant",
-                report["missing_patches"], report["sla_breaches"], report["compliance_rate"])
+    logger.info(
+        "OT patches: %d missing, %d breaches, %.1f%% compliant",
+        report["missing_patches"],
+        report["sla_breaches"],
+        report["compliance_rate"],
+    )
     print(json.dumps(report, indent=2, default=str))
+
 
 if __name__ == "__main__":
     main()

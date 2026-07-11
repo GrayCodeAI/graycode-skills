@@ -8,9 +8,9 @@ domain confusion, and parameter pollution.
 
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
-from urllib.parse import urlparse, quote
+from pathlib import Path
+from urllib.parse import quote, urlparse
 
 try:
     import requests
@@ -19,10 +19,28 @@ except ImportError:
 
 
 REDIRECT_PARAMS = [
-    "url", "redirect", "redirect_uri", "redirect_url", "next",
-    "return", "returnTo", "return_to", "goto", "target", "dest",
-    "destination", "rurl", "continue", "forward", "out", "view",
-    "ref", "callback", "redir", "login_url", "logout",
+    "url",
+    "redirect",
+    "redirect_uri",
+    "redirect_url",
+    "next",
+    "return",
+    "returnTo",
+    "return_to",
+    "goto",
+    "target",
+    "dest",
+    "destination",
+    "rurl",
+    "continue",
+    "forward",
+    "out",
+    "view",
+    "ref",
+    "callback",
+    "redir",
+    "login_url",
+    "logout",
 ]
 
 BYPASS_PAYLOADS = [
@@ -93,17 +111,21 @@ class OpenRedirectTestAgent:
                         redirected = True
 
             if redirected:
-                results.append({
-                    "payload": payload,
-                    "status": resp.status_code,
-                    "location": location,
-                    "bypassed": True,
-                })
-                self.findings.append({
-                    "severity": "medium",
-                    "type": "Open Redirect",
-                    "detail": f"{path}?{param}={payload} redirects to {location}",
-                })
+                results.append(
+                    {
+                        "payload": payload,
+                        "status": resp.status_code,
+                        "location": location,
+                        "bypassed": True,
+                    }
+                )
+                self.findings.append(
+                    {
+                        "severity": "medium",
+                        "type": "Open Redirect",
+                        "detail": f"{path}?{param}={payload} redirects to {location}",
+                    }
+                )
         return results
 
     def test_all_endpoints(self, redirect_points=None):
@@ -123,11 +145,13 @@ class OpenRedirectTestAgent:
             js_patterns = ["window.location", "document.location", "meta http-equiv"]
             for pattern in js_patterns:
                 if pattern in resp.text:
-                    self.findings.append({
-                        "severity": "medium",
-                        "type": "JavaScript Redirect",
-                        "detail": f"Client-side redirect via {pattern}",
-                    })
+                    self.findings.append(
+                        {
+                            "severity": "medium",
+                            "type": "JavaScript Redirect",
+                            "detail": f"Client-side redirect via {pattern}",
+                        }
+                    )
                     return {"pattern": pattern, "found": True}
         return {"found": False}
 

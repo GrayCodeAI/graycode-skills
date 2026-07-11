@@ -6,14 +6,12 @@ unauthorized file access, suspicious syscalls, and process execution anomalies.
 """
 
 import argparse
-import json
-import os
-import re
-import sys
-import datetime
 import collections
+import datetime
+import json
+import re
 import subprocess
-
+import sys
 
 SUSPICIOUS_SYSCALLS = {
     "execve": "Program execution",
@@ -32,31 +30,47 @@ SUSPICIOUS_SYSCALLS = {
 }
 
 SENSITIVE_PATHS = [
-    "/etc/passwd", "/etc/shadow", "/etc/sudoers",
-    "/etc/ssh/sshd_config", "/root/.ssh/authorized_keys",
-    "/etc/crontab", "/var/spool/cron",
+    "/etc/passwd",
+    "/etc/shadow",
+    "/etc/sudoers",
+    "/etc/ssh/sshd_config",
+    "/root/.ssh/authorized_keys",
+    "/etc/crontab",
+    "/var/spool/cron",
 ]
 
 SUSPICIOUS_COMMANDS = [
-    "curl", "wget", "nc", "ncat", "nmap", "tcpdump",
-    "python", "perl", "ruby", "gcc", "cc", "make",
-    "useradd", "usermod", "groupadd", "visudo",
-    "iptables", "ip6tables", "nft",
+    "curl",
+    "wget",
+    "nc",
+    "ncat",
+    "nmap",
+    "tcpdump",
+    "python",
+    "perl",
+    "ruby",
+    "gcc",
+    "cc",
+    "make",
+    "useradd",
+    "usermod",
+    "groupadd",
+    "visudo",
+    "iptables",
+    "ip6tables",
+    "nft",
 ]
 
 
 def parse_audit_log(log_path, max_lines=50000):
     """Parse raw audit.log file into structured events."""
     events = []
-    current = {}
     try:
-        with open(log_path, "r") as f:
+        with open(log_path) as f:
             for i, line in enumerate(f):
                 if i >= max_lines:
                     break
-                match = re.match(
-                    r"type=(\S+)\s+msg=audit\((\d+\.\d+):(\d+)\):\s*(.*)", line
-                )
+                match = re.match(r"type=(\S+)\s+msg=audit\((\d+\.\d+):(\d+)\):\s*(.*)", line)
                 if not match:
                     continue
                 event_type = match.group(1)
@@ -84,22 +98,26 @@ def detect_privilege_escalation(events):
     for e in events:
         if e.get("type") == "SYSCALL" and e.get("syscall_name") in ("setuid", "setgid", "execve"):
             if e.get("uid") != "0" and e.get("euid") == "0":
-                findings.append({
-                    "type": "privilege_escalation",
-                    "detail": f"UID {e.get('uid')} escalated to eUID 0",
-                    "command": e.get("comm", ""),
-                    "exe": e.get("exe", ""),
-                    "timestamp": e.get("timestamp"),
-                    "severity": "CRITICAL",
-                })
+                findings.append(
+                    {
+                        "type": "privilege_escalation",
+                        "detail": f"UID {e.get('uid')} escalated to eUID 0",
+                        "command": e.get("comm", ""),
+                        "exe": e.get("exe", ""),
+                        "timestamp": e.get("timestamp"),
+                        "severity": "CRITICAL",
+                    }
+                )
         if e.get("type") == "USER_CMD" and "sudo" in e.get("cmd", "").lower():
-            findings.append({
-                "type": "sudo_usage",
-                "user": e.get("acct", e.get("uid", "")),
-                "command": e.get("cmd", ""),
-                "timestamp": e.get("timestamp"),
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "type": "sudo_usage",
+                    "user": e.get("acct", e.get("uid", "")),
+                    "command": e.get("cmd", ""),
+                    "timestamp": e.get("timestamp"),
+                    "severity": "MEDIUM",
+                }
+            )
     return findings
 
 
@@ -111,14 +129,16 @@ def detect_file_access(events):
             path = e.get("name", e.get("exe", ""))
             for sensitive in SENSITIVE_PATHS:
                 if sensitive in path:
-                    findings.append({
-                        "type": "sensitive_file_access",
-                        "path": path,
-                        "syscall": e.get("syscall_name", e.get("syscall", "")),
-                        "user": e.get("uid", ""),
-                        "timestamp": e.get("timestamp"),
-                        "severity": "HIGH",
-                    })
+                    findings.append(
+                        {
+                            "type": "sensitive_file_access",
+                            "path": path,
+                            "syscall": e.get("syscall_name", e.get("syscall", "")),
+                            "user": e.get("uid", ""),
+                            "timestamp": e.get("timestamp"),
+                            "severity": "HIGH",
+                        }
+                    )
                     break
     return findings
 
@@ -132,14 +152,16 @@ def detect_suspicious_commands(events):
             exe = e.get("exe", "").lower()
             for cmd in SUSPICIOUS_COMMANDS:
                 if cmd in comm or cmd in exe:
-                    findings.append({
-                        "type": "suspicious_command",
-                        "command": comm,
-                        "exe": exe,
-                        "user": e.get("uid", ""),
-                        "timestamp": e.get("timestamp"),
-                        "severity": "MEDIUM",
-                    })
+                    findings.append(
+                        {
+                            "type": "suspicious_command",
+                            "command": comm,
+                            "exe": exe,
+                            "user": e.get("uid", ""),
+                            "timestamp": e.get("timestamp"),
+                            "severity": "MEDIUM",
+                        }
+                    )
                     break
     return findings
 
@@ -177,8 +199,12 @@ def generate_summary(events, findings):
 
 def main():
     parser = argparse.ArgumentParser(description="Linux audit log intrusion detection agent")
-    parser.add_argument("log_file", nargs="?", default="/var/log/audit/audit.log",
-                        help="Path to audit.log (default: /var/log/audit/audit.log)")
+    parser.add_argument(
+        "log_file",
+        nargs="?",
+        default="/var/log/audit/audit.log",
+        help="Path to audit.log (default: /var/log/audit/audit.log)",
+    )
     parser.add_argument("--max-lines", type=int, default=50000, help="Max log lines to parse")
     parser.add_argument("--ausearch-key", help="Run ausearch with this key")
     parser.add_argument("--output", "-o", help="Output JSON report path")

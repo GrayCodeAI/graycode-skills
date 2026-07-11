@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Authentication anomaly detection agent using UEBA analytics."""
 
+import csv
 import json
 import sys
-import csv
-from datetime import datetime, timedelta
-from math import radians, sin, cos, sqrt, atan2
 from collections import Counter
-from pathlib import Path
+from datetime import datetime, timedelta
+from math import atan2, cos, radians, sin, sqrt
 
 
 def haversine_km(lat1, lon1, lat2, lon2):
@@ -25,7 +24,7 @@ def load_auth_logs(csv_path):
     timestamp,user,source_ip,result,lat,lon,city,country,app,device
     """
     events = []
-    with open(csv_path, "r") as f:
+    with open(csv_path) as f:
         reader = csv.DictReader(f)
         for row in reader:
             row["lat"] = float(row["lat"]) if row.get("lat") else None
@@ -68,18 +67,20 @@ def detect_impossible_travel(events, max_speed_kmh=900):
                 continue
             speed = dist / hours
             if speed > max_speed_kmh:
-                alerts.append({
-                    "type": "IMPOSSIBLE_TRAVEL",
-                    "severity": "HIGH",
-                    "user": user,
-                    "from": f"{prev.get('city', '?')}, {prev.get('country', '?')}",
-                    "to": f"{curr.get('city', '?')}, {curr.get('country', '?')}",
-                    "distance_km": round(dist, 1),
-                    "time_hours": round(hours, 2),
-                    "speed_kmh": round(speed, 1),
-                    "ip_from": prev.get("source_ip"),
-                    "ip_to": curr.get("source_ip"),
-                })
+                alerts.append(
+                    {
+                        "type": "IMPOSSIBLE_TRAVEL",
+                        "severity": "HIGH",
+                        "user": user,
+                        "from": f"{prev.get('city', '?')}, {prev.get('country', '?')}",
+                        "to": f"{curr.get('city', '?')}, {curr.get('country', '?')}",
+                        "distance_km": round(dist, 1),
+                        "time_hours": round(hours, 2),
+                        "speed_kmh": round(speed, 1),
+                        "ip_from": prev.get("source_ip"),
+                        "ip_to": curr.get("source_ip"),
+                    }
+                )
     return alerts
 
 
@@ -96,27 +97,30 @@ def detect_brute_force(events, threshold=10, window_min=10):
 
     for user, fails in by_user.items():
         fails.sort(key=lambda x: x.get("timestamp", ""))
-        for i, event in enumerate(fails):
+        for _i, event in enumerate(fails):
             try:
                 t_start = datetime.fromisoformat(event["timestamp"].replace("Z", "+00:00"))
                 t_end = t_start + timedelta(minutes=window_min)
             except Exception:
                 continue
             window = [
-                f for f in fails
+                f
+                for f in fails
                 if t_start <= datetime.fromisoformat(f["timestamp"].replace("Z", "+00:00")) <= t_end
             ]
             if len(window) >= threshold:
                 ips = list(set(w.get("source_ip", "") for w in window))
-                alerts.append({
-                    "type": "BRUTE_FORCE",
-                    "severity": "HIGH",
-                    "user": user,
-                    "failures": len(window),
-                    "window_minutes": window_min,
-                    "source_ips": ips,
-                    "distributed": len(ips) > 1,
-                })
+                alerts.append(
+                    {
+                        "type": "BRUTE_FORCE",
+                        "severity": "HIGH",
+                        "user": user,
+                        "failures": len(window),
+                        "window_minutes": window_min,
+                        "source_ips": ips,
+                        "distributed": len(ips) > 1,
+                    }
+                )
                 break
     return alerts
 
@@ -141,21 +145,24 @@ def detect_password_spray(events, user_threshold=10, window_min=30):
             except Exception:
                 continue
             window = [
-                f for f in fails
+                f
+                for f in fails
                 if t_start <= datetime.fromisoformat(f["timestamp"].replace("Z", "+00:00")) <= t_end
             ]
             users = set(w.get("user", "") for w in window)
             if len(users) >= user_threshold:
                 avg_per_user = len(window) / len(users)
                 if avg_per_user <= 3:
-                    alerts.append({
-                        "type": "PASSWORD_SPRAY",
-                        "severity": "CRITICAL",
-                        "source_ip": ip,
-                        "targeted_users": len(users),
-                        "total_attempts": len(window),
-                        "avg_per_user": round(avg_per_user, 1),
-                    })
+                    alerts.append(
+                        {
+                            "type": "PASSWORD_SPRAY",
+                            "severity": "CRITICAL",
+                            "source_ip": ip,
+                            "targeted_users": len(users),
+                            "total_attempts": len(window),
+                            "avg_per_user": round(avg_per_user, 1),
+                        }
+                    )
                     break
     return alerts
 

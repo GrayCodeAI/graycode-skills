@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Cloud infrastructure penetration testing agent using boto3 and ScoutSuite."""
 
-import json
-import sys
 import argparse
+import json
 import subprocess
+import sys
 from datetime import datetime
 
 try:
@@ -23,12 +23,14 @@ def enumerate_public_resources(session):
         for perm in sg.get("IpPermissions", []):
             for ip_range in perm.get("IpRanges", []):
                 if ip_range.get("CidrIp") == "0.0.0.0/0":
-                    findings.append({
-                        "type": "open_security_group",
-                        "resource": sg["GroupId"],
-                        "port": perm.get("FromPort", "all"),
-                        "severity": "HIGH",
-                    })
+                    findings.append(
+                        {
+                            "type": "open_security_group",
+                            "resource": sg["GroupId"],
+                            "port": perm.get("FromPort", "all"),
+                            "severity": "HIGH",
+                        }
+                    )
     s3 = session.client("s3")
     for bucket in s3.list_buckets().get("Buckets", []):
         try:
@@ -36,12 +38,14 @@ def enumerate_public_resources(session):
             for grant in acl.get("Grants", []):
                 grantee = grant.get("Grantee", {})
                 if grantee.get("URI", "").endswith("AllUsers"):
-                    findings.append({
-                        "type": "public_s3_bucket",
-                        "resource": bucket["Name"],
-                        "permission": grant["Permission"],
-                        "severity": "CRITICAL",
-                    })
+                    findings.append(
+                        {
+                            "type": "public_s3_bucket",
+                            "resource": bucket["Name"],
+                            "permission": grant["Permission"],
+                            "severity": "CRITICAL",
+                        }
+                    )
         except ClientError:
             pass
     return findings
@@ -55,24 +59,28 @@ def check_iam_weaknesses(session):
         policies = iam.list_attached_user_policies(UserName=user["UserName"])
         for pol in policies["AttachedPolicies"]:
             if pol["PolicyArn"].endswith("/AdministratorAccess"):
-                issues.append({
-                    "type": "admin_user",
-                    "user": user["UserName"],
-                    "policy": pol["PolicyName"],
-                    "severity": "HIGH",
-                })
+                issues.append(
+                    {
+                        "type": "admin_user",
+                        "user": user["UserName"],
+                        "policy": pol["PolicyName"],
+                        "severity": "HIGH",
+                    }
+                )
         keys = iam.list_access_keys(UserName=user["UserName"])
         for key in keys["AccessKeyMetadata"]:
             if key["Status"] == "Active":
                 age = (datetime.utcnow() - key["CreateDate"].replace(tzinfo=None)).days
                 if age > 90:
-                    issues.append({
-                        "type": "stale_access_key",
-                        "user": user["UserName"],
-                        "key_id": key["AccessKeyId"],
-                        "age_days": age,
-                        "severity": "MEDIUM",
-                    })
+                    issues.append(
+                        {
+                            "type": "stale_access_key",
+                            "user": user["UserName"],
+                            "key_id": key["AccessKeyId"],
+                            "age_days": age,
+                            "severity": "MEDIUM",
+                        }
+                    )
     return issues
 
 
@@ -86,12 +94,14 @@ def check_metadata_service(session):
             for inst in res["Instances"]:
                 md = inst.get("MetadataOptions", {})
                 if md.get("HttpTokens") != "required":
-                    vulnerable.append({
-                        "type": "imdsv1_enabled",
-                        "instance_id": inst["InstanceId"],
-                        "state": inst["State"]["Name"],
-                        "severity": "HIGH",
-                    })
+                    vulnerable.append(
+                        {
+                            "type": "imdsv1_enabled",
+                            "instance_id": inst["InstanceId"],
+                            "state": inst["State"]["Name"],
+                            "severity": "HIGH",
+                        }
+                    )
     return vulnerable
 
 
@@ -110,11 +120,11 @@ def run_scoutsuite_scan(provider="aws"):
 def run_pentest(profile=None, region="us-east-1"):
     """Execute cloud infrastructure penetration test."""
     session = boto3.Session(profile_name=profile, region_name=region)
-    print(f"\n{'='*60}")
-    print(f"  CLOUD INFRASTRUCTURE PENETRATION TEST")
+    print(f"\n{'=' * 60}")
+    print("  CLOUD INFRASTRUCTURE PENETRATION TEST")
     print(f"  Region: {region} | Profile: {profile or 'default'}")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     public = enumerate_public_resources(session)
     print(f"--- PUBLIC EXPOSURE ({len(public)} findings) ---")

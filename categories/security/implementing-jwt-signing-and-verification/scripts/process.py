@@ -15,32 +15,38 @@ Usage:
     python process.py attack-demo  # Demonstrates and defends common attacks
 """
 
-import os
-import sys
-import json
-import time
-import hmac
-import hashlib
-import base64
 import argparse
-import logging
+import base64
 import datetime
+import json
+import logging
+import os
 from pathlib import Path
-from typing import Dict, Optional, List
+from typing import Optional
 
 import jwt
-from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519
-from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec, ed25519, rsa
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-ALLOWED_ALGORITHMS = ["HS256", "HS384", "HS512", "RS256", "RS384", "RS512",
-                       "ES256", "ES384", "ES512", "EdDSA"]
+ALLOWED_ALGORITHMS = [
+    "HS256",
+    "HS384",
+    "HS512",
+    "RS256",
+    "RS384",
+    "RS512",
+    "ES256",
+    "ES384",
+    "ES512",
+    "EdDSA",
+]
 
 
-def generate_signing_keys(algorithm: str, output_dir: str) -> Dict:
+def generate_signing_keys(algorithm: str, output_dir: str) -> dict:
     """Generate signing keys for a JWT algorithm."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -50,13 +56,21 @@ def generate_signing_keys(algorithm: str, output_dir: str) -> Dict:
         secret = os.urandom(key_size)
         secret_hex = secret.hex()
         (output_path / "secret.key").write_text(secret_hex)
-        return {"algorithm": algorithm, "key_type": "symmetric", "key_file": str(output_path / "secret.key")}
+        return {
+            "algorithm": algorithm,
+            "key_type": "symmetric",
+            "key_file": str(output_path / "secret.key"),
+        }
 
     if algorithm.startswith("RS"):
         key_size = {"RS256": 2048, "RS384": 3072, "RS512": 4096}.get(algorithm, 2048)
-        private_key = rsa.generate_private_key(public_exponent=65537, key_size=key_size, backend=default_backend())
+        private_key = rsa.generate_private_key(
+            public_exponent=65537, key_size=key_size, backend=default_backend()
+        )
     elif algorithm.startswith("ES"):
-        curve = {"ES256": ec.SECP256R1(), "ES384": ec.SECP384R1(), "ES512": ec.SECP521R1()}.get(algorithm, ec.SECP256R1())
+        curve = {"ES256": ec.SECP256R1(), "ES384": ec.SECP384R1(), "ES512": ec.SECP521R1()}.get(
+            algorithm, ec.SECP256R1()
+        )
         private_key = ec.generate_private_key(curve, default_backend())
     elif algorithm == "EdDSA":
         private_key = ed25519.Ed25519PrivateKey.generate()
@@ -88,7 +102,7 @@ def create_jwt(
     issuer: str,
     audience: Optional[str] = None,
     expiry_seconds: int = 900,
-    extra_claims: Optional[Dict] = None,
+    extra_claims: Optional[dict] = None,
 ) -> str:
     """Create a signed JWT."""
     if algorithm not in ALLOWED_ALGORITHMS:
@@ -115,10 +129,10 @@ def create_jwt(
 def verify_jwt(
     token: str,
     verification_key,
-    algorithms: List[str],
+    algorithms: list[str],
     issuer: Optional[str] = None,
     audience: Optional[str] = None,
-) -> Dict:
+) -> dict:
     """
     Securely verify a JWT with algorithm allowlist.
     Defends against algorithm confusion by requiring explicit algorithm list.
@@ -129,7 +143,6 @@ def verify_jwt(
         raise ValueError("No valid algorithms specified")
 
     try:
-        options = {}
         kwargs = {"algorithms": safe_algorithms}
         if issuer:
             kwargs["issuer"] = issuer
@@ -154,7 +167,7 @@ def verify_jwt(
         return {"valid": False, "error": str(e)}
 
 
-def decode_jwt_unverified(token: str) -> Dict:
+def decode_jwt_unverified(token: str) -> dict:
     """Decode JWT header and payload without verification (for inspection only)."""
     parts = token.split(".")
     if len(parts) != 3:
@@ -186,18 +199,23 @@ def attack_demo():
 
     # Create legitimate token
     token = create_jwt("RS256", priv_pem, "user123", "myapp", expiry_seconds=3600)
-    print(f"[1] Legitimate RS256 token created")
+    print("[1] Legitimate RS256 token created")
 
     # Verify legitimate token
     result = verify_jwt(token, pub_pem, ["RS256"], issuer="myapp")
     print(f"    Verification: {result['valid']}")
 
     # Attack 1: Algorithm Confusion (RS256 -> HS256)
-    print(f"\n[2] Attack: Algorithm Confusion (RS256 -> HS256)")
+    print("\n[2] Attack: Algorithm Confusion (RS256 -> HS256)")
     try:
         malicious_token = jwt.encode(
-            {"sub": "admin", "iss": "myapp", "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
-            pub_pem, algorithm="HS256"
+            {
+                "sub": "admin",
+                "iss": "myapp",
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1),
+            },
+            pub_pem,
+            algorithm="HS256",
         )
         result = verify_jwt(malicious_token, pub_pem, ["RS256"])  # Only allow RS256
         print(f"    Defense: Algorithm restricted to RS256 only -> {result}")
@@ -205,26 +223,34 @@ def attack_demo():
         print(f"    Defense: Attack blocked -> {e}")
 
     # Attack 2: None Algorithm
-    print(f"\n[3] Attack: None Algorithm")
-    header = base64.urlsafe_b64encode(json.dumps({"alg": "none", "typ": "JWT"}).encode()).rstrip(b"=").decode()
-    payload = base64.urlsafe_b64encode(json.dumps({"sub": "admin", "iss": "myapp"}).encode()).rstrip(b"=").decode()
+    print("\n[3] Attack: None Algorithm")
+    header = (
+        base64.urlsafe_b64encode(json.dumps({"alg": "none", "typ": "JWT"}).encode())
+        .rstrip(b"=")
+        .decode()
+    )
+    payload = (
+        base64.urlsafe_b64encode(json.dumps({"sub": "admin", "iss": "myapp"}).encode())
+        .rstrip(b"=")
+        .decode()
+    )
     none_token = f"{header}.{payload}."
     result = verify_jwt(none_token, pub_pem, ["RS256"])
     print(f"    Defense: None algorithm rejected -> {result}")
 
     # Attack 3: Expired Token
-    print(f"\n[4] Attack: Expired Token Replay")
+    print("\n[4] Attack: Expired Token Replay")
     expired_token = create_jwt("RS256", priv_pem, "user123", "myapp", expiry_seconds=-10)
     result = verify_jwt(expired_token, pub_pem, ["RS256"], issuer="myapp")
     print(f"    Defense: Expired token rejected -> {result}")
 
     # Attack 4: Wrong Issuer
-    print(f"\n[5] Attack: Wrong Issuer")
+    print("\n[5] Attack: Wrong Issuer")
     wrong_issuer_token = create_jwt("RS256", priv_pem, "user123", "evil-app")
     result = verify_jwt(wrong_issuer_token, pub_pem, ["RS256"], issuer="myapp")
     print(f"    Defense: Wrong issuer rejected -> {result}")
 
-    print(f"\n[OK] All attacks successfully defended")
+    print("\n[OK] All attacks successfully defended")
 
 
 def main():
@@ -264,7 +290,9 @@ def main():
         key_data = Path(args.key).read_text().strip()
         if args.alg.startswith("HS"):
             key_data = bytes.fromhex(key_data)
-        token = create_jwt(args.alg, key_data, args.subject, args.issuer, args.audience, args.expiry)
+        token = create_jwt(
+            args.alg, key_data, args.subject, args.issuer, args.audience, args.expiry
+        )
         print(token)
     elif args.command == "verify":
         key_data = Path(args.key).read_text().strip()

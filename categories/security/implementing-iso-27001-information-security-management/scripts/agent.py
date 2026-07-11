@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Agent for assessing ISO 27001:2022 ISMS compliance."""
 
-import json
 import argparse
-from datetime import datetime
+import json
 from collections import Counter
+from datetime import datetime
 
 ANNEX_A_CATEGORIES = {
     "A.5": {"name": "Organizational controls", "count": 37},
@@ -14,13 +14,20 @@ ANNEX_A_CATEGORIES = {
 }
 
 REQUIRED_DOCUMENTS = [
-    "ISMS Scope (4.3)", "Information Security Policy (5.2)",
-    "Risk Assessment Methodology (6.1.2)", "Risk Treatment Plan (6.1.3)",
-    "Statement of Applicability (6.1.3d)", "Information Security Objectives (6.2)",
-    "Evidence of Competence (7.2)", "Documented Operating Procedures (8.1)",
-    "Risk Assessment Results (8.2)", "Risk Treatment Results (8.3)",
-    "Monitoring and Measurement Results (9.1)", "Internal Audit Program (9.2)",
-    "Management Review Results (9.3)", "Nonconformities and Corrective Actions (10.1)",
+    "ISMS Scope (4.3)",
+    "Information Security Policy (5.2)",
+    "Risk Assessment Methodology (6.1.2)",
+    "Risk Treatment Plan (6.1.3)",
+    "Statement of Applicability (6.1.3d)",
+    "Information Security Objectives (6.2)",
+    "Evidence of Competence (7.2)",
+    "Documented Operating Procedures (8.1)",
+    "Risk Assessment Results (8.2)",
+    "Risk Treatment Results (8.3)",
+    "Monitoring and Measurement Results (9.1)",
+    "Internal Audit Program (9.2)",
+    "Management Review Results (9.3)",
+    "Nonconformities and Corrective Actions (10.1)",
 ]
 
 
@@ -35,25 +42,33 @@ def assess_soa_completeness(soa_path):
     not_implemented = sum(1 for c in controls if c.get("status", "").lower() == "not_implemented")
     excluded = sum(1 for c in controls if c.get("status", "").lower() == "excluded")
 
-    missing_justification = [c for c in controls
-                             if c.get("status", "").lower() == "excluded"
-                             and not c.get("justification")]
+    missing_justification = [
+        c
+        for c in controls
+        if c.get("status", "").lower() == "excluded" and not c.get("justification")
+    ]
     findings = []
     if missing_justification:
-        findings.append({
-            "issue": f"{len(missing_justification)} excluded controls without justification",
-            "severity": "HIGH",
-            "controls": [c.get("id", "") for c in missing_justification],
-        })
+        findings.append(
+            {
+                "issue": f"{len(missing_justification)} excluded controls without justification",
+                "severity": "HIGH",
+                "controls": [c.get("id", "") for c in missing_justification],
+            }
+        )
 
-    no_evidence = [c for c in controls
-                   if c.get("status", "").lower() == "implemented"
-                   and not c.get("evidence")]
+    no_evidence = [
+        c
+        for c in controls
+        if c.get("status", "").lower() == "implemented" and not c.get("evidence")
+    ]
     if no_evidence:
-        findings.append({
-            "issue": f"{len(no_evidence)} implemented controls without evidence",
-            "severity": "MEDIUM",
-        })
+        findings.append(
+            {
+                "issue": f"{len(no_evidence)} implemented controls without evidence",
+                "severity": "MEDIUM",
+            }
+        )
 
     return {
         "total_controls": total,
@@ -79,10 +94,13 @@ def assess_documentation(docs_inventory_path):
         if not found:
             missing.append(req)
 
-    outdated = [d for d in docs
-                if d.get("last_review") and
-                (datetime.utcnow() - datetime.fromisoformat(
-                    d["last_review"].replace("Z", ""))).days > 365]
+    outdated = [
+        d
+        for d in docs
+        if d.get("last_review")
+        and (datetime.utcnow() - datetime.fromisoformat(d["last_review"].replace("Z", ""))).days
+        > 365
+    ]
 
     return {
         "required": len(REQUIRED_DOCUMENTS),
@@ -90,7 +108,8 @@ def assess_documentation(docs_inventory_path):
         "missing": missing,
         "outdated_documents": len(outdated),
         "compliance_rate": round(
-            (len(REQUIRED_DOCUMENTS) - len(missing)) / len(REQUIRED_DOCUMENTS) * 100, 1),
+            (len(REQUIRED_DOCUMENTS) - len(missing)) / len(REQUIRED_DOCUMENTS) * 100, 1
+        ),
     }
 
 
@@ -106,23 +125,29 @@ def assess_risk_register(risk_register_path):
         level = risk.get("risk_level", risk.get("rating", "unknown")).lower()
         by_level[level] += 1
         if not risk.get("treatment", risk.get("mitigation")):
-            findings.append({
-                "risk": risk.get("id", risk.get("name", "")),
-                "issue": "No treatment plan defined",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "risk": risk.get("id", risk.get("name", "")),
+                    "issue": "No treatment plan defined",
+                    "severity": "HIGH",
+                }
+            )
         if not risk.get("owner"):
-            findings.append({
-                "risk": risk.get("id", ""),
-                "issue": "No risk owner assigned",
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "risk": risk.get("id", ""),
+                    "issue": "No risk owner assigned",
+                    "severity": "MEDIUM",
+                }
+            )
         if risk.get("treatment", "").lower() == "accept" and not risk.get("acceptance_authority"):
-            findings.append({
-                "risk": risk.get("id", ""),
-                "issue": "Risk accepted without management approval",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "risk": risk.get("id", ""),
+                    "issue": "Risk accepted without management approval",
+                    "severity": "HIGH",
+                }
+            )
 
     return {
         "total_risks": len(risks),
@@ -162,8 +187,9 @@ def main():
     parser.add_argument("--docs", help="Documentation inventory JSON")
     parser.add_argument("--risks", help="Risk register JSON")
     parser.add_argument("--state", help="Current state assessment JSON for gap analysis")
-    parser.add_argument("--action", choices=["soa", "docs", "risks", "gaps", "full"],
-                        default="full")
+    parser.add_argument(
+        "--action", choices=["soa", "docs", "risks", "gaps", "full"], default="full"
+    )
     parser.add_argument("--output", default="iso27001_report.json")
     args = parser.parse_args()
 

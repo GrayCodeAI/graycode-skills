@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Windows Defender advanced configuration audit agent."""
 
-import json
-import sys
 import argparse
+import json
 import subprocess
 from datetime import datetime
 
@@ -30,8 +29,11 @@ def get_defender_preferences():
 
 def audit_asr_rules():
     """Audit Attack Surface Reduction rules configuration."""
-    cmd = ["powershell", "-Command",
-           "Get-MpPreference | Select-Object -ExpandProperty AttackSurfaceReductionRules_Ids | ConvertTo-Json"]
+    cmd = [
+        "powershell",
+        "-Command",
+        "Get-MpPreference | Select-Object -ExpandProperty AttackSurfaceReductionRules_Ids | ConvertTo-Json",
+    ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         rule_ids = json.loads(result.stdout) if result.stdout.strip() else []
@@ -57,26 +59,24 @@ def audit_asr_rules():
 
 def check_tamper_protection():
     """Check tamper protection status."""
-    cmd = ["powershell", "-Command",
-           "(Get-MpComputerStatus).IsTamperProtected"]
+    cmd = ["powershell", "-Command", "(Get-MpComputerStatus).IsTamperProtected"]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=15)
         enabled = "true" in result.stdout.strip().lower()
-        return {"tamper_protection": enabled,
-                "severity": "CRITICAL" if not enabled else "INFO"}
+        return {"tamper_protection": enabled, "severity": "CRITICAL" if not enabled else "INFO"}
     except (FileNotFoundError, subprocess.TimeoutExpired):
         return {"error": "Cannot check tamper protection"}
 
 
 def run_audit():
     """Execute Windows Defender audit."""
-    print(f"\n{'='*60}")
-    print(f"  WINDOWS DEFENDER ADVANCED SETTINGS AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  WINDOWS DEFENDER ADVANCED SETTINGS AUDIT")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     status = get_defender_status()
-    print(f"--- DEFENDER STATUS ---")
+    print("--- DEFENDER STATUS ---")
     if "error" not in status:
         print(f"  Real-time protection: {status.get('RealTimeProtectionEnabled', 'N/A')}")
         print(f"  Behavior monitoring: {status.get('BehaviorMonitorEnabled', 'N/A')}")
@@ -84,14 +84,14 @@ def run_audit():
         print(f"  Signature version: {status.get('AntivirusSignatureVersion', 'N/A')}")
 
     asr = audit_asr_rules()
-    print(f"\n--- ASR RULES ---")
+    print("\n--- ASR RULES ---")
     print(f"  Configured: {asr['configured_count']}")
     print(f"  Missing critical: {len(asr['missing_critical'])}")
     for rule in asr["missing_critical"][:5]:
         print(f"    [{rule['severity']}] {rule['description']}")
 
     tamper = check_tamper_protection()
-    print(f"\n--- TAMPER PROTECTION ---")
+    print("\n--- TAMPER PROTECTION ---")
     print(f"  Enabled: {tamper.get('tamper_protection', 'N/A')}")
 
     return {"status": status, "asr": asr, "tamper": tamper}

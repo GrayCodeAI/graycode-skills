@@ -5,22 +5,27 @@ Analyzes process access logs for LSASS memory access, SAM extraction,
 DCSync activity, and other credential theft indicators.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
-import sys
 from collections import defaultdict
 from pathlib import Path
 
 # Suspicious LSASS access masks indicating credential dumping
 SUSPICIOUS_ACCESS_MASKS = {
     "0x1FFFFF": {"risk": "CRITICAL", "description": "PROCESS_ALL_ACCESS - full process access"},
-    "0x1010": {"risk": "HIGH", "description": "PROCESS_VM_READ + PROCESS_QUERY_INFORMATION (Mimikatz default)"},
+    "0x1010": {
+        "risk": "HIGH",
+        "description": "PROCESS_VM_READ + PROCESS_QUERY_INFORMATION (Mimikatz default)",
+    },
     "0x1038": {"risk": "HIGH", "description": "Common credential dumping access mask"},
     "0x0410": {"risk": "MEDIUM", "description": "PROCESS_QUERY_INFORMATION + PROCESS_VM_READ"},
-    "0x1400": {"risk": "MEDIUM", "description": "PROCESS_QUERY_INFORMATION + PROCESS_QUERY_LIMITED"},
+    "0x1400": {
+        "risk": "MEDIUM",
+        "description": "PROCESS_QUERY_INFORMATION + PROCESS_QUERY_LIMITED",
+    },
     "0x0040": {"risk": "HIGH", "description": "PROCESS_DUP_HANDLE - handle duplication"},
     "0x0810": {"risk": "HIGH", "description": "PROCESS_SUSPEND_RESUME + PROCESS_VM_READ"},
     "0x1fffff": {"risk": "CRITICAL", "description": "PROCESS_ALL_ACCESS (lowercase)"},
@@ -28,12 +33,27 @@ SUSPICIOUS_ACCESS_MASKS = {
 
 # Legitimate processes that commonly access LSASS
 LSASS_WHITELIST = {
-    "csrss.exe", "svchost.exe", "services.exe", "lsass.exe", "wininit.exe",
-    "smss.exe", "wmiprvse.exe", "taskmgr.exe", "procexp.exe", "procexp64.exe",
-    "msmpsvc.exe", "msmpeng.exe", "nissrv.exe", "mssense.exe", "sensecncproxy.exe",
-    "csfalconservice.exe", "csfalconcontainer.exe",
-    "sentinelagent.exe", "sentinelone.exe",
-    "cb.exe", "carbonblack.exe",
+    "csrss.exe",
+    "svchost.exe",
+    "services.exe",
+    "lsass.exe",
+    "wininit.exe",
+    "smss.exe",
+    "wmiprvse.exe",
+    "taskmgr.exe",
+    "procexp.exe",
+    "procexp64.exe",
+    "msmpsvc.exe",
+    "msmpeng.exe",
+    "nissrv.exe",
+    "mssense.exe",
+    "sensecncproxy.exe",
+    "csfalconservice.exe",
+    "csfalconcontainer.exe",
+    "sentinelagent.exe",
+    "sentinelone.exe",
+    "cb.exe",
+    "carbonblack.exe",
     "logrhythmagent.exe",
 }
 
@@ -133,13 +153,17 @@ def parse_logs(input_path: str) -> list[dict]:
     events = []
     path = Path(input_path)
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
-            events = data if isinstance(data, list) else data.get("events", data.get("hits", {}).get("hits", []))
+            events = (
+                data
+                if isinstance(data, list)
+                else data.get("events", data.get("hits", {}).get("hits", []))
+            )
             if events and isinstance(events[0], dict) and "_source" in events[0]:
                 events = [e["_source"] for e in events]
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             reader = csv.DictReader(f)
             events = [dict(row) for row in reader]
     return events
@@ -148,10 +172,20 @@ def parse_logs(input_path: str) -> list[dict]:
 def normalize_event(event: dict) -> dict:
     """Normalize event field names."""
     field_map = {
-        "source_image": ["SourceImage", "source_image", "InitiatingProcessFileName", "process.executable"],
+        "source_image": [
+            "SourceImage",
+            "source_image",
+            "InitiatingProcessFileName",
+            "process.executable",
+        ],
         "target_image": ["TargetImage", "target_image", "FileName", "target.process.executable"],
         "granted_access": ["GrantedAccess", "granted_access", "AccessMask"],
-        "command_line": ["CommandLine", "command_line", "ProcessCommandLine", "process.command_line"],
+        "command_line": [
+            "CommandLine",
+            "command_line",
+            "ProcessCommandLine",
+            "process.command_line",
+        ],
         "user": ["User", "user", "AccountName", "SubjectUserName", "user.name"],
         "hostname": ["Computer", "hostname", "DeviceName", "host.name"],
         "timestamp": ["UtcTime", "timestamp", "Timestamp", "@timestamp"],
@@ -223,7 +257,10 @@ def detect_credential_tool(event: dict) -> dict | None:
                     "user": event.get("user", "unknown"),
                     "hostname": event.get("hostname", "unknown"),
                     "timestamp": event.get("timestamp", "unknown"),
-                    "indicators": [f"Credential tool detected: {tool_name}", f"Pattern matched: {pattern}"],
+                    "indicators": [
+                        f"Credential tool detected: {tool_name}",
+                        f"Pattern matched: {pattern}",
+                    ],
                 }
     return None
 
@@ -290,19 +327,23 @@ def run_hunt(input_path: str, output_dir: str, dc_list: list[str] | None = None)
 
     findings_file = output_path / "credential_dump_findings.json"
     with open(findings_file, "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-CRED-DUMP-{datetime.date.today().isoformat()}",
-            "timestamp": datetime.datetime.now().isoformat(),
-            "total_events": len(events),
-            "total_findings": len(findings),
-            "statistics": dict(stats),
-            "findings": findings,
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-CRED-DUMP-{datetime.date.today().isoformat()}",
+                "timestamp": datetime.datetime.now().isoformat(),
+                "total_events": len(events),
+                "total_findings": len(findings),
+                "statistics": dict(stats),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
 
     # Write report
     report_file = output_path / "hunt_report.md"
     with open(report_file, "w", encoding="utf-8") as f:
-        f.write(f"# Credential Dumping Hunt Report\n\n")
+        f.write("# Credential Dumping Hunt Report\n\n")
         f.write(f"**Date**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"**Events Analyzed**: {len(events)}\n")
         f.write(f"**Findings**: {len(findings)}\n\n")
@@ -310,17 +351,23 @@ def run_hunt(input_path: str, output_dir: str, dc_list: list[str] | None = None)
         for key, count in sorted(stats.items()):
             f.write(f"- {key}: {count}\n")
         f.write("\n## Critical Findings\n\n")
-        for finding in sorted(findings, key=lambda x: ("CRITICAL", "HIGH", "MEDIUM", "LOW").index(x["risk_level"])):
+        for finding in sorted(
+            findings, key=lambda x: ("CRITICAL", "HIGH", "MEDIUM", "LOW").index(x["risk_level"])
+        ):
             if finding["risk_level"] in ("CRITICAL", "HIGH"):
-                f.write(f"### [{finding['risk_level']}] {finding['detection_type']} - {finding['technique']}\n")
+                f.write(
+                    f"### [{finding['risk_level']}] {finding['detection_type']} - {finding['technique']}\n"
+                )
                 f.write(f"- **Host**: {finding['hostname']}\n")
                 f.write(f"- **User**: {finding['user']}\n")
                 f.write(f"- **Indicators**: {', '.join(finding['indicators'])}\n\n")
 
     print(f"[+] Output written to {output_dir}")
-    print(f"\n{'='*60}")
-    print(f"FINDINGS: {len(findings)} | CRITICAL: {stats.get('CRITICAL',0)} | HIGH: {stats.get('HIGH',0)}")
-    print(f"{'='*60}")
+    print(f"\n{'=' * 60}")
+    print(
+        f"FINDINGS: {len(findings)} | CRITICAL: {stats.get('CRITICAL', 0)} | HIGH: {stats.get('HIGH', 0)}"
+    )
+    print(f"{'=' * 60}")
 
 
 def generate_queries(platform: str) -> None:
@@ -357,8 +404,12 @@ def main():
 
     hunt_parser = subparsers.add_parser("hunt", help="Run credential dumping hunt")
     hunt_parser.add_argument("--input", "-i", required=True, help="Log file path")
-    hunt_parser.add_argument("--output", "-o", default="./cred_dump_output", help="Output directory")
-    hunt_parser.add_argument("--dc-list", nargs="*", help="List of known DCs to exclude from DCSync alerts")
+    hunt_parser.add_argument(
+        "--output", "-o", default="./cred_dump_output", help="Output directory"
+    )
+    hunt_parser.add_argument(
+        "--dc-list", nargs="*", help="List of known DCs to exclude from DCSync alerts"
+    )
 
     query_parser = subparsers.add_parser("queries", help="Generate hunting queries")
     query_parser.add_argument("--platform", "-p", choices=["splunk", "kql", "all"], default="all")

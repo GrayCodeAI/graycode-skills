@@ -15,15 +15,14 @@ Usage:
 import argparse
 import json
 import re
-import sys
-from dataclasses import dataclass, field, asdict
-from collections import defaultdict, Counter
-from datetime import datetime
+from collections import Counter, defaultdict
+from dataclasses import asdict, dataclass, field
 
 
 @dataclass
 class PolicyAudit:
     """TTP policy configuration audit result."""
+
     url_protect_enabled: bool = False
     url_rewriting: bool = False
     url_predelivery_hold: bool = False
@@ -40,6 +39,7 @@ class PolicyAudit:
 @dataclass
 class TTPMetrics:
     """TTP detection metrics from log analysis."""
+
     total_emails: int = 0
     url_threats_blocked: int = 0
     attachment_threats_blocked: int = 0
@@ -53,6 +53,7 @@ class TTPMetrics:
 @dataclass
 class ImpersonationCheck:
     """VIP impersonation check result."""
+
     from_display_name: str = ""
     from_email: str = ""
     matched_vip: str = ""
@@ -63,26 +64,10 @@ class ImpersonationCheck:
 
 
 REQUIRED_POLICIES = {
-    "url_protect": {
-        "enabled": True,
-        "rewriting": True,
-        "predelivery_hold": True,
-        "weight": 25
-    },
-    "attachment_protect": {
-        "enabled": True,
-        "sandbox_mode": "dynamic",
-        "weight": 25
-    },
-    "impersonation_protect": {
-        "enabled": True,
-        "min_vips": 5,
-        "weight": 25
-    },
-    "internal_email_protect": {
-        "enabled": True,
-        "weight": 25
-    }
+    "url_protect": {"enabled": True, "rewriting": True, "predelivery_hold": True, "weight": 25},
+    "attachment_protect": {"enabled": True, "sandbox_mode": "dynamic", "weight": 25},
+    "impersonation_protect": {"enabled": True, "min_vips": 5, "weight": 25},
+    "internal_email_protect": {"enabled": True, "weight": 25},
 }
 
 
@@ -202,8 +187,7 @@ def analyze_ttp_logs(logs: list) -> TTPMetrics:
 
     metrics.top_threat_types = dict(threat_types.most_common(10))
     metrics.top_targeted_users = [
-        {"user": user, "threat_count": count}
-        for user, count in targeted_users.most_common(10)
+        {"user": user, "threat_count": count} for user, count in targeted_users.most_common(10)
     ]
     metrics.daily_stats = dict(daily)
 
@@ -217,7 +201,7 @@ def check_impersonation(email_data: dict, vip_list: list) -> ImpersonationCheck:
     check.from_email = email_data.get("from", "")
 
     from_domain = ""
-    match = re.search(r'@([\w.-]+)', check.from_email)
+    match = re.search(r"@([\w.-]+)", check.from_email)
     if match:
         from_domain = match.group(1).lower()
 
@@ -304,9 +288,15 @@ def main():
         else:
             print(f"TTP Configuration Score: {result.score}/{result.max_score}")
             print(f"URL Protect: {'Enabled' if result.url_protect_enabled else 'DISABLED'}")
-            print(f"Attachment Protect: {'Enabled' if result.attachment_protect_enabled else 'DISABLED'}")
-            print(f"Impersonation Protect: {'Enabled' if result.impersonation_protect_enabled else 'DISABLED'}")
-            print(f"Internal Email Protect: {'Enabled' if result.internal_email_protect else 'DISABLED'}")
+            print(
+                f"Attachment Protect: {'Enabled' if result.attachment_protect_enabled else 'DISABLED'}"
+            )
+            print(
+                f"Impersonation Protect: {'Enabled' if result.impersonation_protect_enabled else 'DISABLED'}"
+            )
+            print(
+                f"Internal Email Protect: {'Enabled' if result.internal_email_protect else 'DISABLED'}"
+            )
             if result.findings:
                 print(f"\nFindings ({len(result.findings)}):")
                 for i, f_item in enumerate(result.findings, 1):

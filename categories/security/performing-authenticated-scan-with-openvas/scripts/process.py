@@ -7,11 +7,7 @@ the Greenbone Management Protocol (GMP) via python-gvm.
 
 import argparse
 import csv
-import json
 import sys
-import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
-from pathlib import Path
 
 try:
     from gvm.connections import UnixSocketConnection
@@ -39,7 +35,7 @@ def connect_gmp(socket_path, username, password):
 def create_ssh_credential(gmp, name, login, key_path=None, password=None):
     """Create SSH credential for Linux authenticated scanning."""
     if key_path:
-        with open(key_path, "r") as f:
+        with open(key_path) as f:
             private_key = f.read()
         credential = gmp.create_credential(
             name=name,
@@ -144,15 +140,17 @@ def export_report_csv(gmp, report_id, output_path):
         port = result.find("port")
         severity = result.find("severity")
         cve_refs = nvt.find("cve")
-        results.append({
-            "host": host.text if host is not None else "",
-            "port": port.text if port is not None else "",
-            "nvt_name": nvt.findtext("name", ""),
-            "nvt_oid": nvt.get("oid", ""),
-            "severity": severity.text if severity is not None else "",
-            "cve": cve_refs.text if cve_refs is not None else "",
-            "description": result.findtext("description", "")[:500],
-        })
+        results.append(
+            {
+                "host": host.text if host is not None else "",
+                "port": port.text if port is not None else "",
+                "nvt_name": nvt.findtext("name", ""),
+                "nvt_oid": nvt.get("oid", ""),
+                "severity": severity.text if severity is not None else "",
+                "cve": cve_refs.text if cve_refs is not None else "",
+                "description": result.findtext("description", "")[:500],
+            }
+        )
 
     with open(output_path, "w", newline="", encoding="utf-8") as f:
         if results:

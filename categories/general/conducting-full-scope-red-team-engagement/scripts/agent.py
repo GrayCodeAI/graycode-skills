@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Full-scope red team engagement management agent."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
@@ -24,16 +24,23 @@ def get_attack_techniques(tactics=None):
             kill_chain = tech.get("kill_chain_phases", [])
             for phase in kill_chain:
                 if phase.get("phase_name", "").lower() in tactic_set:
-                    filtered.append({
-                        "id": tech.get("external_references", [{}])[0].get("external_id", ""),
-                        "name": tech.get("name", ""),
-                        "tactic": phase.get("phase_name", ""),
-                        "platforms": tech.get("x_mitre_platforms", []),
-                    })
+                    filtered.append(
+                        {
+                            "id": tech.get("external_references", [{}])[0].get("external_id", ""),
+                            "name": tech.get("name", ""),
+                            "tactic": phase.get("phase_name", ""),
+                            "platforms": tech.get("x_mitre_platforms", []),
+                        }
+                    )
                     break
         return filtered
-    return [{"id": t.get("external_references", [{}])[0].get("external_id", ""),
-             "name": t.get("name", "")} for t in techniques[:50]]
+    return [
+        {
+            "id": t.get("external_references", [{}])[0].get("external_id", ""),
+            "name": t.get("name", ""),
+        }
+        for t in techniques[:50]
+    ]
 
 
 def generate_engagement_plan(scope, objectives):
@@ -120,13 +127,13 @@ def generate_c2_checklist():
 
 def run_planning(scope, objectives):
     """Execute red team engagement planning."""
-    print(f"\n{'='*60}")
-    print(f"  RED TEAM ENGAGEMENT PLANNER")
+    print(f"\n{'=' * 60}")
+    print("  RED TEAM ENGAGEMENT PLANNER")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     plan = generate_engagement_plan(scope, objectives)
-    print(f"--- ENGAGEMENT PLAN ---")
+    print("--- ENGAGEMENT PLAN ---")
     print(f"  Scope: {plan['scope']}")
     print(f"  Duration: {plan['total_duration_days']} days")
     for phase in plan["phases"]:
@@ -135,7 +142,7 @@ def run_planning(scope, objectives):
             print(f"    - {act}")
 
     checklist = generate_c2_checklist()
-    print(f"\n--- C2 INFRASTRUCTURE CHECKLIST ---")
+    print("\n--- C2 INFRASTRUCTURE CHECKLIST ---")
     for item in checklist["infrastructure"]:
         print(f"  [ ] {item['item']}")
 

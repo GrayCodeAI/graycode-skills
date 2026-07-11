@@ -8,9 +8,8 @@ import logging
 import os
 import re
 import subprocess
-import sys
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -40,7 +39,7 @@ def verify_dump(dump_path: str) -> dict:
     return {"valid": True, "size_bytes": size, "sha256_1mb": sha256}
 
 
-def run_vol3(dump_path: str, plugin: str, extra_args: Optional[List[str]] = None) -> str:
+def run_vol3(dump_path: str, plugin: str, extra_args: Optional[list[str]] = None) -> str:
     """Run a volatility3 plugin and return stdout."""
     cmd = ["vol", "-f", dump_path, plugin]
     if extra_args:
@@ -82,22 +81,26 @@ def find_lsass_pid(dump_path: str) -> Optional[int]:
     return None
 
 
-def extract_hashdump(dump_path: str) -> List[dict]:
+def extract_hashdump(dump_path: str) -> list[dict]:
     """Extract SAM hashes using windows.hashdump."""
     output = run_vol3(dump_path, "windows.hashdump")
     results = []
     for line in output.splitlines():
         parts = line.split()
         if len(parts) >= 4 and parts[1].isdigit():
-            results.append({
-                "user": parts[0], "rid": int(parts[1]),
-                "lm_hash": parts[2], "ntlm_hash": parts[3],
-            })
+            results.append(
+                {
+                    "user": parts[0],
+                    "rid": int(parts[1]),
+                    "lm_hash": parts[2],
+                    "ntlm_hash": parts[3],
+                }
+            )
     logger.info("Extracted %d SAM hashes", len(results))
     return results
 
 
-def extract_lsadump(dump_path: str) -> List[dict]:
+def extract_lsadump(dump_path: str) -> list[dict]:
     """Extract LSA secrets using windows.lsadump."""
     output = run_vol3(dump_path, "windows.lsadump")
     results = []
@@ -109,14 +112,20 @@ def extract_lsadump(dump_path: str) -> List[dict]:
     return results
 
 
-def extract_cachedump(dump_path: str) -> List[dict]:
+def extract_cachedump(dump_path: str) -> list[dict]:
     """Extract cached domain credentials using windows.cachedump."""
     output = run_vol3(dump_path, "windows.cachedump")
     results = []
     for line in output.splitlines():
         parts = line.split()
         if len(parts) >= 3 and parts[0] not in ("User", "---"):
-            results.append({"user": parts[0], "domain": parts[1], "dcc2_hash": parts[2] if len(parts) > 2 else ""})
+            results.append(
+                {
+                    "user": parts[0],
+                    "domain": parts[1],
+                    "dcc2_hash": parts[2] if len(parts) > 2 else "",
+                }
+            )
     logger.info("Extracted %d cached domain credentials", len(results))
     return results
 
@@ -138,17 +147,21 @@ def run_pypykatz(dump_path: str, output_dir: str) -> dict:
     return {}
 
 
-def parse_pypykatz_creds(pypykatz_data: dict) -> List[dict]:
+def parse_pypykatz_creds(pypykatz_data: dict) -> list[dict]:
     """Parse pypykatz JSON output into structured credential list."""
     creds = []
-    for session_key, session in pypykatz_data.get("logon_sessions", {}).items():
+    for _session_key, session in pypykatz_data.get("logon_sessions", {}).items():
         username = session.get("username", "")
         domain = session.get("domainname", "")
         if not username or username == "(null)":
             continue
-        entry = {"user": f"{domain}\\{username}", "sid": session.get("sid", ""),
-                 "logon_server": session.get("logon_server", ""),
-                 "logon_time": session.get("logon_time", ""), "cred_types": []}
+        entry = {
+            "user": f"{domain}\\{username}",
+            "sid": session.get("sid", ""),
+            "logon_server": session.get("logon_server", ""),
+            "logon_time": session.get("logon_time", ""),
+            "cred_types": [],
+        }
         for msv in session.get("msv_creds", []):
             if msv.get("NThash"):
                 entry["cred_types"].append({"type": "NTLM", "hash": msv["NThash"]})
@@ -156,20 +169,27 @@ def parse_pypykatz_creds(pypykatz_data: dict) -> List[dict]:
             if kerb.get("password"):
                 entry["cred_types"].append({"type": "Kerberos_password", "value": kerb["password"]})
             for ticket in kerb.get("tickets", []):
-                entry["cred_types"].append({"type": "Kerberos_ticket",
-                                            "server": ticket.get("server", ""), "enc_type": ticket.get("enc_type", "")})
+                entry["cred_types"].append(
+                    {
+                        "type": "Kerberos_ticket",
+                        "server": ticket.get("server", ""),
+                        "enc_type": ticket.get("enc_type", ""),
+                    }
+                )
         for wd in session.get("wdigest_creds", []):
             if wd.get("password"):
                 entry["cred_types"].append({"type": "WDigest", "value": wd["password"]})
         for dpapi in session.get("dpapi_creds", []):
             if dpapi.get("masterkey"):
-                entry["cred_types"].append({"type": "DPAPI_masterkey", "key": dpapi["masterkey"][:40]})
+                entry["cred_types"].append(
+                    {"type": "DPAPI_masterkey", "key": dpapi["masterkey"][:40]}
+                )
         if entry["cred_types"]:
             creds.append(entry)
     return creds
 
 
-def search_cloud_keys(dump_path: str) -> List[dict]:
+def search_cloud_keys(dump_path: str) -> list[dict]:
     """Search memory strings for cloud credentials and auth tokens."""
     output = run_vol3(dump_path, "windows.strings", ["--pid", "0"])
     findings = []
@@ -212,11 +232,17 @@ def generate_report(dump_path: str, output_dir: str) -> dict:
     report["summary"] = summary
     report["actions"] = []
     if summary["sam_hashes"] > 0:
-        report["actions"].append("Reset passwords for all local accounts with extracted NTLM hashes")
+        report["actions"].append(
+            "Reset passwords for all local accounts with extracted NTLM hashes"
+        )
     if summary["lsass_creds"] > 0:
-        report["actions"].append("Reset domain account passwords and perform double krbtgt rotation")
+        report["actions"].append(
+            "Reset domain account passwords and perform double krbtgt rotation"
+        )
     if summary["cloud_keys"] > 0:
-        report["actions"].append("Rotate all discovered cloud access keys and revoke active sessions")
+        report["actions"].append(
+            "Rotate all discovered cloud access keys and revoke active sessions"
+        )
 
     logger.info("Report complete: %s", json.dumps(summary))
     return report

@@ -5,13 +5,14 @@ Generates structured threat hunting hypotheses from MITRE ATT&CK techniques,
 maps data sources, defines detection logic, and tracks hunt outcomes.
 """
 
-import sys
-import json
 import datetime
 import hashlib
+import json
+import sys
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -26,20 +27,49 @@ HUNT_MATURITY_LEVELS = {
 }
 
 DATA_SOURCE_MAP = {
-    "T1059.001": {"name": "PowerShell", "sources": ["Script Block Logging (4104)", "Module Logging (4103)",
-                   "Process Creation (4688/Sysmon 1)"], "log_channel": "Microsoft-Windows-PowerShell/Operational"},
-    "T1053.005": {"name": "Scheduled Task", "sources": ["Task Scheduler (4698/4702)", "Sysmon Event 1"],
-                   "log_channel": "Microsoft-Windows-TaskScheduler/Operational"},
-    "T1078": {"name": "Valid Accounts", "sources": ["Logon Events (4624/4625)", "Kerberos (4768/4769)"],
-               "log_channel": "Security"},
-    "T1003.001": {"name": "LSASS Memory", "sources": ["Sysmon Event 10 (ProcessAccess)", "Windows Defender alerts"],
-                   "log_channel": "Microsoft-Windows-Sysmon/Operational"},
-    "T1071.001": {"name": "Web Protocols C2", "sources": ["Proxy logs", "DNS query logs", "Zeek http.log"],
-                   "log_channel": "Proxy/DNS"},
-    "T1486": {"name": "Data Encrypted for Impact", "sources": ["File creation burst (Sysmon 11)",
-               "Canary file triggers", "VSS deletion (Sysmon 1)"], "log_channel": "Sysmon"},
-    "T1021.001": {"name": "Remote Desktop Protocol", "sources": ["Logon Type 10 (4624)",
-                   "RDP connection (1149)"], "log_channel": "Security / TerminalServices-RemoteConnectionManager"},
+    "T1059.001": {
+        "name": "PowerShell",
+        "sources": [
+            "Script Block Logging (4104)",
+            "Module Logging (4103)",
+            "Process Creation (4688/Sysmon 1)",
+        ],
+        "log_channel": "Microsoft-Windows-PowerShell/Operational",
+    },
+    "T1053.005": {
+        "name": "Scheduled Task",
+        "sources": ["Task Scheduler (4698/4702)", "Sysmon Event 1"],
+        "log_channel": "Microsoft-Windows-TaskScheduler/Operational",
+    },
+    "T1078": {
+        "name": "Valid Accounts",
+        "sources": ["Logon Events (4624/4625)", "Kerberos (4768/4769)"],
+        "log_channel": "Security",
+    },
+    "T1003.001": {
+        "name": "LSASS Memory",
+        "sources": ["Sysmon Event 10 (ProcessAccess)", "Windows Defender alerts"],
+        "log_channel": "Microsoft-Windows-Sysmon/Operational",
+    },
+    "T1071.001": {
+        "name": "Web Protocols C2",
+        "sources": ["Proxy logs", "DNS query logs", "Zeek http.log"],
+        "log_channel": "Proxy/DNS",
+    },
+    "T1486": {
+        "name": "Data Encrypted for Impact",
+        "sources": [
+            "File creation burst (Sysmon 11)",
+            "Canary file triggers",
+            "VSS deletion (Sysmon 1)",
+        ],
+        "log_channel": "Sysmon",
+    },
+    "T1021.001": {
+        "name": "Remote Desktop Protocol",
+        "sources": ["Logon Type 10 (4624)", "RDP connection (1149)"],
+        "log_channel": "Security / TerminalServices-RemoteConnectionManager",
+    },
 }
 
 
@@ -47,9 +77,12 @@ def generate_hypothesis(technique_id, threat_actor=None, environment=None):
     """Generate a structured threat hunting hypothesis."""
     ds = DATA_SOURCE_MAP.get(technique_id, {})
     technique_name = ds.get("name", technique_id)
-    hyp_id = "HYP-" + hashlib.md5(
-        (technique_id + str(datetime.datetime.utcnow())).encode()
-    ).hexdigest()[:8].upper()
+    hyp_id = (
+        "HYP-"
+        + hashlib.md5((technique_id + str(datetime.datetime.utcnow())).encode())
+        .hexdigest()[:8]
+        .upper()
+    )
 
     hypothesis = {
         "hypothesis_id": hyp_id,
@@ -84,9 +117,7 @@ def build_hunt_plan(hypotheses, analyst="SOC Analyst"):
         "maturity_description": HUNT_MATURITY_LEVELS[2],
         "hypothesis_count": len(hypotheses),
         "hypotheses": hypotheses,
-        "data_coverage": list(set(
-            src for h in hypotheses for src in h.get("data_sources", [])
-        )),
+        "data_coverage": list(set(src for h in hypotheses for src in h.get("data_sources", []))),
         "estimated_hours": len(hypotheses) * 4,
     }
     return plan
@@ -102,7 +133,8 @@ def evaluate_hunt_results(hypothesis, findings_count, true_positives, false_posi
         "precision": round(true_positives / max(findings_count, 1), 3),
         "outcome": "confirmed" if true_positives > 0 else "not_confirmed",
         "recommendation": (
-            "Create detection rule" if true_positives > 0
+            "Create detection rule"
+            if true_positives > 0
             else "Refine hypothesis and re-hunt with broader data"
         ),
     }
@@ -144,21 +176,31 @@ if __name__ == "__main__":
         hypotheses.append(h)
 
     plan = build_hunt_plan(hypotheses)
-    print("\nHunt Plan: {} ({} hypotheses, ~{} hours)".format(
-        plan["plan_id"], plan["hypothesis_count"], plan["estimated_hours"]))
+    print(
+        "\nHunt Plan: {} ({} hypotheses, ~{} hours)".format(
+            plan["plan_id"], plan["hypothesis_count"], plan["estimated_hours"]
+        )
+    )
     print("Maturity: {}".format(plan["maturity_description"]))
 
     print("\n--- Hypotheses ---")
     for h in hypotheses:
-        print("  [{}] {} - {}".format(h["priority"].upper(), h["technique_id"], h["technique_name"]))
+        print(
+            "  [{}] {} - {}".format(h["priority"].upper(), h["technique_id"], h["technique_name"])
+        )
         print("    {}".format(h["hypothesis_statement"][:120] + "..."))
         print("    Sources: {}".format(", ".join(h["data_sources"][:3])))
 
-    evaluated = evaluate_hunt_results(hypotheses[0], findings_count=12, true_positives=3, false_positives=9)
+    evaluated = evaluate_hunt_results(
+        hypotheses[0], findings_count=12, true_positives=3, false_positives=9
+    )
     print("\n--- Sample Result ---")
-    print("  {} precision: {} -> {}".format(
-        evaluated["technique_id"],
-        evaluated["results"]["precision"],
-        evaluated["results"]["recommendation"]))
+    print(
+        "  {} precision: {} -> {}".format(
+            evaluated["technique_id"],
+            evaluated["results"]["precision"],
+            evaluated["results"]["recommendation"],
+        )
+    )
 
     print("\n" + json.dumps({"hypotheses_generated": len(hypotheses)}, indent=2))

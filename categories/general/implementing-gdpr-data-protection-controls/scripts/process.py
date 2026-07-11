@@ -6,14 +6,12 @@ Automates data mapping, ROPA creation, DPIA assessment, data subject
 request tracking, breach notification management, and compliance reporting.
 """
 
-import json
 import csv
-import os
+import json
+from dataclasses import asdict, dataclass, field
 from datetime import datetime, timedelta
-from pathlib import Path
-from dataclasses import dataclass, field, asdict
 from enum import Enum
-from typing import Optional
+from pathlib import Path
 
 
 class LawfulBasis(Enum):
@@ -51,10 +49,21 @@ class TransferMechanism(Enum):
 
 
 ADEQUATE_COUNTRIES = [
-    "Andorra", "Argentina", "Canada", "Faroe Islands", "Guernsey",
-    "Israel", "Isle of Man", "Japan", "Jersey", "New Zealand",
-    "Republic of Korea", "Switzerland", "United Kingdom", "Uruguay",
-    "United States (Data Privacy Framework participants)"
+    "Andorra",
+    "Argentina",
+    "Canada",
+    "Faroe Islands",
+    "Guernsey",
+    "Israel",
+    "Isle of Man",
+    "Japan",
+    "Jersey",
+    "New Zealand",
+    "Republic of Korea",
+    "Switzerland",
+    "United Kingdom",
+    "Uruguay",
+    "United States (Data Privacy Framework participants)",
 ]
 
 
@@ -163,7 +172,9 @@ class GDPRComplianceManager:
             print(f"    Lawful Basis: {activity.lawful_basis}")
             print(f"    Data Subjects: {', '.join(activity.data_subjects)}")
             print(f"    Special Categories: {'Yes' if activity.special_categories else 'No'}")
-            print(f"    International Transfers: {'Yes' if activity.international_transfers else 'No'}")
+            print(
+                f"    International Transfers: {'Yes' if activity.international_transfers else 'No'}"
+            )
             print(f"    DPIA Required: {'Yes' if activity.dpia_required else 'No'}")
 
         # Summary statistics
@@ -172,7 +183,7 @@ class GDPRComplianceManager:
         transfers = sum(1 for a in self.processing_activities if a.international_transfers)
         dpia_needed = sum(1 for a in self.processing_activities if a.dpia_required)
 
-        print(f"\n  ROPA Summary:")
+        print("\n  ROPA Summary:")
         print(f"    Total Processing Activities: {total}")
         print(f"    Special Category Processing: {special}")
         print(f"    International Transfers: {transfers}")
@@ -183,7 +194,7 @@ class GDPRComplianceManager:
         for a in self.processing_activities:
             basis_counts.setdefault(a.lawful_basis, 0)
             basis_counts[a.lawful_basis] += 1
-        print(f"\n  Lawful Basis Breakdown:")
+        print("\n  Lawful Basis Breakdown:")
         for basis, count in basis_counts.items():
             print(f"    {basis}: {count}")
 
@@ -195,21 +206,41 @@ class GDPRComplianceManager:
         csv_path = self.output_dir / "ropa.csv"
         with open(csv_path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
-            writer.writerow([
-                "Activity ID", "Name", "Purpose", "Lawful Basis",
-                "Data Subjects", "Personal Data Categories", "Special Categories",
-                "Recipients", "International Transfers", "Retention Period",
-                "Systems", "Security Measures", "DPIA Required"
-            ])
+            writer.writerow(
+                [
+                    "Activity ID",
+                    "Name",
+                    "Purpose",
+                    "Lawful Basis",
+                    "Data Subjects",
+                    "Personal Data Categories",
+                    "Special Categories",
+                    "Recipients",
+                    "International Transfers",
+                    "Retention Period",
+                    "Systems",
+                    "Security Measures",
+                    "DPIA Required",
+                ]
+            )
             for a in self.processing_activities:
-                writer.writerow([
-                    a.activity_id, a.name, a.purpose, a.lawful_basis,
-                    "; ".join(a.data_subjects), "; ".join(a.personal_data_categories),
-                    "Yes" if a.special_categories else "No",
-                    "; ".join(a.recipients), "; ".join(a.international_transfers),
-                    a.retention_period, "; ".join(a.systems),
-                    "; ".join(a.security_measures), "Yes" if a.dpia_required else "No"
-                ])
+                writer.writerow(
+                    [
+                        a.activity_id,
+                        a.name,
+                        a.purpose,
+                        a.lawful_basis,
+                        "; ".join(a.data_subjects),
+                        "; ".join(a.personal_data_categories),
+                        "Yes" if a.special_categories else "No",
+                        "; ".join(a.recipients),
+                        "; ".join(a.international_transfers),
+                        a.retention_period,
+                        "; ".join(a.systems),
+                        "; ".join(a.security_measures),
+                        "Yes" if a.dpia_required else "No",
+                    ]
+                )
 
         print(f"\n  ROPA saved to: {ropa_path}")
         return self.processing_activities
@@ -244,7 +275,7 @@ class GDPRComplianceManager:
             type_counts.setdefault(d.request_type, 0)
             type_counts[d.request_type] += 1
 
-        print(f"\n  DSR Summary:")
+        print("\n  DSR Summary:")
         for rtype, count in type_counts.items():
             print(f"    {rtype}: {count}")
         print(f"    Total: {len(self.dsr_log)}")
@@ -319,8 +350,12 @@ class GDPRComplianceManager:
                 "Purpose limitation documented for each activity": False,
                 "Data minimization assessed": False,
                 "Accuracy procedures in place": False,
-                "Retention periods defined": any(a.retention_period for a in self.processing_activities),
-                "Security measures documented": any(a.security_measures for a in self.processing_activities),
+                "Retention periods defined": any(
+                    a.retention_period for a in self.processing_activities
+                ),
+                "Security measures documented": any(
+                    a.security_measures for a in self.processing_activities
+                ),
             },
             "Article 25 - Privacy by Design": {
                 "Development processes include privacy reviews": False,
@@ -329,7 +364,9 @@ class GDPRComplianceManager:
             },
             "Article 30 - ROPA": {
                 "Records of processing maintained": bool(self.processing_activities),
-                "Controller details documented": any(a.controller_name for a in self.processing_activities),
+                "Controller details documented": any(
+                    a.controller_name for a in self.processing_activities
+                ),
                 "All processing activities captured": len(self.processing_activities) > 0,
             },
             "Article 32 - Security Measures": {
@@ -357,7 +394,9 @@ class GDPRComplianceManager:
                 "Portability export capability": False,
             },
             "Articles 44-49 - International Transfers": {
-                "Cross-border transfers mapped": any(a.international_transfers for a in self.processing_activities),
+                "Cross-border transfers mapped": any(
+                    a.international_transfers for a in self.processing_activities
+                ),
                 "Transfer mechanisms in place (SCCs/BCRs)": False,
                 "Transfer impact assessments conducted": False,
             },
@@ -421,7 +460,14 @@ def main():
             "purpose": "Employment administration, payroll, benefits",
             "lawful_basis": LawfulBasis.CONTRACT.value,
             "data_subjects": ["Employees", "Job applicants"],
-            "personal_data_categories": ["Name", "Address", "DOB", "NI number", "Bank details", "Health data"],
+            "personal_data_categories": [
+                "Name",
+                "Address",
+                "DOB",
+                "NI number",
+                "Bank details",
+                "Health data",
+            ],
             "special_categories": True,
             "recipients": ["Payroll provider", "Pension provider", "HMRC"],
             "retention_period": "Employment + 7 years",

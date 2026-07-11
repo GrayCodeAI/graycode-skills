@@ -9,9 +9,7 @@ Requirements:
     pip install requests
 """
 
-import json
 import sys
-import time
 from datetime import datetime, timezone
 from typing import Any
 
@@ -37,9 +35,9 @@ class ZPAAuditor:
             json={
                 "apiKey": self.client_id,
                 "username": self.client_secret,
-                "password": self.customer_id
+                "password": self.customer_id,
             },
-            timeout=30
+            timeout=30,
         )
         resp.raise_for_status()
         self.token = resp.json().get("token")
@@ -47,15 +45,12 @@ class ZPAAuditor:
 
     def _get(self, endpoint: str, params: dict = None) -> dict:
         """Make authenticated GET request to ZPA API."""
-        headers = {
-            "Authorization": f"Bearer {self.token}",
-            "Content-Type": "application/json"
-        }
+        headers = {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
         resp = requests.get(
             f"{ZPA_BASE_URL}/mgmtconfig/v1/admin/customers/{self.customer_id}/{endpoint}",
             headers=headers,
             params=params or {},
-            timeout=30
+            timeout=30,
         )
         resp.raise_for_status()
         return resp.json()
@@ -72,7 +67,7 @@ class ZPAAuditor:
             "unhealthy": 0,
             "groups": {},
             "version_distribution": {},
-            "unhealthy_list": []
+            "unhealthy_list": [],
         }
 
         for conn in connectors:
@@ -83,18 +78,22 @@ class ZPAAuditor:
             group = conn.get("appConnectorGroupName", "ungrouped")
 
             stats["groups"][group] = stats["groups"].get(group, 0) + 1
-            stats["version_distribution"][version] = stats["version_distribution"].get(version, 0) + 1
+            stats["version_distribution"][version] = (
+                stats["version_distribution"].get(version, 0) + 1
+            )
 
             if enabled and runtime_status == "ACTIVE":
                 stats["healthy"] += 1
             else:
                 stats["unhealthy"] += 1
-                stats["unhealthy_list"].append({
-                    "name": name, "status": runtime_status, "group": group
-                })
+                stats["unhealthy_list"].append(
+                    {"name": name, "status": runtime_status, "group": group}
+                )
                 print(f"  [WARN] Unhealthy connector: {name} (status: {runtime_status})")
 
-        print(f"  Total: {stats['total']}, Healthy: {stats['healthy']}, Unhealthy: {stats['unhealthy']}")
+        print(
+            f"  Total: {stats['total']}, Healthy: {stats['healthy']}, Unhealthy: {stats['unhealthy']}"
+        )
         print(f"  Groups: {stats['groups']}")
 
         # Check HA: each group should have >= 2 connectors
@@ -116,7 +115,7 @@ class ZPAAuditor:
             "disabled": 0,
             "bypass_enabled": 0,
             "health_reporting": {"continuous": 0, "on_access": 0, "none": 0},
-            "segments": []
+            "segments": [],
         }
 
         for seg in segments:
@@ -140,15 +139,19 @@ class ZPAAuditor:
             health_key = health.lower() if health.lower() in stats["health_reporting"] else "none"
             stats["health_reporting"][health_key] += 1
 
-            stats["segments"].append({
-                "name": name,
-                "enabled": enabled,
-                "domains": domains[:5],
-                "ports": tcp_ports[:5],
-                "bypass": bypass_type
-            })
+            stats["segments"].append(
+                {
+                    "name": name,
+                    "enabled": enabled,
+                    "domains": domains[:5],
+                    "ports": tcp_ports[:5],
+                    "bypass": bypass_type,
+                }
+            )
 
-        print(f"  Total: {stats['total']}, Enabled: {stats['enabled']}, Disabled: {stats['disabled']}")
+        print(
+            f"  Total: {stats['total']}, Enabled: {stats['enabled']}, Disabled: {stats['disabled']}"
+        )
         print(f"  Bypass enabled: {stats['bypass_enabled']}")
         print(f"  Health reporting: {stats['health_reporting']}")
         return stats
@@ -166,7 +169,7 @@ class ZPAAuditor:
             "has_default_deny": False,
             "rules_without_conditions": 0,
             "rules_with_posture": 0,
-            "rules": []
+            "rules": [],
         }
 
         for rule in rules:
@@ -187,15 +190,21 @@ class ZPAAuditor:
             # Check for device posture conditions
             has_posture = any(
                 c.get("operands", [{}])[0].get("objectType") == "POSTURE_PROFILE"
-                for c in conditions if c.get("operands")
+                for c in conditions
+                if c.get("operands")
             )
             if has_posture:
                 stats["rules_with_posture"] += 1
 
-            stats["rules"].append({
-                "name": name, "action": action, "order": order,
-                "conditions_count": len(conditions), "has_posture": has_posture
-            })
+            stats["rules"].append(
+                {
+                    "name": name,
+                    "action": action,
+                    "order": order,
+                    "conditions_count": len(conditions),
+                    "has_posture": has_posture,
+                }
+            )
 
         # Check for default deny rule (should be last rule with DENY action)
         if rules and rules[-1].get("action") == "DENY":
@@ -215,12 +224,7 @@ class ZPAAuditor:
         data = self._get("serverGroup")
         groups = data.get("list", [])
 
-        stats = {
-            "total": len(groups),
-            "enabled": 0,
-            "servers_total": 0,
-            "groups": []
-        }
+        stats = {"total": len(groups), "enabled": 0, "servers_total": 0, "groups": []}
 
         for group in groups:
             name = group.get("name", "unknown")
@@ -230,9 +234,7 @@ class ZPAAuditor:
             if enabled:
                 stats["enabled"] += 1
             stats["servers_total"] += len(servers)
-            stats["groups"].append({
-                "name": name, "enabled": enabled, "server_count": len(servers)
-            })
+            stats["groups"].append({"name": name, "enabled": enabled, "server_count": len(servers)})
 
         print(f"  Total groups: {stats['total']}, Enabled: {stats['enabled']}")
         print(f"  Total servers: {stats['servers_total']}")
@@ -245,47 +247,49 @@ class ZPAAuditor:
 
         report = f"""
 ZPA ZTNA Deployment Audit Report
-{'=' * 55}
+{"=" * 55}
 Customer ID: {self.customer_id}
 Generated: {now}
 
 1. APP CONNECTORS
-   Total deployed:              {connectors['total']}
-   Healthy:                     {connectors['healthy']}
-   Unhealthy:                   {connectors['unhealthy']}
-   Connector groups:            {len(connectors['groups'])}
-   HA compliance (2+ per group): {'PASS' if all(v >= 2 for v in connectors['groups'].values()) else 'FAIL'}
+   Total deployed:              {connectors["total"]}
+   Healthy:                     {connectors["healthy"]}
+   Unhealthy:                   {connectors["unhealthy"]}
+   Connector groups:            {len(connectors["groups"])}
+   HA compliance (2+ per group): {"PASS" if all(v >= 2 for v in connectors["groups"].values()) else "FAIL"}
 
 2. APPLICATION SEGMENTS
-   Total segments:              {segments['total']}
-   Enabled:                     {segments['enabled']}
-   Disabled:                    {segments['disabled']}
-   With bypass enabled:         {segments['bypass_enabled']}
-   Health reporting:            {segments['health_reporting']}
+   Total segments:              {segments["total"]}
+   Enabled:                     {segments["enabled"]}
+   Disabled:                    {segments["disabled"]}
+   With bypass enabled:         {segments["bypass_enabled"]}
+   Health reporting:            {segments["health_reporting"]}
 
 3. ACCESS POLICIES
-   Total rules:                 {policies['total']}
-   Allow rules:                 {policies['allow_rules']}
-   Deny rules:                  {policies['deny_rules']}
-   Default deny rule:           {'YES' if policies['has_default_deny'] else 'MISSING - CRITICAL'}
-   Rules with device posture:   {policies['rules_with_posture']} / {policies['total']}
+   Total rules:                 {policies["total"]}
+   Allow rules:                 {policies["allow_rules"]}
+   Deny rules:                  {policies["deny_rules"]}
+   Default deny rule:           {"YES" if policies["has_default_deny"] else "MISSING - CRITICAL"}
+   Rules with device posture:   {policies["rules_with_posture"]} / {policies["total"]}
 
 4. SERVER GROUPS
-   Total groups:                {server_groups['total']}
-   Total servers:               {server_groups['servers_total']}
+   Total groups:                {server_groups["total"]}
+   Total servers:               {server_groups["servers_total"]}
 
 5. RECOMMENDATIONS
 """
         recommendations = []
-        if connectors['unhealthy'] > 0:
+        if connectors["unhealthy"] > 0:
             recommendations.append(f"   - Fix {connectors['unhealthy']} unhealthy App Connector(s)")
-        if not policies['has_default_deny']:
+        if not policies["has_default_deny"]:
             recommendations.append("   - ADD DEFAULT DENY RULE immediately")
-        if policies['rules_with_posture'] < policies['allow_rules']:
-            gap = policies['allow_rules'] - policies['rules_with_posture']
+        if policies["rules_with_posture"] < policies["allow_rules"]:
+            gap = policies["allow_rules"] - policies["rules_with_posture"]
             recommendations.append(f"   - Add device posture to {gap} allow rule(s)")
-        if segments['bypass_enabled'] > 0:
-            recommendations.append(f"   - Review {segments['bypass_enabled']} segment(s) with bypass enabled")
+        if segments["bypass_enabled"] > 0:
+            recommendations.append(
+                f"   - Review {segments['bypass_enabled']} segment(s) with bypass enabled"
+            )
         if not recommendations:
             recommendations.append("   - No critical issues found")
 
@@ -296,7 +300,9 @@ Generated: {now}
 def main():
     if len(sys.argv) < 4:
         print("Usage: python process.py <client_id> <client_secret> <customer_id>")
-        print("\nAudits ZPA deployment for connector health, segment coverage, and policy compliance.")
+        print(
+            "\nAudits ZPA deployment for connector health, segment coverage, and policy compliance."
+        )
         sys.exit(1)
 
     auditor = ZPAAuditor(sys.argv[1], sys.argv[2], sys.argv[3])

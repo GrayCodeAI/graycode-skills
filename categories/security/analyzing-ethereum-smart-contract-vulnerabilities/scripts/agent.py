@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Smart Contract Security Agent - runs Slither and Mythril analysis on Solidity contracts."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
-import os
 from collections import defaultdict
 from datetime import datetime
 
@@ -62,20 +61,29 @@ def analyze_slither_results(slither_output):
         location = ""
         if elements:
             elem = elements[0]
-            location = f"{elem.get('source_mapping', {}).get('filename_short', '')}:" \
-                       f"L{elem.get('source_mapping', {}).get('lines', [0])[0] if elem.get('source_mapping', {}).get('lines') else 0}"
-        findings.append({
-            "detector": det_name,
-            "severity": severity,
-            "description": detector.get("description", "")[:200],
-            "location": location,
-            "confidence": detector.get("confidence", ""),
-        })
+            location = (
+                f"{elem.get('source_mapping', {}).get('filename_short', '')}:"
+                f"L{elem.get('source_mapping', {}).get('lines', [0])[0] if elem.get('source_mapping', {}).get('lines') else 0}"
+            )
+        findings.append(
+            {
+                "detector": det_name,
+                "severity": severity,
+                "description": detector.get("description", "")[:200],
+                "location": location,
+                "confidence": detector.get("confidence", ""),
+            }
+        )
     return {
         "total": len(findings),
         "by_severity": dict(by_severity),
         "by_detector": dict(sorted(by_detector.items(), key=lambda x: x[1], reverse=True)[:15]),
-        "findings": sorted(findings, key=lambda x: {"high": 0, "medium": 1, "low": 2, "informational": 3}.get(x["severity"], 4)),
+        "findings": sorted(
+            findings,
+            key=lambda x: {"high": 0, "medium": 1, "low": 2, "informational": 3}.get(
+                x["severity"], 4
+            ),
+        ),
     }
 
 
@@ -88,15 +96,17 @@ def analyze_mythril_results(mythril_output):
         swc_key = f"SWC-{swc_id}" if swc_id else "unknown"
         by_swc[swc_key] += 1
         severity = issue.get("severity", "Medium").lower()
-        findings.append({
-            "swc_id": swc_key,
-            "swc_title": SWC_REGISTRY.get(swc_key, issue.get("title", "")),
-            "severity": severity,
-            "description": issue.get("description", "")[:200],
-            "contract": issue.get("contract", ""),
-            "function": issue.get("function", ""),
-            "line_number": issue.get("lineno", 0),
-        })
+        findings.append(
+            {
+                "swc_id": swc_key,
+                "swc_title": SWC_REGISTRY.get(swc_key, issue.get("title", "")),
+                "severity": severity,
+                "description": issue.get("description", "")[:200],
+                "contract": issue.get("contract", ""),
+                "function": issue.get("function", ""),
+                "line_number": issue.get("lineno", 0),
+            }
+        )
     return {
         "total": len(findings),
         "by_swc": dict(by_swc),
@@ -144,9 +154,15 @@ def generate_report(contract_path, slither_analysis, mythril_analysis, combined)
 
 def main():
     parser = argparse.ArgumentParser(description="Solidity Smart Contract Security Analysis Agent")
-    parser.add_argument("--contract", required=True, help="Path to Solidity contract or project directory")
-    parser.add_argument("--mythril-timeout", type=int, default=300, help="Mythril execution timeout (seconds)")
-    parser.add_argument("--skip-mythril", action="store_true", help="Skip Mythril (slow symbolic execution)")
+    parser.add_argument(
+        "--contract", required=True, help="Path to Solidity contract or project directory"
+    )
+    parser.add_argument(
+        "--mythril-timeout", type=int, default=300, help="Mythril execution timeout (seconds)"
+    )
+    parser.add_argument(
+        "--skip-mythril", action="store_true", help="Skip Mythril (slow symbolic execution)"
+    )
     parser.add_argument("--output", default="smart_contract_audit_report.json")
     args = parser.parse_args()
 
@@ -160,8 +176,12 @@ def main():
     report = generate_report(args.contract, slither_analysis, mythril_analysis, combined)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Smart contract audit: %d findings (%d critical/high), result: %s",
-                report["combined_findings"], report["critical_high_findings"], report["audit_result"])
+    logger.info(
+        "Smart contract audit: %d findings (%d critical/high), result: %s",
+        report["combined_findings"],
+        report["critical_high_findings"],
+        report["audit_result"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

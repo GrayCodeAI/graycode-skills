@@ -9,15 +9,13 @@ Usage:
     python process.py --gophish-url https://localhost:3333 --api-key <key> --output ./results
 """
 
-import json
-import csv
 import argparse
 import datetime
 from pathlib import Path
-from typing import Optional
 
 try:
     import requests
+
     requests.packages.urllib3.disable_warnings()
 except ImportError:
     print("Install requests: pip install requests")
@@ -32,7 +30,7 @@ class GoPhishClient:
         self.headers = {"Authorization": f"Bearer {api_key}"}
         self.session = requests.Session()
         self.session.headers.update(self.headers)
-        self.session.verify = False
+        self.session.verify = True
 
     def get_campaigns(self) -> list[dict]:
         resp = self.session.get(f"{self.base_url}/api/campaigns/")
@@ -53,7 +51,7 @@ class GoPhishClient:
 def analyze_campaign(campaign: dict) -> dict:
     """Analyze a single campaign's results."""
     results = campaign.get("results", [])
-    timeline = campaign.get("timeline", [])
+    campaign.get("timeline", [])
 
     stats = {
         "campaign_name": campaign.get("name", "Unknown"),
@@ -68,8 +66,12 @@ def analyze_campaign(campaign: dict) -> dict:
 
     for entry in results:
         status = entry.get("status", "")
-        if status == "Email Sent" or status in ("Email Opened", "Clicked Link",
-                                                  "Submitted Data", "Email Reported"):
+        if status == "Email Sent" or status in (
+            "Email Opened",
+            "Clicked Link",
+            "Submitted Data",
+            "Email Reported",
+        ):
             stats["emails_sent"] += 1
         if status in ("Email Opened", "Clicked Link", "Submitted Data"):
             stats["emails_opened"] += 1
@@ -101,9 +103,7 @@ def analyze_by_department(results: list[dict]) -> dict[str, dict]:
     for entry in results:
         dept = entry.get("position", "Unknown")
         if dept not in departments:
-            departments[dept] = {
-                "total": 0, "clicked": 0, "submitted": 0, "reported": 0
-            }
+            departments[dept] = {"total": 0, "clicked": 0, "submitted": 0, "reported": 0}
         departments[dept]["total"] += 1
         status = entry.get("status", "")
         if status in ("Clicked Link", "Submitted Data"):
@@ -133,14 +133,20 @@ def generate_report(stats: dict, dept_analysis: dict, output_dir: Path) -> str:
         f.write(f"| Emails Sent | {stats['emails_sent']} | — |\n")
         f.write(f"| Emails Opened | {stats['emails_opened']} | {stats['open_rate']}% |\n")
         f.write(f"| Links Clicked | {stats['links_clicked']} | {stats['click_rate']}% |\n")
-        f.write(f"| Credentials Submitted | {stats['credentials_submitted']} | {stats['submit_rate']}% |\n")
-        f.write(f"| Reported to Security | {stats['emails_reported']} | {stats['report_rate']}% |\n\n")
+        f.write(
+            f"| Credentials Submitted | {stats['credentials_submitted']} | {stats['submit_rate']}% |\n"
+        )
+        f.write(
+            f"| Reported to Security | {stats['emails_reported']} | {stats['report_rate']}% |\n\n"
+        )
 
         f.write("## Department Breakdown\n\n")
         f.write("| Department | Total | Clicked | Submitted | Reported |\n")
         f.write("|-----------|-------|---------|-----------|----------|\n")
         for dept, data in sorted(dept_analysis.items()):
-            f.write(f"| {dept} | {data['total']} | {data['clicked']} | {data['submitted']} | {data['reported']} |\n")
+            f.write(
+                f"| {dept} | {data['total']} | {data['clicked']} | {data['submitted']} | {data['reported']} |\n"
+            )
         f.write("\n")
 
         f.write("## Risk Assessment\n\n")

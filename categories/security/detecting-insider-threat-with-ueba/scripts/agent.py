@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """UEBA Insider Threat Agent - builds behavioral baselines and scores anomalies using Elasticsearch."""
 
-import json
 import argparse
+import json
 import logging
 import math
 from collections import defaultdict
 from datetime import datetime, timedelta
+
 from elasticsearch import Elasticsearch
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -32,13 +33,15 @@ def build_user_baseline(es, index, user_field, hours=720):
                 "terms": {"field": user_field, "size": 5000},
                 "aggs": {
                     "login_hours": {"histogram": {"field": "hour_of_day", "interval": 1}},
-                    "daily_events": {"date_histogram": {"field": "@timestamp", "calendar_interval": "day"}},
+                    "daily_events": {
+                        "date_histogram": {"field": "@timestamp", "calendar_interval": "day"}
+                    },
                     "unique_hosts": {"cardinality": {"field": "host.name"}},
                     "data_volume": {"sum": {"field": "bytes_transferred"}},
                     "unique_apps": {"cardinality": {"field": "application.name"}},
-                }
+                },
             }
-        }
+        },
     }
     result = es.search(index=index, body=query)
     baselines = {}
@@ -46,7 +49,9 @@ def build_user_baseline(es, index, user_field, hours=720):
         user = bucket["key"]
         daily_counts = [d["doc_count"] for d in bucket["daily_events"]["buckets"]]
         avg_daily = sum(daily_counts) / max(len(daily_counts), 1)
-        std_daily = math.sqrt(sum((x - avg_daily) ** 2 for x in daily_counts) / max(len(daily_counts), 1))
+        std_daily = math.sqrt(
+            sum((x - avg_daily) ** 2 for x in daily_counts) / max(len(daily_counts), 1)
+        )
         baselines[user] = {
             "avg_daily_events": round(avg_daily, 1),
             "std_daily_events": round(std_daily, 1),
@@ -70,9 +75,9 @@ def score_current_activity(es, index, user_field, baselines, hours=24):
                     "unique_hosts": {"cardinality": {"field": "host.name"}},
                     "data_volume": {"sum": {"field": "bytes_transferred"}},
                     "unique_apps": {"cardinality": {"field": "application.name"}},
-                }
+                },
             }
-        }
+        },
     }
     result = es.search(index=index, body=query)
     anomalies = []
@@ -80,45 +85,60 @@ def score_current_activity(es, index, user_field, baselines, hours=24):
         user = bucket["key"]
         baseline = baselines.get(user)
         if not baseline:
-            anomalies.append({
-                "user": user, "indicator": "new_user",
-                "severity": "medium", "detail": "No baseline exists for this user",
-                "risk_score": 50,
-            })
+            anomalies.append(
+                {
+                    "user": user,
+                    "indicator": "new_user",
+                    "severity": "medium",
+                    "detail": "No baseline exists for this user",
+                    "risk_score": 50,
+                }
+            )
             continue
         current_events = bucket["doc_count"]
         avg = baseline["avg_daily_events"]
         std = baseline["std_daily_events"]
         z_score = (current_events - avg) / max(std, 1)
         if z_score > 3:
-            anomalies.append({
-                "user": user, "indicator": "activity_spike",
-                "severity": "high", "z_score": round(z_score, 2),
-                "current": current_events, "baseline_avg": avg,
-                "risk_score": min(int(z_score * 15), 100),
-                "detail": f"Event count {current_events} is {z_score:.1f} std devs above baseline",
-            })
+            anomalies.append(
+                {
+                    "user": user,
+                    "indicator": "activity_spike",
+                    "severity": "high",
+                    "z_score": round(z_score, 2),
+                    "current": current_events,
+                    "baseline_avg": avg,
+                    "risk_score": min(int(z_score * 15), 100),
+                    "detail": f"Event count {current_events} is {z_score:.1f} std devs above baseline",
+                }
+            )
         current_hosts = bucket["unique_hosts"]["value"]
         if current_hosts > baseline["unique_hosts"] * 2:
-            anomalies.append({
-                "user": user, "indicator": "new_host_access",
-                "severity": "high",
-                "current_hosts": current_hosts,
-                "baseline_hosts": baseline["unique_hosts"],
-                "risk_score": 70,
-                "detail": f"Accessed {current_hosts} hosts vs baseline {baseline['unique_hosts']}",
-            })
+            anomalies.append(
+                {
+                    "user": user,
+                    "indicator": "new_host_access",
+                    "severity": "high",
+                    "current_hosts": current_hosts,
+                    "baseline_hosts": baseline["unique_hosts"],
+                    "risk_score": 70,
+                    "detail": f"Accessed {current_hosts} hosts vs baseline {baseline['unique_hosts']}",
+                }
+            )
         current_volume = bucket["data_volume"]["value"]
         daily_avg_volume = baseline["total_data_volume"] / 30
         if current_volume > daily_avg_volume * 5 and current_volume > 100_000_000:
-            anomalies.append({
-                "user": user, "indicator": "data_exfiltration",
-                "severity": "critical",
-                "current_bytes": current_volume,
-                "baseline_daily_avg": round(daily_avg_volume),
-                "risk_score": 90,
-                "detail": f"Transferred {current_volume / 1e6:.0f}MB vs daily avg {daily_avg_volume / 1e6:.1f}MB",
-            })
+            anomalies.append(
+                {
+                    "user": user,
+                    "indicator": "data_exfiltration",
+                    "severity": "critical",
+                    "current_bytes": current_volume,
+                    "baseline_daily_avg": round(daily_avg_volume),
+                    "risk_score": 90,
+                    "detail": f"Transferred {current_volume / 1e6:.0f}MB vs daily avg {daily_avg_volume / 1e6:.1f}MB",
+                }
+            )
     return sorted(anomalies, key=lambda x: x.get("risk_score", 0), reverse=True)
 
 
@@ -134,13 +154,16 @@ def peer_group_analysis(baselines, peer_groups):
         group = peer_groups.get(user, "default")
         group_avg = group_avgs.get(group, 0)
         if group_avg > 0 and baseline["avg_daily_events"] > group_avg * 3:
-            findings.append({
-                "user": user, "peer_group": group,
-                "user_avg": baseline["avg_daily_events"],
-                "group_avg": round(group_avg, 1),
-                "deviation_factor": round(baseline["avg_daily_events"] / group_avg, 1),
-                "severity": "medium",
-            })
+            findings.append(
+                {
+                    "user": user,
+                    "peer_group": group,
+                    "user_avg": baseline["avg_daily_events"],
+                    "group_avg": round(group_avg, 1),
+                    "deviation_factor": round(baseline["avg_daily_events"] / group_avg, 1),
+                    "severity": "medium",
+                }
+            )
     return findings
 
 
@@ -179,8 +202,12 @@ def main():
     report = generate_report(anomalies, peer_findings, baselines)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("UEBA: %d users baselined, %d anomalies (%d critical)",
-                len(baselines), len(anomalies), report["critical_anomalies"])
+    logger.info(
+        "UEBA: %d users baselined, %d anomalies (%d critical)",
+        len(baselines),
+        len(anomalies),
+        report["critical_anomalies"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

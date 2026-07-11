@@ -3,18 +3,17 @@
 
 import email
 import email.utils
-import re
 import hashlib
 import os
-import sys
+import re
 import subprocess
-import json
+import sys
 from email import policy
 
 
 def parse_email_file(eml_path):
     """Parse an EML file and extract key header fields."""
-    with open(eml_path, "r", errors="replace") as f:
+    with open(eml_path, errors="replace") as f:
         msg = email.message_from_file(f, policy=policy.default)
     headers = {
         "from": str(msg["From"] or ""),
@@ -37,11 +36,13 @@ def extract_received_chain(msg):
     ip_pattern = re.compile(r"\[?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]?")
     for i, header in enumerate(reversed(received_headers)):
         ips = ip_pattern.findall(header)
-        hops.append({
-            "hop": i + 1,
-            "header": header.strip()[:200],
-            "ips": ips,
-        })
+        hops.append(
+            {
+                "hop": i + 1,
+                "header": header.strip()[:200],
+                "ips": ips,
+            }
+        )
     return hops
 
 
@@ -111,10 +112,12 @@ def detect_url_mismatch(msg):
             if display_urls:
                 for display_url in display_urls:
                     if display_url.rstrip("/") != href.rstrip("/"):
-                        mismatches.append({
-                            "display_url": display_url,
-                            "actual_url": href,
-                        })
+                        mismatches.append(
+                            {
+                                "display_url": display_url,
+                                "actual_url": href,
+                            }
+                        )
     return mismatches
 
 
@@ -148,8 +151,11 @@ def extract_attachments(msg, output_dir=None):
 def dns_lookup(domain, record_type="TXT"):
     """Perform DNS lookup for SPF/DKIM/DMARC records."""
     cmd = f"dig {record_type} {domain} +short"
-    stdout, _, rc = subprocess.run(cmd, shell=True, capture_output=True, text=True,
-                                    timeout=10).stdout, "", 0
+    stdout, _, _rc = (
+        subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=10).stdout,
+        "",
+        0,
+    )
     return stdout.strip() if stdout else ""
 
 
@@ -178,8 +184,10 @@ def generate_phishing_indicators(headers, auth, hops, url_mismatches, attachment
     if url_mismatches:
         indicators.append(f"{len(url_mismatches)} URL display/href mismatches detected")
     for att in attachments:
-        if any(att["filename"].endswith(ext) for ext in [".exe", ".scr", ".vbs", ".js",
-               ".docm", ".xlsm", ".bat", ".ps1", ".hta"]):
+        if any(
+            att["filename"].endswith(ext)
+            for ext in [".exe", ".scr", ".vbs", ".js", ".docm", ".xlsm", ".bat", ".ps1", ".hta"]
+        ):
             indicators.append(f"Suspicious attachment: {att['filename']}")
     return indicators
 
@@ -221,9 +229,9 @@ if __name__ == "__main__":
 
         indicators = generate_phishing_indicators(headers, auth, hops, url_mismatches, attachments)
         if indicators:
-            print(f"\n[!] PHISHING INDICATORS:")
+            print("\n[!] PHISHING INDICATORS:")
             for ind in indicators:
                 print(f"  - {ind}")
     else:
-        print(f"\n[DEMO] Usage: python agent.py <email.eml>")
+        print("\n[DEMO] Usage: python agent.py <email.eml>")
         print("[*] Provide an EML file for phishing analysis.")

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """SOC Metrics and KPI Tracking Agent - Collects and reports SOC performance metrics."""
 
-import json
-import time
-import logging
 import argparse
-from datetime import datetime, timedelta
+import json
+import logging
+import time
+from datetime import datetime
 
 import requests
 
@@ -21,7 +21,7 @@ def authenticate_splunk(base_url, username, password):
     resp = requests.post(
         f"{base_url}/services/auth/login",
         data={"username": username, "password": password},
-        verify=False,
+        verify=True,
     )
     resp.raise_for_status()
     session_key = resp.json()["sessionKey"]
@@ -41,7 +41,7 @@ def run_splunk_search(base_url, headers, query, earliest="-30d", latest="now"):
         f"{base_url}/services/search/jobs",
         headers=headers,
         data=search_body,
-        verify=False,
+        verify=True,
     )
     resp.raise_for_status()
     sid = resp.json()["sid"]
@@ -51,7 +51,7 @@ def run_splunk_search(base_url, headers, query, earliest="-30d", latest="now"):
             f"{base_url}/services/search/jobs/{sid}",
             headers=headers,
             params={"output_mode": "json"},
-            verify=False,
+            verify=True,
         ).json()
         if status["entry"][0]["content"]["isDone"]:
             break
@@ -61,7 +61,7 @@ def run_splunk_search(base_url, headers, query, earliest="-30d", latest="now"):
         f"{base_url}/services/search/jobs/{sid}/results",
         headers=headers,
         params={"output_mode": "json", "count": 0},
-        verify=False,
+        verify=True,
     ).json()
     return results.get("results", [])
 
@@ -130,9 +130,7 @@ def generate_report(mttd, mttr, quality, productivity):
         "KEY METRICS (MTTD):",
     ]
     for row in mttd:
-        lines.append(
-            f"  {row.get('urgency', 'N/A'):15s} Avg: {row.get('avg_mttd_min', 'N/A')} min"
-        )
+        lines.append(f"  {row.get('urgency', 'N/A'):15s} Avg: {row.get('avg_mttd_min', 'N/A')} min")
 
     lines.append("\nKEY METRICS (MTTR):")
     for row in mttr:

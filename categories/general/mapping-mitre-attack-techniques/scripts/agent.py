@@ -36,13 +36,15 @@ def get_all_techniques(attack_data: MitreAttackData) -> list[dict]:
             if phase.get("kill_chain_name") == "mitre-attack":
                 tactics.append(phase.get("phase_name", ""))
 
-        result.append({
-            "id": tech_id,
-            "name": tech.name,
-            "tactics": tactics,
-            "platforms": platforms,
-            "is_subtechnique": tech.get("x_mitre_is_subtechnique", False),
-        })
+        result.append(
+            {
+                "id": tech_id,
+                "name": tech.name,
+                "tactics": tactics,
+                "platforms": platforms,
+                "is_subtechnique": tech.get("x_mitre_is_subtechnique", False),
+            }
+        )
 
     return sorted(result, key=lambda x: x["id"])
 
@@ -81,7 +83,7 @@ def get_techniques_by_group(attack_data: MitreAttackData, group_name: str) -> li
 def load_detection_rules(rules_file: str) -> list[dict]:
     """Load detection rules with ATT&CK technique tags."""
     if os.path.exists(rules_file):
-        with open(rules_file, "r") as f:
+        with open(rules_file) as f:
             return json.load(f)
     return []
 
@@ -106,7 +108,9 @@ def calculate_coverage(all_techniques: list[dict], detected_technique_ids: set) 
         data["coverage_pct"] = round(data["covered"] / max(data["total"], 1) * 100, 1)
 
     total_techniques = len([t for t in all_techniques if not t["is_subtechnique"]])
-    covered = len(detected_technique_ids & {t["id"] for t in all_techniques if not t["is_subtechnique"]})
+    covered = len(
+        detected_technique_ids & {t["id"] for t in all_techniques if not t["is_subtechnique"]}
+    )
 
     return {
         "overall_coverage_pct": round(covered / max(total_techniques, 1) * 100, 1),
@@ -122,12 +126,14 @@ def generate_navigator_layer(techniques: list[dict], detected_ids: set, layer_na
     for tech in techniques:
         score = 1 if tech["id"] in detected_ids else 0
         color = "#31a354" if score == 1 else ""
-        tech_entries.append({
-            "techniqueID": tech["id"],
-            "score": score,
-            "color": color,
-            "enabled": True,
-        })
+        tech_entries.append(
+            {
+                "techniqueID": tech["id"],
+                "score": score,
+                "color": color,
+                "enabled": True,
+            }
+        )
 
     return {
         "name": layer_name,
@@ -143,12 +149,14 @@ def identify_priority_gaps(coverage: dict, group_techniques: list[str]) -> list[
     """Identify high-priority coverage gaps based on threat group activity."""
     gaps = []
     all_uncovered = set()
-    for tactic, data in coverage["by_tactic"].items():
+    for _tactic, data in coverage["by_tactic"].items():
         all_uncovered.update(data["uncovered_techniques"])
 
     for tech_id in group_techniques:
         if tech_id in all_uncovered:
-            gaps.append({"technique_id": tech_id, "reason": "Used by target threat group, no detection"})
+            gaps.append(
+                {"technique_id": tech_id, "reason": "Used by target threat group, no detection"}
+            )
 
     return gaps
 
@@ -202,4 +210,4 @@ if __name__ == "__main__":
     layer = generate_navigator_layer(all_techniques, detected_ids, "Detection Coverage")
     with open("attack_navigator_layer.json", "w") as f:
         json.dump(layer, f, indent=2)
-    print(f"\n[*] Navigator layer saved to attack_navigator_layer.json")
+    print("\n[*] Navigator layer saved to attack_navigator_layer.json")

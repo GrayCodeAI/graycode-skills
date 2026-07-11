@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Web Server Log Intrusion Analyzer - Detects SQLi, LFI, XSS, and scanner activity in access logs."""
 
-import re
+import argparse
 import json
 import logging
-import argparse
+import re
 from collections import defaultdict
 from datetime import datetime
 
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger(__name__)
 
 COMBINED_LOG_PATTERN = re.compile(
-    r'(?P<ip>\S+) \S+ \S+ \[(?P<time>[^\]]+)\] '
+    r"(?P<ip>\S+) \S+ \S+ \[(?P<time>[^\]]+)\] "
     r'"(?P<method>\S+) (?P<uri>\S+) (?P<proto>[^"]*)" '
     r'(?P<status>\d+) (?P<size>\S+) "(?P<referer>[^"]*)" "(?P<ua>[^"]*)"'
 )
@@ -73,7 +73,7 @@ def parse_log_line(line):
 def parse_log_file(log_path):
     """Parse all entries from a web server access log."""
     entries = []
-    with open(log_path, "r", errors="ignore") as f:
+    with open(log_path, errors="ignore") as f:
         for line in f:
             entry = parse_log_line(line)
             if entry:
@@ -102,15 +102,17 @@ def detect_attacks(entries):
             if re.search(pattern, ua):
                 entry_findings.append({"type": "Scanner", "pattern": desc, "severity": "medium"})
         if entry_findings:
-            findings.append({
-                "ip": entry["ip"],
-                "timestamp": entry["time"],
-                "method": entry["method"],
-                "uri": entry["uri"][:200],
-                "status": entry["status"],
-                "user_agent": entry["ua"][:150],
-                "attacks": entry_findings,
-            })
+            findings.append(
+                {
+                    "ip": entry["ip"],
+                    "timestamp": entry["time"],
+                    "method": entry["method"],
+                    "uri": entry["uri"][:200],
+                    "status": entry["status"],
+                    "user_agent": entry["ua"][:150],
+                    "attacks": entry_findings,
+                }
+            )
     logger.info("Detected %d suspicious requests", len(findings))
     return findings
 
@@ -136,6 +138,7 @@ def enrich_with_geoip(findings, geoip_db_path):
     """Enrich findings with GeoIP location data."""
     try:
         import geoip2.database
+
         reader = geoip2.database.Reader(geoip_db_path)
         for finding in findings:
             try:
@@ -165,12 +168,14 @@ def summarize_attackers(findings):
             ip_summary[ip]["attacks"][attack["type"]] += 1
     result = []
     for ip, data in sorted(ip_summary.items(), key=lambda x: x[1]["total"], reverse=True):
-        result.append({
-            "ip": ip,
-            "total_hits": data["total"],
-            "attack_types": dict(data["attacks"]),
-            "unique_uris": len(data["uris"]),
-        })
+        result.append(
+            {
+                "ip": ip,
+                "total_hits": data["total"],
+                "attack_types": dict(data["attacks"]),
+                "unique_uris": len(data["uris"]),
+            }
+        )
     return result[:50]
 
 

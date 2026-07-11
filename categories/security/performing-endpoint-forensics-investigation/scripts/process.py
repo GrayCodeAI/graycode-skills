@@ -6,79 +6,86 @@ Parses and correlates forensic artifacts from KAPE/EZ tool output
 to generate consolidated timeline and IOC reports.
 """
 
-import json
 import csv
-import sys
+import json
 import os
+import sys
 from datetime import datetime
-from collections import defaultdict
 
 
 def parse_prefetch_csv(csv_path: str) -> list:
     """Parse PECmd output for program execution history."""
     entries = []
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            entries.append({
-                "artifact": "prefetch",
-                "timestamp": row.get("LastRun", ""),
-                "executable": row.get("ExecutableName", ""),
-                "run_count": row.get("RunCount", ""),
-                "path": row.get("SourceFilename", ""),
-                "hash": row.get("Hash", ""),
-                "volume": row.get("Volume0Name", ""),
-            })
+            entries.append(
+                {
+                    "artifact": "prefetch",
+                    "timestamp": row.get("LastRun", ""),
+                    "executable": row.get("ExecutableName", ""),
+                    "run_count": row.get("RunCount", ""),
+                    "path": row.get("SourceFilename", ""),
+                    "hash": row.get("Hash", ""),
+                    "volume": row.get("Volume0Name", ""),
+                }
+            )
     return entries
 
 
 def parse_shimcache_csv(csv_path: str) -> list:
     """Parse AppCompatCacheParser output."""
     entries = []
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            entries.append({
-                "artifact": "shimcache",
-                "timestamp": row.get("LastModifiedTimeUTC", ""),
-                "path": row.get("Path", ""),
-                "executed": row.get("Executed", ""),
-            })
+            entries.append(
+                {
+                    "artifact": "shimcache",
+                    "timestamp": row.get("LastModifiedTimeUTC", ""),
+                    "path": row.get("Path", ""),
+                    "executed": row.get("Executed", ""),
+                }
+            )
     return entries
 
 
 def parse_amcache_csv(csv_path: str) -> list:
     """Parse AmcacheParser output for installed programs."""
     entries = []
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            entries.append({
-                "artifact": "amcache",
-                "timestamp": row.get("FileKeyLastWriteTimestamp", ""),
-                "path": row.get("FullPath", row.get("Name", "")),
-                "sha1": row.get("SHA1", ""),
-                "publisher": row.get("Publisher", ""),
-                "product": row.get("ProductName", ""),
-            })
+            entries.append(
+                {
+                    "artifact": "amcache",
+                    "timestamp": row.get("FileKeyLastWriteTimestamp", ""),
+                    "path": row.get("FullPath", row.get("Name", "")),
+                    "sha1": row.get("SHA1", ""),
+                    "publisher": row.get("Publisher", ""),
+                    "product": row.get("ProductName", ""),
+                }
+            )
     return entries
 
 
 def parse_mft_csv(csv_path: str) -> list:
     """Parse MFTECmd output for file system timeline."""
     entries = []
-    with open(csv_path, "r", encoding="utf-8-sig") as f:
+    with open(csv_path, encoding="utf-8-sig") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            entries.append({
-                "artifact": "mft",
-                "timestamp_created": row.get("Created0x10", ""),
-                "timestamp_modified": row.get("LastModified0x10", ""),
-                "path": row.get("ParentPath", "") + "\\" + row.get("FileName", ""),
-                "size": row.get("FileSize", ""),
-                "in_use": row.get("InUse", ""),
-                "is_directory": row.get("IsDirectory", ""),
-            })
+            entries.append(
+                {
+                    "artifact": "mft",
+                    "timestamp_created": row.get("Created0x10", ""),
+                    "timestamp_modified": row.get("LastModified0x10", ""),
+                    "path": row.get("ParentPath", "") + "\\" + row.get("FileName", ""),
+                    "size": row.get("FileSize", ""),
+                    "in_use": row.get("InUse", ""),
+                    "is_directory": row.get("IsDirectory", ""),
+                }
+            )
     return entries
 
 
@@ -94,13 +101,16 @@ def build_timeline(all_entries: list) -> list:
                 break
 
         if ts:
-            timeline.append({
-                "timestamp": ts,
-                "artifact": entry.get("artifact", "unknown"),
-                "description": entry.get("path", entry.get("executable", "")),
-                "details": {k: v for k, v in entry.items()
-                            if k not in ("timestamp", "artifact")},
-            })
+            timeline.append(
+                {
+                    "timestamp": ts,
+                    "artifact": entry.get("artifact", "unknown"),
+                    "description": entry.get("path", entry.get("executable", "")),
+                    "details": {
+                        k: v for k, v in entry.items() if k not in ("timestamp", "artifact")
+                    },
+                }
+            )
 
     timeline.sort(key=lambda x: x["timestamp"])
     return timeline
@@ -115,9 +125,13 @@ def extract_iocs(all_entries: list) -> dict:
     }
 
     suspicious_dirs = [
-        "\\temp\\", "\\tmp\\", "\\appdata\\local\\temp\\",
-        "\\users\\public\\", "\\programdata\\",
-        "\\recycle", "\\windows\\debug\\",
+        "\\temp\\",
+        "\\tmp\\",
+        "\\appdata\\local\\temp\\",
+        "\\users\\public\\",
+        "\\programdata\\",
+        "\\recycle",
+        "\\windows\\debug\\",
     ]
 
     for entry in all_entries:
@@ -129,11 +143,13 @@ def extract_iocs(all_entries: list) -> dict:
         path = entry.get("path", "").lower()
         if any(d in path for d in suspicious_dirs):
             if path.endswith((".exe", ".dll", ".ps1", ".bat", ".vbs", ".js")):
-                iocs["suspicious_paths"].append({
-                    "path": entry.get("path", ""),
-                    "artifact": entry.get("artifact", ""),
-                    "timestamp": entry.get("timestamp", ""),
-                })
+                iocs["suspicious_paths"].append(
+                    {
+                        "path": entry.get("path", ""),
+                        "artifact": entry.get("artifact", ""),
+                        "timestamp": entry.get("timestamp", ""),
+                    }
+                )
 
         exe = entry.get("executable", "")
         if exe:
@@ -175,7 +191,7 @@ if __name__ == "__main__":
 
     all_entries = []
 
-    for root, dirs, files in os.walk(kape_dir):
+    for root, _dirs, files in os.walk(kape_dir):
         for f in files:
             if not f.endswith(".csv"):
                 continue
@@ -202,7 +218,7 @@ if __name__ == "__main__":
     generate_report(timeline, iocs, report_path)
     print(f"Forensic report: {report_path}")
 
-    print(f"\n--- Forensic Summary ---")
+    print("\n--- Forensic Summary ---")
     print(f"Timeline entries: {len(timeline)}")
     print(f"Unique file hashes: {len(iocs['file_hashes'])}")
     print(f"Suspicious file paths: {len(iocs['suspicious_paths'])}")

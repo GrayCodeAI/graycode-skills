@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for configuring and auditing NextDNS zero trust DNS filtering via API."""
 
-import requests
-import json
 import argparse
-import sys
+import json
 from datetime import datetime, timezone
+
+import requests
 
 NEXTDNS_API = "https://api.nextdns.io"
 
@@ -24,7 +24,9 @@ def get_profile(api_key, profile_id):
 def audit_security_settings(api_key, profile_id):
     """Audit security features enabled on a NextDNS profile."""
     headers = {"X-Api-Key": api_key}
-    resp = requests.get(f"{NEXTDNS_API}/profiles/{profile_id}/security", headers=headers, timeout=15)
+    resp = requests.get(
+        f"{NEXTDNS_API}/profiles/{profile_id}/security", headers=headers, timeout=15
+    )
     resp.raise_for_status()
     security = resp.json()
     findings = []
@@ -55,8 +57,9 @@ def get_query_logs(api_key, profile_id, limit=100):
     """Retrieve recent DNS query logs for analysis."""
     headers = {"X-Api-Key": api_key}
     params = {"limit": limit}
-    resp = requests.get(f"{NEXTDNS_API}/profiles/{profile_id}/logs",
-                        headers=headers, params=params, timeout=15)
+    resp = requests.get(
+        f"{NEXTDNS_API}/profiles/{profile_id}/logs", headers=headers, params=params, timeout=15
+    )
     resp.raise_for_status()
     logs = resp.json().get("data", [])
     blocked = [l for l in logs if l.get("status") == "blocked"]
@@ -76,24 +79,30 @@ def get_analytics(api_key, profile_id, period="last30d"):
     }
     analytics = {}
     for name, path in endpoints.items():
-        resp = requests.get(f"{NEXTDNS_API}{path}", headers=headers,
-                            params={"from": f"-{period}"}, timeout=15)
+        resp = requests.get(
+            f"{NEXTDNS_API}{path}", headers=headers, params={"from": f"-{period}"}, timeout=15
+        )
         if resp.status_code == 200:
             analytics[name] = resp.json()
     if "queries" in analytics:
         data = analytics["queries"].get("data", [])
         total = sum(d.get("queries", 0) for d in data)
         blocked = sum(d.get("blockedQueries", 0) for d in data)
-        print(f"[*] Analytics ({period}): {total} queries, {blocked} blocked "
-              f"({blocked/total*100:.1f}%)" if total else "[*] No query data")
+        print(
+            f"[*] Analytics ({period}): {total} queries, {blocked} blocked "
+            f"({blocked / total * 100:.1f}%)"
+            if total
+            else "[*] No query data"
+        )
     return analytics
 
 
 def check_denylist(api_key, profile_id):
     """Check configured denylists and custom blocked domains."""
     headers = {"X-Api-Key": api_key}
-    resp = requests.get(f"{NEXTDNS_API}/profiles/{profile_id}/denylist",
-                        headers=headers, timeout=15)
+    resp = requests.get(
+        f"{NEXTDNS_API}/profiles/{profile_id}/denylist", headers=headers, timeout=15
+    )
     resp.raise_for_status()
     denylist = resp.json()
     entries = denylist.get("data", [])

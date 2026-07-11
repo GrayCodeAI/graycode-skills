@@ -6,21 +6,20 @@ Validates SDP deployment readiness, tests SPA mechanisms,
 verifies gateway invisibility, and generates deployment reports.
 """
 
-import json
-import socket
 import hashlib
 import hmac
+import json
+import socket
+import ssl
 import struct
 import time
-import ssl
-import subprocess
-import sys
 from datetime import datetime
-from pathlib import Path
 from typing import Optional
 
 
-def check_gateway_invisibility(host: str, port_range: tuple = (1, 1024), timeout: float = 0.5) -> dict:
+def check_gateway_invisibility(
+    host: str, port_range: tuple = (1, 1024), timeout: float = 0.5
+) -> dict:
     """Scan gateway ports to verify SDP invisibility (all ports should appear closed/filtered)."""
     result = {
         "host": host,
@@ -52,22 +51,21 @@ def check_gateway_invisibility(host: str, port_range: tuple = (1, 1024), timeout
 
 
 def generate_spa_packet(
-    source_ip: str,
-    destination_service: str,
-    shared_key: str,
-    timestamp: Optional[float] = None
+    source_ip: str, destination_service: str, shared_key: str, timestamp: Optional[float] = None
 ) -> bytes:
     """Generate a Single Packet Authorization payload (demonstration)."""
     if timestamp is None:
         timestamp = time.time()
 
-    payload = json.dumps({
-        "version": 2,
-        "source_ip": source_ip,
-        "service": destination_service,
-        "timestamp": timestamp,
-        "nonce": hashlib.sha256(f"{time.time()}{source_ip}".encode()).hexdigest()[:16],
-    }).encode()
+    payload = json.dumps(
+        {
+            "version": 2,
+            "source_ip": source_ip,
+            "service": destination_service,
+            "timestamp": timestamp,
+            "nonce": hashlib.sha256(f"{time.time()}{source_ip}".encode()).hexdigest()[:16],
+        }
+    ).encode()
 
     mac = hmac.new(shared_key.encode(), payload, hashlib.sha256).digest()
     packet = struct.pack("!I", len(payload)) + payload + mac
@@ -81,8 +79,8 @@ def validate_spa_packet(packet: bytes, shared_key: str, max_age_seconds: int = 6
 
     try:
         payload_len = struct.unpack("!I", packet[:4])[0]
-        payload = packet[4:4 + payload_len]
-        received_mac = packet[4 + payload_len:]
+        payload = packet[4 : 4 + payload_len]
+        received_mac = packet[4 + payload_len :]
 
         expected_mac = hmac.new(shared_key.encode(), payload, hashlib.sha256).digest()
         if not hmac.compare_digest(received_mac, expected_mac):
@@ -177,26 +175,39 @@ def validate_sdp_config(config: dict) -> dict:
         score -= 25
     for gw in gateways:
         if not gw.get("default_drop"):
-            findings.append({"severity": "critical", "finding": f"Gateway {gw.get('name')}: default-drop not enabled"})
+            findings.append(
+                {
+                    "severity": "critical",
+                    "finding": f"Gateway {gw.get('name')}: default-drop not enabled",
+                }
+            )
             score -= 20
         if not gw.get("spa_enabled"):
-            findings.append({"severity": "critical", "finding": f"Gateway {gw.get('name')}: SPA not enabled"})
+            findings.append(
+                {"severity": "critical", "finding": f"Gateway {gw.get('name')}: SPA not enabled"}
+            )
             score -= 15
         if not gw.get("mtls_enabled"):
-            findings.append({"severity": "high", "finding": f"Gateway {gw.get('name')}: mTLS not configured"})
+            findings.append(
+                {"severity": "high", "finding": f"Gateway {gw.get('name')}: mTLS not configured"}
+            )
             score -= 10
 
     pki = config.get("pki", {})
     cert_lifetime_hours = pki.get("client_cert_lifetime_hours", 8760)
     if cert_lifetime_hours > 72:
-        findings.append({
-            "severity": "warning",
-            "finding": f"Client certificate lifetime is {cert_lifetime_hours}h (recommend <=72h for zero trust)"
-        })
+        findings.append(
+            {
+                "severity": "warning",
+                "finding": f"Client certificate lifetime is {cert_lifetime_hours}h (recommend <=72h for zero trust)",
+            }
+        )
         score -= 5
 
     if not pki.get("ocsp_enabled") and not pki.get("crl_enabled"):
-        findings.append({"severity": "high", "finding": "No certificate revocation checking enabled"})
+        findings.append(
+            {"severity": "high", "finding": "No certificate revocation checking enabled"}
+        )
         score -= 10
 
     monitoring = config.get("monitoring", {})
@@ -232,12 +243,15 @@ def generate_sdp_deployment_report(config: dict) -> dict:
             "spa_enabled": all(g.get("spa_enabled") for g in config.get("gateways", [])),
             "mtls_enabled": all(g.get("mtls_enabled") for g in config.get("gateways", [])),
         },
-        "recommendations": [f["finding"] for f in validation["findings"] if f["severity"] in ("critical", "high")],
+        "recommendations": [
+            f["finding"] for f in validation["findings"] if f["severity"] in ("critical", "high")
+        ],
     }
 
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser(description="SDP Deployment Validator")
     parser.add_argument("--config", type=str, help="Path to SDP configuration JSON")
     parser.add_argument("--scan", type=str, help="Gateway host to scan for invisibility")
@@ -273,7 +287,9 @@ def main():
         result = validate_mtls_certificate(host, port)
         with open(args.output, "w") as f:
             json.dump(result, f, indent=2)
-        print(f"TLS on {host}:{port}: {'configured' if result['tls_configured'] else 'not configured'}")
+        print(
+            f"TLS on {host}:{port}: {'configured' if result['tls_configured'] else 'not configured'}"
+        )
 
     else:
         parser.print_help()

@@ -5,13 +5,13 @@ Connects to MISP instances to collect, filter, and export threat intelligence
 including events, attributes, and feeds via the PyMISP REST API client.
 """
 
-import sys
+import datetime
 import json
 import os
-import datetime
 
 try:
-    from pymisp import PyMISP, MISPEvent, MISPAttribute
+    from pymisp import MISPAttribute, MISPEvent, PyMISP
+
     HAS_PYMISP = True
 except ImportError:
     HAS_PYMISP = False
@@ -43,7 +43,9 @@ def search_events(misp, tags=None, date_from=None, published=True, limit=50):
                 "uuid": e.uuid,
                 "info": e.info,
                 "date": str(e.date),
-                "threat_level": {1: "High", 2: "Medium", 3: "Low", 4: "Undefined"}.get(e.threat_level_id, "?"),
+                "threat_level": {1: "High", 2: "Medium", 3: "Low", 4: "Undefined"}.get(
+                    e.threat_level_id, "?"
+                ),
                 "analysis": {0: "Initial", 1: "Ongoing", 2: "Complete"}.get(e.analysis, "?"),
                 "attribute_count": e.attribute_count,
                 "org": e.Orgc.name if hasattr(e, "Orgc") and e.Orgc else "",
@@ -132,8 +134,16 @@ def export_stix2(misp, event_id):
 
 
 COMMON_IOC_TYPES = [
-    "ip-dst", "ip-src", "domain", "hostname", "url",
-    "md5", "sha1", "sha256", "email-src", "filename",
+    "ip-dst",
+    "ip-src",
+    "domain",
+    "hostname",
+    "url",
+    "md5",
+    "sha1",
+    "sha256",
+    "email-src",
+    "filename",
 ]
 
 
@@ -142,7 +152,7 @@ if __name__ == "__main__":
     print("Threat Intelligence Collection with MISP")
     print("PyMISP REST client, event search, attribute extraction, feeds")
     print("=" * 60)
-    print("  PyMISP available: {}".format(HAS_PYMISP))
+    print(f"  PyMISP available: {HAS_PYMISP}")
 
     misp = init_misp() if HAS_PYMISP else None
 
@@ -150,7 +160,7 @@ if __name__ == "__main__":
         print("\n[DEMO] No MISP connection. Showing IOC types and feed structure.")
         print("\n--- Common IOC Types ---")
         for t in COMMON_IOC_TYPES:
-            print("  - {}".format(t))
+            print(f"  - {t}")
         print("\n--- Usage ---")
         print("  Set MISP_URL and MISP_API_KEY environment variables")
         print("  python agent.py")
@@ -158,15 +168,17 @@ if __name__ == "__main__":
         print("\n[*] Searching recent events...")
         events = search_events(misp, date_from="7d")
         if isinstance(events, list):
-            print("  Found {} events".format(len(events)))
+            print(f"  Found {len(events)} events")
             for e in events[:5]:
-                print("    [{}] {} ({} attrs)".format(e["id"], e["info"][:60], e["attribute_count"]))
+                print(
+                    "    [{}] {} ({} attrs)".format(e["id"], e["info"][:60], e["attribute_count"])
+                )
         else:
-            print("  Error: {}".format(events))
+            print(f"  Error: {events}")
 
         feeds = list_feeds(misp)
         if isinstance(feeds, list):
-            print("\n--- Feeds ({}) ---".format(len(feeds)))
+            print(f"\n--- Feeds ({len(feeds)}) ---")
             for f in feeds[:10]:
                 status = "enabled" if f["enabled"] else "disabled"
                 print("  [{}] {} ({})".format(f["id"], f["name"], status))

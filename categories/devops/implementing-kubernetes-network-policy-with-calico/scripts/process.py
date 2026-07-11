@@ -4,12 +4,13 @@ Calico Network Policy Manager - Generate, validate, and audit Kubernetes
 network policies using Calico for zero-trust pod communication.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
-import yaml
 from typing import Optional
+
+import yaml
 
 
 def run_kubectl(args: list, namespace: Optional[str] = None) -> str:
@@ -28,11 +29,15 @@ def get_namespaces() -> list:
     """Get all non-system namespaces."""
     output = run_kubectl(["get", "namespaces", "-o", "json"])
     ns_data = json.loads(output)
-    system_ns = {"kube-system", "kube-public", "kube-node-lease", "calico-system", "tigera-operator"}
+    system_ns = {
+        "kube-system",
+        "kube-public",
+        "kube-node-lease",
+        "calico-system",
+        "tigera-operator",
+    }
     return [
-        ns["metadata"]["name"]
-        for ns in ns_data["items"]
-        if ns["metadata"]["name"] not in system_ns
+        ns["metadata"]["name"] for ns in ns_data["items"] if ns["metadata"]["name"] not in system_ns
     ]
 
 
@@ -174,7 +179,11 @@ def print_audit_report(results: list):
     for r in results:
         ingress = "YES" if r["default_deny_ingress"] else "NO"
         egress = "YES" if r["default_deny_egress"] else "NO"
-        status = "COMPLIANT" if r["default_deny_ingress"] and r["default_deny_egress"] else "NON-COMPLIANT"
+        status = (
+            "COMPLIANT"
+            if r["default_deny_ingress"] and r["default_deny_egress"]
+            else "NON-COMPLIANT"
+        )
         if status == "COMPLIANT":
             compliant += 1
         print(f"{r['namespace']:<30} {ingress:<15} {egress:<15} {r['policy_count']:<10} {status}")

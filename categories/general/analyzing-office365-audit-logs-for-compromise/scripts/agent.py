@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Agent for analyzing Office 365 audit logs for compromise indicators via Microsoft Graph."""
 
-import json
 import argparse
+import json
 from datetime import datetime, timedelta
 
 try:
@@ -18,11 +18,17 @@ except ImportError:
 GRAPH_BASE = "https://graph.microsoft.com/v1.0"
 
 SUSPICIOUS_OPERATIONS = [
-    "New-InboxRule", "Set-InboxRule", "Set-Mailbox",
-    "Add-MailboxPermission", "Set-MailboxJunkEmailConfiguration",
-    "Set-OwaMailboxPolicy", "New-TransportRule",
-    "Add-RecipientPermission", "Set-TransportRule",
-    "UpdateInboxRules", "Set-MailboxAutoReplyConfiguration",
+    "New-InboxRule",
+    "Set-InboxRule",
+    "Set-Mailbox",
+    "Add-MailboxPermission",
+    "Set-MailboxJunkEmailConfiguration",
+    "Set-OwaMailboxPolicy",
+    "New-TransportRule",
+    "Add-RecipientPermission",
+    "Set-TransportRule",
+    "UpdateInboxRules",
+    "Set-MailboxAutoReplyConfiguration",
 ]
 
 
@@ -60,24 +66,24 @@ def query_audit_logs(token, days=7):
     since = (datetime.utcnow() - timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
     events = []
     for operation in SUSPICIOUS_OPERATIONS:
-        filter_str = (
-            f"activityDisplayName eq '{operation}' "
-            f"and activityDateTime ge {since}"
-        )
+        filter_str = f"activityDisplayName eq '{operation}' and activityDateTime ge {since}"
         try:
-            logs = graph_get(token, "/auditLogs/directoryAudits",
-                             params={"$filter": filter_str, "$top": "100"})
+            logs = graph_get(
+                token, "/auditLogs/directoryAudits", params={"$filter": filter_str, "$top": "100"}
+            )
             for log in logs:
                 initiated = log.get("initiatedBy", {}).get("user", {})
-                events.append({
-                    "operation": operation,
-                    "timestamp": log.get("activityDateTime"),
-                    "result": log.get("result"),
-                    "user": initiated.get("userPrincipalName"),
-                    "ip_address": initiated.get("ipAddress"),
-                    "target": [t.get("displayName") for t in log.get("targetResources", [])],
-                    "details": log.get("additionalDetails"),
-                })
+                events.append(
+                    {
+                        "operation": operation,
+                        "timestamp": log.get("activityDateTime"),
+                        "result": log.get("result"),
+                        "user": initiated.get("userPrincipalName"),
+                        "ip_address": initiated.get("ipAddress"),
+                        "target": [t.get("displayName") for t in log.get("targetResources", [])],
+                        "details": log.get("additionalDetails"),
+                    }
+                )
         except Exception:
             pass
     events.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
@@ -94,16 +100,20 @@ def check_inbox_rules(token, user_id):
         actions = rule.get("actions", {})
         if actions.get("forwardTo"):
             is_forwarding = True
-            forward_to = [r.get("emailAddress", {}).get("address", "")
-                          for r in actions["forwardTo"]]
+            forward_to = [
+                r.get("emailAddress", {}).get("address", "") for r in actions["forwardTo"]
+            ]
         if actions.get("forwardAsAttachmentTo"):
             is_forwarding = True
-            forward_to += [r.get("emailAddress", {}).get("address", "")
-                           for r in actions["forwardAsAttachmentTo"]]
+            forward_to += [
+                r.get("emailAddress", {}).get("address", "")
+                for r in actions["forwardAsAttachmentTo"]
+            ]
         if actions.get("redirectTo"):
             is_forwarding = True
-            forward_to += [r.get("emailAddress", {}).get("address", "")
-                           for r in actions["redirectTo"]]
+            forward_to += [
+                r.get("emailAddress", {}).get("address", "") for r in actions["redirectTo"]
+            ]
         delete_after = actions.get("delete", False)
         mark_read = actions.get("markAsRead", False)
 
@@ -118,19 +128,27 @@ def check_inbox_rules(token, user_id):
         if external:
             risk += 20
 
-        findings.append({
-            "rule_id": rule.get("id"),
-            "display_name": rule.get("displayName"),
-            "enabled": rule.get("isEnabled"),
-            "is_forwarding": is_forwarding,
-            "forward_to": forward_to,
-            "external_forwards": external,
-            "delete_after_forward": delete_after,
-            "mark_as_read": mark_read,
-            "conditions": rule.get("conditions"),
-            "risk_score": min(risk, 100),
-            "risk_level": "CRITICAL" if risk >= 70 else "HIGH" if risk >= 50 else "MEDIUM" if risk >= 25 else "LOW",
-        })
+        findings.append(
+            {
+                "rule_id": rule.get("id"),
+                "display_name": rule.get("displayName"),
+                "enabled": rule.get("isEnabled"),
+                "is_forwarding": is_forwarding,
+                "forward_to": forward_to,
+                "external_forwards": external,
+                "delete_after_forward": delete_after,
+                "mark_as_read": mark_read,
+                "conditions": rule.get("conditions"),
+                "risk_score": min(risk, 100),
+                "risk_level": "CRITICAL"
+                if risk >= 70
+                else "HIGH"
+                if risk >= 50
+                else "MEDIUM"
+                if risk >= 25
+                else "LOW",
+            }
+        )
     return findings
 
 
@@ -139,8 +157,7 @@ def check_mailbox_forwarding(token, user_id):
     try:
         headers = {"Authorization": f"Bearer {token}"}
         resp = requests.get(
-            f"{GRAPH_BASE}/users/{user_id}/mailboxSettings",
-            headers=headers, timeout=30
+            f"{GRAPH_BASE}/users/{user_id}/mailboxSettings", headers=headers, timeout=30
         )
         resp.raise_for_status()
         settings = resp.json()
@@ -159,21 +176,28 @@ def check_mailbox_forwarding(token, user_id):
 def check_oauth_grants(token):
     """Check for suspicious OAuth application consent grants."""
     grants = graph_get(token, "/oauth2PermissionGrants")
-    high_risk_scopes = {"Mail.Read", "Mail.ReadWrite", "Mail.Send",
-                        "Files.ReadWrite.All", "MailboxSettings.ReadWrite"}
+    high_risk_scopes = {
+        "Mail.Read",
+        "Mail.ReadWrite",
+        "Mail.Send",
+        "Files.ReadWrite.All",
+        "MailboxSettings.ReadWrite",
+    }
     suspicious = []
     for g in grants:
         scopes = g.get("scope", "").split()
         risky = [s for s in scopes if s in high_risk_scopes]
         if risky:
-            suspicious.append({
-                "client_id": g.get("clientId"),
-                "consent_type": g.get("consentType"),
-                "principal_id": g.get("principalId"),
-                "high_risk_scopes": risky,
-                "all_scopes": scopes,
-                "risk_score": min(len(risky) * 20, 100),
-            })
+            suspicious.append(
+                {
+                    "client_id": g.get("clientId"),
+                    "consent_type": g.get("consentType"),
+                    "principal_id": g.get("principalId"),
+                    "high_risk_scopes": risky,
+                    "all_scopes": scopes,
+                    "risk_score": min(len(risky) * 20, 100),
+                }
+            )
     suspicious.sort(key=lambda x: x["risk_score"], reverse=True)
     return suspicious
 

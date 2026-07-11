@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Agent for deploying and monitoring Canary Tokens via the Thinkst Canary API."""
 
-import json
 import argparse
+import json
 from datetime import datetime
 
 try:
@@ -66,8 +66,13 @@ class CanaryClient:
         if kind == "doc-msword" and "doc" in kwargs:
             doc_path = kwargs.pop("doc")
             data.pop("doc", None)
-            files = {"doc": (doc_path, open(doc_path, "rb"),
-                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document")}
+            files = {
+                "doc": (
+                    doc_path,
+                    open(doc_path, "rb"),
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                )
+            }
         return self._post("/canarytoken/create", data=data, files=files)
 
     def list_tokens(self):
@@ -107,13 +112,15 @@ def create_deployment(client, deployment_plan):
         extra = {k: v for k, v in token_spec.items() if k not in ("kind", "memo")}
         try:
             resp = client.create_token(kind, memo, **extra)
-            results.append({
-                "kind": kind,
-                "memo": memo,
-                "status": "CREATED",
-                "canarytoken": resp.get("canarytoken", {}).get("canarytoken", ""),
-                "url": resp.get("canarytoken", {}).get("url", ""),
-            })
+            results.append(
+                {
+                    "kind": kind,
+                    "memo": memo,
+                    "status": "CREATED",
+                    "canarytoken": resp.get("canarytoken", {}).get("canarytoken", ""),
+                    "url": resp.get("canarytoken", {}).get("url", ""),
+                }
+            )
         except Exception as e:
             results.append({"kind": kind, "memo": memo, "status": "FAILED", "error": str(e)})
     return results
@@ -162,25 +169,29 @@ def full_audit(client):
 
     token_details = []
     for t in tokens[:30]:
-        token_details.append({
-            "canarytoken": t.get("canarytoken"),
-            "kind": t.get("kind"),
-            "memo": t.get("memo"),
-            "created": t.get("created_printable"),
-            "enabled": t.get("enabled"),
-            "url": t.get("url", ""),
-        })
+        token_details.append(
+            {
+                "canarytoken": t.get("canarytoken"),
+                "kind": t.get("kind"),
+                "memo": t.get("memo"),
+                "created": t.get("created_printable"),
+                "enabled": t.get("enabled"),
+                "url": t.get("url", ""),
+            }
+        )
 
     alert_details = []
     for a in alerts[:20]:
-        alert_details.append({
-            "incident_id": a.get("id"),
-            "description": a.get("description"),
-            "source_ip": a.get("src_host"),
-            "timestamp": a.get("created_printable"),
-            "canarytoken": a.get("canarytoken"),
-            "acknowledged": a.get("acknowledged"),
-        })
+        alert_details.append(
+            {
+                "incident_id": a.get("id"),
+                "description": a.get("description"),
+                "source_ip": a.get("src_host"),
+                "timestamp": a.get("created_printable"),
+                "canarytoken": a.get("canarytoken"),
+                "acknowledged": a.get("acknowledged"),
+            }
+        )
 
     return {
         "audit_type": "Canarytoken Deception Coverage Audit",
@@ -189,7 +200,8 @@ def full_audit(client):
         "deployed_tokens": token_details,
         "recent_alerts": alert_details,
         "recommendation": "Deploy missing token types to improve coverage"
-            if coverage["coverage_score"] < 50 else "Good coverage — review untriggered tokens",
+        if coverage["coverage_score"] < 50
+        else "Good coverage — review untriggered tokens",
     }
 
 

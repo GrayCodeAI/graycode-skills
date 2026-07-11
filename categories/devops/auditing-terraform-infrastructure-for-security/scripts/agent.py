@@ -1,17 +1,24 @@
 #!/usr/bin/env python3
 """Agent for auditing Terraform infrastructure for security misconfigurations."""
 
-import os
-import json
 import argparse
+import json
 import subprocess
 from datetime import datetime
-from pathlib import Path
 
 
 def run_checkov(terraform_dir, output_format="json"):
     """Run Checkov static analysis on Terraform code."""
-    cmd = ["checkov", "-d", terraform_dir, "--framework", "terraform", "--output", output_format, "--compact"]
+    cmd = [
+        "checkov",
+        "-d",
+        terraform_dir,
+        "--framework",
+        "terraform",
+        "--output",
+        output_format,
+        "--compact",
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if output_format == "json":
         try:
@@ -52,15 +59,19 @@ def parse_checkov_results(checkov_output):
         return findings
     for check in checks:
         if isinstance(check, dict):
-            findings.append({
-                "check_id": check.get("check_id", ""),
-                "check_name": check.get("check_result", {}).get("check", {}).get("name", check.get("name", "")),
-                "resource": check.get("resource", ""),
-                "file": check.get("file_path", ""),
-                "line": check.get("file_line_range", []),
-                "severity": check.get("severity", "UNKNOWN"),
-                "guideline": check.get("guideline", ""),
-            })
+            findings.append(
+                {
+                    "check_id": check.get("check_id", ""),
+                    "check_name": check.get("check_result", {})
+                    .get("check", {})
+                    .get("name", check.get("name", "")),
+                    "resource": check.get("resource", ""),
+                    "file": check.get("file_path", ""),
+                    "line": check.get("file_line_range", []),
+                    "severity": check.get("severity", "UNKNOWN"),
+                    "guideline": check.get("guideline", ""),
+                }
+            )
     return findings
 
 
@@ -71,14 +82,16 @@ def parse_tfsec_results(tfsec_output):
     if results is None:
         return findings
     for r in results:
-        findings.append({
-            "rule_id": r.get("rule_id", ""),
-            "description": r.get("description", ""),
-            "severity": r.get("severity", ""),
-            "resource": r.get("resource", ""),
-            "location": f"{r.get('location', {}).get('filename', '')}:{r.get('location', {}).get('start_line', '')}",
-            "resolution": r.get("resolution", ""),
-        })
+        findings.append(
+            {
+                "rule_id": r.get("rule_id", ""),
+                "description": r.get("description", ""),
+                "severity": r.get("severity", ""),
+                "resource": r.get("resource", ""),
+                "location": f"{r.get('location', {}).get('filename', '')}:{r.get('location', {}).get('start_line', '')}",
+                "resolution": r.get("resolution", ""),
+            }
+        )
     return findings
 
 
@@ -93,11 +106,25 @@ def scan_tf_plan_for_issues(plan_json_path):
         address = change.get("address", "")
         if resource_type == "aws_s3_bucket":
             if not after.get("server_side_encryption_configuration"):
-                issues.append({"resource": address, "issue": "S3 bucket without encryption", "severity": "HIGH"})
+                issues.append(
+                    {
+                        "resource": address,
+                        "issue": "S3 bucket without encryption",
+                        "severity": "HIGH",
+                    }
+                )
         if resource_type == "aws_security_group_rule":
             for cidr in after.get("cidr_blocks", []):
-                if cidr == "0.0.0.0/0" and after.get("from_port", 0) <= 22 <= after.get("to_port", 0):
-                    issues.append({"resource": address, "issue": "SSH open to 0.0.0.0/0", "severity": "CRITICAL"})
+                if cidr == "0.0.0.0/0" and after.get("from_port", 0) <= 22 <= after.get(
+                    "to_port", 0
+                ):
+                    issues.append(
+                        {
+                            "resource": address,
+                            "issue": "SSH open to 0.0.0.0/0",
+                            "severity": "CRITICAL",
+                        }
+                    )
         if resource_type == "aws_iam_policy":
             policy_doc = after.get("policy", "{}")
             if isinstance(policy_doc, str):
@@ -105,7 +132,13 @@ def scan_tf_plan_for_issues(plan_json_path):
                     doc = json.loads(policy_doc)
                     for stmt in doc.get("Statement", []):
                         if stmt.get("Action") == "*" and stmt.get("Effect") == "Allow":
-                            issues.append({"resource": address, "issue": "IAM wildcard actions", "severity": "CRITICAL"})
+                            issues.append(
+                                {
+                                    "resource": address,
+                                    "issue": "IAM wildcard actions",
+                                    "severity": "CRITICAL",
+                                }
+                            )
                 except json.JSONDecodeError:
                     pass
     return issues
@@ -166,7 +199,9 @@ def main():
     report = generate_report(checkov_findings, tfsec_findings, plan_issues)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    print(f"[+] {report['critical']} critical, {report['high']} high out of {report['total_findings']} total")
+    print(
+        f"[+] {report['critical']} critical, {report['high']} high out of {report['total_findings']} total"
+    )
     print(f"[+] Report saved to {args.output}")
 
 

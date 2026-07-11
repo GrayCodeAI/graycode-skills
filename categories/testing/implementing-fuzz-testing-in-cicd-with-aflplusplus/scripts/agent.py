@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Agent for implementing AFL++ fuzz testing in CI/CD pipelines."""
 
-import json
 import argparse
-import subprocess
+import json
 import os
-import shutil
-from datetime import datetime
+import subprocess
 from pathlib import Path
 
 
@@ -66,13 +64,20 @@ def run_fuzzer(binary, input_dir, output_dir, duration_seconds=300, memory_limit
     env["AFL_NO_UI"] = "1"
     cmd = [
         "afl-fuzz",
-        "-i", input_dir,
-        "-o", output_dir,
-        "-m", memory_limit,
-        "-V", str(duration_seconds),
-        "--", binary,
+        "-i",
+        input_dir,
+        "-o",
+        output_dir,
+        "-m",
+        memory_limit,
+        "-V",
+        str(duration_seconds),
+        "--",
+        binary,
     ]
-    result = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=duration_seconds + 60)
+    result = subprocess.run(
+        cmd, capture_output=True, text=True, env=env, timeout=duration_seconds + 60
+    )
     stats = parse_fuzzer_stats(os.path.join(output_dir, "default", "fuzzer_stats"))
     crashes_dir = os.path.join(output_dir, "default", "crashes")
     crash_files = list(Path(crashes_dir).glob("id:*")) if os.path.isdir(crashes_dir) else []
@@ -90,7 +95,7 @@ def parse_fuzzer_stats(stats_file):
     """Parse AFL++ fuzzer_stats file into a dict."""
     stats = {}
     try:
-        with open(stats_file, "r") as f:
+        with open(stats_file) as f:
             for line in f:
                 if ":" in line:
                     key, _, value = line.partition(":")
@@ -117,16 +122,17 @@ def triage_crashes(binary, crashes_dir):
         cmd = [binary]
         try:
             proc = subprocess.run(
-                cmd, input=crash_file.read_bytes(),
-                capture_output=True, timeout=5
+                cmd, input=crash_file.read_bytes(), capture_output=True, timeout=5
             )
-            results.append({
-                "file": str(crash_file),
-                "returncode": proc.returncode,
-                "signal": -proc.returncode if proc.returncode < 0 else None,
-                "stderr_snippet": proc.stderr[:200].decode("utf-8", errors="replace"),
-                "crash_type": _classify_signal(proc.returncode),
-            })
+            results.append(
+                {
+                    "file": str(crash_file),
+                    "returncode": proc.returncode,
+                    "signal": -proc.returncode if proc.returncode < 0 else None,
+                    "stderr_snippet": proc.stderr[:200].decode("utf-8", errors="replace"),
+                    "crash_type": _classify_signal(proc.returncode),
+                }
+            )
         except subprocess.TimeoutExpired:
             results.append({"file": str(crash_file), "crash_type": "hang/timeout"})
     return {

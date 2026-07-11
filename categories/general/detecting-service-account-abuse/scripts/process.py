@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """Service Account Abuse Detection - Analyzes logs for T1078.002 indicators."""
 
-import json, csv, argparse, datetime, re
-from collections import defaultdict
+import argparse
+import csv
+import datetime
+import json
+import re
 from pathlib import Path
 
 DETECTION_PATTERNS = [
-    r'svc_.*Logon_Type=(2|10)',
-    r'service.*interactive',
+    r"svc_.*Logon_Type=(2|10)",
+    r"service.*interactive",
 ]
+
 
 def parse_logs(path):
     p = Path(path)
@@ -20,6 +24,7 @@ def parse_logs(path):
         with open(p, encoding="utf-8-sig") as f:
             return [dict(r) for r in csv.DictReader(f)]
     return []
+
 
 def analyze_event(event):
     cmd = event.get("CommandLine", event.get("command_line", event.get("ProcessCommandLine", "")))
@@ -37,13 +42,24 @@ def analyze_event(event):
     return {
         "technique": "T1078.002",
         "command_line": cmd[:500] if cmd else content[:500],
-        "hostname": event.get("Computer", event.get("DeviceName", event.get("hostname", "unknown"))),
+        "hostname": event.get(
+            "Computer", event.get("DeviceName", event.get("hostname", "unknown"))
+        ),
         "user": event.get("User", event.get("AccountName", event.get("UserId", "unknown"))),
-        "timestamp": event.get("_time", event.get("timestamp", event.get("UtcTime", event.get("Timestamp", "")))),
+        "timestamp": event.get(
+            "_time", event.get("timestamp", event.get("UtcTime", event.get("Timestamp", "")))
+        ),
         "risk_score": risk,
-        "risk_level": "CRITICAL" if risk >= 75 else "HIGH" if risk >= 50 else "MEDIUM" if risk >= 25 else "LOW",
+        "risk_level": "CRITICAL"
+        if risk >= 75
+        else "HIGH"
+        if risk >= 50
+        else "MEDIUM"
+        if risk >= 25
+        else "LOW",
         "indicators": indicators,
     }
+
 
 def run_hunt(input_path, output_dir):
     print(f"[*] Service Account Abuse Hunt - {datetime.datetime.now().isoformat()}")
@@ -52,9 +68,17 @@ def run_hunt(input_path, output_dir):
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     slug = "detecting_service_ac"
     with open(Path(output_dir) / f"{slug}_findings.json", "w", encoding="utf-8") as f:
-        json.dump({"hunt_id": f"TH-{datetime.date.today()}", "total_events": len(events), "findings": findings}, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-{datetime.date.today()}",
+                "total_events": len(events),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
     with open(Path(output_dir) / "hunt_report.md", "w", encoding="utf-8") as f:
-        f.write(f"# Service Account Abuse Hunt Report\n\n")
+        f.write("# Service Account Abuse Hunt Report\n\n")
         f.write(f"**Date**: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"**Findings**: {len(findings)}\n\n")
         for finding in sorted(findings, key=lambda x: x["risk_score"], reverse=True)[:20]:
@@ -63,16 +87,23 @@ def run_hunt(input_path, output_dir):
             f.write(f"- **Indicators**: {', '.join(finding['indicators'])}\n\n")
     print(f"[+] {len(findings)} findings written to {output_dir}")
 
+
 def main():
     p = argparse.ArgumentParser(description="Service Account Abuse Detection")
     sp = p.add_subparsers(dest="cmd")
-    h = sp.add_parser("hunt"); h.add_argument("--input", "-i", required=True); h.add_argument("--output", "-o", default="./detecting_servi_output")
+    h = sp.add_parser("hunt")
+    h.add_argument("--input", "-i", required=True)
+    h.add_argument("--output", "-o", default="./detecting_servi_output")
     sp.add_parser("queries")
     args = p.parse_args()
-    if args.cmd == "hunt": run_hunt(args.input, args.output)
+    if args.cmd == "hunt":
+        run_hunt(args.input, args.output)
     elif args.cmd == "queries":
         print("=== Detection Queries ===")
         print("See references/workflows.md for platform-specific queries")
-    else: p.print_help()
+    else:
+        p.print_help()
 
-if __name__ == "__main__": main()
+
+if __name__ == "__main__":
+    main()

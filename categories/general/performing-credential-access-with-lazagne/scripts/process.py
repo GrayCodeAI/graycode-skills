@@ -8,15 +8,14 @@ prioritized reports. For authorized red team engagements only.
 
 import json
 import sys
-import os
-from datetime import datetime
 from collections import defaultdict
+from datetime import datetime
 
 
 def load_lazagne_output(filepath: str) -> list:
     """Load LaZagne JSON output file."""
     try:
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             return json.load(f)
     except (FileNotFoundError, json.JSONDecodeError) as e:
         print(f"Error loading LaZagne output: {e}")
@@ -42,7 +41,7 @@ def parse_credentials(data: list) -> list:
                             "url": entry.get("URL", entry.get("Host", "")),
                             "port": entry.get("Port", ""),
                             "source": entry.get("Software", entry.get("Module", category)),
-                            "raw": entry
+                            "raw": entry,
                         }
                         if cred["username"] or cred["password"]:
                             credentials.append(cred)
@@ -59,7 +58,7 @@ def deduplicate_credentials(credentials: list) -> list:
         key = (
             cred["username"].lower(),
             cred["password"],
-            cred["url"].lower() if cred["url"] else ""
+            cred["url"].lower() if cred["url"] else "",
         )
         if key not in seen:
             seen.add(key)
@@ -77,7 +76,7 @@ def categorize_credentials(credentials: list) -> dict:
         "remote_access": [],
         "email": [],
         "web": [],
-        "other": []
+        "other": [],
     }
 
     cloud_indicators = ["aws", "azure", "gcp", "cloud", "console."]
@@ -90,11 +89,12 @@ def categorize_credentials(credentials: list) -> dict:
         url_lower = cred["url"].lower() if cred["url"] else ""
         combined = source_lower + " " + url_lower
 
-        if "\\" in cred["username"] or "@" in cred["username"]:
-            if any(domain_hint in cred["username"].lower()
-                   for domain_hint in [".local", ".corp", ".internal", "\\"]):
-                categories["domain"].append(cred)
-                continue
+        if ("\\" in cred["username"] or "@" in cred["username"]) and any(
+            domain_hint in cred["username"].lower()
+            for domain_hint in [".local", ".corp", ".internal", "\\"]
+        ):
+            categories["domain"].append(cred)
+            continue
 
         if any(ind in combined for ind in cloud_indicators):
             categories["cloud"].append(cred)
@@ -131,7 +131,7 @@ def generate_report(credentials: list, categories: dict, source_file: str) -> st
         f"  [MEDIUM]   Email Credentials: {len(categories['email'])}",
         f"  [LOW]      Web Credentials: {len(categories['web'])}",
         f"  [INFO]     Other: {len(categories['other'])}",
-        ""
+        "",
     ]
 
     priority_order = [

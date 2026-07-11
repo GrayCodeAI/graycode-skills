@@ -2,13 +2,12 @@
 """Threat campaign correlation agent using MISP and STIX."""
 
 import json
-import sys
-import urllib.request
-import urllib.parse
 import ssl
+import sys
+import urllib.parse
+import urllib.request
 from collections import Counter
 from datetime import datetime
-from math import radians, sin, cos, sqrt, atan2
 
 
 class MISPClient:
@@ -66,13 +65,15 @@ class MISPClient:
         for attr in ev.get("Attribute", []):
             if attr.get("RelatedAttribute"):
                 for rel in attr["RelatedAttribute"]:
-                    correlations.append({
-                        "source_event": event_id,
-                        "source_attr": attr.get("value"),
-                        "source_type": attr.get("type"),
-                        "related_event": rel.get("event_id"),
-                        "related_value": rel.get("value"),
-                    })
+                    correlations.append(
+                        {
+                            "source_event": event_id,
+                            "source_attr": attr.get("value"),
+                            "source_type": attr.get("type"),
+                            "related_event": rel.get("event_id"),
+                            "related_value": rel.get("value"),
+                        }
+                    )
         return correlations
 
 
@@ -174,7 +175,10 @@ def build_campaign_report(campaign_name, events, attribution=None):
     return {
         "campaign_name": campaign_name,
         "report_date": datetime.utcnow().isoformat() + "Z",
-        "timeline": {"first_seen": min(dates) if dates else None, "last_seen": max(dates) if dates else None},
+        "timeline": {
+            "first_seen": min(dates) if dates else None,
+            "last_seen": max(dates) if dates else None,
+        },
         "attribution": attribution or "Unattributed",
         "confidence": confidence,
         "shared_indicators": iocs,
@@ -185,6 +189,7 @@ def build_campaign_report(campaign_name, events, attribution=None):
 
 if __name__ == "__main__":
     import os
+
     misp_url = os.environ.get("MISP_URL", "https://misp.example.com")
     misp_key = os.environ.get("MISP_KEY", "")
 

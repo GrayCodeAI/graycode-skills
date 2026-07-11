@@ -5,10 +5,10 @@ Detects UAC bypass attempts via registry modifications, auto-elevating
 process abuse, and unusual privilege escalation patterns.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from pathlib import Path
 
@@ -22,8 +22,13 @@ UAC_REGISTRY_PATTERNS = [
 ]
 
 AUTO_ELEVATE_BINARIES = {
-    "fodhelper.exe", "computerdefaults.exe", "eventvwr.exe",
-    "sdclt.exe", "slui.exe", "cmstp.exe", "cleanmgr.exe",
+    "fodhelper.exe",
+    "computerdefaults.exe",
+    "eventvwr.exe",
+    "sdclt.exe",
+    "slui.exe",
+    "cmstp.exe",
+    "cleanmgr.exe",
 }
 
 EXPECTED_PARENTS = {"explorer.exe", "svchost.exe", "services.exe", "winlogon.exe"}
@@ -33,11 +38,11 @@ def parse_events(input_path: str) -> list[dict]:
     path = Path(input_path)
     events = []
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             events = data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             events = [dict(row) for row in csv.DictReader(f)]
     return events
 
@@ -56,13 +61,19 @@ def detect_elevation_abuse(events: list[dict]) -> list[dict]:
             image = event.get("Image", "")
             for pattern in UAC_REGISTRY_PATTERNS:
                 if re.search(pattern, target_obj):
-                    findings.append({
-                        "timestamp": timestamp, "computer": computer, "user": user,
-                        "detection_type": "UAC_Registry_Modification",
-                        "registry_key": target_obj, "value": details,
-                        "modifying_process": image,
-                        "severity": "CRITICAL", "technique": "T1548.002",
-                    })
+                    findings.append(
+                        {
+                            "timestamp": timestamp,
+                            "computer": computer,
+                            "user": user,
+                            "detection_type": "UAC_Registry_Modification",
+                            "registry_key": target_obj,
+                            "value": details,
+                            "modifying_process": image,
+                            "severity": "CRITICAL",
+                            "technique": "T1548.002",
+                        }
+                    )
                     break
 
         elif event_code == "1":
@@ -73,24 +84,44 @@ def detect_elevation_abuse(events: list[dict]) -> list[dict]:
             parent_name = parent.split("\\")[-1].lower() if parent else ""
 
             if image_name in AUTO_ELEVATE_BINARIES and parent_name not in EXPECTED_PARENTS:
-                findings.append({
-                    "timestamp": timestamp, "computer": computer, "user": user,
-                    "detection_type": "Auto_Elevate_Abuse",
-                    "auto_elevate_binary": image, "parent_process": parent,
-                    "command_line": cmdline,
-                    "severity": "HIGH", "technique": "T1548.002",
-                })
+                findings.append(
+                    {
+                        "timestamp": timestamp,
+                        "computer": computer,
+                        "user": user,
+                        "detection_type": "Auto_Elevate_Abuse",
+                        "auto_elevate_binary": image,
+                        "parent_process": parent,
+                        "command_line": cmdline,
+                        "severity": "HIGH",
+                        "technique": "T1548.002",
+                    }
+                )
 
-            if parent_name in AUTO_ELEVATE_BINARIES and image_name in {"cmd.exe", "powershell.exe", "wscript.exe", "cscript.exe", "mshta.exe"}:
-                findings.append({
-                    "timestamp": timestamp, "computer": computer, "user": user,
-                    "detection_type": "Elevated_Child_Process",
-                    "child_process": image, "auto_elevate_parent": parent,
-                    "command_line": cmdline,
-                    "severity": "CRITICAL", "technique": "T1548.002",
-                })
+            if parent_name in AUTO_ELEVATE_BINARIES and image_name in {
+                "cmd.exe",
+                "powershell.exe",
+                "wscript.exe",
+                "cscript.exe",
+                "mshta.exe",
+            }:
+                findings.append(
+                    {
+                        "timestamp": timestamp,
+                        "computer": computer,
+                        "user": user,
+                        "detection_type": "Elevated_Child_Process",
+                        "child_process": image,
+                        "auto_elevate_parent": parent,
+                        "command_line": cmdline,
+                        "severity": "CRITICAL",
+                        "technique": "T1548.002",
+                    }
+                )
 
-    return sorted(findings, key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2}.get(x["severity"], 3))
+    return sorted(
+        findings, key=lambda x: {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2}.get(x["severity"], 3)
+    )
 
 
 def run_hunt(input_path: str, output_dir: str) -> None:
@@ -102,8 +133,11 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
     with open(output_path / "elevation_abuse_findings.json", "w", encoding="utf-8") as f:
-        json.dump({"hunt_id": f"TH-UAC-{datetime.date.today().isoformat()}",
-                    "findings": findings}, f, indent=2)
+        json.dump(
+            {"hunt_id": f"TH-UAC-{datetime.date.today().isoformat()}", "findings": findings},
+            f,
+            indent=2,
+        )
     print(f"[+] Results written to {output_dir}")
 
 

@@ -1,19 +1,32 @@
 #!/usr/bin/env python3
 """Webshell Detection Agent - Scans web server directories for webshell indicators."""
 
+import argparse
 import json
+import logging
 import math
 import os
 import re
-import logging
-import argparse
-from datetime import datetime, timedelta
 from collections import Counter
+from datetime import datetime, timedelta
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-WEB_EXTENSIONS = {".php", ".phtml", ".php5", ".php7", ".jsp", ".jspx", ".asp", ".aspx", ".cgi", ".py", ".pl", ".cfm"}
+WEB_EXTENSIONS = {
+    ".php",
+    ".phtml",
+    ".php5",
+    ".php7",
+    ".jsp",
+    ".jspx",
+    ".asp",
+    ".aspx",
+    ".cgi",
+    ".py",
+    ".pl",
+    ".cfm",
+}
 
 PHP_PATTERNS = [
     (r"\beval\s*\(", "eval() execution", "critical"),
@@ -77,7 +90,7 @@ def get_patterns_for_ext(ext):
 def scan_file(filepath, entropy_threshold=5.5):
     """Scan a single file for webshell indicators."""
     try:
-        with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+        with open(filepath, encoding="utf-8", errors="ignore") as f:
             content = f.read()
     except (OSError, PermissionError) as e:
         return {"file": filepath, "error": str(e)}
@@ -144,13 +157,12 @@ def scan_directory(webroot, entropy_threshold=5.5, max_age_days=30):
             if "error" not in result:
                 results.append(result)
 
-    recently_modified = [
-        r for r in results
-        if datetime.fromisoformat(r["modified"]) > cutoff
-    ]
+    recently_modified = [r for r in results if datetime.fromisoformat(r["modified"]) > cutoff]
     logger.info(
         "Scanned %d files, %d recently modified (<%d days)",
-        len(results), len(recently_modified), max_age_days,
+        len(results),
+        len(recently_modified),
+        max_age_days,
     )
     return results
 
@@ -168,7 +180,9 @@ def generate_report(scan_results):
         "malicious_files": malicious,
         "suspicious_files": suspicious,
     }
-    print(f"WEBSHELL REPORT: {len(malicious)} malicious, {len(suspicious)} suspicious out of {len(scan_results)} files")
+    print(
+        f"WEBSHELL REPORT: {len(malicious)} malicious, {len(suspicious)} suspicious out of {len(scan_results)} files"
+    )
     return report
 
 

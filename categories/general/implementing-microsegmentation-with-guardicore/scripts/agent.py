@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Guardicore Microsegmentation Agent - audits segmentation policies and network flow visibility."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 from collections import defaultdict
@@ -15,10 +15,18 @@ GC_API = "https://gc-centra.example.com/api/v3.0"
 
 
 def gc_request(api_url, token, endpoint, method="GET", data=None):
-    cmd = ["curl", "-s", "-k", "-X", method,
-           "-H", f"Authorization: Bearer {token}",
-           "-H", "Content-Type: application/json",
-           f"{api_url}{endpoint}"]
+    cmd = [
+        "curl",
+        "-s",
+        "-k",
+        "-X",
+        method,
+        "-H",
+        f"Authorization: Bearer {token}",
+        "-H",
+        "Content-Type: application/json",
+        f"{api_url}{endpoint}",
+    ]
     if data:
         cmd.extend(["-d", json.dumps(data)])
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -71,13 +79,15 @@ def analyze_policy_coverage(policies, flows):
         if (src_label, dst_label, port) in policy_rules or ("any", "any", "any") in policy_rules:
             covered += 1
         else:
-            uncovered_flows.append({
-                "source": flow.get("source_ip", ""),
-                "destination": flow.get("destination_ip", ""),
-                "port": port,
-                "protocol": flow.get("protocol", ""),
-                "bytes": flow.get("bytes_total", 0),
-            })
+            uncovered_flows.append(
+                {
+                    "source": flow.get("source_ip", ""),
+                    "destination": flow.get("destination_ip", ""),
+                    "port": port,
+                    "protocol": flow.get("protocol", ""),
+                    "bytes": flow.get("bytes_total", 0),
+                }
+            )
     total = len(flows)
     return {
         "total_flows": total,
@@ -107,8 +117,12 @@ def audit_agent_health(agents):
     """Audit deployment agent health status."""
     healthy = sum(1 for a in agents if a.get("status") == "online")
     offline = sum(1 for a in agents if a.get("status") == "offline")
-    return {"total": len(agents), "online": healthy, "offline": offline,
-            "health_percent": round(healthy / max(len(agents), 1) * 100, 1)}
+    return {
+        "total": len(agents),
+        "online": healthy,
+        "offline": offline,
+        "health_percent": round(healthy / max(len(agents), 1) * 100, 1),
+    }
 
 
 def generate_report(policies, flows, agents, api_url):
@@ -142,8 +156,11 @@ def main():
     report = generate_report(policies, flows, agents, args.api_url)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Coverage: %.1f%%, Agent health: %.1f%%",
-                report["policy_coverage"]["coverage_percent"], report["agent_health"]["health_percent"])
+    logger.info(
+        "Coverage: %.1f%%, Agent health: %.1f%%",
+        report["policy_coverage"]["coverage_percent"],
+        report["agent_health"]["health_percent"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

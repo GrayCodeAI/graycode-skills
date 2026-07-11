@@ -6,14 +6,11 @@ verification, IOC extraction, and recovery tracking during
 ransomware incident response.
 """
 
-import requests
+import hashlib
 import json
 import sys
-import hashlib
-import re
-from pathlib import Path
 from datetime import datetime
-from collections import defaultdict
+from pathlib import Path
 
 
 class RansomwareResponseAgent:
@@ -40,8 +37,7 @@ class RansomwareResponseAgent:
             event["details"] = details
         self.incident["timeline"].append(event)
 
-    def identify_ransomware(self, ransom_note_path=None, encrypted_file_path=None,
-                            extension=None):
+    def identify_ransomware(self, ransom_note_path=None, encrypted_file_path=None, extension=None):
         """Identify ransomware variant from note, file, or extension."""
         identification = {
             "method": "manual",
@@ -68,13 +64,13 @@ class RansomwareResponseAgent:
                         break
 
         if encrypted_file_path and Path(encrypted_file_path).exists():
-            file_hash = hashlib.sha256(
-                Path(encrypted_file_path).read_bytes()
-            ).hexdigest()
+            file_hash = hashlib.sha256(Path(encrypted_file_path).read_bytes()).hexdigest()
             identification["encrypted_sample_hash"] = file_hash
 
         self.incident["identification"] = identification
-        self.log_event("identification", f"Ransomware identified: {identification.get('family', 'Unknown')}")
+        self.log_event(
+            "identification", f"Ransomware identified: {identification.get('family', 'Unknown')}"
+        )
         return identification
 
     def check_decryptor_availability(self, family):
@@ -95,11 +91,18 @@ class RansomwareResponseAgent:
             "id_ransomware_url": "https://id-ransomware.malwarehunterteam.com/",
         }
 
-    def assess_impact(self, encrypted_hosts=0, total_hosts=0,
-                      encrypted_servers=0, total_servers=0,
-                      dc_affected=0, total_dcs=0,
-                      data_exfiltrated_gb=0, ransom_amount="",
-                      backup_status="unknown"):
+    def assess_impact(
+        self,
+        encrypted_hosts=0,
+        total_hosts=0,
+        encrypted_servers=0,
+        total_servers=0,
+        dc_affected=0,
+        total_dcs=0,
+        data_exfiltrated_gb=0,
+        ransom_amount="",
+        backup_status="unknown",
+    ):
         """Assess the scope and impact of the ransomware incident."""
         assessment = {
             "encrypted_hosts": encrypted_hosts,
@@ -129,22 +132,45 @@ class RansomwareResponseAgent:
     def generate_containment_checklist(self):
         """Generate prioritized containment checklist."""
         checklist = [
-            {"priority": 1, "action": "Disconnect affected network segments from core infrastructure",
-             "status": "pending", "note": "Pull network cable, do NOT power off"},
-            {"priority": 2, "action": "Isolate all domain controllers immediately",
-             "status": "pending", "note": "If GPO-based deployment suspected"},
-            {"priority": 3, "action": "Disable compromised accounts used for deployment",
-             "status": "pending"},
-            {"priority": 4, "action": "Block lateral movement protocols (SMB 445, RDP 3389, WinRM 5985-5986)",
-             "status": "pending"},
-            {"priority": 5, "action": "Preserve at least one encrypted system powered on for memory forensics",
-             "status": "pending", "note": "Encryption keys may be in memory"},
-            {"priority": 6, "action": "Verify offline backup integrity",
-             "status": "pending"},
-            {"priority": 7, "action": "Engage incident response retainer and cyber insurance",
-             "status": "pending"},
-            {"priority": 8, "action": "Notify legal counsel for OFAC screening and regulatory assessment",
-             "status": "pending"},
+            {
+                "priority": 1,
+                "action": "Disconnect affected network segments from core infrastructure",
+                "status": "pending",
+                "note": "Pull network cable, do NOT power off",
+            },
+            {
+                "priority": 2,
+                "action": "Isolate all domain controllers immediately",
+                "status": "pending",
+                "note": "If GPO-based deployment suspected",
+            },
+            {
+                "priority": 3,
+                "action": "Disable compromised accounts used for deployment",
+                "status": "pending",
+            },
+            {
+                "priority": 4,
+                "action": "Block lateral movement protocols (SMB 445, RDP 3389, WinRM 5985-5986)",
+                "status": "pending",
+            },
+            {
+                "priority": 5,
+                "action": "Preserve at least one encrypted system powered on for memory forensics",
+                "status": "pending",
+                "note": "Encryption keys may be in memory",
+            },
+            {"priority": 6, "action": "Verify offline backup integrity", "status": "pending"},
+            {
+                "priority": 7,
+                "action": "Engage incident response retainer and cyber insurance",
+                "status": "pending",
+            },
+            {
+                "priority": 8,
+                "action": "Notify legal counsel for OFAC screening and regulatory assessment",
+                "status": "pending",
+            },
         ]
         self.incident["containment_checklist"] = checklist
         return checklist
@@ -217,10 +243,7 @@ def main():
     if len(sys.argv) > 3:
         agent.identify_ransomware(ransom_note_path=sys.argv[3])
 
-    agent.assess_impact(
-        encrypted_hosts=0, total_hosts=0,
-        backup_status="unknown"
-    )
+    agent.assess_impact(encrypted_hosts=0, total_hosts=0, backup_status="unknown")
     agent.generate_report()
 
 

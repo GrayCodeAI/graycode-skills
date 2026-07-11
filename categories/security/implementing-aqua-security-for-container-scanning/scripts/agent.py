@@ -8,7 +8,6 @@ import os
 import subprocess
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -23,8 +22,7 @@ def check_trivy_installed() -> bool:
         return False
 
 
-def scan_image(image: str, severity: str = "CRITICAL,HIGH",
-               ignore_unfixed: bool = True) -> dict:
+def scan_image(image: str, severity: str = "CRITICAL,HIGH", ignore_unfixed: bool = True) -> dict:
     """Scan a container image for vulnerabilities using Trivy."""
     cmd = ["trivy", "image", "--format", "json", "--severity", severity, image]
     if ignore_unfixed:
@@ -72,25 +70,27 @@ def generate_sbom(image: str, output_path: str) -> bool:
         return False
 
 
-def parse_vuln_results(scan_data: dict) -> List[dict]:
+def parse_vuln_results(scan_data: dict) -> list[dict]:
     """Parse Trivy JSON output into structured vulnerability list."""
     vulns = []
     for result in scan_data.get("Results", []):
         target = result.get("Target", "")
         for vuln in result.get("Vulnerabilities", []):
-            vulns.append({
-                "target": target,
-                "vuln_id": vuln.get("VulnerabilityID", ""),
-                "pkg_name": vuln.get("PkgName", ""),
-                "installed": vuln.get("InstalledVersion", ""),
-                "fixed": vuln.get("FixedVersion", ""),
-                "severity": vuln.get("Severity", ""),
-                "title": vuln.get("Title", ""),
-            })
+            vulns.append(
+                {
+                    "target": target,
+                    "vuln_id": vuln.get("VulnerabilityID", ""),
+                    "pkg_name": vuln.get("PkgName", ""),
+                    "installed": vuln.get("InstalledVersion", ""),
+                    "fixed": vuln.get("FixedVersion", ""),
+                    "severity": vuln.get("Severity", ""),
+                    "title": vuln.get("Title", ""),
+                }
+            )
     return vulns
 
 
-def compute_summary(vulns: List[dict]) -> dict:
+def compute_summary(vulns: list[dict]) -> dict:
     """Compute severity summary from vulnerability list."""
     summary = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0}
     for v in vulns:
@@ -103,17 +103,20 @@ def compute_summary(vulns: List[dict]) -> dict:
     return summary
 
 
-def scan_multiple_images(images: List[str], severity: str) -> dict:
+def scan_multiple_images(images: list[str], severity: str) -> dict:
     """Scan multiple container images and aggregate results."""
     report = {"scan_date": datetime.utcnow().isoformat(), "images": []}
     for image in images:
         logger.info("Scanning %s...", image)
         scan_data = scan_image(image, severity)
         vulns = parse_vuln_results(scan_data)
-        report["images"].append({
-            "image": image, "vulnerabilities": vulns,
-            "summary": compute_summary(vulns),
-        })
+        report["images"].append(
+            {
+                "image": image,
+                "vulnerabilities": vulns,
+                "summary": compute_summary(vulns),
+            }
+        )
     totals = {"CRITICAL": 0, "HIGH": 0, "MEDIUM": 0, "LOW": 0, "total": 0}
     for img in report["images"]:
         for k in totals:

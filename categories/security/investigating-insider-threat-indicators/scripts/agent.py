@@ -10,7 +10,7 @@ import hashlib
 import json
 import os
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 
 
 def load_dlp_alerts(filepath: str) -> list[dict]:
@@ -19,19 +19,21 @@ def load_dlp_alerts(filepath: str) -> list[dict]:
     if not os.path.exists(filepath):
         print(f"[!] DLP alerts file not found: {filepath}")
         return alerts
-    with open(filepath, "r", newline="") as f:
+    with open(filepath, newline="") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            alerts.append({
-                "timestamp": row.get("timestamp", ""),
-                "user": row.get("user", ""),
-                "policy": row.get("policy_name", ""),
-                "action": row.get("action", ""),
-                "destination": row.get("destination", ""),
-                "file_count": int(row.get("file_count", 0)),
-                "bytes_transferred": int(row.get("bytes_transferred", 0)),
-                "severity": row.get("severity", "medium"),
-            })
+            alerts.append(
+                {
+                    "timestamp": row.get("timestamp", ""),
+                    "user": row.get("user", ""),
+                    "policy": row.get("policy_name", ""),
+                    "action": row.get("action", ""),
+                    "destination": row.get("destination", ""),
+                    "file_count": int(row.get("file_count", 0)),
+                    "bytes_transferred": int(row.get("bytes_transferred", 0)),
+                    "severity": row.get("severity", "medium"),
+                }
+            )
     return alerts
 
 
@@ -40,7 +42,7 @@ def load_access_logs(filepath: str) -> list[dict]:
     if not os.path.exists(filepath):
         print(f"[!] Access logs file not found: {filepath}")
         return []
-    with open(filepath, "r") as f:
+    with open(filepath) as f:
         return json.load(f)
 
 
@@ -111,48 +113,60 @@ def detect_pre_departure_indicators(
     indicators = []
 
     if data_movement["total_bytes_gb"] > 1.0:
-        indicators.append({
-            "severity": "HIGH",
-            "indicator": "Bulk data transfer",
-            "detail": f"{data_movement['total_bytes_gb']} GB transferred across {data_movement['total_files']} files",
-        })
+        indicators.append(
+            {
+                "severity": "HIGH",
+                "indicator": "Bulk data transfer",
+                "detail": f"{data_movement['total_bytes_gb']} GB transferred across {data_movement['total_files']} files",
+            }
+        )
 
     if data_movement["high_severity_alerts"] > 0:
-        indicators.append({
-            "severity": "HIGH",
-            "indicator": "High-severity DLP violations",
-            "detail": f"{data_movement['high_severity_alerts']} high-severity DLP alerts triggered",
-        })
+        indicators.append(
+            {
+                "severity": "HIGH",
+                "indicator": "High-severity DLP violations",
+                "detail": f"{data_movement['high_severity_alerts']} high-severity DLP alerts triggered",
+            }
+        )
 
     personal_storage = ["dropbox", "drive.google", "onedrive.live", "mega.nz", "wetransfer"]
     for dest, count in data_movement["destinations"].items():
         if any(ps in dest.lower() for ps in personal_storage):
-            indicators.append({
-                "severity": "HIGH",
-                "indicator": "Transfer to personal cloud storage",
-                "detail": f"{count} files sent to {dest}",
-            })
+            indicators.append(
+                {
+                    "severity": "HIGH",
+                    "indicator": "Transfer to personal cloud storage",
+                    "detail": f"{count} files sent to {dest}",
+                }
+            )
 
     if access_patterns["off_hours_pct"] > 30:
-        indicators.append({
-            "severity": "MEDIUM",
-            "indicator": "Elevated off-hours activity",
-            "detail": f"{access_patterns['off_hours_pct']}% of activity outside business hours",
-        })
+        indicators.append(
+            {
+                "severity": "MEDIUM",
+                "indicator": "Elevated off-hours activity",
+                "detail": f"{access_patterns['off_hours_pct']}% of activity outside business hours",
+            }
+        )
 
     if access_patterns["weekend_pct"] > 15:
-        indicators.append({
-            "severity": "MEDIUM",
-            "indicator": "Elevated weekend activity",
-            "detail": f"{access_patterns['weekend_pct']}% of activity on weekends",
-        })
+        indicators.append(
+            {
+                "severity": "MEDIUM",
+                "indicator": "Elevated weekend activity",
+                "detail": f"{access_patterns['weekend_pct']}% of activity on weekends",
+            }
+        )
 
     if len(access_patterns["unique_applications"]) > 15:
-        indicators.append({
-            "severity": "MEDIUM",
-            "indicator": "Broad application access",
-            "detail": f"Accessed {len(access_patterns['unique_applications'])} unique applications",
-        })
+        indicators.append(
+            {
+                "severity": "MEDIUM",
+                "indicator": "Broad application access",
+                "detail": f"Accessed {len(access_patterns['unique_applications'])} unique applications",
+            }
+        )
 
     return indicators
 
@@ -164,13 +178,15 @@ def create_evidence_log(case_id: str, evidence_files: list[str]) -> dict:
         if os.path.exists(filepath):
             with open(filepath, "rb") as f:
                 content = f.read()
-            items.append({
-                "item_id": f"EV-{len(items)+1:03d}",
-                "file": filepath,
-                "sha256": hashlib.sha256(content).hexdigest(),
-                "size_bytes": len(content),
-                "collected_at": datetime.now(timezone.utc).isoformat(),
-            })
+            items.append(
+                {
+                    "item_id": f"EV-{len(items) + 1:03d}",
+                    "file": filepath,
+                    "sha256": hashlib.sha256(content).hexdigest(),
+                    "size_bytes": len(content),
+                    "collected_at": datetime.now(timezone.utc).isoformat(),
+                }
+            )
 
     return {
         "case_id": case_id,
@@ -180,7 +196,9 @@ def create_evidence_log(case_id: str, evidence_files: list[str]) -> dict:
     }
 
 
-def generate_report(case_id: str, subject: str, data_mv: dict, access: dict, indicators: list) -> str:
+def generate_report(
+    case_id: str, subject: str, data_mv: dict, access: dict, indicators: list
+) -> str:
     """Generate insider threat investigation report."""
     lines = [
         f"INSIDER THREAT INVESTIGATION REPORT - {case_id}",
@@ -230,5 +248,13 @@ if __name__ == "__main__":
 
     output = f"insider_threat_{case_id}_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
     with open(output, "w") as f:
-        json.dump({"data_movement": data_movement, "access_patterns": access_patterns, "indicators": indicators}, f, indent=2)
+        json.dump(
+            {
+                "data_movement": data_movement,
+                "access_patterns": access_patterns,
+                "indicators": indicators,
+            },
+            f,
+            indent=2,
+        )
     print(f"\n[*] Results saved to {output}")

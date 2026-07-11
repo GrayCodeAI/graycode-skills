@@ -5,19 +5,23 @@ import argparse
 import csv
 import json
 import math
-import sys
 from collections import defaultdict
 from datetime import datetime, timezone
-
 
 DNS_EXFIL_ENTROPY_THRESHOLD = 3.5
 DNS_LABEL_LENGTH_THRESHOLD = 40
 LARGE_UPLOAD_THRESHOLD_MB = 50
 
 SUSPICIOUS_PORTS = {
-    20: "FTP Data", 21: "FTP", 22: "SSH/SCP", 53: "DNS",
-    443: "HTTPS", 993: "IMAPS", 995: "POP3S",
-    8443: "Alt HTTPS", 6667: "IRC",
+    20: "FTP Data",
+    21: "FTP",
+    22: "SSH/SCP",
+    53: "DNS",
+    443: "HTTPS",
+    993: "IMAPS",
+    995: "POP3S",
+    8443: "Alt HTTPS",
+    6667: "IRC",
 }
 
 
@@ -29,7 +33,7 @@ def shannon_entropy(data):
     for c in data:
         freq[c] += 1
     length = len(data)
-    return -sum((count/length) * math.log2(count/length) for count in freq.values())
+    return -sum((count / length) * math.log2(count / length) for count in freq.values())
 
 
 def analyze_dns_queries(filepath):
@@ -37,7 +41,7 @@ def analyze_dns_queries(filepath):
     findings = []
     domain_stats = defaultdict(lambda: {"count": 0, "total_length": 0, "queries": []})
     try:
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 query = row.get("query", "")
@@ -61,14 +65,16 @@ def analyze_dns_queries(filepath):
         all_subdomains = "".join(stats["queries"])
         entropy = shannon_entropy(all_subdomains)
         if entropy > DNS_EXFIL_ENTROPY_THRESHOLD and avg_subdomain_len > 20:
-            findings.append({
-                "type": "dns_exfiltration",
-                "domain": domain,
-                "query_count": stats["count"],
-                "avg_subdomain_length": round(avg_subdomain_len, 1),
-                "entropy": round(entropy, 3),
-                "severity": "CRITICAL",
-            })
+            findings.append(
+                {
+                    "type": "dns_exfiltration",
+                    "domain": domain,
+                    "query_count": stats["count"],
+                    "avg_subdomain_length": round(avg_subdomain_len, 1),
+                    "entropy": round(entropy, 3),
+                    "severity": "CRITICAL",
+                }
+            )
     return findings
 
 
@@ -77,7 +83,7 @@ def analyze_network_flows(filepath):
     findings = []
     dest_bytes = defaultdict(int)
     try:
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 dst = row.get("id.resp_h", row.get("dst", ""))
@@ -89,13 +95,15 @@ def analyze_network_flows(filepath):
     for dst, total in dest_bytes.items():
         mb = total / (1024 * 1024)
         if mb >= LARGE_UPLOAD_THRESHOLD_MB:
-            findings.append({
-                "type": "large_outbound_transfer",
-                "destination": dst,
-                "total_bytes": total,
-                "total_mb": round(mb, 2),
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "type": "large_outbound_transfer",
+                    "destination": dst,
+                    "total_bytes": total,
+                    "total_mb": round(mb, 2),
+                    "severity": "HIGH",
+                }
+            )
     return findings
 
 
@@ -104,7 +112,7 @@ def analyze_off_hours_traffic(filepath):
     findings = []
     off_hours_transfers = defaultdict(int)
     try:
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             reader = csv.DictReader(f, delimiter="\t")
             for row in reader:
                 ts = float(row.get("ts", 0))
@@ -119,19 +127,19 @@ def analyze_off_hours_traffic(filepath):
     for dst, total in off_hours_transfers.items():
         mb = total / (1024 * 1024)
         if mb >= 10:
-            findings.append({
-                "type": "off_hours_transfer",
-                "destination": dst,
-                "total_mb": round(mb, 2),
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "type": "off_hours_transfer",
+                    "destination": dst,
+                    "total_mb": round(mb, 2),
+                    "severity": "MEDIUM",
+                }
+            )
     return findings
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Data exfiltration indicator hunter"
-    )
+    parser = argparse.ArgumentParser(description="Data exfiltration indicator hunter")
     parser.add_argument("--conn-log", help="Zeek conn.log or network flow CSV")
     parser.add_argument("--dns-log", help="Zeek dns.log or DNS query CSV")
     parser.add_argument("--output", "-o", help="Output JSON report")
@@ -151,9 +159,13 @@ def main():
         report["findings"].extend(analyze_off_hours_traffic(args.conn_log))
 
     report["risk_level"] = (
-        "CRITICAL" if any(f["severity"] == "CRITICAL" for f in report["findings"])
-        else "HIGH" if any(f["severity"] == "HIGH" for f in report["findings"])
-        else "MEDIUM" if report["findings"] else "LOW"
+        "CRITICAL"
+        if any(f["severity"] == "CRITICAL" for f in report["findings"])
+        else "HIGH"
+        if any(f["severity"] == "HIGH" for f in report["findings"])
+        else "MEDIUM"
+        if report["findings"]
+        else "LOW"
     )
     report["total_findings"] = len(report["findings"])
 

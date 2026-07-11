@@ -19,11 +19,9 @@ import hashlib
 import json
 import logging
 import os
-import socket
 import subprocess
 import sys
 from datetime import datetime, timezone
-from pathlib import Path
 from typing import Optional
 
 try:
@@ -33,7 +31,7 @@ except ImportError:
     sys.exit(1)
 
 try:
-    from ldap3 import Server, Connection, MODIFY_REPLACE, ALL
+    from ldap3 import ALL, MODIFY_REPLACE, Connection, Server
 except ImportError:
     ldap3_available = False
 else:
@@ -97,7 +95,9 @@ class ContainmentActionLog:
 class CrowdStrikeContainment:
     """CrowdStrike Falcon endpoint containment via API."""
 
-    def __init__(self, client_id: str, client_secret: str, base_url: str = "https://api.crowdstrike.com"):
+    def __init__(
+        self, client_id: str, client_secret: str, base_url: str = "https://api.crowdstrike.com"
+    ):
         self.base_url = base_url
         self.client_id = client_id
         self.client_secret = client_secret
@@ -193,7 +193,9 @@ class ActiveDirectoryContainment:
             raise ImportError("ldap3 package required: pip install ldap3")
         self.server = Server(server_addr, get_info=ALL)
         self.domain = domain
-        self.conn = Connection(self.server, user=f"{domain}\\{username}", password=password, auto_bind=True)
+        self.conn = Connection(
+            self.server, user=f"{domain}\\{username}", password=password, auto_bind=True
+        )
 
     def disable_account(self, sam_account_name: str) -> bool:
         search_base = ",".join([f"DC={part}" for part in self.domain.split(".")])
@@ -216,7 +218,9 @@ class ActiveDirectoryContainment:
 
     def reset_password(self, sam_account_name: str, new_password: str) -> bool:
         search_base = ",".join([f"DC={part}" for part in self.domain.split(".")])
-        self.conn.search(search_base, f"(sAMAccountName={sam_account_name})", attributes=["distinguishedName"])
+        self.conn.search(
+            search_base, f"(sAMAccountName={sam_account_name})", attributes=["distinguishedName"]
+        )
         if not self.conn.entries:
             return False
         dn = self.conn.entries[0].distinguishedName.value
@@ -252,15 +256,29 @@ class FirewallContainment:
             try:
                 rule_name = f"IR_Block_{ip.replace('.', '_')}"
                 cmd = [
-                    "netsh", "advfirewall", "firewall", "add", "rule",
-                    f"name={rule_name}", "dir=in", "action=block",
-                    f"remoteip={ip}", "protocol=any",
+                    "netsh",
+                    "advfirewall",
+                    "firewall",
+                    "add",
+                    "rule",
+                    f"name={rule_name}",
+                    "dir=in",
+                    "action=block",
+                    f"remoteip={ip}",
+                    "protocol=any",
                 ]
                 subprocess.run(cmd, capture_output=True, text=True, check=True)
                 cmd_out = [
-                    "netsh", "advfirewall", "firewall", "add", "rule",
-                    f"name={rule_name}_out", "dir=out", "action=block",
-                    f"remoteip={ip}", "protocol=any",
+                    "netsh",
+                    "advfirewall",
+                    "firewall",
+                    "add",
+                    "rule",
+                    f"name={rule_name}_out",
+                    "dir=out",
+                    "action=block",
+                    f"remoteip={ip}",
+                    "protocol=any",
                 ]
                 subprocess.run(cmd_out, capture_output=True, text=True, check=True)
                 results.append({"ip": ip, "status": "blocked", "method": "windows_firewall"})
@@ -278,7 +296,9 @@ class FirewallContainment:
             with open(hosts_path, "a") as f:
                 for domain in domain_list:
                     f.write(f"\n0.0.0.0 {domain}  # IR Containment Block")
-                    results.append({"domain": domain, "status": "sinkholed", "method": "hosts_file"})
+                    results.append(
+                        {"domain": domain, "status": "sinkholed", "method": "hosts_file"}
+                    )
                     logger.info(f"Sinkholed domain: {domain}")
         except PermissionError:
             logger.error("Insufficient permissions to modify hosts file. Run as administrator.")
@@ -307,7 +327,7 @@ class SplunkScopeAssessment:
                 "latest_time": latest,
                 "output_mode": "json",
             },
-            verify=False,
+            verify=True,
         )
         resp.raise_for_status()
         return resp.json()
@@ -351,7 +371,9 @@ def collect_volatile_evidence(output_dir: str) -> dict:
     # Running processes
     try:
         if os.name == "nt":
-            result = subprocess.run(["tasklist", "/V", "/FO", "CSV"], capture_output=True, text=True)
+            result = subprocess.run(
+                ["tasklist", "/V", "/FO", "CSV"], capture_output=True, text=True
+            )
         else:
             result = subprocess.run(["ps", "auxwwf"], capture_output=True, text=True)
         proc_file = os.path.join(output_dir, "running_processes.txt")
@@ -369,8 +391,14 @@ def collect_volatile_evidence(output_dir: str) -> dict:
         if os.name == "nt":
             result = subprocess.run(["ipconfig", "/displaydns"], capture_output=True, text=True)
         else:
-            dns_cache_file = "/var/cache/nscd/hosts" if os.path.exists("/var/cache/nscd/hosts") else ""
-            result = subprocess.run(["cat", dns_cache_file], capture_output=True, text=True) if dns_cache_file else None
+            dns_cache_file = (
+                "/var/cache/nscd/hosts" if os.path.exists("/var/cache/nscd/hosts") else ""
+            )
+            result = (
+                subprocess.run(["cat", dns_cache_file], capture_output=True, text=True)
+                if dns_cache_file
+                else None
+            )
         if result and result.stdout:
             dns_file = os.path.join(output_dir, "dns_cache.txt")
             with open(dns_file, "w") as f:
@@ -425,7 +453,9 @@ def run_containment(args):
         logger.info(f"Collecting volatile evidence to {evidence_dir}")
         evidence = collect_volatile_evidence(evidence_dir)
         for etype, edata in evidence.items():
-            action_log.log_action("evidence_collection", etype, "collected", f"SHA256: {edata['sha256']}")
+            action_log.log_action(
+                "evidence_collection", etype, "collected", f"SHA256: {edata['sha256']}"
+            )
 
     # Step 2: Block IPs at firewall
     if args.block_ips:
@@ -436,7 +466,9 @@ def run_containment(args):
         else:
             results = FirewallContainment.block_ips_iptables(ip_list)
         for r in results:
-            action_log.log_action("ip_block", r["ip"], r["status"], r.get("method", r.get("error", "")))
+            action_log.log_action(
+                "ip_block", r["ip"], r["status"], r.get("method", r.get("error", ""))
+            )
 
     # Step 3: Block domains
     if args.block_domains:
@@ -457,9 +489,13 @@ def run_containment(args):
                 device_id = cs.get_device_id_by_hostname(hostname)
                 if device_id:
                     cs.contain_host(device_id)
-                    action_log.log_action("endpoint_isolation", hostname, "contained", f"Device ID: {device_id}")
+                    action_log.log_action(
+                        "endpoint_isolation", hostname, "contained", f"Device ID: {device_id}"
+                    )
                 else:
-                    action_log.log_action("endpoint_isolation", hostname, "failed", "Device not found in Falcon")
+                    action_log.log_action(
+                        "endpoint_isolation", hostname, "failed", "Device not found in Falcon"
+                    )
         except Exception as e:
             action_log.log_action("edr_auth", "crowdstrike", "failed", str(e))
             logger.error(f"CrowdStrike containment failed: {e}")
@@ -474,7 +510,9 @@ def run_containment(args):
             for account in accounts:
                 result = ad.disable_account(account)
                 action_log.log_action(
-                    "account_disable", account, "disabled" if result else "failed",
+                    "account_disable",
+                    account,
+                    "disabled" if result else "failed",
                     "AD account disabled" if result else "Account not found",
                 )
         except Exception as e:
@@ -495,17 +533,37 @@ def run_containment(args):
 
 def main():
     parser = argparse.ArgumentParser(description="Active Security Breach Containment Automation")
-    parser.add_argument("--incident-id", required=True, help="Incident tracking ID (e.g., IR-2024-001)")
-    parser.add_argument("--output-dir", default="./containment_output", help="Output directory for logs and reports")
-    parser.add_argument("--collect-evidence", action="store_true", help="Collect volatile evidence before containment")
+    parser.add_argument(
+        "--incident-id", required=True, help="Incident tracking ID (e.g., IR-2024-001)"
+    )
+    parser.add_argument(
+        "--output-dir", default="./containment_output", help="Output directory for logs and reports"
+    )
+    parser.add_argument(
+        "--collect-evidence",
+        action="store_true",
+        help="Collect volatile evidence before containment",
+    )
     parser.add_argument("--block-ips", help="Comma-separated list of IPs to block at firewall")
     parser.add_argument("--block-domains", help="Comma-separated list of domains to sinkhole")
-    parser.add_argument("--crowdstrike-isolate", help="Comma-separated hostnames to isolate via CrowdStrike")
-    parser.add_argument("--cs-client-id", default=os.getenv("CS_CLIENT_ID"), help="CrowdStrike API client ID")
-    parser.add_argument("--cs-client-secret", default=os.getenv("CS_CLIENT_SECRET"), help="CrowdStrike API client secret")
+    parser.add_argument(
+        "--crowdstrike-isolate", help="Comma-separated hostnames to isolate via CrowdStrike"
+    )
+    parser.add_argument(
+        "--cs-client-id", default=os.getenv("CS_CLIENT_ID"), help="CrowdStrike API client ID"
+    )
+    parser.add_argument(
+        "--cs-client-secret",
+        default=os.getenv("CS_CLIENT_SECRET"),
+        help="CrowdStrike API client secret",
+    )
     parser.add_argument("--disable-accounts", help="Comma-separated AD accounts to disable")
-    parser.add_argument("--ad-server", default=os.getenv("AD_SERVER"), help="Active Directory server address")
-    parser.add_argument("--ad-domain", default=os.getenv("AD_DOMAIN"), help="Active Directory domain")
+    parser.add_argument(
+        "--ad-server", default=os.getenv("AD_SERVER"), help="Active Directory server address"
+    )
+    parser.add_argument(
+        "--ad-domain", default=os.getenv("AD_DOMAIN"), help="Active Directory domain"
+    )
     parser.add_argument("--ad-username", default=os.getenv("AD_USERNAME"), help="AD admin username")
     parser.add_argument("--ad-password", default=os.getenv("AD_PASSWORD"), help="AD admin password")
 

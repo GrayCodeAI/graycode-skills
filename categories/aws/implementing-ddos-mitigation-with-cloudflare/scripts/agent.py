@@ -7,7 +7,6 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List
 
 try:
     import requests
@@ -25,49 +24,50 @@ class CloudflareClient:
 
     def __init__(self, api_token: str):
         self.session = requests.Session()
-        self.session.headers.update({
-            "Authorization": f"Bearer {api_token}",
-            "Content-Type": "application/json",
-        })
+        self.session.headers.update(
+            {
+                "Authorization": f"Bearer {api_token}",
+                "Content-Type": "application/json",
+            }
+        )
 
-    def list_zones(self) -> List[dict]:
+    def list_zones(self) -> list[dict]:
         resp = self.session.get(f"{CF_API}/zones", timeout=15)
         resp.raise_for_status()
         return resp.json().get("result", [])
 
     def get_zone_analytics(self, zone_id: str, since: str = "-1440") -> dict:
         resp = self.session.get(
-            f"{CF_API}/zones/{zone_id}/analytics/dashboard",
-            params={"since": since}, timeout=15)
+            f"{CF_API}/zones/{zone_id}/analytics/dashboard", params={"since": since}, timeout=15
+        )
         return resp.json().get("result", {}) if resp.status_code == 200 else {}
 
-    def get_firewall_events(self, zone_id: str, limit: int = 100) -> List[dict]:
+    def get_firewall_events(self, zone_id: str, limit: int = 100) -> list[dict]:
         resp = self.session.get(
-            f"{CF_API}/zones/{zone_id}/security/events",
-            params={"per_page": limit}, timeout=15)
+            f"{CF_API}/zones/{zone_id}/security/events", params={"per_page": limit}, timeout=15
+        )
         return resp.json().get("result", []) if resp.status_code == 200 else []
 
     def get_ddos_settings(self, zone_id: str) -> dict:
-        resp = self.session.get(
-            f"{CF_API}/zones/{zone_id}/firewall/ddos_protection", timeout=15)
+        resp = self.session.get(f"{CF_API}/zones/{zone_id}/firewall/ddos_protection", timeout=15)
         return resp.json().get("result", {}) if resp.status_code == 200 else {}
 
-    def create_rate_limit_rule(self, zone_id: str, url_pattern: str,
-                                threshold: int, period: int) -> dict:
+    def create_rate_limit_rule(
+        self, zone_id: str, url_pattern: str, threshold: int, period: int
+    ) -> dict:
         payload = {
             "match": {"request": {"url_pattern": url_pattern}},
             "threshold": threshold,
             "period": period,
             "action": {"mode": "challenge"},
         }
-        resp = self.session.post(
-            f"{CF_API}/zones/{zone_id}/rate_limits", json=payload, timeout=15)
+        resp = self.session.post(f"{CF_API}/zones/{zone_id}/rate_limits", json=payload, timeout=15)
         return resp.json().get("result", {})
 
     def set_security_level(self, zone_id: str, level: str = "high") -> dict:
         resp = self.session.patch(
-            f"{CF_API}/zones/{zone_id}/settings/security_level",
-            json={"value": level}, timeout=15)
+            f"{CF_API}/zones/{zone_id}/settings/security_level", json={"value": level}, timeout=15
+        )
         return resp.json().get("result", {})
 
 
@@ -94,12 +94,15 @@ def generate_report(client: CloudflareClient) -> dict:
         traffic = analyze_traffic(analytics)
         events = client.get_firewall_events(zid, 50)
         ddos_settings = client.get_ddos_settings(zid)
-        report["zones"].append({
-            "name": zone["name"], "id": zid,
-            "traffic": traffic,
-            "security_events": len(events),
-            "ddos_protection": ddos_settings,
-        })
+        report["zones"].append(
+            {
+                "name": zone["name"],
+                "id": zid,
+                "traffic": traffic,
+                "security_events": len(events),
+                "ddos_protection": ddos_settings,
+            }
+        )
     report["summary"] = {
         "zones_assessed": len(report["zones"]),
         "total_threats": sum(z["traffic"]["threats_blocked"] for z in report["zones"]),

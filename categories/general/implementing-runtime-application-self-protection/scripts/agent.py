@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """RASP Agent - audits runtime application protection config, attack logs, and coverage."""
 
-import json
 import argparse
+import json
 import logging
-import os
-import re
 from collections import defaultdict
 from datetime import datetime
 
@@ -18,7 +16,11 @@ OWASP_TOP10_CHECKS = {
     "ssrf": {"name": "Server-Side Request Forgery", "owasp": "A10:2021", "hook": "http_request"},
     "path_traversal": {"name": "Path Traversal", "owasp": "A01:2021", "hook": "file_open"},
     "xxe": {"name": "XML External Entity", "owasp": "A05:2021", "hook": "xml_parse"},
-    "deserialization": {"name": "Insecure Deserialization", "owasp": "A08:2021", "hook": "deserialize"},
+    "deserialization": {
+        "name": "Insecure Deserialization",
+        "owasp": "A08:2021",
+        "hook": "deserialize",
+    },
     "xss": {"name": "Cross-Site Scripting", "owasp": "A03:2021", "hook": "response_write"},
     "ldap_injection": {"name": "LDAP Injection", "owasp": "A03:2021", "hook": "ldap_query"},
     "rce": {"name": "Remote Code Execution", "owasp": "A03:2021", "hook": "code_eval"},
@@ -38,26 +40,37 @@ def audit_rasp_policy(config):
     for check_id, check_info in OWASP_TOP10_CHECKS.items():
         plugin = enabled_checks.get(check_id, {})
         if not plugin.get("enabled", False):
-            findings.append({
-                "check": check_id, "name": check_info["name"],
-                "owasp": check_info["owasp"], "status": "disabled",
-                "severity": "high",
-                "recommendation": f"Enable {check_info['name']} detection plugin",
-            })
+            findings.append(
+                {
+                    "check": check_id,
+                    "name": check_info["name"],
+                    "owasp": check_info["owasp"],
+                    "status": "disabled",
+                    "severity": "high",
+                    "recommendation": f"Enable {check_info['name']} detection plugin",
+                }
+            )
         elif plugin.get("action", "log") != "block":
-            findings.append({
-                "check": check_id, "name": check_info["name"],
-                "owasp": check_info["owasp"], "status": "monitor_only",
-                "severity": "medium",
-                "recommendation": f"Switch {check_info['name']} from monitor to block mode",
-            })
+            findings.append(
+                {
+                    "check": check_id,
+                    "name": check_info["name"],
+                    "owasp": check_info["owasp"],
+                    "status": "monitor_only",
+                    "severity": "medium",
+                    "recommendation": f"Switch {check_info['name']} from monitor to block mode",
+                }
+            )
     block_mode = config.get("global_action", "log")
     if block_mode == "log":
-        findings.append({
-            "check": "global_mode", "status": "monitor_only",
-            "severity": "high",
-            "recommendation": "Switch RASP from monitor to block mode after baseline period",
-        })
+        findings.append(
+            {
+                "check": "global_mode",
+                "status": "monitor_only",
+                "severity": "high",
+                "recommendation": "Switch RASP from monitor to block mode after baseline period",
+            }
+        )
     return findings
 
 
@@ -99,23 +112,29 @@ def check_agent_health(config):
     if not config.get("agent_version"):
         findings.append({"issue": "Agent version unknown", "severity": "medium"})
     if config.get("cpu_limit_percent", 100) > 10:
-        findings.append({
-            "issue": f"CPU limit set to {config.get('cpu_limit_percent')}% (recommend < 5%)",
-            "severity": "low",
-        })
+        findings.append(
+            {
+                "issue": f"CPU limit set to {config.get('cpu_limit_percent')}% (recommend < 5%)",
+                "severity": "low",
+            }
+        )
     if not config.get("siem_integration", {}).get("enabled"):
-        findings.append({
-            "issue": "SIEM log forwarding not configured",
-            "severity": "high",
-            "recommendation": "Enable syslog or webhook forwarding to SIEM",
-        })
+        findings.append(
+            {
+                "issue": "SIEM log forwarding not configured",
+                "severity": "high",
+                "recommendation": "Enable syslog or webhook forwarding to SIEM",
+            }
+        )
     return findings
 
 
 def calculate_coverage(config):
     """Calculate OWASP Top 10 coverage percentage."""
     enabled_checks = config.get("detection_plugins", {})
-    covered = sum(1 for check_id in OWASP_TOP10_CHECKS if enabled_checks.get(check_id, {}).get("enabled"))
+    covered = sum(
+        1 for check_id in OWASP_TOP10_CHECKS if enabled_checks.get(check_id, {}).get("enabled")
+    )
     return {
         "total_checks": len(OWASP_TOP10_CHECKS),
         "enabled": covered,
@@ -154,8 +173,12 @@ def main():
     report = generate_report(policy_findings, attack_analysis, health_findings, coverage, config)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("RASP audit: %.1f%% OWASP coverage, %d findings, mode: %s",
-                coverage["coverage_percent"], report["total_findings"], config.get("global_action", "log"))
+    logger.info(
+        "RASP audit: %.1f%% OWASP coverage, %d findings, mode: %s",
+        coverage["coverage_percent"],
+        report["total_findings"],
+        config.get("global_action", "log"),
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

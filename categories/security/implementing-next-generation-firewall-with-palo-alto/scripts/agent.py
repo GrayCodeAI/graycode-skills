@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Palo Alto NGFW Agent - audits security policies, threat prevention, and App-ID usage via XML API."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 import xml.etree.ElementTree as ET
-from collections import defaultdict
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -46,21 +45,40 @@ def audit_security_rules(rules):
     for rule in rules:
         name = rule["name"]
         if "any" in rule["application"]:
-            findings.append({"rule": name, "issue": "Uses any application instead of App-ID", "severity": "high"})
+            findings.append(
+                {
+                    "rule": name,
+                    "issue": "Uses any application instead of App-ID",
+                    "severity": "high",
+                }
+            )
         if not rule.get("profile_group"):
-            findings.append({"rule": name, "issue": "No security profile group attached", "severity": "high"})
+            findings.append(
+                {"rule": name, "issue": "No security profile group attached", "severity": "high"}
+            )
         if rule["log_end"] != "yes":
-            findings.append({"rule": name, "issue": "End logging not enabled", "severity": "medium"})
-        if rule["action"] == "allow" and "any" in rule["source_zone"] and "any" in rule["dest_zone"]:
-            findings.append({"rule": name, "issue": "Allow any-to-any zones", "severity": "critical"})
+            findings.append(
+                {"rule": name, "issue": "End logging not enabled", "severity": "medium"}
+            )
+        if (
+            rule["action"] == "allow"
+            and "any" in rule["source_zone"]
+            and "any" in rule["dest_zone"]
+        ):
+            findings.append(
+                {"rule": name, "issue": "Allow any-to-any zones", "severity": "critical"}
+            )
     return findings
 
 
 def calculate_appid_coverage(rules):
     total = len(rules)
     appid_rules = sum(1 for r in rules if "any" not in r["application"])
-    return {"total_rules": total, "appid_enabled": appid_rules,
-            "coverage_percent": round(appid_rules / max(total, 1) * 100, 1)}
+    return {
+        "total_rules": total,
+        "appid_enabled": appid_rules,
+        "coverage_percent": round(appid_rules / max(total, 1) * 100, 1),
+    }
 
 
 def check_system_health(fw_ip, api_key):
@@ -105,8 +123,12 @@ def main():
     report = generate_report(rules, findings, appid, health)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("PAN-OS: %d rules, App-ID %.1f%%, %d findings",
-                len(rules), appid["coverage_percent"], len(findings))
+    logger.info(
+        "PAN-OS: %d rules, App-ID %.1f%%, %d findings",
+        len(rules),
+        appid["coverage_percent"],
+        len(findings),
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

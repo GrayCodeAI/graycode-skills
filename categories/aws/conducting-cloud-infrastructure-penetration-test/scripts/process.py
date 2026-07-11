@@ -8,10 +8,10 @@ Usage:
     python process.py --provider aws --profile testuser --output ./results
 """
 
-import subprocess
-import json
 import argparse
 import datetime
+import json
+import subprocess
 from pathlib import Path
 
 
@@ -64,19 +64,23 @@ def check_public_s3(buckets: list[str], profile: str) -> list[dict]:
             acl = json.loads(stdout)
             for grant in acl.get("Grants", []):
                 grantee = grant.get("Grantee", {})
-                if grantee.get("URI", "").endswith("AllUsers") or \
-                   grantee.get("URI", "").endswith("AuthenticatedUsers"):
-                    findings.append({
-                        "bucket": bucket,
-                        "grantee": grantee.get("URI"),
-                        "permission": grant.get("Permission"),
-                        "severity": "Critical"
-                    })
+                if grantee.get("URI", "").endswith("AllUsers") or grantee.get("URI", "").endswith(
+                    "AuthenticatedUsers"
+                ):
+                    findings.append(
+                        {
+                            "bucket": bucket,
+                            "grantee": grantee.get("URI"),
+                            "permission": grant.get("Permission"),
+                            "severity": "Critical",
+                        }
+                    )
     return findings
 
 
-def generate_report(provider: str, enum_results: dict, findings: list[dict],
-                     output_dir: Path) -> str:
+def generate_report(
+    provider: str, enum_results: dict, findings: list[dict], output_dir: Path
+) -> str:
     """Generate cloud pentest report."""
     report_file = output_dir / f"{provider}_pentest_report.md"
     timestamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -96,7 +100,9 @@ def generate_report(provider: str, enum_results: dict, findings: list[dict],
         if findings:
             f.write("## Security Findings\n\n")
             for finding in findings:
-                f.write(f"### [{finding['severity']}] {finding.get('bucket', finding.get('resource', 'Unknown'))}\n")
+                f.write(
+                    f"### [{finding['severity']}] {finding.get('bucket', finding.get('resource', 'Unknown'))}\n"
+                )
                 f.write(f"- Issue: {finding.get('grantee', finding.get('issue', ''))}\n")
                 f.write(f"- Permission: {finding.get('permission', '')}\n\n")
 

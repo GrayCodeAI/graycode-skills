@@ -5,10 +5,10 @@ Analyzes Windows Security Event 4662 logs to identify non-domain-controller
 accounts requesting Active Directory replication rights.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
 from pathlib import Path
 
@@ -18,7 +18,9 @@ REPLICATION_GUIDS = {
     "89e95b76-444d-4c62-991a-0facbeda640c": "DS-Replication-Get-Changes-In-Filtered-Set",
 }
 
-GUID_PATTERN = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE)
+GUID_PATTERN = re.compile(
+    r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}", re.IGNORECASE
+)
 
 
 def load_dc_list(dc_file: str) -> set:
@@ -27,7 +29,7 @@ def load_dc_list(dc_file: str) -> set:
     if dc_file:
         path = Path(dc_file)
         if path.exists():
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 for line in f:
                     line = line.strip()
                     if line and not line.startswith("#"):
@@ -40,11 +42,11 @@ def parse_events(input_path: str) -> list[dict]:
     path = Path(input_path)
     events = []
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             events = data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             events = [dict(row) for row in csv.DictReader(f)]
     return events
 
@@ -86,18 +88,20 @@ def detect_dcsync(events: list[dict], known_dcs: set) -> list[dict]:
 
         severity = "CRITICAL" if has_get_changes_all else "HIGH"
 
-        findings.append({
-            "timestamp": timestamp,
-            "subject_user": subject_user,
-            "subject_domain": subject_domain,
-            "computer": computer,
-            "replication_guids": replication_guids,
-            "replication_rights": replication_rights,
-            "has_get_changes_all": has_get_changes_all,
-            "is_machine_account": subject_user.endswith("$"),
-            "severity": severity,
-            "description": f"Non-DC account '{subject_user}' requested replication rights: {', '.join(replication_rights)}",
-        })
+        findings.append(
+            {
+                "timestamp": timestamp,
+                "subject_user": subject_user,
+                "subject_domain": subject_domain,
+                "computer": computer,
+                "replication_guids": replication_guids,
+                "replication_rights": replication_rights,
+                "has_get_changes_all": has_get_changes_all,
+                "is_machine_account": subject_user.endswith("$"),
+                "severity": severity,
+                "description": f"Non-DC account '{subject_user}' requested replication rights: {', '.join(replication_rights)}",
+            }
+        )
 
     return sorted(findings, key=lambda x: x.get("timestamp", ""), reverse=True)
 
@@ -119,12 +123,16 @@ def run_hunt(input_path: str, dc_file: str, output_dir: str) -> None:
     output_path.mkdir(parents=True, exist_ok=True)
 
     with open(output_path / "dcsync_findings.json", "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-DCSYNC-{datetime.date.today().isoformat()}",
-            "total_events": len(events),
-            "findings_count": len(findings),
-            "findings": findings,
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-DCSYNC-{datetime.date.today().isoformat()}",
+                "total_events": len(events),
+                "findings_count": len(findings),
+                "findings": findings,
+            },
+            f,
+            indent=2,
+        )
 
     with open(output_path / "dcsync_report.md", "w", encoding="utf-8") as f:
         f.write("# DCSync Attack Detection Report\n\n")

@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Forensic disk image analysis agent using The Sleuth Kit (TSK) command-line tools."""
 
-import subprocess
-import os
-import sys
-import json
-import csv
 import datetime
+import json
+import os
+import subprocess
+import sys
 
 
 def run_cmd(cmd):
@@ -36,13 +35,15 @@ def list_partitions(image_path):
         for line in stdout.splitlines():
             parts = line.split()
             if len(parts) >= 6 and parts[2].isdigit():
-                partitions.append({
-                    "slot": parts[0].rstrip(":"),
-                    "start": int(parts[2]),
-                    "end": int(parts[3]),
-                    "length": int(parts[4]),
-                    "description": " ".join(parts[5:]),
-                })
+                partitions.append(
+                    {
+                        "slot": parts[0].rstrip(":"),
+                        "start": int(parts[2]),
+                        "end": int(parts[3]),
+                        "length": int(parts[4]),
+                        "description": " ".join(parts[5:]),
+                    }
+                )
     return partitions
 
 
@@ -70,12 +71,14 @@ def list_files(image_path, offset, path="/", recursive=False):
                     if "-" in token and token.replace("-", "").isdigit():
                         inode = token
                         break
-                files.append({
-                    "name": name,
-                    "inode": inode,
-                    "type": "directory" if file_type == "d" else "file",
-                    "deleted": deleted,
-                })
+                files.append(
+                    {
+                        "name": name,
+                        "inode": inode,
+                        "type": "directory" if file_type == "d" else "file",
+                        "deleted": deleted,
+                    }
+                )
     return files
 
 
@@ -139,10 +142,10 @@ def analyze_image(image_path, case_dir):
     os.makedirs(case_dir, exist_ok=True)
     results = {"image": image_path, "timestamp": datetime.datetime.utcnow().isoformat()}
 
-    print(f"[*] Image info...")
+    print("[*] Image info...")
     results["image_info"] = get_image_info(image_path)
 
-    print(f"[*] Partition layout...")
+    print("[*] Partition layout...")
     partitions = list_partitions(image_path)
     results["partitions"] = partitions
 
@@ -155,9 +158,11 @@ def analyze_image(image_path, case_dir):
                 "total": len(files),
                 "deleted": sum(1 for f in files if f["deleted"]),
             }
-            print(f"    Total: {len(files)}, Deleted: {results[f'files_offset_{offset}']['deleted']}")
+            print(
+                f"    Total: {len(files)}, Deleted: {results[f'files_offset_{offset}']['deleted']}"
+            )
 
-            print(f"[*] Creating bodyfile for timeline...")
+            print("[*] Creating bodyfile for timeline...")
             bf_path = os.path.join(case_dir, f"bodyfile_{offset}.txt")
             create_bodyfile(image_path, offset, bf_path)
 

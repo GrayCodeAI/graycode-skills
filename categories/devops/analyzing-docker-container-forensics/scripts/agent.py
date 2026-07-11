@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Docker container forensics agent for investigating compromised containers."""
 
-import subprocess
+import datetime
+import hashlib
 import json
 import os
+import subprocess
 import sys
-import hashlib
-import datetime
 
 
 def run_cmd(cmd):
@@ -50,8 +50,14 @@ def analyze_security_config(inspect_data):
         findings.append({"severity": "CRITICAL", "finding": "Container running in PRIVILEGED mode"})
 
     cap_add = host_config.get("CapAdd") or []
-    dangerous_caps = ["SYS_ADMIN", "SYS_PTRACE", "NET_ADMIN", "SYS_MODULE",
-                      "DAC_OVERRIDE", "NET_RAW"]
+    dangerous_caps = [
+        "SYS_ADMIN",
+        "SYS_PTRACE",
+        "NET_ADMIN",
+        "SYS_MODULE",
+        "DAC_OVERRIDE",
+        "NET_RAW",
+    ]
     for cap in cap_add:
         if cap in dangerous_caps:
             findings.append({"severity": "HIGH", "finding": f"Dangerous capability added: {cap}"})
@@ -68,15 +74,19 @@ def analyze_security_config(inspect_data):
         src = mount.get("Source", "")
         rw = mount.get("RW", False)
         if src in sensitive_paths and rw:
-            findings.append({
-                "severity": "CRITICAL",
-                "finding": f"Sensitive host path mounted RW: {src} -> {mount.get('Destination')}"
-            })
+            findings.append(
+                {
+                    "severity": "CRITICAL",
+                    "finding": f"Sensitive host path mounted RW: {src} -> {mount.get('Destination')}",
+                }
+            )
         if "docker.sock" in src:
-            findings.append({
-                "severity": "CRITICAL",
-                "finding": "Docker socket mounted (container can control Docker daemon)"
-            })
+            findings.append(
+                {
+                    "severity": "CRITICAL",
+                    "finding": "Docker socket mounted (container can control Docker daemon)",
+                }
+            )
 
     user = config.get("User", "")
     if not user or user == "root":
@@ -111,23 +121,45 @@ def get_filesystem_changes(container_id):
 def detect_suspicious_files(changes):
     """Analyze filesystem changes for indicators of compromise."""
     suspicious_patterns = [
-        "/tmp/", "/dev/shm/", "/root/", ".sh", ".py", ".elf",
-        "reverse", "shell", "backdoor", "miner", "xmr", "nc ",
-        ".php", "webshell", "c2", "beacon",
+        "/tmp/",
+        "/dev/shm/",
+        "/root/",
+        ".sh",
+        ".py",
+        ".elf",
+        "reverse",
+        "shell",
+        "backdoor",
+        "miner",
+        "xmr",
+        "nc ",
+        ".php",
+        "webshell",
+        "c2",
+        "beacon",
     ]
-    suspicious_changes = ["/etc/passwd", "/etc/shadow", "/etc/crontab",
-                          "/etc/ssh", ".bashrc", "/etc/sudoers", "authorized_keys"]
+    suspicious_changes = [
+        "/etc/passwd",
+        "/etc/shadow",
+        "/etc/crontab",
+        "/etc/ssh",
+        ".bashrc",
+        "/etc/sudoers",
+        "authorized_keys",
+    ]
 
     findings = []
     for f in changes["added"]:
         for pattern in suspicious_patterns:
             if pattern in f.lower():
-                findings.append({"type": "ADDED", "path": f, "reason": f"Matches pattern: {pattern}"})
+                findings.append(
+                    {"type": "ADDED", "path": f, "reason": f"Matches pattern: {pattern}"}
+                )
                 break
     for f in changes["changed"]:
         for pattern in suspicious_changes:
             if pattern in f.lower():
-                findings.append({"type": "CHANGED", "path": f, "reason": f"Critical file modified"})
+                findings.append({"type": "CHANGED", "path": f, "reason": "Critical file modified"})
                 break
     return findings
 
@@ -163,8 +195,7 @@ def scan_image_vulnerabilities(image_name):
     return None
 
 
-def generate_report(container_id, inspect_data, security_findings,
-                    fs_changes, suspicious_files):
+def generate_report(container_id, inspect_data, security_findings, fs_changes, suspicious_files):
     """Generate a forensic analysis report."""
     container_name = "unknown"
     image = "unknown"
@@ -213,8 +244,10 @@ if __name__ == "__main__":
 
         print("\n--- Filesystem Changes ---")
         changes = get_filesystem_changes(container_id)
-        print(f"  Added: {len(changes['added'])}, Changed: {len(changes['changed'])}, "
-              f"Deleted: {len(changes['deleted'])}")
+        print(
+            f"  Added: {len(changes['added'])}, Changed: {len(changes['changed'])}, "
+            f"Deleted: {len(changes['deleted'])}"
+        )
 
         print("\n--- Suspicious Files ---")
         suspicious = detect_suspicious_files(changes)
@@ -228,4 +261,4 @@ if __name__ == "__main__":
         containers = list_containers()
         for c in containers:
             print(f"  {c.get('ID', '?')[:12]}  {c.get('Names', '?')}  {c.get('Status', '?')}")
-        print(f"\n[DEMO] Usage: python agent.py <container_id>")
+        print("\n[DEMO] Usage: python agent.py <container_id>")

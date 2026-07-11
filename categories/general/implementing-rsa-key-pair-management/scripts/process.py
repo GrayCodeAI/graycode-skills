@@ -16,20 +16,19 @@ Usage:
     python process.py rotate --keystore ./keys --passphrase "MyKeyPass"
 """
 
-import os
-import sys
-import json
-import hashlib
 import argparse
-import logging
 import datetime
+import hashlib
+import json
+import logging
+import sys
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional
 
-from cryptography.hazmat.primitives.asymmetric import rsa, padding, utils
-from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.backends import default_backend
 from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding, rsa
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -41,7 +40,7 @@ PUBLIC_EXPONENT = 65537
 def generate_rsa_keypair(
     key_size: int = RECOMMENDED_KEY_SIZE,
     passphrase: Optional[str] = None,
-) -> Tuple[bytes, bytes, Dict]:
+) -> tuple[bytes, bytes, dict]:
     """
     Generate an RSA key pair.
 
@@ -98,9 +97,9 @@ def save_keypair(
     output_dir: str,
     private_pem: bytes,
     public_pem: bytes,
-    metadata: Dict,
+    metadata: dict,
     version: int = 1,
-) -> Dict:
+) -> dict:
     """Save key pair to files with metadata."""
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -198,7 +197,7 @@ def decrypt_data(ciphertext: bytes, private_key) -> bytes:
     )
 
 
-def get_key_info(key_path: str, passphrase: Optional[str] = None) -> Dict:
+def get_key_info(key_path: str, passphrase: Optional[str] = None) -> dict:
     """Get information about an RSA key."""
     key_data = Path(key_path).read_bytes()
 
@@ -237,7 +236,7 @@ def get_key_info(key_path: str, passphrase: Optional[str] = None) -> Dict:
     return info
 
 
-def rotate_keys(keystore_dir: str, passphrase: Optional[str] = None) -> Dict:
+def rotate_keys(keystore_dir: str, passphrase: Optional[str] = None) -> dict:
     """Rotate RSA key pair, archiving the old one."""
     keystore = Path(keystore_dir)
 

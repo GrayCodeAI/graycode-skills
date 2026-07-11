@@ -12,10 +12,7 @@ Usage:
 import argparse
 import json
 import sys
-import time
-import hashlib
 from pathlib import Path
-from urllib.parse import urljoin
 
 try:
     import requests
@@ -41,7 +38,7 @@ class MobSFScanner:
         if not apk_file.exists():
             raise FileNotFoundError(f"APK not found: {apk_path}")
 
-        if not apk_file.suffix.lower() in (".apk", ".aab", ".zip", ".ipa"):
+        if apk_file.suffix.lower() not in (".apk", ".aab", ".zip", ".ipa"):
             raise ValueError(f"Unsupported file type: {apk_file.suffix}")
 
         with open(apk_path, "rb") as f:
@@ -111,11 +108,13 @@ def extract_critical_findings(report: dict) -> dict:
         for item in manifest:
             severity = item.get("stat", item.get("severity", "info"))
             if severity.lower() in ("high", "warning"):
-                findings["manifest_issues"].append({
-                    "title": item.get("title", "Unknown"),
-                    "description": item.get("desc", item.get("description", "")),
-                    "severity": severity,
-                })
+                findings["manifest_issues"].append(
+                    {
+                        "title": item.get("title", "Unknown"),
+                        "description": item.get("desc", item.get("description", "")),
+                        "severity": severity,
+                    }
+                )
 
     # Code analysis
     code_analysis = report.get("code_analysis", {})
@@ -125,12 +124,14 @@ def extract_critical_findings(report: dict) -> dict:
                 metadata = items.get("metadata", {})
                 severity = metadata.get("severity", "info")
                 if severity.lower() in ("high", "warning"):
-                    findings["code_issues"].append({
-                        "category": category,
-                        "description": metadata.get("description", ""),
-                        "severity": severity,
-                        "files": list(items.get("files", {}).keys())[:5],
-                    })
+                    findings["code_issues"].append(
+                        {
+                            "category": category,
+                            "description": metadata.get("description", ""),
+                            "severity": severity,
+                            "files": list(items.get("files", {}).keys())[:5],
+                        }
+                    )
 
     # Network security
     network = report.get("network_security", [])
@@ -138,11 +139,13 @@ def extract_critical_findings(report: dict) -> dict:
         for item in network:
             severity = item.get("severity", "info")
             if severity.lower() in ("high", "warning"):
-                findings["network_issues"].append({
-                    "title": item.get("scope", "Unknown"),
-                    "description": item.get("description", ""),
-                    "severity": severity,
-                })
+                findings["network_issues"].append(
+                    {
+                        "title": item.get("scope", "Unknown"),
+                        "description": item.get("description", ""),
+                        "severity": severity,
+                    }
+                )
 
     return findings
 
@@ -161,22 +164,14 @@ def evaluate_security_score(scorecard: dict, threshold: int) -> bool:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="MobSF Automated Static Analysis Pipeline"
-    )
+    parser = argparse.ArgumentParser(description="MobSF Automated Static Analysis Pipeline")
     parser.add_argument("--apk", required=True, help="Path to APK/AAB file")
     parser.add_argument("--api-key", required=True, help="MobSF REST API key")
-    parser.add_argument(
-        "--url", default="http://localhost:8000", help="MobSF server URL"
-    )
-    parser.add_argument(
-        "--threshold", type=int, default=60, help="Minimum security score (0-100)"
-    )
+    parser.add_argument("--url", default="http://localhost:8000", help="MobSF server URL")
+    parser.add_argument("--threshold", type=int, default=60, help="Minimum security score (0-100)")
     parser.add_argument("--output", default="mobsf_report.json", help="Output report path")
     parser.add_argument("--pdf", help="Optional PDF report output path")
-    parser.add_argument(
-        "--ci-mode", action="store_true", help="Exit with non-zero code on failure"
-    )
+    parser.add_argument("--ci-mode", action="store_true", help="Exit with non-zero code on failure")
     args = parser.parse_args()
 
     scanner = MobSFScanner(args.url, args.api_key)

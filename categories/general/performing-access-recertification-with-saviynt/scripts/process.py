@@ -54,12 +54,9 @@ class SaviyntCampaignManager:
         resp.raise_for_status()
         return resp.json()
 
-    def create_campaign(self, name, campaign_type, certifier_type,
-                         due_days=14, scope=None):
+    def create_campaign(self, name, campaign_type, certifier_type, due_days=14, scope=None):
         """Create a new certification campaign."""
-        due_date = (datetime.now(timezone.utc) + timedelta(days=due_days)).strftime(
-            "%Y-%m-%d"
-        )
+        due_date = (datetime.now(timezone.utc) + timedelta(days=due_days)).strftime("%Y-%m-%d")
         payload = {
             "campaignname": name,
             "campaigntype": campaign_type,  # UserManager, EntitlementOwner, Application
@@ -80,18 +77,13 @@ class SaviyntCampaignManager:
 
     def launch_campaign(self, campaign_id):
         """Launch an existing campaign, sending notifications to certifiers."""
-        result = self._api_call(
-            "POST", "/ECM/api/v5/launchCampaign",
-            {"campaignId": campaign_id}
-        )
+        result = self._api_call("POST", "/ECM/api/v5/launchCampaign", {"campaignId": campaign_id})
         logger.info(f"Campaign {campaign_id} launched")
         return result
 
     def get_campaign_status(self, campaign_id):
         """Get campaign progress and statistics."""
-        result = self._api_call(
-            "GET", f"/ECM/api/v5/getCampaignDetails?campaignId={campaign_id}"
-        )
+        result = self._api_call("GET", f"/ECM/api/v5/getCampaignDetails?campaignId={campaign_id}")
         return {
             "campaign_id": campaign_id,
             "name": result.get("campaignname"),
@@ -118,8 +110,7 @@ class SaviyntCampaignManager:
     def get_certification_items(self, campaign_id, status_filter=None):
         """Get individual certification line items for a campaign."""
         result = self._api_call(
-            "POST", "/ECM/api/v5/getCertificationDetails",
-            {"campaignId": campaign_id, "max": 1000}
+            "POST", "/ECM/api/v5/getCertificationDetails", {"campaignId": campaign_id, "max": 1000}
         )
         items = result.get("certifications", [])
         if status_filter:
@@ -131,8 +122,8 @@ class SaviyntCampaignManager:
         status = self.get_campaign_status(campaign_id)
         items = self.get_certification_items(campaign_id)
 
-        certified_items = [i for i in items if i.get("decision") == "Certify"]
-        revoked_items = [i for i in items if i.get("decision") == "Revoke"]
+        [i for i in items if i.get("decision") == "Certify"]
+        [i for i in items if i.get("decision") == "Revoke"]
         pending_items = [i for i in items if not i.get("decision")]
 
         report = {
@@ -148,30 +139,36 @@ class SaviyntCampaignManager:
                 "completion_rate": f"{status['completion_pct']}%",
                 "certification_rate": (
                     f"{(status['certified'] / status['total_items'] * 100):.1f}%"
-                    if status["total_items"] else "N/A"
+                    if status["total_items"]
+                    else "N/A"
                 ),
                 "revocation_rate": (
                     f"{(status['revoked'] / status['total_items'] * 100):.1f}%"
-                    if status["total_items"] else "N/A"
+                    if status["total_items"]
+                    else "N/A"
                 ),
             },
             "findings": [],
         }
 
         if pending_items:
-            report["findings"].append({
-                "severity": "High",
-                "finding": f"{len(pending_items)} items not reviewed by due date",
-                "action": "Auto-revoke or manual follow-up required",
-            })
+            report["findings"].append(
+                {
+                    "severity": "High",
+                    "finding": f"{len(pending_items)} items not reviewed by due date",
+                    "action": "Auto-revoke or manual follow-up required",
+                }
+            )
 
         revoke_rate = status["revoked"] / status["total_items"] if status["total_items"] else 0
         if revoke_rate > 0.20:
-            report["findings"].append({
-                "severity": "Medium",
-                "finding": f"High revocation rate ({revoke_rate:.0%}) suggests over-provisioning",
-                "action": "Review provisioning policies and role definitions",
-            })
+            report["findings"].append(
+                {
+                    "severity": "Medium",
+                    "finding": f"High revocation rate ({revoke_rate:.0%}) suggests over-provisioning",
+                    "action": "Review provisioning policies and role definitions",
+                }
+            )
 
         return report
 
@@ -182,17 +179,18 @@ class RecertificationScheduler:
     def __init__(self):
         self.schedules = []
 
-    def add_schedule(self, name, frequency_days, campaign_type,
-                      certifier_type, scope=None):
+    def add_schedule(self, name, frequency_days, campaign_type, certifier_type, scope=None):
         """Add a recurring certification schedule."""
-        self.schedules.append({
-            "name": name,
-            "frequency_days": frequency_days,
-            "campaign_type": campaign_type,
-            "certifier_type": certifier_type,
-            "scope": scope,
-            "last_run": None,
-        })
+        self.schedules.append(
+            {
+                "name": name,
+                "frequency_days": frequency_days,
+                "campaign_type": campaign_type,
+                "certifier_type": certifier_type,
+                "scope": scope,
+                "last_run": None,
+            }
+        )
 
     def get_due_campaigns(self):
         """Check which campaigns are due to run."""
@@ -210,10 +208,15 @@ class RecertificationScheduler:
     def export_schedule(self, output_path):
         """Export certification schedule for documentation."""
         with open(output_path, "w") as f:
-            json.dump({
-                "schedules": self.schedules,
-                "exported_at": datetime.now(timezone.utc).isoformat(),
-            }, f, indent=2, default=str)
+            json.dump(
+                {
+                    "schedules": self.schedules,
+                    "exported_at": datetime.now(timezone.utc).isoformat(),
+                },
+                f,
+                indent=2,
+                default=str,
+            )
         logger.info(f"Schedule exported to {output_path}")
 
 

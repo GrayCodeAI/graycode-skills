@@ -13,22 +13,19 @@ Usage:
     python process.py benchmark --messages 1000
 """
 
-import os
-import sys
-import json
-import time
-import struct
-import hashlib
 import argparse
 import logging
+import os
+import struct
+import time
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Tuple, List
+from typing import Optional
 
-from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives import hashes, hmac, serialization
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes, hmac, serialization
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -39,7 +36,7 @@ CHAIN_KEY_CONSTANT = b"\x01"
 MESSAGE_KEY_CONSTANT = b"\x02"
 
 
-def generate_x25519_keypair() -> Tuple[X25519PrivateKey, bytes]:
+def generate_x25519_keypair() -> tuple[X25519PrivateKey, bytes]:
     """Generate an X25519 key pair, returning (private_key, public_key_bytes)."""
     private_key = X25519PrivateKey.generate()
     public_bytes = private_key.public_key().public_bytes(
@@ -73,7 +70,7 @@ def hmac_derive(key: bytes, constant: bytes) -> bytes:
     return h.finalize()
 
 
-def kdf_rk(root_key: bytes, dh_output: bytes) -> Tuple[bytes, bytes]:
+def kdf_rk(root_key: bytes, dh_output: bytes) -> tuple[bytes, bytes]:
     """Root key KDF: derive new root key and chain key from DH output."""
     derived = hkdf_derive(dh_output + root_key, INFO_ROOT_KEY, 64)
     new_root_key = derived[:32]
@@ -81,7 +78,7 @@ def kdf_rk(root_key: bytes, dh_output: bytes) -> Tuple[bytes, bytes]:
     return new_root_key, new_chain_key
 
 
-def kdf_ck(chain_key: bytes) -> Tuple[bytes, bytes]:
+def kdf_ck(chain_key: bytes) -> tuple[bytes, bytes]:
     """Chain key KDF: derive next chain key and message key."""
     new_chain_key = hmac_derive(chain_key, CHAIN_KEY_CONSTANT)
     message_key = hmac_derive(chain_key, MESSAGE_KEY_CONSTANT)
@@ -107,14 +104,14 @@ def decrypt_message(message_key: bytes, data: bytes, associated_data: bytes = b"
 @dataclass
 class MessageHeader:
     """Header included with each encrypted message."""
+
     dh_public_key: bytes
     previous_chain_length: int
     message_number: int
 
     def serialize(self) -> bytes:
-        return (
-            self.dh_public_key
-            + struct.pack(">II", self.previous_chain_length, self.message_number)
+        return self.dh_public_key + struct.pack(
+            ">II", self.previous_chain_length, self.message_number
         )
 
     @classmethod
@@ -127,6 +124,7 @@ class MessageHeader:
 @dataclass
 class DoubleRatchetState:
     """State for one side of the Double Ratchet."""
+
     dh_self_private: Optional[X25519PrivateKey] = None
     dh_self_public: bytes = b""
     dh_remote_public: bytes = b""
@@ -136,7 +134,7 @@ class DoubleRatchetState:
     send_count: int = 0
     recv_count: int = 0
     previous_send_count: int = 0
-    skipped_keys: Dict[Tuple[bytes, int], bytes] = field(default_factory=dict)
+    skipped_keys: dict[tuple[bytes, int], bytes] = field(default_factory=dict)
     max_skip: int = 100
 
 
@@ -157,7 +155,9 @@ def initialize_alice(shared_secret: bytes, bob_dh_public: bytes) -> DoubleRatche
     return state
 
 
-def initialize_bob(shared_secret: bytes, bob_dh_keypair: Tuple[X25519PrivateKey, bytes]) -> DoubleRatchetState:
+def initialize_bob(
+    shared_secret: bytes, bob_dh_keypair: tuple[X25519PrivateKey, bytes]
+) -> DoubleRatchetState:
     """Initialize the ratchet for Bob (responder)."""
     state = DoubleRatchetState()
     state.dh_self_private = bob_dh_keypair[0]
@@ -172,7 +172,7 @@ def initialize_bob(shared_secret: bytes, bob_dh_keypair: Tuple[X25519PrivateKey,
     return state
 
 
-def ratchet_encrypt(state: DoubleRatchetState, plaintext: bytes) -> Tuple[MessageHeader, bytes]:
+def ratchet_encrypt(state: DoubleRatchetState, plaintext: bytes) -> tuple[MessageHeader, bytes]:
     """Encrypt a message using the Double Ratchet."""
     state.sending_chain_key, message_key = kdf_ck(state.sending_chain_key)
 
@@ -326,7 +326,7 @@ def benchmark(num_messages: int = 1000):
     start = time.time()
     for _ in range(num_messages):
         header, ct = ratchet_encrypt(alice_state, message)
-        pt = ratchet_decrypt(bob_state, header, ct)
+        ratchet_decrypt(bob_state, header, ct)
     elapsed = time.time() - start
 
     print(f"Messages: {num_messages}")

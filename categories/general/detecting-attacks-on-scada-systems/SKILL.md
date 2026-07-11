@@ -390,7 +390,7 @@ class ProcessAnomalyDetector:
                 params=params,
                 headers=headers,
                 timeout=10,
-                verify=False,  # Many OT historians use self-signed certs
+                verify="/path/to/ot-root-ca.pem",
             )
             resp.raise_for_status()
             return resp.json()

@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 """Cloud Incident Response Agent - Automates AWS/Azure cloud IR containment and evidence collection."""
 
+import argparse
 import json
 import logging
-import argparse
 import subprocess
 from datetime import datetime, timedelta
-
-import requests
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -16,10 +14,15 @@ logger = logging.getLogger(__name__)
 def aws_disable_access_key(username, access_key_id):
     """Disable a compromised IAM access key via AWS CLI."""
     cmd = [
-        "aws", "iam", "update-access-key",
-        "--user-name", username,
-        "--access-key-id", access_key_id,
-        "--status", "Inactive",
+        "aws",
+        "iam",
+        "update-access-key",
+        "--user-name",
+        username,
+        "--access-key-id",
+        access_key_id,
+        "--status",
+        "Inactive",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -32,9 +35,13 @@ def aws_disable_access_key(username, access_key_id):
 def aws_attach_deny_all(username):
     """Attach AWSDenyAll policy to a compromised IAM user."""
     cmd = [
-        "aws", "iam", "attach-user-policy",
-        "--user-name", username,
-        "--policy-arn", "arn:aws:iam::aws:policy/AWSDenyAll",
+        "aws",
+        "iam",
+        "attach-user-policy",
+        "--user-name",
+        username,
+        "--policy-arn",
+        "arn:aws:iam::aws:policy/AWSDenyAll",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -45,9 +52,13 @@ def aws_attach_deny_all(username):
 def aws_isolate_ec2(instance_id, forensic_sg):
     """Isolate an EC2 instance by changing its security group to forensic isolation SG."""
     cmd = [
-        "aws", "ec2", "modify-instance-attribute",
-        "--instance-id", instance_id,
-        "--groups", forensic_sg,
+        "aws",
+        "ec2",
+        "modify-instance-attribute",
+        "--instance-id",
+        instance_id,
+        "--groups",
+        forensic_sg,
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -58,19 +69,28 @@ def aws_isolate_ec2(instance_id, forensic_sg):
 def aws_snapshot_ebs(instance_id):
     """Create EBS snapshots of all volumes attached to an EC2 instance."""
     cmd = [
-        "aws", "ec2", "describe-volumes",
-        "--filters", f"Name=attachment.instance-id,Values={instance_id}",
-        "--query", "Volumes[*].VolumeId",
-        "--output", "text",
+        "aws",
+        "ec2",
+        "describe-volumes",
+        "--filters",
+        f"Name=attachment.instance-id,Values={instance_id}",
+        "--query",
+        "Volumes[*].VolumeId",
+        "--output",
+        "text",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     volume_ids = result.stdout.strip().split()
     snapshots = []
     for vol_id in volume_ids:
         snap_cmd = [
-            "aws", "ec2", "create-snapshot",
-            "--volume-id", vol_id,
-            "--description", f"IR evidence - {instance_id} - {datetime.utcnow().isoformat()}",
+            "aws",
+            "ec2",
+            "create-snapshot",
+            "--volume-id",
+            vol_id,
+            "--description",
+            f"IR evidence - {instance_id} - {datetime.utcnow().isoformat()}",
         ]
         snap_result = subprocess.run(snap_cmd, capture_output=True, text=True)
         if snap_result.returncode == 0:
@@ -84,25 +104,34 @@ def aws_query_cloudtrail(username, hours_back=24):
     """Query CloudTrail for API calls made by a specific IAM user."""
     start_time = (datetime.utcnow() - timedelta(hours=hours_back)).strftime("%Y-%m-%dT%H:%M:%SZ")
     cmd = [
-        "aws", "cloudtrail", "lookup-events",
-        "--lookup-attributes", f"AttributeKey=Username,AttributeValue={username}",
-        "--start-time", start_time,
-        "--output", "json",
+        "aws",
+        "cloudtrail",
+        "lookup-events",
+        "--lookup-attributes",
+        f"AttributeKey=Username,AttributeValue={username}",
+        "--start-time",
+        start_time,
+        "--output",
+        "json",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
         events = json.loads(result.stdout).get("Events", [])
-        logger.info("CloudTrail: %d events for user %s in last %d hours", len(events), username, hours_back)
+        logger.info(
+            "CloudTrail: %d events for user %s in last %d hours", len(events), username, hours_back
+        )
         parsed = []
         for event in events:
             ct_event = json.loads(event.get("CloudTrailEvent", "{}"))
-            parsed.append({
-                "time": event.get("EventTime", ""),
-                "event_name": event.get("EventName", ""),
-                "source_ip": ct_event.get("sourceIPAddress", ""),
-                "user_agent": ct_event.get("userAgent", ""),
-                "resources": event.get("Resources", []),
-            })
+            parsed.append(
+                {
+                    "time": event.get("EventTime", ""),
+                    "event_name": event.get("EventName", ""),
+                    "source_ip": ct_event.get("sourceIPAddress", ""),
+                    "user_agent": ct_event.get("userAgent", ""),
+                    "resources": event.get("Resources", []),
+                }
+            )
         return parsed
     return []
 
@@ -110,8 +139,7 @@ def aws_query_cloudtrail(username, hours_back=24):
 def aws_list_attacker_resources(username, events):
     """Identify resources created by the attacker from CloudTrail events."""
     create_events = [
-        e for e in events
-        if e["event_name"].startswith(("Create", "Run", "Put", "Attach"))
+        e for e in events if e["event_name"].startswith(("Create", "Run", "Put", "Attach"))
     ]
     logger.info("Identified %d resource creation events", len(create_events))
     return create_events
@@ -125,10 +153,15 @@ def aws_check_all_regions_instances():
     all_instances = {}
     for region in regions:
         cmd = [
-            "aws", "ec2", "describe-instances",
-            "--region", region,
-            "--query", "Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name]",
-            "--output", "json",
+            "aws",
+            "ec2",
+            "describe-instances",
+            "--region",
+            region,
+            "--query",
+            "Reservations[*].Instances[*].[InstanceId,InstanceType,State.Name]",
+            "--output",
+            "json",
         ]
         r = subprocess.run(cmd, capture_output=True, text=True)
         if r.returncode == 0:
@@ -181,7 +214,7 @@ def main():
         snapshots = aws_snapshot_ebs(args.instance_id)
 
     events = aws_query_cloudtrail(args.username, hours_back=72)
-    attacker_actions = aws_list_attacker_resources(args.username, events)
+    aws_list_attacker_resources(args.username, events)
 
     report = generate_ir_report(args.incident_id, args.username, events, snapshots, containment)
     with open(args.output, "w") as f:

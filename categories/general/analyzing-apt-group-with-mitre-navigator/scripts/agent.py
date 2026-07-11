@@ -8,16 +8,18 @@ performs detection gap analysis, and generates threat-informed reports.
 import json
 import os
 import sys
-import hashlib
 from collections import Counter
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
 
-ATTACK_ENTERPRISE_URL = "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
+ATTACK_ENTERPRISE_URL = (
+    "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
+)
 
 NAVIGATOR_LAYER_TEMPLATE = {
     "name": "",
@@ -26,8 +28,14 @@ NAVIGATOR_LAYER_TEMPLATE = {
     "description": "",
     "filters": {"platforms": ["Windows", "Linux", "macOS", "Cloud"]},
     "sorting": 0,
-    "layout": {"layout": "side", "aggregateFunction": "average", "showID": False,
-                "showName": True, "showAggregateScores": False, "countUnscored": False},
+    "layout": {
+        "layout": "side",
+        "aggregateFunction": "average",
+        "showID": False,
+        "showName": True,
+        "showAggregateScores": False,
+        "countUnscored": False,
+    },
     "hideDisabled": False,
     "techniques": [],
     "gradient": {"colors": ["#ffffff", "#ff6666"], "minValue": 0, "maxValue": 100},
@@ -45,7 +53,7 @@ NAVIGATOR_LAYER_TEMPLATE = {
 def load_attack_data(filepath=None):
     """Load ATT&CK STIX bundle from file or download."""
     if filepath and os.path.exists(filepath):
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, encoding="utf-8") as f:
             return json.load(f)
     if HAS_REQUESTS:
         print("[*] Downloading ATT&CK Enterprise data...")
@@ -69,7 +77,9 @@ def extract_groups(bundle):
                     attack_id = ref.get("external_id", "")
                     break
             groups[obj["id"]] = {
-                "name": name, "id": attack_id, "aliases": aliases,
+                "name": name,
+                "id": attack_id,
+                "aliases": aliases,
                 "description": obj.get("description", "")[:200],
             }
     return groups
@@ -89,8 +99,10 @@ def extract_techniques(bundle):
             if attack_id:
                 tactics = [p["phase_name"] for p in obj.get("kill_chain_phases", [])]
                 techniques[obj["id"]] = {
-                    "id": attack_id, "name": obj.get("name", ""),
-                    "tactics": tactics, "platforms": obj.get("x_mitre_platforms", []),
+                    "id": attack_id,
+                    "name": obj.get("name", ""),
+                    "tactics": tactics,
+                    "platforms": obj.get("x_mitre_platforms", []),
                 }
     return techniques
 
@@ -99,10 +111,12 @@ def map_group_techniques(bundle, group_stix_id, techniques):
     """Map techniques used by a specific group via relationship objects."""
     group_techniques = []
     for obj in bundle.get("objects", []):
-        if (obj.get("type") == "relationship" and
-                obj.get("relationship_type") == "uses" and
-                obj.get("source_ref") == group_stix_id and
-                obj.get("target_ref", "").startswith("attack-pattern--")):
+        if (
+            obj.get("type") == "relationship"
+            and obj.get("relationship_type") == "uses"
+            and obj.get("source_ref") == group_stix_id
+            and obj.get("target_ref", "").startswith("attack-pattern--")
+        ):
             tech_id = obj["target_ref"]
             if tech_id in techniques:
                 group_techniques.append(techniques[tech_id])
@@ -140,14 +154,19 @@ def detection_gap_analysis(group_techniques, detection_rules):
     gaps = []
     for tech in group_techniques:
         if tech["id"] not in covered:
-            gaps.append({
-                "technique_id": tech["id"],
-                "technique_name": tech["name"],
-                "tactics": tech["tactics"],
-                "status": "NO DETECTION",
-            })
-    coverage_pct = (len(covered & {t["id"] for t in group_techniques}) /
-                    len(group_techniques) * 100) if group_techniques else 0
+            gaps.append(
+                {
+                    "technique_id": tech["id"],
+                    "technique_name": tech["name"],
+                    "tactics": tech["tactics"],
+                    "status": "NO DETECTION",
+                }
+            )
+    coverage_pct = (
+        (len(covered & {t["id"] for t in group_techniques}) / len(group_techniques) * 100)
+        if group_techniques
+        else 0
+    )
     return gaps, round(coverage_pct, 1)
 
 
@@ -169,8 +188,10 @@ def compare_groups(group_a_techs, group_b_techs):
     only_b = set_b - set_a
     jaccard = len(overlap) / len(set_a | set_b) if (set_a | set_b) else 0
     return {
-        "overlap_count": len(overlap), "overlap_ids": sorted(overlap),
-        "only_group_a": len(only_a), "only_group_b": len(only_b),
+        "overlap_count": len(overlap),
+        "overlap_ids": sorted(overlap),
+        "only_group_a": len(only_a),
+        "only_group_b": len(only_b),
         "jaccard_similarity": round(jaccard, 4),
     }
 
@@ -211,9 +232,11 @@ if __name__ == "__main__":
 
     target_group = None
     for gid, g in groups.items():
-        if (g["name"].lower() == group_name.lower() or
-                g["id"].lower() == group_name.lower() or
-                group_name.lower() in [a.lower() for a in g["aliases"]]):
+        if (
+            g["name"].lower() == group_name.lower()
+            or g["id"].lower() == group_name.lower()
+            or group_name.lower() in [a.lower() for a in g["aliases"]]
+        ):
             target_group = (gid, g)
             break
 
@@ -238,7 +261,7 @@ if __name__ == "__main__":
     out_file = f"{ginfo['name'].replace(' ', '_')}_layer.json"
     save_layer(layer, out_file)
 
-    sample_rules = [{"technique_id": t["id"]} for t in group_techs[:len(group_techs)//2]]
+    sample_rules = [{"technique_id": t["id"]} for t in group_techs[: len(group_techs) // 2]]
     gaps, coverage = detection_gap_analysis(group_techs, sample_rules)
     print(f"\n--- Detection Gap Analysis (demo: {coverage}% coverage) ---")
     for gap in gaps[:10]:

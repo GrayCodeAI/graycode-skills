@@ -5,12 +5,11 @@ Analyzes DLL load events for sideloading indicators including unsigned DLLs,
 path anomalies, and known vulnerable application abuse.
 """
 
-import json
-import csv
 import argparse
+import csv
 import datetime
+import json
 import re
-from collections import defaultdict
 from pathlib import Path
 
 KNOWN_SIDELOAD_TARGETS = {
@@ -36,8 +35,12 @@ LEGITIMATE_DLL_PATHS = [
 ]
 
 SUSPICIOUS_DLL_PATHS = [
-    r"\\Temp\\", r"\\tmp\\", r"\\AppData\\Local\\Temp\\",
-    r"\\Users\\Public\\", r"\\Downloads\\", r"\\Desktop\\",
+    r"\\Temp\\",
+    r"\\tmp\\",
+    r"\\AppData\\Local\\Temp\\",
+    r"\\Users\\Public\\",
+    r"\\Downloads\\",
+    r"\\Desktop\\",
     r"\\ProgramData\\(?!Microsoft)",
 ]
 
@@ -45,11 +48,11 @@ SUSPICIOUS_DLL_PATHS = [
 def parse_logs(input_path: str) -> list[dict]:
     path = Path(input_path)
     if path.suffix == ".json":
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
             return data if isinstance(data, list) else data.get("events", [])
     elif path.suffix == ".csv":
-        with open(path, "r", encoding="utf-8-sig") as f:
+        with open(path, encoding="utf-8-sig") as f:
             return [dict(row) for row in csv.DictReader(f)]
     return []
 
@@ -116,13 +119,15 @@ def detect_sideloading(event: dict) -> dict | None:
         for pattern in SUSPICIOUS_DLL_PATHS:
             if re.search(pattern, image_path, re.IGNORECASE):
                 risk += 20
-                indicators.append(f"Host application in suspicious path")
+                indicators.append("Host application in suspicious path")
                 break
 
     if not indicators:
         return None
 
-    risk_level = "CRITICAL" if risk >= 70 else "HIGH" if risk >= 50 else "MEDIUM" if risk >= 30 else "LOW"
+    risk_level = (
+        "CRITICAL" if risk >= 70 else "HIGH" if risk >= 50 else "MEDIUM" if risk >= 30 else "LOW"
+    )
 
     return {
         "detection_type": "DLL_SIDELOADING",
@@ -151,11 +156,15 @@ def run_hunt(input_path: str, output_dir: str) -> None:
     output_path.mkdir(parents=True, exist_ok=True)
 
     with open(output_path / "sideload_findings.json", "w", encoding="utf-8") as f:
-        json.dump({
-            "hunt_id": f"TH-SIDELOAD-{datetime.date.today().isoformat()}",
-            "total_events": len(events),
-            "findings": sorted(findings, key=lambda x: x["risk_score"], reverse=True),
-        }, f, indent=2)
+        json.dump(
+            {
+                "hunt_id": f"TH-SIDELOAD-{datetime.date.today().isoformat()}",
+                "total_events": len(events),
+                "findings": sorted(findings, key=lambda x: x["risk_score"], reverse=True),
+            },
+            f,
+            indent=2,
+        )
 
     print(f"[+] {len(findings)} findings written to {output_dir}")
 
@@ -172,7 +181,9 @@ def main():
         run_hunt(args.input, args.output)
     elif args.command == "queries":
         print("=== Sysmon DLL Load Queries ===")
-        print('index=sysmon EventCode=7 Signed=false\n| stats count by Image ImageLoaded Computer\n| sort -count')
+        print(
+            "index=sysmon EventCode=7 Signed=false\n| stats count by Image ImageLoaded Computer\n| sort -count"
+        )
     else:
         parser.print_help()
 

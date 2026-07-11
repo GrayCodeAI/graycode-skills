@@ -7,27 +7,29 @@ cluster-admin sprawl, default service account usage, and
 generates hardening recommendations.
 """
 
+import argparse
 import json
 import subprocess
 import sys
-import argparse
 from datetime import datetime
-from collections import defaultdict
-
 
 DANGEROUS_VERBS = {"*", "create", "update", "patch", "delete"}
 DANGEROUS_RESOURCES = {
-    "secrets", "pods/exec", "clusterroles", "clusterrolebindings",
-    "roles", "rolebindings", "serviceaccounts/token", "nodes/proxy"
+    "secrets",
+    "pods/exec",
+    "clusterroles",
+    "clusterrolebindings",
+    "roles",
+    "rolebindings",
+    "serviceaccounts/token",
+    "nodes/proxy",
 }
 DANGEROUS_API_GROUPS = {"*"}
 
 
 def run_kubectl(args: list[str]) -> str:
     try:
-        result = subprocess.run(
-            ["kubectl"] + args, capture_output=True, text=True, timeout=30
-        )
+        result = subprocess.run(["kubectl"] + args, capture_output=True, text=True, timeout=30)
         return result.stdout.strip()
     except (subprocess.TimeoutExpired, FileNotFoundError):
         return ""
@@ -69,15 +71,17 @@ def audit_cluster_admin_bindings(crbs: list[dict]) -> list[dict]:
     for crb in crbs:
         if crb.get("roleRef", {}).get("name") == "cluster-admin":
             for subject in crb.get("subjects", []):
-                findings.append({
-                    "severity": "CRITICAL",
-                    "type": "cluster_admin_binding",
-                    "binding": crb["metadata"]["name"],
-                    "subject_kind": subject.get("kind", ""),
-                    "subject_name": subject.get("name", ""),
-                    "subject_namespace": subject.get("namespace", ""),
-                    "description": f"cluster-admin bound to {subject.get('kind', '')}/{subject.get('name', '')}"
-                })
+                findings.append(
+                    {
+                        "severity": "CRITICAL",
+                        "type": "cluster_admin_binding",
+                        "binding": crb["metadata"]["name"],
+                        "subject_kind": subject.get("kind", ""),
+                        "subject_name": subject.get("name", ""),
+                        "subject_namespace": subject.get("namespace", ""),
+                        "description": f"cluster-admin bound to {subject.get('kind', '')}/{subject.get('name', '')}",
+                    }
+                )
     return findings
 
 
@@ -87,23 +91,27 @@ def audit_wildcard_permissions(roles: dict) -> list[dict]:
         for rule in rules:
             verbs = rule.get("verbs", [])
             resources = rule.get("resources", [])
-            api_groups = rule.get("apiGroups", [])
+            rule.get("apiGroups", [])
 
             if "*" in verbs and "*" in resources:
-                findings.append({
-                    "severity": "HIGH",
-                    "type": "wildcard_permissions",
-                    "role": role_name,
-                    "description": f"ClusterRole {role_name} has wildcard verbs and resources"
-                })
+                findings.append(
+                    {
+                        "severity": "HIGH",
+                        "type": "wildcard_permissions",
+                        "role": role_name,
+                        "description": f"ClusterRole {role_name} has wildcard verbs and resources",
+                    }
+                )
             elif "*" in verbs:
-                findings.append({
-                    "severity": "MEDIUM",
-                    "type": "wildcard_verbs",
-                    "role": role_name,
-                    "resources": resources,
-                    "description": f"ClusterRole {role_name} has wildcard verbs on {resources}"
-                })
+                findings.append(
+                    {
+                        "severity": "MEDIUM",
+                        "type": "wildcard_verbs",
+                        "role": role_name,
+                        "resources": resources,
+                        "description": f"ClusterRole {role_name} has wildcard verbs on {resources}",
+                    }
+                )
     return findings
 
 
@@ -117,14 +125,16 @@ def audit_dangerous_permissions(roles: dict) -> list[dict]:
             has_dangerous_verbs = verbs.intersection(DANGEROUS_VERBS)
 
             if dangerous_matches and has_dangerous_verbs:
-                findings.append({
-                    "severity": "HIGH",
-                    "type": "dangerous_permission",
-                    "role": role_name,
-                    "resources": list(dangerous_matches),
-                    "verbs": list(has_dangerous_verbs),
-                    "description": f"ClusterRole {role_name} grants {list(has_dangerous_verbs)} on {list(dangerous_matches)}"
-                })
+                findings.append(
+                    {
+                        "severity": "HIGH",
+                        "type": "dangerous_permission",
+                        "role": role_name,
+                        "resources": list(dangerous_matches),
+                        "verbs": list(has_dangerous_verbs),
+                        "description": f"ClusterRole {role_name} grants {list(has_dangerous_verbs)} on {list(dangerous_matches)}",
+                    }
+                )
     return findings
 
 
@@ -133,14 +143,16 @@ def audit_default_service_accounts(rbs: list[dict], crbs: list[dict]) -> list[di
     for binding in rbs + crbs:
         for subject in binding.get("subjects", []):
             if subject.get("kind") == "ServiceAccount" and subject.get("name") == "default":
-                findings.append({
-                    "severity": "MEDIUM",
-                    "type": "default_sa_binding",
-                    "binding": binding["metadata"]["name"],
-                    "namespace": subject.get("namespace", "N/A"),
-                    "role": binding.get("roleRef", {}).get("name", ""),
-                    "description": f"Default service account in {subject.get('namespace', 'N/A')} has role binding"
-                })
+                findings.append(
+                    {
+                        "severity": "MEDIUM",
+                        "type": "default_sa_binding",
+                        "binding": binding["metadata"]["name"],
+                        "namespace": subject.get("namespace", "N/A"),
+                        "role": binding.get("roleRef", {}).get("name", ""),
+                        "description": f"Default service account in {subject.get('namespace', 'N/A')} has role binding",
+                    }
+                )
     return findings
 
 
@@ -150,14 +162,21 @@ def generate_report(all_findings: list[dict], output_format: str = "text") -> st
     medium = [f for f in all_findings if f["severity"] == "MEDIUM"]
 
     if output_format == "json":
-        return json.dumps({
-            "timestamp": datetime.utcnow().isoformat(),
-            "summary": {"critical": len(critical), "high": len(high), "medium": len(medium)},
-            "findings": all_findings
-        }, indent=2)
+        return json.dumps(
+            {
+                "timestamp": datetime.utcnow().isoformat(),
+                "summary": {"critical": len(critical), "high": len(high), "medium": len(medium)},
+                "findings": all_findings,
+            },
+            indent=2,
+        )
 
-    lines = ["=" * 70, "KUBERNETES RBAC HARDENING AUDIT REPORT",
-             f"Generated: {datetime.utcnow().isoformat()}", "=" * 70]
+    lines = [
+        "=" * 70,
+        "KUBERNETES RBAC HARDENING AUDIT REPORT",
+        f"Generated: {datetime.utcnow().isoformat()}",
+        "=" * 70,
+    ]
     lines.append(f"\nFindings: {len(critical)} Critical, {len(high)} High, {len(medium)} Medium")
 
     for sev, items in [("CRITICAL", critical), ("HIGH", high), ("MEDIUM", medium)]:

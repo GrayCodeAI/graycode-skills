@@ -32,7 +32,7 @@ python scripts/agent.py --gophish-url https://localhost:3333 --api-key <key> --c
 ```python
 from gophish import Gophish
 from gophish.models import Campaign, Template, Group, SMTP, Page
-api = Gophish("api_key", host="https://localhost:3333", verify=False)
+api = Gophish("api_key", host="https://localhost:3333", verify=True)
 campaign = Campaign(name="Q1 Test", groups=[Group(name="Sales Team")],
     template=Template(name="IT Password Reset"), smtp=SMTP(name="Internal SMTP"),
     page=Page(name="Credential Page"))

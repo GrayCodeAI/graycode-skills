@@ -3,11 +3,11 @@
 boundary-guard: ## Fail if the skills repo references support engines or Hawk private packages
 	bash ./scripts/check-consumer-boundaries.sh
 
-lint: ## Run ruff linter on tool scripts
-	ruff check tools/
+lint: ## Run Ruff over all repository Python code
+	ruff check .
 
-format: ## Format tool scripts
-	ruff format tools/
+format: ## Format all repository Python code
+	ruff format .
 
 validate: ## Validate all skills in the registry
 	python3 tools/validate_skill.py --all

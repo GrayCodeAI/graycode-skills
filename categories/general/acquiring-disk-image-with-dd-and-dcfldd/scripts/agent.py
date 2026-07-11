@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Forensic disk image acquisition agent using dd and dcfldd with hash verification."""
 
-import subprocess
-import hashlib
-import os
-import sys
 import datetime
+import hashlib
 import json
+import os
+import subprocess
 
 
 def run_cmd(cmd, capture=True):
@@ -65,10 +64,7 @@ def compute_hash(path, algorithm="sha256", block_size=65536):
 
 def acquire_with_dd(source, destination, block_size=4096, log_file=None):
     """Acquire a forensic image using dd with error handling."""
-    cmd = (
-        f"dd if={source} of={destination} bs={block_size} "
-        f"conv=noerror,sync status=progress"
-    )
+    cmd = f"dd if={source} of={destination} bs={block_size} conv=noerror,sync status=progress"
     if log_file:
         cmd += f" 2>&1 | tee {log_file}"
     print(f"[*] Starting dd acquisition: {source} -> {destination}")
@@ -80,8 +76,15 @@ def acquire_with_dd(source, destination, block_size=4096, log_file=None):
     return rc == 0
 
 
-def acquire_with_dcfldd(source, destination, hash_alg="sha256", hash_log=None,
-                        error_log=None, block_size=4096, split_size=None):
+def acquire_with_dcfldd(
+    source,
+    destination,
+    hash_alg="sha256",
+    hash_log=None,
+    error_log=None,
+    block_size=4096,
+    split_size=None,
+):
     """Acquire a forensic image using dcfldd with built-in hashing."""
     cmd = f"dcfldd if={source} of={destination} bs={block_size} conv=noerror,sync"
     cmd += f" hash={hash_alg}"
@@ -116,8 +119,16 @@ def verify_image(source, image_path, algorithm="sha256"):
     return False, source_hash, image_hash
 
 
-def generate_report(case_dir, source_device, image_path, tool_used,
-                    source_hash, image_hash, verified, elapsed_seconds=0):
+def generate_report(
+    case_dir,
+    source_device,
+    image_path,
+    tool_used,
+    source_hash,
+    image_hash,
+    verified,
+    elapsed_seconds=0,
+):
     """Generate a forensic acquisition report."""
     report = {
         "report_type": "Disk Image Acquisition",
@@ -163,8 +174,10 @@ if __name__ == "__main__":
 
     print(f"\n[DEMO] Acquisition workflow for {demo_source}:")
     print(f"  1. Enable write protection: blockdev --setro {demo_source}")
-    print(f"  2. Acquire with dcfldd: dcfldd if={demo_source} of={demo_image} "
-          f"hash=sha256 hashwindow=1G bs=4096 conv=noerror,sync")
+    print(
+        f"  2. Acquire with dcfldd: dcfldd if={demo_source} of={demo_image} "
+        f"hash=sha256 hashwindow=1G bs=4096 conv=noerror,sync"
+    )
     print(f"  3. Verify: compare SHA-256 of {demo_source} and {demo_image}")
-    print(f"  4. Generate acquisition report with chain-of-custody metadata")
+    print("  4. Generate acquisition report with chain-of-custody metadata")
     print("\n[*] Agent ready. Provide a source device and case directory to begin.")

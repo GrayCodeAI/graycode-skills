@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Zeek network anomaly detection agent for log analysis and threat hunting."""
 
+import contextlib
 import json
 import os
 import subprocess
@@ -8,7 +9,6 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
-
 
 ZEEK_BIN = "/opt/zeek/bin/zeek"
 ZEEK_LOG_DIR = "/opt/zeek/logs/current"
@@ -22,7 +22,9 @@ def check_zeek_status():
         version = {"installed": True, "version": result.stdout.strip() or result.stderr.strip()}
     except FileNotFoundError:
         try:
-            result = subprocess.run(["zeek", "--version"], capture_output=True, text=True, timeout=10)
+            result = subprocess.run(
+                ["zeek", "--version"], capture_output=True, text=True, timeout=10
+            )
             version = {"installed": True, "version": result.stdout.strip()}
         except FileNotFoundError:
             version = {"installed": False}
@@ -50,7 +52,7 @@ def parse_conn_log(log_path=None):
     top_destinations = Counter()
     long_connections = []
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         header = {}
         for line in f:
             if line.startswith("#fields"):
@@ -64,11 +66,19 @@ def parse_conn_log(log_path=None):
             if not header:
                 continue
 
-            src = parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
-            dst = parts[header.get("id.resp_h", 4)] if len(parts) > header.get("id.resp_h", 4) else ""
+            src = (
+                parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
+            )
+            dst = (
+                parts[header.get("id.resp_h", 4)] if len(parts) > header.get("id.resp_h", 4) else ""
+            )
             proto = parts[header.get("proto", 6)] if len(parts) > header.get("proto", 6) else ""
-            service = parts[header.get("service", 7)] if len(parts) > header.get("service", 7) else "-"
-            duration = parts[header.get("duration", 8)] if len(parts) > header.get("duration", 8) else "-"
+            service = (
+                parts[header.get("service", 7)] if len(parts) > header.get("service", 7) else "-"
+            )
+            duration = (
+                parts[header.get("duration", 8)] if len(parts) > header.get("duration", 8) else "-"
+            )
 
             protocols[proto] += 1
             if service != "-":
@@ -80,7 +90,9 @@ def parse_conn_log(log_path=None):
                 try:
                     dur = float(duration)
                     if dur > 3600:
-                        long_connections.append({"src": src, "dst": dst, "duration_sec": dur, "service": service})
+                        long_connections.append(
+                            {"src": src, "dst": dst, "duration_sec": dur, "service": service}
+                        )
                 except ValueError:
                     pass
 
@@ -90,7 +102,9 @@ def parse_conn_log(log_path=None):
         "top_services": services.most_common(15),
         "top_sources": top_talkers.most_common(15),
         "top_destinations": top_destinations.most_common(15),
-        "long_connections": sorted(long_connections, key=lambda x: x["duration_sec"], reverse=True)[:20],
+        "long_connections": sorted(long_connections, key=lambda x: x["duration_sec"], reverse=True)[
+            :20
+        ],
     }
 
 
@@ -105,7 +119,7 @@ def parse_dns_log(log_path=None):
     long_queries = []
     nxdomain = []
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         header = {}
         for line in f:
             if line.startswith("#fields"):
@@ -119,9 +133,19 @@ def parse_dns_log(log_path=None):
                 continue
 
             query = parts[header.get("query", 9)] if len(parts) > header.get("query", 9) else ""
-            qtype = parts[header.get("qtype_name", 13)] if len(parts) > header.get("qtype_name", 13) else ""
-            rcode = parts[header.get("rcode_name", 15)] if len(parts) > header.get("rcode_name", 15) else ""
-            src = parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
+            qtype = (
+                parts[header.get("qtype_name", 13)]
+                if len(parts) > header.get("qtype_name", 13)
+                else ""
+            )
+            rcode = (
+                parts[header.get("rcode_name", 15)]
+                if len(parts) > header.get("rcode_name", 15)
+                else ""
+            )
+            src = (
+                parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
+            )
 
             queries[query] += 1
             query_types[qtype] += 1
@@ -151,7 +175,7 @@ def parse_ssl_log(log_path=None):
     server_names = Counter()
     expired_certs = []
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         header = {}
         for line in f:
             if line.startswith("#fields"):
@@ -164,9 +188,21 @@ def parse_ssl_log(log_path=None):
             if not header:
                 continue
 
-            ja3 = parts[header.get("ja3", -1)] if header.get("ja3") and len(parts) > header["ja3"] else "-"
-            sni = parts[header.get("server_name", -1)] if header.get("server_name") and len(parts) > header["server_name"] else "-"
-            valid = parts[header.get("validation_status", -1)] if header.get("validation_status") and len(parts) > header["validation_status"] else "-"
+            ja3 = (
+                parts[header.get("ja3", -1)]
+                if header.get("ja3") and len(parts) > header["ja3"]
+                else "-"
+            )
+            sni = (
+                parts[header.get("server_name", -1)]
+                if header.get("server_name") and len(parts) > header["server_name"]
+                else "-"
+            )
+            valid = (
+                parts[header.get("validation_status", -1)]
+                if header.get("validation_status") and len(parts) > header["validation_status"]
+                else "-"
+            )
 
             if ja3 != "-":
                 ja3_hashes[ja3] += 1
@@ -190,7 +226,7 @@ def detect_beaconing(log_path=None, interval_tolerance=0.15):
         return {"error": f"conn.log not found: {log_path}"}
 
     pair_times = defaultdict(list)
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         header = {}
         for line in f:
             if line.startswith("#fields"):
@@ -203,19 +239,21 @@ def detect_beaconing(log_path=None, interval_tolerance=0.15):
             if not header:
                 continue
             ts = parts[header.get("ts", 0)] if len(parts) > header.get("ts", 0) else ""
-            src = parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
-            dst = parts[header.get("id.resp_h", 4)] if len(parts) > header.get("id.resp_h", 4) else ""
-            try:
+            src = (
+                parts[header.get("id.orig_h", 2)] if len(parts) > header.get("id.orig_h", 2) else ""
+            )
+            dst = (
+                parts[header.get("id.resp_h", 4)] if len(parts) > header.get("id.resp_h", 4) else ""
+            )
+            with contextlib.suppress(ValueError):
                 pair_times[f"{src}->{dst}"].append(float(ts))
-            except ValueError:
-                pass
 
     beacons = []
     for pair, times in pair_times.items():
         if len(times) < 10:
             continue
         times.sort()
-        intervals = [times[i+1] - times[i] for i in range(len(times)-1)]
+        intervals = [times[i + 1] - times[i] for i in range(len(times) - 1)]
         if not intervals:
             continue
         avg = sum(intervals) / len(intervals)
@@ -224,12 +262,15 @@ def detect_beaconing(log_path=None, interval_tolerance=0.15):
         jitter = sum(abs(i - avg) for i in intervals) / len(intervals) / avg if avg > 0 else 1
         if jitter < interval_tolerance:
             src, dst = pair.split("->")
-            beacons.append({
-                "source": src, "destination": dst,
-                "connections": len(times),
-                "avg_interval_sec": round(avg, 1),
-                "jitter_pct": round(jitter * 100, 1),
-            })
+            beacons.append(
+                {
+                    "source": src,
+                    "destination": dst,
+                    "connections": len(times),
+                    "avg_interval_sec": round(avg, 1),
+                    "jitter_pct": round(jitter * 100, 1),
+                }
+            )
 
     beacons.sort(key=lambda x: x["connections"], reverse=True)
     return {"beacons_detected": len(beacons), "beacons": beacons[:20]}
@@ -245,7 +286,10 @@ def analyze_pcap(pcap_path):
     try:
         result = subprocess.run(
             ["zeek", "-r", pcap_path, "-C"],
-            capture_output=True, text=True, timeout=120, cwd=output_dir
+            capture_output=True,
+            text=True,
+            timeout=120,
+            cwd=output_dir,
         )
         logs = list(Path(output_dir).glob("*.log"))
         return {

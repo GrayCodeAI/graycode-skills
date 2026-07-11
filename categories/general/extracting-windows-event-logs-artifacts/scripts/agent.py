@@ -9,7 +9,6 @@ import os
 import sys
 from collections import Counter, defaultdict
 from datetime import datetime
-from typing import Dict, List, Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -38,19 +37,34 @@ CRITICAL_EVENT_IDS = {
 }
 
 LOGON_TYPES = {
-    "2": "Interactive", "3": "Network", "4": "Batch", "5": "Service",
-    "7": "Unlock", "8": "NetworkCleartext", "9": "NewCredentials",
-    "10": "RemoteInteractive (RDP)", "11": "CachedInteractive",
+    "2": "Interactive",
+    "3": "Network",
+    "4": "Batch",
+    "5": "Service",
+    "7": "Unlock",
+    "8": "NetworkCleartext",
+    "9": "NewCredentials",
+    "10": "RemoteInteractive (RDP)",
+    "11": "CachedInteractive",
 }
 
 SUSPICIOUS_PROCESSES = [
-    "mimikatz", "psexec", "procdump", "lazagne", "sharphound",
-    "rubeus", "certutil", "powershell -enc", "bitsadmin",
-    "wmic shadowcopy delete", "vssadmin delete", "bcdedit /set",
+    "mimikatz",
+    "psexec",
+    "procdump",
+    "lazagne",
+    "sharphound",
+    "rubeus",
+    "certutil",
+    "powershell -enc",
+    "bitsadmin",
+    "wmic shadowcopy delete",
+    "vssadmin delete",
+    "bcdedit /set",
 ]
 
 
-def parse_evtx_file(evtx_path: str) -> List[dict]:
+def parse_evtx_file(evtx_path: str) -> list[dict]:
     """Parse an EVTX file and return list of event records."""
     if not os.path.isfile(evtx_path):
         logger.warning("EVTX file not found: %s", evtx_path)
@@ -66,14 +80,19 @@ def parse_evtx_file(evtx_path: str) -> List[dict]:
                 event_id = str(system.get("EventID", ""))
                 if isinstance(system.get("EventID"), dict):
                     event_id = str(system["EventID"].get("#text", ""))
-                timestamp = system.get("TimeCreated", {}).get("#attributes", {}).get("SystemTime", "")
+                timestamp = (
+                    system.get("TimeCreated", {}).get("#attributes", {}).get("SystemTime", "")
+                )
                 event_data = event.get("EventData", {})
-                records.append({
-                    "event_id": event_id, "timestamp": timestamp,
-                    "channel": system.get("Channel", ""),
-                    "computer": system.get("Computer", ""),
-                    "event_data": event_data if isinstance(event_data, dict) else {},
-                })
+                records.append(
+                    {
+                        "event_id": event_id,
+                        "timestamp": timestamp,
+                        "channel": system.get("Channel", ""),
+                        "computer": system.get("Computer", ""),
+                        "event_data": event_data if isinstance(event_data, dict) else {},
+                    }
+                )
             except (json.JSONDecodeError, KeyError):
                 continue
     except Exception as exc:
@@ -82,7 +101,7 @@ def parse_evtx_file(evtx_path: str) -> List[dict]:
     return records
 
 
-def filter_critical_events(records: List[dict]) -> Dict[str, List[dict]]:
+def filter_critical_events(records: list[dict]) -> dict[str, list[dict]]:
     """Filter records for critical security event IDs."""
     filtered = defaultdict(list)
     for r in records:
@@ -92,7 +111,7 @@ def filter_critical_events(records: List[dict]) -> Dict[str, List[dict]]:
     return dict(filtered)
 
 
-def detect_lateral_movement(records: List[dict]) -> List[dict]:
+def detect_lateral_movement(records: list[dict]) -> list[dict]:
     """Detect lateral movement indicators from logon events."""
     findings = []
     for r in records:
@@ -104,16 +123,21 @@ def detect_lateral_movement(records: List[dict]) -> List[dict]:
         src_ip = ed.get("IpAddress", "-")
         user = ed.get("TargetUserName", "")
         if logon_type in ("3", "10") and src_ip not in ("-", "::1", "127.0.0.1"):
-            findings.append({
-                "timestamp": r["timestamp"], "type": "lateral_movement",
-                "logon_type": LOGON_TYPES.get(logon_type, logon_type),
-                "user": user, "source_ip": src_ip, "auth_package": auth_pkg,
-                "pth_indicator": logon_type == "9" and "NTLM" in auth_pkg,
-            })
+            findings.append(
+                {
+                    "timestamp": r["timestamp"],
+                    "type": "lateral_movement",
+                    "logon_type": LOGON_TYPES.get(logon_type, logon_type),
+                    "user": user,
+                    "source_ip": src_ip,
+                    "auth_package": auth_pkg,
+                    "pth_indicator": logon_type == "9" and "NTLM" in auth_pkg,
+                }
+            )
     return findings
 
 
-def detect_privilege_escalation(records: List[dict]) -> List[dict]:
+def detect_privilege_escalation(records: list[dict]) -> list[dict]:
     """Detect privilege escalation from group membership and special privilege events."""
     findings = []
     escalation_ids = {"4672", "4728", "4732", "4756", "4720"}
@@ -121,16 +145,20 @@ def detect_privilege_escalation(records: List[dict]) -> List[dict]:
         if r["event_id"] not in escalation_ids:
             continue
         ed = r["event_data"]
-        findings.append({
-            "timestamp": r["timestamp"], "type": "privilege_escalation",
-            "event_id": r["event_id"], "description": CRITICAL_EVENT_IDS.get(r["event_id"], ""),
-            "user": ed.get("TargetUserName", ed.get("SubjectUserName", "")),
-            "group": ed.get("TargetDomainName", ""),
-        })
+        findings.append(
+            {
+                "timestamp": r["timestamp"],
+                "type": "privilege_escalation",
+                "event_id": r["event_id"],
+                "description": CRITICAL_EVENT_IDS.get(r["event_id"], ""),
+                "user": ed.get("TargetUserName", ed.get("SubjectUserName", "")),
+                "group": ed.get("TargetDomainName", ""),
+            }
+        )
     return findings
 
 
-def detect_suspicious_processes(records: List[dict]) -> List[dict]:
+def detect_suspicious_processes(records: list[dict]) -> list[dict]:
     """Detect suspicious process creation events."""
     findings = []
     for r in records:
@@ -141,59 +169,74 @@ def detect_suspicious_processes(records: List[dict]) -> List[dict]:
         process_name = str(ed.get("NewProcessName", "")).lower()
         for pattern in SUSPICIOUS_PROCESSES:
             if pattern in cmd or pattern in process_name:
-                findings.append({
-                    "timestamp": r["timestamp"], "type": "suspicious_process",
-                    "matched_pattern": pattern,
-                    "process": ed.get("NewProcessName", ""),
-                    "command_line": str(ed.get("CommandLine", ""))[:300],
-                    "user": ed.get("SubjectUserName", ""),
-                    "parent": ed.get("ParentProcessName", ""),
-                })
+                findings.append(
+                    {
+                        "timestamp": r["timestamp"],
+                        "type": "suspicious_process",
+                        "matched_pattern": pattern,
+                        "process": ed.get("NewProcessName", ""),
+                        "command_line": str(ed.get("CommandLine", ""))[:300],
+                        "user": ed.get("SubjectUserName", ""),
+                        "parent": ed.get("ParentProcessName", ""),
+                    }
+                )
                 break
     return findings
 
 
-def detect_log_clearing(records: List[dict]) -> List[dict]:
+def detect_log_clearing(records: list[dict]) -> list[dict]:
     """Detect audit log clearing events."""
     findings = []
     for r in records:
         if r["event_id"] in ("1102", "104"):
-            findings.append({
-                "timestamp": r["timestamp"], "type": "log_cleared",
-                "event_id": r["event_id"], "channel": r.get("channel", ""),
-                "user": r["event_data"].get("SubjectUserName", "SYSTEM"),
-            })
+            findings.append(
+                {
+                    "timestamp": r["timestamp"],
+                    "type": "log_cleared",
+                    "event_id": r["event_id"],
+                    "channel": r.get("channel", ""),
+                    "user": r["event_data"].get("SubjectUserName", "SYSTEM"),
+                }
+            )
     return findings
 
 
-def detect_persistence(records: List[dict]) -> List[dict]:
+def detect_persistence(records: list[dict]) -> list[dict]:
     """Detect persistence mechanisms from service and scheduled task events."""
     findings = []
     for r in records:
         if r["event_id"] in ("4697", "7045"):
             ed = r["event_data"]
-            findings.append({
-                "timestamp": r["timestamp"], "type": "service_install",
-                "service_name": ed.get("ServiceName", ""),
-                "image_path": ed.get("ImagePath", ed.get("ServiceFileName", "")),
-                "start_type": ed.get("StartType", ""),
-                "user": ed.get("AccountName", ed.get("SubjectUserName", "")),
-            })
+            findings.append(
+                {
+                    "timestamp": r["timestamp"],
+                    "type": "service_install",
+                    "service_name": ed.get("ServiceName", ""),
+                    "image_path": ed.get("ImagePath", ed.get("ServiceFileName", "")),
+                    "start_type": ed.get("StartType", ""),
+                    "user": ed.get("AccountName", ed.get("SubjectUserName", "")),
+                }
+            )
         elif r["event_id"] == "4698":
             ed = r["event_data"]
-            findings.append({
-                "timestamp": r["timestamp"], "type": "scheduled_task",
-                "task_name": ed.get("TaskName", ""),
-                "user": ed.get("SubjectUserName", ""),
-            })
+            findings.append(
+                {
+                    "timestamp": r["timestamp"],
+                    "type": "scheduled_task",
+                    "task_name": ed.get("TaskName", ""),
+                    "user": ed.get("SubjectUserName", ""),
+                }
+            )
     return findings
 
 
-def generate_summary(records: List[dict], findings: dict) -> dict:
+def generate_summary(records: list[dict], findings: dict) -> dict:
     """Generate analysis summary statistics."""
     event_counts = Counter(r["event_id"] for r in records)
-    top_events = [(eid, count, CRITICAL_EVENT_IDS.get(eid, "Other"))
-                  for eid, count in event_counts.most_common(15)]
+    top_events = [
+        (eid, count, CRITICAL_EVENT_IDS.get(eid, "Other"))
+        for eid, count in event_counts.most_common(15)
+    ]
     return {
         "total_records": len(records),
         "unique_event_ids": len(event_counts),
@@ -206,7 +249,7 @@ def generate_summary(records: List[dict], findings: dict) -> dict:
     }
 
 
-def export_timeline_csv(records: List[dict], output_path: str) -> None:
+def export_timeline_csv(records: list[dict], output_path: str) -> None:
     """Export critical events as a CSV timeline."""
     critical = [r for r in records if r["event_id"] in CRITICAL_EVENT_IDS]
     critical.sort(key=lambda r: r["timestamp"])
@@ -220,7 +263,7 @@ def export_timeline_csv(records: List[dict], output_path: str) -> None:
     logger.info("Timeline exported: %d events to %s", len(critical), output_path)
 
 
-def analyze_evtx(evtx_paths: List[str], output_dir: str) -> dict:
+def analyze_evtx(evtx_paths: list[str], output_dir: str) -> dict:
     """Run full EVTX analysis across multiple log files."""
     all_records = []
     for path in evtx_paths:

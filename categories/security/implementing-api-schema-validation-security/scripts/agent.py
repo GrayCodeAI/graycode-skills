@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Agent for auditing API schema validation security using OpenAPI specs."""
 
-import json
 import argparse
-import re
+import json
 from datetime import datetime
-from pathlib import Path
 
 try:
     import yaml
@@ -35,55 +33,78 @@ def audit_schema_validation(spec):
             if method in ("get", "post", "put", "patch", "delete"):
                 request_body = details.get("requestBody", {})
                 if method in ("post", "put", "patch") and not request_body:
-                    findings.append({
-                        "path": path, "method": method.upper(),
-                        "issue": "no_request_body_schema", "severity": "HIGH",
-                    })
+                    findings.append(
+                        {
+                            "path": path,
+                            "method": method.upper(),
+                            "issue": "no_request_body_schema",
+                            "severity": "HIGH",
+                        }
+                    )
                 elif request_body:
                     content = request_body.get("content", {})
-                    for media, media_def in content.items():
+                    for _media, media_def in content.items():
                         schema = media_def.get("schema", {})
                         if not schema:
-                            findings.append({
-                                "path": path, "method": method.upper(),
-                                "issue": "empty_request_schema", "severity": "HIGH",
-                            })
+                            findings.append(
+                                {
+                                    "path": path,
+                                    "method": method.upper(),
+                                    "issue": "empty_request_schema",
+                                    "severity": "HIGH",
+                                }
+                            )
                         elif schema.get("additionalProperties") is not False:
-                            findings.append({
-                                "path": path, "method": method.upper(),
-                                "issue": "additional_properties_allowed",
-                                "severity": "MEDIUM",
-                                "risk": "mass_assignment",
-                            })
+                            findings.append(
+                                {
+                                    "path": path,
+                                    "method": method.upper(),
+                                    "issue": "additional_properties_allowed",
+                                    "severity": "MEDIUM",
+                                    "risk": "mass_assignment",
+                                }
+                            )
                 params = details.get("parameters", [])
                 for param in params:
                     if not param.get("schema"):
-                        findings.append({
-                            "path": path, "method": method.upper(),
-                            "parameter": param.get("name"),
-                            "issue": "parameter_no_schema", "severity": "MEDIUM",
-                        })
+                        findings.append(
+                            {
+                                "path": path,
+                                "method": method.upper(),
+                                "parameter": param.get("name"),
+                                "issue": "parameter_no_schema",
+                                "severity": "MEDIUM",
+                            }
+                        )
                     elif param.get("schema", {}).get("type") == "string":
                         schema = param["schema"]
                         if not schema.get("maxLength") and not schema.get("pattern"):
-                            findings.append({
-                                "path": path, "method": method.upper(),
-                                "parameter": param.get("name"),
-                                "issue": "string_no_max_length", "severity": "MEDIUM",
-                                "risk": "injection",
-                            })
+                            findings.append(
+                                {
+                                    "path": path,
+                                    "method": method.upper(),
+                                    "parameter": param.get("name"),
+                                    "issue": "string_no_max_length",
+                                    "severity": "MEDIUM",
+                                    "risk": "injection",
+                                }
+                            )
                 responses = details.get("responses", {})
                 for code, resp in responses.items():
                     content = resp.get("content", {})
-                    for media, media_def in content.items():
+                    for _media, media_def in content.items():
                         schema = media_def.get("schema", {})
                         if not schema:
-                            findings.append({
-                                "path": path, "method": method.upper(),
-                                "response_code": code,
-                                "issue": "no_response_schema", "severity": "MEDIUM",
-                                "risk": "data_exposure",
-                            })
+                            findings.append(
+                                {
+                                    "path": path,
+                                    "method": method.upper(),
+                                    "response_code": code,
+                                    "issue": "no_response_schema",
+                                    "severity": "MEDIUM",
+                                    "risk": "data_exposure",
+                                }
+                            )
     return findings
 
 
@@ -106,10 +127,14 @@ def check_security_definitions(spec):
             if method in ("get", "post", "put", "patch", "delete"):
                 op_security = details.get("security")
                 if op_security == []:
-                    findings.append({
-                        "path": path, "method": method.upper(),
-                        "issue": "security_explicitly_disabled", "severity": "CRITICAL",
-                    })
+                    findings.append(
+                        {
+                            "path": path,
+                            "method": method.upper(),
+                            "issue": "security_explicitly_disabled",
+                            "severity": "CRITICAL",
+                        }
+                    )
     return findings
 
 
@@ -124,11 +149,13 @@ def validate_request_payload(schema_path, payload_path):
     errors = []
     v = jsonschema.Draft7Validator(schema)
     for error in v.iter_errors(payload):
-        errors.append({
-            "path": list(error.path),
-            "message": error.message,
-            "schema_path": list(error.schema_path),
-        })
+        errors.append(
+            {
+                "path": list(error.path),
+                "message": error.message,
+                "schema_path": list(error.schema_path),
+            }
+        )
     return {"valid": len(errors) == 0, "errors": errors}
 
 
@@ -138,8 +165,9 @@ def main():
     parser.add_argument("--schema", help="JSON Schema for validation")
     parser.add_argument("--payload", help="Request payload to validate")
     parser.add_argument("--output", default="schema_validation_report.json")
-    parser.add_argument("--action", choices=["audit", "security", "validate", "full"],
-                        default="full")
+    parser.add_argument(
+        "--action", choices=["audit", "security", "validate", "full"], default="full"
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

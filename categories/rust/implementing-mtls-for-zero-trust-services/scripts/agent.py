@@ -1,66 +1,88 @@
 #!/usr/bin/env python3
 """Agent for implementing and auditing mutual TLS between services."""
 
-import os
-import ssl
-import json
-import socket
 import argparse
+import json
+import os
+import socket
+import ssl
 from datetime import datetime, timedelta
 
 from cryptography import x509
-from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 
 
 def generate_ca(common_name="Internal mTLS CA", days_valid=3650):
     """Generate a self-signed CA certificate and key."""
     key = rsa.generate_private_key(public_exponent=65537, key_size=4096)
-    subject = issuer = x509.Name([
-        x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Security Team"),
-        x509.NameAttribute(NameOID.COMMON_NAME, common_name),
-    ])
-    cert = (x509.CertificateBuilder()
-            .subject_name(subject)
-            .issuer_name(issuer)
-            .public_key(key.public_key())
-            .serial_number(x509.random_serial_number())
-            .not_valid_before(datetime.utcnow())
-            .not_valid_after(datetime.utcnow() + timedelta(days=days_valid))
-            .add_extension(x509.BasicConstraints(ca=True, path_length=1), critical=True)
-            .add_extension(x509.KeyUsage(
-                digital_signature=True, key_cert_sign=True, crl_sign=True,
-                content_commitment=False, key_encipherment=False,
-                data_encipherment=False, key_agreement=False,
-                encipher_only=False, decipher_only=False,
-            ), critical=True)
-            .sign(key, hashes.SHA256()))
+    subject = issuer = x509.Name(
+        [
+            x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Security Team"),
+            x509.NameAttribute(NameOID.COMMON_NAME, common_name),
+        ]
+    )
+    cert = (
+        x509.CertificateBuilder()
+        .subject_name(subject)
+        .issuer_name(issuer)
+        .public_key(key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(datetime.utcnow())
+        .not_valid_after(datetime.utcnow() + timedelta(days=days_valid))
+        .add_extension(x509.BasicConstraints(ca=True, path_length=1), critical=True)
+        .add_extension(
+            x509.KeyUsage(
+                digital_signature=True,
+                key_cert_sign=True,
+                crl_sign=True,
+                content_commitment=False,
+                key_encipherment=False,
+                data_encipherment=False,
+                key_agreement=False,
+                encipher_only=False,
+                decipher_only=False,
+            ),
+            critical=True,
+        )
+        .sign(key, hashes.SHA256())
+    )
     return key, cert
 
 
 def issue_service_cert(ca_key, ca_cert, service_name, san_dns=None, days_valid=365):
     """Issue a service certificate signed by the CA."""
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    subject = x509.Name([
-        x509.NameAttribute(NameOID.COMMON_NAME, service_name),
-    ])
-    builder = (x509.CertificateBuilder()
-               .subject_name(subject)
-               .issuer_name(ca_cert.subject)
-               .public_key(key.public_key())
-               .serial_number(x509.random_serial_number())
-               .not_valid_before(datetime.utcnow())
-               .not_valid_after(datetime.utcnow() + timedelta(days=days_valid))
-               .add_extension(x509.ExtendedKeyUsage([
-                   ExtendedKeyUsageOID.CLIENT_AUTH,
-                   ExtendedKeyUsageOID.SERVER_AUTH,
-               ]), critical=False))
+    subject = x509.Name(
+        [
+            x509.NameAttribute(NameOID.COMMON_NAME, service_name),
+        ]
+    )
+    builder = (
+        x509.CertificateBuilder()
+        .subject_name(subject)
+        .issuer_name(ca_cert.subject)
+        .public_key(key.public_key())
+        .serial_number(x509.random_serial_number())
+        .not_valid_before(datetime.utcnow())
+        .not_valid_after(datetime.utcnow() + timedelta(days=days_valid))
+        .add_extension(
+            x509.ExtendedKeyUsage(
+                [
+                    ExtendedKeyUsageOID.CLIENT_AUTH,
+                    ExtendedKeyUsageOID.SERVER_AUTH,
+                ]
+            ),
+            critical=False,
+        )
+    )
     dns_names = [x509.DNSName(service_name)]
     if san_dns:
         dns_names.extend([x509.DNSName(d) for d in san_dns])
     builder = builder.add_extension(
-        x509.SubjectAlternativeName(dns_names), critical=False,
+        x509.SubjectAlternativeName(dns_names),
+        critical=False,
     )
     cert = builder.sign(ca_key, hashes.SHA256())
     return key, cert
@@ -69,11 +91,13 @@ def issue_service_cert(ca_key, ca_cert, service_name, san_dns=None, days_valid=3
 def save_pem(key, cert, key_path, cert_path):
     """Save key and certificate to PEM files."""
     with open(key_path, "wb") as f:
-        f.write(key.private_bytes(
-            serialization.Encoding.PEM,
-            serialization.PrivateFormat.TraditionalOpenSSL,
-            serialization.NoEncryption(),
-        ))
+        f.write(
+            key.private_bytes(
+                serialization.Encoding.PEM,
+                serialization.PrivateFormat.TraditionalOpenSSL,
+                serialization.NoEncryption(),
+            )
+        )
     with open(cert_path, "wb") as f:
         f.write(cert.public_bytes(serialization.Encoding.PEM))
 
@@ -105,6 +129,7 @@ def audit_certificates(cert_dir):
     """Audit all certificates in a directory for expiration and key size."""
     findings = []
     from pathlib import Path
+
     for cert_path in Path(cert_dir).glob("*.pem"):
         try:
             with open(cert_path, "rb") as f:
@@ -139,9 +164,11 @@ def main():
     parser.add_argument("--verify-host", help="Host to test mTLS connection")
     parser.add_argument("--verify-port", type=int, default=443)
     parser.add_argument("--output", default="mtls_report.json")
-    parser.add_argument("--action", choices=[
-        "generate_ca", "issue_cert", "verify", "audit", "full_setup"
-    ], default="full_setup")
+    parser.add_argument(
+        "--action",
+        choices=["generate_ca", "issue_cert", "verify", "audit", "full_setup"],
+        default="full_setup",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "results": {}}
@@ -149,10 +176,9 @@ def main():
 
     if args.action in ("generate_ca", "full_setup"):
         ca_key, ca_cert = generate_ca()
-        save_pem(ca_key, ca_cert,
-                 f"{args.output_dir}/ca-key.pem", f"{args.output_dir}/ca.pem")
+        save_pem(ca_key, ca_cert, f"{args.output_dir}/ca-key.pem", f"{args.output_dir}/ca.pem")
         report["results"]["ca"] = {"subject": ca_cert.subject.rfc4514_string()}
-        print(f"[+] CA certificate generated")
+        print("[+] CA certificate generated")
 
     if args.action in ("issue_cert", "full_setup"):
         ca_key_path = f"{args.output_dir}/ca-key.pem"
@@ -164,8 +190,12 @@ def main():
         services = ["api-gateway", "auth-service", "data-service"]
         for svc in services:
             svc_key, svc_cert = issue_service_cert(ca_key, ca_cert, svc)
-            save_pem(svc_key, svc_cert,
-                     f"{args.output_dir}/{svc}-key.pem", f"{args.output_dir}/{svc}.pem")
+            save_pem(
+                svc_key,
+                svc_cert,
+                f"{args.output_dir}/{svc}-key.pem",
+                f"{args.output_dir}/{svc}.pem",
+            )
             print(f"[+] Issued certificate for {svc}")
 
     if args.action in ("audit", "full_setup") and (args.audit_dir or args.output_dir):

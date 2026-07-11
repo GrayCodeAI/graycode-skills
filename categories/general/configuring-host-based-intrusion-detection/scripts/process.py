@@ -7,9 +7,9 @@ file integrity monitoring and intrusion detection events.
 """
 
 import json
-import sys
 import os
-from collections import defaultdict, Counter
+import sys
+from collections import Counter
 from datetime import datetime
 
 
@@ -17,27 +17,29 @@ def parse_wazuh_alerts(json_path: str) -> list:
     """Parse Wazuh alerts JSON file (one JSON object per line)."""
     alerts = []
 
-    with open(json_path, "r", encoding="utf-8") as f:
+    with open(json_path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
             try:
                 alert = json.loads(line)
-                alerts.append({
-                    "timestamp": alert.get("timestamp", ""),
-                    "rule_id": alert.get("rule", {}).get("id", ""),
-                    "rule_description": alert.get("rule", {}).get("description", ""),
-                    "rule_level": alert.get("rule", {}).get("level", 0),
-                    "rule_groups": alert.get("rule", {}).get("groups", []),
-                    "agent_name": alert.get("agent", {}).get("name", ""),
-                    "agent_ip": alert.get("agent", {}).get("ip", ""),
-                    "syscheck_path": alert.get("syscheck", {}).get("path", ""),
-                    "syscheck_event": alert.get("syscheck", {}).get("event", ""),
-                    "syscheck_md5_after": alert.get("syscheck", {}).get("md5_after", ""),
-                    "src_ip": alert.get("data", {}).get("srcip", ""),
-                    "full_log": alert.get("full_log", "")[:300],
-                })
+                alerts.append(
+                    {
+                        "timestamp": alert.get("timestamp", ""),
+                        "rule_id": alert.get("rule", {}).get("id", ""),
+                        "rule_description": alert.get("rule", {}).get("description", ""),
+                        "rule_level": alert.get("rule", {}).get("level", 0),
+                        "rule_groups": alert.get("rule", {}).get("groups", []),
+                        "agent_name": alert.get("agent", {}).get("name", ""),
+                        "agent_ip": alert.get("agent", {}).get("ip", ""),
+                        "syscheck_path": alert.get("syscheck", {}).get("path", ""),
+                        "syscheck_event": alert.get("syscheck", {}).get("event", ""),
+                        "syscheck_md5_after": alert.get("syscheck", {}).get("md5_after", ""),
+                        "src_ip": alert.get("data", {}).get("srcip", ""),
+                        "full_log": alert.get("full_log", "")[:300],
+                    }
+                )
             except json.JSONDecodeError:
                 continue
 
@@ -82,13 +84,15 @@ def analyze_alerts(alerts: list) -> dict:
                 analysis["fim_events"]["deleted"] += 1
 
         if level >= 10:
-            analysis["high_severity"].append({
-                "timestamp": alert["timestamp"],
-                "agent": alert["agent_name"],
-                "rule": alert["rule_description"],
-                "level": level,
-                "detail": alert["full_log"],
-            })
+            analysis["high_severity"].append(
+                {
+                    "timestamp": alert["timestamp"],
+                    "agent": alert["agent_name"],
+                    "rule": alert["rule_description"],
+                    "level": level,
+                    "detail": alert["full_log"],
+                }
+            )
 
         if alert["src_ip"]:
             analysis["attack_sources"][alert["src_ip"]] += 1
@@ -144,9 +148,11 @@ if __name__ == "__main__":
     generate_report(analysis, report_path)
     print(f"Analysis report: {report_path}")
 
-    print(f"\n--- HIDS Alert Summary ---")
+    print("\n--- HIDS Alert Summary ---")
     print(f"Total alerts: {analysis['total_alerts']}")
     print(f"High severity (level >= 10): {len(analysis['high_severity'])}")
-    print(f"FIM: {analysis['fim_events']['modified']} modified, "
-          f"{analysis['fim_events']['added']} added, "
-          f"{analysis['fim_events']['deleted']} deleted")
+    print(
+        f"FIM: {analysis['fim_events']['modified']} modified, "
+        f"{analysis['fim_events']['added']} added, "
+        f"{analysis['fim_events']['deleted']} deleted"
+    )

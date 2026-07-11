@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Agent for auditing Azure Active Directory (Entra ID) configuration."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime, timedelta
 
-from azure.identity import DefaultAzureCredential, ClientSecretCredential
-from azure.mgmt.authorization import AuthorizationManagementClient
 import requests
+from azure.identity import ClientSecretCredential, DefaultAzureCredential
 
 
 def get_graph_token(credential):
@@ -52,8 +51,11 @@ def list_global_admins(token):
         return []
     members = graph_get(token, f"/directoryRoles/{ga_role}/members")
     return [
-        {"displayName": m.get("displayName"), "upn": m.get("userPrincipalName"),
-         "type": m.get("@odata.type", "").split(".")[-1]}
+        {
+            "displayName": m.get("displayName"),
+            "upn": m.get("userPrincipalName"),
+            "type": m.get("@odata.type", "").split(".")[-1],
+        }
         for m in members.get("value", [])
     ]
 
@@ -63,12 +65,16 @@ def list_conditional_access_policies(token):
     policies = graph_get(token, "/identity/conditionalAccess/policies")
     results = []
     for p in policies.get("value", []):
-        results.append({
-            "name": p.get("displayName"),
-            "state": p.get("state"),
-            "grant_controls": p.get("grantControls", {}).get("builtInControls", []),
-            "excluded_groups": p.get("conditions", {}).get("users", {}).get("excludeGroups", []),
-        })
+        results.append(
+            {
+                "name": p.get("displayName"),
+                "state": p.get("state"),
+                "grant_controls": p.get("grantControls", {}).get("builtInControls", []),
+                "excluded_groups": p.get("conditions", {})
+                .get("users", {})
+                .get("excludeGroups", []),
+            }
+        )
     return results
 
 
@@ -76,35 +82,45 @@ def find_stale_users(token, days=90):
     """Find users who have not signed in for specified number of days."""
     cutoff = (datetime.utcnow() - timedelta(days=days)).strftime("%Y-%m-%dT00:00:00Z")
     users = graph_get(
-        token, "/users",
+        token,
+        "/users",
         params={
             "$select": "displayName,userPrincipalName,signInActivity,accountEnabled",
             "$top": "999",
-        }
+        },
     )
     stale = []
     for u in users.get("value", []):
         sign_in = u.get("signInActivity", {})
         last_sign_in = sign_in.get("lastSignInDateTime")
         if last_sign_in and last_sign_in < cutoff:
-            stale.append({
-                "upn": u.get("userPrincipalName"),
-                "display_name": u.get("displayName"),
-                "last_sign_in": last_sign_in,
-                "enabled": u.get("accountEnabled"),
-            })
+            stale.append(
+                {
+                    "upn": u.get("userPrincipalName"),
+                    "display_name": u.get("displayName"),
+                    "last_sign_in": last_sign_in,
+                    "enabled": u.get("accountEnabled"),
+                }
+            )
     return stale
 
 
 def list_guest_users(token):
     """List all guest users in the tenant."""
     users = graph_get(
-        token, "/users",
-        params={"$filter": "userType eq 'Guest'", "$select": "displayName,userPrincipalName,createdDateTime"}
+        token,
+        "/users",
+        params={
+            "$filter": "userType eq 'Guest'",
+            "$select": "displayName,userPrincipalName,createdDateTime",
+        },
     )
     return [
-        {"upn": u.get("userPrincipalName"), "display_name": u.get("displayName"),
-         "created": u.get("createdDateTime")}
+        {
+            "upn": u.get("userPrincipalName"),
+            "display_name": u.get("displayName"),
+            "created": u.get("createdDateTime"),
+        }
         for u in users.get("value", [])
     ]
 
@@ -115,7 +131,8 @@ def check_mfa_registration(token):
         data = graph_get(token, "/reports/authenticationMethods/userRegistrationDetails")
         no_mfa = [
             {"upn": u.get("userPrincipalName"), "mfa_registered": u.get("isMfaRegistered")}
-            for u in data.get("value", []) if not u.get("isMfaRegistered")
+            for u in data.get("value", [])
+            if not u.get("isMfaRegistered")
         ]
         return no_mfa
     except Exception:
@@ -127,12 +144,17 @@ def get_risky_signins(token, days=7):
     since = (datetime.utcnow() - timedelta(days=days)).strftime("%Y-%m-%dT00:00:00Z")
     try:
         data = graph_get(
-            token, "/auditLogs/signIns",
-            params={"$filter": f"riskLevelDuringSignIn ne 'none' and createdDateTime ge {since}"}
+            token,
+            "/auditLogs/signIns",
+            params={"$filter": f"riskLevelDuringSignIn ne 'none' and createdDateTime ge {since}"},
         )
         return [
-            {"user": s.get("userPrincipalName"), "risk": s.get("riskLevelDuringSignIn"),
-             "ip": s.get("ipAddress"), "app": s.get("appDisplayName")}
+            {
+                "user": s.get("userPrincipalName"),
+                "risk": s.get("riskLevelDuringSignIn"),
+                "ip": s.get("ipAddress"),
+                "app": s.get("appDisplayName"),
+            }
             for s in data.get("value", [])
         ]
     except Exception:

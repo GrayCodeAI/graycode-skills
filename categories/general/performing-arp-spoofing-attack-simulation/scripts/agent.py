@@ -7,19 +7,20 @@ to test network detection capabilities and validate DAI countermeasures.
 WARNING: Only use with explicit written authorization on isolated test networks.
 """
 
-import json
 import sys
 import time
 from datetime import datetime, timezone
 
-from scapy.all import ARP, Ether, sendp, srp, conf, get_if_list, get_if_hwaddr
+from scapy.all import ARP, Ether, get_if_hwaddr, sendp, srp
 
 
 def get_mac(ip: str, iface: str) -> str:
     """Resolve MAC address for a given IP using ARP request."""
     ans, _ = srp(
         Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=ip),
-        timeout=3, verbose=False, iface=iface,
+        timeout=3,
+        verbose=False,
+        iface=iface,
     )
     if ans:
         return ans[0][1].hwsrc
@@ -30,21 +31,27 @@ def scan_network(network_cidr: str, iface: str) -> list[dict]:
     """Scan local network segment to discover active hosts."""
     ans, _ = srp(
         Ether(dst="ff:ff:ff:ff:ff:ff") / ARP(pdst=network_cidr),
-        timeout=5, verbose=False, iface=iface,
+        timeout=5,
+        verbose=False,
+        iface=iface,
     )
     hosts = []
-    for sent, received in ans:
-        hosts.append({
-            "ip": received.psrc,
-            "mac": received.hwsrc,
-            "responded": True,
-        })
+    for _sent, received in ans:
+        hosts.append(
+            {
+                "ip": received.psrc,
+                "mac": received.hwsrc,
+                "responded": True,
+            }
+        )
     return hosts
 
 
 def craft_arp_poison_packets(
-    target_ip: str, target_mac: str,
-    gateway_ip: str, gateway_mac: str,
+    target_ip: str,
+    target_mac: str,
+    gateway_ip: str,
+    gateway_mac: str,
     attacker_mac: str,
 ) -> tuple:
     """Craft ARP poison packets for target and gateway."""
@@ -86,8 +93,10 @@ def send_arp_poison(
 
 
 def restore_arp(
-    target_ip: str, target_mac: str,
-    gateway_ip: str, gateway_mac: str,
+    target_ip: str,
+    target_mac: str,
+    gateway_ip: str,
+    gateway_mac: str,
     iface: str,
 ) -> None:
     """Restore legitimate ARP entries to undo spoofing."""
@@ -126,8 +135,11 @@ def verify_detection(expected_alerts: list[str]) -> dict:
 
 
 def generate_report(
-    hosts: list, target_ip: str, gateway_ip: str,
-    send_results: dict, detection: dict,
+    hosts: list,
+    target_ip: str,
+    gateway_ip: str,
+    send_results: dict,
+    detection: dict,
 ) -> str:
     """Generate ARP spoofing simulation report."""
     lines = [

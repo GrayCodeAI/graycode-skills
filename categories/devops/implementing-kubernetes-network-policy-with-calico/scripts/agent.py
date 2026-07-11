@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Agent for auditing and generating Calico Kubernetes network policies."""
 
-import json
 import argparse
+import json
 import subprocess
-import yaml
 from datetime import datetime
-from collections import Counter
 
 
 def kubectl_get(resource, namespace=None, label_selector=None):
@@ -30,7 +28,9 @@ def list_network_policies():
     calico_gnp = kubectl_get("globalnetworkpolicy")
     return {
         "k8s_network_policies": k8s_np.get("items", []) if isinstance(k8s_np, dict) else [],
-        "calico_global_policies": calico_gnp.get("items", []) if isinstance(calico_gnp, dict) else [],
+        "calico_global_policies": calico_gnp.get("items", [])
+        if isinstance(calico_gnp, dict)
+        else [],
     }
 
 
@@ -50,41 +50,52 @@ def audit_network_policies(policies_path):
 
         policy_types = spec.get("policyTypes", [])
         if "Ingress" not in policy_types and "Egress" not in policy_types:
-            findings.append({
-                "policy": metadata.get("name", ""),
-                "namespace": ns,
-                "issue": "No policyTypes defined (defaults to ingress-only)",
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "policy": metadata.get("name", ""),
+                    "namespace": ns,
+                    "issue": "No policyTypes defined (defaults to ingress-only)",
+                    "severity": "MEDIUM",
+                }
+            )
 
         if "Egress" not in policy_types:
-            findings.append({
-                "policy": metadata.get("name", ""),
-                "namespace": ns,
-                "issue": "No egress policy - all outbound traffic allowed",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "policy": metadata.get("name", ""),
+                    "namespace": ns,
+                    "issue": "No egress policy - all outbound traffic allowed",
+                    "severity": "HIGH",
+                }
+            )
 
         ingress_rules = spec.get("ingress", [])
         for rule in ingress_rules:
             if not rule.get("from"):
-                findings.append({
-                    "policy": metadata.get("name", ""),
-                    "issue": "Ingress rule allows from all sources",
-                    "severity": "HIGH",
-                })
+                findings.append(
+                    {
+                        "policy": metadata.get("name", ""),
+                        "issue": "Ingress rule allows from all sources",
+                        "severity": "HIGH",
+                    }
+                )
 
         egress_rules = spec.get("egress", [])
         for rule in egress_rules:
             if not rule.get("to"):
-                findings.append({
-                    "policy": metadata.get("name", ""),
-                    "issue": "Egress rule allows to all destinations",
-                    "severity": "MEDIUM",
-                })
+                findings.append(
+                    {
+                        "policy": metadata.get("name", ""),
+                        "issue": "Egress rule allows to all destinations",
+                        "severity": "MEDIUM",
+                    }
+                )
 
-    return {"findings": findings, "namespaces_covered": list(namespaces_covered),
-            "total_policies": len(policies)}
+    return {
+        "findings": findings,
+        "namespaces_covered": list(namespaces_covered),
+        "total_policies": len(policies),
+    }
 
 
 def generate_default_deny(namespace):
@@ -109,18 +120,25 @@ def generate_allow_dns_egress(namespace):
         "spec": {
             "podSelector": {},
             "policyTypes": ["Egress"],
-            "egress": [{
-                "to": [{"namespaceSelector": {"matchLabels": {
-                    "kubernetes.io/metadata.name": "kube-system"}}}],
-                "ports": [{"protocol": "UDP", "port": 53},
-                           {"protocol": "TCP", "port": 53}],
-            }],
+            "egress": [
+                {
+                    "to": [
+                        {
+                            "namespaceSelector": {
+                                "matchLabels": {"kubernetes.io/metadata.name": "kube-system"}
+                            }
+                        }
+                    ],
+                    "ports": [{"protocol": "UDP", "port": 53}, {"protocol": "TCP", "port": 53}],
+                }
+            ],
         },
     }
 
 
-def generate_app_policy(namespace, app_label, allowed_ingress_labels=None,
-                         allowed_egress_ports=None):
+def generate_app_policy(
+    namespace, app_label, allowed_ingress_labels=None, allowed_egress_ports=None
+):
     """Generate a Calico-style network policy for an application."""
     policy = {
         "apiVersion": "networking.k8s.io/v1",
@@ -135,15 +153,20 @@ def generate_app_policy(namespace, app_label, allowed_ingress_labels=None,
     }
     if allowed_ingress_labels:
         for label in allowed_ingress_labels:
-            policy["spec"]["ingress"].append({
-                "from": [{"podSelector": {"matchLabels": {"app": label}}}],
-            })
+            policy["spec"]["ingress"].append(
+                {
+                    "from": [{"podSelector": {"matchLabels": {"app": label}}}],
+                }
+            )
     if allowed_egress_ports:
         for port_info in allowed_egress_ports:
-            policy["spec"]["egress"].append({
-                "ports": [{"protocol": port_info.get("protocol", "TCP"),
-                           "port": port_info["port"]}],
-            })
+            policy["spec"]["egress"].append(
+                {
+                    "ports": [
+                        {"protocol": port_info.get("protocol", "TCP"), "port": port_info["port"]}
+                    ],
+                }
+            )
     return policy
 
 
@@ -176,8 +199,7 @@ def main():
     parser.add_argument("--audit", help="Network policies JSON to audit")
     parser.add_argument("--namespace", help="Namespace for policy generation")
     parser.add_argument("--app", help="App label for policy generation")
-    parser.add_argument("--action", choices=["audit", "generate", "check", "full"],
-                        default="full")
+    parser.add_argument("--action", choices=["audit", "generate", "check", "full"], default="full")
     parser.add_argument("--output", default="calico_netpol_report.json")
     args = parser.parse_args()
 
@@ -186,7 +208,9 @@ def main():
     if args.action in ("audit", "full") and args.audit:
         result = audit_network_policies(args.audit)
         report["results"]["audit"] = result
-        print(f"[+] Audit: {len(result['findings'])} findings across {result['total_policies']} policies")
+        print(
+            f"[+] Audit: {len(result['findings'])} findings across {result['total_policies']} policies"
+        )
 
     if args.action in ("generate", "full") and args.namespace:
         policies = [

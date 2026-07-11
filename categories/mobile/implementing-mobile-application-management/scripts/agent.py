@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Mobile Application Management Agent - audits MDM policies, app inventory, and compliance posture."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 from collections import defaultdict
@@ -14,10 +14,17 @@ logger = logging.getLogger(__name__)
 
 def mdm_api_request(base_url, token, endpoint, method="GET"):
     """Execute MDM API request via curl."""
-    cmd = ["curl", "-s", "-X", method,
-           "-H", f"Authorization: Bearer {token}",
-           "-H", "Accept: application/json",
-           f"{base_url}{endpoint}"]
+    cmd = [
+        "curl",
+        "-s",
+        "-X",
+        method,
+        "-H",
+        f"Authorization: Bearer {token}",
+        "-H",
+        "Accept: application/json",
+        f"{base_url}{endpoint}",
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     return json.loads(result.stdout) if result.stdout else {}
 
@@ -73,11 +80,15 @@ def audit_app_security(apps):
         if app.get("data_sharing_allowed"):
             findings.append({"app": app_name, "issue": "data_sharing_enabled", "severity": "high"})
         if not app.get("encryption_required"):
-            findings.append({"app": app_name, "issue": "encryption_not_required", "severity": "high"})
+            findings.append(
+                {"app": app_name, "issue": "encryption_not_required", "severity": "high"}
+            )
         if not app.get("pin_required"):
             findings.append({"app": app_name, "issue": "no_app_pin", "severity": "medium"})
         if app.get("allow_backup_to_cloud"):
-            findings.append({"app": app_name, "issue": "cloud_backup_allowed", "severity": "medium"})
+            findings.append(
+                {"app": app_name, "issue": "cloud_backup_allowed", "severity": "medium"}
+            )
     return findings
 
 
@@ -95,12 +106,14 @@ def audit_protection_policies(policies):
             "offline_grace_period_set": bool(policy.get("offline_interval")),
         }
         passed = sum(1 for v in checks.values() if v)
-        results.append({
-            "policy_name": policy.get("name", "unknown"),
-            "platform": policy.get("platform", "unknown"),
-            "checks": checks,
-            "score": round(passed / max(len(checks), 1) * 100, 1),
-        })
+        results.append(
+            {
+                "policy_name": policy.get("name", "unknown"),
+                "platform": policy.get("platform", "unknown"),
+                "checks": checks,
+                "score": round(passed / max(len(checks), 1) * 100, 1),
+            }
+        )
     return results
 
 
@@ -116,7 +129,8 @@ def generate_report(devices, apps, policies, protection_policies):
         "app_findings_detail": app_findings[:20],
         "protection_policy_audit": policy_audit,
         "overall_mam_score": round(
-            sum(p["score"] for p in policy_audit) / max(len(policy_audit), 1), 1),
+            sum(p["score"] for p in policy_audit) / max(len(policy_audit), 1), 1
+        ),
     }
     return report
 
@@ -135,10 +149,13 @@ def main():
     report = generate_report(devices, apps, policies, protection)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("MAM audit: %d devices (%.1f%% compliant), %d app findings, MAM score %.1f%%",
-                report["device_compliance"]["total_devices"],
-                report["device_compliance"]["compliance_rate"],
-                report["app_security_findings"], report["overall_mam_score"])
+    logger.info(
+        "MAM audit: %d devices (%.1f%% compliant), %d app findings, MAM score %.1f%%",
+        report["device_compliance"]["total_devices"],
+        report["device_compliance"]["compliance_rate"],
+        report["app_security_findings"],
+        report["overall_mam_score"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

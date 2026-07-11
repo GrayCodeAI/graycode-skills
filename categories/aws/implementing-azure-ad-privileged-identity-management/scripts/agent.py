@@ -7,7 +7,6 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 try:
     import requests
@@ -37,63 +36,75 @@ class PIMClient:
                 "client_id": client_id,
                 "client_secret": client_secret,
                 "scope": "https://graph.microsoft.com/.default",
-            }, timeout=15)
+            },
+            timeout=15,
+        )
         resp.raise_for_status()
         return resp.json()["access_token"]
 
-    def list_role_definitions(self) -> List[dict]:
+    def list_role_definitions(self) -> list[dict]:
         """List available directory role definitions."""
-        resp = self.session.get(f"{GRAPH_BASE}/roleManagement/directory/roleDefinitions", timeout=30)
+        resp = self.session.get(
+            f"{GRAPH_BASE}/roleManagement/directory/roleDefinitions", timeout=30
+        )
         resp.raise_for_status()
         return resp.json().get("value", [])
 
-    def list_eligible_assignments(self) -> List[dict]:
+    def list_eligible_assignments(self) -> list[dict]:
         """List PIM eligible role assignments."""
         resp = self.session.get(
-            f"{GRAPH_BASE}/roleManagement/directory/roleEligibilityScheduleInstances", timeout=30)
+            f"{GRAPH_BASE}/roleManagement/directory/roleEligibilityScheduleInstances", timeout=30
+        )
         resp.raise_for_status()
         return resp.json().get("value", [])
 
-    def list_active_assignments(self) -> List[dict]:
+    def list_active_assignments(self) -> list[dict]:
         """List currently active (activated) role assignments."""
         resp = self.session.get(
-            f"{GRAPH_BASE}/roleManagement/directory/roleAssignmentScheduleInstances", timeout=30)
+            f"{GRAPH_BASE}/roleManagement/directory/roleAssignmentScheduleInstances", timeout=30
+        )
         resp.raise_for_status()
         return resp.json().get("value", [])
 
-    def list_role_settings(self) -> List[dict]:
+    def list_role_settings(self) -> list[dict]:
         """List PIM role management policy assignments."""
         resp = self.session.get(
             f"{GRAPH_BASE}/policies/roleManagementPolicyAssignments?"
-            "$filter=scopeId eq '/' and scopeType eq 'DirectoryRole'", timeout=30)
+            "$filter=scopeId eq '/' and scopeType eq 'DirectoryRole'",
+            timeout=30,
+        )
         resp.raise_for_status()
         return resp.json().get("value", [])
 
-    def get_activation_requests(self, top: int = 50) -> List[dict]:
+    def get_activation_requests(self, top: int = 50) -> list[dict]:
         """List recent role activation requests."""
         resp = self.session.get(
             f"{GRAPH_BASE}/roleManagement/directory/roleEligibilityScheduleRequests?"
-            f"$top={top}&$orderby=createdDateTime desc", timeout=30)
+            f"$top={top}&$orderby=createdDateTime desc",
+            timeout=30,
+        )
         resp.raise_for_status()
         return resp.json().get("value", [])
 
 
-def audit_permanent_assignments(active: List[dict], eligible: List[dict]) -> List[dict]:
+def audit_permanent_assignments(active: list[dict], eligible: list[dict]) -> list[dict]:
     """Identify permanent (non-PIM) role assignments that should be converted to eligible."""
     eligible_ids = {a.get("principalId") for a in eligible}
     permanent = []
     for a in active:
         if a.get("assignmentType") == "Assigned" and a.get("principalId") not in eligible_ids:
-            permanent.append({
-                "principal_id": a.get("principalId", ""),
-                "role": a.get("roleDefinition", {}).get("displayName", ""),
-                "start": a.get("startDateTime", ""),
-                "recommendation": "Convert to eligible assignment with JIT activation",
-            })
+            permanent.append(
+                {
+                    "principal_id": a.get("principalId", ""),
+                    "role": a.get("roleDefinition", {}).get("displayName", ""),
+                    "start": a.get("startDateTime", ""),
+                    "recommendation": "Convert to eligible assignment with JIT activation",
+                }
+            )
     return permanent
 
 
-def compute_pim_coverage(active: List[dict], eligible: List[dict]) -> dict:
+def compute_pim_coverage(active: list[dict], eligible: list[dict]) -> dict:
     """Calculate PIM coverage metrics."""
     total = len(active)
     eligible_count = len(eligible)
@@ -123,7 +134,8 @@ def generate_report(client: PIMClient) -> dict:
     }
     if permanent:
         report["recommendations"].append(
-            f"Convert {len(permanent)} permanent assignments to PIM-eligible")
+            f"Convert {len(permanent)} permanent assignments to PIM-eligible"
+        )
     if coverage["pim_coverage_pct"] < 80:
         report["recommendations"].append("Increase PIM coverage above 80%")
     return report

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Agent for analyzing Windows event logs in Splunk for SOC operations."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime
 
 import splunklib.client as client
@@ -21,7 +21,7 @@ def search(service, query, earliest="-24h", latest="now"):
     """Run a blocking Splunk search and return results."""
     job = service.jobs.create(
         f"search {query}",
-        **{"earliest_time": earliest, "latest_time": latest, "exec_mode": "blocking"}
+        **{"earliest_time": earliest, "latest_time": latest, "exec_mode": "blocking"},
     )
     reader = results.JSONResultsReader(job.results(output_mode="json"))
     rows = [r for r in reader if isinstance(r, dict)]
@@ -59,7 +59,7 @@ def detect_new_admin_accounts(service, earliest="-7d"):
     """Detect new accounts added to the Administrators group (T1136.001)."""
     query = (
         'index=wineventlog sourcetype="WinEventLog:Security" EventCode=4720 '
-        '| join TargetUserName type=left [search index=wineventlog EventCode=4732 '
+        "| join TargetUserName type=left [search index=wineventlog EventCode=4732 "
         'TargetUserName="Administrators" | rename MemberName as TargetUserName] '
         "| table _time, SubjectUserName, TargetUserName, ComputerName"
     )
@@ -125,10 +125,20 @@ def main():
     parser.add_argument("--password", default=os.getenv("SPLUNK_PASSWORD", ""))
     parser.add_argument("--earliest", default="-24h")
     parser.add_argument("--hostname", help="Target hostname for timeline")
-    parser.add_argument("--action", choices=[
-        "brute_force", "password_spray", "new_admin", "lsass_access",
-        "lateral_smb", "psexec", "timeline", "full_hunt"
-    ], default="full_hunt")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "brute_force",
+            "password_spray",
+            "new_admin",
+            "lsass_access",
+            "lateral_smb",
+            "psexec",
+            "timeline",
+            "full_hunt",
+        ],
+        default="full_hunt",
+    )
     args = parser.parse_args()
 
     svc = connect(args.host, args.port, args.username, args.password)
@@ -158,7 +168,13 @@ def main():
         findings["timeline"] = build_forensic_timeline(svc, args.hostname, args.earliest)
         print(f"[+] Timeline events: {len(findings['timeline'])}")
 
-    print(json.dumps({"generated_at": datetime.utcnow().isoformat(), "findings": findings}, indent=2, default=str))
+    print(
+        json.dumps(
+            {"generated_at": datetime.utcnow().isoformat(), "findings": findings},
+            indent=2,
+            default=str,
+        )
+    )
 
 
 if __name__ == "__main__":

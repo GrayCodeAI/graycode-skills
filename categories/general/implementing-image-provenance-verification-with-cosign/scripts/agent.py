@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Agent for verifying container image provenance using Sigstore Cosign."""
 
-import json
 import argparse
+import contextlib
+import json
 import subprocess
 from datetime import datetime
 
@@ -24,17 +25,21 @@ def verify_image(image_ref, key=None, certificate_identity=None, certificate_oid
     if key:
         args.extend(["--key", key])
     elif certificate_identity and certificate_oidc_issuer:
-        args.extend(["--certificate-identity", certificate_identity,
-                      "--certificate-oidc-issuer", certificate_oidc_issuer])
+        args.extend(
+            [
+                "--certificate-identity",
+                certificate_identity,
+                "--certificate-oidc-issuer",
+                certificate_oidc_issuer,
+            ]
+        )
     args.append(image_ref)
     result = run_cosign(args)
     verified = result["returncode"] == 0
     attestations = []
     if verified and result["stdout"]:
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             attestations = json.loads(result["stdout"])
-        except json.JSONDecodeError:
-            pass
     return {
         "image": image_ref,
         "verified": verified,
@@ -88,8 +93,9 @@ def audit_registry_images(images_list, key=None, identity=None, issuer=None):
     """Audit multiple container images for valid signatures."""
     results = []
     for image in images_list:
-        result = verify_image(image, key=key, certificate_identity=identity,
-                              certificate_oidc_issuer=issuer)
+        result = verify_image(
+            image, key=key, certificate_identity=identity, certificate_oidc_issuer=issuer
+        )
         result["severity"] = "INFO" if result["verified"] else "HIGH"
         results.append(result)
     signed = sum(1 for r in results if r["verified"])
@@ -111,21 +117,32 @@ def generate_kyverno_policy(image_patterns, key=None, identity=None, issuer=None
         "spec": {
             "validationFailureAction": "Enforce",
             "webhookTimeoutSeconds": 30,
-            "rules": [{
-                "name": "verify-cosign-signature",
-                "match": {"any": [{"resources": {"kinds": ["Pod"]}}]},
-                "verifyImages": [{
-                    "imageReferences": image_patterns,
-                    "attestors": [{
-                        "entries": [{
-                            "keyless": {
-                                "subject": identity or "*",
-                                "issuer": issuer or "https://token.actions.githubusercontent.com",
-                            }
-                        }] if not key else [{"keys": {"publicKeys": key}}]
-                    }],
-                }],
-            }],
+            "rules": [
+                {
+                    "name": "verify-cosign-signature",
+                    "match": {"any": [{"resources": {"kinds": ["Pod"]}}]},
+                    "verifyImages": [
+                        {
+                            "imageReferences": image_patterns,
+                            "attestors": [
+                                {
+                                    "entries": [
+                                        {
+                                            "keyless": {
+                                                "subject": identity or "*",
+                                                "issuer": issuer
+                                                or "https://token.actions.githubusercontent.com",
+                                            }
+                                        }
+                                    ]
+                                    if not key
+                                    else [{"keys": {"publicKeys": key}}]
+                                }
+                            ],
+                        }
+                    ],
+                }
+            ],
         },
     }
     return policy
@@ -178,22 +195,27 @@ def main():
     report = {"generated_at": datetime.utcnow().isoformat(), "results": {}}
 
     if args.verify:
-        result = verify_image(args.verify, key=args.key,
-                              certificate_identity=args.identity,
-                              certificate_oidc_issuer=args.issuer)
+        result = verify_image(
+            args.verify,
+            key=args.key,
+            certificate_identity=args.identity,
+            certificate_oidc_issuer=args.issuer,
+        )
         report["results"]["verification"] = result
         status = "VERIFIED" if result["verified"] else "FAILED"
         print(f"[+] {args.verify}: {status}")
 
     if args.audit:
-        result = audit_registry_images(args.audit, key=args.key,
-                                       identity=args.identity, issuer=args.issuer)
+        result = audit_registry_images(
+            args.audit, key=args.key, identity=args.identity, issuer=args.issuer
+        )
         report["results"]["audit"] = result
         print(f"[+] Audit: {result['signed']}/{result['total_images']} signed")
 
     if args.gen_policy:
-        policy = generate_kyverno_policy(args.gen_policy, key=args.key,
-                                          identity=args.identity, issuer=args.issuer)
+        policy = generate_kyverno_policy(
+            args.gen_policy, key=args.key, identity=args.identity, issuer=args.issuer
+        )
         report["results"]["kyverno_policy"] = policy
         print("[+] Kyverno policy generated")
 

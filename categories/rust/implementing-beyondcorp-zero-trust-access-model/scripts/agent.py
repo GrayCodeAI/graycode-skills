@@ -8,7 +8,6 @@ import os
 import subprocess
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 try:
     import requests
@@ -23,13 +22,14 @@ def get_gcloud_token() -> str:
     """Get access token from gcloud CLI."""
     try:
         result = subprocess.run(
-            ["gcloud", "auth", "print-access-token"], capture_output=True, text=True, timeout=10)
+            ["gcloud", "auth", "print-access-token"], capture_output=True, text=True, timeout=10
+        )
         return result.stdout.strip()
     except FileNotFoundError:
         return ""
 
 
-def list_iap_resources(project_id: str, token: str) -> List[dict]:
+def list_iap_resources(project_id: str, token: str) -> list[dict]:
     """List IAP-protected resources in a GCP project."""
     url = f"https://iap.googleapis.com/v1/projects/{project_id}/iap_tunnel/locations/-/destGroups"
     resp = requests.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
@@ -47,20 +47,21 @@ def get_iap_settings(project_id: str, resource: str, token: str) -> dict:
     return {"error": resp.status_code}
 
 
-def list_access_levels(org_id: str, policy_name: str, token: str) -> List[dict]:
+def list_access_levels(org_id: str, policy_name: str, token: str) -> list[dict]:
     """List Access Context Manager access levels."""
-    url = f"https://accesscontextmanager.googleapis.com/v1/accessPolicies/{policy_name}/accessLevels"
+    url = (
+        f"https://accesscontextmanager.googleapis.com/v1/accessPolicies/{policy_name}/accessLevels"
+    )
     resp = requests.get(url, headers={"Authorization": f"Bearer {token}"}, timeout=30)
     if resp.status_code == 200:
         return resp.json().get("accessLevels", [])
     return []
 
 
-def audit_iap_bindings(project_id: str, token: str) -> List[dict]:
+def audit_iap_bindings(project_id: str, token: str) -> list[dict]:
     """Audit IAM policy bindings for IAP-secured resources."""
     url = f"https://cloudresourcemanager.googleapis.com/v1/projects/{project_id}:getIamPolicy"
-    resp = requests.post(url, headers={"Authorization": f"Bearer {token}"},
-                         json={}, timeout=30)
+    resp = requests.post(url, headers={"Authorization": f"Bearer {token}"}, json={}, timeout=30)
     if resp.status_code != 200:
         return []
     bindings = resp.json().get("bindings", [])

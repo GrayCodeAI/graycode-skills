@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Agent for performing DMARC policy enforcement rollout with DNS record analysis."""
 
-import json
 import argparse
+import json
 from datetime import datetime
 
 try:
@@ -36,9 +36,13 @@ def parse_dmarc_tags(record, domain):
     if policy == "none":
         findings.append({"severity": "HIGH", "finding": "DMARC policy is 'none' — no enforcement"})
     elif policy == "quarantine":
-        findings.append({"severity": "MEDIUM", "finding": "DMARC policy is 'quarantine' — partial enforcement"})
+        findings.append(
+            {"severity": "MEDIUM", "finding": "DMARC policy is 'quarantine' — partial enforcement"}
+        )
     if "rua" not in tags:
-        findings.append({"severity": "MEDIUM", "finding": "No aggregate report URI (rua) configured"})
+        findings.append(
+            {"severity": "MEDIUM", "finding": "No aggregate report URI (rua) configured"}
+        )
     pct = int(tags.get("pct", "100"))
     if pct < 100:
         findings.append({"severity": "INFO", "finding": f"Policy applied to {pct}% of messages"})
@@ -46,12 +50,22 @@ def parse_dmarc_tags(record, domain):
     if sp == "none" and policy != "none":
         findings.append({"severity": "MEDIUM", "finding": "Subdomain policy (sp) is 'none'"})
     return {
-        "domain": domain, "dmarc_found": True, "record": record,
-        "policy": policy, "subdomain_policy": sp, "percentage": pct,
-        "rua": tags.get("rua"), "ruf": tags.get("ruf"),
-        "adkim": tags.get("adkim", "r"), "aspf": tags.get("aspf", "r"),
+        "domain": domain,
+        "dmarc_found": True,
+        "record": record,
+        "policy": policy,
+        "subdomain_policy": sp,
+        "percentage": pct,
+        "rua": tags.get("rua"),
+        "ruf": tags.get("ruf"),
+        "adkim": tags.get("adkim", "r"),
+        "aspf": tags.get("aspf", "r"),
         "findings": findings,
-        "enforcement_level": "full" if policy == "reject" and pct == 100 else "partial" if policy != "none" else "none",
+        "enforcement_level": "full"
+        if policy == "reject" and pct == 100
+        else "partial"
+        if policy != "none"
+        else "none",
     }
 
 
@@ -64,9 +78,14 @@ def check_spf(domain):
             if txt.startswith("v=spf1"):
                 mechanisms = txt.split()
                 qualifier = mechanisms[-1] if mechanisms else "~all"
-                return {"domain": domain, "spf_found": True, "record": txt,
-                        "mechanisms": mechanisms, "qualifier": qualifier,
-                        "strict": qualifier == "-all"}
+                return {
+                    "domain": domain,
+                    "spf_found": True,
+                    "record": txt,
+                    "mechanisms": mechanisms,
+                    "qualifier": qualifier,
+                    "strict": qualifier == "-all",
+                }
         return {"domain": domain, "spf_found": False}
     except Exception as e:
         return {"domain": domain, "spf_found": False, "error": str(e)}
@@ -80,7 +99,12 @@ def check_dkim(domain, selector="default"):
         for rdata in answers:
             txt = rdata.to_text().strip('"')
             if "p=" in txt:
-                return {"domain": domain, "selector": selector, "dkim_found": True, "record": txt[:200]}
+                return {
+                    "domain": domain,
+                    "selector": selector,
+                    "dkim_found": True,
+                    "record": txt[:200],
+                }
         return {"domain": domain, "selector": selector, "dkim_found": False}
     except Exception as e:
         return {"domain": domain, "selector": selector, "dkim_found": False, "error": str(e)}
@@ -112,10 +136,15 @@ def audit_domains(domains, selectors=None):
             score += 15
         if dkim_results:
             score += 30
-        results.append({
-            "domain": domain, "dmarc": dmarc, "spf": spf,
-            "dkim": dkim_results, "security_score": score,
-        })
+        results.append(
+            {
+                "domain": domain,
+                "dmarc": dmarc,
+                "spf": spf,
+                "dkim": dkim_results,
+                "security_score": score,
+            }
+        )
     return {"timestamp": datetime.utcnow().isoformat(), "domains": results}
 
 

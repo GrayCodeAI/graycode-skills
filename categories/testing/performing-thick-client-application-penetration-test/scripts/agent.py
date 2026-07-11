@@ -6,14 +6,13 @@ dynamic analysis (process monitoring, DLL search order checks),
 local storage auditing, and API traffic interception assessment.
 """
 
-import subprocess
 import json
-import sys
 import os
 import re
 import sqlite3
-from pathlib import Path
+import sys
 from datetime import datetime
+from pathlib import Path
 
 
 class ThickClientPentestAgent:
@@ -29,12 +28,14 @@ class ThickClientPentestAgent:
         """Extract readable strings from binary for credential/URL discovery."""
         patterns = {
             "url": re.compile(r'https?://[^\s"\'<>]{5,200}'),
-            "email": re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'),
-            "ip_addr": re.compile(r'\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b'),
+            "email": re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"),
+            "ip_addr": re.compile(r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"),
             "password_hint": re.compile(
-                r'(?i)(password|passwd|pwd|secret|api.?key|token|'
-                r'connectionstring|jdbc|bearer)', re.IGNORECASE),
-            "sql_query": re.compile(r'(?i)(SELECT|INSERT|UPDATE|DELETE)\s+', re.IGNORECASE),
+                r"(?i)(password|passwd|pwd|secret|api.?key|token|"
+                r"connectionstring|jdbc|bearer)",
+                re.IGNORECASE,
+            ),
+            "sql_query": re.compile(r"(?i)(SELECT|INSERT|UPDATE|DELETE)\s+", re.IGNORECASE),
         }
         results = {k: [] for k in patterns}
         try:
@@ -46,17 +47,21 @@ class ThickClientPentestAgent:
                 results[name] = list(set(matches))[:50]
 
             if results["password_hint"]:
-                self.findings.append({
-                    "type": "Credential Reference in Binary",
-                    "severity": "Medium",
-                    "details": f"Found {len(results['password_hint'])} credential-related strings",
-                })
+                self.findings.append(
+                    {
+                        "type": "Credential Reference in Binary",
+                        "severity": "Medium",
+                        "details": f"Found {len(results['password_hint'])} credential-related strings",
+                    }
+                )
             if results["sql_query"]:
-                self.findings.append({
-                    "type": "SQL Queries in Binary",
-                    "severity": "Medium",
-                    "details": "Embedded SQL may be vulnerable to injection",
-                })
+                self.findings.append(
+                    {
+                        "type": "SQL Queries in Binary",
+                        "severity": "Medium",
+                        "details": "Embedded SQL may be vulnerable to injection",
+                    }
+                )
         except (OSError, PermissionError) as exc:
             results["error"] = str(exc)
         return results
@@ -89,28 +94,42 @@ class ThickClientPentestAgent:
             Path(localappdata) / app_name if localappdata else None,
             self.app_path.parent,
         ]
-        sensitive_exts = {".db", ".sqlite", ".sqlite3", ".json", ".xml",
-                         ".config", ".ini", ".cfg", ".log"}
+        sensitive_exts = {
+            ".db",
+            ".sqlite",
+            ".sqlite3",
+            ".json",
+            ".xml",
+            ".config",
+            ".ini",
+            ".cfg",
+            ".log",
+        }
 
         for search_dir in search_dirs:
             if search_dir is None or not search_dir.exists():
                 continue
-            for root, dirs, files in os.walk(search_dir):
+            for root, _dirs, files in os.walk(search_dir):
                 for fname in files:
                     fpath = Path(root) / fname
                     if fpath.suffix.lower() in sensitive_exts:
                         size = fpath.stat().st_size
-                        locations.append({
-                            "path": str(fpath), "type": fpath.suffix,
-                            "size_bytes": size,
-                        })
+                        locations.append(
+                            {
+                                "path": str(fpath),
+                                "type": fpath.suffix,
+                                "size_bytes": size,
+                            }
+                        )
 
         if locations:
-            self.findings.append({
-                "type": "Sensitive Local Files",
-                "severity": "Medium",
-                "details": f"Found {len(locations)} potentially sensitive files",
-            })
+            self.findings.append(
+                {
+                    "type": "Sensitive Local Files",
+                    "severity": "Medium",
+                    "details": f"Found {len(locations)} potentially sensitive files",
+                }
+            )
         return locations
 
     def audit_sqlite_databases(self, db_paths):
@@ -126,21 +145,34 @@ class ThickClientPentestAgent:
                 sensitive_tables = []
                 for table in tables:
                     lower = table.lower()
-                    if any(kw in lower for kw in
-                           ["user", "account", "credential", "auth",
-                            "login", "password", "token", "session"]):
+                    if any(
+                        kw in lower
+                        for kw in [
+                            "user",
+                            "account",
+                            "credential",
+                            "auth",
+                            "login",
+                            "password",
+                            "token",
+                            "session",
+                        ]
+                    ):
                         cursor.execute(f'SELECT COUNT(*) FROM "{table}"')
                         count = cursor.fetchone()[0]
                         sensitive_tables.append({"table": table, "rows": count})
 
                 if sensitive_tables:
-                    self.findings.append({
-                        "type": "Sensitive SQLite Database",
-                        "severity": "High",
-                        "details": f"{db_path}: {sensitive_tables}",
-                    })
-                results.append({"database": db_path, "tables": tables,
-                                "sensitive_tables": sensitive_tables})
+                    self.findings.append(
+                        {
+                            "type": "Sensitive SQLite Database",
+                            "severity": "High",
+                            "details": f"{db_path}: {sensitive_tables}",
+                        }
+                    )
+                results.append(
+                    {"database": db_path, "tables": tables, "sensitive_tables": sensitive_tables}
+                )
                 conn.close()
             except sqlite3.Error as exc:
                 results.append({"database": db_path, "error": str(exc)})
@@ -158,14 +190,15 @@ class ThickClientPentestAgent:
         app_dir_writable = os.access(app_dir, os.W_OK)
 
         if writable_dirs or app_dir_writable:
-            self.findings.append({
-                "type": "DLL Hijacking Risk",
-                "severity": "High",
-                "details": f"Writable PATH dirs: {len(writable_dirs)}, "
-                           f"App dir writable: {app_dir_writable}",
-            })
-        return {"writable_path_dirs": writable_dirs,
-                "app_dir_writable": app_dir_writable}
+            self.findings.append(
+                {
+                    "type": "DLL Hijacking Risk",
+                    "severity": "High",
+                    "details": f"Writable PATH dirs: {len(writable_dirs)}, "
+                    f"App dir writable: {app_dir_writable}",
+                }
+            )
+        return {"writable_path_dirs": writable_dirs, "app_dir_writable": app_dir_writable}
 
     def generate_report(self):
         """Generate comprehensive pentest findings report."""

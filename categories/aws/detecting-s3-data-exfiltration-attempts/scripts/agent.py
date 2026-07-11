@@ -39,28 +39,37 @@ def get_guardduty_s3_findings():
         "Impact:S3/AnomalousBehavior.Write",
     ]
     criteria = {"Criterion": {"type": {"Eq": s3_types}, "service.archived": {"Eq": ["false"]}}}
-    result = aws_cli([
-        "guardduty", "list-findings",
-        "--detector-id", detector_id,
-        "--finding-criteria", json.dumps(criteria),
-    ])
+    result = aws_cli(
+        [
+            "guardduty",
+            "list-findings",
+            "--detector-id",
+            detector_id,
+            "--finding-criteria",
+            json.dumps(criteria),
+        ]
+    )
     finding_ids = result.get("FindingIds", [])
     if not finding_ids:
         return {"count": 0, "findings": []}
 
-    details = aws_cli(["guardduty", "get-findings", "--detector-id", detector_id,
-                        "--finding-ids"] + finding_ids[:25])
+    details = aws_cli(
+        ["guardduty", "get-findings", "--detector-id", detector_id, "--finding-ids"]
+        + finding_ids[:25]
+    )
     parsed = []
     for f in details.get("Findings", []):
         s3 = f.get("Resource", {}).get("S3BucketDetails", [{}])
         bucket = s3[0] if s3 else {}
-        parsed.append({
-            "type": f.get("Type"),
-            "severity": f.get("Severity"),
-            "bucket": bucket.get("Name"),
-            "region": f.get("Region"),
-            "action": f.get("Service", {}).get("Action", {}),
-        })
+        parsed.append(
+            {
+                "type": f.get("Type"),
+                "severity": f.get("Severity"),
+                "bucket": bucket.get("Name"),
+                "region": f.get("Region"),
+                "action": f.get("Service", {}).get("Action", {}),
+            }
+        )
     return {"count": len(parsed), "findings": parsed}
 
 
@@ -68,29 +77,36 @@ def query_cloudtrail_s3_gets(bucket_name, hours=24):
     """Query CloudTrail for GetObject events on a specific bucket."""
     end_time = datetime.utcnow()
     start_time = end_time - timedelta(hours=hours)
-    result = aws_cli([
-        "cloudtrail", "lookup-events",
-        "--lookup-attributes", json.dumps([
-            {"AttributeKey": "EventName", "AttributeValue": "GetObject"}
-        ]),
-        "--start-time", start_time.isoformat() + "Z",
-        "--end-time", end_time.isoformat() + "Z",
-        "--max-results", "50",
-    ])
+    result = aws_cli(
+        [
+            "cloudtrail",
+            "lookup-events",
+            "--lookup-attributes",
+            json.dumps([{"AttributeKey": "EventName", "AttributeValue": "GetObject"}]),
+            "--start-time",
+            start_time.isoformat() + "Z",
+            "--end-time",
+            end_time.isoformat() + "Z",
+            "--max-results",
+            "50",
+        ]
+    )
     events = []
     for e in result.get("Events", []):
         detail = json.loads(e.get("CloudTrailEvent", "{}"))
         req = detail.get("requestParameters", {})
         if bucket_name and req.get("bucketName") != bucket_name:
             continue
-        events.append({
-            "time": e.get("EventTime"),
-            "user": e.get("Username"),
-            "source_ip": detail.get("sourceIPAddress"),
-            "bucket": req.get("bucketName"),
-            "key": req.get("key", "")[:100],
-            "user_agent": detail.get("userAgent", "")[:80],
-        })
+        events.append(
+            {
+                "time": e.get("EventTime"),
+                "user": e.get("Username"),
+                "source_ip": detail.get("sourceIPAddress"),
+                "bucket": req.get("bucketName"),
+                "key": req.get("key", "")[:100],
+                "user_agent": detail.get("userAgent", "")[:80],
+            }
+        )
     return {"bucket": bucket_name, "get_events": events, "count": len(events)}
 
 
@@ -108,21 +124,25 @@ def detect_bulk_download_patterns(bucket_name, hours=24):
     anomalies = []
     for user, count in by_user.items():
         if count > 50:
-            anomalies.append({
-                "type": "BULK_DOWNLOAD",
-                "severity": "HIGH",
-                "user": user,
-                "object_count": count,
-                "period_hours": hours,
-            })
+            anomalies.append(
+                {
+                    "type": "BULK_DOWNLOAD",
+                    "severity": "HIGH",
+                    "user": user,
+                    "object_count": count,
+                    "period_hours": hours,
+                }
+            )
     for ip, count in by_ip.items():
         if count > 100:
-            anomalies.append({
-                "type": "HIGH_VOLUME_SOURCE",
-                "severity": "HIGH",
-                "source_ip": ip,
-                "object_count": count,
-            })
+            anomalies.append(
+                {
+                    "type": "HIGH_VOLUME_SOURCE",
+                    "severity": "HIGH",
+                    "source_ip": ip,
+                    "object_count": count,
+                }
+            )
 
     return {
         "bucket": bucket_name,
@@ -141,18 +161,22 @@ def check_bucket_policy(bucket_name):
     if "error" in result:
         return result
 
-    policy = json.loads(result.get("Policy", "{}")) if isinstance(result.get("Policy"), str) else result
+    policy = (
+        json.loads(result.get("Policy", "{}")) if isinstance(result.get("Policy"), str) else result
+    )
     issues = []
     for stmt in policy.get("Statement", []):
         principal = stmt.get("Principal", "")
         if principal == "*" or (isinstance(principal, dict) and principal.get("AWS") == "*"):
             if stmt.get("Effect") == "Allow":
-                issues.append({
-                    "severity": "CRITICAL",
-                    "finding": "Bucket allows public access",
-                    "action": stmt.get("Action"),
-                    "sid": stmt.get("Sid", ""),
-                })
+                issues.append(
+                    {
+                        "severity": "CRITICAL",
+                        "finding": "Bucket allows public access",
+                        "action": stmt.get("Action"),
+                        "sid": stmt.get("Sid", ""),
+                    }
+                )
 
     return {"bucket": bucket_name, "policy_issues": issues, "issue_count": len(issues)}
 
@@ -172,22 +196,29 @@ def block_external_access(bucket_name):
     """Restrict S3 bucket to VPC endpoint access only."""
     policy = {
         "Version": "2012-10-17",
-        "Statement": [{
-            "Sid": "DenyNonVPCAccess",
-            "Effect": "Deny",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": f"arn:aws:s3:::{bucket_name}/*",
-            "Condition": {
-                "StringNotEquals": {"aws:sourceVpce": "vpce-REPLACE_WITH_ENDPOINT_ID"}
-            },
-        }],
+        "Statement": [
+            {
+                "Sid": "DenyNonVPCAccess",
+                "Effect": "Deny",
+                "Principal": "*",
+                "Action": "s3:GetObject",
+                "Resource": f"arn:aws:s3:::{bucket_name}/*",
+                "Condition": {
+                    "StringNotEquals": {"aws:sourceVpce": "vpce-REPLACE_WITH_ENDPOINT_ID"}
+                },
+            }
+        ],
     }
-    return aws_cli([
-        "s3api", "put-bucket-policy",
-        "--bucket", bucket_name,
-        "--policy", json.dumps(policy),
-    ])
+    return aws_cli(
+        [
+            "s3api",
+            "put-bucket-policy",
+            "--bucket",
+            bucket_name,
+            "--policy",
+            json.dumps(policy),
+        ]
+    )
 
 
 def generate_report(bucket_name=None):
@@ -218,4 +249,6 @@ if __name__ == "__main__":
     elif action == "policy" and len(sys.argv) > 2:
         print(json.dumps(check_bucket_policy(sys.argv[2]), indent=2))
     else:
-        print("Usage: agent.py [report [bucket]|findings|gets <bucket> [hours]|bulk <bucket>|policy <bucket>]")
+        print(
+            "Usage: agent.py [report [bucket]|findings|gets <bucket> [hours]|bulk <bucket>|policy <bucket>]"
+        )

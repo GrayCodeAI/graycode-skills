@@ -2,13 +2,12 @@
 # For authorized penetration testing and lab environments only
 """MITM Attack Simulation Agent - Tests network defenses against ARP spoofing and traffic interception."""
 
+import argparse
 import json
 import logging
-import argparse
-import subprocess
 from datetime import datetime
 
-from scapy.all import ARP, Ether, srp, send, sniff, IP, TCP, get_if_hwaddr, conf
+from scapy.all import ARP, IP, TCP, Ether, send, sniff, srp
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -31,7 +30,7 @@ def discover_hosts(network_cidr):
     broadcast = Ether(dst="ff:ff:ff:ff:ff:ff")
     answered, _ = srp(broadcast / arp_request, timeout=5, verbose=False)
     hosts = []
-    for sent, received in answered:
+    for _sent, received in answered:
         hosts.append({"ip": received.psrc, "mac": received.hwsrc})
     logger.info("Discovered %d hosts on %s", len(hosts), network_cidr)
     return hosts
@@ -61,12 +60,14 @@ def detect_cleartext_protocols(interface, duration=30):
             sport = pkt[TCP].sport
             for port, proto in cleartext_ports.items():
                 if dport == port or sport == port:
-                    findings.append({
-                        "protocol": proto,
-                        "src": pkt[IP].src,
-                        "dst": pkt[IP].dst,
-                        "port": port,
-                    })
+                    findings.append(
+                        {
+                            "protocol": proto,
+                            "src": pkt[IP].src,
+                            "dst": pkt[IP].dst,
+                            "port": port,
+                        }
+                    )
 
     logger.info("Sniffing for cleartext protocols on %s for %ds", interface, duration)
     sniff(iface=interface, prn=packet_callback, timeout=duration, store=False)
@@ -78,8 +79,9 @@ def detect_cleartext_protocols(interface, duration=30):
 def check_hsts_enforcement(target_url):
     """Check if a target enforces HSTS headers."""
     import requests
+
     try:
-        resp = requests.get(target_url, timeout=10, verify=False)
+        resp = requests.get(target_url, timeout=10, verify=True)
         hsts = resp.headers.get("Strict-Transport-Security", "")
         return {
             "url": target_url,
@@ -94,6 +96,7 @@ def check_hsts_enforcement(target_url):
 def test_ssl_stripping_potential(target_ip, gateway_ip):
     """Evaluate if SSL stripping is feasible by checking HSTS preload status."""
     import requests
+
     try:
         resp = requests.get(
             f"https://hstspreload.org/api/v2/status?domain={target_ip}",

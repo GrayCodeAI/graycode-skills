@@ -6,13 +6,10 @@ Audits AD environments for accounts with DCSync rights and
 analyzes dumped credential data. For authorized red team engagements only.
 """
 
-import sys
-import os
 import re
-import json
-from datetime import datetime
+import sys
 from collections import defaultdict
-
+from datetime import datetime
 
 REPLICATION_GUIDS = {
     "1131f6aa-9c07-11d1-f79f-00c04fc2dcd2": "DS-Replication-Get-Changes",
@@ -30,11 +27,11 @@ def parse_secretsdump_output(filepath: str) -> dict:
         "machine_accounts": [],
         "user_accounts": [],
         "krbtgt_hash": None,
-        "admin_hash": None
+        "admin_hash": None,
     }
 
     try:
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             lines = f.readlines()
     except FileNotFoundError:
         print(f"File not found: {filepath}")
@@ -58,7 +55,7 @@ def parse_secretsdump_output(filepath: str) -> dict:
                 "rid": rid,
                 "lm_hash": lm_hash,
                 "nt_hash": nt_hash,
-                "is_machine": username.endswith("$")
+                "is_machine": username.endswith("$"),
             }
 
             results["ntds_hashes"].append(entry)
@@ -75,10 +72,9 @@ def parse_secretsdump_output(filepath: str) -> dict:
 
         cleartext_match = cleartext_pattern.match(line)
         if cleartext_match:
-            results["cleartext_passwords"].append({
-                "username": cleartext_match.group(1),
-                "password": cleartext_match.group(2)
-            })
+            results["cleartext_passwords"].append(
+                {"username": cleartext_match.group(1), "password": cleartext_match.group(2)}
+            )
 
     return results
 
@@ -109,7 +105,7 @@ def generate_dcsync_report(results: dict, source_file: str) -> str:
         f"  User Accounts: {len(results['user_accounts'])}",
         f"  Machine Accounts: {len(results['machine_accounts'])}",
         f"  Cleartext Passwords: {len(results['cleartext_passwords'])}",
-        ""
+        "",
     ]
 
     # KRBTGT hash (most critical)
@@ -141,15 +137,17 @@ def generate_dcsync_report(results: dict, source_file: str) -> str:
             report.append(f"  {entry['username']}: [REDACTED]")
         report.append("")
 
-    report.extend([
-        "[Persistence Opportunities]",
-        "  1. Golden Ticket: Use KRBTGT hash for indefinite domain access",
-        "  2. Silver Tickets: Use machine account hashes for service impersonation",
-        "  3. Pass-the-Hash: Use NT hashes for immediate lateral movement",
-        "  4. Password Cracking: Offline cracking of user hashes",
-        "",
-        "=" * 70
-    ])
+    report.extend(
+        [
+            "[Persistence Opportunities]",
+            "  1. Golden Ticket: Use KRBTGT hash for indefinite domain access",
+            "  2. Silver Tickets: Use machine account hashes for service impersonation",
+            "  3. Pass-the-Hash: Use NT hashes for immediate lateral movement",
+            "  4. Password Cracking: Offline cracking of user hashes",
+            "",
+            "=" * 70,
+        ]
+    )
 
     return "\n".join(report)
 

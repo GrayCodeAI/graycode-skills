@@ -5,13 +5,10 @@ Core TIP components: STIX/TAXII ingestion, indicator lifecycle management,
 confidence scoring, sharing groups, and intelligence dissemination.
 """
 
-import sys
-import json
 import datetime
-import hashlib
+import json
 import re
 import uuid
-
 
 STIX_INDICATOR_TYPES = {
     "ipv4-addr": "[ipv4-addr:value = '{}']",
@@ -65,7 +62,7 @@ def create_stix_indicator(value, indicator_type=None, confidence=50, tlp="TLP:AM
         "id": indicator_id,
         "created": now,
         "modified": now,
-        "name": "{}: {}".format(indicator_type, value),
+        "name": f"{indicator_type}: {value}",
         "pattern": pattern_template.format(value),
         "pattern_type": "stix",
         "valid_from": now,
@@ -154,12 +151,14 @@ if __name__ == "__main__":
     bundle = build_stix_bundle(indicators)
     print("\nSTIX Bundle: {} ({} objects)".format(bundle["id"], len(bundle["objects"])))
 
-    score = calculate_indicator_score(sources_count=3, age_days=5, confirmed_sightings=2, false_positives=0)
-    print("\nSample score calculation: {}".format(score))
+    score = calculate_indicator_score(
+        sources_count=3, age_days=5, confirmed_sightings=2, false_positives=0
+    )
+    print(f"\nSample score calculation: {score}")
 
     report = generate_tip_report(indicators)
     print("\n--- Platform Report ---")
     for k, v in report.items():
-        print("  {}: {}".format(k, v))
+        print(f"  {k}: {v}")
 
     print("\n" + json.dumps({"indicators_created": len(indicators)}, indent=2))

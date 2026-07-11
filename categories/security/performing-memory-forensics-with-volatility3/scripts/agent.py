@@ -6,12 +6,11 @@ network connection extraction, malware detection, and credential
 extraction using Volatility 3 framework via subprocess.
 """
 
-import subprocess
 import json
-import sys
 import re
+import subprocess
+import sys
 from pathlib import Path
-from collections import defaultdict
 
 
 class MemoryForensicsAgent:
@@ -65,9 +64,7 @@ class MemoryForensicsAgent:
         """Dump memory of a specific process."""
         dump_dir = self.output_dir / "process_dumps"
         dump_dir.mkdir(exist_ok=True)
-        return self._run_vol("windows.memmap", [
-            "--pid", str(pid), "--dump", "-o", str(dump_dir)
-        ])
+        return self._run_vol("windows.memmap", ["--pid", str(pid), "--dump", "-o", str(dump_dir)])
 
     def extract_hashes(self):
         """Extract cached password hashes."""

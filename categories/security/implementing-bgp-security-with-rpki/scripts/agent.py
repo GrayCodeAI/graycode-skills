@@ -7,7 +7,6 @@ import logging
 import os
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 try:
     import requests
@@ -23,8 +22,9 @@ CLOUDFLARE_RPKI = "https://rpki.cloudflare.com/api/v1"
 
 def validate_prefix_rpki(prefix: str) -> dict:
     """Validate a prefix against RPKI using RIPEstat."""
-    resp = requests.get(f"{RIPESTAT_BASE}/rpki-validation/data.json",
-                        params={"resource": prefix}, timeout=15)
+    resp = requests.get(
+        f"{RIPESTAT_BASE}/rpki-validation/data.json", params={"resource": prefix}, timeout=15
+    )
     if resp.status_code == 200:
         data = resp.json().get("data", {})
         return {
@@ -35,7 +35,7 @@ def validate_prefix_rpki(prefix: str) -> dict:
     return {"prefix": prefix, "status": "error"}
 
 
-def get_roas_for_asn(asn: str) -> List[dict]:
+def get_roas_for_asn(asn: str) -> list[dict]:
     """Get Route Origin Authorizations for an ASN from Cloudflare RPKI."""
     resp = requests.get(f"{CLOUDFLARE_RPKI}/roas", params={"asn": asn}, timeout=15)
     if resp.status_code == 200:
@@ -45,8 +45,9 @@ def get_roas_for_asn(asn: str) -> List[dict]:
 
 def get_prefix_overview(prefix: str) -> dict:
     """Get prefix routing overview from RIPEstat."""
-    resp = requests.get(f"{RIPESTAT_BASE}/prefix-overview/data.json",
-                        params={"resource": prefix}, timeout=15)
+    resp = requests.get(
+        f"{RIPESTAT_BASE}/prefix-overview/data.json", params={"resource": prefix}, timeout=15
+    )
     if resp.status_code == 200:
         return resp.json().get("data", {})
     return {}
@@ -55,8 +56,9 @@ def get_prefix_overview(prefix: str) -> dict:
 def check_rpki_adoption(asn: str) -> dict:
     """Check RPKI adoption status for an ASN."""
     roas = get_roas_for_asn(asn)
-    resp = requests.get(f"{RIPESTAT_BASE}/announced-prefixes/data.json",
-                        params={"resource": asn}, timeout=15)
+    resp = requests.get(
+        f"{RIPESTAT_BASE}/announced-prefixes/data.json", params={"resource": asn}, timeout=15
+    )
     announced = []
     if resp.status_code == 200:
         announced = resp.json().get("data", {}).get("prefixes", [])
@@ -74,7 +76,7 @@ def check_rpki_adoption(asn: str) -> dict:
     }
 
 
-def validate_multiple_prefixes(prefixes: List[str]) -> List[dict]:
+def validate_multiple_prefixes(prefixes: list[str]) -> list[dict]:
     """Validate multiple prefixes against RPKI."""
     results = []
     for prefix in prefixes:
@@ -84,7 +86,7 @@ def validate_multiple_prefixes(prefixes: List[str]) -> List[dict]:
     return results
 
 
-def generate_report(asn: str, prefixes: List[str]) -> dict:
+def generate_report(asn: str, prefixes: list[str]) -> dict:
     """Generate RPKI validation report for an ASN and its prefixes."""
     report = {"analysis_date": datetime.utcnow().isoformat(), "asn": asn}
     report["adoption"] = check_rpki_adoption(asn)
@@ -94,7 +96,8 @@ def generate_report(asn: str, prefixes: List[str]) -> dict:
     report["recommendations"] = []
     if report["adoption"]["coverage_pct"] < 100:
         report["recommendations"].append(
-            f"Create ROAs for {report['adoption']['uncovered']} uncovered prefixes")
+            f"Create ROAs for {report['adoption']['uncovered']} uncovered prefixes"
+        )
     if invalid:
         report["recommendations"].append(f"Investigate {len(invalid)} RPKI-invalid prefixes")
     return report

@@ -13,10 +13,10 @@ Usage:
 """
 
 import argparse
+import contextlib
 import csv
 import json
-import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class IOCLifecycleManager:
@@ -26,16 +26,21 @@ class IOCLifecycleManager:
     def add_indicator(self, ioc_type, value, source, confidence=50):
         key = f"{ioc_type}:{value}"
         self.indicators[key] = {
-            "type": ioc_type, "value": value, "source": source,
-            "confidence": confidence, "state": "discovered",
+            "type": ioc_type,
+            "value": value,
+            "source": source,
+            "confidence": confidence,
+            "state": "discovered",
             "created": datetime.utcnow().isoformat(),
             "last_updated": datetime.utcnow().isoformat(),
-            "hit_count": 0, "fp_count": 0, "last_seen": None,
+            "hit_count": 0,
+            "fp_count": 0,
+            "last_seen": None,
         }
 
     def apply_decay(self):
         half_lives = {"ip": 30, "domain": 90, "hash": 365, "url": 60, "email": 180}
-        for key, ioc in self.indicators.items():
+        for _key, ioc in self.indicators.items():
             if ioc["state"] == "retired":
                 continue
             hl = half_lives.get(ioc["type"], 90)
@@ -52,10 +57,7 @@ class IOCLifecycleManager:
             max_ages = {"ip": 90, "domain": 180, "hash": 730, "url": 120}
             max_age = max_ages.get(ioc["type"], 180)
 
-            if age > max_age and ioc["hit_count"] == 0:
-                review["retire"].append(key)
-                ioc["state"] = "retired"
-            elif ioc["fp_count"] > 3:
+            if age > max_age and ioc["hit_count"] == 0 or ioc["fp_count"] > 3:
                 review["retire"].append(key)
                 ioc["state"] = "retired"
             elif ioc["hit_count"] > 5:
@@ -74,7 +76,8 @@ class IOCLifecycleManager:
             "by_state": states,
             "avg_confidence": (
                 sum(i["confidence"] for i in self.indicators.values()) / len(self.indicators)
-                if self.indicators else 0
+                if self.indicators
+                else 0
             ),
         }
 
@@ -98,18 +101,18 @@ def main():
     args = parser.parse_args()
 
     mgr = IOCLifecycleManager()
-    try:
+    with contextlib.suppress(FileNotFoundError):
         mgr.load(args.db)
-    except FileNotFoundError:
-        pass
 
     if args.import_iocs:
         with open(args.import_iocs) as f:
             reader = csv.DictReader(f)
             for row in reader:
                 mgr.add_indicator(
-                    row.get("type", "ip"), row.get("value", ""),
-                    row.get("source", "import"), int(row.get("confidence", 50)),
+                    row.get("type", "ip"),
+                    row.get("value", ""),
+                    row.get("source", "import"),
+                    int(row.get("confidence", 50)),
                 )
         mgr.save(args.db)
 

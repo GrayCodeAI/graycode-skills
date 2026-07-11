@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """BloodHound CE reconnaissance agent using bloodhound Python ingestor and Neo4j."""
 
-import json
-import sys
 import argparse
+import json
 import subprocess
+import sys
 from datetime import datetime
 
 try:
@@ -17,8 +17,18 @@ except ImportError:
 def collect_bloodhound_data(domain, username, password, dc_ip, method="all"):
     """Run BloodHound Python ingestor to collect AD data."""
     cmd = [
-        "bloodhound-python", "-d", domain, "-u", username, "-p", password,
-        "-ns", dc_ip, "-c", method, "--zip",
+        "bloodhound-python",
+        "-d",
+        domain,
+        "-u",
+        username,
+        "-p",
+        password,
+        "-ns",
+        dc_ip,
+        "-c",
+        method,
+        "--zip",
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
@@ -49,8 +59,7 @@ def query_kerberoastable_users(driver):
             "RETURN u.name AS user, u.serviceprincipalnames AS spns, "
             "u.admincount AS admin_count ORDER BY u.admincount DESC"
         )
-        return [{"user": r["user"], "spns": r["spns"],
-                 "admin": r["admin_count"]} for r in result]
+        return [{"user": r["user"], "spns": r["spns"], "admin": r["admin_count"]} for r in result]
 
 
 def query_unconstrained_delegation(driver):
@@ -76,10 +85,10 @@ def query_as_rep_roastable(driver):
 def run_recon(neo4j_uri, neo4j_user, neo4j_password):
     """Run BloodHound reconnaissance queries."""
     driver = GraphDatabase.driver(neo4j_uri, auth=(neo4j_user, neo4j_password))
-    print(f"\n{'='*60}")
-    print(f"  BLOODHOUND CE RECONNAISSANCE")
+    print(f"\n{'=' * 60}")
+    print("  BLOODHOUND CE RECONNAISSANCE")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     paths = query_shortest_path_to_da(driver)
     print(f"--- SHORTEST PATHS TO DOMAIN ADMIN ({len(paths)}) ---")
@@ -102,8 +111,12 @@ def run_recon(neo4j_uri, neo4j_user, neo4j_password):
         print(f"  {a['user']} (admin={a['admin']})")
 
     driver.close()
-    return {"paths_to_da": paths, "kerberoastable": kerb,
-            "unconstrained_delegation": deleg, "asrep_roastable": asrep}
+    return {
+        "paths_to_da": paths,
+        "kerberoastable": kerb,
+        "unconstrained_delegation": deleg,
+        "asrep_roastable": asrep,
+    }
 
 
 def main():

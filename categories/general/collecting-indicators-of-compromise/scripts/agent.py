@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 """IOC Collection Agent - Extracts, enriches, and exports indicators of compromise."""
 
-import json
-import re
-import hashlib
-import logging
 import argparse
+import logging
+import re
 from datetime import datetime
 
 import requests
-from stix2 import Indicator, Bundle
+from stix2 import Bundle, Indicator
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -37,7 +35,7 @@ def extract_iocs_from_text(text):
 
 def extract_iocs_from_file(file_path):
     """Extract IOCs from a file (text report, log file, etc.)."""
-    with open(file_path, "r", errors="ignore") as f:
+    with open(file_path, errors="ignore") as f:
         content = f.read()
     return extract_iocs_from_text(content)
 
@@ -56,7 +54,9 @@ def enrich_ip_virustotal(ip_address, api_key):
             "asn": data.get("asn", 0),
             "as_owner": data.get("as_owner", "unknown"),
         }
-        logger.info("VT enrichment for %s: %d malicious detections", ip_address, result["malicious"])
+        logger.info(
+            "VT enrichment for %s: %d malicious detections", ip_address, result["malicious"]
+        )
         return result
     return {"ip": ip_address, "error": resp.status_code}
 
@@ -156,7 +156,9 @@ def generate_ioc_report(iocs_with_scores):
         if typed:
             lines.append(f"\n{ioc_type.upper()} ({len(typed)}):")
             for ioc in typed[:10]:
-                lines.append(f"  {ioc['value'][:60]:60s} Confidence: {ioc.get('confidence', 'N/A')}")
+                lines.append(
+                    f"  {ioc['value'][:60]:60s} Confidence: {ioc.get('confidence', 'N/A')}"
+                )
     print("\n".join(lines))
 
 

@@ -37,11 +37,13 @@ def enumerate_s3_buckets() -> list[dict]:
                     "http://acs.amazonaws.com/groups/global/AllUsers",
                     "http://acs.amazonaws.com/groups/global/AuthenticatedUsers",
                 ):
-                    finding["issues"].append({
-                        "type": "PUBLIC_ACL",
-                        "severity": "HIGH",
-                        "detail": f"Bucket grants {grant['Permission']} to {grantee['URI']}",
-                    })
+                    finding["issues"].append(
+                        {
+                            "type": "PUBLIC_ACL",
+                            "severity": "HIGH",
+                            "detail": f"Bucket grants {grant['Permission']} to {grantee['URI']}",
+                        }
+                    )
         except ClientError:
             pass
 
@@ -50,22 +52,26 @@ def enumerate_s3_buckets() -> list[dict]:
             policy_doc = json.loads(policy["Policy"])
             for stmt in policy_doc.get("Statement", []):
                 if stmt.get("Effect") == "Allow" and stmt.get("Principal") in ("*", {"AWS": "*"}):
-                    finding["issues"].append({
-                        "type": "PUBLIC_POLICY",
-                        "severity": "HIGH",
-                        "detail": f"Policy allows public access: {stmt.get('Action')}",
-                    })
+                    finding["issues"].append(
+                        {
+                            "type": "PUBLIC_POLICY",
+                            "severity": "HIGH",
+                            "detail": f"Policy allows public access: {stmt.get('Action')}",
+                        }
+                    )
         except ClientError:
             pass
 
         try:
-            encryption = s3.get_bucket_encryption(Bucket=name)
+            s3.get_bucket_encryption(Bucket=name)
         except ClientError:
-            finding["issues"].append({
-                "type": "NO_ENCRYPTION",
-                "severity": "MEDIUM",
-                "detail": "Bucket does not have default encryption enabled",
-            })
+            finding["issues"].append(
+                {
+                    "type": "NO_ENCRYPTION",
+                    "severity": "MEDIUM",
+                    "detail": "Bucket does not have default encryption enabled",
+                }
+            )
 
         findings.append(finding)
 
@@ -86,19 +92,23 @@ def enumerate_security_groups(region: str = "us-east-1") -> list[dict]:
                     port = perm.get("FromPort", "all")
                     proto = perm.get("IpProtocol", "all")
                     severity = "CRITICAL" if port in (22, 3389, 3306, 5432) else "HIGH"
-                    sg_issues.append({
-                        "type": "OPEN_INGRESS",
-                        "severity": severity,
-                        "detail": f"Port {port}/{proto} open to 0.0.0.0/0",
-                    })
+                    sg_issues.append(
+                        {
+                            "type": "OPEN_INGRESS",
+                            "severity": severity,
+                            "detail": f"Port {port}/{proto} open to 0.0.0.0/0",
+                        }
+                    )
 
         if sg_issues:
-            findings.append({
-                "sg_id": sg["GroupId"],
-                "sg_name": sg.get("GroupName", ""),
-                "vpc_id": sg.get("VpcId", ""),
-                "issues": sg_issues,
-            })
+            findings.append(
+                {
+                    "sg_id": sg["GroupId"],
+                    "sg_name": sg.get("GroupName", ""),
+                    "vpc_id": sg.get("VpcId", ""),
+                    "issues": sg_issues,
+                }
+            )
 
     return findings
 
@@ -120,18 +130,22 @@ def enumerate_lambda_functions(region: str = "us-east-1") -> list[dict]:
         sensitive_patterns = ["password", "secret", "key", "token", "api_key"]
         for var_name in env_vars:
             if any(p in var_name.lower() for p in sensitive_patterns):
-                func_finding["issues"].append({
-                    "type": "SENSITIVE_ENV_VAR",
-                    "severity": "HIGH",
-                    "detail": f"Potentially sensitive env var: {var_name}",
-                })
+                func_finding["issues"].append(
+                    {
+                        "type": "SENSITIVE_ENV_VAR",
+                        "severity": "HIGH",
+                        "detail": f"Potentially sensitive env var: {var_name}",
+                    }
+                )
 
         if not func.get("VpcConfig", {}).get("VpcId"):
-            func_finding["issues"].append({
-                "type": "NO_VPC",
-                "severity": "LOW",
-                "detail": "Function not in VPC - has internet access",
-            })
+            func_finding["issues"].append(
+                {
+                    "type": "NO_VPC",
+                    "severity": "LOW",
+                    "detail": "Function not in VPC - has internet access",
+                }
+            )
 
         if func_finding["issues"]:
             findings.append(func_finding)
@@ -149,12 +163,14 @@ def check_imds_v1(region: str = "us-east-1") -> list[dict]:
         for inst in reservation["Instances"]:
             metadata_options = inst.get("MetadataOptions", {})
             if metadata_options.get("HttpTokens") != "required":
-                findings.append({
-                    "instance_id": inst["InstanceId"],
-                    "state": inst["State"]["Name"],
-                    "severity": "HIGH",
-                    "detail": "IMDSv1 enabled - vulnerable to SSRF credential theft",
-                })
+                findings.append(
+                    {
+                        "instance_id": inst["InstanceId"],
+                        "state": inst["State"]["Name"],
+                        "severity": "HIGH",
+                        "detail": "IMDSv1 enabled - vulnerable to SSRF credential theft",
+                    }
+                )
 
     return findings
 
@@ -162,10 +178,10 @@ def check_imds_v1(region: str = "us-east-1") -> list[dict]:
 def generate_report(s3: list, sgs: list, lambdas: list, imds: list) -> str:
     """Generate cloud penetration testing report."""
     total_issues = (
-        sum(len(b.get("issues", [])) for b in s3) +
-        sum(len(s.get("issues", [])) for s in sgs) +
-        sum(len(l.get("issues", [])) for l in lambdas) +
-        len(imds)
+        sum(len(b.get("issues", [])) for b in s3)
+        + sum(len(s.get("issues", [])) for s in sgs)
+        + sum(len(l.get("issues", [])) for l in lambdas)
+        + len(imds)
     )
 
     lines = [
@@ -219,6 +235,14 @@ if __name__ == "__main__":
 
     output = f"cloud_pentest_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
     with open(output, "w") as f:
-        json.dump({"s3": s3_findings, "security_groups": sg_findings,
-                    "lambda": lambda_findings, "imds": imds_findings}, f, indent=2)
+        json.dump(
+            {
+                "s3": s3_findings,
+                "security_groups": sg_findings,
+                "lambda": lambda_findings,
+                "imds": imds_findings,
+            },
+            f,
+            indent=2,
+        )
     print(f"\n[*] Results saved to {output}")

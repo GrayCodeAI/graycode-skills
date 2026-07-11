@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Agent for building cloud security posture management across AWS/Azure/GCP."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime
 
 import boto3
@@ -20,11 +20,21 @@ def check_s3_public_buckets(session):
         try:
             pab = s3.get_public_access_block(Bucket=name)
             config = pab["PublicAccessBlockConfiguration"]
-            if not all([config.get("BlockPublicAcls"), config.get("IgnorePublicAcls"),
-                        config.get("BlockPublicPolicy"), config.get("RestrictPublicBuckets")]):
-                findings.append({"bucket": name, "issue": "Incomplete public access block", "severity": "HIGH"})
+            if not all(
+                [
+                    config.get("BlockPublicAcls"),
+                    config.get("IgnorePublicAcls"),
+                    config.get("BlockPublicPolicy"),
+                    config.get("RestrictPublicBuckets"),
+                ]
+            ):
+                findings.append(
+                    {"bucket": name, "issue": "Incomplete public access block", "severity": "HIGH"}
+                )
         except ClientError:
-            findings.append({"bucket": name, "issue": "No public access block configured", "severity": "HIGH"})
+            findings.append(
+                {"bucket": name, "issue": "No public access block configured", "severity": "HIGH"}
+            )
     return findings
 
 
@@ -34,7 +44,8 @@ def check_unencrypted_ebs(session):
     volumes = ec2.describe_volumes()["Volumes"]
     unencrypted = [
         {"volume_id": v["VolumeId"], "state": v["State"], "size_gb": v["Size"]}
-        for v in volumes if not v.get("Encrypted")
+        for v in volumes
+        if not v.get("Encrypted")
     ]
     return unencrypted
 
@@ -51,14 +62,20 @@ def check_public_security_groups(session):
                 if ip_range.get("CidrIp") == "0.0.0.0/0":
                     from_port = rule.get("FromPort", 0)
                     to_port = rule.get("ToPort", 65535)
-                    severity = "CRITICAL" if any(from_port <= p <= to_port for p in dangerous_ports) else "HIGH"
-                    findings.append({
-                        "sg_id": sg["GroupId"],
-                        "sg_name": sg.get("GroupName"),
-                        "port_range": f"{from_port}-{to_port}",
-                        "source": "0.0.0.0/0",
-                        "severity": severity,
-                    })
+                    severity = (
+                        "CRITICAL"
+                        if any(from_port <= p <= to_port for p in dangerous_ports)
+                        else "HIGH"
+                    )
+                    findings.append(
+                        {
+                            "sg_id": sg["GroupId"],
+                            "sg_name": sg.get("GroupName"),
+                            "port_range": f"{from_port}-{to_port}",
+                            "source": "0.0.0.0/0",
+                            "severity": severity,
+                        }
+                    )
     return findings
 
 
@@ -79,8 +96,13 @@ def check_rds_public_access(session):
     rds = session.client("rds")
     instances = rds.describe_db_instances()["DBInstances"]
     public = [
-        {"instance": db["DBInstanceIdentifier"], "engine": db["Engine"], "endpoint": db.get("Endpoint", {}).get("Address", "")}
-        for db in instances if db.get("PubliclyAccessible")
+        {
+            "instance": db["DBInstanceIdentifier"],
+            "engine": db["Engine"],
+            "endpoint": db.get("Endpoint", {}).get("Address", ""),
+        }
+        for db in instances
+        if db.get("PubliclyAccessible")
     ]
     return public
 
@@ -143,10 +165,14 @@ def main():
     print("[+] Checking CloudTrail...")
     report["findings"]["cloudtrail"] = check_cloudtrail_enabled(session)
 
-    critical = sum(1 for f in report["findings"].get("public_sgs", []) if f.get("severity") == "CRITICAL")
+    critical = sum(
+        1 for f in report["findings"].get("public_sgs", []) if f.get("severity") == "CRITICAL"
+    )
     high = len(report["findings"]["s3_public"]) + len(report["findings"]["no_mfa_users"])
     medium = len(report["findings"]["unencrypted_ebs"])
-    report["posture_score"] = calculate_posture_score({"critical": critical, "high": high, "medium": medium})
+    report["posture_score"] = calculate_posture_score(
+        {"critical": critical, "high": high, "medium": medium}
+    )
     print(f"\n[+] Posture Score: {report['posture_score']}/100")
 
     with open(args.output, "w") as f:

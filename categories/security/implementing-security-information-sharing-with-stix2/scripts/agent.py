@@ -6,21 +6,31 @@ malware, campaigns, and relationships using the stix2 Python library.
 """
 
 import argparse
+import datetime
 import json
 import sys
-import datetime
-import uuid
 
 try:
     import stix2
-    from stix2 import Indicator, Malware, Campaign, Relationship, Bundle
-    from stix2 import ThreatActor, Identity, Sighting, AttackPattern
+    from stix2 import (
+        AttackPattern,
+        Bundle,
+        Campaign,
+        Identity,
+        Indicator,
+        Malware,
+        Relationship,
+        Sighting,
+        ThreatActor,
+    )
+
     HAS_STIX2 = True
 except ImportError:
     HAS_STIX2 = False
 
 try:
     from taxii2client.v21 import Collection, Server
+
     HAS_TAXII = True
 except ImportError:
     HAS_TAXII = False
@@ -77,8 +87,11 @@ def create_campaign(name, description="", first_seen=None):
     """Create a STIX 2.1 Campaign object."""
     if not HAS_STIX2:
         return {"error": "stix2 not installed"}
-    kwargs = {"name": name, "description": description or f"Campaign: {name}",
-              "created_by_ref": IDENTITY.id}
+    kwargs = {
+        "name": name,
+        "description": description or f"Campaign: {name}",
+        "created_by_ref": IDENTITY.id,
+    }
     if first_seen:
         kwargs["first_seen"] = first_seen
     return Campaign(**kwargs)
@@ -127,8 +140,11 @@ def publish_to_taxii(bundle, collection_url, username=None, password=None):
     try:
         collection = Collection(collection_url, user=username, password=password)
         collection.add_objects(bundle.serialize())
-        return {"status": "published", "collection": collection_url,
-                "object_count": len(bundle.objects)}
+        return {
+            "status": "published",
+            "collection": collection_url,
+            "object_count": len(bundle.objects),
+        }
     except Exception as e:
         return {"error": str(e)}
 
@@ -139,15 +155,20 @@ def validate_bundle(bundle_json):
         return {"error": "stix2 not installed"}
     try:
         parsed = stix2.parse(bundle_json, allow_custom=True)
-        return {"valid": True, "type": parsed.type,
-                "object_count": len(parsed.objects) if hasattr(parsed, "objects") else 1}
+        return {
+            "valid": True,
+            "type": parsed.type,
+            "object_count": len(parsed.objects) if hasattr(parsed, "objects") else 1,
+        }
     except Exception as e:
         return {"valid": False, "error": str(e)}
 
 
 def main():
     parser = argparse.ArgumentParser(description="STIX 2.1 threat intelligence sharing agent")
-    parser.add_argument("--create-indicator", help="Create indicator from value (e.g. 198.51.100.42)")
+    parser.add_argument(
+        "--create-indicator", help="Create indicator from value (e.g. 198.51.100.42)"
+    )
     parser.add_argument("--type", default="ipv4-addr", help="Indicator type (default: ipv4-addr)")
     parser.add_argument("--malware", help="Create malware object with this name")
     parser.add_argument("--campaign", help="Create campaign object with this name")
@@ -175,13 +196,18 @@ def main():
         indicators.append(ind)
         print(f"[+] Created indicator: {ind.name}")
     else:
-        demo_iocs = [("198.51.100.42", "ipv4-addr"), ("evil.example.com", "domain-name"),
-                     ("a" * 64, "file-sha256")]
+        demo_iocs = [
+            ("198.51.100.42", "ipv4-addr"),
+            ("evil.example.com", "domain-name"),
+            ("a" * 64, "file-sha256"),
+        ]
         for val, itype in demo_iocs:
             indicators.append(create_indicator(val, itype))
         print(f"[DEMO] Created {len(indicators)} sample indicators")
 
-    malware_obj = create_malware(args.malware) if args.malware else create_malware("DemoRAT", ["trojan"])
+    malware_obj = (
+        create_malware(args.malware) if args.malware else create_malware("DemoRAT", ["trojan"])
+    )
     campaign_obj = create_campaign(args.campaign) if args.campaign else None
     bundle = build_threat_report(indicators, malware_obj, campaign_obj)
 

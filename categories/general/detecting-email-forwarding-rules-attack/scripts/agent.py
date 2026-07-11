@@ -27,8 +27,17 @@ SUSPICIOUS_RULE_PATTERNS = {
     "mark_as_read": {"severity": "MEDIUM", "desc": "Rule marks messages as read"},
 }
 
-FINANCIAL_KEYWORDS = ["invoice", "payment", "wire", "transfer", "bank",
-                       "ach", "routing", "remittance", "purchase order"]
+FINANCIAL_KEYWORDS = [
+    "invoice",
+    "payment",
+    "wire",
+    "transfer",
+    "bank",
+    "ach",
+    "routing",
+    "remittance",
+    "purchase order",
+]
 
 
 def get_mailbox_rules(token, user_id="me"):
@@ -56,7 +65,7 @@ def analyze_rules(rules, org_domain=""):
         forward_to = actions.get("forwardTo", [])
         redirect_to = actions.get("redirectTo", [])
         delete = actions.get("delete", False)
-        move_folder = actions.get("moveToFolder", "")
+        actions.get("moveToFolder", "")
         mark_read = actions.get("markAsRead", False)
 
         all_forwards = forward_to + redirect_to
@@ -64,57 +73,67 @@ def analyze_rules(rules, org_domain=""):
             addr = fwd.get("emailAddress", {}).get("address", "")
             if org_domain and addr and not addr.lower().endswith(f"@{org_domain.lower()}"):
                 severity = "CRITICAL" if delete else "HIGH"
-                findings.append({
-                    "rule_name": rule_name,
-                    "type": "external_forwarding",
-                    "forward_to": addr,
-                    "delete_after": delete,
-                    "is_enabled": is_enabled,
-                    "severity": severity,
-                    "mitre": "T1114.003",
-                })
+                findings.append(
+                    {
+                        "rule_name": rule_name,
+                        "type": "external_forwarding",
+                        "forward_to": addr,
+                        "delete_after": delete,
+                        "is_enabled": is_enabled,
+                        "severity": severity,
+                        "mitre": "T1114.003",
+                    }
+                )
 
         subject_contains = conditions.get("subjectContains", [])
         body_contains = conditions.get("bodyContains", [])
         all_keywords = [k.lower() for k in subject_contains + body_contains]
         matched_financial = [k for k in all_keywords if k in FINANCIAL_KEYWORDS]
         if matched_financial and all_forwards:
-            findings.append({
-                "rule_name": rule_name,
-                "type": "financial_keyword_forwarding",
-                "keywords": matched_financial,
-                "forward_to": [f.get("emailAddress", {}).get("address", "") for f in all_forwards],
-                "severity": "CRITICAL",
-                "mitre": "T1114.003",
-            })
+            findings.append(
+                {
+                    "rule_name": rule_name,
+                    "type": "financial_keyword_forwarding",
+                    "keywords": matched_financial,
+                    "forward_to": [
+                        f.get("emailAddress", {}).get("address", "") for f in all_forwards
+                    ],
+                    "severity": "CRITICAL",
+                    "mitre": "T1114.003",
+                }
+            )
 
         if mark_read and all_forwards:
-            findings.append({
-                "rule_name": rule_name,
-                "type": "silent_forwarding",
-                "mark_as_read": True,
-                "severity": "HIGH",
-                "description": "Rule forwards and marks as read to hide activity",
-            })
+            findings.append(
+                {
+                    "rule_name": rule_name,
+                    "type": "silent_forwarding",
+                    "mark_as_read": True,
+                    "severity": "HIGH",
+                    "description": "Rule forwards and marks as read to hide activity",
+                }
+            )
 
     return findings
 
 
 def parse_audit_log_for_rules(filepath):
     findings = []
-    with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+    with open(filepath, encoding="utf-8", errors="replace") as f:
         for line in f:
             if "New-InboxRule" in line or "Set-InboxRule" in line:
                 forward = re.search(r'ForwardTo["\s:]+([^\s"]+@[^\s"]+)', line, re.IGNORECASE)
                 user = re.search(r'UserId["\s:]+([^\s"]+)', line, re.IGNORECASE)
-                findings.append({
-                    "type": "rule_creation_audit",
-                    "command": "New-InboxRule" if "New-InboxRule" in line else "Set-InboxRule",
-                    "user": user.group(1) if user else "",
-                    "forward_to": forward.group(1) if forward else "",
-                    "severity": "HIGH",
-                    "raw": line.strip()[:300],
-                })
+                findings.append(
+                    {
+                        "type": "rule_creation_audit",
+                        "command": "New-InboxRule" if "New-InboxRule" in line else "Set-InboxRule",
+                        "user": user.group(1) if user else "",
+                        "forward_to": forward.group(1) if forward else "",
+                        "severity": "HIGH",
+                        "raw": line.strip()[:300],
+                    }
+                )
     return findings
 
 

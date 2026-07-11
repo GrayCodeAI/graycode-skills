@@ -5,10 +5,10 @@ Tests GraphQL endpoints for introspection leaks, authorization flaws,
 query depth/complexity DoS, and injection vulnerabilities.
 """
 
-import requests
 import json
 import sys
-from urllib.parse import urlparse
+
+import requests
 
 
 class GraphQLSecurityAgent:
@@ -42,11 +42,16 @@ class GraphQLSecurityAgent:
             }
         }"""
         result = self._query(query)
-        has_schema = "data" in result.get("body", {}) and "__schema" in result.get("body", {}).get("data", {})
+        has_schema = "data" in result.get("body", {}) and "__schema" in result.get("body", {}).get(
+            "data", {}
+        )
         types = []
         if has_schema:
-            types = [t["name"] for t in result["body"]["data"]["__schema"].get("types", [])
-                     if not t["name"].startswith("__")]
+            types = [
+                t["name"]
+                for t in result["body"]["data"]["__schema"].get("types", [])
+                if not t["name"].startswith("__")
+            ]
         return {
             "vulnerable": has_schema,
             "severity": "Medium",
@@ -58,7 +63,7 @@ class GraphQLSecurityAgent:
     def test_query_depth(self, max_depth=10):
         """Test for query depth limiting."""
         nested = "{ __typename }"
-        for i in range(max_depth):
+        for _i in range(max_depth):
             nested = f"{{ users {nested} }}"
         query = nested
         result = self._query(query)
@@ -119,14 +124,18 @@ class GraphQLSecurityAgent:
         for query, test_name in queries:
             result = self._query(query)
             has_data = "data" in result.get("body", {})
-            has_null_data = has_data and all(
-                v is None for v in result["body"]["data"].values()
-            ) if has_data else False
-            results.append({
-                "test": test_name,
-                "accessible": has_data and not has_null_data,
-                "status": result.get("status"),
-            })
+            has_null_data = (
+                has_data and all(v is None for v in result["body"]["data"].values())
+                if has_data
+                else False
+            )
+            results.append(
+                {
+                    "test": test_name,
+                    "accessible": has_data and not has_null_data,
+                    "status": result.get("status"),
+                }
+            )
         if saved_auth:
             self.session.headers["Authorization"] = saved_auth
         accessible_count = sum(1 for r in results if r["accessible"])
@@ -139,7 +148,7 @@ class GraphQLSecurityAgent:
 
     def test_alias_overloading(self, count=50):
         """Test for alias-based resource exhaustion."""
-        aliases = " ".join(f'a{i}: __typename' for i in range(count))
+        aliases = " ".join(f"a{i}: __typename" for i in range(count))
         query = f"{{ {aliases} }}"
         result = self._query(query)
         has_error = "errors" in result.get("body", {})
@@ -173,10 +182,22 @@ class GraphQLSecurityAgent:
         report["summary"] = {
             "total_tests": len(report["findings"]),
             "vulnerabilities_found": vulnerable_count,
-            "critical": sum(1 for f in report["findings"] if f.get("severity") == "Critical" and f.get("vulnerable")),
-            "high": sum(1 for f in report["findings"] if f.get("severity") == "High" and f.get("vulnerable")),
-            "medium": sum(1 for f in report["findings"] if f.get("severity") == "Medium" and f.get("vulnerable")),
-            "low": sum(1 for f in report["findings"] if f.get("severity") == "Low" and f.get("vulnerable")),
+            "critical": sum(
+                1
+                for f in report["findings"]
+                if f.get("severity") == "Critical" and f.get("vulnerable")
+            ),
+            "high": sum(
+                1 for f in report["findings"] if f.get("severity") == "High" and f.get("vulnerable")
+            ),
+            "medium": sum(
+                1
+                for f in report["findings"]
+                if f.get("severity") == "Medium" and f.get("vulnerable")
+            ),
+            "low": sum(
+                1 for f in report["findings"] if f.get("severity") == "Low" and f.get("vulnerable")
+            ),
         }
         return report
 

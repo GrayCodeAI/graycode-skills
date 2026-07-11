@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for analyzing Windows Registry hives for forensic artifacts."""
 
-import os
-import json
-import codecs
-import struct
 import argparse
+import codecs
+import json
+import os
+import struct
 from datetime import datetime, timedelta
 
 from regipy.registry import RegistryHive
@@ -26,12 +26,14 @@ def extract_autorun_entries(software_hive_path):
         try:
             key = reg.get_key(path)
             for val in key.iter_values():
-                entries.append({
-                    "path": path,
-                    "name": val.name,
-                    "value": str(val.value),
-                    "last_modified": str(key.header.last_modified),
-                })
+                entries.append(
+                    {
+                        "path": path,
+                        "name": val.name,
+                        "value": str(val.value),
+                        "last_modified": str(key.header.last_modified),
+                    }
+                )
         except Exception:
             pass
     return entries
@@ -49,12 +51,14 @@ def extract_user_autorun(ntuser_path):
         try:
             key = reg.get_key(path)
             for val in key.iter_values():
-                entries.append({
-                    "path": path,
-                    "name": val.name,
-                    "value": str(val.value),
-                    "last_modified": str(key.header.last_modified),
-                })
+                entries.append(
+                    {
+                        "path": path,
+                        "name": val.name,
+                        "value": str(val.value),
+                        "last_modified": str(key.header.last_modified),
+                    }
+                )
         except Exception:
             pass
     return entries
@@ -86,11 +90,13 @@ def extract_userassist(ntuser_path):
                 if timestamp > 0:
                     ts = datetime(1601, 1, 1) + timedelta(microseconds=timestamp // 10)
                     last_run = ts.strftime("%Y-%m-%d %H:%M:%S")
-                programs.append({
-                    "program": decoded_name,
-                    "run_count": run_count,
-                    "last_run": last_run,
-                })
+                programs.append(
+                    {
+                        "program": decoded_name,
+                        "run_count": run_count,
+                        "last_run": last_run,
+                    }
+                )
     return programs
 
 
@@ -155,7 +161,14 @@ def extract_installed_software(software_hive_path):
 def flag_suspicious_autorun(entries):
     """Flag autorun entries with suspicious characteristics."""
     suspicious = []
-    suspect_paths = ["\\temp\\", "\\appdata\\", "\\programdata\\", "\\public\\", "powershell", "cmd"]
+    suspect_paths = [
+        "\\temp\\",
+        "\\appdata\\",
+        "\\programdata\\",
+        "\\public\\",
+        "powershell",
+        "cmd",
+    ]
     for entry in entries:
         val_lower = entry.get("value", "").lower()
         if any(s in val_lower for s in suspect_paths):
@@ -171,10 +184,18 @@ def main():
     parser.add_argument("--software-hive", help="Path to SOFTWARE hive")
     parser.add_argument("--ntuser", help="Path to NTUSER.DAT hive")
     parser.add_argument("--output-dir", default="./registry_analysis")
-    parser.add_argument("--action", choices=[
-        "autorun", "userassist", "recent_docs", "system_info",
-        "installed_software", "full_analysis"
-    ], default="full_analysis")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "autorun",
+            "userassist",
+            "recent_docs",
+            "system_info",
+            "installed_software",
+            "full_analysis",
+        ],
+        default="full_analysis",
+    )
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)

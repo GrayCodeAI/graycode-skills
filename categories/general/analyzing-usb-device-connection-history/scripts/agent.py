@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Agent for analyzing USB device connection history from Windows registry hives."""
 
-import os
-import json
 import argparse
 import csv
-from datetime import datetime
+import json
+import os
 
 from regipy.registry import RegistryHive
 
@@ -45,7 +44,6 @@ def parse_usbstor(system_hive_path):
 
 def parse_mounted_devices(system_hive_path):
     """Parse MountedDevices to map drive letters to USB devices."""
-    import struct
     reg = RegistryHive(system_hive_path)
     mounted_key = reg.get_key("MountedDevices")
     mappings = []
@@ -57,10 +55,12 @@ def parse_mounted_devices(system_hive_path):
                 try:
                     device_path = data.decode("utf-16-le").strip("\x00")
                     if "USBSTOR" in device_path or "USB#" in device_path:
-                        mappings.append({
-                            "drive_letter": drive_letter,
-                            "device_path": device_path,
-                        })
+                        mappings.append(
+                            {
+                                "drive_letter": drive_letter,
+                                "device_path": device_path,
+                            }
+                        )
                 except (UnicodeDecodeError, ValueError):
                     pass
     return mappings
@@ -77,28 +77,33 @@ def parse_mountpoints2(ntuser_path):
         return mount_points
     for subkey in mp2_key.iter_subkeys():
         if "{" in subkey.name:
-            mount_points.append({
-                "volume_guid": subkey.name,
-                "last_accessed": str(subkey.header.last_modified),
-            })
+            mount_points.append(
+                {
+                    "volume_guid": subkey.name,
+                    "last_accessed": str(subkey.header.last_modified),
+                }
+            )
     return mount_points
 
 
 def parse_setupapi_log(log_path):
     """Parse setupapi.dev.log for USB first-install timestamps."""
     import re
+
     installs = []
-    with open(log_path, "r", errors="ignore") as f:
+    with open(log_path, errors="ignore") as f:
         content = f.read()
     pattern = r">>>\s+\[Device Install.*?\n.*?Section start (\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}).*?\n(.*?)<<<"
     for match in re.finditer(pattern, content, re.DOTALL):
         timestamp, section = match.group(1), match.group(2)
         dev_match = re.search(r"(USBSTOR\\[^\s]+|USB\\VID_\w+&PID_\w+[^\s]*)", section)
         if dev_match:
-            installs.append({
-                "first_install": timestamp,
-                "device_id": dev_match.group(1),
-            })
+            installs.append(
+                {
+                    "first_install": timestamp,
+                    "device_id": dev_match.group(1),
+                }
+            )
     return installs
 
 
@@ -106,23 +111,27 @@ def build_timeline(devices, mappings, mount_points):
     """Build a unified USB activity timeline."""
     timeline = []
     for dev in devices:
-        timeline.append({
-            "timestamp": dev["last_connected"],
-            "source": "USBSTOR",
-            "device": f"{dev['vendor']} {dev['product']}",
-            "serial": dev["serial"],
-            "event": "Last Connected",
-            "detail": dev.get("friendly_name", ""),
-        })
+        timeline.append(
+            {
+                "timestamp": dev["last_connected"],
+                "source": "USBSTOR",
+                "device": f"{dev['vendor']} {dev['product']}",
+                "serial": dev["serial"],
+                "event": "Last Connected",
+                "detail": dev.get("friendly_name", ""),
+            }
+        )
     for mp in mount_points:
-        timeline.append({
-            "timestamp": mp["last_accessed"],
-            "source": "MountPoints2",
-            "device": mp["volume_guid"],
-            "serial": "",
-            "event": "Volume Accessed",
-            "detail": "",
-        })
+        timeline.append(
+            {
+                "timestamp": mp["last_accessed"],
+                "source": "MountPoints2",
+                "device": mp["volume_guid"],
+                "serial": "",
+                "event": "Volume Accessed",
+                "detail": "",
+            }
+        )
     timeline.sort(key=lambda x: x["timestamp"])
     return timeline
 

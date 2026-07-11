@@ -5,9 +5,7 @@ import argparse
 import json
 import logging
 import os
-import sys
 from datetime import datetime
-from typing import Dict, List
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -67,7 +65,7 @@ def assess_control(control: str, implemented: bool, maturity: str) -> dict:
     }
 
 
-def assess_pillar(pillar: str, responses: Dict[str, dict]) -> dict:
+def assess_pillar(pillar: str, responses: dict[str, dict]) -> dict:
     """Assess a single CISA ZT pillar based on control responses."""
     controls = PILLAR_CONTROLS.get(pillar, [])
     assessed = []
@@ -100,11 +98,11 @@ def assess_pillar(pillar: str, responses: Dict[str, dict]) -> dict:
 
 def load_assessment_data(data_path: str) -> dict:
     """Load assessment responses from JSON file."""
-    with open(data_path, "r") as f:
+    with open(data_path) as f:
         return json.load(f)
 
 
-def compute_overall_maturity(pillar_results: List[dict]) -> dict:
+def compute_overall_maturity(pillar_results: list[dict]) -> dict:
     """Compute overall zero trust maturity from pillar assessments."""
     total_score = sum(p["score"] for p in pillar_results)
     total_max = sum(p["max_score"] for p in pillar_results)
@@ -117,22 +115,28 @@ def compute_overall_maturity(pillar_results: List[dict]) -> dict:
         level = "Initial"
     else:
         level = "Traditional"
-    return {"overall_score": total_score, "max_score": total_max,
-            "percentage": round(pct, 1), "maturity_level": level}
+    return {
+        "overall_score": total_score,
+        "max_score": total_max,
+        "percentage": round(pct, 1),
+        "maturity_level": level,
+    }
 
 
-def generate_recommendations(pillar_results: List[dict]) -> List[dict]:
+def generate_recommendations(pillar_results: list[dict]) -> list[dict]:
     """Generate prioritized recommendations based on assessment gaps."""
     recs = []
     for pillar in pillar_results:
         for control in pillar["controls"]:
             if not control["implemented"]:
-                recs.append({
-                    "pillar": pillar["pillar"],
-                    "control": control["control"],
-                    "priority": "HIGH" if pillar["percentage"] < 50 else "MEDIUM",
-                    "action": f"Implement: {control['control']}",
-                })
+                recs.append(
+                    {
+                        "pillar": pillar["pillar"],
+                        "control": control["control"],
+                        "priority": "HIGH" if pillar["percentage"] < 50 else "MEDIUM",
+                        "action": f"Implement: {control['control']}",
+                    }
+                )
     recs.sort(key=lambda r: 0 if r["priority"] == "HIGH" else 1)
     return recs
 

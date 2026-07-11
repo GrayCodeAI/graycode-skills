@@ -2,15 +2,22 @@
 # For authorized penetration testing and lab environments only
 """Wireless Network Penetration Testing Agent - Tests WiFi security using Scapy and aircrack-ng."""
 
+import argparse
+import contextlib
 import json
 import logging
-import argparse
 import subprocess
 from datetime import datetime
 
 from scapy.all import (
-    Dot11, Dot11Beacon, Dot11Elt, Dot11ProbeReq, Dot11Auth,
-    sniff, RadioTap, sendp, conf,
+    Dot11,
+    Dot11Auth,
+    Dot11Beacon,
+    Dot11Elt,
+    Dot11ProbeReq,
+    RadioTap,
+    sendp,
+    sniff,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -76,15 +83,20 @@ def capture_handshake(interface, target_bssid, channel, output_file, duration=60
     subprocess.run(set_channel_cmd, capture_output=True)
 
     cmd = [
-        "airodump-ng", "--bssid", target_bssid, "--channel", str(channel),
-        "--write", output_file, "--output-format", "pcap",
+        "airodump-ng",
+        "--bssid",
+        target_bssid,
+        "--channel",
+        str(channel),
+        "--write",
+        output_file,
+        "--output-format",
+        "pcap",
         interface,
     ]
     logger.info("Capturing handshake for %s on channel %d", target_bssid, channel)
-    try:
+    with contextlib.suppress(subprocess.TimeoutExpired):
         subprocess.run(cmd, timeout=duration, capture_output=True)
-    except subprocess.TimeoutExpired:
-        pass
     return f"{output_file}-01.cap"
 
 
@@ -114,12 +126,18 @@ def detect_client_probes(interface, duration=30):
 
     def probe_handler(pkt):
         if pkt.haslayer(Dot11ProbeReq):
-            ssid = pkt[Dot11Elt].info.decode("utf-8", errors="ignore") if pkt.haslayer(Dot11Elt) else ""
+            ssid = (
+                pkt[Dot11Elt].info.decode("utf-8", errors="ignore")
+                if pkt.haslayer(Dot11Elt)
+                else ""
+            )
             if ssid:
-                probes.append({
-                    "client_mac": pkt[Dot11].addr2,
-                    "probed_ssid": ssid,
-                })
+                probes.append(
+                    {
+                        "client_mac": pkt[Dot11].addr2,
+                        "probed_ssid": ssid,
+                    }
+                )
 
     sniff(iface=interface, prn=probe_handler, timeout=duration, store=False)
     unique_clients = len(set(p["client_mac"] for p in probes))
@@ -155,7 +173,9 @@ def generate_report(access_points, rogues, weak_crypto, client_probes):
             "clients_probing": len(set(p["client_mac"] for p in client_probes)),
         },
     }
-    print(f"WIRELESS PENTEST REPORT: {len(access_points)} APs, {len(rogues)} rogues, {len(weak_crypto)} weak")
+    print(
+        f"WIRELESS PENTEST REPORT: {len(access_points)} APs, {len(rogues)} rogues, {len(weak_crypto)} weak"
+    )
     return report
 
 

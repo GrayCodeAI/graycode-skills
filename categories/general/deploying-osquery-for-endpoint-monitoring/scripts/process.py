@@ -2,16 +2,16 @@
 """Osquery Results Analyzer - Parses osquery JSON results for anomaly detection."""
 
 import json
-import sys
 import os
-from collections import Counter, defaultdict
+import sys
+from collections import Counter
 from datetime import datetime
 
 
 def parse_osquery_results(json_path: str) -> list:
     """Parse osquery result log (JSON lines format)."""
     results = []
-    with open(json_path, "r") as f:
+    with open(json_path) as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -43,18 +43,22 @@ def analyze_results(results: list) -> dict:
         columns = entry.get("columns", {})
 
         if action == "added":
-            analysis["added_items"].append({
-                "query": name,
-                "host": entry.get("hostIdentifier", ""),
-                "timestamp": entry.get("unixTime", ""),
-                "data": columns,
-            })
+            analysis["added_items"].append(
+                {
+                    "query": name,
+                    "host": entry.get("hostIdentifier", ""),
+                    "timestamp": entry.get("unixTime", ""),
+                    "data": columns,
+                }
+            )
         elif action == "removed":
-            analysis["removed_items"].append({
-                "query": name,
-                "host": entry.get("hostIdentifier", ""),
-                "data": columns,
-            })
+            analysis["removed_items"].append(
+                {
+                    "query": name,
+                    "host": entry.get("hostIdentifier", ""),
+                    "data": columns,
+                }
+            )
 
     return analysis
 

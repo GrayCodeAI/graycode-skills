@@ -4,20 +4,34 @@
 import argparse
 import json
 import math
-import re
-import sys
 from collections import Counter, defaultdict
 from datetime import datetime
 from pathlib import Path
 
 SUSPICIOUS_UA_PATTERNS = [
-    "python-requests", "python-urllib", "curl", "wget", "powershell",
-    "go-http-client", "httpie", "postman", "insomnia",
+    "python-requests",
+    "python-urllib",
+    "curl",
+    "wget",
+    "powershell",
+    "go-http-client",
+    "httpie",
+    "postman",
+    "insomnia",
 ]
 
 FINANCIAL_KEYWORDS = [
-    "invoice", "payment", "wire", "transfer", "bank", "account",
-    "payroll", "salary", "remittance", "ach", "swift",
+    "invoice",
+    "payment",
+    "wire",
+    "transfer",
+    "bank",
+    "account",
+    "payroll",
+    "salary",
+    "remittance",
+    "ach",
+    "swift",
 ]
 
 
@@ -44,37 +58,50 @@ def analyze_inbox_rules(rules):
         forward_to = actions.get("forwardTo", []) or actions.get("forward_to", [])
         redirect_to = actions.get("redirectTo", []) or actions.get("redirect_to", [])
         delete_msg = actions.get("delete", False) or actions.get("moveToDeletedItems", False)
-        move_to = actions.get("moveToFolder", "") or ""
+        actions.get("moveToFolder", "") or ""
         conditions = rule.get("conditions", {})
         subject_contains = conditions.get("subjectContains", []) or []
         body_contains = conditions.get("bodyContains", []) or []
         for dest in forward_to + redirect_to:
-            addr = dest.get("emailAddress", {}).get("address", dest) if isinstance(dest, dict) else str(dest)
+            addr = (
+                dest.get("emailAddress", {}).get("address", dest)
+                if isinstance(dest, dict)
+                else str(dest)
+            )
             domain = addr.split("@")[-1] if "@" in str(addr) else ""
             user_domain = user.split("@")[-1] if "@" in user else ""
             if domain and domain != user_domain:
-                findings.append({
-                    "type": "external_forwarding_rule",
-                    "severity": "critical",
-                    "resource": user,
-                    "detail": f"Rule '{rule_name}' forwards to external address: {addr}",
-                })
+                findings.append(
+                    {
+                        "type": "external_forwarding_rule",
+                        "severity": "critical",
+                        "resource": user,
+                        "detail": f"Rule '{rule_name}' forwards to external address: {addr}",
+                    }
+                )
         if delete_msg:
-            findings.append({
-                "type": "deletion_rule",
-                "severity": "high",
-                "resource": user,
-                "detail": f"Rule '{rule_name}' auto-deletes messages",
-            })
-        keyword_hits = [kw for kw in FINANCIAL_KEYWORDS
-                        if any(kw in s.lower() for s in subject_contains + body_contains)]
+            findings.append(
+                {
+                    "type": "deletion_rule",
+                    "severity": "high",
+                    "resource": user,
+                    "detail": f"Rule '{rule_name}' auto-deletes messages",
+                }
+            )
+        keyword_hits = [
+            kw
+            for kw in FINANCIAL_KEYWORDS
+            if any(kw in s.lower() for s in subject_contains + body_contains)
+        ]
         if keyword_hits:
-            findings.append({
-                "type": "financial_keyword_filter",
-                "severity": "high",
-                "resource": user,
-                "detail": f"Rule '{rule_name}' targets financial keywords: {', '.join(keyword_hits)}",
-            })
+            findings.append(
+                {
+                    "type": "financial_keyword_filter",
+                    "severity": "high",
+                    "resource": user,
+                    "detail": f"Rule '{rule_name}' targets financial keywords: {', '.join(keyword_hits)}",
+                }
+            )
     return findings
 
 
@@ -93,20 +120,24 @@ def analyze_sign_ins(sign_ins):
         risk = si.get("riskLevelAggregated", si.get("risk_level", "none"))
         for pattern in SUSPICIOUS_UA_PATTERNS:
             if pattern.lower() in (ua or "").lower():
-                findings.append({
-                    "type": "suspicious_user_agent",
-                    "severity": "high",
-                    "resource": user,
-                    "detail": f"Sign-in from suspicious UA '{ua[:60]}' at IP {ip}",
-                })
+                findings.append(
+                    {
+                        "type": "suspicious_user_agent",
+                        "severity": "high",
+                        "resource": user,
+                        "detail": f"Sign-in from suspicious UA '{ua[:60]}' at IP {ip}",
+                    }
+                )
                 break
         if risk in ("high", "medium"):
-            findings.append({
-                "type": "risky_sign_in",
-                "severity": "high" if risk == "high" else "medium",
-                "resource": user,
-                "detail": f"Azure AD risk level '{risk}' from {country or ip}",
-            })
+            findings.append(
+                {
+                    "type": "risky_sign_in",
+                    "severity": "high" if risk == "high" else "medium",
+                    "resource": user,
+                    "detail": f"Azure AD risk level '{risk}' from {country or ip}",
+                }
+            )
         if lat and lon and ts:
             user_logins[user].append({"ts": ts, "lat": lat, "lon": lon, "ip": ip})
     for user, logins in user_logins.items():
@@ -121,15 +152,19 @@ def analyze_sign_ins(sign_ins):
                 hours = abs((t2 - t1).total_seconds()) / 3600.0
                 if hours < 0.01:
                     continue
-                dist = haversine_km(logins[i - 1]["lat"], logins[i - 1]["lon"], logins[i]["lat"], logins[i]["lon"])
+                dist = haversine_km(
+                    logins[i - 1]["lat"], logins[i - 1]["lon"], logins[i]["lat"], logins[i]["lon"]
+                )
                 speed = dist / hours
                 if speed > 900:
-                    findings.append({
-                        "type": "impossible_travel",
-                        "severity": "critical",
-                        "resource": user,
-                        "detail": f"Impossible travel: {dist:.0f} km in {hours:.1f}h ({speed:.0f} km/h) between IPs {logins[i-1]['ip']} and {logins[i]['ip']}",
-                    })
+                    findings.append(
+                        {
+                            "type": "impossible_travel",
+                            "severity": "critical",
+                            "resource": user,
+                            "detail": f"Impossible travel: {dist:.0f} km in {hours:.1f}h ({speed:.0f} km/h) between IPs {logins[i - 1]['ip']} and {logins[i]['ip']}",
+                        }
+                    )
             except (ValueError, TypeError):
                 continue
     return findings
@@ -143,22 +178,31 @@ def analyze_oauth_grants(grants):
         app = grant.get("appDisplayName", grant.get("app_name", ""))
         scopes = grant.get("scope", grant.get("scopes", ""))
         consent_type = grant.get("consentType", "")
-        risky_scopes = ["Mail.ReadWrite", "Mail.Send", "MailboxSettings.ReadWrite", "Files.ReadWrite.All"]
+        risky_scopes = [
+            "Mail.ReadWrite",
+            "Mail.Send",
+            "MailboxSettings.ReadWrite",
+            "Files.ReadWrite.All",
+        ]
         granted_risky = [s for s in risky_scopes if s.lower() in (scopes or "").lower()]
         if granted_risky:
-            findings.append({
-                "type": "risky_oauth_grant",
-                "severity": "high",
-                "resource": user,
-                "detail": f"App '{app}' granted risky scopes: {', '.join(granted_risky)}",
-            })
+            findings.append(
+                {
+                    "type": "risky_oauth_grant",
+                    "severity": "high",
+                    "resource": user,
+                    "detail": f"App '{app}' granted risky scopes: {', '.join(granted_risky)}",
+                }
+            )
         if consent_type == "AllPrincipals":
-            findings.append({
-                "type": "admin_consent_grant",
-                "severity": "critical",
-                "resource": user,
-                "detail": f"App '{app}' has admin consent (AllPrincipals) with scopes: {scopes[:80]}",
-            })
+            findings.append(
+                {
+                    "type": "admin_consent_grant",
+                    "severity": "critical",
+                    "resource": user,
+                    "detail": f"App '{app}' has admin consent (AllPrincipals) with scopes: {scopes[:80]}",
+                }
+            )
     return findings
 
 

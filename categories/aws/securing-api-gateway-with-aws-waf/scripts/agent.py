@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for managing AWS WAF Web ACLs protecting API Gateway endpoints."""
 
-import boto3
-import json
-import sys
 import argparse
+import json
 from datetime import datetime, timedelta, timezone
+
+import boto3
 
 
 def get_waf_client(region="us-east-1"):
@@ -61,15 +61,20 @@ def get_sampled_requests(client, web_acl_arn, rule_metric, scope="REGIONAL", min
     start_time = end_time - timedelta(minutes=minutes)
     try:
         response = client.get_sampled_requests(
-            WebAclArn=web_acl_arn, RuleMetricName=rule_metric, Scope=scope,
-            TimeWindow={"StartTime": start_time, "EndTime": end_time}, MaxItems=50,
+            WebAclArn=web_acl_arn,
+            RuleMetricName=rule_metric,
+            Scope=scope,
+            TimeWindow={"StartTime": start_time, "EndTime": end_time},
+            MaxItems=50,
         )
         samples = response.get("SampledRequests", [])
         print(f"\n[*] Sampled requests for rule '{rule_metric}': {len(samples)}")
         for s in samples[:10]:
             req = s["Request"]
-            print(f"  [{s.get('Action', '?')}] {req['Method']} {req.get('URI', '/')} "
-                  f"from {req.get('ClientIP', '?')} at {s.get('Timestamp', '?')}")
+            print(
+                f"  [{s.get('Action', '?')}] {req['Method']} {req.get('URI', '/')} "
+                f"from {req.get('ClientIP', '?')} at {s.get('Timestamp', '?')}"
+            )
         return samples
     except Exception as e:
         print(f"  [-] Error getting samples: {e}")
@@ -80,7 +85,10 @@ def get_rate_based_keys(client, name, acl_id, rule_name, scope="REGIONAL"):
     """Get IPs currently rate-limited by a rate-based rule."""
     try:
         response = client.get_rate_based_statement_managed_keys(
-            Scope=scope, WebACLName=name, WebACLId=acl_id, RuleName=rule_name,
+            Scope=scope,
+            WebACLName=name,
+            WebACLId=acl_id,
+            RuleName=rule_name,
         )
         keys = response.get("ManagedKeysIPV4", {}).get("Addresses", [])
         keys += response.get("ManagedKeysIPV6", {}).get("Addresses", [])
@@ -101,9 +109,13 @@ def get_waf_metrics(region="us-east-1", acl_name="api-gateway-waf", hours=24):
     metrics = {}
     for metric_name in ["AllowedRequests", "BlockedRequests"]:
         response = cw.get_metric_statistics(
-            Namespace="AWS/WAFV2", MetricName=metric_name,
+            Namespace="AWS/WAFV2",
+            MetricName=metric_name,
             Dimensions=[{"Name": "WebACL", "Value": acl_name}, {"Name": "Rule", "Value": "ALL"}],
-            StartTime=start_time, EndTime=end_time, Period=3600, Statistics=["Sum"],
+            StartTime=start_time,
+            EndTime=end_time,
+            Period=3600,
+            Statistics=["Sum"],
         )
         total = sum(dp["Sum"] for dp in response.get("Datapoints", []))
         metrics[metric_name] = total
@@ -117,8 +129,12 @@ def audit_web_acl(client, name, acl_id, scope="REGIONAL"):
     findings = []
     rules = acl.get("Rules", [])
     rule_names = [r["Name"] for r in rules]
-    recommended = ["AWSManagedRulesCommonRuleSet", "AWSManagedRulesKnownBadInputsRuleSet",
-                    "AWSManagedRulesSQLiRuleSet", "AWSManagedRulesAmazonIpReputationList"]
+    recommended = [
+        "AWSManagedRulesCommonRuleSet",
+        "AWSManagedRulesKnownBadInputsRuleSet",
+        "AWSManagedRulesSQLiRuleSet",
+        "AWSManagedRulesAmazonIpReputationList",
+    ]
     for rec in recommended:
         if not any(rec in rn for rn in rule_names):
             findings.append(f"MISSING: Recommended managed rule group '{rec}' not found")
@@ -136,7 +152,9 @@ def audit_web_acl(client, name, acl_id, scope="REGIONAL"):
 
 def main():
     parser = argparse.ArgumentParser(description="AWS WAF API Gateway Security Agent")
-    parser.add_argument("action", choices=["list", "details", "audit", "metrics", "samples", "rate-keys"])
+    parser.add_argument(
+        "action", choices=["list", "details", "audit", "metrics", "samples", "rate-keys"]
+    )
     parser.add_argument("--name", help="Web ACL name")
     parser.add_argument("--id", help="Web ACL ID")
     parser.add_argument("--region", default="us-east-1")

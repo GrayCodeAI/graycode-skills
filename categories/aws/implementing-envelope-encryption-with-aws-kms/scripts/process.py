@@ -19,16 +19,13 @@ Environment:
     or ~/.aws/credentials
 """
 
-import os
-import sys
-import json
-import struct
 import argparse
+import json
 import logging
-import base64
-import ctypes
+import os
+import struct
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional
 
 import boto3
 from botocore.exceptions import ClientError
@@ -51,8 +48,8 @@ def secure_wipe(data: bytearray):
 def generate_data_key(
     kms_client,
     key_id: str,
-    encryption_context: Optional[Dict[str, str]] = None,
-) -> Tuple[bytes, bytes]:
+    encryption_context: Optional[dict[str, str]] = None,
+) -> tuple[bytes, bytes]:
     """
     Generate a data encryption key (DEK) using AWS KMS.
 
@@ -80,7 +77,7 @@ def generate_data_key(
 def decrypt_data_key(
     kms_client,
     encrypted_key: bytes,
-    encryption_context: Optional[Dict[str, str]] = None,
+    encryption_context: Optional[dict[str, str]] = None,
 ) -> bytes:
     """Decrypt an encrypted data key using AWS KMS."""
     params = {"CiphertextBlob": encrypted_key}
@@ -99,8 +96,8 @@ def re_encrypt_data_key(
     kms_client,
     encrypted_key: bytes,
     new_key_id: str,
-    source_context: Optional[Dict[str, str]] = None,
-    dest_context: Optional[Dict[str, str]] = None,
+    source_context: Optional[dict[str, str]] = None,
+    dest_context: Optional[dict[str, str]] = None,
 ) -> bytes:
     """Re-encrypt a data key with a new master key without exposing plaintext."""
     params = {
@@ -124,7 +121,7 @@ def envelope_encrypt(
     data: bytes,
     kms_client,
     key_id: str,
-    encryption_context: Optional[Dict[str, str]] = None,
+    encryption_context: Optional[dict[str, str]] = None,
 ) -> bytes:
     """
     Encrypt data using envelope encryption.
@@ -163,7 +160,7 @@ def envelope_encrypt(
 def envelope_decrypt(
     data: bytes,
     kms_client,
-) -> Tuple[bytes, Dict]:
+) -> tuple[bytes, dict]:
     """
     Decrypt envelope-encrypted data.
 
@@ -254,8 +251,8 @@ def encrypt_file(
     output_path: str,
     kms_client,
     key_id: str,
-    encryption_context: Optional[Dict[str, str]] = None,
-) -> Dict:
+    encryption_context: Optional[dict[str, str]] = None,
+) -> dict:
     """Encrypt a file using envelope encryption."""
     plaintext = Path(input_path).read_bytes()
 
@@ -277,7 +274,7 @@ def encrypt_file(
     }
 
 
-def decrypt_file(input_path: str, output_path: str, kms_client) -> Dict:
+def decrypt_file(input_path: str, output_path: str, kms_client) -> dict:
     """Decrypt an envelope-encrypted file."""
     data = Path(input_path).read_bytes()
     plaintext, context = envelope_decrypt(data, kms_client)

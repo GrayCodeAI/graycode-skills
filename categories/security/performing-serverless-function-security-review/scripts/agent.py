@@ -3,6 +3,7 @@
 
 import json
 import re
+
 import boto3
 from botocore.exceptions import ClientError
 
@@ -25,9 +26,17 @@ def list_all_functions(client):
 
 def check_deprecated_runtime(runtime):
     deprecated = [
-        "python2.7", "python3.6", "python3.7", "nodejs10.x",
-        "nodejs12.x", "nodejs14.x", "dotnetcore2.1", "dotnetcore3.1",
-        "ruby2.5", "java8", "go1.x",
+        "python2.7",
+        "python3.6",
+        "python3.7",
+        "nodejs10.x",
+        "nodejs12.x",
+        "nodejs14.x",
+        "dotnetcore2.1",
+        "dotnetcore3.1",
+        "ruby2.5",
+        "java8",
+        "go1.x",
     ]
     return runtime in deprecated
 
@@ -41,9 +50,9 @@ def audit_execution_role(iam, role_arn):
             if policy["PolicyName"] == "AdministratorAccess":
                 findings.append(f"CRITICAL: Role {role_name} has AdministratorAccess")
             version_id = iam.get_policy(PolicyArn=policy["PolicyArn"])["Policy"]["DefaultVersionId"]
-            doc = iam.get_policy_version(
-                PolicyArn=policy["PolicyArn"], VersionId=version_id
-            )["PolicyVersion"]["Document"]
+            doc = iam.get_policy_version(PolicyArn=policy["PolicyArn"], VersionId=version_id)[
+                "PolicyVersion"
+            ]["Document"]
             for stmt in doc.get("Statement", []):
                 actions = stmt.get("Action", [])
                 if isinstance(actions, str):
@@ -97,9 +106,7 @@ def check_public_access(client, function_name):
         urls = client.list_function_url_configs(FunctionName=function_name)
         for url_cfg in urls.get("FunctionUrlConfigs", []):
             if url_cfg.get("AuthType") == "NONE":
-                findings.append(
-                    f"UNAUTHENTICATED URL: {function_name} -> {url_cfg['FunctionUrl']}"
-                )
+                findings.append(f"UNAUTHENTICATED URL: {function_name} -> {url_cfg['FunctionUrl']}")
     except ClientError:
         pass
     return findings
@@ -125,9 +132,7 @@ def run_review(region="us-east-1"):
         env = func.get("Environment", {}).get("Variables", {})
         secrets = check_env_secrets(env)
         if secrets:
-            report["secret_findings"].extend(
-                [{"function": name, "finding": s} for s in secrets]
-            )
+            report["secret_findings"].extend([{"function": name, "finding": s} for s in secrets])
         report["public_access_findings"].extend(check_public_access(lam, name))
     return report
 

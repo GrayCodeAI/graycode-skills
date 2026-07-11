@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Agent for hunting registry-based persistence mechanisms on Windows."""
 
-import json
 import argparse
-import subprocess
+import json
 import re
+import subprocess
 from datetime import datetime
 
 PERSISTENCE_KEYS = {
@@ -40,13 +40,22 @@ PERSISTENCE_KEYS = {
 }
 
 SUSPICIOUS_PATTERNS = [
-    r"\\temp\\", r"\\tmp\\", r"\\appdata\\local\\temp",
-    r"powershell.*-enc", r"powershell.*-nop",
-    r"cmd\.exe\s+/c\s+", r"mshta\.exe", r"rundll32\.exe.*javascript",
+    r"\\temp\\",
+    r"\\tmp\\",
+    r"\\appdata\\local\\temp",
+    r"powershell.*-enc",
+    r"powershell.*-nop",
+    r"cmd\.exe\s+/c\s+",
+    r"mshta\.exe",
+    r"rundll32\.exe.*javascript",
     r"regsvr32\.exe.*/s\s+/n\s+/u\s+/i:",
-    r"\\users\\public\\", r"\\programdata\\[^m]",
-    r"certutil.*-decode", r"bitsadmin.*transfer",
-    r"base64", r"downloadstring", r"iex\s*\(",
+    r"\\users\\public\\",
+    r"\\programdata\\[^m]",
+    r"certutil.*-decode",
+    r"bitsadmin.*transfer",
+    r"base64",
+    r"downloadstring",
+    r"iex\s*\(",
 ]
 
 
@@ -94,7 +103,9 @@ def _parse_reg(output, default_key):
             continue
         parts = re.split(r"\s{2,}", line, maxsplit=2)
         if len(parts) >= 3:
-            entries.append({"key": current_key, "name": parts[0], "type": parts[1], "value": parts[2]})
+            entries.append(
+                {"key": current_key, "name": parts[0], "type": parts[1], "value": parts[2]}
+            )
     return entries
 
 
@@ -104,7 +115,7 @@ def _check_suspicious(value):
 
 def compare_baseline(baseline_file, current_scan=None):
     """Compare current registry state against a known-good baseline."""
-    with open(baseline_file, "r") as f:
+    with open(baseline_file) as f:
         baseline = json.load(f)
     if current_scan is None:
         current_scan = scan_persistence_keys()
@@ -113,7 +124,7 @@ def compare_baseline(baseline_file, current_scan=None):
         for entry in cat_data.get("entries", []):
             baseline_set.add((entry.get("key", ""), entry.get("name", ""), entry.get("value", "")))
     new_entries = []
-    for cat_name, cat_data in current_scan["categories"].items():
+    for _cat_name, cat_data in current_scan["categories"].items():
         for entry in cat_data.get("entries", []):
             key_tuple = (entry.get("key", ""), entry.get("name", ""), entry.get("value", ""))
             if key_tuple not in baseline_set:
@@ -130,8 +141,12 @@ def main():
     parser = argparse.ArgumentParser(description="Hunt for registry persistence mechanisms")
     sub = parser.add_subparsers(dest="command")
     s = sub.add_parser("scan", help="Scan registry persistence keys")
-    s.add_argument("--categories", nargs="*", choices=list(PERSISTENCE_KEYS.keys()),
-                   help="Categories to scan (default: all)")
+    s.add_argument(
+        "--categories",
+        nargs="*",
+        choices=list(PERSISTENCE_KEYS.keys()),
+        help="Categories to scan (default: all)",
+    )
     s.add_argument("--save-baseline", help="Save scan as baseline JSON file")
     c = sub.add_parser("compare", help="Compare against baseline")
     c.add_argument("--baseline", required=True, help="Baseline JSON file")

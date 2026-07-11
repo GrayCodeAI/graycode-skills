@@ -10,8 +10,17 @@ from datetime import datetime
 def block_ip_at_firewall(ip_address, chain="INPUT", comment="breach-containment"):
     """Block a C2 or malicious IP address using iptables."""
     cmd = [
-        "iptables", "-A", chain, "-s", ip_address, "-j", "DROP",
-        "-m", "comment", "--comment", comment,
+        "iptables",
+        "-A",
+        chain,
+        "-s",
+        ip_address,
+        "-j",
+        "DROP",
+        "-m",
+        "comment",
+        "--comment",
+        comment,
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
@@ -42,14 +51,19 @@ def disable_ad_account(username, domain_controller=None):
             "timestamp": datetime.utcnow().isoformat() + "Z",
         }
     except Exception as e:
-        return {"action": "disable_account", "username": username, "success": False, "error": str(e)}
+        return {
+            "action": "disable_account",
+            "username": username,
+            "success": False,
+            "error": str(e),
+        }
 
 
 def reset_ad_password(username, domain_controller=None):
     """Force password reset for a compromised AD account."""
     ps_cmd = (
         f'Set-ADAccountPassword -Identity "{username}" -Reset '
-        f'-NewPassword (ConvertTo-SecureString -AsPlainText '
+        f"-NewPassword (ConvertTo-SecureString -AsPlainText "
         f'"TempP@ss{datetime.now().strftime("%H%M%S")}!" -Force)'
     )
     if domain_controller:
@@ -115,7 +129,7 @@ def sinkhole_domain(domain, sinkhole_ip="127.0.0.1", hosts_file="/etc/hosts"):
     """Add DNS sinkhole entry for a C2 domain."""
     entry = f"{sinkhole_ip}\t{domain}\t# breach-containment {datetime.utcnow().isoformat()}"
     try:
-        with open(hosts_file, "r") as f:
+        with open(hosts_file) as f:
             existing = f.read()
         if domain in existing:
             return {"action": "sinkhole", "domain": domain, "status": "already_sinkholed"}
@@ -190,4 +204,6 @@ if __name__ == "__main__":
     elif action == "collect-evidence":
         print(json.dumps(collect_volatile_evidence(), indent=2))
     else:
-        print("Usage: agent.py [block-ip <ip>|disable-account <user>|isolate-host <ip> [mgmt_ip]|block-smb|sinkhole <domain>|collect-evidence]")
+        print(
+            "Usage: agent.py [block-ip <ip>|disable-account <user>|isolate-host <ip> [mgmt_ip]|block-smb|sinkhole <domain>|collect-evidence]"
+        )

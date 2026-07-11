@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Agent for hunting Living-off-the-Land Binaries (LOLBins) execution patterns."""
 
-import json
 import argparse
+import json
 import re
 from datetime import datetime
-from pathlib import Path
 
 try:
     from elasticsearch import Elasticsearch
@@ -30,7 +29,11 @@ LOLBINS = {
     },
     "rundll32.exe": {
         "mitre": "T1218.011",
-        "suspicious_args": [r"javascript:", r"shell32\.dll.*ShellExec_RunDLL", r"url\.dll.*FileProtocolHandler"],
+        "suspicious_args": [
+            r"javascript:",
+            r"shell32\.dll.*ShellExec_RunDLL",
+            r"url\.dll.*FileProtocolHandler",
+        ],
         "description": "DLL loader abused for proxy execution",
     },
     "bitsadmin.exe": {
@@ -66,9 +69,16 @@ LOLBINS = {
     "powershell.exe": {
         "mitre": "T1059.001",
         "suspicious_args": [
-            r"-enc\s+", r"-encodedcommand", r"-nop\s+", r"-noprofile",
-            r"IEX\s*\(", r"Invoke-Expression", r"DownloadString",
-            r"Net\.WebClient", r"bitstransfer", r"-w\s+hidden",
+            r"-enc\s+",
+            r"-encodedcommand",
+            r"-nop\s+",
+            r"-noprofile",
+            r"IEX\s*\(",
+            r"Invoke-Expression",
+            r"DownloadString",
+            r"Net\.WebClient",
+            r"bitstransfer",
+            r"-w\s+hidden",
         ],
         "description": "PowerShell with obfuscation or download cradles",
     },
@@ -90,32 +100,44 @@ def hunt_lolbins_elastic(es_host, es_index, api_key=None, hours=24):
     es = Elasticsearch(**kwargs)
     results = {"timestamp": datetime.utcnow().isoformat(), "detections": [], "total_suspicious": 0}
     for binary, info in LOLBINS.items():
-        query = {"bool": {"must": [
-            {"term": {"process.name": binary}},
-            {"range": {"@timestamp": {"gte": f"now-{hours}h"}}}
-        ]}}
-        resp = es.search(index=es_index, body={"query": query, "size": 200, "sort": [{"@timestamp": "desc"}]})
+        query = {
+            "bool": {
+                "must": [
+                    {"term": {"process.name": binary}},
+                    {"range": {"@timestamp": {"gte": f"now-{hours}h"}}},
+                ]
+            }
+        }
+        resp = es.search(
+            index=es_index, body={"query": query, "size": 200, "sort": [{"@timestamp": "desc"}]}
+        )
         suspicious = []
         for hit in resp["hits"]["hits"]:
             src = hit["_source"]
             cmdline = src.get("process", {}).get("command_line", "")
             for pattern in info["suspicious_args"]:
                 if re.search(pattern, cmdline, re.I):
-                    suspicious.append({
-                        "timestamp": src.get("@timestamp"),
-                        "host": src.get("host", {}).get("name"),
-                        "user": src.get("user", {}).get("name"),
-                        "command_line": cmdline[:500],
-                        "parent_process": src.get("process", {}).get("parent", {}).get("name"),
-                        "matched_pattern": pattern,
-                    })
+                    suspicious.append(
+                        {
+                            "timestamp": src.get("@timestamp"),
+                            "host": src.get("host", {}).get("name"),
+                            "user": src.get("user", {}).get("name"),
+                            "command_line": cmdline[:500],
+                            "parent_process": src.get("process", {}).get("parent", {}).get("name"),
+                            "matched_pattern": pattern,
+                        }
+                    )
                     break
         if suspicious:
-            results["detections"].append({
-                "binary": binary, "mitre": info["mitre"],
-                "description": info["description"],
-                "count": len(suspicious), "events": suspicious[:50],
-            })
+            results["detections"].append(
+                {
+                    "binary": binary,
+                    "mitre": info["mitre"],
+                    "description": info["description"],
+                    "count": len(suspicious),
+                    "events": suspicious[:50],
+                }
+            )
             results["total_suspicious"] += len(suspicious)
     return results
 

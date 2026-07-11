@@ -4,10 +4,9 @@
 # For authorized penetration testing and lab environments only.
 """
 
+import argparse
 import json
 import logging
-import argparse
-import subprocess
 from datetime import datetime
 
 import requests
@@ -24,9 +23,9 @@ def havoc_api_request(teamserver, endpoint, token, method="GET", data=None):
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
     try:
         if method == "GET":
-            resp = requests.get(url, headers=headers, timeout=15, verify=False)
+            resp = requests.get(url, headers=headers, timeout=15, verify=True)
         else:
-            resp = requests.post(url, headers=headers, json=data or {}, timeout=15, verify=False)
+            resp = requests.post(url, headers=headers, json=data or {}, timeout=15, verify=True)
         resp.raise_for_status()
         return resp.json()
     except requests.RequestException as e:
@@ -72,9 +71,19 @@ def list_agents(teamserver, token):
     data = havoc_api_request(teamserver, "agents", token)
     agents = data.get("agents", [])
     logger.info("Found %d connected agents", len(agents))
-    return [{"id": a.get("agent_id"), "hostname": a.get("hostname"), "username": a.get("username"),
-             "os": a.get("os"), "process": a.get("process_name"), "pid": a.get("pid"),
-             "last_callback": a.get("last_callback"), "sleep": a.get("sleep")} for a in agents]
+    return [
+        {
+            "id": a.get("agent_id"),
+            "hostname": a.get("hostname"),
+            "username": a.get("username"),
+            "os": a.get("os"),
+            "process": a.get("process_name"),
+            "pid": a.get("pid"),
+            "last_callback": a.get("last_callback"),
+            "sleep": a.get("sleep"),
+        }
+        for a in agents
+    ]
 
 
 def generate_payload(teamserver, token, listener_name, payload_type="exe", arch="x64"):
@@ -128,17 +137,24 @@ def generate_report(listeners, agents, assessment):
         "agents": agents,
         "infrastructure_assessment": assessment,
     }
-    print(f"C2 REPORT: {len(listeners)} listeners, {len(agents)} agents, "
-          f"{len(assessment.get('recommendations', []))} recommendations")
+    print(
+        f"C2 REPORT: {len(listeners)} listeners, {len(agents)} agents, "
+        f"{len(assessment.get('recommendations', []))} recommendations"
+    )
     return report
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Havoc C2 Infrastructure Builder (authorized testing only)")
+    parser = argparse.ArgumentParser(
+        description="Havoc C2 Infrastructure Builder (authorized testing only)"
+    )
     parser.add_argument("--teamserver", required=True, help="Teamserver address (host:port)")
     parser.add_argument("--token", required=True, help="API authentication token")
-    parser.add_argument("--action", choices=["status", "create-listener", "generate-payload", "full-report"],
-                        default="full-report")
+    parser.add_argument(
+        "--action",
+        choices=["status", "create-listener", "generate-payload", "full-report"],
+        default="full-report",
+    )
     parser.add_argument("--listener-name", default="https-primary")
     parser.add_argument("--bind-port", type=int, default=443)
     parser.add_argument("--output", default="havoc_c2_report.json")

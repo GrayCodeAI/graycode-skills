@@ -14,8 +14,8 @@ Requirements:
 """
 
 import argparse
+import contextlib
 import csv
-import hashlib
 import json
 import logging
 import os
@@ -25,7 +25,6 @@ import sys
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 try:
     import requests
@@ -75,10 +74,21 @@ RANSOMWARE_EXTENSIONS = {
 }
 
 RANSOM_NOTE_PATTERNS = [
-    "README*.txt", "README*.html", "DECRYPT*.txt", "DECRYPT*.html",
-    "HOW_TO_RECOVER*", "RESTORE_FILES*", "RECOVER_YOUR_DATA*",
-    "!README!*", "_readme.txt", "info.txt", "info.hta",
-    "HELP_RECOVER*", "YOUR_FILES*", "#DECRYPT#*", "RANSOM_NOTE*",
+    "README*.txt",
+    "README*.html",
+    "DECRYPT*.txt",
+    "DECRYPT*.html",
+    "HOW_TO_RECOVER*",
+    "RESTORE_FILES*",
+    "RECOVER_YOUR_DATA*",
+    "!README!*",
+    "_readme.txt",
+    "info.txt",
+    "info.hta",
+    "HELP_RECOVER*",
+    "YOUR_FILES*",
+    "#DECRYPT#*",
+    "RANSOM_NOTE*",
 ]
 
 DECRYPTOR_SOURCES = {
@@ -117,13 +127,17 @@ class RansomwareScanner:
                     if item.is_file():
                         ext = item.suffix.lower()
                         if ext in RANSOMWARE_EXTENSIONS:
-                            self.encrypted_files.append({
-                                "path": str(item),
-                                "extension": ext,
-                                "family": RANSOMWARE_EXTENSIONS[ext],
-                                "size": item.stat().st_size,
-                                "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat(),
-                            })
+                            self.encrypted_files.append(
+                                {
+                                    "path": str(item),
+                                    "extension": ext,
+                                    "family": RANSOMWARE_EXTENSIONS[ext],
+                                    "size": item.stat().st_size,
+                                    "modified": datetime.fromtimestamp(
+                                        item.stat().st_mtime
+                                    ).isoformat(),
+                                }
+                            )
                             self.extension_counts[ext] += 1
                             self.affected_directories.add(str(item.parent))
                             count += 1
@@ -152,18 +166,20 @@ class RansomwareScanner:
                     for note in scan_path.rglob(pattern):
                         if note.is_file():
                             content = ""
-                            try:
+                            with contextlib.suppress(Exception):
                                 content = note.read_text(errors="ignore")[:2000]
-                            except Exception:
-                                pass
-                            self.ransom_notes.append({
-                                "path": str(note),
-                                "size": note.stat().st_size,
-                                "modified": datetime.fromtimestamp(note.stat().st_mtime).isoformat(),
-                                "content_preview": content[:500],
-                                "bitcoin_addresses": self._extract_bitcoin_addresses(content),
-                                "onion_urls": self._extract_onion_urls(content),
-                            })
+                            self.ransom_notes.append(
+                                {
+                                    "path": str(note),
+                                    "size": note.stat().st_size,
+                                    "modified": datetime.fromtimestamp(
+                                        note.stat().st_mtime
+                                    ).isoformat(),
+                                    "content_preview": content[:500],
+                                    "bitcoin_addresses": self._extract_bitcoin_addresses(content),
+                                    "onion_urls": self._extract_onion_urls(content),
+                                }
+                            )
                 except Exception as e:
                     logger.error(f"Error scanning for notes with pattern {pattern}: {e}")
 
@@ -178,12 +194,12 @@ class RansomwareScanner:
 
     @staticmethod
     def _extract_bitcoin_addresses(text: str) -> list:
-        btc_pattern = r'\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|bc1[a-zA-HJ-NP-Z0-9]{25,89}\b'
+        btc_pattern = r"\b[13][a-km-zA-HJ-NP-Z1-9]{25,34}\b|bc1[a-zA-HJ-NP-Z0-9]{25,89}\b"
         return re.findall(btc_pattern, text)
 
     @staticmethod
     def _extract_onion_urls(text: str) -> list:
-        onion_pattern = r'[a-z2-7]{16,56}\.onion'
+        onion_pattern = r"[a-z2-7]{16,56}\.onion"
         return re.findall(onion_pattern, text)
 
 
@@ -200,10 +216,14 @@ class BackupAssessor:
         try:
             result = subprocess.run(
                 ["vssadmin", "list", "shadows"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             shadows = re.findall(r"Shadow Copy Volume: (.+)", result.stdout)
-            deleted = "No items found" in result.stdout or "no shadow copies" in result.stdout.lower()
+            deleted = (
+                "No items found" in result.stdout or "no shadow copies" in result.stdout.lower()
+            )
             return {
                 "status": "deleted" if deleted else "available",
                 "shadow_count": len(shadows),
@@ -219,7 +239,9 @@ class BackupAssessor:
         try:
             result = subprocess.run(
                 ["wbadmin", "get", "versions"],
-                capture_output=True, text=True, timeout=30,
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
             versions = re.findall(r"Version identifier: (.+)", result.stdout)
             return {
@@ -245,7 +267,9 @@ class BackupAssessor:
                 "status": "available",
                 "file_count": file_count,
                 "newest_file": datetime.fromtimestamp(newest).isoformat(),
-                "total_size_gb": round(sum(f.stat().st_size for f in files if f.is_file()) / (1024**3), 2),
+                "total_size_gb": round(
+                    sum(f.stat().st_size for f in files if f.is_file()) / (1024**3), 2
+                ),
             }
         except Exception as e:
             return {"path": backup_path, "status": "error", "error": str(e)}
@@ -265,24 +289,35 @@ class EncryptionScopeAssessor:
         # Check for VSS deletion events
         try:
             result = subprocess.run(
-                ["wevtutil", "qe", "Application",
-                 "/q:*[System[Provider[@Name='VSS'] and (EventID=8193 or EventID=8194)]]",
-                 "/f:text", "/c:20"],
-                capture_output=True, text=True, timeout=30,
+                [
+                    "wevtutil",
+                    "qe",
+                    "Application",
+                    "/q:*[System[Provider[@Name='VSS'] and (EventID=8193 or EventID=8194)]]",
+                    "/f:text",
+                    "/c:20",
+                ],
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
-            indicators["vss_events"] = result.stdout[:2000] if result.stdout else "No VSS events found"
+            indicators["vss_events"] = (
+                result.stdout[:2000] if result.stdout else "No VSS events found"
+            )
         except Exception as e:
             indicators["vss_events_error"] = str(e)
 
         # Check for service stop events (ransomware often stops services)
         try:
             result = subprocess.run(
-                ["wevtutil", "qe", "System",
-                 "/q:*[System[EventID=7036]]",
-                 "/f:text", "/c:50"],
-                capture_output=True, text=True, timeout=30,
+                ["wevtutil", "qe", "System", "/q:*[System[EventID=7036]]", "/f:text", "/c:50"],
+                capture_output=True,
+                text=True,
+                timeout=30,
             )
-            indicators["service_stops"] = result.stdout[:2000] if result.stdout else "No service stop events"
+            indicators["service_stops"] = (
+                result.stdout[:2000] if result.stdout else "No service stop events"
+            )
         except Exception as e:
             indicators["service_stops_error"] = str(e)
 
@@ -297,8 +332,15 @@ class EncryptionScopeAssessor:
                 result = subprocess.run(["ps", "aux"], capture_output=True, text=True)
             suspicious = []
             suspicious_names = [
-                "encrypt", "ransom", "lock", "crypt", "vssadmin", "wbadmin",
-                "bcdedit", "wmic shadowcopy", "cipher",
+                "encrypt",
+                "ransom",
+                "lock",
+                "crypt",
+                "vssadmin",
+                "wbadmin",
+                "bcdedit",
+                "wmic shadowcopy",
+                "cipher",
             ]
             for line in result.stdout.lower().split("\n"):
                 for name in suspicious_names:
@@ -312,8 +354,9 @@ class EncryptionScopeAssessor:
             return {"error": str(e)}
 
 
-def generate_scope_report(incident_id: str, scanner: RansomwareScanner,
-                          backup: BackupAssessor, output_dir: str):
+def generate_scope_report(
+    incident_id: str, scanner: RansomwareScanner, backup: BackupAssessor, output_dir: str
+):
     """Generate a comprehensive ransomware scope assessment report."""
     os.makedirs(output_dir, exist_ok=True)
     report = {
@@ -327,12 +370,16 @@ def generate_scope_report(incident_id: str, scanner: RansomwareScanner,
         },
         "ransom_notes": {
             "total_found": len(scanner.ransom_notes),
-            "bitcoin_addresses": list(set(
-                addr for note in scanner.ransom_notes for addr in note.get("bitcoin_addresses", [])
-            )),
-            "onion_urls": list(set(
-                url for note in scanner.ransom_notes for url in note.get("onion_urls", [])
-            )),
+            "bitcoin_addresses": list(
+                set(
+                    addr
+                    for note in scanner.ransom_notes
+                    for addr in note.get("bitcoin_addresses", [])
+                )
+            ),
+            "onion_urls": list(
+                set(url for note in scanner.ransom_notes for url in note.get("onion_urls", []))
+            ),
         },
         "backup_status": {
             "vss": backup.check_vss_status(),
@@ -364,11 +411,17 @@ def generate_scope_report(incident_id: str, scanner: RansomwareScanner,
 def main():
     parser = argparse.ArgumentParser(description="Ransomware Incident Response Automation")
     parser.add_argument("--incident-id", required=True, help="Incident tracking ID")
-    parser.add_argument("--scan-paths", nargs="+", required=True, help="Paths to scan for encrypted files")
-    parser.add_argument("--backup-paths", nargs="*", default=[], help="Backup paths to check integrity")
+    parser.add_argument(
+        "--scan-paths", nargs="+", required=True, help="Paths to scan for encrypted files"
+    )
+    parser.add_argument(
+        "--backup-paths", nargs="*", default=[], help="Backup paths to check integrity"
+    )
     parser.add_argument("--output-dir", default="./ransomware_ir_output", help="Output directory")
     parser.add_argument("--max-files", type=int, default=10000, help="Maximum files to scan")
-    parser.add_argument("--check-processes", action="store_true", help="Check for active encryption processes")
+    parser.add_argument(
+        "--check-processes", action="store_true", help="Check for active encryption processes"
+    )
 
     args = parser.parse_args()
 
@@ -411,7 +464,7 @@ def main():
     logger.info(f"Assessment complete. Family: {report['ransomware_family']}")
     logger.info(f"Total encrypted files: {report['encryption_scope']['total_encrypted_files']}")
 
-    print(f"\nRansomware IR Assessment Complete")
+    print("\nRansomware IR Assessment Complete")
     print(f"Incident ID: {args.incident_id}")
     print(f"Likely Family: {report['ransomware_family']}")
     print(f"Encrypted Files: {report['encryption_scope']['total_encrypted_files']}")

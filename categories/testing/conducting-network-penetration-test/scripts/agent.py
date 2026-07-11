@@ -2,9 +2,9 @@
 # For authorized penetration testing and lab environments only
 """Network Penetration Testing Agent - Automates host discovery, port scanning, and vuln assessment."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 import nmap
@@ -20,11 +20,13 @@ def host_discovery(target_network):
     hosts = []
     for host in scanner.all_hosts():
         if scanner[host].state() == "up":
-            hosts.append({
-                "ip": host,
-                "hostname": scanner[host].hostname(),
-                "state": scanner[host].state(),
-            })
+            hosts.append(
+                {
+                    "ip": host,
+                    "hostname": scanner[host].hostname(),
+                    "state": scanner[host].state(),
+                }
+            )
     logger.info("Host discovery: %d live hosts on %s", len(hosts), target_network)
     return hosts
 
@@ -43,24 +45,28 @@ def port_scan(target, ports="1-10000", scan_type="-sS"):
         }
         if "osmatch" in scanner[host]:
             host_info["os_match"] = [
-                {"name": m["name"], "accuracy": m["accuracy"]}
-                for m in scanner[host]["osmatch"][:3]
+                {"name": m["name"], "accuracy": m["accuracy"]} for m in scanner[host]["osmatch"][:3]
             ]
         for proto in scanner[host].all_protocols():
             for port in scanner[host][proto]:
                 svc = scanner[host][proto][port]
-                host_info["services"].append({
-                    "port": port,
-                    "protocol": proto,
-                    "state": svc["state"],
-                    "service": svc.get("name", ""),
-                    "version": svc.get("version", ""),
-                    "product": svc.get("product", ""),
-                    "extrainfo": svc.get("extrainfo", ""),
-                })
+                host_info["services"].append(
+                    {
+                        "port": port,
+                        "protocol": proto,
+                        "state": svc["state"],
+                        "service": svc.get("name", ""),
+                        "version": svc.get("version", ""),
+                        "product": svc.get("product", ""),
+                        "extrainfo": svc.get("extrainfo", ""),
+                    }
+                )
         results.append(host_info)
-    logger.info("Port scan: %d hosts, %d total services",
-                len(results), sum(len(h["services"]) for h in results))
+    logger.info(
+        "Port scan: %d hosts, %d total services",
+        len(results),
+        sum(len(h["services"]) for h in results),
+    )
     return results
 
 
@@ -68,8 +74,9 @@ def vulnerability_scan(target, ports="1-1024"):
     """Run Nmap vulnerability scripts against target."""
     scanner = nmap.PortScanner()
     scanner.scan(
-        hosts=target, ports=ports,
-        arguments="-sV --script=vulners,vulscan/vulscan.nse --script-args vulscan/vulscan.db=cve.csv"
+        hosts=target,
+        ports=ports,
+        arguments="-sV --script=vulners,vulscan/vulscan.nse --script-args vulscan/vulscan.db=cve.csv",
     )
     vulns = []
     for host in scanner.all_hosts():
@@ -78,13 +85,15 @@ def vulnerability_scan(target, ports="1-1024"):
                 svc = scanner[host][proto][port]
                 scripts = svc.get("script", {})
                 if scripts:
-                    vulns.append({
-                        "host": host,
-                        "port": port,
-                        "service": svc.get("name", ""),
-                        "version": svc.get("version", ""),
-                        "scripts": scripts,
-                    })
+                    vulns.append(
+                        {
+                            "host": host,
+                            "port": port,
+                            "service": svc.get("name", ""),
+                            "version": svc.get("version", ""),
+                            "scripts": scripts,
+                        }
+                    )
     logger.info("Vulnerability scan: %d services with script output", len(vulns))
     return vulns
 
@@ -93,8 +102,9 @@ def smb_enumeration(target):
     """Enumerate SMB shares and users via Nmap scripts."""
     scanner = nmap.PortScanner()
     scanner.scan(
-        hosts=target, ports="139,445",
-        arguments="--script=smb-enum-shares,smb-enum-users,smb-os-discovery"
+        hosts=target,
+        ports="139,445",
+        arguments="--script=smb-enum-shares,smb-enum-users,smb-os-discovery",
     )
     results = {}
     for host in scanner.all_hosts():
@@ -110,10 +120,7 @@ def smb_enumeration(target):
 def ssl_audit(target, port=443):
     """Audit SSL/TLS configuration using Nmap ssl-enum-ciphers."""
     scanner = nmap.PortScanner()
-    scanner.scan(
-        hosts=target, ports=str(port),
-        arguments="--script=ssl-enum-ciphers,ssl-cert"
-    )
+    scanner.scan(hosts=target, ports=str(port), arguments="--script=ssl-enum-ciphers,ssl-cert")
     results = {}
     for host in scanner.all_hosts():
         if port in scanner[host].get("tcp", {}):
@@ -139,14 +146,18 @@ def classify_findings(scan_results, vuln_results):
             severity = "Critical"
         elif "high" in script_text:
             severity = "High"
-        findings.append({
-            "host": vuln["host"],
-            "port": vuln["port"],
-            "service": vuln["service"],
-            "severity": severity,
-            "details": scripts,
-        })
-    findings.sort(key=lambda x: {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}.get(x["severity"], 4))
+        findings.append(
+            {
+                "host": vuln["host"],
+                "port": vuln["port"],
+                "service": vuln["service"],
+                "severity": severity,
+                "details": scripts,
+            }
+        )
+    findings.sort(
+        key=lambda x: {"Critical": 0, "High": 1, "Medium": 2, "Low": 3}.get(x["severity"], 4)
+    )
     return findings
 
 

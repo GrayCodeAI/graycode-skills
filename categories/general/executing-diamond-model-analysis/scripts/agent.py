@@ -2,12 +2,11 @@
 """Diamond Model intrusion analysis agent for structuring adversary activity."""
 
 import argparse
-import json
 import hashlib
+import json
 import logging
+from dataclasses import dataclass, field
 from datetime import datetime
-from dataclasses import dataclass, field, asdict
-from typing import List, Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -16,7 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Vertex:
     vertex_type: str
-    values: List[str] = field(default_factory=list)
+    values: list[str] = field(default_factory=list)
     confidence: str = "medium"
     notes: str = ""
 
@@ -38,9 +37,9 @@ class DiamondEvent:
 def create_event(event_data: dict) -> DiamondEvent:
     """Build a DiamondEvent from a raw dict of incident data."""
     return DiamondEvent(
-        event_id=event_data.get("event_id", hashlib.md5(
-            json.dumps(event_data, sort_keys=True).encode()
-        ).hexdigest()[:8]),
+        event_id=event_data.get(
+            "event_id", hashlib.md5(json.dumps(event_data, sort_keys=True).encode()).hexdigest()[:8]
+        ),
         timestamp=event_data.get("timestamp", datetime.utcnow().isoformat()),
         adversary=Vertex(
             vertex_type="adversary",
@@ -65,7 +64,7 @@ def create_event(event_data: dict) -> DiamondEvent:
     )
 
 
-def pivot_on_vertex(events: List[DiamondEvent], vertex_type: str, value: str) -> List[DiamondEvent]:
+def pivot_on_vertex(events: list[DiamondEvent], vertex_type: str, value: str) -> list[DiamondEvent]:
     """Pivot across events sharing a common vertex value."""
     matches = []
     for event in events:
@@ -76,7 +75,7 @@ def pivot_on_vertex(events: List[DiamondEvent], vertex_type: str, value: str) ->
     return matches
 
 
-def cluster_events(events: List[DiamondEvent]) -> dict:
+def cluster_events(events: list[DiamondEvent]) -> dict:
     """Cluster events by shared infrastructure and capability vertices."""
     infra_map = {}
     cap_map = {}
@@ -96,26 +95,28 @@ def cluster_events(events: List[DiamondEvent]) -> dict:
     return {"clusters": clusters, "total_events": len(events)}
 
 
-def build_activity_thread(events: List[DiamondEvent]) -> List[dict]:
+def build_activity_thread(events: list[DiamondEvent]) -> list[dict]:
     """Order events into a time-sorted activity thread."""
     sorted_events = sorted(events, key=lambda e: e.timestamp)
     thread = []
     for idx, event in enumerate(sorted_events):
-        thread.append({
-            "sequence": idx + 1,
-            "event_id": event.event_id,
-            "timestamp": event.timestamp,
-            "phase": event.phase,
-            "adversary": event.adversary.values,
-            "capability": event.capability.values,
-            "infrastructure": event.infrastructure.values,
-            "victim": event.victim.values,
-            "result": event.result,
-        })
+        thread.append(
+            {
+                "sequence": idx + 1,
+                "event_id": event.event_id,
+                "timestamp": event.timestamp,
+                "phase": event.phase,
+                "adversary": event.adversary.values,
+                "capability": event.capability.values,
+                "infrastructure": event.infrastructure.values,
+                "victim": event.victim.values,
+                "result": event.result,
+            }
+        )
     return thread
 
 
-def generate_report(events: List[DiamondEvent]) -> dict:
+def generate_report(events: list[DiamondEvent]) -> dict:
     """Generate a complete Diamond Model analysis report."""
     clusters = cluster_events(events)
     thread = build_activity_thread(events)
@@ -139,7 +140,7 @@ def generate_report(events: List[DiamondEvent]) -> dict:
     }
 
 
-def load_events_from_file(filepath: str) -> List[DiamondEvent]:
+def load_events_from_file(filepath: str) -> list[DiamondEvent]:
     """Load raw event data from a JSON file."""
     with open(filepath) as f:
         raw = json.load(f)
@@ -151,7 +152,9 @@ def main():
     parser = argparse.ArgumentParser(description="Diamond Model Analysis Agent")
     parser.add_argument("--input", required=True, help="JSON file with raw event data")
     parser.add_argument("--output", default="diamond_report.json", help="Output report path")
-    parser.add_argument("--pivot-type", choices=["adversary", "capability", "infrastructure", "victim"])
+    parser.add_argument(
+        "--pivot-type", choices=["adversary", "capability", "infrastructure", "victim"]
+    )
     parser.add_argument("--pivot-value", help="Value to pivot on")
     args = parser.parse_args()
 

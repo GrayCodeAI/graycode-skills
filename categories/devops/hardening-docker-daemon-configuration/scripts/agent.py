@@ -4,10 +4,7 @@
 import argparse
 import json
 import os
-import subprocess
-import sys
 from datetime import datetime, timezone
-
 
 DAEMON_JSON_PATH = "/etc/docker/daemon.json"
 
@@ -27,7 +24,7 @@ def read_daemon_config():
     if not os.path.isfile(DAEMON_JSON_PATH):
         return {"error": f"{DAEMON_JSON_PATH} not found"}
     try:
-        with open(DAEMON_JSON_PATH, "r") as f:
+        with open(DAEMON_JSON_PATH) as f:
             return json.load(f)
     except (json.JSONDecodeError, PermissionError) as e:
         return {"error": str(e)}
@@ -41,23 +38,58 @@ def audit_daemon_config(config):
         return findings
 
     if config.get("icc", True):
-        findings.append({"check": "CIS 2.1", "issue": "Inter-container communication enabled", "severity": "MEDIUM"})
+        findings.append(
+            {
+                "check": "CIS 2.1",
+                "issue": "Inter-container communication enabled",
+                "severity": "MEDIUM",
+            }
+        )
     if not config.get("live-restore"):
-        findings.append({"check": "CIS 2.2", "issue": "Live restore not enabled", "severity": "LOW"})
+        findings.append(
+            {"check": "CIS 2.2", "issue": "Live restore not enabled", "severity": "LOW"}
+        )
     if config.get("userland-proxy", True):
-        findings.append({"check": "CIS 2.3", "issue": "Userland proxy enabled (use iptables)", "severity": "LOW"})
+        findings.append(
+            {
+                "check": "CIS 2.3",
+                "issue": "Userland proxy enabled (use iptables)",
+                "severity": "LOW",
+            }
+        )
     if not config.get("no-new-privileges"):
-        findings.append({"check": "CIS 2.4", "issue": "no-new-privileges not set", "severity": "MEDIUM"})
+        findings.append(
+            {"check": "CIS 2.4", "issue": "no-new-privileges not set", "severity": "MEDIUM"}
+        )
     if "userns-remap" not in config:
-        findings.append({"check": "CIS 2.8", "issue": "User namespace remapping not configured", "severity": "MEDIUM"})
-    if not config.get("tls"):
-        if not config.get("tlsverify"):
-            findings.append({"check": "CIS 2.6", "issue": "TLS not configured for Docker daemon", "severity": "HIGH"})
+        findings.append(
+            {
+                "check": "CIS 2.8",
+                "issue": "User namespace remapping not configured",
+                "severity": "MEDIUM",
+            }
+        )
+    if not config.get("tls") and not config.get("tlsverify"):
+        findings.append(
+            {
+                "check": "CIS 2.6",
+                "issue": "TLS not configured for Docker daemon",
+                "severity": "HIGH",
+            }
+        )
     log_driver = config.get("log-driver", "")
     if not log_driver:
-        findings.append({"check": "CIS 2.12", "issue": "No log driver configured", "severity": "MEDIUM"})
+        findings.append(
+            {"check": "CIS 2.12", "issue": "No log driver configured", "severity": "MEDIUM"}
+        )
     if config.get("insecure-registries"):
-        findings.append({"check": "CIS 2.4", "issue": f"Insecure registries: {config['insecure-registries']}", "severity": "HIGH"})
+        findings.append(
+            {
+                "check": "CIS 2.4",
+                "issue": f"Insecure registries: {config['insecure-registries']}",
+                "severity": "HIGH",
+            }
+        )
 
     return findings
 
@@ -70,11 +102,13 @@ def check_docker_socket():
         stat = os.stat(socket_path)
         mode = oct(stat.st_mode)[-3:]
         if mode != "660":
-            findings.append({
-                "check": "CIS 3.3",
-                "issue": f"Docker socket permissions: {mode} (should be 660)",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "check": "CIS 3.3",
+                    "issue": f"Docker socket permissions: {mode} (should be 660)",
+                    "severity": "HIGH",
+                }
+            )
     return findings
 
 
@@ -91,11 +125,13 @@ def check_docker_files():
             stat = os.stat(fpath)
             mode = oct(stat.st_mode)[-3:]
             if mode > expected:
-                findings.append({
-                    "check": "CIS 3.x",
-                    "issue": f"{fpath}: permissions {mode} (should be {expected})",
-                    "severity": "MEDIUM",
-                })
+                findings.append(
+                    {
+                        "check": "CIS 3.x",
+                        "issue": f"{fpath}: permissions {mode} (should be {expected})",
+                        "severity": "MEDIUM",
+                    }
+                )
     return findings
 
 

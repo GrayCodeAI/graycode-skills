@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Bootkit and rootkit analysis agent for MBR/VBR/UEFI inspection and rootkit detection."""
 
-import struct
 import hashlib
-import os
-import sys
-import subprocess
 import math
+import os
+import struct
+import subprocess
+import sys
 from collections import Counter
 
 
@@ -20,7 +20,7 @@ def read_mbr(disk_path_or_file):
 def validate_mbr_signature(mbr_data):
     """Check the MBR boot signature at bytes 510-511 (should be 0x55AA)."""
     sig = mbr_data[510:512]
-    valid = sig == b"\x55\xAA"
+    valid = sig == b"\x55\xaa"
     return valid, sig.hex()
 
 
@@ -29,30 +29,32 @@ def parse_partition_table(mbr_data):
     partitions = []
     for i in range(4):
         offset = 446 + (i * 16)
-        entry = mbr_data[offset:offset + 16]
+        entry = mbr_data[offset : offset + 16]
         if entry == b"\x00" * 16:
             continue
         boot_flag = entry[0]
         part_type = entry[4]
         start_lba = struct.unpack_from("<I", entry, 8)[0]
         size_lba = struct.unpack_from("<I", entry, 12)[0]
-        partitions.append({
-            "index": i + 1,
-            "active": boot_flag == 0x80,
-            "type_id": f"0x{part_type:02X}",
-            "start_lba": start_lba,
-            "size_sectors": size_lba,
-            "size_mb": round(size_lba * 512 / (1024 * 1024), 1),
-        })
+        partitions.append(
+            {
+                "index": i + 1,
+                "active": boot_flag == 0x80,
+                "type_id": f"0x{part_type:02X}",
+                "start_lba": start_lba,
+                "size_sectors": size_lba,
+                "size_mb": round(size_lba * 512 / (1024 * 1024), 1),
+            }
+        )
     return partitions
 
 
 BOOTKIT_SIGNATURES = {
-    b"\xE8\x00\x00\x5E\x81\xEE": "TDL4/Alureon bootkit",
-    b"\xFA\x33\xC0\x8E\xD0\xBC\x00\x7C\x8B\xF4\x50\x07": "Standard Windows MBR (clean)",
-    b"\xEB\x5A\x90\x4E\x54\x46\x53": "Standard NTFS VBR (clean)",
-    b"\xEB\x52\x90\x4E\x54\x46\x53": "NTFS VBR variant (clean)",
-    b"\x33\xC0\x8E\xD0\xBC\x00\x7C": "Windows 10 MBR (clean)",
+    b"\xe8\x00\x00\x5e\x81\xee": "TDL4/Alureon bootkit",
+    b"\xfa\x33\xc0\x8e\xd0\xbc\x00\x7c\x8b\xf4\x50\x07": "Standard Windows MBR (clean)",
+    b"\xeb\x5a\x90\x4e\x54\x46\x53": "Standard NTFS VBR (clean)",
+    b"\xeb\x52\x90\x4e\x54\x46\x53": "NTFS VBR variant (clean)",
+    b"\x33\xc0\x8e\xd0\xbc\x00\x7c": "Windows 10 MBR (clean)",
 }
 
 
@@ -72,10 +74,7 @@ def calculate_entropy(data):
         return 0.0
     counter = Counter(data)
     length = len(data)
-    entropy = -sum(
-        (count / length) * math.log2(count / length)
-        for count in counter.values()
-    )
+    entropy = -sum((count / length) * math.log2(count / length) for count in counter.values())
     return round(entropy, 4)
 
 
@@ -93,14 +92,14 @@ def analyze_boot_code(mbr_data):
     sha256 = hashlib.sha256(boot_code).hexdigest()
     suspicious_patterns = []
     # Check for INT 13h hooking (common bootkit technique)
-    if b"\xCD\x13" in boot_code:
-        count = boot_code.count(b"\xCD\x13")
+    if b"\xcd\x13" in boot_code:
+        count = boot_code.count(b"\xcd\x13")
         suspicious_patterns.append(f"INT 13h calls: {count}")
     # Check for far jumps to unusual addresses
-    if b"\xEA" in boot_code:
+    if b"\xea" in boot_code:
         suspicious_patterns.append("Far JMP instruction found")
     # Check for self-modifying code patterns
-    if b"\xF3\xA4" in boot_code or b"\xF3\xA5" in boot_code:
+    if b"\xf3\xa4" in boot_code or b"\xf3\xa5" in boot_code:
         suspicious_patterns.append("REP MOVSB/MOVSW (memory copy, possible code relocation)")
     return {
         "entropy": entropy,
@@ -171,8 +170,10 @@ if __name__ == "__main__":
         print(f"[*] Partition entries: {len(partitions)}")
         for p in partitions:
             active = "Active" if p["active"] else "Inactive"
-            print(f"    Part {p['index']}: Type={p['type_id']} {active} "
-                  f"Start=LBA {p['start_lba']} Size={p['size_mb']} MB")
+            print(
+                f"    Part {p['index']}: Type={p['type_id']} {active} "
+                f"Start=LBA {p['start_lba']} Size={p['size_mb']} MB"
+            )
 
         sigs = scan_bootkit_signatures(mbr)
         for s in sigs:
@@ -180,8 +181,10 @@ if __name__ == "__main__":
             print(f"{tag} Signature match: {s['signature']} at offset {s['offset']}")
 
         analysis = analyze_boot_code(mbr)
-        print(f"[*] Boot code entropy: {analysis['entropy']}"
-              f" ({'HIGH - possible encryption' if analysis['high_entropy'] else 'Normal'})")
+        print(
+            f"[*] Boot code entropy: {analysis['entropy']}"
+            f" ({'HIGH - possible encryption' if analysis['high_entropy'] else 'Normal'})"
+        )
         print(f"[*] Boot code SHA-256: {analysis['sha256']}")
         for pat in analysis["suspicious_patterns"]:
             print(f"[!] {pat}")

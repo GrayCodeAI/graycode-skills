@@ -5,11 +5,9 @@ import argparse
 import json
 import logging
 import os
-import sys
 import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -18,6 +16,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DiamondEvent:
     """A Diamond Model event with four core vertices."""
+
     event_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
     timestamp: str = ""
     adversary: str = ""
@@ -32,32 +31,40 @@ class DiamondEvent:
     notes: str = ""
 
 
-def create_event(adversary: str, capability: str, infrastructure: str,
-                 victim: str, **kwargs) -> DiamondEvent:
+def create_event(
+    adversary: str, capability: str, infrastructure: str, victim: str, **kwargs
+) -> DiamondEvent:
     """Create a Diamond Model event from the four vertices."""
     return DiamondEvent(
-        adversary=adversary, capability=capability,
-        infrastructure=infrastructure, victim=victim,
-        timestamp=datetime.utcnow().isoformat(), **kwargs)
+        adversary=adversary,
+        capability=capability,
+        infrastructure=infrastructure,
+        victim=victim,
+        timestamp=datetime.utcnow().isoformat(),
+        **kwargs,
+    )
 
 
-def load_events(data_path: str) -> List[DiamondEvent]:
+def load_events(data_path: str) -> list[DiamondEvent]:
     """Load Diamond Model events from JSON file."""
     with open(data_path) as f:
         data = json.load(f)
     events = []
     for item in data.get("events", []):
-        events.append(DiamondEvent(**{k: v for k, v in item.items()
-                                      if k in DiamondEvent.__dataclass_fields__}))
+        events.append(
+            DiamondEvent(
+                **{k: v for k, v in item.items() if k in DiamondEvent.__dataclass_fields__}
+            )
+        )
     return events
 
 
-def pivot_on_vertex(events: List[DiamondEvent], vertex: str, value: str) -> List[DiamondEvent]:
+def pivot_on_vertex(events: list[DiamondEvent], vertex: str, value: str) -> list[DiamondEvent]:
     """Pivot analysis: find all events sharing a vertex value."""
     return [e for e in events if getattr(e, vertex, "") == value]
 
 
-def build_activity_thread(events: List[DiamondEvent], adversary: str) -> dict:
+def build_activity_thread(events: list[DiamondEvent], adversary: str) -> dict:
     """Build an activity thread for an adversary across events."""
     thread_events = [e for e in events if e.adversary == adversary]
     thread_events.sort(key=lambda e: e.timestamp)
@@ -73,7 +80,7 @@ def build_activity_thread(events: List[DiamondEvent], adversary: str) -> dict:
     }
 
 
-def cluster_by_infrastructure(events: List[DiamondEvent]) -> Dict[str, List[str]]:
+def cluster_by_infrastructure(events: list[DiamondEvent]) -> dict[str, list[str]]:
     """Cluster events by shared infrastructure to identify campaigns."""
     clusters = {}
     for e in events:
@@ -82,7 +89,7 @@ def cluster_by_infrastructure(events: List[DiamondEvent]) -> Dict[str, List[str]
     return clusters
 
 
-def compute_vertex_statistics(events: List[DiamondEvent]) -> dict:
+def compute_vertex_statistics(events: list[DiamondEvent]) -> dict:
     """Compute statistics across all Diamond Model vertices."""
     return {
         "total_events": len(events),

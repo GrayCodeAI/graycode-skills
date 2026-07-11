@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """User Behavior Analytics (UEBA) agent using elasticsearch-py."""
 
-import sys
-import json
 import math
-from datetime import datetime, timedelta
+import sys
+from datetime import datetime
 
 try:
     from elasticsearch import Elasticsearch
@@ -54,7 +53,7 @@ def build_user_baselines(es, index="logs-auth-*", days=30):
                     "daily_count": {
                         "date_histogram": {"field": "@timestamp", "calendar_interval": "day"},
                     },
-                }
+                },
             }
         },
     }
@@ -97,14 +96,16 @@ def detect_impossible_travel(es, index="logs-auth-*", hours=24):
         user = src.get("user", {}).get("name")
         if not user:
             continue
-        events_by_user.setdefault(user, []).append({
-            "timestamp": src.get("@timestamp"),
-            "ip": src.get("source", {}).get("ip"),
-            "lat": src.get("source", {}).get("geo", {}).get("location", {}).get("lat"),
-            "lon": src.get("source", {}).get("geo", {}).get("location", {}).get("lon"),
-            "city": src.get("source", {}).get("geo", {}).get("city_name"),
-            "country": src.get("source", {}).get("geo", {}).get("country_name"),
-        })
+        events_by_user.setdefault(user, []).append(
+            {
+                "timestamp": src.get("@timestamp"),
+                "ip": src.get("source", {}).get("ip"),
+                "lat": src.get("source", {}).get("geo", {}).get("location", {}).get("lat"),
+                "lon": src.get("source", {}).get("geo", {}).get("location", {}).get("lon"),
+                "city": src.get("source", {}).get("geo", {}).get("city_name"),
+                "country": src.get("source", {}).get("geo", {}).get("country_name"),
+            }
+        )
     alerts = []
     for user, events in events_by_user.items():
         for i in range(1, len(events)):
@@ -122,16 +123,18 @@ def detect_impossible_travel(es, index="logs-auth-*", hours=24):
                 continue
             speed = dist / hours_diff
             if speed > 900 and dist > 500:
-                alerts.append({
-                    "user": user,
-                    "from": f"{prev.get('city', '?')}, {prev.get('country', '?')}",
-                    "to": f"{curr.get('city', '?')}, {curr.get('country', '?')}",
-                    "distance_km": round(dist),
-                    "time_hours": round(hours_diff, 2),
-                    "speed_kmh": round(speed),
-                    "prev_time": prev["timestamp"],
-                    "curr_time": curr["timestamp"],
-                })
+                alerts.append(
+                    {
+                        "user": user,
+                        "from": f"{prev.get('city', '?')}, {prev.get('country', '?')}",
+                        "to": f"{curr.get('city', '?')}, {curr.get('country', '?')}",
+                        "distance_km": round(dist),
+                        "time_hours": round(hours_diff, 2),
+                        "speed_kmh": round(speed),
+                        "prev_time": prev["timestamp"],
+                        "curr_time": curr["timestamp"],
+                    }
+                )
     return alerts
 
 
@@ -167,14 +170,16 @@ def detect_off_hours_access(es, baselines, index="logs-auth-*", hours=168):
         if avg_hour and stdev:
             if hour < (avg_hour - 2 * stdev) or hour > (avg_hour + 2 * stdev):
                 if hour < 6 or hour > 22 or dt.weekday() >= 5:
-                    alerts.append({
-                        "user": user,
-                        "timestamp": ts,
-                        "login_hour": hour,
-                        "baseline_avg": round(avg_hour, 1),
-                        "weekend": dt.weekday() >= 5,
-                        "ip": src.get("source", {}).get("ip"),
-                    })
+                    alerts.append(
+                        {
+                            "user": user,
+                            "timestamp": ts,
+                            "login_hour": hour,
+                            "baseline_avg": round(avg_hour, 1),
+                            "weekend": dt.weekday() >= 5,
+                            "ip": src.get("source", {}).get("ip"),
+                        }
+                    )
     return alerts
 
 
@@ -201,7 +206,7 @@ def print_report(travel_alerts, offhours_alerts, risk_scores):
     print(f"Date: {datetime.now().isoformat()}")
     print(f"Impossible Travel Alerts: {len(travel_alerts)}")
     print(f"Off-Hours Access Alerts:  {len(offhours_alerts)}")
-    print(f"\nTOP RISK USERS:")
+    print("\nTOP RISK USERS:")
     for user, data in risk_scores[:10]:
         print(f"  {user:20s} Risk: {data['risk']:>5}")
         for a in data["anomalies"][:3]:

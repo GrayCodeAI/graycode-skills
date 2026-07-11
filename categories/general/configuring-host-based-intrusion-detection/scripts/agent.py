@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Host-based intrusion detection agent using OSSEC/Wazuh API and osquery."""
 
-import json
-import sys
 import argparse
+import json
 import subprocess
+import sys
 from datetime import datetime
 
 try:
     import requests
+
     requests.packages.urllib3.disable_warnings()
 except ImportError:
     print("Install: pip install requests")
@@ -23,15 +24,19 @@ class WazuhClient:
         self.token = self._authenticate(username, password)
 
     def _authenticate(self, username, password):
-        resp = requests.post(f"{self.url}/security/user/authenticate",
-                             auth=(username, password), verify=False)
+        resp = requests.post(
+            f"{self.url}/security/user/authenticate", auth=(username, password), verify=True
+        )
         resp.raise_for_status()
         return resp.json()["data"]["token"]
 
     def _get(self, endpoint, params=None):
-        resp = requests.get(f"{self.url}/{endpoint}",
-                            headers={"Authorization": f"Bearer {self.token}"},
-                            params=params, verify=False)
+        resp = requests.get(
+            f"{self.url}/{endpoint}",
+            headers={"Authorization": f"Bearer {self.token}"},
+            params=params,
+            verify=True,
+        )
         resp.raise_for_status()
         return resp.json()
 
@@ -42,7 +47,7 @@ class WazuhClient:
         return self._get("agents", params)
 
     def get_agent_alerts(self, agent_id, limit=20):
-        return self._get(f"alerts", {"agent.id": agent_id, "limit": limit})
+        return self._get("alerts", {"agent.id": agent_id, "limit": limit})
 
     def get_sca_results(self, agent_id):
         return self._get(f"sca/{agent_id}")
@@ -64,19 +69,23 @@ def run_osquery_check(query):
 def check_file_integrity(paths):
     """Check file integrity for key system files."""
     checks = []
-    import hashlib, os
+    import hashlib
+    import os
+
     for path in paths:
         if os.path.exists(path):
             with open(path, "rb") as f:
                 sha256 = hashlib.sha256(f.read()).hexdigest()
             stat = os.stat(path)
-            checks.append({
-                "path": path,
-                "sha256": sha256,
-                "size": stat.st_size,
-                "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                "status": "present",
-            })
+            checks.append(
+                {
+                    "path": path,
+                    "sha256": sha256,
+                    "size": stat.st_size,
+                    "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                    "status": "present",
+                }
+            )
         else:
             checks.append({"path": path, "status": "missing", "severity": "HIGH"})
     return checks
@@ -84,10 +93,10 @@ def check_file_integrity(paths):
 
 def run_audit(wazuh_url=None, username=None, password=None, agent_id=None):
     """Execute HIDS audit."""
-    print(f"\n{'='*60}")
-    print(f"  HOST-BASED INTRUSION DETECTION AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  HOST-BASED INTRUSION DETECTION AUDIT")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     if wazuh_url and username and password:
         client = WazuhClient(wazuh_url, username, password)
@@ -107,7 +116,7 @@ def run_audit(wazuh_url=None, username=None, password=None, agent_id=None):
 
     system_files = ["/etc/passwd", "/etc/shadow", "/etc/sudoers", "/etc/ssh/sshd_config"]
     integrity = check_file_integrity(system_files)
-    print(f"\n--- FILE INTEGRITY CHECK ---")
+    print("\n--- FILE INTEGRITY CHECK ---")
     for f in integrity:
         print(f"  {f['path']}: {f['status']}")
 

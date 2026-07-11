@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Web application penetration test agent using requests and subprocess."""
 
-import subprocess
-import sys
-import re
 import json
 import os
-from urllib.parse import urlparse, urljoin
+import subprocess
+import sys
+from urllib.parse import urlparse
 
 try:
     import requests
@@ -19,7 +18,7 @@ except ImportError:
 def fingerprint_technology(target_url):
     """Identify technology stack from response headers and cookies."""
     try:
-        resp = requests.get(target_url, timeout=10, verify=False, allow_redirects=True)
+        resp = requests.get(target_url, timeout=10, verify=True, allow_redirects=True)
     except RequestException as e:
         return {"error": str(e)}
     headers = dict(resp.headers)
@@ -28,9 +27,12 @@ def fingerprint_technology(target_url):
         tech["technologies"].append(headers["X-Powered-By"])
     cookies = resp.cookies.get_dict()
     cookie_tech = {
-        "JSESSIONID": "Java", "PHPSESSID": "PHP",
-        "ASP.NET_SessionId": "ASP.NET", "csrftoken": "Django",
-        "laravel_session": "Laravel", "_rails_session": "Ruby on Rails",
+        "JSESSIONID": "Java",
+        "PHPSESSID": "PHP",
+        "ASP.NET_SessionId": "ASP.NET",
+        "csrftoken": "Django",
+        "laravel_session": "Laravel",
+        "_rails_session": "Ruby on Rails",
     }
     for cookie_name, framework in cookie_tech.items():
         if cookie_name in cookies:
@@ -41,7 +43,7 @@ def fingerprint_technology(target_url):
 def check_security_headers(target_url):
     """Check for presence of security headers."""
     try:
-        resp = requests.get(target_url, timeout=10, verify=False)
+        resp = requests.get(target_url, timeout=10, verify=True)
     except RequestException as e:
         return {"error": str(e)}
     required_headers = {
@@ -70,16 +72,19 @@ def test_http_methods(target_url):
     results = []
     for method in dangerous:
         try:
-            resp = requests.request(method, target_url, timeout=5, verify=False)
+            resp = requests.request(method, target_url, timeout=5, verify=True)
             if resp.status_code not in (405, 501):
-                results.append({
-                    "method": method, "status": resp.status_code,
-                    "risk": "HIGH" if method in ("PUT", "DELETE") else "MEDIUM",
-                })
+                results.append(
+                    {
+                        "method": method,
+                        "status": resp.status_code,
+                        "risk": "HIGH" if method in ("PUT", "DELETE") else "MEDIUM",
+                    }
+                )
         except RequestException:
             pass
     try:
-        resp = requests.options(target_url, timeout=5, verify=False)
+        resp = requests.options(target_url, timeout=5, verify=True)
         allow = resp.headers.get("Allow", "")
         results.append({"method": "OPTIONS", "allow_header": allow})
     except RequestException:
@@ -97,18 +102,18 @@ def test_cors_config(target_url):
     ]
     for origin in origins:
         try:
-            resp = requests.get(
-                target_url, headers={"Origin": origin},
-                timeout=5, verify=False
-            )
+            resp = requests.get(target_url, headers={"Origin": origin}, timeout=5, verify=True)
             acao = resp.headers.get("Access-Control-Allow-Origin", "")
             acac = resp.headers.get("Access-Control-Allow-Credentials", "")
             if acao == origin or acao == "*":
-                tests.append({
-                    "origin": origin, "reflected": True,
-                    "allow_credentials": acac.lower() == "true",
-                    "risk": "HIGH" if acac.lower() == "true" else "MEDIUM",
-                })
+                tests.append(
+                    {
+                        "origin": origin,
+                        "reflected": True,
+                        "allow_credentials": acac.lower() == "true",
+                        "risk": "HIGH" if acac.lower() == "true" else "MEDIUM",
+                    }
+                )
         except RequestException:
             pass
     return tests
@@ -122,10 +127,25 @@ def run_directory_bruteforce(target_url, wordlist=None):
         return {"error": f"Wordlist not found: {wordlist}"}
     try:
         result = subprocess.run(
-            ["ffuf", "-w", wordlist, "-u", f"{target_url}/FUZZ",
-             "-mc", "200,301,302,403", "-t", "20", "-o", "/tmp/ffuf_output.json",
-             "-of", "json", "-s"],
-            capture_output=True, text=True, timeout=120
+            [
+                "ffuf",
+                "-w",
+                wordlist,
+                "-u",
+                f"{target_url}/FUZZ",
+                "-mc",
+                "200,301,302,403",
+                "-t",
+                "20",
+                "-o",
+                "/tmp/ffuf_output.json",
+                "-of",
+                "json",
+                "-s",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=120,
         )
         if os.path.exists("/tmp/ffuf_output.json"):
             with open("/tmp/ffuf_output.json") as f:
@@ -141,23 +161,33 @@ def test_sql_injection_basic(target_url, params):
     """Test for basic SQL injection indicators."""
     payloads = ["'", "' OR '1'='1", "1 OR 1=1--", "'; DROP TABLE--"]
     sql_errors = [
-        "sql syntax", "mysql", "sqlite", "postgresql", "ora-",
-        "microsoft ole db", "unclosed quotation", "syntax error",
+        "sql syntax",
+        "mysql",
+        "sqlite",
+        "postgresql",
+        "ora-",
+        "microsoft ole db",
+        "unclosed quotation",
+        "syntax error",
     ]
     findings = []
     for param_name in params:
         for payload in payloads:
             test_params = {param_name: payload}
             try:
-                resp = requests.get(target_url, params=test_params, timeout=10, verify=False)
+                resp = requests.get(target_url, params=test_params, timeout=10, verify=True)
                 body_lower = resp.text.lower()
                 for err in sql_errors:
                     if err in body_lower:
-                        findings.append({
-                            "parameter": param_name, "payload": payload,
-                            "error_pattern": err, "status": resp.status_code,
-                            "risk": "CRITICAL",
-                        })
+                        findings.append(
+                            {
+                                "parameter": param_name,
+                                "payload": payload,
+                                "error_pattern": err,
+                                "status": resp.status_code,
+                                "risk": "CRITICAL",
+                            }
+                        )
                         break
             except RequestException:
                 pass
@@ -167,7 +197,7 @@ def test_sql_injection_basic(target_url, params):
 def test_xss_basic(target_url, params):
     """Test for basic reflected XSS."""
     payloads = [
-        '<script>alert(1)</script>',
+        "<script>alert(1)</script>",
         '"><img src=x onerror=alert(1)>',
         "'-alert(1)-'",
     ]
@@ -176,14 +206,17 @@ def test_xss_basic(target_url, params):
         for payload in payloads:
             try:
                 resp = requests.get(
-                    target_url, params={param_name: payload},
-                    timeout=10, verify=False
+                    target_url, params={param_name: payload}, timeout=10, verify=True
                 )
                 if payload in resp.text:
-                    findings.append({
-                        "parameter": param_name, "payload": payload,
-                        "reflected": True, "risk": "HIGH",
-                    })
+                    findings.append(
+                        {
+                            "parameter": param_name,
+                            "payload": payload,
+                            "reflected": True,
+                            "risk": "HIGH",
+                        }
+                    )
             except RequestException:
                 pass
     return findings
@@ -203,7 +236,8 @@ def run_assessment(target_url, test_params=None):
         "xss_findings": test_xss_basic(target_url, test_params),
     }
     missing_headers = [
-        h for h, v in report["security_headers"].items()
+        h
+        for h, v in report["security_headers"].items()
         if isinstance(v, dict) and not v.get("present", True)
     ]
     report["summary"] = {

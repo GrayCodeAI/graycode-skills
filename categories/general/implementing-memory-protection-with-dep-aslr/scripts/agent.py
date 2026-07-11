@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """DEP/ASLR Memory Protection Agent - audits processes and binaries for memory protection mitigations."""
 
-import json
 import argparse
+import json
 import logging
-import subprocess
-import re
 import os
+import subprocess
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -26,10 +25,13 @@ def check_windows_dep_policy():
 
 def check_windows_process_mitigations():
     """Check process mitigation policies using PowerShell Get-ProcessMitigation."""
-    cmd = ["powershell", "-Command",
-           "Get-Process | ForEach-Object { try { $m = Get-ProcessMitigation -Id $_.Id -ErrorAction Stop; "
-           "[PSCustomObject]@{Name=$_.Name;PID=$_.Id;DEP=$m.DEP.Enable;ASLR=$m.ASLR.ForceRelocateImages;"
-           "CFG=$m.CFG.Enable;StrictHandle=$m.StrictHandle.Enable} } catch {} } | ConvertTo-Json"]
+    cmd = [
+        "powershell",
+        "-Command",
+        "Get-Process | ForEach-Object { try { $m = Get-ProcessMitigation -Id $_.Id -ErrorAction Stop; "
+        "[PSCustomObject]@{Name=$_.Name;PID=$_.Id;DEP=$m.DEP.Enable;ASLR=$m.ASLR.ForceRelocateImages;"
+        "CFG=$m.CFG.Enable;StrictHandle=$m.StrictHandle.Enable} } catch {} } | ConvertTo-Json",
+    ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     try:
         processes = json.loads(result.stdout) if result.stdout else []
@@ -85,7 +87,7 @@ def scan_directory_binaries(directory, extensions=None):
     if extensions is None:
         extensions = [""]
     results = []
-    for root, dirs, files in os.walk(directory):
+    for root, _dirs, files in os.walk(directory):
         for fname in files:
             fpath = os.path.join(root, fname)
             if os.path.isfile(fpath) and os.access(fpath, os.X_OK):
@@ -138,20 +140,25 @@ def main():
         process_mitigations = check_windows_process_mitigations()
         binary_checks = []
         for proc in process_mitigations:
-            binary_checks.append({
-                "binary": proc.get("Name", ""),
-                "pid": proc.get("PID", 0),
-                "pie": bool(proc.get("ASLR")),
-                "nx": bool(proc.get("DEP")),
-                "canary": False,
-                "relro": "n/a",
-            })
+            binary_checks.append(
+                {
+                    "binary": proc.get("Name", ""),
+                    "pid": proc.get("PID", 0),
+                    "pie": bool(proc.get("ASLR")),
+                    "nx": bool(proc.get("DEP")),
+                    "canary": False,
+                    "relro": "n/a",
+                }
+            )
 
     report = generate_report(system_checks, binary_checks)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Scanned %d binaries, %d with weak protections",
-                report["binaries_scanned"], report["weak_binaries"])
+    logger.info(
+        "Scanned %d binaries, %d with weak protections",
+        report["binaries_scanned"],
+        report["weak_binaries"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

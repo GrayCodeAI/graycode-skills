@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """SAML Azure AD Federation Agent - Configures and validates SAML SSO with Azure AD."""
 
+import argparse
 import json
 import logging
-import argparse
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
@@ -43,11 +43,17 @@ def generate_sp_metadata(entity_id, acs_url, slo_url=None):
     """Generate Service Provider SAML metadata."""
     metadata = {
         "entityID": entity_id,
-        "assertionConsumerService": {"binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST", "location": acs_url},
+        "assertionConsumerService": {
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+            "location": acs_url,
+        },
         "nameIDFormat": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
     }
     if slo_url:
-        metadata["singleLogoutService"] = {"binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect", "location": slo_url}
+        metadata["singleLogoutService"] = {
+            "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+            "location": slo_url,
+        }
     return metadata
 
 
@@ -60,11 +66,16 @@ def validate_configuration(idp_metadata, sp_config):
         findings.append({"issue": "No signing certificates in metadata", "severity": "critical"})
     if not sp_config.get("assertionConsumerService", {}).get("location", "").startswith("https://"):
         findings.append({"issue": "ACS URL not using HTTPS", "severity": "high"})
-    http_redirect = any("HTTP-Redirect" in s.get("binding", "") for s in idp_metadata.get("sso_services", []))
-    http_post = any("HTTP-POST" in s.get("binding", "") for s in idp_metadata.get("sso_services", []))
+    any("HTTP-Redirect" in s.get("binding", "") for s in idp_metadata.get("sso_services", []))
+    http_post = any(
+        "HTTP-POST" in s.get("binding", "") for s in idp_metadata.get("sso_services", [])
+    )
     if not http_post:
         findings.append({"issue": "HTTP-POST binding not available", "severity": "medium"})
-    return {"valid": len([f for f in findings if f["severity"] == "critical"]) == 0, "findings": findings}
+    return {
+        "valid": len([f for f in findings if f["severity"] == "critical"]) == 0,
+        "findings": findings,
+    }
 
 
 def generate_report(idp_metadata, sp_config, validation):

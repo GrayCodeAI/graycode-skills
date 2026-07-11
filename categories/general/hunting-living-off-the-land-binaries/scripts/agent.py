@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
 """Agent for hunting Living Off The Land Binary (LOLBAS) abuse."""
 
-import os
+import argparse
 import json
 import re
-import argparse
 from datetime import datetime
 from xml.etree import ElementTree as ET
 
-import requests
 import Evtx.Evtx as evtx
-
+import requests
 
 LOLBAS_PATTERNS = {
     "certutil.exe": [
@@ -101,14 +99,16 @@ def scan_evtx_for_lolbas(evtx_path, patterns=None):
                     if binary.lower() in image.lower() or binary.lower() in cmd_line.lower():
                         for regex in regex_list:
                             if re.search(regex, cmd_line, re.IGNORECASE):
-                                findings.append({
-                                    "event_id": event_id,
-                                    "binary": binary,
-                                    "command_line": cmd_line,
-                                    "image": image,
-                                    "pattern": regex,
-                                    "timestamp": str(record.timestamp()),
-                                })
+                                findings.append(
+                                    {
+                                        "event_id": event_id,
+                                        "binary": binary,
+                                        "command_line": cmd_line,
+                                        "image": image,
+                                        "pattern": regex,
+                                        "timestamp": str(record.timestamp()),
+                                    }
+                                )
             except Exception:
                 continue
     return findings
@@ -163,9 +163,11 @@ def main():
     parser = argparse.ArgumentParser(description="LOLBAS Hunting Agent")
     parser.add_argument("--evtx", help="Path to Windows Event Log (.evtx)")
     parser.add_argument("--output", default="lolbas_report.json")
-    parser.add_argument("--action", choices=[
-        "scan_evtx", "fetch_db", "generate_sigma", "full_hunt"
-    ], default="full_hunt")
+    parser.add_argument(
+        "--action",
+        choices=["scan_evtx", "fetch_db", "generate_sigma", "full_hunt"],
+        default="full_hunt",
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "findings": {}}

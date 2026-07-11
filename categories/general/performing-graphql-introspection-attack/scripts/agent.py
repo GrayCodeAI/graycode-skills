@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Agent for performing GraphQL introspection attack and schema analysis."""
 
-import json
 import argparse
-from datetime import datetime
+import json
 
 try:
     import requests
@@ -48,7 +47,15 @@ def run_introspection(url, headers=None):
             queries = [f["name"] for f in t.get("fields", [])]
         if t["name"] == (schema.get("mutationType") or {}).get("name"):
             mutations = [f["name"] for f in t.get("fields", [])]
-    sensitive_patterns = ["password", "token", "secret", "credential", "ssn", "credit_card", "api_key"]
+    sensitive_patterns = [
+        "password",
+        "token",
+        "secret",
+        "credential",
+        "ssn",
+        "credit_card",
+        "api_key",
+    ]
     sensitive_fields = []
     for t in user_types:
         for f in t.get("fields", []):
@@ -61,8 +68,13 @@ def run_introspection(url, headers=None):
         "queries": queries,
         "mutations": mutations,
         "sensitive_fields": sensitive_fields,
-        "finding": "CRITICAL: Introspection enabled — full schema exposed" if user_types else "Schema empty",
-        "types": [{"name": t["name"], "kind": t["kind"], "field_count": len(t.get("fields", []) or [])} for t in user_types][:50],
+        "finding": "CRITICAL: Introspection enabled — full schema exposed"
+        if user_types
+        else "Schema empty",
+        "types": [
+            {"name": t["name"], "kind": t["kind"], "field_count": len(t.get("fields", []) or [])}
+            for t in user_types
+        ][:50],
     }
 
 
@@ -77,12 +89,19 @@ def test_depth_limit(url, max_depth=10, headers=None):
         query = f"query {{ __schema {nested} }}"
         try:
             resp = requests.post(url, json={"query": query}, headers=hdrs, timeout=10)
-            results.append({"depth": depth, "status": resp.status_code, "has_errors": "errors" in resp.json()})
+            results.append(
+                {"depth": depth, "status": resp.status_code, "has_errors": "errors" in resp.json()}
+            )
         except Exception as e:
             results.append({"depth": depth, "error": str(e)})
             break
     max_allowed = max((r["depth"] for r in results if r.get("status") == 200), default=0)
-    return {"url": url, "max_depth_tested": max_depth, "max_allowed_depth": max_allowed, "results": results}
+    return {
+        "url": url,
+        "max_depth_tested": max_depth,
+        "max_allowed_depth": max_allowed,
+        "results": results,
+    }
 
 
 def main():
@@ -98,7 +117,11 @@ def main():
     d.add_argument("--url", required=True)
     d.add_argument("--max-depth", type=int, default=10)
     args = parser.parse_args()
-    headers = {"Authorization": args.auth_header} if hasattr(args, "auth_header") and args.auth_header else None
+    headers = (
+        {"Authorization": args.auth_header}
+        if hasattr(args, "auth_header") and args.auth_header
+        else None
+    )
     if args.command == "introspect":
         result = run_introspection(args.url, headers)
     elif args.command == "depth":

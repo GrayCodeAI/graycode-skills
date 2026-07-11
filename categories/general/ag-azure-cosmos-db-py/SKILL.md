@@ -48,7 +48,7 @@ from azure.cosmos import CosmosClient
 client = CosmosClient(
     url="https://localhost:8081",
     credential=os.environ["COSMOS_KEY"],
-    connection_verify=False
+    connection_verify="/path/to/cosmos-emulator-ca.pem"
 )
 ```
 
@@ -100,7 +100,7 @@ async def get_container():
             client = CosmosClient(
                 url=settings.cosmos_endpoint,
                 credential=settings.cosmos_key,
-                connection_verify=False
+                connection_verify="/path/to/cosmos-emulator-ca.pem"
             )
         else:
             client = CosmosClient(

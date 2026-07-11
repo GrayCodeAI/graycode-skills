@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 """Deleted file recovery agent using PhotoRec subprocess wrapper."""
 
-import subprocess
-import os
-import sys
-import json
 import hashlib
-from pathlib import Path
+import os
+import subprocess
+import sys
 from collections import defaultdict
 from datetime import datetime
+from pathlib import Path
 
 
 def verify_photorec():
     """Check that PhotoRec is installed and available."""
-    result = subprocess.run(
-        ["photorec", "--version"], capture_output=True, text=True
-    )
+    result = subprocess.run(["photorec", "--version"], capture_output=True, text=True)
     if result.returncode == 0:
         return {"installed": True, "version": result.stdout.strip()}
     return {"installed": False}
@@ -23,14 +20,12 @@ def verify_photorec():
 
 def get_image_info(image_path):
     """Get forensic image information."""
-    file_result = subprocess.run(
-        ["file", image_path], capture_output=True, text=True
-    )
+    file_result = subprocess.run(["file", image_path], capture_output=True, text=True)
     size = os.path.getsize(image_path) if os.path.exists(image_path) else 0
     return {
         "path": image_path,
         "size_bytes": size,
-        "size_gb": round(size / (1024 ** 3), 2),
+        "size_gb": round(size / (1024**3), 2),
         "type": file_result.stdout.strip(),
     }
 
@@ -47,9 +42,7 @@ def run_photorec(image_path, output_dir, file_types=None, partition=None):
         options.append(f"fileopt,everything,disable,{enable_list},enable")
     options.append("search")
     cmd.append(",".join(options) if options else "search")
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=14400
-    )
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=14400)
     return {
         "command": " ".join(cmd),
         "returncode": result.returncode,
@@ -64,7 +57,7 @@ def catalog_recovered_files(output_dir):
     catalog = defaultdict(list)
     total_files = 0
     total_bytes = 0
-    for root, dirs, files in os.walk(output_dir):
+    for root, _dirs, files in os.walk(output_dir):
         for filename in files:
             filepath = os.path.join(root, filename)
             ext = Path(filename).suffix.lower()
@@ -96,7 +89,7 @@ def catalog_recovered_files(output_dir):
 def hash_recovered_files(output_dir, extensions=None):
     """Generate SHA-256 hashes for recovered files for evidence integrity."""
     hashes = []
-    for root, dirs, files in os.walk(output_dir):
+    for root, _dirs, files in os.walk(output_dir):
         for filename in files:
             filepath = os.path.join(root, filename)
             ext = Path(filename).suffix.lower()
@@ -105,11 +98,13 @@ def hash_recovered_files(output_dir, extensions=None):
             try:
                 with open(filepath, "rb") as f:
                     sha256 = hashlib.sha256(f.read()).hexdigest()
-                hashes.append({
-                    "file": filepath,
-                    "sha256": sha256,
-                    "size": os.path.getsize(filepath),
-                })
+                hashes.append(
+                    {
+                        "file": filepath,
+                        "sha256": sha256,
+                        "size": os.path.getsize(filepath),
+                    }
+                )
             except (OSError, PermissionError):
                 pass
     return hashes
@@ -118,8 +113,20 @@ def hash_recovered_files(output_dir, extensions=None):
 def sort_recovered_files(output_dir, sorted_dir):
     """Sort recovered files into categorized directories."""
     categories = {
-        "documents": [".doc", ".docx", ".pdf", ".xls", ".xlsx", ".ppt", ".pptx",
-                      ".odt", ".ods", ".txt", ".rtf", ".csv"],
+        "documents": [
+            ".doc",
+            ".docx",
+            ".pdf",
+            ".xls",
+            ".xlsx",
+            ".ppt",
+            ".pptx",
+            ".odt",
+            ".ods",
+            ".txt",
+            ".rtf",
+            ".csv",
+        ],
         "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg", ".webp"],
         "databases": [".db", ".sqlite", ".mdb", ".accdb", ".sql"],
         "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2"],
@@ -132,7 +139,7 @@ def sort_recovered_files(output_dir, sorted_dir):
         os.makedirs(os.path.join(sorted_dir, cat), exist_ok=True)
     os.makedirs(os.path.join(sorted_dir, "other"), exist_ok=True)
     moved = defaultdict(int)
-    for root, dirs, files in os.walk(output_dir):
+    for root, _dirs, files in os.walk(output_dir):
         if root.startswith(sorted_dir):
             continue
         for filename in files:

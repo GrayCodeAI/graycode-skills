@@ -8,7 +8,6 @@ WARNING: Only use with explicit written authorization on approved AWS accounts.
 """
 
 import json
-import sys
 from datetime import datetime, timezone
 
 import boto3
@@ -39,14 +38,16 @@ def enumerate_iam_users() -> list[dict]:
             inline = iam.list_user_policies(UserName=username)
             groups = iam.list_groups_for_user(UserName=username)
 
-            users.append({
-                "username": username,
-                "arn": user["Arn"],
-                "attached_policies": [p["PolicyArn"] for p in attached["AttachedPolicies"]],
-                "inline_policies": inline["PolicyNames"],
-                "groups": [g["GroupName"] for g in groups["Groups"]],
-                "has_console": user.get("PasswordLastUsed") is not None,
-            })
+            users.append(
+                {
+                    "username": username,
+                    "arn": user["Arn"],
+                    "attached_policies": [p["PolicyArn"] for p in attached["AttachedPolicies"]],
+                    "inline_policies": inline["PolicyNames"],
+                    "groups": [g["GroupName"] for g in groups["Groups"]],
+                    "has_console": user.get("PasswordLastUsed") is not None,
+                }
+            )
 
     return users
 
@@ -62,12 +63,14 @@ def enumerate_iam_roles() -> list[dict]:
             trust = role.get("AssumeRolePolicyDocument", {})
             attached = iam.list_attached_role_policies(RoleName=role["RoleName"])
 
-            roles.append({
-                "role_name": role["RoleName"],
-                "arn": role["Arn"],
-                "trust_policy": trust,
-                "attached_policies": [p["PolicyArn"] for p in attached["AttachedPolicies"]],
-            })
+            roles.append(
+                {
+                    "role_name": role["RoleName"],
+                    "arn": role["Arn"],
+                    "trust_policy": trust,
+                    "attached_policies": [p["PolicyArn"] for p in attached["AttachedPolicies"]],
+                }
+            )
 
     return roles
 
@@ -78,14 +81,25 @@ def check_dangerous_permissions(users: list[dict]) -> list[dict]:
     escalation_paths = []
 
     dangerous_actions = [
-        "iam:CreatePolicyVersion", "iam:SetDefaultPolicyVersion",
-        "iam:PassRole", "iam:CreateRole", "iam:AttachUserPolicy",
-        "iam:AttachRolePolicy", "iam:PutUserPolicy", "iam:PutRolePolicy",
-        "iam:AddUserToGroup", "iam:UpdateAssumeRolePolicy",
-        "sts:AssumeRole", "lambda:CreateFunction", "lambda:InvokeFunction",
-        "lambda:UpdateFunctionCode", "ec2:RunInstances",
-        "cloudformation:CreateStack", "glue:CreateDevEndpoint",
-        "datapipeline:CreatePipeline", "ssm:SendCommand",
+        "iam:CreatePolicyVersion",
+        "iam:SetDefaultPolicyVersion",
+        "iam:PassRole",
+        "iam:CreateRole",
+        "iam:AttachUserPolicy",
+        "iam:AttachRolePolicy",
+        "iam:PutUserPolicy",
+        "iam:PutRolePolicy",
+        "iam:AddUserToGroup",
+        "iam:UpdateAssumeRolePolicy",
+        "sts:AssumeRole",
+        "lambda:CreateFunction",
+        "lambda:InvokeFunction",
+        "lambda:UpdateFunctionCode",
+        "ec2:RunInstances",
+        "cloudformation:CreateStack",
+        "glue:CreateDevEndpoint",
+        "datapipeline:CreatePipeline",
+        "ssm:SendCommand",
     ]
 
     for user in users:
@@ -105,22 +119,26 @@ def check_dangerous_permissions(users: list[dict]) -> list[dict]:
                         actions = [actions]
                     for action in actions:
                         if action == "*" or action in dangerous_actions:
-                            user_dangerous.append({
-                                "policy": policy_arn,
-                                "action": action,
-                                "resource": stmt.get("Resource", "*"),
-                            })
+                            user_dangerous.append(
+                                {
+                                    "policy": policy_arn,
+                                    "action": action,
+                                    "resource": stmt.get("Resource", "*"),
+                                }
+                            )
             except ClientError:
                 continue
 
         if user_dangerous:
-            escalation_paths.append({
-                "username": user["username"],
-                "dangerous_permissions": user_dangerous,
-                "escalation_risk": "HIGH" if any(
-                    d["action"] == "*" for d in user_dangerous
-                ) else "MEDIUM",
-            })
+            escalation_paths.append(
+                {
+                    "username": user["username"],
+                    "dangerous_permissions": user_dangerous,
+                    "escalation_risk": "HIGH"
+                    if any(d["action"] == "*" for d in user_dangerous)
+                    else "MEDIUM",
+                }
+            )
 
     return escalation_paths
 
@@ -141,12 +159,14 @@ def check_role_chaining(roles: list[dict], account_id: str) -> list[dict]:
 
             for p in aws_principal:
                 if p == f"arn:aws:iam::{account_id}:root" or p == "*":
-                    chains.append({
-                        "role": role["role_name"],
-                        "trust_principal": p,
-                        "risk": "HIGH" if p == "*" else "MEDIUM",
-                        "policies": role["attached_policies"],
-                    })
+                    chains.append(
+                        {
+                            "role": role["role_name"],
+                            "trust_principal": p,
+                            "risk": "HIGH" if p == "*" else "MEDIUM",
+                            "policies": role["attached_policies"],
+                        }
+                    )
 
     return chains
 
@@ -198,8 +218,19 @@ if __name__ == "__main__":
     report = generate_report(identity, users, escalation, chains)
     print(report)
 
-    output = f"aws_privesc_{identity['account']}_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
+    output = (
+        f"aws_privesc_{identity['account']}_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
+    )
     with open(output, "w") as f:
-        json.dump({"identity": identity, "users": users, "escalation_paths": escalation,
-                    "role_chains": chains}, f, indent=2, default=str)
+        json.dump(
+            {
+                "identity": identity,
+                "users": users,
+                "escalation_paths": escalation,
+                "role_chains": chains,
+            },
+            f,
+            indent=2,
+            default=str,
+        )
     print(f"\n[*] Results saved to {output}")

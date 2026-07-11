@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Agent for analyzing Windows LNK shortcut files for forensic artifacts."""
 
-import os
-import json
-import csv
 import argparse
+import csv
+import json
+import os
 from datetime import datetime
-from pathlib import Path
 
 import LnkParse3
 
@@ -88,7 +87,8 @@ def filter_removable_media(results):
 def filter_network_shares(results):
     """Filter LNK files pointing to network shares."""
     return [
-        r for r in results
+        r
+        for r in results
         if "network" in r.get("drive_type", "").lower()
         or r.get("target_path", "").startswith("\\\\")
     ]
@@ -105,10 +105,9 @@ def detect_suspicious_startup(startup_dir):
             parsed = parse_lnk_file(filepath)
             target = parsed["target_path"].lower()
             args = parsed["arguments"].lower()
-            if any(s in target for s in ["temp", "appdata", "programdata", "public"]):
-                parsed["risk"] = "HIGH"
-                suspicious.append(parsed)
-            elif any(s in args for s in ["-enc", "powershell", "cmd /c", "wscript"]):
+            if any(s in target for s in ["temp", "appdata", "programdata", "public"]) or any(
+                s in args for s in ["-enc", "powershell", "cmd /c", "wscript"]
+            ):
                 parsed["risk"] = "HIGH"
                 suspicious.append(parsed)
         except Exception:
@@ -142,9 +141,11 @@ def main():
     parser.add_argument("--lnk-dir", required=True, help="Directory containing LNK files")
     parser.add_argument("--startup-dir", help="Startup folder to check for persistence")
     parser.add_argument("--output-dir", default="./lnk_analysis")
-    parser.add_argument("--action", choices=[
-        "parse_all", "removable", "network", "startup", "machines", "full_analysis"
-    ], default="full_analysis")
+    parser.add_argument(
+        "--action",
+        choices=["parse_all", "removable", "network", "startup", "machines", "full_analysis"],
+        default="full_analysis",
+    )
     args = parser.parse_args()
 
     os.makedirs(args.output_dir, exist_ok=True)
@@ -178,7 +179,11 @@ def main():
         for mid, mac in machines.items():
             print(f"    Machine: {mid} | MAC: {mac}")
 
-    print(json.dumps({"total_lnk": len(all_results), "generated_at": datetime.utcnow().isoformat()}, indent=2))
+    print(
+        json.dumps(
+            {"total_lnk": len(all_results), "generated_at": datetime.utcnow().isoformat()}, indent=2
+        )
+    )
 
 
 if __name__ == "__main__":

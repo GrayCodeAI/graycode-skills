@@ -9,13 +9,12 @@ import os
 import subprocess
 import sys
 from datetime import datetime
-from typing import Dict, List, Optional
 
 try:
-    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+    from cryptography.exceptions import InvalidSignature
     from cryptography.hazmat.primitives import hashes, serialization
     from cryptography.hazmat.primitives.asymmetric import padding, rsa
-    from cryptography.exceptions import InvalidSignature
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 except ImportError:
     sys.exit("cryptography required: pip install cryptography")
 
@@ -90,14 +89,14 @@ def verify_cosign_signature(image: str) -> dict:
     """Verify container image signature using cosign CLI."""
     try:
         result = subprocess.run(
-            ["cosign", "verify", image], capture_output=True, text=True, timeout=30)
-        return {"image": image, "verified": result.returncode == 0,
-                "output": result.stdout[:500]}
+            ["cosign", "verify", image], capture_output=True, text=True, timeout=30
+        )
+        return {"image": image, "verified": result.returncode == 0, "output": result.stdout[:500]}
     except FileNotFoundError:
         return {"image": image, "error": "cosign not installed"}
 
 
-def batch_verify(artifacts: List[dict], public_key_path: str) -> List[dict]:
+def batch_verify(artifacts: list[dict], public_key_path: str) -> list[dict]:
     """Verify signatures for multiple artifacts."""
     results = []
     for art in artifacts:
@@ -106,7 +105,7 @@ def batch_verify(artifacts: List[dict], public_key_path: str) -> List[dict]:
     return results
 
 
-def generate_report(artifacts: List[str], public_key_path: str) -> dict:
+def generate_report(artifacts: list[str], public_key_path: str) -> dict:
     """Generate code signing verification report."""
     report = {"analysis_date": datetime.utcnow().isoformat(), "verifications": []}
     for art_path in artifacts:

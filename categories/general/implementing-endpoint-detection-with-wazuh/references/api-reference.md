@@ -22,7 +22,7 @@ from requests.auth import HTTPBasicAuth
 resp = requests.post(
     "https://wazuh:55000/security/user/authenticate",
     auth=HTTPBasicAuth("wazuh-wui", "password"),
-    verify=False,
+    verify="/path/to/wazuh-ca.pem",
 )
 token = resp.json()["data"]["token"]
 headers = {"Authorization": f"Bearer {token}"}

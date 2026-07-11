@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Microsoft Entra ID passwordless authentication audit agent using MS Graph API."""
 
+import argparse
 import json
 import sys
-import argparse
 from datetime import datetime
 
 try:
@@ -21,8 +21,10 @@ GRAPH_BETA = "https://graph.microsoft.com/beta"
 def get_access_token(tenant_id, client_id, client_secret):
     """Authenticate to Microsoft Graph using client credentials."""
     app = ConfidentialClientApplication(
-        client_id, authority=f"https://login.microsoftonline.com/{tenant_id}",
-        client_credential=client_secret)
+        client_id,
+        authority=f"https://login.microsoftonline.com/{tenant_id}",
+        client_credential=client_secret,
+    )
     result = app.acquire_token_for_client(scopes=["https://graph.microsoft.com/.default"])
     if "access_token" in result:
         return result["access_token"]
@@ -83,8 +85,10 @@ def list_user_auth_methods(token, user_id):
     """List authentication methods registered by a specific user."""
     try:
         methods = graph_get(token, f"/users/{user_id}/authentication/methods")
-        return [{"id": m.get("id"), "type": m.get("@odata.type", "").split(".")[-1]}
-                for m in methods.get("value", [])]
+        return [
+            {"id": m.get("id"), "type": m.get("@odata.type", "").split(".")[-1]}
+            for m in methods.get("value", [])
+        ]
     except Exception as e:
         return [{"error": str(e)}]
 
@@ -95,15 +99,20 @@ def get_users_without_passwordless(token, max_users=100):
     users_without = []
     for user in users.get("value", []):
         methods = list_user_auth_methods(token, user["id"])
-        passwordless_types = {"fido2AuthenticationMethod", "microsoftAuthenticatorAuthenticationMethod",
-                              "windowsHelloForBusinessAuthenticationMethod"}
+        passwordless_types = {
+            "fido2AuthenticationMethod",
+            "microsoftAuthenticatorAuthenticationMethod",
+            "windowsHelloForBusinessAuthenticationMethod",
+        }
         user_types = {m.get("type") for m in methods if not m.get("error")}
         if not user_types.intersection(passwordless_types):
-            users_without.append({
-                "user": user["userPrincipalName"],
-                "name": user.get("displayName", ""),
-                "methods": [m.get("type") for m in methods if not m.get("error")],
-            })
+            users_without.append(
+                {
+                    "user": user["userPrincipalName"],
+                    "name": user.get("displayName", ""),
+                    "methods": [m.get("type") for m in methods if not m.get("error")],
+                }
+            )
     return users_without
 
 
@@ -111,15 +120,23 @@ def get_sign_in_logs(token, days=7, passwordless_only=False):
     """Get recent sign-in logs to analyze authentication methods used."""
     filter_str = ""
     if passwordless_only:
-        filter_str = "?$filter=authenticationDetails/any(a:a/authenticationMethod eq 'FIDO2 security key')"
+        filter_str = (
+            "?$filter=authenticationDetails/any(a:a/authenticationMethod eq 'FIDO2 security key')"
+        )
     try:
         logs = graph_get(token, f"/auditLogs/signIns{filter_str}", beta=True)
-        return [{"user": log.get("userPrincipalName"),
-                 "app": log.get("appDisplayName"),
-                 "status": log.get("status", {}).get("errorCode", 0),
-                 "auth_detail": [d.get("authenticationMethod") for d in log.get("authenticationDetails", [])],
-                 "time": log.get("createdDateTime")}
-                for log in logs.get("value", [])[:50]]
+        return [
+            {
+                "user": log.get("userPrincipalName"),
+                "app": log.get("appDisplayName"),
+                "status": log.get("status", {}).get("errorCode", 0),
+                "auth_detail": [
+                    d.get("authenticationMethod") for d in log.get("authenticationDetails", [])
+                ],
+                "time": log.get("createdDateTime"),
+            }
+            for log in logs.get("value", [])[:50]
+        ]
     except Exception as e:
         return [{"error": str(e)}]
 
@@ -132,11 +149,13 @@ def get_conditional_access_policies(token):
         for p in policies.get("value", []):
             grant = p.get("grantControls", {})
             if grant and "authenticationStrength" in json.dumps(grant):
-                auth_strength_policies.append({
-                    "name": p.get("displayName"),
-                    "state": p.get("state"),
-                    "grant_controls": grant,
-                })
+                auth_strength_policies.append(
+                    {
+                        "name": p.get("displayName"),
+                        "state": p.get("state"),
+                        "grant_controls": grant,
+                    }
+                )
         return auth_strength_policies
     except Exception as e:
         return [{"error": str(e)}]
@@ -144,23 +163,23 @@ def get_conditional_access_policies(token):
 
 def run_passwordless_audit(token):
     """Run comprehensive passwordless authentication audit."""
-    print(f"\n{'='*60}")
-    print(f"  MICROSOFT ENTRA PASSWORDLESS AUTH AUDIT")
+    print(f"\n{'=' * 60}")
+    print("  MICROSOFT ENTRA PASSWORDLESS AUTH AUDIT")
     print(f"  Generated: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     fido2 = get_fido2_policy(token)
-    print(f"--- FIDO2 SECURITY KEYS ---")
+    print("--- FIDO2 SECURITY KEYS ---")
     print(f"  State: {fido2.get('state', 'unknown')}")
     print(f"  Attestation Enforced: {fido2.get('is_attestation_enforced', 'N/A')}")
     print(f"  Self-Service Registration: {fido2.get('is_self_service_allowed', 'N/A')}")
 
     authenticator = get_microsoft_authenticator_policy(token)
-    print(f"\n--- MICROSOFT AUTHENTICATOR ---")
+    print("\n--- MICROSOFT AUTHENTICATOR ---")
     print(f"  State: {authenticator.get('state', 'unknown')}")
 
     hello = get_windows_hello_policy(token)
-    print(f"\n--- WINDOWS HELLO FOR BUSINESS ---")
+    print("\n--- WINDOWS HELLO FOR BUSINESS ---")
     print(f"  State: {hello.get('state', 'unknown')}")
 
     ca_policies = get_conditional_access_policies(token)
@@ -173,9 +192,13 @@ def run_passwordless_audit(token):
     for u in users_without[:10]:
         print(f"  {u['user']} - Current methods: {', '.join(u['methods']) or 'none'}")
 
-    print(f"\n{'='*60}\n")
-    return {"fido2": fido2, "authenticator": authenticator, "hello": hello,
-            "users_without_passwordless": len(users_without)}
+    print(f"\n{'=' * 60}\n")
+    return {
+        "fido2": fido2,
+        "authenticator": authenticator,
+        "hello": hello,
+        "users_without_passwordless": len(users_without),
+    }
 
 
 def main():

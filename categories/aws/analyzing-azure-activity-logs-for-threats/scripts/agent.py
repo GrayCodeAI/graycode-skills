@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Agent for analyzing Azure activity logs for threat detection."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime, timedelta
 
-from azure.identity import DefaultAzureCredential, ClientSecretCredential
+from azure.identity import ClientSecretCredential, DefaultAzureCredential
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 
 
@@ -20,9 +20,7 @@ def get_credential(tenant_id=None, client_id=None, client_secret=None):
 def run_kql(credential, workspace_id, query, hours=24):
     """Execute KQL query against Log Analytics workspace."""
     client = LogsQueryClient(credential)
-    response = client.query_workspace(
-        workspace_id, query, timespan=timedelta(hours=hours)
-    )
+    response = client.query_workspace(workspace_id, query, timespan=timedelta(hours=hours))
     rows = []
     if response.status == LogsQueryStatus.SUCCESS:
         for table in response.tables:
@@ -136,9 +134,11 @@ def main():
     parser.add_argument("--client-id", default=os.getenv("AZURE_CLIENT_ID"))
     parser.add_argument("--client-secret", default=os.getenv("AZURE_CLIENT_SECRET"))
     parser.add_argument("--output", default="azure_threat_report.json")
-    parser.add_argument("--action", choices=[
-        "privesc", "nsg", "keyvault", "travel", "deletion", "full_hunt"
-    ], default="full_hunt")
+    parser.add_argument(
+        "--action",
+        choices=["privesc", "nsg", "keyvault", "travel", "deletion", "full_hunt"],
+        default="full_hunt",
+    )
     args = parser.parse_args()
 
     cred = get_credential(args.tenant_id, args.client_id, args.client_secret)

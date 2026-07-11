@@ -2,11 +2,10 @@
 # For authorized testing only
 """Postman API security testing orchestration agent using Newman CLI."""
 
-import json
-import sys
 import argparse
-import subprocess
+import json
 import os
+import subprocess
 from datetime import datetime
 
 
@@ -31,14 +30,14 @@ def run_newman_collection(collection_path, environment_path=None, reporters=None
     }
 
     if os.path.exists("newman-results.json"):
-        with open("newman-results.json", "r") as f:
+        with open("newman-results.json") as f:
             output["results"] = json.load(f)
     return output
 
 
 def parse_newman_results(results_path):
     """Parse Newman JSON results for security test outcomes."""
-    with open(results_path, "r") as f:
+    with open(results_path) as f:
         data = json.load(f)
 
     run_data = data.get("run", {})
@@ -52,14 +51,18 @@ def parse_newman_results(results_path):
         assertions = execution.get("assertions", [])
 
         for assertion in assertions:
-            test_results.append({
-                "request_name": item.get("name", ""),
-                "test_name": assertion.get("assertion", ""),
-                "passed": not assertion.get("error"),
-                "status_code": response.get("code", 0),
-                "response_time_ms": response.get("responseTime", 0),
-                "error": assertion.get("error", {}).get("message", "") if assertion.get("error") else "",
-            })
+            test_results.append(
+                {
+                    "request_name": item.get("name", ""),
+                    "test_name": assertion.get("assertion", ""),
+                    "passed": not assertion.get("error"),
+                    "status_code": response.get("code", 0),
+                    "response_time_ms": response.get("responseTime", 0),
+                    "error": assertion.get("error", {}).get("message", "")
+                    if assertion.get("error")
+                    else "",
+                }
+            )
 
     failures = [t for t in test_results if not t["passed"]]
     return {
@@ -77,31 +80,39 @@ def generate_bola_collection(base_url, endpoints, user_a_token, user_b_token):
     for ep in endpoints:
         method = ep.get("method", "GET")
         path = ep.get("path", "")
-        items.append({
-            "name": f"BOLA: {method} {path} (User B accessing User A resource)",
-            "request": {
-                "method": method,
-                "header": [
-                    {"key": "Authorization", "value": f"Bearer {user_b_token}"},
-                    {"key": "Content-Type", "value": "application/json"},
-                ],
-                "url": {"raw": f"{base_url}{path}", "host": [base_url], "path": path.strip("/").split("/")},
-            },
-            "event": [{
-                "listen": "test",
-                "script": {
-                    "exec": [
-                        "pm.test('BOLA Check: Should return 403 or 404', function () {",
-                        "    pm.expect(pm.response.code).to.be.oneOf([403, 404]);",
-                        "});",
-                        "pm.test('No data leakage in response', function () {",
-                        f"    pm.expect(pm.response.text()).to.not.include('{user_a_token[:10]}');",
-                        "});",
+        items.append(
+            {
+                "name": f"BOLA: {method} {path} (User B accessing User A resource)",
+                "request": {
+                    "method": method,
+                    "header": [
+                        {"key": "Authorization", "value": f"Bearer {user_b_token}"},
+                        {"key": "Content-Type", "value": "application/json"},
                     ],
-                    "type": "text/javascript",
+                    "url": {
+                        "raw": f"{base_url}{path}",
+                        "host": [base_url],
+                        "path": path.strip("/").split("/"),
+                    },
                 },
-            }],
-        })
+                "event": [
+                    {
+                        "listen": "test",
+                        "script": {
+                            "exec": [
+                                "pm.test('BOLA Check: Should return 403 or 404', function () {",
+                                "    pm.expect(pm.response.code).to.be.oneOf([403, 404]);",
+                                "});",
+                                "pm.test('No data leakage in response', function () {",
+                                f"    pm.expect(pm.response.text()).to.not.include('{user_a_token[:10]}');",
+                                "});",
+                            ],
+                            "type": "text/javascript",
+                        },
+                    }
+                ],
+            }
+        )
 
     collection = {
         "info": {
@@ -129,33 +140,37 @@ def generate_injection_collection(base_url, endpoints):
         params = ep.get("params", [])
         for param in params:
             for payload_name, payload in injection_payloads:
-                items.append({
-                    "name": f"{payload_name}: {path}?{param}",
-                    "request": {
-                        "method": "GET",
-                        "url": {
-                            "raw": f"{base_url}{path}?{param}={payload}",
-                            "host": [base_url],
-                            "path": path.strip("/").split("/"),
-                            "query": [{"key": param, "value": payload}],
+                items.append(
+                    {
+                        "name": f"{payload_name}: {path}?{param}",
+                        "request": {
+                            "method": "GET",
+                            "url": {
+                                "raw": f"{base_url}{path}?{param}={payload}",
+                                "host": [base_url],
+                                "path": path.strip("/").split("/"),
+                                "query": [{"key": param, "value": payload}],
+                            },
                         },
-                    },
-                    "event": [{
-                        "listen": "test",
-                        "script": {
-                            "exec": [
-                                f"pm.test('{payload_name} — no 500 error', function () {{",
-                                "    pm.expect(pm.response.code).to.not.equal(500);",
-                                "});",
-                                f"pm.test('{payload_name} — no stack trace', function () {{",
-                                "    pm.expect(pm.response.text()).to.not.include('Traceback');",
-                                "    pm.expect(pm.response.text()).to.not.include('Exception');",
-                                "});",
-                            ],
-                            "type": "text/javascript",
-                        },
-                    }],
-                })
+                        "event": [
+                            {
+                                "listen": "test",
+                                "script": {
+                                    "exec": [
+                                        f"pm.test('{payload_name} — no 500 error', function () {{",
+                                        "    pm.expect(pm.response.code).to.not.equal(500);",
+                                        "});",
+                                        f"pm.test('{payload_name} — no stack trace', function () {{",
+                                        "    pm.expect(pm.response.text()).to.not.include('Traceback');",
+                                        "    pm.expect(pm.response.text()).to.not.include('Exception');",
+                                        "});",
+                                    ],
+                                    "type": "text/javascript",
+                                },
+                            }
+                        ],
+                    }
+                )
 
     return {
         "info": {
@@ -168,23 +183,23 @@ def generate_injection_collection(base_url, endpoints):
 
 def run_audit(args):
     """Execute Postman API security testing audit."""
-    print(f"\n{'='*60}")
-    print(f"  POSTMAN API SECURITY TESTING")
+    print(f"\n{'=' * 60}")
+    print("  POSTMAN API SECURITY TESTING")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     report = {}
 
     if args.collection:
         newman = run_newman_collection(args.collection, args.environment)
         report["newman_run"] = {"exit_code": newman["exit_code"]}
-        print(f"--- NEWMAN EXECUTION ---")
+        print("--- NEWMAN EXECUTION ---")
         print(f"  Exit code: {newman['exit_code']}")
 
         if os.path.exists("newman-results.json"):
             parsed = parse_newman_results("newman-results.json")
             report["test_results"] = parsed
-            print(f"\n--- TEST RESULTS ---")
+            print("\n--- TEST RESULTS ---")
             print(f"  Total requests: {parsed['total_requests']}")
             print(f"  Total assertions: {parsed['total_assertions']}")
             print(f"  Failed: {parsed['failed_assertions']}")
@@ -197,13 +212,15 @@ def run_audit(args):
         endpoints = json.loads(args.gen_bola)
         collection = generate_bola_collection(
             args.base_url or "http://localhost:8080",
-            endpoints, args.token_a or "token_a", args.token_b or "token_b",
+            endpoints,
+            args.token_a or "token_a",
+            args.token_b or "token_b",
         )
         output_path = "bola-tests.postman_collection.json"
         with open(output_path, "w") as f_out:
             json.dump(collection, f_out, indent=2)
         report["bola_collection"] = output_path
-        print(f"\n--- GENERATED BOLA COLLECTION ---")
+        print("\n--- GENERATED BOLA COLLECTION ---")
         print(f"  Path: {output_path}")
         print(f"  Tests: {len(collection['item'])}")
 

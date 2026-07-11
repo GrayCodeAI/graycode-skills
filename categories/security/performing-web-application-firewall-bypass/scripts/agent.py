@@ -6,11 +6,12 @@ against a target URL to identify WAF evasion weaknesses in
 XSS, SQLi, and path traversal filtering.
 """
 
-import requests
 import json
 import sys
 import urllib.parse
 from datetime import datetime
+
+import requests
 
 
 class WAFBypassAgent:
@@ -25,14 +26,25 @@ class WAFBypassAgent:
         try:
             if method == "GET":
                 resp = self.session.get(
-                    self.target_url, params={param: payload},
-                    headers=headers or {}, timeout=10, allow_redirects=False)
+                    self.target_url,
+                    params={param: payload},
+                    headers=headers or {},
+                    timeout=10,
+                    allow_redirects=False,
+                )
             else:
                 resp = self.session.post(
-                    self.target_url, data={param: payload},
-                    headers=headers or {}, timeout=10, allow_redirects=False)
-            return {"status": resp.status_code, "length": len(resp.text),
-                    "blocked": resp.status_code in (403, 406, 429, 501)}
+                    self.target_url,
+                    data={param: payload},
+                    headers=headers or {},
+                    timeout=10,
+                    allow_redirects=False,
+                )
+            return {
+                "status": resp.status_code,
+                "length": len(resp.text),
+                "blocked": resp.status_code in (403, 406, 429, 501),
+            }
         except requests.RequestException as exc:
             return {"error": str(exc)}
 
@@ -53,10 +65,12 @@ class WAFBypassAgent:
             resp = self._send(payload)
             bypassed = not resp.get("blocked", True) and not resp.get("error")
             if bypassed:
-                self.findings.append({"type": "Encoding Bypass", "technique": name,
-                                      "severity": "High"})
-            results.append({"technique": name, "blocked": resp.get("blocked"),
-                            "status": resp.get("status")})
+                self.findings.append(
+                    {"type": "Encoding Bypass", "technique": name, "severity": "High"}
+                )
+            results.append(
+                {"technique": name, "blocked": resp.get("blocked"), "status": resp.get("status")}
+            )
         return results
 
     def test_sqli_bypasses(self):
@@ -77,10 +91,12 @@ class WAFBypassAgent:
             resp = self._send(payload, method="POST", headers=headers)
             bypassed = not resp.get("blocked", True) and not resp.get("error")
             if bypassed:
-                self.findings.append({"type": "SQLi WAF Bypass", "technique": name,
-                                      "severity": "Critical"})
-            results.append({"technique": name, "blocked": resp.get("blocked"),
-                            "status": resp.get("status")})
+                self.findings.append(
+                    {"type": "SQLi WAF Bypass", "technique": name, "severity": "Critical"}
+                )
+            results.append(
+                {"technique": name, "blocked": resp.get("blocked"), "status": resp.get("status")}
+            )
         return results
 
     def test_path_traversal_bypasses(self):
@@ -98,10 +114,12 @@ class WAFBypassAgent:
             resp = self._send(payload, param="file")
             bypassed = not resp.get("blocked", True) and not resp.get("error")
             if bypassed:
-                self.findings.append({"type": "Path Traversal Bypass",
-                                      "technique": name, "severity": "High"})
-            results.append({"technique": name, "blocked": resp.get("blocked"),
-                            "status": resp.get("status")})
+                self.findings.append(
+                    {"type": "Path Traversal Bypass", "technique": name, "severity": "High"}
+                )
+            results.append(
+                {"technique": name, "blocked": resp.get("blocked"), "status": resp.get("status")}
+            )
         return results
 
     def test_http_method_bypass(self):
@@ -111,10 +129,16 @@ class WAFBypassAgent:
         results = []
         for method in methods:
             try:
-                resp = self.session.request(method, self.target_url,
-                                            params={"q": payload}, timeout=10)
-                results.append({"method": method, "status": resp.status_code,
-                                "blocked": resp.status_code in (403, 406, 429)})
+                resp = self.session.request(
+                    method, self.target_url, params={"q": payload}, timeout=10
+                )
+                results.append(
+                    {
+                        "method": method,
+                        "status": resp.status_code,
+                        "blocked": resp.status_code in (403, 406, 429),
+                    }
+                )
             except requests.RequestException:
                 results.append({"method": method, "error": "failed"})
         return results

@@ -6,14 +6,11 @@ Parses LNK file headers and extracts forensic metadata including
 target paths, timestamps, volume information, and machine identifiers.
 """
 
-import struct
-import os
-import sys
 import json
-import csv
+import os
+import struct
+import sys
 from datetime import datetime, timedelta
-from pathlib import Path
-
 
 FILETIME_EPOCH = datetime(1601, 1, 1)
 
@@ -66,7 +63,7 @@ def parse_lnk_file(filepath: str) -> dict:
             "system": bool(file_attrs & 0x04),
             "directory": bool(file_attrs & 0x10),
             "archive": bool(file_attrs & 0x20),
-        }
+        },
     }
     return result
 
@@ -76,7 +73,7 @@ def scan_directory(lnk_dir: str, output_dir: str) -> str:
     os.makedirs(output_dir, exist_ok=True)
     results = []
 
-    for root, dirs, files in os.walk(lnk_dir):
+    for root, _dirs, files in os.walk(lnk_dir):
         for fname in files:
             if fname.lower().endswith(".lnk"):
                 filepath = os.path.join(root, fname)
@@ -85,12 +82,17 @@ def scan_directory(lnk_dir: str, output_dir: str) -> str:
 
     report_path = os.path.join(output_dir, "lnk_analysis_report.json")
     with open(report_path, "w") as f:
-        json.dump({
-            "analysis_timestamp": datetime.now().isoformat(),
-            "source_directory": lnk_dir,
-            "total_lnk_files": len(results),
-            "files": results
-        }, f, indent=2, default=str)
+        json.dump(
+            {
+                "analysis_timestamp": datetime.now().isoformat(),
+                "source_directory": lnk_dir,
+                "total_lnk_files": len(results),
+                "files": results,
+            },
+            f,
+            indent=2,
+            default=str,
+        )
 
     print(f"[*] Analyzed {len(results)} LNK files")
     print(f"[*] Report: {report_path}")

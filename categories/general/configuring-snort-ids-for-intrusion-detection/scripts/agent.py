@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Snort IDS configuration and rule management agent."""
 
-import subprocess
 import json
 import os
 import re
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
-
 
 SNORT_BIN = "/usr/local/bin/snort"
 SNORT_CONF = "/usr/local/etc/snort/snort.lua"
@@ -19,9 +18,7 @@ LOG_DIR = "/var/log/snort"
 def check_snort_installed():
     """Verify Snort 3 installation and return version info."""
     try:
-        result = subprocess.run(
-            [SNORT_BIN, "-V"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run([SNORT_BIN, "-V"], capture_output=True, text=True, timeout=10)
         for line in result.stdout.splitlines() + result.stderr.splitlines():
             if "Snort++" in line or "Version" in line:
                 return {"installed": True, "version": line.strip()}
@@ -37,7 +34,9 @@ def validate_configuration(config_path=SNORT_CONF):
     try:
         result = subprocess.run(
             [SNORT_BIN, "-c", config_path, "--daq-dir", "/usr/local/lib/daq", "-T"],
-            capture_output=True, text=True, timeout=60
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         success = result.returncode == 0
         rules_loaded = None
@@ -64,22 +63,26 @@ def parse_alert_fast(log_path=None):
 
     alerts = []
     sid_counts = {}
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
             sid_match = re.search(r"\[(\d+):(\d+):(\d+)\]", line)
-            msg_match = re.search(r'\] (.+?) \[', line)
+            msg_match = re.search(r"\] (.+?) \[", line)
             if sid_match:
                 gid, sid, rev = sid_match.groups()
                 key = f"{gid}:{sid}"
                 sid_counts[key] = sid_counts.get(key, 0) + 1
-                alerts.append({
-                    "gid": gid, "sid": sid, "rev": rev,
-                    "message": msg_match.group(1) if msg_match else "",
-                    "raw": line[:200],
-                })
+                alerts.append(
+                    {
+                        "gid": gid,
+                        "sid": sid,
+                        "rev": rev,
+                        "message": msg_match.group(1) if msg_match else "",
+                        "raw": line[:200],
+                    }
+                )
 
     top_rules = sorted(sid_counts.items(), key=lambda x: x[1], reverse=True)[:20]
     return {
@@ -97,7 +100,7 @@ def parse_alert_json(log_path=None):
         return {"error": f"JSON alert log not found: {log_path}"}
 
     alerts = []
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         for line in f:
             line = line.strip()
             if not line:
@@ -133,9 +136,17 @@ def test_rule_against_pcap(pcap_path, rule_file=None):
     os.makedirs(output_dir, exist_ok=True)
 
     cmd = [
-        SNORT_BIN, "-c", SNORT_CONF,
-        "--daq-dir", "/usr/local/lib/daq",
-        "-r", pcap_path, "-l", output_dir, "-A", "fast",
+        SNORT_BIN,
+        "-c",
+        SNORT_CONF,
+        "--daq-dir",
+        "/usr/local/lib/daq",
+        "-r",
+        pcap_path,
+        "-l",
+        output_dir,
+        "-A",
+        "fast",
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)

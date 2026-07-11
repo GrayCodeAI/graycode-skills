@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """Agent for JWT signing, verification, and security auditing."""
 
-import json
 import argparse
 import base64
-import hmac
 import hashlib
+import hmac
+import json
 import time
 from datetime import datetime
 
 try:
-    from cryptography.hazmat.primitives.asymmetric import rsa, ec, ed25519
     from cryptography.hazmat.primitives import hashes, serialization
-    from cryptography.hazmat.primitives.asymmetric import padding, utils
+    from cryptography.hazmat.primitives.asymmetric import ec, ed25519, padding, rsa, utils
+
     HAS_CRYPTO = True
 except ImportError:
     HAS_CRYPTO = False
@@ -86,15 +86,22 @@ def audit_jwt_security(token):
 
     alg = header.get("alg", "")
     if alg == "none":
-        findings.append({"issue": "Algorithm 'none' - unsigned token",
-                         "severity": "CRITICAL"})
+        findings.append({"issue": "Algorithm 'none' - unsigned token", "severity": "CRITICAL"})
     if alg == "HS256" and header.get("jwk"):
-        findings.append({"issue": "JWK in header with symmetric algorithm - key injection risk",
-                         "severity": "CRITICAL"})
+        findings.append(
+            {
+                "issue": "JWK in header with symmetric algorithm - key injection risk",
+                "severity": "CRITICAL",
+            }
+        )
     if alg in ("HS256", "HS384", "HS512"):
-        findings.append({"issue": f"Symmetric algorithm {alg} - shared secret risk",
-                         "severity": "MEDIUM",
-                         "recommendation": "Use RS256 or ES256 for multi-party verification"})
+        findings.append(
+            {
+                "issue": f"Symmetric algorithm {alg} - shared secret risk",
+                "severity": "MEDIUM",
+                "recommendation": "Use RS256 or ES256 for multi-party verification",
+            }
+        )
 
     if not payload.get("exp"):
         findings.append({"issue": "No expiration claim (exp)", "severity": "HIGH"})
@@ -102,8 +109,9 @@ def audit_jwt_security(token):
         exp = payload["exp"]
         now = int(time.time())
         if exp - now > 86400:
-            findings.append({"issue": f"Long expiration: {(exp - now) / 3600:.0f} hours",
-                             "severity": "MEDIUM"})
+            findings.append(
+                {"issue": f"Long expiration: {(exp - now) / 3600:.0f} hours", "severity": "MEDIUM"}
+            )
     if not payload.get("iss"):
         findings.append({"issue": "No issuer claim (iss)", "severity": "MEDIUM"})
     if not payload.get("aud"):
@@ -116,8 +124,7 @@ def audit_jwt_security(token):
     sensitive_keys = ["password", "secret", "ssn", "credit_card", "api_key"]
     for key in payload:
         if any(s in key.lower() for s in sensitive_keys):
-            findings.append({"issue": f"Sensitive data in claim: {key}",
-                             "severity": "HIGH"})
+            findings.append({"issue": f"Sensitive data in claim: {key}", "severity": "HIGH"})
 
     return findings
 
@@ -128,10 +135,13 @@ def generate_rsa_keypair():
         return {"error": "cryptography library not available"}
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     priv_pem = private_key.private_bytes(
-        serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
-        serialization.NoEncryption()).decode()
-    pub_pem = private_key.public_key().public_bytes(
-        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo).decode()
+        serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()
+    ).decode()
+    pub_pem = (
+        private_key.public_key()
+        .public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo)
+        .decode()
+    )
     return {"private_key": priv_pem, "public_key": pub_pem, "algorithm": "RS256"}
 
 

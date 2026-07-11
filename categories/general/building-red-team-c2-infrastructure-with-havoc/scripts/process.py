@@ -7,22 +7,21 @@ listeners) and generates operational status reports for red team operations.
 """
 
 import json
+import os
 import socket
 import ssl
-import os
-import hashlib
-import subprocess
 import time
+from dataclasses import asdict, dataclass
 from datetime import datetime
-from dataclasses import dataclass, field, asdict
 from typing import Optional
-from urllib.request import urlopen, Request
-from urllib.error import URLError, HTTPError
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 
 @dataclass
 class InfraComponent:
     """Represents an infrastructure component."""
+
     name: str
     host: str
     port: int
@@ -35,6 +34,7 @@ class InfraComponent:
 @dataclass
 class HealthCheck:
     """Result of a health check."""
+
     component: str
     host: str
     port: int
@@ -78,7 +78,7 @@ class HavocInfraMonitor:
             latency = (time.time() - start) * 1000
             sock.close()
             return result == 0, latency
-        except (socket.error, socket.timeout):
+        except (OSError, socket.timeout):
             return False, 0.0
 
     def check_ssl_certificate(self, host: str, port: int = 443) -> dict:
@@ -109,8 +109,14 @@ class HavocInfraMonitor:
         except Exception as e:
             return {"valid": False, "error": str(e)}
 
-    def check_http_response(self, host: str, port: int, path: str = "/",
-                            ssl_enabled: bool = True, expected_status: int = 200) -> dict:
+    def check_http_response(
+        self,
+        host: str,
+        port: int,
+        path: str = "/",
+        ssl_enabled: bool = True,
+        expected_status: int = 200,
+    ) -> dict:
         """Check HTTP/HTTPS endpoint response."""
         scheme = "https" if ssl_enabled else "http"
         url = f"{scheme}://{host}:{port}{path}"
@@ -119,9 +125,12 @@ class HavocInfraMonitor:
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
 
-            req = Request(url, headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            })
+            req = Request(
+                url,
+                headers={
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                },
+            )
             start = time.time()
             resp = urlopen(req, timeout=10, context=context)
             latency = (time.time() - start) * 1000
@@ -178,13 +187,10 @@ class HavocInfraMonitor:
                 check.ssl_expiry = ssl_info.get("expiry", "")
 
                 if ssl_info.get("self_signed", False):
-                    self.alerts.append(
-                        f"OPSEC WARNING: {comp.name} has self-signed certificate!"
-                    )
+                    self.alerts.append(f"OPSEC WARNING: {comp.name} has self-signed certificate!")
                 if ssl_info.get("days_remaining", 999) < 7:
                     self.alerts.append(
-                        f"WARNING: {comp.name} SSL expires in "
-                        f"{ssl_info['days_remaining']} days"
+                        f"WARNING: {comp.name} SSL expires in {ssl_info['days_remaining']} days"
                     )
 
             # HTTP response check for web-based components
@@ -202,9 +208,7 @@ class HavocInfraMonitor:
 
             # Latency check
             if latency > 1000:
-                self.alerts.append(
-                    f"WARNING: {comp.name} high latency: {latency:.0f}ms"
-                )
+                self.alerts.append(f"WARNING: {comp.name} high latency: {latency:.0f}ms")
                 check.status = "degraded"
 
             self.check_results.append(check)
@@ -225,25 +229,31 @@ class HavocInfraMonitor:
         results["resolved_ips"] = dns.get("ips", [])
 
         # Check if domain is too new (WHOIS-based heuristic)
-        results["checks"].append({
-            "check": "DNS Resolution",
-            "status": "PASS" if dns.get("resolved") else "FAIL",
-        })
+        results["checks"].append(
+            {
+                "check": "DNS Resolution",
+                "status": "PASS" if dns.get("resolved") else "FAIL",
+            }
+        )
 
         # SSL certificate check
         ssl_info = self.check_ssl_certificate(domain)
-        results["checks"].append({
-            "check": "Valid SSL Certificate",
-            "status": "PASS" if ssl_info.get("valid") else "FAIL",
-            "details": ssl_info,
-        })
+        results["checks"].append(
+            {
+                "check": "Valid SSL Certificate",
+                "status": "PASS" if ssl_info.get("valid") else "FAIL",
+                "details": ssl_info,
+            }
+        )
 
         if ssl_info.get("self_signed"):
-            results["checks"].append({
-                "check": "Not Self-Signed",
-                "status": "FAIL",
-                "details": "Self-signed certificates are an OPSEC failure",
-            })
+            results["checks"].append(
+                {
+                    "check": "Not Self-Signed",
+                    "status": "FAIL",
+                    "details": "Self-signed certificates are an OPSEC failure",
+                }
+            )
 
         return results
 
@@ -315,29 +325,35 @@ def main():
     monitor = HavocInfraMonitor()
 
     # Configure infrastructure components
-    monitor.add_component(InfraComponent(
-        name="Havoc Teamserver",
-        host="127.0.0.1",
-        port=40056,
-        component_type="teamserver",
-        protocol="tcp",
-    ))
+    monitor.add_component(
+        InfraComponent(
+            name="Havoc Teamserver",
+            host="127.0.0.1",
+            port=40056,
+            component_type="teamserver",
+            protocol="tcp",
+        )
+    )
 
-    monitor.add_component(InfraComponent(
-        name="HTTPS Redirector",
-        host="127.0.0.1",
-        port=443,
-        component_type="redirector",
-        ssl_enabled=True,
-    ))
+    monitor.add_component(
+        InfraComponent(
+            name="HTTPS Redirector",
+            host="127.0.0.1",
+            port=443,
+            component_type="redirector",
+            ssl_enabled=True,
+        )
+    )
 
-    monitor.add_component(InfraComponent(
-        name="HTTPS Listener",
-        host="127.0.0.1",
-        port=443,
-        component_type="listener",
-        ssl_enabled=True,
-    ))
+    monitor.add_component(
+        InfraComponent(
+            name="HTTPS Listener",
+            host="127.0.0.1",
+            port=443,
+            component_type="listener",
+            ssl_enabled=True,
+        )
+    )
 
     # Run health checks
     print("[*] Running infrastructure health checks...\n")

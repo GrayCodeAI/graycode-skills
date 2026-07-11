@@ -8,10 +8,7 @@ DCSync indicators (Event ID 4662), and suspicious process patterns.
 import argparse
 import json
 import re
-import struct
-import sys
 from datetime import datetime
-from pathlib import Path
 
 try:
     import Evtx.Evtx as evtx
@@ -28,8 +25,13 @@ LSASS_SUSPICIOUS_ACCESS = {
 }
 
 LSASS_LEGITIMATE_SOURCES = {
-    "csrss.exe", "services.exe", "lsm.exe", "svchost.exe",
-    "mrt.exe", "taskmgr.exe", "wmiprvse.exe",
+    "csrss.exe",
+    "services.exe",
+    "lsm.exe",
+    "svchost.exe",
+    "mrt.exe",
+    "taskmgr.exe",
+    "wmiprvse.exe",
 }
 
 DCSYNC_GUIDS = {
@@ -49,9 +51,13 @@ SAM_COMMANDS = [
 ]
 
 DUMP_TOOLS = {
-    "mimikatz.exe": "CRITICAL", "procdump.exe": "HIGH", "procdump64.exe": "HIGH",
-    "nanodump.exe": "CRITICAL", "pypykatz": "CRITICAL",
-    "secretsdump.py": "CRITICAL", "lazagne.exe": "HIGH",
+    "mimikatz.exe": "CRITICAL",
+    "procdump.exe": "HIGH",
+    "procdump64.exe": "HIGH",
+    "nanodump.exe": "CRITICAL",
+    "pypykatz": "CRITICAL",
+    "secretsdump.py": "CRITICAL",
+    "lazagne.exe": "HIGH",
 }
 
 
@@ -84,17 +90,19 @@ def parse_sysmon_event10(filepath):
             if access_mask.lower() in LSASS_SUSPICIOUS_ACCESS:
                 severity = "CRITICAL"
 
-            findings.append({
-                "event_id": 10,
-                "timestamp": time_created.group(1) if time_created else "",
-                "source_image": source_name,
-                "target_image": target.group(1),
-                "granted_access": access_mask,
-                "access_meaning": LSASS_SUSPICIOUS_ACCESS.get(access_mask.lower(), ""),
-                "source_user": source_user.group(1) if source_user else "",
-                "severity": severity,
-                "mitre": technique,
-            })
+            findings.append(
+                {
+                    "event_id": 10,
+                    "timestamp": time_created.group(1) if time_created else "",
+                    "source_image": source_name,
+                    "target_image": target.group(1),
+                    "granted_access": access_mask,
+                    "access_meaning": LSASS_SUSPICIOUS_ACCESS.get(access_mask.lower(), ""),
+                    "source_user": source_user.group(1) if source_user else "",
+                    "severity": severity,
+                    "mitre": technique,
+                }
+            )
     return findings
 
 
@@ -122,39 +130,45 @@ def parse_security_4662(filepath):
             if subject_name.endswith("$"):
                 continue
             time_created = re.search(r'SystemTime="([^"]+)"', xml)
-            findings.append({
-                "event_id": 4662,
-                "timestamp": time_created.group(1) if time_created else "",
-                "subject_user": subject_name,
-                "replication_rights": matched_guids,
-                "severity": "CRITICAL",
-                "mitre": "T1003.006",
-                "description": "DCSync - non-DC account requesting replication",
-            })
+            findings.append(
+                {
+                    "event_id": 4662,
+                    "timestamp": time_created.group(1) if time_created else "",
+                    "subject_user": subject_name,
+                    "replication_rights": matched_guids,
+                    "severity": "CRITICAL",
+                    "mitre": "T1003.006",
+                    "description": "DCSync - non-DC account requesting replication",
+                }
+            )
     return findings
 
 
 def detect_sam_dump_commands(filepath):
     findings = []
-    with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+    with open(filepath, encoding="utf-8", errors="replace") as f:
         for line_num, line in enumerate(f, 1):
             for pattern in SAM_COMMANDS:
                 if re.search(pattern, line, re.IGNORECASE):
-                    findings.append({
-                        "line": line_num,
-                        "command": line.strip()[:200],
-                        "pattern": pattern,
-                        "severity": "CRITICAL",
-                        "mitre": "T1003.002",
-                    })
+                    findings.append(
+                        {
+                            "line": line_num,
+                            "command": line.strip()[:200],
+                            "pattern": pattern,
+                            "severity": "CRITICAL",
+                            "mitre": "T1003.002",
+                        }
+                    )
             for tool, sev in DUMP_TOOLS.items():
                 if tool.lower() in line.lower():
-                    findings.append({
-                        "line": line_num,
-                        "tool": tool,
-                        "severity": sev,
-                        "mitre": "T1003",
-                    })
+                    findings.append(
+                        {
+                            "line": line_num,
+                            "tool": tool,
+                            "severity": sev,
+                            "mitre": "T1003",
+                        }
+                    )
     return findings
 
 

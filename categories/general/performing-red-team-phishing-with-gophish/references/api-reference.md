@@ -5,7 +5,7 @@
 ### Constructor
 ```python
 from gophish import Gophish
-api = Gophish(api_key, host="https://localhost:3333", verify=False)
+api = Gophish(api_key, host="https://localhost:3333", verify=True)
 ```
 
 ### Campaigns

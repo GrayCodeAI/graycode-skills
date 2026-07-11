@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Patch Tuesday Response Agent - Tracks Microsoft patches, assesses risk, and prioritizes deployment."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 import requests
@@ -47,11 +47,16 @@ def parse_vulnerabilities(cvrf_data):
         for product_status in vuln.get("ProductStatuses", []):
             for pid in product_status.get("ProductID", []):
                 affected_products.append(pid)
-        vulns.append({
-            "cve": cve_id, "title": title, "severity": severity,
-            "cvss_score": cvss_score, "exploited_in_wild": exploited,
-            "affected_product_ids": affected_products[:10],
-        })
+        vulns.append(
+            {
+                "cve": cve_id,
+                "title": title,
+                "severity": severity,
+                "cvss_score": cvss_score,
+                "exploited_in_wild": exploited,
+                "affected_product_ids": affected_products[:10],
+            }
+        )
     logger.info("Parsed %d vulnerabilities", len(vulns))
     return vulns
 
@@ -59,7 +64,10 @@ def parse_vulnerabilities(cvrf_data):
 def check_cisa_kev(cve_list):
     """Check CVEs against CISA Known Exploited Vulnerabilities catalog."""
     try:
-        resp = requests.get("https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json", timeout=15)
+        resp = requests.get(
+            "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+            timeout=15,
+        )
         resp.raise_for_status()
         kev_data = resp.json()
         kev_cves = {v["cveID"] for v in kev_data.get("vulnerabilities", [])}
@@ -106,8 +114,12 @@ def generate_deployment_plan(prioritized_vulns):
     phases = {"emergency_24h": [], "critical_72h": [], "standard_7d": [], "routine_30d": []}
     for vuln in prioritized_vulns:
         urgency = vuln.get("deployment_urgency", "routine")
-        entry = {"cve": vuln["cve"], "title": vuln["title"], "cvss": vuln["cvss_score"],
-                 "exploited": vuln["exploited_in_wild"]}
+        entry = {
+            "cve": vuln["cve"],
+            "title": vuln["title"],
+            "cvss": vuln["cvss_score"],
+            "exploited": vuln["exploited_in_wild"],
+        }
         if urgency == "emergency":
             phases["emergency_24h"].append(entry)
         elif urgency == "critical":
@@ -129,12 +141,21 @@ def generate_report(vulns, kev_cves, deployment_plan, year_month):
         "in_cisa_kev": len(kev_cves),
         "critical_cvss": sum(1 for v in vulns if v.get("cvss_score", 0) >= 9.0),
         "deployment_plan": deployment_plan,
-        "top_10_priority": [{"cve": v["cve"], "title": v["title"], "cvss": v["cvss_score"],
-                             "exploited": v["exploited_in_wild"], "priority": v["priority_score"]}
-                            for v in vulns[:10]],
+        "top_10_priority": [
+            {
+                "cve": v["cve"],
+                "title": v["title"],
+                "cvss": v["cvss_score"],
+                "exploited": v["exploited_in_wild"],
+                "priority": v["priority_score"],
+            }
+            for v in vulns[:10]
+        ],
     }
-    print(f"PATCH TUESDAY REPORT ({year_month}): {len(vulns)} vulns, "
-          f"{report['actively_exploited']} exploited, {len(kev_cves)} in KEV")
+    print(
+        f"PATCH TUESDAY REPORT ({year_month}): {len(vulns)} vulns, "
+        f"{report['actively_exploited']} exploited, {len(kev_cves)} in KEV"
+    )
     return report
 
 

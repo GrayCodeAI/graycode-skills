@@ -2,10 +2,10 @@
 """IBM QRadar SIEM correlation and offense management agent."""
 
 import json
-import sys
-import urllib.request
-import urllib.parse
 import ssl
+import sys
+import urllib.parse
+import urllib.request
 from datetime import datetime
 
 
@@ -46,6 +46,7 @@ class QRadarClient:
         if not search_id:
             return result
         import time
+
         for _ in range(30):
             status = self._request("GET", f"ariel/searches/{search_id}")
             if status.get("status") == "COMPLETED":
@@ -55,7 +56,7 @@ class QRadarClient:
 
     def get_offenses(self, status_filter="OPEN", limit=50):
         """Retrieve offenses filtered by status."""
-        params = f"?filter=status%3D%22{status_filter}%22&Range=items%3D0-{limit-1}"
+        params = f"?filter=status%3D%22{status_filter}%22&Range=items%3D0-{limit - 1}"
         return self._request("GET", f"siem/offenses{params}")
 
     def get_offense_details(self, offense_id):
@@ -83,7 +84,9 @@ class QRadarClient:
     def add_to_reference_set(self, name, value):
         """Add a value to a reference set."""
         encoded = urllib.parse.quote(name)
-        return self._request("POST", f"reference_data/sets/{encoded}?value={urllib.parse.quote(value)}")
+        return self._request(
+            "POST", f"reference_data/sets/{encoded}?value={urllib.parse.quote(value)}"
+        )
 
     def create_reference_set(self, name, element_type="IP", ttl="30 days"):
         """Create a new reference set."""
@@ -97,7 +100,7 @@ class QRadarClient:
 
     def get_rules(self, limit=50):
         """List custom rules."""
-        return self._request("GET", f"analytics/rules?Range=items%3D0-{limit-1}")
+        return self._request("GET", f"analytics/rules?Range=items%3D0-{limit - 1}")
 
 
 def brute_force_aql(client, hours=24):
@@ -148,6 +151,7 @@ def generate_report(client):
 
 if __name__ == "__main__":
     import os
+
     host = os.environ.get("QRADAR_HOST", "qradar.example.com")
     token = os.environ.get("QRADAR_TOKEN", "")
     if not token:
@@ -170,4 +174,6 @@ if __name__ == "__main__":
     elif action == "aql" and len(sys.argv) > 2:
         print(json.dumps(client.search_aql(" ".join(sys.argv[2:])), indent=2))
     else:
-        print("Usage: agent.py [report|offenses|offense <id>|brute-force|lateral-movement|aql <query>]")
+        print(
+            "Usage: agent.py [report|offenses|offense <id>|brute-force|lateral-movement|aql <query>]"
+        )

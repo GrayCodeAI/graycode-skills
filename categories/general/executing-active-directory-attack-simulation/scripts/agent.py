@@ -3,26 +3,26 @@
 """Active Directory attack simulation agent using Impacket and ldap3."""
 
 import argparse
-import sys
 import json
 import logging
+import sys
 from datetime import datetime
 
 try:
-    from impacket.krb5.kerberosv5 import getKerberosTGT, getKerberosTGS
-    from impacket.krb5 import constants as krb5_constants
-    from impacket.krb5.types import Principal, KerberosTime
-    from impacket.smbconnection import SMBConnection
     from impacket import version as impacket_version
     from impacket.dcerpc.v5 import samr, transport
-    from impacket.examples.GetUserSPNs import GetUserSPNs
     from impacket.examples.GetNPUsers import GetNPUsers
+    from impacket.examples.GetUserSPNs import GetUserSPNs
+    from impacket.krb5 import constants as krb5_constants
+    from impacket.krb5.kerberosv5 import getKerberosTGS, getKerberosTGT
+    from impacket.krb5.types import KerberosTime, Principal
+    from impacket.smbconnection import SMBConnection
 except ImportError:
     sys.exit("impacket is required: pip install impacket")
 
 try:
     import ldap3
-    from ldap3 import Server, Connection, ALL, SUBTREE
+    from ldap3 import ALL, SUBTREE, Connection, Server
 except ImportError:
     sys.exit("ldap3 is required: pip install ldap3")
 
@@ -41,8 +41,13 @@ def ldap_enum_users(dc_ip: str, domain: str, username: str, password: str) -> li
         "(objectClass=user)",
         search_scope=SUBTREE,
         attributes=[
-            "sAMAccountName", "servicePrincipalName", "userAccountControl",
-            "memberOf", "adminCount", "pwdLastSet", "lastLogon",
+            "sAMAccountName",
+            "servicePrincipalName",
+            "userAccountControl",
+            "memberOf",
+            "adminCount",
+            "pwdLastSet",
+            "lastLogon",
         ],
     )
     users = []
@@ -50,12 +55,14 @@ def ldap_enum_users(dc_ip: str, domain: str, username: str, password: str) -> li
         uac = int(str(entry.userAccountControl)) if entry.userAccountControl else 0
         spn_list = list(entry.servicePrincipalName) if entry.servicePrincipalName else []
         no_preauth = bool(uac & 0x400000)
-        users.append({
-            "samaccountname": str(entry.sAMAccountName),
-            "spns": spn_list,
-            "no_preauth": no_preauth,
-            "admin_count": str(entry.adminCount) if entry.adminCount else "0",
-        })
+        users.append(
+            {
+                "samaccountname": str(entry.sAMAccountName),
+                "spns": spn_list,
+                "no_preauth": no_preauth,
+                "admin_count": str(entry.adminCount) if entry.adminCount else "0",
+            }
+        )
     conn.unbind()
     logger.info("Enumerated %d domain users via LDAP", len(users))
     return users
@@ -82,8 +89,11 @@ def enum_groups(dc_ip: str, domain: str, username: str, password: str) -> dict:
     conn = Connection(server, user=f"{domain}\\{username}", password=password, auto_bind=True)
 
     high_value_groups = [
-        "Domain Admins", "Enterprise Admins", "Schema Admins",
-        "Backup Operators", "Account Operators",
+        "Domain Admins",
+        "Enterprise Admins",
+        "Schema Admins",
+        "Backup Operators",
+        "Account Operators",
     ]
     results = {}
     for group_name in high_value_groups:
@@ -139,7 +149,9 @@ def generate_report(users: list, groups: dict, dc_ip: str) -> dict:
             f"HIGH: {len(asrep)} accounts lack Kerberos pre-authentication"
         )
     if not smb_signing:
-        report["risk_summary"].append("HIGH: SMB signing not required on DC - relay attacks possible")
+        report["risk_summary"].append(
+            "HIGH: SMB signing not required on DC - relay attacks possible"
+        )
     return report
 
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """OPA Gatekeeper Policy Enforcement Agent - audits constraint templates and violation status."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 from collections import defaultdict
@@ -42,11 +42,17 @@ def audit_constraint_violations(constraints):
         total = status.get("totalViolations", 0)
         violation_list = status.get("violations", [])
         if total > 0:
-            violations.append({
-                "constraint": name, "kind": kind, "total_violations": total,
-                "enforcement_action": constraint.get("spec", {}).get("enforcementAction", "deny"),
-                "sample_violations": violation_list[:5],
-            })
+            violations.append(
+                {
+                    "constraint": name,
+                    "kind": kind,
+                    "total_violations": total,
+                    "enforcement_action": constraint.get("spec", {}).get(
+                        "enforcementAction", "deny"
+                    ),
+                    "sample_violations": violation_list[:5],
+                }
+            )
     return sorted(violations, key=lambda x: x["total_violations"], reverse=True)
 
 
@@ -56,7 +62,11 @@ def analyze_policy_coverage(constraints):
     for c in constraints:
         categories[c.get("kind", "unknown")] += 1
         enforcement[c.get("spec", {}).get("enforcementAction", "deny")] += 1
-    return {"total_constraints": len(constraints), "by_template": dict(categories), "by_enforcement_action": dict(enforcement)}
+    return {
+        "total_constraints": len(constraints),
+        "by_template": dict(categories),
+        "by_enforcement_action": dict(enforcement),
+    }
 
 
 def check_audit_status():
@@ -67,7 +77,9 @@ def check_audit_status():
     for pod in pods.get("items", []):
         name = pod.get("metadata", {}).get("name", "")
         phase = pod.get("status", {}).get("phase", "")
-        ready = all(c.get("ready", False) for c in pod.get("status", {}).get("containerStatuses", []))
+        ready = all(
+            c.get("ready", False) for c in pod.get("status", {}).get("containerStatuses", [])
+        )
         pod_status.append({"name": name, "phase": phase, "ready": ready})
     return pod_status
 
@@ -99,8 +111,12 @@ def main():
     report = generate_report(templates, constraints, violations, coverage, pod_status)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Gatekeeper: %d templates, %d constraints, %d violations",
-                report["constraint_templates"], report["active_constraints"], report["total_violations"])
+    logger.info(
+        "Gatekeeper: %d templates, %d constraints, %d violations",
+        report["constraint_templates"],
+        report["active_constraints"],
+        report["total_violations"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

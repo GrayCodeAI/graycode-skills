@@ -19,9 +19,7 @@ Usage:
 
 import argparse
 import json
-import sys
 from datetime import datetime
-from typing import Optional
 
 import requests
 
@@ -125,12 +123,14 @@ class DarkWebMonitor:
                 if resp.status_code == 200:
                     data = resp.json()
                     if data.get("result"):
-                        breaches.append({
-                            "type": "breach_directory",
-                            "domain": domain,
-                            "entries_found": len(data.get("result", [])),
-                            "severity": "HIGH",
-                        })
+                        breaches.append(
+                            {
+                                "type": "breach_directory",
+                                "domain": domain,
+                                "entries_found": len(data.get("result", [])),
+                                "severity": "HIGH",
+                            }
+                        )
         except Exception as e:
             print(f"[-] Breach directory check failed: {e}")
         return breaches

@@ -8,11 +8,9 @@ Categorization (SSVC) decision tree and produces prioritized triage reports.
 import argparse
 import csv
 import json
-import sys
 import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
-from pathlib import Path
 
 import requests
 
@@ -147,7 +145,7 @@ def ssvc_decision(exploitation, tech_impact, automatability, mission_prevalence,
 def parse_nessus_csv(filepath):
     """Parse Nessus CSV export into vulnerability records."""
     vulns = []
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             cve = row.get("CVE", "").strip()
@@ -198,7 +196,7 @@ def parse_openvas_xml(filepath):
 def parse_generic_csv(filepath):
     """Parse generic CSV with cve_id, host, cvss_vector columns."""
     vulns = []
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             cve = row.get("cve_id", "").strip()

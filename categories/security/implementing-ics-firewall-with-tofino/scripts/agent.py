@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Agent for auditing and configuring Tofino ICS firewall rules."""
 
-import json
 import argparse
-import re
+import json
+from collections import Counter
 from datetime import datetime
-from collections import Counter, defaultdict
-
 
 OT_PROTOCOLS = {
     "modbus": {"port": 502, "layer": "TCP", "dpi": True},
@@ -41,51 +39,64 @@ def audit_firewall_rules(rules_path):
         src = rule.get("source", rule.get("src", "any"))
         dst = rule.get("destination", rule.get("dst", "any"))
         protocol = rule.get("protocol", "").lower()
-        port = rule.get("port", rule.get("dst_port", "any"))
+        rule.get("port", rule.get("dst_port", "any"))
 
         if src == "any" and dst == "any" and action == "allow":
-            findings.append({
-                "rule": rule.get("id", rule.get("name", "")),
-                "issue": "Allow-any-any rule detected",
-                "severity": "CRITICAL",
-                "recommendation": "Restrict to specific source/destination",
-            })
+            findings.append(
+                {
+                    "rule": rule.get("id", rule.get("name", "")),
+                    "issue": "Allow-any-any rule detected",
+                    "severity": "CRITICAL",
+                    "recommendation": "Restrict to specific source/destination",
+                }
+            )
 
         if protocol in ("modbus", "enip", "s7comm") and not rule.get("dpi_enabled", False):
-            findings.append({
-                "rule": rule.get("id", ""),
-                "issue": f"DPI not enabled for {protocol}",
-                "severity": "HIGH",
-                "recommendation": f"Enable deep packet inspection for {protocol}",
-            })
+            findings.append(
+                {
+                    "rule": rule.get("id", ""),
+                    "issue": f"DPI not enabled for {protocol}",
+                    "severity": "HIGH",
+                    "recommendation": f"Enable deep packet inspection for {protocol}",
+                }
+            )
 
         if protocol == "modbus":
             allowed_funcs = rule.get("allowed_functions", [])
             risky = [f for f in allowed_funcs if f in RISKY_MODBUS_FUNCTIONS]
             if risky:
-                findings.append({
-                    "rule": rule.get("id", ""),
-                    "issue": f"Write functions allowed: {risky}",
-                    "severity": "HIGH",
-                    "detail": {fc: RISKY_MODBUS_FUNCTIONS[fc] for fc in risky},
-                })
+                findings.append(
+                    {
+                        "rule": rule.get("id", ""),
+                        "issue": f"Write functions allowed: {risky}",
+                        "severity": "HIGH",
+                        "detail": {fc: RISKY_MODBUS_FUNCTIONS[fc] for fc in risky},
+                    }
+                )
 
         if action == "allow" and not rule.get("logging", False):
-            findings.append({
-                "rule": rule.get("id", ""),
-                "issue": "Allow rule without logging",
-                "severity": "MEDIUM",
-            })
+            findings.append(
+                {
+                    "rule": rule.get("id", ""),
+                    "issue": "Allow rule without logging",
+                    "severity": "MEDIUM",
+                }
+            )
 
-    has_deny_all = any(r.get("action", "").lower() == "deny" and
-                       r.get("source", "any") == "any" and
-                       r.get("destination", "any") == "any" for r in rule_list)
+    has_deny_all = any(
+        r.get("action", "").lower() == "deny"
+        and r.get("source", "any") == "any"
+        and r.get("destination", "any") == "any"
+        for r in rule_list
+    )
     if not has_deny_all:
-        findings.append({
-            "issue": "No default deny-all rule found",
-            "severity": "CRITICAL",
-            "recommendation": "Add deny-all as last rule",
-        })
+        findings.append(
+            {
+                "issue": "No default deny-all rule found",
+                "severity": "CRITICAL",
+                "recommendation": "Add deny-all as last rule",
+            }
+        )
 
     return findings
 
@@ -107,17 +118,20 @@ def analyze_ot_traffic_log(log_path):
 
         port = entry.get("dst_port", 0)
         if proto == "modbus" and port != 502:
-            anomalies.append({"type": "non_standard_port", "protocol": proto,
-                              "port": port, "severity": "HIGH"})
+            anomalies.append(
+                {"type": "non_standard_port", "protocol": proto, "port": port, "severity": "HIGH"}
+            )
 
         if entry.get("action", "").lower() == "denied":
-            anomalies.append({
-                "type": "denied_connection",
-                "src": entry.get("src_ip", ""),
-                "dst": entry.get("dst_ip", ""),
-                "protocol": proto,
-                "severity": "MEDIUM",
-            })
+            anomalies.append(
+                {
+                    "type": "denied_connection",
+                    "src": entry.get("src_ip", ""),
+                    "dst": entry.get("dst_ip", ""),
+                    "protocol": proto,
+                    "severity": "MEDIUM",
+                }
+            )
 
     return {
         "total_flows": len(items),
@@ -144,34 +158,46 @@ def generate_zone_rules(zone_config):
             port = proto_info.get("port", "any")
             for hmi in hmi_ips:
                 for plc in plc_ips:
-                    rules.append({
-                        "zone": zone_name,
-                        "action": "allow",
-                        "source": hmi,
-                        "destination": plc,
-                        "protocol": proto,
-                        "port": port,
-                        "dpi_enabled": proto_info.get("dpi", False),
-                        "logging": True,
-                    })
+                    rules.append(
+                        {
+                            "zone": zone_name,
+                            "action": "allow",
+                            "source": hmi,
+                            "destination": plc,
+                            "protocol": proto,
+                            "port": port,
+                            "dpi_enabled": proto_info.get("dpi", False),
+                            "logging": True,
+                        }
+                    )
             if proto == "modbus":
                 for eng in eng_ips:
                     for plc in plc_ips:
-                        rules.append({
-                            "zone": zone_name,
-                            "action": "allow",
-                            "source": eng,
-                            "destination": plc,
-                            "protocol": "modbus",
-                            "port": 502,
-                            "dpi_enabled": True,
-                            "allowed_functions": [1, 2, 3, 4],
-                            "logging": True,
-                            "comment": "Read-only Modbus for engineering",
-                        })
+                        rules.append(
+                            {
+                                "zone": zone_name,
+                                "action": "allow",
+                                "source": eng,
+                                "destination": plc,
+                                "protocol": "modbus",
+                                "port": 502,
+                                "dpi_enabled": True,
+                                "allowed_functions": [1, 2, 3, 4],
+                                "logging": True,
+                                "comment": "Read-only Modbus for engineering",
+                            }
+                        )
 
-    rules.append({"action": "deny", "source": "any", "destination": "any",
-                  "protocol": "any", "logging": True, "comment": "Default deny-all"})
+    rules.append(
+        {
+            "action": "deny",
+            "source": "any",
+            "destination": "any",
+            "protocol": "any",
+            "logging": True,
+            "comment": "Default deny-all",
+        }
+    )
     return rules
 
 
@@ -180,8 +206,9 @@ def main():
     parser.add_argument("--rules", help="Firewall rules JSON to audit")
     parser.add_argument("--traffic-log", help="OT traffic log JSON")
     parser.add_argument("--zone-config", help="Zone config JSON for rule generation")
-    parser.add_argument("--action", choices=["audit", "traffic", "generate", "full"],
-                        default="full")
+    parser.add_argument(
+        "--action", choices=["audit", "traffic", "generate", "full"], default="full"
+    )
     parser.add_argument("--output", default="tofino_ics_firewall_report.json")
     args = parser.parse_args()
 

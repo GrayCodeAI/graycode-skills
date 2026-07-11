@@ -5,11 +5,9 @@ Performs runtime security assessment of iOS apps including SSL pinning bypass,
 keychain dumping, filesystem inspection, and jailbreak detection bypass.
 """
 
-import subprocess
 import json
-import os
+import subprocess
 import sys
-import re
 
 
 def run_objection(command, app_id=None, timeout=30):
@@ -101,13 +99,17 @@ OWASP_MOBILE_CHECKS = {
         "description": "Test SSL/TLS implementation and certificate pinning",
     },
     "M4_Insecure_Authentication": {
-        "checks": ["ios hooking list classes --include Auth",
-                    "ios hooking list classes --include Login"],
+        "checks": [
+            "ios hooking list classes --include Auth",
+            "ios hooking list classes --include Login",
+        ],
         "description": "Analyze authentication mechanisms",
     },
     "M5_Insufficient_Cryptography": {
-        "checks": ["ios hooking list classes --include Crypto",
-                    "ios hooking list classes --include AES"],
+        "checks": [
+            "ios hooking list classes --include Crypto",
+            "ios hooking list classes --include AES",
+        ],
         "description": "Review cryptographic implementations",
     },
     "M8_Code_Tampering": {
@@ -128,11 +130,13 @@ def run_owasp_assessment(app_id):
         category_results = {"description": config["description"], "findings": []}
         for check in config["checks"]:
             output, rc = run_objection(check, app_id)
-            category_results["findings"].append({
-                "command": check,
-                "status": "success" if rc == 0 else "failed",
-                "output_preview": output[:200] if output else "",
-            })
+            category_results["findings"].append(
+                {
+                    "command": check,
+                    "status": "success" if rc == 0 else "failed",
+                    "output_preview": output[:200] if output else "",
+                }
+            )
         results[category] = category_results
     return results
 
@@ -166,9 +170,7 @@ console.log('Keychain query prepared');
 
 def generate_report(app_id, assessment_results):
     """Generate iOS security assessment report."""
-    findings_count = sum(
-        len(cat["findings"]) for cat in assessment_results.values()
-    )
+    findings_count = sum(len(cat["findings"]) for cat in assessment_results.values())
     return {
         "app_identifier": app_id,
         "assessment_framework": "OWASP Mobile Top 10",

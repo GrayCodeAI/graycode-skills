@@ -6,24 +6,50 @@ import email
 import json
 import os
 import re
-import sys
-from collections import defaultdict
 from datetime import datetime, timezone
 from email import policy
 
-
 EXECUTIVE_TITLES = [
-    "ceo", "cfo", "cto", "cio", "coo", "president", "director",
-    "vp", "vice president", "managing director", "partner",
+    "ceo",
+    "cfo",
+    "cto",
+    "cio",
+    "coo",
+    "president",
+    "director",
+    "vp",
+    "vice president",
+    "managing director",
+    "partner",
 ]
 URGENCY_KEYWORDS = [
-    "urgent", "immediate", "asap", "right away", "time sensitive",
-    "confidential", "do not share", "wire transfer", "bank account",
-    "update payment", "invoice attached", "past due",
+    "urgent",
+    "immediate",
+    "asap",
+    "right away",
+    "time sensitive",
+    "confidential",
+    "do not share",
+    "wire transfer",
+    "bank account",
+    "update payment",
+    "invoice attached",
+    "past due",
 ]
 SUSPICIOUS_EXTENSIONS = {
-    ".exe", ".scr", ".bat", ".cmd", ".ps1", ".vbs", ".js",
-    ".hta", ".lnk", ".iso", ".img", ".dll", ".msi",
+    ".exe",
+    ".scr",
+    ".bat",
+    ".cmd",
+    ".ps1",
+    ".vbs",
+    ".js",
+    ".hta",
+    ".lnk",
+    ".iso",
+    ".img",
+    ".dll",
+    ".msi",
 }
 
 
@@ -61,7 +87,9 @@ def check_authentication(headers):
     from_domain = re.search(r"@([\w.-]+)", headers.get("from", ""))
     reply_domain = re.search(r"@([\w.-]+)", headers.get("reply_to", ""))
     if from_domain and reply_domain and from_domain.group(1) != reply_domain.group(1):
-        issues.append(f"Reply-To domain mismatch: {reply_domain.group(1)} vs {from_domain.group(1)}")
+        issues.append(
+            f"Reply-To domain mismatch: {reply_domain.group(1)} vs {from_domain.group(1)}"
+        )
     return issues
 
 
@@ -82,7 +110,7 @@ def check_content_indicators(msg):
 
     urls = re.findall(r'https?://[^\s<>"\']+', body)
     for url in urls[:10]:
-        if re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', url):
+        if re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", url):
             indicators.append(f"URL with IP address: {url[:80]}")
         if len(url) > 100:
             indicators.append(f"Unusually long URL: {url[:80]}...")
@@ -109,7 +137,9 @@ def analyze_email(eml_path):
 
     all_indicators = auth_issues + content_indicators
     score = len(all_indicators) * 15
-    risk = "CRITICAL" if score >= 75 else "HIGH" if score >= 50 else "MEDIUM" if score >= 25 else "LOW"
+    risk = (
+        "CRITICAL" if score >= 75 else "HIGH" if score >= 50 else "MEDIUM" if score >= 25 else "LOW"
+    )
 
     return {
         "file": eml_path,
@@ -125,9 +155,7 @@ def analyze_email(eml_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Detect spearphishing via email gateway analysis"
-    )
+    parser = argparse.ArgumentParser(description="Detect spearphishing via email gateway analysis")
     parser.add_argument("input", help=".eml file or directory")
     parser.add_argument("--output", "-o", help="Output JSON report")
     parser.add_argument("--verbose", "-v", action="store_true")

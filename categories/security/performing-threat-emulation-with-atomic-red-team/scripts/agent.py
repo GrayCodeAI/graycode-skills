@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Agent for threat emulation with Atomic Red Team test execution."""
 
-import os
-import json
-import yaml
 import argparse
+import json
 import subprocess
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+
+import yaml
 
 
 def load_atomic_tests(atomics_path, technique_id):
@@ -30,15 +30,20 @@ def list_available_techniques(atomics_path):
             if yaml_file.exists():
                 with open(yaml_file) as f:
                     data = yaml.safe_load(f)
-                techniques.append({
-                    "technique_id": technique_dir.name,
-                    "name": data.get("display_name", ""),
-                    "test_count": len(data.get("atomic_tests", [])),
-                    "platforms": list(set(
-                        p for t in data.get("atomic_tests", [])
-                        for p in t.get("supported_platforms", [])
-                    )),
-                })
+                techniques.append(
+                    {
+                        "technique_id": technique_dir.name,
+                        "name": data.get("display_name", ""),
+                        "test_count": len(data.get("atomic_tests", [])),
+                        "platforms": list(
+                            set(
+                                p
+                                for t in data.get("atomic_tests", [])
+                                for p in t.get("supported_platforms", [])
+                            )
+                        ),
+                    }
+                )
     return techniques
 
 
@@ -49,16 +54,18 @@ def get_test_details(atomics_path, technique_id):
         return []
     tests = []
     for i, test in enumerate(data.get("atomic_tests", [])):
-        tests.append({
-            "test_number": i + 1,
-            "name": test.get("name", ""),
-            "description": test.get("description", ""),
-            "platforms": test.get("supported_platforms", []),
-            "executor": test.get("executor", {}).get("name", ""),
-            "command": test.get("executor", {}).get("command", "")[:200],
-            "cleanup": test.get("executor", {}).get("cleanup_command", "")[:200],
-            "input_arguments": list(test.get("input_arguments", {}).keys()),
-        })
+        tests.append(
+            {
+                "test_number": i + 1,
+                "name": test.get("name", ""),
+                "description": test.get("description", ""),
+                "platforms": test.get("supported_platforms", []),
+                "executor": test.get("executor", {}).get("name", ""),
+                "command": test.get("executor", {}).get("command", "")[:200],
+                "cleanup": test.get("executor", {}).get("cleanup_command", "")[:200],
+                "input_arguments": list(test.get("input_arguments", {}).keys()),
+            }
+        )
     return tests
 
 
@@ -66,14 +73,19 @@ def execute_atomic_test(atomics_path, technique_id, test_number=1, platform="lin
     """Execute an Atomic Red Team test using atomic-operator."""
     try:
         from atomic_operator import AtomicOperator
+
         operator = AtomicOperator()
         result = operator.run(
             technique=technique_id,
             atomics_path=str(atomics_path),
             test_numbers=[test_number],
         )
-        return {"status": "executed", "technique": technique_id,
-                "test_number": test_number, "result": str(result)}
+        return {
+            "status": "executed",
+            "technique": technique_id,
+            "test_number": test_number,
+            "result": str(result),
+        }
     except ImportError:
         return execute_atomic_manual(atomics_path, technique_id, test_number, platform)
 
@@ -96,7 +108,11 @@ def execute_atomic_manual(atomics_path, technique_id, test_number, platform):
         command = command.replace(f"#{{{arg_name}}}", str(default))
     try:
         result = subprocess.run(
-            command, shell=True, capture_output=True, text=True, timeout=60,
+            command,
+            shell=True,
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         return {
             "status": "executed",
@@ -142,13 +158,15 @@ def build_coverage_matrix(atomics_path, detection_rules):
     matrix = []
     for t in techniques:
         tid = t["technique_id"]
-        matrix.append({
-            "technique_id": tid,
-            "name": t["name"],
-            "has_atomic_test": True,
-            "has_detection_rule": tid in covered,
-            "gap": tid not in covered,
-        })
+        matrix.append(
+            {
+                "technique_id": tid,
+                "name": t["name"],
+                "has_atomic_test": True,
+                "has_detection_rule": tid in covered,
+                "gap": tid not in covered,
+            }
+        )
     return matrix
 
 
@@ -158,9 +176,9 @@ def main():
     parser.add_argument("--technique", help="ATT&CK technique ID (e.g., T1059.001)")
     parser.add_argument("--test-number", type=int, default=1)
     parser.add_argument("--output", default="atomic_report.json")
-    parser.add_argument("--action", choices=[
-        "list", "details", "execute", "cleanup", "coverage"
-    ], default="list")
+    parser.add_argument(
+        "--action", choices=["list", "details", "execute", "cleanup", "coverage"], default="list"
+    )
     args = parser.parse_args()
 
     report = {"generated_at": datetime.utcnow().isoformat(), "results": {}}

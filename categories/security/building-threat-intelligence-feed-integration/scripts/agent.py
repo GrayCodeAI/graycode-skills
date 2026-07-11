@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Threat Intelligence Feed Integration Agent - Ingests STIX/TAXII and open-source TI feeds."""
 
-import json
-import logging
 import argparse
 import hashlib
+import logging
 from datetime import datetime, timedelta
 
 import requests
-from taxii2client.v21 import Server, Collection
-from stix2 import Indicator, Bundle, parse
+from stix2 import Bundle, Indicator, parse
+from taxii2client.v21 import Collection
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -25,12 +24,14 @@ def ingest_taxii_feed(taxii_url, collection_url, username, password, hours_back=
     indicators = []
     for obj in response.get("objects", []):
         indicator = parse(obj)
-        indicators.append({
-            "id": str(indicator.id),
-            "pattern": indicator.pattern,
-            "valid_from": str(indicator.valid_from),
-            "source": "taxii",
-        })
+        indicators.append(
+            {
+                "id": str(indicator.id),
+                "pattern": indicator.pattern,
+                "valid_from": str(indicator.valid_from),
+                "source": "taxii",
+            }
+        )
     logger.info("Ingested %d indicators from TAXII feed", len(indicators))
     return indicators
 
@@ -42,14 +43,16 @@ def ingest_urlhaus_feed():
     data = resp.json()
     indicators = []
     for entry in data.get("urls", []):
-        indicators.append({
-            "type": "url",
-            "value": entry["url"],
-            "threat": entry.get("threat", "unknown"),
-            "status": entry.get("url_status", "unknown"),
-            "tags": entry.get("tags", []),
-            "source": "urlhaus",
-        })
+        indicators.append(
+            {
+                "type": "url",
+                "value": entry["url"],
+                "threat": entry.get("threat", "unknown"),
+                "status": entry.get("url_status", "unknown"),
+                "tags": entry.get("tags", []),
+                "source": "urlhaus",
+            }
+        )
     logger.info("Ingested %d URLs from URLhaus", len(indicators))
     return indicators
 
@@ -60,14 +63,16 @@ def ingest_feodotracker():
     resp = requests.get(url, timeout=30)
     indicators = []
     for entry in resp.json():
-        indicators.append({
-            "type": "ipv4",
-            "value": entry["ip_address"],
-            "port": entry.get("port"),
-            "malware": entry.get("malware", "unknown"),
-            "first_seen": entry.get("first_seen"),
-            "source": "feodotracker",
-        })
+        indicators.append(
+            {
+                "type": "ipv4",
+                "value": entry["ip_address"],
+                "port": entry.get("port"),
+                "malware": entry.get("malware", "unknown"),
+                "first_seen": entry.get("first_seen"),
+                "source": "feodotracker",
+            }
+        )
     logger.info("Ingested %d C2 IPs from Feodo Tracker", len(indicators))
     return indicators
 
@@ -125,7 +130,9 @@ def push_to_splunk_ti(splunk_url, session_key, indicators):
         data = {"ip": ioc["value"], "description": f"{ioc.get('source')}: {ioc['value']}"}
         resp = requests.post(
             f"{splunk_url}/services/data/threat_intel/item/ip_intel",
-            headers=headers, data=data, verify=False,
+            headers=headers,
+            data=data,
+            verify=True,
         )
         if resp.status_code == 201:
             pushed += 1

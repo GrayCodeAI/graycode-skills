@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Cloud Storage Access Pattern Analyzer - Detects abnormal S3/GCS/Azure Blob access via CloudTrail."""
 
+import argparse
 import json
 import logging
-import argparse
 import subprocess
 from collections import defaultdict
 from datetime import datetime, timedelta
@@ -16,10 +16,15 @@ def query_cloudtrail_s3_events(bucket_name, hours_back=24):
     """Query CloudTrail for S3 data events on a specific bucket."""
     start_time = (datetime.utcnow() - timedelta(hours=hours_back)).strftime("%Y-%m-%dT%H:%M:%SZ")
     cmd = [
-        "aws", "cloudtrail", "lookup-events",
-        "--lookup-attributes", f"AttributeKey=ResourceType,AttributeValue=AWS::S3::Object",
-        "--start-time", start_time,
-        "--output", "json",
+        "aws",
+        "cloudtrail",
+        "lookup-events",
+        "--lookup-attributes",
+        "AttributeKey=ResourceType,AttributeValue=AWS::S3::Object",
+        "--start-time",
+        start_time,
+        "--output",
+        "json",
     ]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
@@ -31,16 +36,18 @@ def query_cloudtrail_s3_events(bucket_name, hours_back=24):
         ct_event = json.loads(event.get("CloudTrailEvent", "{}"))
         req_params = ct_event.get("requestParameters", {})
         if req_params.get("bucketName") == bucket_name or not bucket_name:
-            s3_events.append({
-                "timestamp": event.get("EventTime", ""),
-                "event_name": event.get("EventName", ""),
-                "username": event.get("Username", ""),
-                "source_ip": ct_event.get("sourceIPAddress", ""),
-                "user_agent": ct_event.get("userAgent", ""),
-                "bucket": req_params.get("bucketName", ""),
-                "key": req_params.get("key", ""),
-                "user_arn": ct_event.get("userIdentity", {}).get("arn", ""),
-            })
+            s3_events.append(
+                {
+                    "timestamp": event.get("EventTime", ""),
+                    "event_name": event.get("EventName", ""),
+                    "username": event.get("Username", ""),
+                    "source_ip": ct_event.get("sourceIPAddress", ""),
+                    "user_agent": ct_event.get("userAgent", ""),
+                    "bucket": req_params.get("bucketName", ""),
+                    "key": req_params.get("key", ""),
+                    "user_arn": ct_event.get("userIdentity", {}).get("arn", ""),
+                }
+            )
     logger.info("Retrieved %d S3 events for bucket '%s'", len(s3_events), bucket_name or "all")
     return s3_events
 
@@ -55,16 +62,18 @@ def detect_bulk_downloads(events, threshold=100):
     for user_arn, downloads in user_downloads.items():
         if len(downloads) >= threshold:
             keys = [d["key"] for d in downloads]
-            alerts.append({
-                "user_arn": user_arn,
-                "download_count": len(downloads),
-                "unique_keys": len(set(keys)),
-                "source_ips": list({d["source_ip"] for d in downloads}),
-                "first_access": downloads[0]["timestamp"],
-                "last_access": downloads[-1]["timestamp"],
-                "severity": "critical",
-                "indicator": "Bulk download (potential exfiltration)",
-            })
+            alerts.append(
+                {
+                    "user_arn": user_arn,
+                    "download_count": len(downloads),
+                    "unique_keys": len(set(keys)),
+                    "source_ips": list({d["source_ip"] for d in downloads}),
+                    "first_access": downloads[0]["timestamp"],
+                    "last_access": downloads[-1]["timestamp"],
+                    "severity": "critical",
+                    "indicator": "Bulk download (potential exfiltration)",
+                }
+            )
     logger.info("Found %d bulk download alerts", len(alerts))
     return alerts
 
@@ -75,10 +84,7 @@ def detect_after_hours_access(events, business_start=8, business_end=18):
     for event in events:
         try:
             ts = event["timestamp"]
-            if isinstance(ts, str):
-                dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-            else:
-                dt = ts
+            dt = datetime.fromisoformat(ts.replace("Z", "+00:00")) if isinstance(ts, str) else ts
             hour = dt.hour
             if hour < business_start or hour >= business_end:
                 event["indicator"] = f"After-hours access at {hour:02d}:00 UTC"
@@ -115,12 +121,14 @@ def detect_enumeration(events, threshold=20):
     alerts = []
     for user_arn, count in user_listings.items():
         if count >= threshold:
-            alerts.append({
-                "user_arn": user_arn,
-                "list_count": count,
-                "severity": "high",
-                "indicator": "Bucket enumeration spike (reconnaissance)",
-            })
+            alerts.append(
+                {
+                    "user_arn": user_arn,
+                    "list_count": count,
+                    "severity": "high",
+                    "indicator": "Bucket enumeration spike (reconnaissance)",
+                }
+            )
     return alerts
 
 

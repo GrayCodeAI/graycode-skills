@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Agent for analyzing security logs with Splunk using splunk-sdk."""
 
-import os
-import sys
-import json
-import time
 import argparse
-from datetime import datetime, timedelta
+import json
+import os
+from datetime import datetime
 
 import splunklib.client as client
 import splunklib.results as results
@@ -93,7 +91,7 @@ def build_incident_timeline(service, hosts, users, earliest="-24h", latest="now"
     query = (
         f"index=windows OR index=sysmon OR index=proxy OR index=firewall "
         f"({host_filter} OR {user_filter}) "
-        '| eval event_summary=case('
+        "| eval event_summary=case("
         '    sourcetype=="WinEventLog:Security" AND EventCode==4624, '
         '    "Logon: ".TargetUserName." from ".src_ip, '
         '    sourcetype=="WinEventLog:Security" AND EventCode==4625, '
@@ -123,10 +121,18 @@ def main():
     parser.add_argument("--username", default=os.getenv("SPLUNK_USERNAME", "admin"))
     parser.add_argument("--password", default=os.getenv("SPLUNK_PASSWORD", ""))
     parser.add_argument("--earliest", default="-24h", help="Search earliest time")
-    parser.add_argument("--action", choices=[
-        "brute_force", "lateral_movement", "powershell",
-        "lsass_access", "timeline", "full_investigation"
-    ], default="full_investigation")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "brute_force",
+            "lateral_movement",
+            "powershell",
+            "lsass_access",
+            "timeline",
+            "full_investigation",
+        ],
+        default="full_investigation",
+    )
     parser.add_argument("--hosts", nargs="*", default=[], help="Target hosts for timeline")
     parser.add_argument("--users", nargs="*", default=[], help="Target users for timeline")
     parser.add_argument("--threshold", type=int, default=10)

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Agent for auditing AWS S3 bucket permissions using boto3."""
 
-import os
-import json
 import argparse
+import json
+import os
 from datetime import datetime
 
 import boto3
@@ -61,10 +61,12 @@ def check_bucket_acl(session, bucket_name):
     for grant in acl.get("Grants", []):
         grantee = grant.get("Grantee", {})
         if grantee.get("URI") in public_uris:
-            public_grants.append({
-                "grantee": grantee.get("URI"),
-                "permission": grant.get("Permission"),
-            })
+            public_grants.append(
+                {
+                    "grantee": grantee.get("URI"),
+                    "permission": grant.get("Permission"),
+                }
+            )
     return public_grants
 
 
@@ -78,11 +80,13 @@ def check_bucket_policy(session, bucket_name):
         for stmt in policy.get("Statement", []):
             principal = stmt.get("Principal", {})
             if principal == "*" or principal == {"AWS": "*"}:
-                issues.append({
-                    "effect": stmt.get("Effect"),
-                    "action": stmt.get("Action"),
-                    "condition": stmt.get("Condition", "NONE"),
-                })
+                issues.append(
+                    {
+                        "effect": stmt.get("Effect"),
+                        "action": stmt.get("Action"),
+                        "condition": stmt.get("Condition", "NONE"),
+                    }
+                )
         return {"has_policy": True, "wildcard_issues": issues}
     except ClientError:
         return {"has_policy": False, "wildcard_issues": []}
@@ -137,9 +141,10 @@ def classify_risk(audit_result):
         risk = "CRITICAL"
     elif audit_result["bucket_policy"]["wildcard_issues"]:
         risk = "HIGH"
-    elif not audit_result["encryption"]["enabled"]:
-        risk = "MEDIUM"
-    elif not audit_result["public_access_block"]["configured"]:
+    elif (
+        not audit_result["encryption"]["enabled"]
+        or not audit_result["public_access_block"]["configured"]
+    ):
         risk = "MEDIUM"
     audit_result["risk_level"] = risk
     return audit_result
@@ -157,10 +162,7 @@ def main():
     account_id = session.client("sts").get_caller_identity()["Account"]
     print(f"[+] Auditing S3 buckets in account {account_id}")
 
-    if args.bucket:
-        buckets = [{"name": args.bucket}]
-    else:
-        buckets = list_all_buckets(session)
+    buckets = [{"name": args.bucket}] if args.bucket else list_all_buckets(session)
     print(f"[+] Found {len(buckets)} buckets")
 
     results = []

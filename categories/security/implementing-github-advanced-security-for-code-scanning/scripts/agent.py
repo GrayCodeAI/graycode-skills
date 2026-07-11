@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for managing GitHub Advanced Security code scanning with CodeQL."""
 
-import json
 import argparse
+import json
 import subprocess
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
 
 
 def gh_api(endpoint, method="GET"):
@@ -60,15 +60,17 @@ def analyze_code_scanning_alerts(alerts):
         tool = alert.get("tool", {}).get("name", "unknown")
         by_tool[tool] += 1
         if severity in ("critical", "high"):
-            critical_alerts.append({
-                "number": alert.get("number"),
-                "rule": rule.get("id", ""),
-                "description": rule.get("description", "")[:120],
-                "severity": severity,
-                "state": alert.get("state", ""),
-                "created_at": alert.get("created_at", ""),
-                "html_url": alert.get("html_url", ""),
-            })
+            critical_alerts.append(
+                {
+                    "number": alert.get("number"),
+                    "rule": rule.get("id", ""),
+                    "description": rule.get("description", "")[:120],
+                    "severity": severity,
+                    "state": alert.get("state", ""),
+                    "created_at": alert.get("created_at", ""),
+                    "html_url": alert.get("html_url", ""),
+                }
+            )
     return {
         "total_alerts": len(alerts),
         "by_severity": dict(by_severity),
@@ -89,8 +91,12 @@ def analyze_secret_alerts(alerts):
         "total_secrets": len(alerts),
         "by_type": dict(by_type),
         "alerts": [
-            {"number": a.get("number"), "type": a.get("secret_type_display_name", ""),
-             "state": a.get("state", ""), "created_at": a.get("created_at", "")}
+            {
+                "number": a.get("number"),
+                "type": a.get("secret_type_display_name", ""),
+                "state": a.get("state", ""),
+                "created_at": a.get("created_at", ""),
+            }
             for a in alerts[:20]
         ],
     }
@@ -168,9 +174,11 @@ def main():
     parser = argparse.ArgumentParser(description="GitHub Advanced Security Agent")
     parser.add_argument("--owner", help="Repository owner")
     parser.add_argument("--repo", help="Repository name")
-    parser.add_argument("--action", choices=["audit", "code-alerts", "secrets",
-                                              "dependabot", "gen-workflow"],
-                        default="audit")
+    parser.add_argument(
+        "--action",
+        choices=["audit", "code-alerts", "secrets", "dependabot", "gen-workflow"],
+        default="audit",
+    )
     parser.add_argument("--languages", nargs="+", default=["python", "javascript-typescript"])
     parser.add_argument("--output", default="ghas_report.json")
     args = parser.parse_args()

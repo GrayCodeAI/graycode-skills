@@ -10,11 +10,8 @@ Requirements:
     pip install pandas numpy scikit-learn
 """
 
-import csv
 import json
 from collections import defaultdict
-from itertools import combinations
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -41,13 +38,14 @@ class RoleMiningEngine:
             raise ValueError(f"CSV must contain columns: {required}")
 
         self.upa_matrix = df.pivot_table(
-            index="user_id", columns="permission_id",
-            aggfunc="size", fill_value=0
+            index="user_id", columns="permission_id", aggfunc="size", fill_value=0
         )
         self.upa_matrix = (self.upa_matrix > 0).astype(int)
 
-        print(f"[OK] Loaded UPA matrix: {self.upa_matrix.shape[0]} users x "
-              f"{self.upa_matrix.shape[1]} permissions")
+        print(
+            f"[OK] Loaded UPA matrix: {self.upa_matrix.shape[0]} users x "
+            f"{self.upa_matrix.shape[1]} permissions"
+        )
         print(f"     Total assignments: {self.upa_matrix.values.sum()}")
         density = self.upa_matrix.values.sum() / self.upa_matrix.size
         print(f"     Matrix density: {density:.2%}")
@@ -68,9 +66,7 @@ class RoleMiningEngine:
         scores = []
 
         for k in range(2, max_k + 1):
-            clustering = AgglomerativeClustering(
-                n_clusters=k, metric="jaccard", linkage="average"
-            )
+            clustering = AgglomerativeClustering(n_clusters=k, metric="jaccard", linkage="average")
             labels = clustering.fit_predict(matrix)
             score = silhouette_score(matrix, labels, metric="jaccard")
             scores.append({"k": k, "silhouette": round(score, 4)})
@@ -105,8 +101,10 @@ class RoleMiningEngine:
             # Determine role name from user metadata
             role_label = f"Role_{cluster_id:03d}"
             if self.user_metadata:
-                depts = [self.user_metadata.get(u, {}).get("department", "Unknown")
-                         for u in cluster_users]
+                depts = [
+                    self.user_metadata.get(u, {}).get("department", "Unknown")
+                    for u in cluster_users
+                ]
                 dept_counts = defaultdict(int)
                 for d in depts:
                     dept_counts[d] += 1
@@ -154,8 +152,7 @@ class RoleMiningEngine:
                 role_idx += 1
 
         self.mined_roles = roles
-        print(f"[OK] Mined {len(roles)} exact-match roles "
-              f"(min {min_users} users per role)")
+        print(f"[OK] Mined {len(roles)} exact-match roles (min {min_users} users per role)")
         return roles
 
     def evaluate_roles(self, roles=None):
@@ -172,9 +169,7 @@ class RoleMiningEngine:
         for role_data in roles.values():
             role_perms = set(role_data["permissions"])
             for user in role_data["users"]:
-                user_perms = set(
-                    self.upa_matrix.columns[self.upa_matrix.loc[user] == 1]
-                )
+                user_perms = set(self.upa_matrix.columns[self.upa_matrix.loc[user] == 1])
                 covered += len(role_perms & user_perms)
                 extra += len(role_perms - user_perms)
 
@@ -193,9 +188,7 @@ class RoleMiningEngine:
             "avg_permissions_per_role": round(
                 np.mean([r["permission_count"] for r in roles.values()]), 1
             ),
-            "avg_users_per_role": round(
-                np.mean([r["user_count"] for r in roles.values()]), 1
-            ),
+            "avg_users_per_role": round(np.mean([r["user_count"] for r in roles.values()]), 1),
         }
         return metrics
 
@@ -204,7 +197,7 @@ class RoleMiningEngine:
         export = {
             "generated_at": pd.Timestamp.now().isoformat(),
             "metrics": self.evaluate_roles(),
-            "roles": {}
+            "roles": {},
         }
 
         for name, data in self.mined_roles.items():
@@ -224,12 +217,14 @@ class RoleMiningEngine:
         rows = []
         for role_name, role_data in self.mined_roles.items():
             for user in role_data["users"]:
-                rows.append({
-                    "user_id": user,
-                    "new_role": role_name,
-                    "permissions_in_role": len(role_data["permissions"]),
-                    "current_permissions": int(self.upa_matrix.loc[user].sum()),
-                })
+                rows.append(
+                    {
+                        "user_id": user,
+                        "new_role": role_name,
+                        "permissions_in_role": len(role_data["permissions"]),
+                        "current_permissions": int(self.upa_matrix.loc[user].sum()),
+                    }
+                )
 
         df = pd.DataFrame(rows)
         df.to_csv(output_path, index=False)

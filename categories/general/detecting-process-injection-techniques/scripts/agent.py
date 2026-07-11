@@ -3,13 +3,13 @@
 
 import json
 import os
-import re
 import subprocess
 import sys
 from datetime import datetime
 
 try:
     import Evtx.Evtx as evtx
+
     HAS_EVTX = True
 except ImportError:
     HAS_EVTX = False
@@ -22,8 +22,14 @@ INJECTION_TECHNIQUES = {
         "description": "Classic DLL injection via remote thread creation",
     },
     "process_hollowing": {
-        "apis": ["CreateProcess(SUSPENDED)", "NtUnmapViewOfSection", "VirtualAllocEx",
-                 "WriteProcessMemory", "SetThreadContext", "ResumeThread"],
+        "apis": [
+            "CreateProcess(SUSPENDED)",
+            "NtUnmapViewOfSection",
+            "VirtualAllocEx",
+            "WriteProcessMemory",
+            "SetThreadContext",
+            "ResumeThread",
+        ],
         "sysmon_events": [1, 10],
         "description": "Process hollowing - replace legitimate process image",
     },
@@ -38,8 +44,13 @@ INJECTION_TECHNIQUES = {
         "description": "Reflective DLL loading without LoadLibrary",
     },
     "process_doppelganging": {
-        "apis": ["CreateTransaction", "CreateFileTransacted", "NtCreateSection",
-                 "NtCreateProcessEx", "RollbackTransaction"],
+        "apis": [
+            "CreateTransaction",
+            "CreateFileTransacted",
+            "NtCreateSection",
+            "NtCreateProcessEx",
+            "RollbackTransaction",
+        ],
         "sysmon_events": [1],
         "description": "Process doppelganging via NTFS transactions",
     },
@@ -91,12 +102,14 @@ def run_volatility_hollowfind(memory_dump):
         for line in result.stdout.splitlines():
             parts = line.split()
             if len(parts) >= 4 and parts[0].isdigit():
-                processes.append({
-                    "pid": parts[0],
-                    "ppid": parts[1] if len(parts) > 1 else "",
-                    "name": parts[2] if len(parts) > 2 else "",
-                    "threads": parts[3] if len(parts) > 3 else "",
-                })
+                processes.append(
+                    {
+                        "pid": parts[0],
+                        "ppid": parts[1] if len(parts) > 1 else "",
+                        "name": parts[2] if len(parts) > 2 else "",
+                        "threads": parts[3] if len(parts) > 3 else "",
+                    }
+                )
         return {"processes": processes, "count": len(processes)}
     except FileNotFoundError:
         return {"error": "Volatility 3 not installed"}
@@ -117,20 +130,24 @@ def scan_sysmon_injection_events(evtx_path):
             try:
                 xml = record.xml()
                 if "<EventID>8</EventID>" in xml:
-                    injection_events.append({
-                        "event_id": 8,
-                        "type": "CreateRemoteThread",
-                        "timestamp": record.timestamp().isoformat(),
-                        "snippet": xml[:500],
-                    })
-                elif "<EventID>10</EventID>" in xml:
-                    if "PROCESS_VM_WRITE" in xml or "PROCESS_CREATE_THREAD" in xml:
-                        injection_events.append({
-                            "event_id": 10,
-                            "type": "ProcessAccess (injection prep)",
+                    injection_events.append(
+                        {
+                            "event_id": 8,
+                            "type": "CreateRemoteThread",
                             "timestamp": record.timestamp().isoformat(),
                             "snippet": xml[:500],
-                        })
+                        }
+                    )
+                elif "<EventID>10</EventID>" in xml:
+                    if "PROCESS_VM_WRITE" in xml or "PROCESS_CREATE_THREAD" in xml:
+                        injection_events.append(
+                            {
+                                "event_id": 10,
+                                "type": "ProcessAccess (injection prep)",
+                                "timestamp": record.timestamp().isoformat(),
+                                "snippet": xml[:500],
+                            }
+                        )
             except Exception:
                 continue
 
@@ -149,8 +166,7 @@ def detect_rwx_memory_regions():
     )
     try:
         result = subprocess.run(
-            ["powershell", "-Command", ps_cmd],
-            capture_output=True, text=True, timeout=15
+            ["powershell", "-Command", ps_cmd], capture_output=True, text=True, timeout=15
         )
         if result.returncode == 0 and result.stdout.strip():
             return json.loads(result.stdout)
@@ -176,8 +192,7 @@ def check_unusual_parent_child():
     )
     try:
         result = subprocess.run(
-            ["powershell", "-Command", ps_cmd],
-            capture_output=True, text=True, timeout=15
+            ["powershell", "-Command", ps_cmd], capture_output=True, text=True, timeout=15
         )
         if result.returncode != 0:
             return {"error": result.stderr.strip()}
@@ -192,12 +207,14 @@ def check_unusual_parent_child():
             child_name = (proc.get("Name") or "").lower()
             for p, c in suspicious_combos:
                 if parent_name == p.lower() and child_name == c.lower():
-                    suspicious.append({
-                        "parent": parent_name,
-                        "child": child_name,
-                        "child_pid": proc["ProcessId"],
-                        "risk": "HIGH",
-                    })
+                    suspicious.append(
+                        {
+                            "parent": parent_name,
+                            "child": child_name,
+                            "child_pid": proc["ProcessId"],
+                            "risk": "HIGH",
+                        }
+                    )
         return {"suspicious_relationships": suspicious, "count": len(suspicious)}
     except Exception as e:
         return {"error": str(e)}
@@ -231,4 +248,6 @@ if __name__ == "__main__":
         sysmon = sys.argv[3] if len(sys.argv) > 3 else None
         print(json.dumps(generate_report(mem, sysmon), indent=2, default=str))
     else:
-        print("Usage: agent.py [malfind <memory.dmp> [pid]|sysmon <Sysmon.evtx>|parent-child|report [mem] [sysmon]]")
+        print(
+            "Usage: agent.py [malfind <memory.dmp> [pid]|sysmon <Sysmon.evtx>|parent-child|report [mem] [sysmon]]"
+        )

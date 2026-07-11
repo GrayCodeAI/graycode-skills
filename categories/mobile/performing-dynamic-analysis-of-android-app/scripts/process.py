@@ -13,9 +13,7 @@ import argparse
 import json
 import subprocess
 import sys
-import time
 from datetime import datetime
-from pathlib import Path
 
 
 class AndroidDynamicAnalyzer:
@@ -63,7 +61,9 @@ class AndroidDynamicAnalyzer:
         try:
             result = subprocess.run(
                 ["frida-ps", "-U"] + (["-D", self.device_id] if self.device_id else []),
-                capture_output=True, text=True, timeout=10
+                capture_output=True,
+                text=True,
+                timeout=10,
             )
             return result.returncode == 0
         except (subprocess.TimeoutExpired, FileNotFoundError):
@@ -76,19 +76,27 @@ class AndroidDynamicAnalyzer:
         receivers = self._objection("android hooking list receivers")
 
         components = {
-            "activities": [l.strip() for l in activities.split("\n") if l.strip() and not l.startswith("[")],
-            "services": [l.strip() for l in services.split("\n") if l.strip() and not l.startswith("[")],
-            "receivers": [l.strip() for l in receivers.split("\n") if l.strip() and not l.startswith("[")],
+            "activities": [
+                l.strip() for l in activities.split("\n") if l.strip() and not l.startswith("[")
+            ],
+            "services": [
+                l.strip() for l in services.split("\n") if l.strip() and not l.startswith("[")
+            ],
+            "receivers": [
+                l.strip() for l in receivers.split("\n") if l.strip() and not l.startswith("[")
+            ],
         }
 
-        self.findings.append({
-            "check": "component_enumeration",
-            "category": "MASVS-PLATFORM",
-            "total_activities": len(components["activities"]),
-            "total_services": len(components["services"]),
-            "total_receivers": len(components["receivers"]),
-            "severity": "INFO",
-        })
+        self.findings.append(
+            {
+                "check": "component_enumeration",
+                "category": "MASVS-PLATFORM",
+                "total_activities": len(components["activities"]),
+                "total_services": len(components["services"]),
+                "total_receivers": len(components["receivers"]),
+                "severity": "INFO",
+            }
+        )
         return components
 
     def test_root_detection(self) -> dict:
@@ -103,7 +111,8 @@ class AndroidDynamicAnalyzer:
             "detection_present": detection_found,
             "bypass_successful": detection_found,
             "severity": "MEDIUM" if not detection_found else "INFO",
-            "description": "Root detection " + ("found and bypassed" if detection_found else "not implemented"),
+            "description": "Root detection "
+            + ("found and bypassed" if detection_found else "not implemented"),
         }
         self.findings.append(finding)
         return finding
@@ -162,7 +171,9 @@ class AndroidDynamicAnalyzer:
             "run_as_works": debuggable,
             "flag_debuggable": flag_debuggable,
             "severity": "HIGH" if flag_debuggable else "PASS",
-            "description": "App " + ("IS" if flag_debuggable else "is NOT") + " flagged as debuggable",
+            "description": "App "
+            + ("IS" if flag_debuggable else "is NOT")
+            + " flagged as debuggable",
         }
         self.findings.append(finding)
         return finding

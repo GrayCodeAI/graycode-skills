@@ -15,31 +15,30 @@ Usage:
     python process.py encrypt-dir --input ./sensitive/ --output ./encrypted/ --password "MySecurePass"
 """
 
-import os
-import sys
-import json
-import struct
-import hashlib
 import argparse
+import hashlib
+import json
 import logging
+import os
+import struct
+import sys
 from pathlib import Path
-from typing import Optional, Tuple
 
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.backends import default_backend
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 # Constants
-SALT_LENGTH = 16          # 128-bit salt
-NONCE_LENGTH = 12         # 96-bit nonce (recommended for GCM)
-TAG_LENGTH = 16           # 128-bit authentication tag
-KEY_LENGTH = 32           # 256-bit key
+SALT_LENGTH = 16  # 128-bit salt
+NONCE_LENGTH = 12  # 96-bit nonce (recommended for GCM)
+TAG_LENGTH = 16  # 128-bit authentication tag
+KEY_LENGTH = 32  # 256-bit key
 PBKDF2_ITERATIONS = 600_000  # OWASP 2024 recommendation
-CHUNK_SIZE = 64 * 1024    # 64KB chunks for streaming
+CHUNK_SIZE = 64 * 1024  # 64KB chunks for streaming
 MAGIC_BYTES = b"AES256GCM"  # File format identifier
 VERSION = 1
 
@@ -91,7 +90,9 @@ def decrypt_bytes(data: bytes, password: str) -> bytes:
 
     magic = data[:magic_len]
     if magic != MAGIC_BYTES:
-        raise ValueError(f"Invalid file format: expected magic bytes {MAGIC_BYTES!r}, got {magic!r}")
+        raise ValueError(
+            f"Invalid file format: expected magic bytes {MAGIC_BYTES!r}, got {magic!r}"
+        )
 
     version = struct.unpack("B", data[magic_len : magic_len + 1])[0]
     if version != VERSION:
@@ -135,7 +136,9 @@ def encrypt_file(input_path: str, output_path: str, password: str) -> dict:
     output_file.write_bytes(ciphertext)
 
     encrypted_size = len(ciphertext)
-    logger.info(f"Encrypted {input_path} -> {output_path} ({original_size} -> {encrypted_size} bytes)")
+    logger.info(
+        f"Encrypted {input_path} -> {output_path} ({original_size} -> {encrypted_size} bytes)"
+    )
 
     return {
         "input": str(input_path),
@@ -201,18 +204,20 @@ def encrypt_directory(input_dir: str, output_dir: str, password: str) -> dict:
             dest = output_path / encrypted_name
 
             result = encrypt_file(str(file), str(dest), password)
-            manifest["files"].append({
-                "original_path": str(relative),
-                "encrypted_path": encrypted_name,
-                "original_sha256": result["original_sha256"],
-                "original_size": result["original_size"],
-            })
+            manifest["files"].append(
+                {
+                    "original_path": str(relative),
+                    "encrypted_path": encrypted_name,
+                    "original_sha256": result["original_sha256"],
+                    "original_size": result["original_size"],
+                }
+            )
 
             file_count += 1
             total_original += result["original_size"]
             total_encrypted += result["encrypted_size"]
 
-    manifest_path = output_path / "manifest.json"
+    output_path / "manifest.json"
     manifest_encrypted = encrypt_bytes(json.dumps(manifest, indent=2).encode(), password)
     (output_path / "manifest.json.enc").write_bytes(manifest_encrypted)
 

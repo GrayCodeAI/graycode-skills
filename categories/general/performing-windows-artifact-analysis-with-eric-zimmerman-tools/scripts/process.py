@@ -6,15 +6,14 @@ Automates the execution of Eric Zimmerman's tools against collected
 forensic artifacts and generates consolidated analysis reports.
 """
 
-import subprocess
 import csv
-import os
-import sys
-import json
 import hashlib
-from pathlib import Path
+import json
+import os
+import subprocess
+import sys
 from datetime import datetime
-from collections import defaultdict
+from pathlib import Path
 
 
 class EZToolsProcessor:
@@ -54,17 +53,12 @@ class EZToolsProcessor:
 
         cmd = [str(tool_path)] + args
         try:
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=300
-            )
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
             return {
                 "status": "success" if result.returncode == 0 else "error",
                 "stdout": result.stdout,
                 "stderr": result.stderr,
-                "returncode": result.returncode
+                "returncode": result.returncode,
             }
         except subprocess.TimeoutExpired:
             return {"status": "error", "message": f"{tool_name} timed out after 300 seconds"}
@@ -196,7 +190,7 @@ class EZToolsProcessor:
         """Analyze MFT CSV output to detect timestomping indicators."""
         timestomped = []
         try:
-            with open(mft_csv_path, "r", encoding="utf-8-sig") as f:
+            with open(mft_csv_path, encoding="utf-8-sig") as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     si_created = row.get("Created0x10", "")
@@ -206,13 +200,15 @@ class EZToolsProcessor:
                             si_dt = datetime.fromisoformat(si_created.replace("Z", "+00:00"))
                             fn_dt = datetime.fromisoformat(fn_created.replace("Z", "+00:00"))
                             if si_dt < fn_dt:
-                                timestomped.append({
-                                    "file": row.get("FileName", "Unknown"),
-                                    "entry_number": row.get("EntryNumber", ""),
-                                    "si_created": si_created,
-                                    "fn_created": fn_created,
-                                    "indicator": "$SI Created before $FN Created"
-                                })
+                                timestomped.append(
+                                    {
+                                        "file": row.get("FileName", "Unknown"),
+                                        "entry_number": row.get("EntryNumber", ""),
+                                        "si_created": si_created,
+                                        "fn_created": fn_created,
+                                        "indicator": "$SI Created before $FN Created",
+                                    }
+                                )
                         except (ValueError, TypeError):
                             continue
         except FileNotFoundError:
@@ -253,7 +249,7 @@ class EZToolsProcessor:
             "timestamp": datetime.now().isoformat(),
             "evidence_path": str(self.evidence_path),
             "output_path": str(self.output_path),
-            "results": {}
+            "results": {},
         }
 
         for artifact, result in self.results.items():

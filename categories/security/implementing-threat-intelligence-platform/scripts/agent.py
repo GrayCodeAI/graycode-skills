@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Threat Intelligence Platform Agent - Manages MISP events, IOC ingestion, and enrichment via PyMISP."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 import requests
-from pymisp import PyMISP, MISPEvent, MISPAttribute, MISPTag
+from pymisp import MISPAttribute, MISPEvent, MISPTag, PyMISP
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -69,13 +69,15 @@ def ingest_urlhaus_feed(misp, event_id):
     data = resp.json()
     iocs = []
     for entry in data.get("urls", []):
-        iocs.append({
-            "type": "url",
-            "value": entry["url"],
-            "comment": f"URLhaus: {entry.get('threat', 'unknown')}",
-            "to_ids": True,
-            "category": "Network activity",
-        })
+        iocs.append(
+            {
+                "type": "url",
+                "value": entry["url"],
+                "comment": f"URLhaus: {entry.get('threat', 'unknown')}",
+                "to_ids": True,
+                "category": "Network activity",
+            }
+        )
     if iocs:
         add_iocs_to_event(misp, event_id, iocs)
     logger.info("Ingested %d URLs from URLhaus", len(iocs))
@@ -88,13 +90,15 @@ def ingest_feodotracker_feed(misp, event_id):
     resp = requests.get(url, timeout=30)
     iocs = []
     for entry in resp.json():
-        iocs.append({
-            "type": "ipv4",
-            "value": entry["ip_address"],
-            "comment": f"Feodo: {entry.get('malware', 'unknown')} port {entry.get('port', '')}",
-            "to_ids": True,
-            "category": "Network activity",
-        })
+        iocs.append(
+            {
+                "type": "ipv4",
+                "value": entry["ip_address"],
+                "comment": f"Feodo: {entry.get('malware', 'unknown')} port {entry.get('port', '')}",
+                "to_ids": True,
+                "category": "Network activity",
+            }
+        )
     if iocs:
         add_iocs_to_event(misp, event_id, iocs)
     logger.info("Ingested %d C2 IPs from Feodo Tracker", len(iocs))
@@ -136,7 +140,7 @@ def tag_with_mitre(misp, event_id, techniques):
     event = misp.get_event(event_id, pythonify=True)
     for technique in techniques:
         tag = MISPTag()
-        tag.name = f"misp-galaxy:mitre-attack-pattern=\"{technique}\""
+        tag.name = f'misp-galaxy:mitre-attack-pattern="{technique}"'
         event.add_tag(tag)
     misp.update_event(event, pythonify=True)
     logger.info("Tagged event %s with %d MITRE techniques", event_id, len(techniques))
@@ -147,12 +151,14 @@ def search_correlated_events(misp, attribute_value):
     results = misp.search(value=attribute_value, pythonify=True)
     events = []
     for event in results:
-        events.append({
-            "event_id": event.id,
-            "info": event.info,
-            "date": str(event.date),
-            "threat_level": event.threat_level_id,
-        })
+        events.append(
+            {
+                "event_id": event.id,
+                "info": event.info,
+                "date": str(event.date),
+                "threat_level": event.threat_level_id,
+            }
+        )
     logger.info("Found %d correlated events for %s", len(events), attribute_value)
     return events
 

@@ -6,13 +6,13 @@ bypass, weak HMAC secrets, kid injection, missing claims, and
 token forgery to detect authentication bypass risks.
 """
 
-import json
 import base64
-import hmac
 import hashlib
+import hmac
+import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 try:
     import requests
@@ -21,10 +21,23 @@ except ImportError:
 
 
 COMMON_SECRETS = [
-    "secret", "password", "123456", "jwt_secret", "supersecret",
-    "key", "changeme", "default", "your-256-bit-secret",
-    "my-secret-key", "jwt-secret", "s3cr3t", "secret123",
-    "apisecret", "qwerty", "letmein", "1234567890",
+    "secret",
+    "password",
+    "123456",
+    "jwt_secret",
+    "supersecret",
+    "key",
+    "changeme",
+    "default",
+    "your-256-bit-secret",
+    "my-secret-key",
+    "jwt-secret",
+    "s3cr3t",
+    "secret123",
+    "apisecret",
+    "qwerty",
+    "letmein",
+    "1234567890",
 ]
 
 
@@ -42,8 +55,10 @@ class JWTTestAgent:
         parts = token.split(".")
         if len(parts) != 3:
             return None, None, None
+
         def pad(s):
             return s + "=" * (4 - len(s) % 4)
+
         try:
             header = json.loads(base64.urlsafe_b64decode(pad(parts[0])))
             payload = json.loads(base64.urlsafe_b64decode(pad(parts[1])))
@@ -64,9 +79,16 @@ class JWTTestAgent:
         if alg in ("HS256", "HS384", "HS512"):
             issues.append({"severity": "info", "issue": f"Symmetric {alg} - test for weak secrets"})
         if "kid" in header:
-            issues.append({"severity": "info", "issue": f"kid present: {header['kid']} - test for injection"})
+            issues.append(
+                {"severity": "info", "issue": f"kid present: {header['kid']} - test for injection"}
+            )
         if "jku" in header:
-            issues.append({"severity": "medium", "issue": f"jku present: {header['jku']} - test JWKS spoofing"})
+            issues.append(
+                {
+                    "severity": "medium",
+                    "issue": f"jku present: {header['jku']} - test JWKS spoofing",
+                }
+            )
         if "exp" not in payload:
             issues.append({"severity": "high", "issue": "No expiration claim"})
         if "iss" not in payload:
@@ -75,7 +97,9 @@ class JWTTestAgent:
             issues.append({"severity": "medium", "issue": "No audience claim"})
 
         for i in issues:
-            self.findings.append({"severity": i["severity"], "type": "JWT Analysis", "detail": i["issue"]})
+            self.findings.append(
+                {"severity": i["severity"], "type": "JWT Analysis", "detail": i["issue"]}
+            )
 
         return {"header": header, "payload": payload, "issues": issues}
 
@@ -97,15 +121,20 @@ class JWTTestAgent:
         results = []
         if self.base_url and requests:
             for v in variants:
-                resp = requests.get(f"{self.base_url}/users/me",
-                                    headers={"Authorization": f"Bearer {v}"}, timeout=10)
+                resp = requests.get(
+                    f"{self.base_url}/users/me",
+                    headers={"Authorization": f"Bearer {v}"},
+                    timeout=10,
+                )
                 if resp.status_code == 200:
                     results.append({"variant": v[:60], "accepted": True})
-                    self.findings.append({
-                        "severity": "critical",
-                        "type": "alg:none Bypass",
-                        "detail": "Server accepts JWT with alg:none",
-                    })
+                    self.findings.append(
+                        {
+                            "severity": "critical",
+                            "type": "alg:none Bypass",
+                            "detail": "Server accepts JWT with alg:none",
+                        }
+                    )
         return variants
 
     def brute_force_secret(self, token):
@@ -122,15 +151,19 @@ class JWTTestAgent:
         h = alg_map[header["alg"]]
 
         for secret in COMMON_SECRETS:
-            expected = base64.urlsafe_b64encode(
-                hmac.new(secret.encode(), signing_input, h).digest()
-            ).decode().rstrip("=")
+            expected = (
+                base64.urlsafe_b64encode(hmac.new(secret.encode(), signing_input, h).digest())
+                .decode()
+                .rstrip("=")
+            )
             if expected == signature:
-                self.findings.append({
-                    "severity": "critical",
-                    "type": "Weak JWT Secret",
-                    "detail": f"Secret found: '{secret}'",
-                })
+                self.findings.append(
+                    {
+                        "severity": "critical",
+                        "type": "Weak JWT Secret",
+                        "detail": f"Secret found: '{secret}'",
+                    }
+                )
                 return secret
         return None
 
@@ -146,9 +179,13 @@ class JWTTestAgent:
 
         if secret and header.get("alg") in ("HS256", "HS384", "HS512"):
             alg_map = {"HS256": hashlib.sha256, "HS384": hashlib.sha384, "HS512": hashlib.sha512}
-            sig = base64.urlsafe_b64encode(
-                hmac.new(secret.encode(), signing_input, alg_map[header["alg"]]).digest()
-            ).decode().rstrip("=")
+            sig = (
+                base64.urlsafe_b64encode(
+                    hmac.new(secret.encode(), signing_input, alg_map[header["alg"]]).digest()
+                )
+                .decode()
+                .rstrip("=")
+            )
             return f"{h_b64}.{p_b64}.{sig}"
         return f"{h_b64}.{p_b64}."
 
@@ -166,11 +203,13 @@ class JWTTestAgent:
         results = []
         for p in payloads:
             results.append({"kid_payload": p, "test": "manual verification required"})
-        self.findings.append({
-            "severity": "medium",
-            "type": "kid Injection Candidates",
-            "detail": f"kid parameter present - test {len(payloads)} injection payloads",
-        })
+        self.findings.append(
+            {
+                "severity": "medium",
+                "type": "kid Injection Candidates",
+                "detail": f"kid parameter present - test {len(payloads)} injection payloads",
+            }
+        )
         return results
 
     def generate_report(self, token=None):

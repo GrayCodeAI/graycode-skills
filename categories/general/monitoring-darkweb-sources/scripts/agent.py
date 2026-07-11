@@ -7,12 +7,10 @@ organizational asset mentions using commercial APIs and OSINT tools.
 
 import json
 import os
-import re
 import sys
 from datetime import datetime, timezone
 
 import requests
-
 
 HAVE_I_BEEN_PWNED_API = "https://haveibeenpwned.com/api/v3"
 DEHASHED_API = "https://api.dehashed.com/search"
@@ -29,7 +27,8 @@ def check_breach_exposure(domain: str, hibp_api_key: str) -> list[dict]:
     }
     resp = requests.get(
         f"{HAVE_I_BEEN_PWNED_API}/breaches",
-        headers=headers, timeout=30,
+        headers=headers,
+        timeout=30,
     )
     if resp.status_code != 200:
         return [{"error": f"HIBP returned {resp.status_code}"}]
@@ -38,14 +37,16 @@ def check_breach_exposure(domain: str, hibp_api_key: str) -> list[dict]:
     relevant = []
     for breach in breaches:
         if domain.lower() in breach.get("Domain", "").lower():
-            relevant.append({
-                "name": breach["Name"],
-                "domain": breach["Domain"],
-                "breach_date": breach.get("BreachDate", ""),
-                "pwn_count": breach.get("PwnCount", 0),
-                "data_classes": breach.get("DataClasses", []),
-                "is_verified": breach.get("IsVerified", False),
-            })
+            relevant.append(
+                {
+                    "name": breach["Name"],
+                    "domain": breach["Domain"],
+                    "breach_date": breach.get("BreachDate", ""),
+                    "pwn_count": breach.get("PwnCount", 0),
+                    "data_classes": breach.get("DataClasses", []),
+                    "is_verified": breach.get("IsVerified", False),
+                }
+            )
 
     return relevant
 
@@ -62,14 +63,16 @@ def search_paste_sites(org_keywords: list[str], api_key: str) -> list[dict]:
         if resp.status_code == 200:
             pastes = resp.json()
             for paste in pastes:
-                results.append({
-                    "keyword": keyword,
-                    "source": paste.get("Source", ""),
-                    "id": paste.get("Id", ""),
-                    "title": paste.get("Title", ""),
-                    "date": paste.get("Date", ""),
-                    "email_count": paste.get("EmailCount", 0),
-                })
+                results.append(
+                    {
+                        "keyword": keyword,
+                        "source": paste.get("Source", ""),
+                        "id": paste.get("Id", ""),
+                        "title": paste.get("Title", ""),
+                        "date": paste.get("Date", ""),
+                        "email_count": paste.get("EmailCount", 0),
+                    }
+                )
 
     return results
 
@@ -97,8 +100,11 @@ def check_credential_exposure(domain: str, dehashed_key: str, dehashed_email: st
         "results_returned": len(entries),
         "sources": list(set(e.get("database_name", "") for e in entries)),
         "sample_entries": [
-            {"email": e.get("email", ""), "source": e.get("database_name", ""),
-             "has_password": bool(e.get("password") or e.get("hashed_password"))}
+            {
+                "email": e.get("email", ""),
+                "source": e.get("database_name", ""),
+                "has_password": bool(e.get("password") or e.get("hashed_password")),
+            }
             for e in entries[:20]
         ],
     }
@@ -118,12 +124,14 @@ def monitor_ransomware_leak_sites(org_name: str) -> dict:
         for victim in victims:
             victim_name = victim.get("victim", "").lower()
             if org_name.lower() in victim_name:
-                results["mentions"].append({
-                    "victim": victim.get("victim", ""),
-                    "group": victim.get("group_name", ""),
-                    "discovered": victim.get("discovered", ""),
-                    "url": victim.get("post_url", ""),
-                })
+                results["mentions"].append(
+                    {
+                        "victim": victim.get("victim", ""),
+                        "group": victim.get("group_name", ""),
+                        "discovered": victim.get("discovered", ""),
+                        "url": victim.get("post_url", ""),
+                    }
+                )
 
     resp2 = requests.get("https://api.ransomware.live/groups", timeout=30)
     if resp2.status_code == 200:
@@ -149,25 +157,31 @@ def generate_monitoring_report(
     for b in breaches[:5]:
         lines.append(f"  - {b['name']} ({b['breach_date']}) - {b['pwn_count']:,} accounts")
 
-    lines.extend([
-        "",
-        "PASTE SITE EXPOSURE:",
-        f"  Paste Mentions Found: {len(pastes)}",
-    ])
+    lines.extend(
+        [
+            "",
+            "PASTE SITE EXPOSURE:",
+            f"  Paste Mentions Found: {len(pastes)}",
+        ]
+    )
 
-    lines.extend([
-        "",
-        "CREDENTIAL EXPOSURE:",
-        f"  Total Exposed Records: {creds.get('total_exposed', 0):,}",
-        f"  Source Databases: {len(creds.get('sources', []))}",
-    ])
+    lines.extend(
+        [
+            "",
+            "CREDENTIAL EXPOSURE:",
+            f"  Total Exposed Records: {creds.get('total_exposed', 0):,}",
+            f"  Source Databases: {len(creds.get('sources', []))}",
+        ]
+    )
 
-    lines.extend([
-        "",
-        "RANSOMWARE LEAK SITES:",
-        f"  Groups Monitored: {len(leak_results.get('checked_groups', []))}",
-        f"  Mentions Found: {len(leak_results.get('mentions', []))}",
-    ])
+    lines.extend(
+        [
+            "",
+            "RANSOMWARE LEAK SITES:",
+            f"  Groups Monitored: {len(leak_results.get('checked_groups', []))}",
+            f"  Mentions Found: {len(leak_results.get('mentions', []))}",
+        ]
+    )
     for m in leak_results.get("mentions", []):
         lines.append(f"  - {m['victim']} by {m['group']} ({m['discovered']})")
 
@@ -192,5 +206,14 @@ if __name__ == "__main__":
 
     output = f"darkweb_monitor_{domain.replace('.', '_')}_{datetime.now(timezone.utc).strftime('%Y%m%d')}.json"
     with open(output, "w") as f:
-        json.dump({"breaches": breaches, "pastes": pastes, "credentials": creds, "leak_sites": leak_results}, f, indent=2)
+        json.dump(
+            {
+                "breaches": breaches,
+                "pastes": pastes,
+                "credentials": creds,
+                "leak_sites": leak_results,
+            },
+            f,
+            indent=2,
+        )
     print(f"\n[*] Results saved to {output}")

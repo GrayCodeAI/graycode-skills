@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Firewall Zone Segmentation Agent - audits zone-based firewall rules and inter-zone traffic policies."""
 
-import json
 import argparse
+import json
 import logging
 import subprocess
 from collections import defaultdict
@@ -39,12 +39,31 @@ def audit_zone_rules(config):
         action = rule.get("action", "")
         service = rule.get("service", "any")
         if action == "allow" and service == "any":
-            findings.append({"rule_id": rule.get("id", ""), "source_zone": src_zone, "dest_zone": dst_zone,
-                           "issue": "Allows all services between zones", "severity": "high"})
+            findings.append(
+                {
+                    "rule_id": rule.get("id", ""),
+                    "source_zone": src_zone,
+                    "dest_zone": dst_zone,
+                    "issue": "Allows all services between zones",
+                    "severity": "high",
+                }
+            )
         if action == "allow" and src_zone == "untrust" and dst_zone == "trust":
-            findings.append({"rule_id": rule.get("id", ""), "issue": "Inbound from untrust to trust zone", "severity": "critical"})
+            findings.append(
+                {
+                    "rule_id": rule.get("id", ""),
+                    "issue": "Inbound from untrust to trust zone",
+                    "severity": "critical",
+                }
+            )
         if rule.get("log") is False and action == "allow":
-            findings.append({"rule_id": rule.get("id", ""), "issue": "Allow rule without logging", "severity": "medium"})
+            findings.append(
+                {
+                    "rule_id": rule.get("id", ""),
+                    "issue": "Allow rule without logging",
+                    "severity": "medium",
+                }
+            )
     return findings
 
 
@@ -52,8 +71,14 @@ def check_default_zone_policies(config):
     issues = []
     for zone in config.get("zones", []):
         if zone.get("default_action", "deny") != "deny":
-            issues.append({"zone": zone.get("name"), "default_action": zone.get("default_action"),
-                         "issue": "Default zone policy is not deny", "severity": "critical"})
+            issues.append(
+                {
+                    "zone": zone.get("name"),
+                    "default_action": zone.get("default_action"),
+                    "issue": "Default zone policy is not deny",
+                    "severity": "critical",
+                }
+            )
     return issues
 
 
@@ -62,10 +87,15 @@ def analyze_rule_shadowing(rules):
     for i, rule in enumerate(rules):
         for j in range(i):
             prev = rules[j]
-            if (prev.get("source_zone") == rule.get("source_zone") and
-                prev.get("destination_zone") == rule.get("destination_zone") and
-                prev.get("service") == "any" and prev.get("action") == "allow"):
-                shadowed.append({"rule_id": rule.get("id"), "shadowed_by": prev.get("id"), "severity": "low"})
+            if (
+                prev.get("source_zone") == rule.get("source_zone")
+                and prev.get("destination_zone") == rule.get("destination_zone")
+                and prev.get("service") == "any"
+                and prev.get("action") == "allow"
+            ):
+                shadowed.append(
+                    {"rule_id": rule.get("id"), "shadowed_by": prev.get("id"), "severity": "low"}
+                )
                 break
     return shadowed
 
@@ -98,7 +128,12 @@ def main():
     report = generate_report(config, zone_findings, default_issues, shadowed)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    logger.info("Zone audit: %d zones, %d rules, %d findings", report["total_zones"], report["total_rules"], report["total_findings"])
+    logger.info(
+        "Zone audit: %d zones, %d rules, %d findings",
+        report["total_zones"],
+        report["total_rules"],
+        report["total_findings"],
+    )
     print(json.dumps(report, indent=2, default=str))
 
 

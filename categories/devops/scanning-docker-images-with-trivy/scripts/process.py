@@ -6,13 +6,12 @@ Scans Docker images with Trivy, parses results, enforces severity gates,
 and generates actionable reports.
 """
 
-import subprocess
-import json
-import sys
-import os
 import argparse
-from datetime import datetime
+import json
+import subprocess
+import sys
 from dataclasses import dataclass, field
+from datetime import datetime
 
 
 @dataclass
@@ -40,9 +39,7 @@ class VulnSummary:
 def check_trivy_installed() -> bool:
     """Verify Trivy is installed."""
     try:
-        result = subprocess.run(
-            ["trivy", "version"], capture_output=True, text=True, timeout=10
-        )
+        result = subprocess.run(["trivy", "version"], capture_output=True, text=True, timeout=10)
         if result.returncode == 0:
             version_line = result.stdout.strip().split("\n")[0]
             print(f"[*] {version_line}")
@@ -57,8 +54,7 @@ def update_db():
     """Update Trivy vulnerability database."""
     print("[*] Updating vulnerability database...")
     result = subprocess.run(
-        ["trivy", "image", "--download-db-only"],
-        capture_output=True, text=True, timeout=300
+        ["trivy", "image", "--download-db-only"], capture_output=True, text=True, timeout=300
     )
     if result.returncode == 0:
         print("[+] Database updated successfully")
@@ -69,9 +65,12 @@ def update_db():
 def scan_image(image: str, policy: ScanPolicy) -> dict:
     """Scan a Docker image with Trivy and return JSON results."""
     cmd = [
-        "trivy", "image",
-        "--format", "json",
-        "--scanners", ",".join(policy.scanners),
+        "trivy",
+        "image",
+        "--format",
+        "json",
+        "--scanners",
+        ",".join(policy.scanners),
     ]
 
     if policy.ignore_unfixed:
@@ -82,9 +81,7 @@ def scan_image(image: str, policy: ScanPolicy) -> dict:
     print(f"[*] Scanning image: {image}")
     print(f"[*] Scanners: {', '.join(policy.scanners)}")
 
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, timeout=600
-    )
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
 
     if result.returncode != 0 and not result.stdout:
         print(f"[!] Scan failed: {result.stderr}")
@@ -108,7 +105,7 @@ def parse_results(scan_data: dict) -> tuple:
 
     for result in results:
         target = result.get("Target", "unknown")
-        result_class = result.get("Class", "")
+        result.get("Class", "")
         result_type = result.get("Type", "")
 
         # Parse vulnerabilities
@@ -128,42 +125,48 @@ def parse_results(scan_data: dict) -> tuple:
 
             summary.total += 1
 
-            vulnerabilities.append({
-                "target": target,
-                "type": result_type,
-                "vuln_id": vuln.get("VulnerabilityID", ""),
-                "pkg_name": vuln.get("PkgName", ""),
-                "installed_version": vuln.get("InstalledVersion", ""),
-                "fixed_version": vuln.get("FixedVersion", ""),
-                "severity": severity,
-                "title": vuln.get("Title", ""),
-                "description": vuln.get("Description", "")[:200],
-                "cvss_score": vuln.get("CVSS", {}).get("nvd", {}).get("V3Score", 0),
-                "references": vuln.get("References", [])[:3],
-            })
+            vulnerabilities.append(
+                {
+                    "target": target,
+                    "type": result_type,
+                    "vuln_id": vuln.get("VulnerabilityID", ""),
+                    "pkg_name": vuln.get("PkgName", ""),
+                    "installed_version": vuln.get("InstalledVersion", ""),
+                    "fixed_version": vuln.get("FixedVersion", ""),
+                    "severity": severity,
+                    "title": vuln.get("Title", ""),
+                    "description": vuln.get("Description", "")[:200],
+                    "cvss_score": vuln.get("CVSS", {}).get("nvd", {}).get("V3Score", 0),
+                    "references": vuln.get("References", [])[:3],
+                }
+            )
 
         # Parse secrets
         for secret in result.get("Secrets", []):
-            secrets.append({
-                "target": target,
-                "rule_id": secret.get("RuleID", ""),
-                "category": secret.get("Category", ""),
-                "severity": secret.get("Severity", ""),
-                "title": secret.get("Title", ""),
-                "match": secret.get("Match", "")[:50] + "...",
-            })
+            secrets.append(
+                {
+                    "target": target,
+                    "rule_id": secret.get("RuleID", ""),
+                    "category": secret.get("Category", ""),
+                    "severity": secret.get("Severity", ""),
+                    "title": secret.get("Title", ""),
+                    "match": secret.get("Match", "")[:50] + "...",
+                }
+            )
 
         # Parse misconfigurations
         for misconfig in result.get("Misconfigurations", []):
-            misconfigs.append({
-                "target": target,
-                "type": misconfig.get("Type", ""),
-                "id": misconfig.get("ID", ""),
-                "title": misconfig.get("Title", ""),
-                "severity": misconfig.get("Severity", ""),
-                "message": misconfig.get("Message", ""),
-                "resolution": misconfig.get("Resolution", ""),
-            })
+            misconfigs.append(
+                {
+                    "target": target,
+                    "type": misconfig.get("Type", ""),
+                    "id": misconfig.get("ID", ""),
+                    "title": misconfig.get("Title", ""),
+                    "severity": misconfig.get("Severity", ""),
+                    "message": misconfig.get("Message", ""),
+                    "resolution": misconfig.get("Resolution", ""),
+                }
+            )
 
     return summary, vulnerabilities, secrets, misconfigs
 
@@ -194,9 +197,15 @@ def evaluate_policy(summary: VulnSummary, policy: ScanPolicy) -> tuple:
     return passed, reasons
 
 
-def generate_report(image: str, summary: VulnSummary, vulnerabilities: list,
-                    secrets: list, misconfigs: list, policy_passed: bool,
-                    policy_reasons: list) -> dict:
+def generate_report(
+    image: str,
+    summary: VulnSummary,
+    vulnerabilities: list,
+    secrets: list,
+    misconfigs: list,
+    policy_passed: bool,
+    policy_reasons: list,
+) -> dict:
     """Generate comprehensive scan report."""
     return {
         "scan_metadata": {
@@ -219,12 +228,8 @@ def generate_report(image: str, summary: VulnSummary, vulnerabilities: list,
             "passed": policy_passed,
             "failure_reasons": policy_reasons,
         },
-        "critical_vulnerabilities": [
-            v for v in vulnerabilities if v["severity"] == "CRITICAL"
-        ],
-        "high_vulnerabilities": [
-            v for v in vulnerabilities if v["severity"] == "HIGH"
-        ],
+        "critical_vulnerabilities": [v for v in vulnerabilities if v["severity"] == "CRITICAL"],
+        "high_vulnerabilities": [v for v in vulnerabilities if v["severity"] == "HIGH"],
         "secrets": secrets,
         "misconfigurations": misconfigs,
         "all_vulnerabilities": vulnerabilities,
@@ -244,7 +249,7 @@ def print_report(report: dict):
     print(f"Policy:    {meta['policy_result']}")
     print("=" * 70)
 
-    print(f"\nVulnerability Summary:")
+    print("\nVulnerability Summary:")
     print(f"  CRITICAL:  {summary['critical']}")
     print(f"  HIGH:      {summary['high']}")
     print(f"  MEDIUM:    {summary['medium']}")
@@ -273,7 +278,7 @@ def print_report(report: dict):
     # Print policy result
     policy = report["policy_evaluation"]
     if not policy["passed"]:
-        print(f"\nPOLICY FAILURES:")
+        print("\nPOLICY FAILURES:")
         for reason in policy["failure_reasons"]:
             print(f"  - {reason}")
 
@@ -287,8 +292,11 @@ def main():
     parser.add_argument("--max-critical", type=int, default=0, help="Max allowed CRITICAL vulns")
     parser.add_argument("--max-high", type=int, default=5, help="Max allowed HIGH vulns")
     parser.add_argument("--ignore-unfixed", action="store_true", help="Ignore unfixed vulns")
-    parser.add_argument("--scanners", default="vuln,secret",
-                        help="Comma-separated scanners: vuln,misconfig,secret,license")
+    parser.add_argument(
+        "--scanners",
+        default="vuln,secret",
+        help="Comma-separated scanners: vuln,misconfig,secret,license",
+    )
     parser.add_argument("--update-db", action="store_true", help="Update DB before scan")
     args = parser.parse_args()
 
@@ -313,8 +321,7 @@ def main():
     policy_passed, policy_reasons = evaluate_policy(summary, policy)
 
     report = generate_report(
-        args.image, summary, vulnerabilities, secrets, misconfigs,
-        policy_passed, policy_reasons
+        args.image, summary, vulnerabilities, secrets, misconfigs, policy_passed, policy_reasons
     )
 
     print_report(report)

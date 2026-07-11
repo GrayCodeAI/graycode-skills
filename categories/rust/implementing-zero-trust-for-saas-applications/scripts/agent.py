@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Agent for auditing zero trust controls on SaaS applications via Microsoft Graph API."""
 
-import requests
-import json
 import argparse
+import json
 from datetime import datetime, timezone
+
+import requests
 
 GRAPH_API = "https://graph.microsoft.com/v1.0"
 
@@ -12,8 +13,12 @@ GRAPH_API = "https://graph.microsoft.com/v1.0"
 def get_token(tenant_id, client_id, client_secret):
     """Acquire OAuth2 token for Microsoft Graph API."""
     url = f"https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token"
-    data = {"grant_type": "client_credentials", "client_id": client_id,
-            "client_secret": client_secret, "scope": "https://graph.microsoft.com/.default"}
+    data = {
+        "grant_type": "client_credentials",
+        "client_id": client_id,
+        "client_secret": client_secret,
+        "scope": "https://graph.microsoft.com/.default",
+    }
     resp = requests.post(url, data=data, timeout=30)
     resp.raise_for_status()
     token = resp.json()["access_token"]
@@ -31,14 +36,17 @@ def list_conditional_access_policies(headers):
     print(f"\n[*] Conditional Access Policies: {len(policies)}")
     for p in policies:
         state = p.get("state", "disabled")
-        conditions = p.get("conditions", {})
+        p.get("conditions", {})
         grant_controls = p.get("grantControls", {})
         mfa_required = "mfa" in str(grant_controls.get("builtInControls", [])).lower()
-        print(f"  [{'+' if state == 'enabled' else '-'}] {p['displayName']} "
-              f"(state={state}, MFA={'Yes' if mfa_required else 'No'})")
+        print(
+            f"  [{'+' if state == 'enabled' else '-'}] {p['displayName']} "
+            f"(state={state}, MFA={'Yes' if mfa_required else 'No'})"
+        )
         if state == "enabled" and not mfa_required:
-            findings.append({"policy": p["displayName"], "issue": "No MFA required",
-                             "severity": "HIGH"})
+            findings.append(
+                {"policy": p["displayName"], "issue": "No MFA required", "severity": "HIGH"}
+            )
     return policies, findings
 
 
@@ -66,12 +74,23 @@ def check_oauth_app_consents(headers):
     findings = []
     for g in grants:
         scope = g.get("scope", "")
-        if any(perm in scope for perm in ["Mail.ReadWrite", "Files.ReadWrite.All",
-                                           "Directory.ReadWrite.All", "User.ReadWrite.All"]):
-            findings.append({
-                "clientId": g.get("clientId"), "scope": scope,
-                "consentType": g.get("consentType"), "severity": "HIGH",
-            })
+        if any(
+            perm in scope
+            for perm in [
+                "Mail.ReadWrite",
+                "Files.ReadWrite.All",
+                "Directory.ReadWrite.All",
+                "User.ReadWrite.All",
+            ]
+        ):
+            findings.append(
+                {
+                    "clientId": g.get("clientId"),
+                    "scope": scope,
+                    "consentType": g.get("consentType"),
+                    "severity": "HIGH",
+                }
+            )
     print(f"\n[*] OAuth grants: {len(grants)} total, {len(findings)} overprivileged")
     for f in findings[:5]:
         print(f"  [!] {f['clientId']}: {f['scope'][:80]}")

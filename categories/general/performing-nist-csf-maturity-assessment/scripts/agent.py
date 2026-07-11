@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Agent for performing NIST Cybersecurity Framework (CSF) maturity assessment."""
 
-import json
 import argparse
 import csv
+import json
 from datetime import datetime
-from pathlib import Path
-
 
 NIST_CSF_FUNCTIONS = {
     "IDENTIFY": {
@@ -69,7 +67,7 @@ MATURITY_LEVELS = {
 
 def assess_from_csv(assessment_file):
     """Load assessment responses from CSV and calculate maturity scores."""
-    with open(assessment_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(assessment_file, encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
     scores = {}
@@ -82,9 +80,14 @@ def assess_from_csv(assessment_file):
             if any(category.startswith(c) for c in data["categories"]):
                 function_name = fn
                 break
-        scores.setdefault(function_name or "UNKNOWN", []).append({
-            "category": category, "score": score, "target": target, "gap": target - score,
-        })
+        scores.setdefault(function_name or "UNKNOWN", []).append(
+            {
+                "category": category,
+                "score": score,
+                "target": target,
+                "gap": target - score,
+            }
+        )
     function_scores = {}
     for fn, items in scores.items():
         avg = sum(i["score"] for i in items) / len(items) if items else 0
@@ -96,7 +99,9 @@ def assess_from_csv(assessment_file):
             "categories_assessed": len(items),
             "below_target": sum(1 for i in items if i["gap"] > 0),
         }
-    overall = sum(fs["average_maturity"] for fs in function_scores.values()) / max(len(function_scores), 1)
+    overall = sum(fs["average_maturity"] for fs in function_scores.values()) / max(
+        len(function_scores), 1
+    )
     return {
         "assessment_file": assessment_file,
         "overall_maturity": round(overall, 1),
@@ -113,11 +118,19 @@ def generate_gap_analysis(assessment_file):
     gaps = []
     for fn, data in assessment["function_scores"].items():
         if data["gap"] > 0:
-            gaps.append({
-                "function": fn, "current": data["average_maturity"],
-                "target": data["target_maturity"], "gap": data["gap"],
-                "priority": "HIGH" if data["gap"] >= 2 else "MEDIUM" if data["gap"] >= 1 else "LOW",
-            })
+            gaps.append(
+                {
+                    "function": fn,
+                    "current": data["average_maturity"],
+                    "target": data["target_maturity"],
+                    "gap": data["gap"],
+                    "priority": "HIGH"
+                    if data["gap"] >= 2
+                    else "MEDIUM"
+                    if data["gap"] >= 1
+                    else "LOW",
+                }
+            )
     gaps.sort(key=lambda x: x["gap"], reverse=True)
     return {
         "generated": datetime.utcnow().isoformat(),
@@ -130,15 +143,19 @@ def generate_gap_analysis(assessment_file):
 def create_assessment_template(output_file=None):
     """Create a blank NIST CSF assessment CSV template."""
     rows = [["category", "description", "score", "target", "evidence", "notes"]]
-    for fn, data in NIST_CSF_FUNCTIONS.items():
+    for _fn, data in NIST_CSF_FUNCTIONS.items():
         for cat in data["categories"]:
             rows.append([cat, data["descriptions"].get(cat, ""), "", "3", "", ""])
     if output_file:
         with open(output_file, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerows(rows)
-    return {"template_rows": len(rows) - 1, "functions": list(NIST_CSF_FUNCTIONS.keys()),
-            "output": output_file, "categories": [r[0] for r in rows[1:]]}
+    return {
+        "template_rows": len(rows) - 1,
+        "functions": list(NIST_CSF_FUNCTIONS.keys()),
+        "output": output_file,
+        "categories": [r[0] for r in rows[1:]],
+    }
 
 
 def generate_executive_summary(assessment_file):
@@ -151,10 +168,13 @@ def generate_executive_summary(assessment_file):
         "overall_maturity_score": assessment["overall_maturity"],
         "maturity_level": assessment["overall_level"],
         "total_categories_assessed": assessment["total_categories"],
-        "categories_meeting_target": assessment["total_categories"] - assessment["categories_below_target"],
+        "categories_meeting_target": assessment["total_categories"]
+        - assessment["categories_below_target"],
         "categories_below_target": assessment["categories_below_target"],
-        "function_summary": {fn: {"score": d["average_maturity"], "target": d["target_maturity"]}
-                            for fn, d in assessment["function_scores"].items()},
+        "function_summary": {
+            fn: {"score": d["average_maturity"], "target": d["target_maturity"]}
+            for fn, d in assessment["function_scores"].items()
+        },
         "top_gaps": gap["high_priority_gaps"][:5],
     }
 

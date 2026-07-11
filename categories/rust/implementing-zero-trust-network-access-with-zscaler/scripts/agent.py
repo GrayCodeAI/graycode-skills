@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Agent for auditing Zscaler Private Access (ZPA) zero trust configuration via API."""
 
-import requests
-import json
 import argparse
+import json
 from datetime import datetime, timezone
+
+import requests
 
 ZPA_BASE = "https://config.private.zscaler.com"
 
@@ -62,8 +63,9 @@ def list_access_policies(headers, customer_id):
         action = r.get("action", "")
         conditions = r.get("conditions", [])
         if action == "ALLOW" and not conditions:
-            findings.append({"rule": r.get("name"), "issue": "ALLOW with no conditions",
-                             "severity": "CRITICAL"})
+            findings.append(
+                {"rule": r.get("name"), "issue": "ALLOW with no conditions", "severity": "CRITICAL"}
+            )
             print(f"  [!] {r.get('name')}: ALLOW without conditions")
         else:
             print(f"  {r.get('name')}: action={action}, conditions={len(conditions)}")
@@ -91,10 +93,14 @@ def generate_report(apps, app_findings, policy_findings, connector_issues, outpu
     """Generate ZPA audit report."""
     report = {
         "audit_date": datetime.now(timezone.utc).isoformat(),
-        "summary": {"app_segments": len(apps), "bypass_findings": len(app_findings),
-                     "policy_findings": len(policy_findings),
-                     "connector_issues": len(connector_issues)},
-        "bypass_findings": app_findings, "policy_findings": policy_findings,
+        "summary": {
+            "app_segments": len(apps),
+            "bypass_findings": len(app_findings),
+            "policy_findings": len(policy_findings),
+            "connector_issues": len(connector_issues),
+        },
+        "bypass_findings": app_findings,
+        "policy_findings": policy_findings,
         "connector_issues": connector_issues,
     }
     with open(output_path, "w") as f:
@@ -104,7 +110,9 @@ def generate_report(apps, app_findings, policy_findings, connector_issues, outpu
 
 def main():
     parser = argparse.ArgumentParser(description="Zscaler ZPA Zero Trust Audit Agent")
-    parser.add_argument("action", choices=["apps", "servers", "policies", "connectors", "full-audit"])
+    parser.add_argument(
+        "action", choices=["apps", "servers", "policies", "connectors", "full-audit"]
+    )
     parser.add_argument("--client-id", required=True)
     parser.add_argument("--client-secret", required=True)
     parser.add_argument("--customer-id", required=True)

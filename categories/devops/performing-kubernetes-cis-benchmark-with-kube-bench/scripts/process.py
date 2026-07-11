@@ -4,12 +4,12 @@ kube-bench CIS Benchmark Reporter - Parse kube-bench JSON output
 and generate compliance reports with trend tracking.
 """
 
+import argparse
 import json
 import sys
-import argparse
-from pathlib import Path
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
+from pathlib import Path
 
 
 def parse_kube_bench_json(filepath: str) -> dict:
@@ -30,17 +30,19 @@ def extract_checks(data: dict) -> list:
         for group in control.get("tests", []):
             group_id = group.get("section", "")
             for result in group.get("results", []):
-                checks.append({
-                    "section": section,
-                    "section_text": section_text,
-                    "group": group_id,
-                    "id": result.get("test_number", ""),
-                    "description": result.get("test_desc", ""),
-                    "status": result.get("status", ""),
-                    "scored": result.get("scored", False),
-                    "remediation": result.get("remediation", ""),
-                    "reason": result.get("reason", ""),
-                })
+                checks.append(
+                    {
+                        "section": section,
+                        "section_text": section_text,
+                        "group": group_id,
+                        "id": result.get("test_number", ""),
+                        "description": result.get("test_desc", ""),
+                        "status": result.get("status", ""),
+                        "scored": result.get("scored", False),
+                        "remediation": result.get("remediation", ""),
+                        "reason": result.get("reason", ""),
+                    }
+                )
     return checks
 
 
@@ -51,7 +53,13 @@ def generate_summary(checks: list) -> dict:
     for c in checks:
         sec = c["section"]
         if sec not in section_counts:
-            section_counts[sec] = {"section_text": c["section_text"], "PASS": 0, "FAIL": 0, "WARN": 0, "INFO": 0}
+            section_counts[sec] = {
+                "section_text": c["section_text"],
+                "PASS": 0,
+                "FAIL": 0,
+                "WARN": 0,
+                "INFO": 0,
+            }
         status = c["status"]
         if status in section_counts[sec]:
             section_counts[sec][status] += 1
@@ -80,17 +88,17 @@ def generate_report(data: dict, output_path: str = None) -> str:
     report = f"""# CIS Kubernetes Benchmark Report
 
 **Date:** {timestamp}
-**Total Checks:** {summary['total_checks']}
-**Score:** {summary['score_percent']}%
+**Total Checks:** {summary["total_checks"]}
+**Score:** {summary["score_percent"]}%
 
 ## Summary
 
 | Status | Count |
 |--------|-------|
-| PASS | {summary['pass']} |
-| FAIL | {summary['fail']} |
-| WARN | {summary['warn']} |
-| INFO | {summary['info']} |
+| PASS | {summary["pass"]} |
+| FAIL | {summary["fail"]} |
+| WARN | {summary["warn"]} |
+| INFO | {summary["info"]} |
 
 ## Results by Section
 
@@ -105,9 +113,9 @@ def generate_report(data: dict, output_path: str = None) -> str:
         report += "\n## Failed Checks (Requires Remediation)\n\n"
         for c in failed:
             report += f"### {c['id']} - {c['description']}\n"
-            report += f"- **Status:** FAIL\n"
+            report += "- **Status:** FAIL\n"
             report += f"- **Scored:** {c['scored']}\n"
-            if c['remediation']:
+            if c["remediation"]:
                 report += f"- **Remediation:** {c['remediation']}\n"
             report += "\n"
 

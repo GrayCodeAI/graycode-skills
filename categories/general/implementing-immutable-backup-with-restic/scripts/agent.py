@@ -5,17 +5,17 @@ Automates backup creation, integrity verification, snapshot retention,
 and restore testing against S3-compatible storage with WORM protection.
 """
 
-import os
-import sys
-import json
-import hashlib
-import logging
 import argparse
-import subprocess
-import tempfile
+import contextlib
+import hashlib
+import json
+import logging
+import os
 import shutil
-from pathlib import Path
-from datetime import datetime, timezone, timedelta
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timezone
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,9 +41,7 @@ def run_restic(args, repo=None, password=None, env_extra=None):
     if env_extra:
         env.update(env_extra)
 
-    result = subprocess.run(
-        cmd, capture_output=True, text=True, env=env, timeout=3600
-    )
+    result = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=3600)
     if result.returncode != 0:
         logger.error("restic %s failed: %s", args[0], result.stderr[:500])
     return {
@@ -80,18 +78,24 @@ def configure_s3_object_lock(bucket_name, retention_days=90, mode="COMPLIANCE"):
                 "Mode": mode,
                 "Days": retention_days,
             }
-        }
+        },
     }
     cmd = [
-        "aws", "s3api", "put-object-lock-configuration",
-        "--bucket", bucket_name,
-        "--object-lock-configuration", json.dumps(lock_config),
+        "aws",
+        "s3api",
+        "put-object-lock-configuration",
+        "--bucket",
+        bucket_name,
+        "--object-lock-configuration",
+        json.dumps(lock_config),
     ]
     result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     if result.returncode == 0:
         logger.info(
             "Object Lock configured: bucket=%s mode=%s retention=%dd",
-            bucket_name, mode, retention_days
+            bucket_name,
+            mode,
+            retention_days,
         )
     else:
         logger.error("Object Lock configuration failed: %s", result.stderr[:300])
@@ -104,7 +108,9 @@ def configure_s3_object_lock(bucket_name, retention_days=90, mode="COMPLIANCE"):
     }
 
 
-def create_backup(repo_url, password, source_paths, tags=None, exclude_patterns=None, env_extra=None):
+def create_backup(
+    repo_url, password, source_paths, tags=None, exclude_patterns=None, env_extra=None
+):
     """Create a new backup snapshot."""
     args = ["backup"]
     if tags:
@@ -197,22 +203,31 @@ def list_snapshots(repo_url, password, env_extra=None):
     return {"count": 0, "snapshots": []}
 
 
-def apply_retention_policy(repo_url, password, keep_daily=7, keep_weekly=4,
-                           keep_monthly=12, keep_yearly=2, env_extra=None):
+def apply_retention_policy(
+    repo_url, password, keep_daily=7, keep_weekly=4, keep_monthly=12, keep_yearly=2, env_extra=None
+):
     """Apply snapshot retention policy using restic forget."""
     args = [
-        "forget", "--prune",
-        "--keep-daily", str(keep_daily),
-        "--keep-weekly", str(keep_weekly),
-        "--keep-monthly", str(keep_monthly),
-        "--keep-yearly", str(keep_yearly),
+        "forget",
+        "--prune",
+        "--keep-daily",
+        str(keep_daily),
+        "--keep-weekly",
+        str(keep_weekly),
+        "--keep-monthly",
+        str(keep_monthly),
+        "--keep-yearly",
+        str(keep_yearly),
         "--json",
     ]
     result = run_restic(args, repo=repo_url, password=password, env_extra=env_extra)
     if result["returncode"] == 0:
         logger.info(
             "Retention policy applied: daily=%d weekly=%d monthly=%d yearly=%d",
-            keep_daily, keep_weekly, keep_monthly, keep_yearly,
+            keep_daily,
+            keep_weekly,
+            keep_monthly,
+            keep_yearly,
         )
     return {
         "success": result["returncode"] == 0,
@@ -226,8 +241,9 @@ def apply_retention_policy(repo_url, password, keep_daily=7, keep_weekly=4,
     }
 
 
-def test_restore(repo_url, password, snapshot_id="latest", target_path=None,
-                 sample_count=5, env_extra=None):
+def test_restore(
+    repo_url, password, snapshot_id="latest", target_path=None, sample_count=5, env_extra=None
+):
     """Test restore by extracting files and verifying checksums."""
     if target_path is None:
         target_path = tempfile.mkdtemp(prefix="restic_restore_test_")
@@ -236,13 +252,15 @@ def test_restore(repo_url, password, snapshot_id="latest", target_path=None,
 
     result = run_restic(
         ["restore", snapshot_id, "--target", target_path],
-        repo=repo_url, password=password, env_extra=env_extra,
+        repo=repo_url,
+        password=password,
+        env_extra=env_extra,
     )
     if result["returncode"] != 0:
         return {"success": False, "error": result["stderr"][:500]}
 
     restored_files = []
-    for root, dirs, files in os.walk(target_path):
+    for root, _dirs, files in os.walk(target_path):
         for fname in files:
             fpath = os.path.join(root, fname)
             try:
@@ -251,11 +269,13 @@ def test_restore(repo_url, password, snapshot_id="latest", target_path=None,
                 with open(fpath, "rb") as f:
                     for chunk in iter(lambda: f.read(65536), b""):
                         sha256.update(chunk)
-                restored_files.append({
-                    "path": os.path.relpath(fpath, target_path),
-                    "size": stat.st_size,
-                    "sha256": sha256.hexdigest(),
-                })
+                restored_files.append(
+                    {
+                        "path": os.path.relpath(fpath, target_path),
+                        "size": stat.st_size,
+                        "sha256": sha256.hexdigest(),
+                    }
+                )
             except (PermissionError, OSError):
                 continue
             if len(restored_files) >= sample_count:
@@ -263,12 +283,12 @@ def test_restore(repo_url, password, snapshot_id="latest", target_path=None,
         if len(restored_files) >= sample_count:
             break
 
-    try:
+    with contextlib.suppress(OSError):
         shutil.rmtree(target_path)
-    except OSError:
-        pass
 
-    logger.info("Restore test: %d files verified from snapshot %s", len(restored_files), snapshot_id)
+    logger.info(
+        "Restore test: %d files verified from snapshot %s", len(restored_files), snapshot_id
+    )
     return {
         "success": True,
         "snapshot": snapshot_id,
@@ -282,25 +302,25 @@ def get_repository_stats(repo_url, password, env_extra=None):
     """Get repository statistics including size and deduplication ratio."""
     result = run_restic(
         ["stats", "--json", "--mode", "restore-size"],
-        repo=repo_url, password=password, env_extra=env_extra,
+        repo=repo_url,
+        password=password,
+        env_extra=env_extra,
     )
     stats = {}
     if result["returncode"] == 0 and result["stdout"].strip():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             stats = json.loads(result["stdout"])
-        except json.JSONDecodeError:
-            pass
 
     raw_result = run_restic(
         ["stats", "--json", "--mode", "raw-data"],
-        repo=repo_url, password=password, env_extra=env_extra,
+        repo=repo_url,
+        password=password,
+        env_extra=env_extra,
     )
     raw_stats = {}
     if raw_result["returncode"] == 0 and raw_result["stdout"].strip():
-        try:
+        with contextlib.suppress(json.JSONDecodeError):
             raw_stats = json.loads(raw_result["stdout"])
-        except json.JSONDecodeError:
-            pass
 
     restore_size = stats.get("total_size", 0)
     raw_size = raw_stats.get("total_size", 0)
@@ -357,10 +377,22 @@ def main():
     )
     parser.add_argument("--repo", required=True, help="Restic repository URL (s3:host/bucket)")
     parser.add_argument("--password-file", help="File containing repository password")
-    parser.add_argument("--action", choices=[
-        "init", "backup", "verify", "snapshots", "retention", "restore-test",
-        "stats", "report", "configure-lock", "full-pipeline"
-    ], default="report")
+    parser.add_argument(
+        "--action",
+        choices=[
+            "init",
+            "backup",
+            "verify",
+            "snapshots",
+            "retention",
+            "restore-test",
+            "stats",
+            "report",
+            "configure-lock",
+            "full-pipeline",
+        ],
+        default="report",
+    )
     parser.add_argument("--source", nargs="+", help="Source paths to back up")
     parser.add_argument("--tags", nargs="+", help="Tags for backup snapshot")
     parser.add_argument("--exclude", nargs="+", help="Exclude patterns")
@@ -401,8 +433,12 @@ def main():
 
     elif args.action == "retention":
         result = apply_retention_policy(
-            args.repo, password,
-            args.keep_daily, args.keep_weekly, args.keep_monthly, 2,
+            args.repo,
+            password,
+            args.keep_daily,
+            args.keep_weekly,
+            args.keep_monthly,
+            2,
         )
         print(json.dumps(result, indent=2))
 

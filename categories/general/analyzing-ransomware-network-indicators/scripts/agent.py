@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """Detect ransomware network indicators: C2 beaconing, TOR connections, data exfiltration via Zeek/NetFlow."""
 
-import json
-import csv
-import math
 import argparse
+import csv
+import json
 import urllib.request
+from collections import defaultdict
 from datetime import datetime
-from collections import defaultdict, Counter
 from statistics import mean, stdev
 
 TOR_EXIT_LIST_URL = "https://check.torproject.org/torbulkexitlist"
@@ -39,16 +38,18 @@ def parse_netflow_csv(log_path):
     with open(log_path) as f:
         reader = csv.DictReader(f)
         for row in reader:
-            connections.append({
-                "ts": row.get("timestamp", row.get("start_time", "")),
-                "id.orig_h": row.get("src_ip", row.get("sa", "")),
-                "id.resp_h": row.get("dst_ip", row.get("da", "")),
-                "id.resp_p": row.get("dst_port", row.get("dp", "")),
-                "proto": row.get("protocol", row.get("pr", "")),
-                "orig_bytes": row.get("src_bytes", row.get("ibyt", "0")),
-                "resp_bytes": row.get("dst_bytes", row.get("obyt", "0")),
-                "duration": row.get("duration", row.get("td", "0")),
-            })
+            connections.append(
+                {
+                    "ts": row.get("timestamp", row.get("start_time", "")),
+                    "id.orig_h": row.get("src_ip", row.get("sa", "")),
+                    "id.resp_h": row.get("dst_ip", row.get("da", "")),
+                    "id.resp_p": row.get("dst_port", row.get("dp", "")),
+                    "proto": row.get("protocol", row.get("pr", "")),
+                    "orig_bytes": row.get("src_bytes", row.get("ibyt", "0")),
+                    "resp_bytes": row.get("dst_bytes", row.get("obyt", "0")),
+                    "duration": row.get("duration", row.get("td", "0")),
+                }
+            )
     return connections
 
 
@@ -63,7 +64,7 @@ def fetch_tor_exit_nodes():
                 if line and not line.startswith("#"):
                     nodes.add(line)
             return nodes
-    except Exception as e:
+    except Exception:
         return set()
 
 
@@ -86,7 +87,7 @@ def detect_beaconing(connections, min_connections=10, max_cv=0.3):
         if len(timestamps) < min_connections:
             continue
         timestamps.sort()
-        intervals = [timestamps[i+1] - timestamps[i] for i in range(len(timestamps)-1)]
+        intervals = [timestamps[i + 1] - timestamps[i] for i in range(len(timestamps) - 1)]
         if not intervals:
             continue
         avg_interval = mean(intervals)
@@ -96,16 +97,20 @@ def detect_beaconing(connections, min_connections=10, max_cv=0.3):
         cv = sd / avg_interval if avg_interval > 0 else 999
 
         if cv <= max_cv:
-            beacons.append({
-                "source": src, "destination": dst, "port": port,
-                "connection_count": len(timestamps),
-                "avg_interval_seconds": round(avg_interval, 2),
-                "interval_stddev": round(sd, 2),
-                "coefficient_of_variation": round(cv, 4),
-                "severity": "critical" if cv < 0.1 else "high",
-                "indicator": "Regular beaconing pattern detected",
-                "mitre": "T1071",
-            })
+            beacons.append(
+                {
+                    "source": src,
+                    "destination": dst,
+                    "port": port,
+                    "connection_count": len(timestamps),
+                    "avg_interval_seconds": round(avg_interval, 2),
+                    "interval_stddev": round(sd, 2),
+                    "coefficient_of_variation": round(cv, 4),
+                    "severity": "critical" if cv < 0.1 else "high",
+                    "indicator": "Regular beaconing pattern detected",
+                    "mitre": "T1071",
+                }
+            )
     return beacons
 
 
@@ -116,14 +121,17 @@ def detect_tor_connections(connections, tor_nodes):
         dst = conn.get("id.resp_h", "")
         src = conn.get("id.orig_h", "")
         if dst in tor_nodes:
-            tor_hits.append({
-                "source": src, "destination": dst,
-                "port": conn.get("id.resp_p", ""),
-                "bytes_sent": conn.get("orig_bytes", "0"),
-                "severity": "high",
-                "indicator": "Connection to TOR exit node",
-                "mitre": "T1573",
-            })
+            tor_hits.append(
+                {
+                    "source": src,
+                    "destination": dst,
+                    "port": conn.get("id.resp_p", ""),
+                    "bytes_sent": conn.get("orig_bytes", "0"),
+                    "severity": "high",
+                    "indicator": "Connection to TOR exit node",
+                    "mitre": "T1573",
+                }
+            )
     unique_tor = len({h["destination"] for h in tor_hits})
     return tor_hits, unique_tor
 
@@ -151,16 +159,19 @@ def detect_exfiltration(connections, byte_threshold=100_000_000):
     for (src, dst), stats in pair_bytes.items():
         if stats["sent"] > byte_threshold:
             ratio = stats["sent"] / max(stats["received"], 1)
-            exfil_alerts.append({
-                "source": src, "destination": dst,
-                "bytes_sent": stats["sent"],
-                "bytes_received": stats["received"],
-                "send_receive_ratio": round(ratio, 2),
-                "connection_count": stats["count"],
-                "severity": "critical" if stats["sent"] > byte_threshold * 5 else "high",
-                "indicator": "High outbound data transfer (potential exfiltration)",
-                "mitre": "T1041",
-            })
+            exfil_alerts.append(
+                {
+                    "source": src,
+                    "destination": dst,
+                    "bytes_sent": stats["sent"],
+                    "bytes_received": stats["received"],
+                    "send_receive_ratio": round(ratio, 2),
+                    "connection_count": stats["count"],
+                    "severity": "critical" if stats["sent"] > byte_threshold * 5 else "high",
+                    "indicator": "High outbound data transfer (potential exfiltration)",
+                    "mitre": "T1041",
+                }
+            )
     return exfil_alerts
 
 
@@ -190,7 +201,9 @@ def main():
     parser.add_argument("--format", choices=["zeek", "netflow"], default="zeek")
     parser.add_argument("--output", default="ransomware_network_report.json")
     parser.add_argument("--beacon-min", type=int, default=10, help="Min connections for beaconing")
-    parser.add_argument("--exfil-threshold", type=int, default=100_000_000, help="Exfil byte threshold")
+    parser.add_argument(
+        "--exfil-threshold", type=int, default=100_000_000, help="Exfil byte threshold"
+    )
     parser.add_argument("--skip-tor", action="store_true", help="Skip TOR exit node check")
     args = parser.parse_args()
 
@@ -208,8 +221,12 @@ def main():
     report = generate_report(connections, beacons, tor_hits, tor_unique, exfil_alerts, args.input)
     with open(args.output, "w") as f:
         json.dump(report, f, indent=2, default=str)
-    print(f"[+] Beaconing: {len(beacons)} | TOR: {len(tor_hits)} ({tor_unique} nodes) | Exfil: {len(exfil_alerts)}")
-    print(f"[+] Ransomware risk score: {report['ransomware_risk_score']}/100 ({report['risk_level']})")
+    print(
+        f"[+] Beaconing: {len(beacons)} | TOR: {len(tor_hits)} ({tor_unique} nodes) | Exfil: {len(exfil_alerts)}"
+    )
+    print(
+        f"[+] Ransomware risk score: {report['ransomware_risk_score']}/100 ({report['risk_level']})"
+    )
     print(f"[+] Report saved to {args.output}")
 
 

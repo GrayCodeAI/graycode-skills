@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """DevSecOps Pipeline Builder Agent - Generates GitLab CI security scanning pipeline configurations."""
 
+import argparse
 import json
 import logging
-import argparse
 from datetime import datetime
 
 import requests
@@ -81,7 +81,12 @@ def validate_pipeline(gitlab_url, token, project_id, ci_content):
     headers = {"PRIVATE-TOKEN": token, "Content-Type": "application/json"}
     data = {"content": json.dumps(ci_content)}
     try:
-        resp = requests.post(f"{gitlab_url}/api/v4/projects/{project_id}/ci/lint", headers=headers, json=data, timeout=15)
+        resp = requests.post(
+            f"{gitlab_url}/api/v4/projects/{project_id}/ci/lint",
+            headers=headers,
+            json=data,
+            timeout=15,
+        )
         return resp.json()
     except requests.RequestException as e:
         return {"error": str(e)}
@@ -115,8 +120,15 @@ def generate_report(ci_config, coverage, stages):
 
 def main():
     parser = argparse.ArgumentParser(description="DevSecOps Pipeline Builder Agent")
-    parser.add_argument("--stages", nargs="*", choices=list(SECURITY_STAGES.keys()), default=list(SECURITY_STAGES.keys()))
-    parser.add_argument("--project-type", choices=["python", "javascript", "java", "go"], default="python")
+    parser.add_argument(
+        "--stages",
+        nargs="*",
+        choices=list(SECURITY_STAGES.keys()),
+        default=list(SECURITY_STAGES.keys()),
+    )
+    parser.add_argument(
+        "--project-type", choices=["python", "javascript", "java", "go"], default="python"
+    )
     parser.add_argument("--gitlab-url", help="GitLab URL for validation")
     parser.add_argument("--token", help="GitLab private token")
     parser.add_argument("--project-id", help="GitLab project ID")

@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Agent for hunting LOLBin execution patterns in endpoint logs (Sysmon, EDR)."""
 
-import json
 import argparse
-import re
 import csv
-from datetime import datetime
-from pathlib import Path
+import json
+import re
 
 LOLBIN_SIGNATURES = {
-    "certutil.exe": {"mitre": "T1140", "patterns": [r"-urlcache", r"-decode", r"-encode", r"-split.*http"]},
+    "certutil.exe": {
+        "mitre": "T1140",
+        "patterns": [r"-urlcache", r"-decode", r"-encode", r"-split.*http"],
+    },
     "mshta.exe": {"mitre": "T1218.005", "patterns": [r"vbscript:", r"javascript:", r"https?://"]},
     "regsvr32.exe": {"mitre": "T1218.010", "patterns": [r"/s\s+/n\s+/u\s+/i:", r"scrobj\.dll"]},
     "rundll32.exe": {"mitre": "T1218.011", "patterns": [r"javascript:", r"shell32.*ShellExec"]},
@@ -22,17 +23,25 @@ LOLBIN_SIGNATURES = {
     "csc.exe": {"mitre": "T1127", "patterns": [r"/out:.*\\temp\\", r"/out:.*\\appdata\\"]},
     "installutil.exe": {"mitre": "T1218.004", "patterns": [r"/logfile=", r"/U\s+"]},
     "msbuild.exe": {"mitre": "T1127.001", "patterns": [r"\.xml$", r"\.csproj$", r"\\temp\\"]},
-    "powershell.exe": {"mitre": "T1059.001", "patterns": [
-        r"-enc\s+", r"IEX", r"Invoke-Expression", r"DownloadString",
-        r"Net\.WebClient", r"-w\s+hidden", r"-nop\s+",
-    ]},
+    "powershell.exe": {
+        "mitre": "T1059.001",
+        "patterns": [
+            r"-enc\s+",
+            r"IEX",
+            r"Invoke-Expression",
+            r"DownloadString",
+            r"Net\.WebClient",
+            r"-w\s+hidden",
+            r"-nop\s+",
+        ],
+    },
 }
 
 
 def scan_csv_logs(csv_file, process_col="Image", cmdline_col="CommandLine"):
     """Scan exported CSV endpoint logs for LOLBin execution."""
     findings = []
-    with open(csv_file, "r", encoding="utf-8", errors="replace") as f:
+    with open(csv_file, encoding="utf-8", errors="replace") as f:
         reader = csv.DictReader(f)
         for row_num, row in enumerate(reader, 2):
             proc = row.get(process_col, "")
@@ -42,16 +51,18 @@ def scan_csv_logs(csv_file, process_col="Image", cmdline_col="CommandLine"):
                 sig = LOLBIN_SIGNATURES[proc_name]
                 for pattern in sig["patterns"]:
                     if re.search(pattern, cmdline, re.I):
-                        findings.append({
-                            "row": row_num,
-                            "binary": proc_name,
-                            "mitre": sig["mitre"],
-                            "command_line": cmdline[:500],
-                            "matched_pattern": pattern,
-                            "user": row.get("User", row.get("user", "")),
-                            "host": row.get("Computer", row.get("hostname", "")),
-                            "timestamp": row.get("UtcTime", row.get("@timestamp", "")),
-                        })
+                        findings.append(
+                            {
+                                "row": row_num,
+                                "binary": proc_name,
+                                "mitre": sig["mitre"],
+                                "command_line": cmdline[:500],
+                                "matched_pattern": pattern,
+                                "user": row.get("User", row.get("user", "")),
+                                "host": row.get("Computer", row.get("hostname", "")),
+                                "timestamp": row.get("UtcTime", row.get("@timestamp", "")),
+                            }
+                        )
                         break
     severity_map = {"T1059.001": "high", "T1218.005": "high", "T1140": "medium"}
     for f_item in findings:
@@ -84,13 +95,15 @@ def scan_evtx_sysmon(evtx_file):
                     sig = LOLBIN_SIGNATURES[binary]
                     for pattern in sig["patterns"]:
                         if re.search(pattern, xml_str, re.I):
-                            findings.append({
-                                "record_id": record.record_num(),
-                                "binary": binary,
-                                "mitre": sig["mitre"],
-                                "pattern": pattern,
-                                "xml_snippet": xml_str[:600],
-                            })
+                            findings.append(
+                                {
+                                    "record_id": record.record_num(),
+                                    "binary": binary,
+                                    "mitre": sig["mitre"],
+                                    "pattern": pattern,
+                                    "xml_snippet": xml_str[:600],
+                                }
+                            )
                             break
                     break
     return {"file": evtx_file, "total_findings": len(findings), "findings": findings[:300]}

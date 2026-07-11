@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Agent for hunting suspicious Windows service installations (T1543.003) via Event ID 7045."""
 
+import argparse
 import json
 import re
-import argparse
-from datetime import datetime
 from collections import Counter
+from datetime import datetime
 
 try:
     from lxml import etree
@@ -72,16 +72,18 @@ def parse_evtx_events(evtx_path):
                 timestamp = time_el.get("SystemTime", "") if time_el is not None else ""
                 computer_el = system.find("e:Computer", ns)
                 computer = computer_el.text if computer_el is not None else ""
-                events.append({
-                    "timestamp": timestamp,
-                    "event_id": 7045,
-                    "computer": computer,
-                    "service_name": data_fields.get("ServiceName", ""),
-                    "image_path": data_fields.get("ImagePath", ""),
-                    "service_type": data_fields.get("ServiceType", ""),
-                    "start_type": data_fields.get("StartType", ""),
-                    "account_name": data_fields.get("AccountName", ""),
-                })
+                events.append(
+                    {
+                        "timestamp": timestamp,
+                        "event_id": 7045,
+                        "computer": computer,
+                        "service_name": data_fields.get("ServiceName", ""),
+                        "image_path": data_fields.get("ImagePath", ""),
+                        "service_type": data_fields.get("ServiceType", ""),
+                        "start_type": data_fields.get("StartType", ""),
+                        "account_name": data_fields.get("AccountName", ""),
+                    }
+                )
             except Exception:
                 continue
     return events
@@ -104,7 +106,13 @@ def analyze_service_path(image_path):
         "suspicious_indicators": findings,
         "legitimate_path": is_legitimate,
         "risk_score": risk_score,
-        "risk_level": "CRITICAL" if risk_score >= 70 else "HIGH" if risk_score >= 50 else "MEDIUM" if risk_score >= 20 else "LOW",
+        "risk_level": "CRITICAL"
+        if risk_score >= 70
+        else "HIGH"
+        if risk_score >= 50
+        else "MEDIUM"
+        if risk_score >= 20
+        else "LOW",
     }
 
 
@@ -115,7 +123,10 @@ def hunt_suspicious_services(evtx_path):
     for event in events:
         analysis = analyze_service_path(event.get("image_path", ""))
         entry = {**event, **analysis}
-        if entry.get("account_name", "").lower() == "localsystem" and not analysis["legitimate_path"]:
+        if (
+            entry.get("account_name", "").lower() == "localsystem"
+            and not analysis["legitimate_path"]
+        ):
             entry["risk_score"] = min(entry["risk_score"] + 20, 100)
             entry["risk_level"] = "CRITICAL" if entry["risk_score"] >= 70 else entry["risk_level"]
             entry["suspicious_indicators"].append("localsystem_nonstandard_path")
@@ -160,13 +171,16 @@ def full_hunt(evtx_path):
             "name": "Create or Modify System Process: Windows Service",
             "tactic": "Persistence, Privilege Escalation",
         },
-        "recommendation": "Investigate CRITICAL and HIGH services. Verify binary hashes against known-good baselines." if stats["critical_count"] + stats["high_count"] > 0
-            else "No high-risk service installations detected.",
+        "recommendation": "Investigate CRITICAL and HIGH services. Verify binary hashes against known-good baselines."
+        if stats["critical_count"] + stats["high_count"] > 0
+        else "No high-risk service installations detected.",
     }
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Service Installation Threat Hunting Agent (T1543.003)")
+    parser = argparse.ArgumentParser(
+        description="Service Installation Threat Hunting Agent (T1543.003)"
+    )
     parser.add_argument("evtx", help="Path to System.evtx file")
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("parse", help="Parse and list all Event ID 7045 records")

@@ -12,16 +12,14 @@ Audits backup infrastructure for ransomware resilience by checking:
 Supports Veeam, AWS Backup, and Azure Backup via API integration.
 """
 
+import datetime
 import json
-import subprocess
-import sys
-import os
 import socket
 import ssl
-import datetime
-from dataclasses import dataclass, field, asdict
-from typing import Optional
+import subprocess
+from dataclasses import asdict, dataclass, field
 from pathlib import Path
+from typing import Optional
 
 
 @dataclass
@@ -95,14 +93,18 @@ class BackupStrategyAuditor:
             "dedicated_admin_accounts": dedicated_admin_accounts,
         }
 
-    def _add_finding(self, severity: str, category: str, title: str, detail: str, recommendation: str):
-        self.assessment.findings.append({
-            "severity": severity,
-            "category": category,
-            "title": title,
-            "detail": detail,
-            "recommendation": recommendation,
-        })
+    def _add_finding(
+        self, severity: str, category: str, title: str, detail: str, recommendation: str
+    ):
+        self.assessment.findings.append(
+            {
+                "severity": severity,
+                "category": category,
+                "title": title,
+                "detail": detail,
+                "recommendation": recommendation,
+            }
+        )
 
     def audit_321_10_compliance(self):
         """Check compliance with the 3-2-1-1-0 backup rule."""
@@ -114,7 +116,8 @@ class BackupStrategyAuditor:
             self.earned_score += 20
         else:
             self._add_finding(
-                "CRITICAL", "3-2-1-1-0",
+                "CRITICAL",
+                "3-2-1-1-0",
                 f"Insufficient backup copies: {len(copies)} of 3 required",
                 f"Only {len(copies)} backup copies configured. Minimum 3 required.",
                 "Add additional backup copies to meet 3-2-1-1-0 minimum.",
@@ -127,7 +130,8 @@ class BackupStrategyAuditor:
             self.earned_score += 15
         else:
             self._add_finding(
-                "HIGH", "3-2-1-1-0",
+                "HIGH",
+                "3-2-1-1-0",
                 f"Insufficient media diversity: {len(media_types)} type(s)",
                 f"All backups use {media_types}. Need at least 2 different media types.",
                 "Add backup copy on different media (e.g., tape, cloud object storage, SAN).",
@@ -140,7 +144,8 @@ class BackupStrategyAuditor:
             self.earned_score += 15
         else:
             self._add_finding(
-                "CRITICAL", "3-2-1-1-0",
+                "CRITICAL",
+                "3-2-1-1-0",
                 "No offsite backup copy",
                 "All backup copies are stored on-premises. A site-level disaster would destroy all copies.",
                 "Configure at least one offsite backup copy (cloud, remote site, or tape vaulting).",
@@ -153,7 +158,8 @@ class BackupStrategyAuditor:
             self.earned_score += 25
         else:
             self._add_finding(
-                "CRITICAL", "3-2-1-1-0",
+                "CRITICAL",
+                "3-2-1-1-0",
                 "No immutable or air-gapped backup copy",
                 "No backup copies are protected against modification or deletion. "
                 "Ransomware operators routinely delete accessible backups.",
@@ -172,14 +178,16 @@ class BackupStrategyAuditor:
                 partial_score = int(25 * len(tested_tiers) / all_tiers)
                 self.earned_score += partial_score
                 self._add_finding(
-                    "HIGH", "3-2-1-1-0",
+                    "HIGH",
+                    "3-2-1-1-0",
                     f"Incomplete restore testing: {len(tested_tiers)}/{all_tiers} tiers verified",
                     f"Only {len(tested_tiers)} of {all_tiers} recovery tiers have successful restore tests.",
                     "Implement automated restore testing (SureBackup) for all tiers.",
                 )
             else:
                 self._add_finding(
-                    "CRITICAL", "3-2-1-1-0",
+                    "CRITICAL",
+                    "3-2-1-1-0",
                     "No successful restore tests recorded",
                     "No recovery tiers have documented successful restore verification.",
                     "Implement automated restore testing immediately. Untested backups "
@@ -191,7 +199,8 @@ class BackupStrategyAuditor:
         creds = self.assessment.credential_isolation
         if not creds:
             self._add_finding(
-                "CRITICAL", "Credential Isolation",
+                "CRITICAL",
+                "Credential Isolation",
                 "Credential isolation not assessed",
                 "No information provided about backup credential isolation.",
                 "Assess backup admin account configuration and network isolation.",
@@ -203,7 +212,8 @@ class BackupStrategyAuditor:
             self.earned_score += 10
         else:
             self._add_finding(
-                "CRITICAL", "Credential Isolation",
+                "CRITICAL",
+                "Credential Isolation",
                 "Backup servers joined to production AD domain",
                 "Backup infrastructure is domain-joined. Ransomware operators compromise "
                 "backup credentials via Kerberoasting, DCSync, or GPO manipulation.",
@@ -216,7 +226,8 @@ class BackupStrategyAuditor:
             self.earned_score += 5
         else:
             self._add_finding(
-                "HIGH", "Credential Isolation",
+                "HIGH",
+                "Credential Isolation",
                 "MFA not enabled for backup administration",
                 "Backup admin accounts do not require multi-factor authentication.",
                 "Enable MFA for all backup console access using hardware tokens.",
@@ -227,7 +238,8 @@ class BackupStrategyAuditor:
             self.earned_score += 5
         else:
             self._add_finding(
-                "HIGH", "Credential Isolation",
+                "HIGH",
+                "Credential Isolation",
                 "Backup infrastructure not on separate network segment",
                 "Backup servers share the production network segment.",
                 "Segment backup infrastructure into a dedicated VLAN with strict firewall rules.",
@@ -238,7 +250,8 @@ class BackupStrategyAuditor:
             self.earned_score += 3
         else:
             self._add_finding(
-                "MEDIUM", "Credential Isolation",
+                "MEDIUM",
+                "Credential Isolation",
                 "RDP enabled on backup servers",
                 "Remote Desktop Protocol is accessible on backup servers.",
                 "Disable RDP and use out-of-band management (iLO/iDRAC) for emergency access.",
@@ -249,7 +262,8 @@ class BackupStrategyAuditor:
             self.earned_score += 2
         else:
             self._add_finding(
-                "HIGH", "Credential Isolation",
+                "HIGH",
+                "Credential Isolation",
                 "No dedicated backup admin accounts",
                 "Backup administration uses shared or production admin accounts.",
                 "Create dedicated backup admin accounts with least-privilege access.",
@@ -276,7 +290,8 @@ class BackupStrategyAuditor:
                         self.earned_score += 5
                     else:
                         self._add_finding(
-                            "HIGH", "RPO/RTO",
+                            "HIGH",
+                            "RPO/RTO",
                             f"Tier {tier.tier_level} ({tier.name}): Restore test overdue",
                             f"Last test was {days_since_test} days ago. "
                             f"Expected frequency: {tier.restore_test_frequency}.",
@@ -284,14 +299,16 @@ class BackupStrategyAuditor:
                         )
                 except ValueError:
                     self._add_finding(
-                        "MEDIUM", "RPO/RTO",
+                        "MEDIUM",
+                        "RPO/RTO",
                         f"Tier {tier.tier_level}: Invalid restore test date format",
                         f"Date '{tier.last_restore_test}' could not be parsed.",
                         "Use YYYY-MM-DD format for restore test dates.",
                     )
             else:
                 self._add_finding(
-                    "CRITICAL", "RPO/RTO",
+                    "CRITICAL",
+                    "RPO/RTO",
                     f"Tier {tier.tier_level} ({tier.name}): No restore test recorded",
                     "No restore test has been documented for this recovery tier.",
                     f"Implement {tier.restore_test_frequency} automated restore testing.",
@@ -306,14 +323,16 @@ class BackupStrategyAuditor:
                     self.earned_score += 3
                 else:
                     self._add_finding(
-                        "MEDIUM", "Encryption",
+                        "MEDIUM",
+                        "Encryption",
                         f"Weak backup encryption: {copy.encryption_algorithm}",
                         f"Backup copy at {copy.location} uses {copy.encryption_algorithm}.",
                         "Upgrade to AES-256 encryption for all backup copies.",
                     )
             else:
                 self._add_finding(
-                    "HIGH", "Encryption",
+                    "HIGH",
+                    "Encryption",
                     f"Unencrypted backup: {copy.location}",
                     f"Backup copy at {copy.location} is not encrypted.",
                     "Enable AES-256 encryption for all backup copies, both at rest and in transit.",
@@ -330,7 +349,8 @@ class BackupStrategyAuditor:
                     self.earned_score += 5
                 else:
                     self._add_finding(
-                        "CRITICAL", "Immutable Retention",
+                        "CRITICAL",
+                        "Immutable Retention",
                         f"Immutable retention too short: {copy.retention_days} days",
                         f"Immutable retention at {copy.location} is {copy.retention_days} days. "
                         f"Average ransomware dwell time is {avg_dwell_time_days} days. "
@@ -401,9 +421,11 @@ class BackupStrategyAuditor:
             lines.append(f"    Systems: {len(tier['systems'])}")
             lines.append(f"    RPO: {tier['rpo_hours']}h | RTO: {tier['rto_hours']}h")
             lines.append(f"    Backup: {tier['backup_frequency']}")
-            lines.append(f"    Restore test: {tier['restore_test_frequency']} "
-                        f"(Last: {tier['last_restore_test'] or 'Never'}, "
-                        f"Result: {tier['last_restore_result'] or 'N/A'})")
+            lines.append(
+                f"    Restore test: {tier['restore_test_frequency']} "
+                f"(Last: {tier['last_restore_test'] or 'Never'}, "
+                f"Result: {tier['last_restore_result'] or 'N/A'})"
+            )
         lines.append("")
 
         # Credential Isolation
@@ -421,7 +443,9 @@ class BackupStrategyAuditor:
         lines.append(f"FINDINGS ({len(result['findings'])} total)")
         lines.append("-" * 40)
         severity_order = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3, "INFO": 4}
-        sorted_findings = sorted(result["findings"], key=lambda f: severity_order.get(f["severity"], 5))
+        sorted_findings = sorted(
+            result["findings"], key=lambda f: severity_order.get(f["severity"], 5)
+        )
 
         for i, finding in enumerate(sorted_findings, 1):
             lines.append(f"\n  [{finding['severity']}] #{i}: {finding['title']}")
@@ -461,11 +485,18 @@ def check_veeam_api(server: str, port: int = 9419) -> dict:
 
 def check_s3_object_lock(bucket_name: str) -> dict:
     """Check AWS S3 bucket for Object Lock configuration."""
-    result = {"bucket": bucket_name, "object_lock_enabled": False, "retention_mode": None, "retention_days": None}
+    result = {
+        "bucket": bucket_name,
+        "object_lock_enabled": False,
+        "retention_mode": None,
+        "retention_days": None,
+    }
     try:
         output = subprocess.run(
             ["aws", "s3api", "get-object-lock-configuration", "--bucket", bucket_name],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True,
+            text=True,
+            timeout=30,
         )
         if output.returncode == 0:
             config = json.loads(output.stdout)
@@ -487,75 +518,87 @@ def main():
     )
 
     # Define backup copies
-    auditor.add_backup_copy(BackupCopy(
-        location="On-premises NAS (Building A)",
-        media_type="NAS/NFS",
-        is_offsite=False,
-        is_immutable=False,
-        is_airgapped=False,
-        retention_days=14,
-        last_successful="2026-02-22",
-        encryption_algorithm="AES-256",
-    ))
+    auditor.add_backup_copy(
+        BackupCopy(
+            location="On-premises NAS (Building A)",
+            media_type="NAS/NFS",
+            is_offsite=False,
+            is_immutable=False,
+            is_airgapped=False,
+            retention_days=14,
+            last_successful="2026-02-22",
+            encryption_algorithm="AES-256",
+        )
+    )
 
-    auditor.add_backup_copy(BackupCopy(
-        location="Veeam Hardened Linux Repository",
-        media_type="Linux/XFS",
-        is_offsite=False,
-        is_immutable=True,
-        is_airgapped=False,
-        retention_days=30,
-        last_successful="2026-02-22",
-        encryption_algorithm="AES-256",
-    ))
+    auditor.add_backup_copy(
+        BackupCopy(
+            location="Veeam Hardened Linux Repository",
+            media_type="Linux/XFS",
+            is_offsite=False,
+            is_immutable=True,
+            is_airgapped=False,
+            retention_days=30,
+            last_successful="2026-02-22",
+            encryption_algorithm="AES-256",
+        )
+    )
 
-    auditor.add_backup_copy(BackupCopy(
-        location="AWS S3 (us-west-2) Object Lock",
-        media_type="Cloud Object Storage",
-        is_offsite=True,
-        is_immutable=True,
-        is_airgapped=False,
-        retention_days=60,
-        last_successful="2026-02-22",
-        encryption_algorithm="AES-256",
-    ))
+    auditor.add_backup_copy(
+        BackupCopy(
+            location="AWS S3 (us-west-2) Object Lock",
+            media_type="Cloud Object Storage",
+            is_offsite=True,
+            is_immutable=True,
+            is_airgapped=False,
+            retention_days=60,
+            last_successful="2026-02-22",
+            encryption_algorithm="AES-256",
+        )
+    )
 
     # Define recovery tiers
-    auditor.add_recovery_tier(RecoveryTier(
-        name="Critical",
-        tier_level=1,
-        systems=["DC01", "DC02", "DNS01", "ERP-DB", "CoreBanking"],
-        rpo_hours=1,
-        rto_hours=4,
-        backup_frequency="Hourly incremental, Daily full",
-        restore_test_frequency="weekly",
-        last_restore_test="2026-02-20",
-        last_restore_result="Success",
-    ))
+    auditor.add_recovery_tier(
+        RecoveryTier(
+            name="Critical",
+            tier_level=1,
+            systems=["DC01", "DC02", "DNS01", "ERP-DB", "CoreBanking"],
+            rpo_hours=1,
+            rto_hours=4,
+            backup_frequency="Hourly incremental, Daily full",
+            restore_test_frequency="weekly",
+            last_restore_test="2026-02-20",
+            last_restore_result="Success",
+        )
+    )
 
-    auditor.add_recovery_tier(RecoveryTier(
-        name="Important",
-        tier_level=2,
-        systems=["Exchange", "FileServer01", "WebApp01", "SharePoint"],
-        rpo_hours=4,
-        rto_hours=12,
-        backup_frequency="4-hour incremental, Daily full",
-        restore_test_frequency="monthly",
-        last_restore_test="2026-02-01",
-        last_restore_result="Success",
-    ))
+    auditor.add_recovery_tier(
+        RecoveryTier(
+            name="Important",
+            tier_level=2,
+            systems=["Exchange", "FileServer01", "WebApp01", "SharePoint"],
+            rpo_hours=4,
+            rto_hours=12,
+            backup_frequency="4-hour incremental, Daily full",
+            restore_test_frequency="monthly",
+            last_restore_test="2026-02-01",
+            last_restore_result="Success",
+        )
+    )
 
-    auditor.add_recovery_tier(RecoveryTier(
-        name="Standard",
-        tier_level=3,
-        systems=["DevServer01", "TestDB", "ArchiveNAS"],
-        rpo_hours=24,
-        rto_hours=48,
-        backup_frequency="Daily incremental, Weekly full",
-        restore_test_frequency="quarterly",
-        last_restore_test="2025-12-15",
-        last_restore_result="Success",
-    ))
+    auditor.add_recovery_tier(
+        RecoveryTier(
+            name="Standard",
+            tier_level=3,
+            systems=["DevServer01", "TestDB", "ArchiveNAS"],
+            rpo_hours=24,
+            rto_hours=48,
+            backup_frequency="Daily incremental, Weekly full",
+            restore_test_frequency="quarterly",
+            last_restore_test="2025-12-15",
+            last_restore_result="Success",
+        )
+    )
 
     # Set credential isolation status
     auditor.set_credential_isolation(

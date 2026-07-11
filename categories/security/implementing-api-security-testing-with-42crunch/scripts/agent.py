@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Agent for API security testing using 42Crunch audit methodology."""
 
-import json
 import argparse
-import re
+import json
 from datetime import datetime
-from pathlib import Path
 
 try:
     import yaml
@@ -41,67 +39,105 @@ def audit_spec_security(spec):
     security_schemes = spec.get("components", {}).get("securitySchemes", {})
     global_security = spec.get("security", [])
     if not security_schemes:
-        findings.append({
-            "owasp": "API2:2023", "issue": "no_security_schemes",
-            "severity": "CRITICAL", "score_deduction": 30,
-        })
+        findings.append(
+            {
+                "owasp": "API2:2023",
+                "issue": "no_security_schemes",
+                "severity": "CRITICAL",
+                "score_deduction": 30,
+            }
+        )
     if not global_security:
-        findings.append({
-            "owasp": "API8:2023", "issue": "no_global_security",
-            "severity": "HIGH", "score_deduction": 20,
-        })
+        findings.append(
+            {
+                "owasp": "API8:2023",
+                "issue": "no_global_security",
+                "severity": "HIGH",
+                "score_deduction": 20,
+            }
+        )
     paths = spec.get("paths", {})
     for path, methods in paths.items():
         for method, details in methods.items():
             if method not in ("get", "post", "put", "patch", "delete"):
                 continue
             if details.get("security") == []:
-                findings.append({
-                    "path": path, "method": method.upper(),
-                    "owasp": "API2:2023", "issue": "security_disabled",
-                    "severity": "CRITICAL", "score_deduction": 25,
-                })
+                findings.append(
+                    {
+                        "path": path,
+                        "method": method.upper(),
+                        "owasp": "API2:2023",
+                        "issue": "security_disabled",
+                        "severity": "CRITICAL",
+                        "score_deduction": 25,
+                    }
+                )
             if method in ("post", "put", "patch"):
                 body = details.get("requestBody", {})
                 content = body.get("content", {})
-                for media, media_def in content.items():
+                for _media, media_def in content.items():
                     schema = media_def.get("schema", {})
                     if not schema:
-                        findings.append({
-                            "path": path, "method": method.upper(),
-                            "owasp": "API3:2023", "issue": "no_input_schema",
-                            "severity": "HIGH", "score_deduction": 15,
-                        })
+                        findings.append(
+                            {
+                                "path": path,
+                                "method": method.upper(),
+                                "owasp": "API3:2023",
+                                "issue": "no_input_schema",
+                                "severity": "HIGH",
+                                "score_deduction": 15,
+                            }
+                        )
                     if schema.get("additionalProperties") is not False:
-                        findings.append({
-                            "path": path, "method": method.upper(),
-                            "owasp": "API3:2023", "issue": "mass_assignment_risk",
-                            "severity": "MEDIUM", "score_deduction": 10,
-                        })
+                        findings.append(
+                            {
+                                "path": path,
+                                "method": method.upper(),
+                                "owasp": "API3:2023",
+                                "issue": "mass_assignment_risk",
+                                "severity": "MEDIUM",
+                                "score_deduction": 10,
+                            }
+                        )
             for param in details.get("parameters", []):
                 p_schema = param.get("schema", {})
                 if p_schema.get("type") == "string" and not p_schema.get("maxLength"):
-                    findings.append({
-                        "path": path, "method": method.upper(),
-                        "parameter": param.get("name"),
-                        "owasp": "API4:2023", "issue": "unbounded_string",
-                        "severity": "MEDIUM", "score_deduction": 5,
-                    })
+                    findings.append(
+                        {
+                            "path": path,
+                            "method": method.upper(),
+                            "parameter": param.get("name"),
+                            "owasp": "API4:2023",
+                            "issue": "unbounded_string",
+                            "severity": "MEDIUM",
+                            "score_deduction": 5,
+                        }
+                    )
             responses = details.get("responses", {})
             if "429" not in responses:
-                findings.append({
-                    "path": path, "method": method.upper(),
-                    "owasp": "API4:2023", "issue": "no_429_response",
-                    "severity": "MEDIUM", "score_deduction": 5,
-                })
+                findings.append(
+                    {
+                        "path": path,
+                        "method": method.upper(),
+                        "owasp": "API4:2023",
+                        "issue": "no_429_response",
+                        "severity": "MEDIUM",
+                        "score_deduction": 5,
+                    }
+                )
     servers = spec.get("servers", [])
     for server in servers:
         url = server.get("url", "")
         if url.startswith("http://"):
-            findings.append({
-                "server": url, "owasp": "API8:2023",
-                "issue": "http_not_https", "severity": "HIGH", "score_deduction": 15,
-            })
+            findings.append(
+                {
+                    "server": url,
+                    "owasp": "API8:2023",
+                    "issue": "http_not_https",
+                    "severity": "HIGH",
+                    "score_deduction": 15,
+                }
+            )
     return findings
 
 

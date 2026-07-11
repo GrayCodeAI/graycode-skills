@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Windows Event Logging Auditor - Checks current audit policy configuration."""
 
-import json, subprocess, sys, os
-from datetime import datetime
+import subprocess
+import sys
 
 
 def get_audit_policy() -> dict:
@@ -10,13 +10,14 @@ def get_audit_policy() -> dict:
     try:
         result = subprocess.run(
             ["auditpol", "/get", "/category:*"],
-            capture_output=True, text=True, timeout=15,
+            capture_output=True,
+            text=True,
+            timeout=15,
         )
         if result.returncode != 0:
             return {"error": result.stderr}
 
         policies = {}
-        current_category = ""
         for line in result.stdout.splitlines():
             line = line.strip()
             if not line:
@@ -61,4 +62,4 @@ if __name__ == "__main__":
             compliant += 1
         print(f"[{status}] {setting}: {actual} (expected: {expected})")
 
-    print(f"\nScore: {compliant}/{total} ({round(compliant/total*100)}%)")
+    print(f"\nScore: {compliant}/{total} ({round(compliant / total * 100)}%)")

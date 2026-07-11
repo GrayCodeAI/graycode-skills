@@ -7,8 +7,6 @@ import subprocess
 import sys
 from collections import Counter
 from datetime import datetime
-from pathlib import Path
-
 
 SURICATA_BIN = "/usr/bin/suricata"
 SURICATA_CONF = "/etc/suricata/suricata.yaml"
@@ -47,11 +45,15 @@ def validate_config():
     try:
         result = subprocess.run(
             [SURICATA_BIN, "-T", "-c", SURICATA_CONF, "-v"],
-            capture_output=True, text=True, timeout=60
+            capture_output=True,
+            text=True,
+            timeout=60,
         )
         return {
             "valid": result.returncode == 0,
-            "output": result.stderr.strip()[-500:] if result.stderr else result.stdout.strip()[-500:],
+            "output": result.stderr.strip()[-500:]
+            if result.stderr
+            else result.stdout.strip()[-500:],
         }
     except Exception as e:
         return {"valid": False, "error": str(e)}
@@ -69,7 +71,7 @@ def parse_eve_alerts(log_path=None, limit=10000):
     dest_ips = Counter()
     severities = Counter()
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         for i, line in enumerate(f):
             if i > limit:
                 break
@@ -88,14 +90,16 @@ def parse_eve_alerts(log_path=None, limit=10000):
             src_ips[event.get("src_ip", "unknown")] += 1
             dest_ips[event.get("dest_ip", "unknown")] += 1
             severities[alert_info.get("severity", 0)] += 1
-            alerts.append({
-                "timestamp": event.get("timestamp"),
-                "src_ip": event.get("src_ip"),
-                "dest_ip": event.get("dest_ip"),
-                "signature": sig,
-                "sid": alert_info.get("signature_id"),
-                "severity": alert_info.get("severity"),
-            })
+            alerts.append(
+                {
+                    "timestamp": event.get("timestamp"),
+                    "src_ip": event.get("src_ip"),
+                    "dest_ip": event.get("dest_ip"),
+                    "signature": sig,
+                    "sid": alert_info.get("signature_id"),
+                    "severity": alert_info.get("severity"),
+                }
+            )
 
     return {
         "total_alerts": len(alerts),
@@ -117,7 +121,7 @@ def parse_eve_dns(log_path=None, limit=50000):
     query_types = Counter()
     long_queries = []
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         for i, line in enumerate(f):
             if i > limit:
                 break
@@ -133,11 +137,13 @@ def parse_eve_dns(log_path=None, limit=50000):
                 domains[rrname] += 1
                 query_types[dns.get("rrtype", "unknown")] += 1
                 if len(rrname) > 60:
-                    long_queries.append({
-                        "src_ip": event.get("src_ip"),
-                        "query": rrname,
-                        "length": len(rrname),
-                    })
+                    long_queries.append(
+                        {
+                            "src_ip": event.get("src_ip"),
+                            "query": rrname,
+                            "length": len(rrname),
+                        }
+                    )
 
     return {
         "unique_domains": len(domains),
@@ -156,7 +162,7 @@ def parse_eve_tls(log_path=None, limit=50000):
     ja3_hashes = Counter()
     sni_list = Counter()
 
-    with open(log_path, "r") as f:
+    with open(log_path) as f:
         for i, line in enumerate(f):
             if i > limit:
                 break
@@ -168,10 +174,7 @@ def parse_eve_tls(log_path=None, limit=50000):
                 continue
             tls = event.get("tls", {})
             ja3 = tls.get("ja3", {})
-            if isinstance(ja3, dict):
-                h = ja3.get("hash")
-            else:
-                h = None
+            h = ja3.get("hash") if isinstance(ja3, dict) else None
             if h:
                 ja3_hashes[h] += 1
             sni = tls.get("sni", "")
@@ -188,9 +191,7 @@ def parse_eve_tls(log_path=None, limit=50000):
 def update_rules():
     """Run suricata-update to fetch latest rulesets."""
     try:
-        result = subprocess.run(
-            ["suricata-update"], capture_output=True, text=True, timeout=120
-        )
+        result = subprocess.run(["suricata-update"], capture_output=True, text=True, timeout=120)
         return {"success": result.returncode == 0, "output": result.stdout.strip()[-500:]}
     except FileNotFoundError:
         return {"success": False, "error": "suricata-update not found"}

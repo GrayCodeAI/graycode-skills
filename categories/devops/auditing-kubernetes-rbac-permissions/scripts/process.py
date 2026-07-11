@@ -6,18 +6,41 @@ Audits RBAC configurations for overly permissive roles,
 dangerous permission combinations, and privilege escalation paths.
 """
 
-import subprocess
 import json
+import subprocess
 import sys
 from dataclasses import dataclass, field
 
 DANGEROUS_VERBS = {"*", "escalate", "bind", "impersonate"}
-DANGEROUS_RESOURCES = {"*", "secrets", "pods", "clusterroles", "clusterrolebindings", "roles", "rolebindings"}
+DANGEROUS_RESOURCES = {
+    "*",
+    "secrets",
+    "pods",
+    "clusterroles",
+    "clusterrolebindings",
+    "roles",
+    "rolebindings",
+}
 HIGH_RISK_COMBINATIONS = [
     ({"*"}, {"*"}, "CRITICAL", "Wildcard access on all resources (cluster-admin equivalent)"),
-    ({"create", "update", "patch"}, {"clusterrolebindings", "rolebindings"}, "CRITICAL", "Can create role bindings for privilege escalation"),
-    ({"escalate"}, {"clusterroles", "roles"}, "CRITICAL", "Can escalate role permissions beyond own level"),
-    ({"impersonate"}, {"users", "groups", "serviceaccounts"}, "CRITICAL", "Can impersonate any identity"),
+    (
+        {"create", "update", "patch"},
+        {"clusterrolebindings", "rolebindings"},
+        "CRITICAL",
+        "Can create role bindings for privilege escalation",
+    ),
+    (
+        {"escalate"},
+        {"clusterroles", "roles"},
+        "CRITICAL",
+        "Can escalate role permissions beyond own level",
+    ),
+    (
+        {"impersonate"},
+        {"users", "groups", "serviceaccounts"},
+        "CRITICAL",
+        "Can impersonate any identity",
+    ),
     ({"get", "list", "watch"}, {"secrets"}, "HIGH", "Can read all secrets in scope"),
     ({"create"}, {"pods"}, "HIGH", "Can create pods (deploy workloads)"),
     ({"create"}, {"pods/exec"}, "HIGH", "Can exec into pods (command execution)"),
@@ -57,7 +80,9 @@ def run_kubectl_json(args: list):
         return None
 
 
-def check_role_rules(rules: list, role_name: str, role_type: str, namespace: str, report: RBACAuditReport):
+def check_role_rules(
+    rules: list, role_name: str, role_type: str, namespace: str, report: RBACAuditReport
+):
     """Analyze role rules for dangerous permissions."""
     for rule in rules:
         verbs = set(rule.get("verbs", []))
@@ -69,15 +94,17 @@ def check_role_rules(rules: list, role_name: str, role_type: str, namespace: str
             resource_match = "*" in resources or bool(resources & req_resources)
 
             if verb_match and resource_match:
-                report.findings.append(RBACFinding(
-                    resource_type=role_type,
-                    resource_name=role_name,
-                    namespace=namespace,
-                    severity=severity,
-                    issue=description,
-                    details=f"verbs={list(verbs)}, resources={list(resources)}, apiGroups={api_groups}",
-                    remediation=f"Restrict {role_type} '{role_name}' to minimum required permissions"
-                ))
+                report.findings.append(
+                    RBACFinding(
+                        resource_type=role_type,
+                        resource_name=role_name,
+                        namespace=namespace,
+                        severity=severity,
+                        issue=description,
+                        details=f"verbs={list(verbs)}, resources={list(resources)}, apiGroups={api_groups}",
+                        remediation=f"Restrict {role_type} '{role_name}' to minimum required permissions",
+                    )
+                )
                 break
 
 
@@ -94,7 +121,10 @@ def audit_cluster_roles(report: RBACAuditReport):
     for cr in items:
         name = cr["metadata"]["name"]
         # Skip well-known system roles
-        if name.startswith("system:") and name not in ("system:aggregate-to-admin", "system:aggregate-to-edit"):
+        if name.startswith("system:") and name not in (
+            "system:aggregate-to-admin",
+            "system:aggregate-to-edit",
+        ):
             continue
 
         rules = cr.get("rules", [])
@@ -142,27 +172,31 @@ def audit_bindings(report: RBACAuditReport):
             s_kind = subject.get("kind", "")
 
             if s_name in dangerous_subjects and role_ref in admin_roles:
-                report.findings.append(RBACFinding(
-                    resource_type="ClusterRoleBinding",
-                    resource_name=name,
-                    namespace="cluster-wide",
-                    severity="CRITICAL",
-                    issue=f"Dangerous subject '{s_name}' bound to '{role_ref}'",
-                    details=f"Subject {s_kind}/{s_name} has {role_ref} access",
-                    remediation=f"Remove or restrict ClusterRoleBinding '{name}'"
-                ))
+                report.findings.append(
+                    RBACFinding(
+                        resource_type="ClusterRoleBinding",
+                        resource_name=name,
+                        namespace="cluster-wide",
+                        severity="CRITICAL",
+                        issue=f"Dangerous subject '{s_name}' bound to '{role_ref}'",
+                        details=f"Subject {s_kind}/{s_name} has {role_ref} access",
+                        remediation=f"Remove or restrict ClusterRoleBinding '{name}'",
+                    )
+                )
 
             # Check for system:authenticated bound to admin roles
             if s_name == "system:authenticated" and role_ref in admin_roles:
-                report.findings.append(RBACFinding(
-                    resource_type="ClusterRoleBinding",
-                    resource_name=name,
-                    namespace="cluster-wide",
-                    severity="CRITICAL",
-                    issue=f"All authenticated users have '{role_ref}' access",
-                    details=f"Group system:authenticated bound to {role_ref}",
-                    remediation=f"Remove binding, use specific user/group bindings"
-                ))
+                report.findings.append(
+                    RBACFinding(
+                        resource_type="ClusterRoleBinding",
+                        resource_name=name,
+                        namespace="cluster-wide",
+                        severity="CRITICAL",
+                        issue=f"All authenticated users have '{role_ref}' access",
+                        details=f"Group system:authenticated bound to {role_ref}",
+                        remediation="Remove binding, use specific user/group bindings",
+                    )
+                )
 
 
 def audit_service_accounts(report: RBACAuditReport):
@@ -178,21 +212,23 @@ def audit_service_accounts(report: RBACAuditReport):
 
     # Check default SAs that have non-default bindings
     crbs = run_kubectl_json(["get", "clusterrolebindings"])
-    rbs = run_kubectl_json(["get", "rolebindings", "-A"])
+    run_kubectl_json(["get", "rolebindings", "-A"])
 
     if crbs:
         for crb in crbs.get("items", []):
             for subject in crb.get("subjects", []) or []:
                 if subject.get("kind") == "ServiceAccount" and subject.get("name") == "default":
-                    report.findings.append(RBACFinding(
-                        resource_type="ServiceAccount",
-                        resource_name=f"default ({subject.get('namespace', 'unknown')})",
-                        namespace=subject.get("namespace", "unknown"),
-                        severity="HIGH",
-                        issue=f"Default SA bound to ClusterRole '{crb['roleRef']['name']}'",
-                        details="Default service account should not have additional permissions",
-                        remediation="Create dedicated service account, remove default SA binding"
-                    ))
+                    report.findings.append(
+                        RBACFinding(
+                            resource_type="ServiceAccount",
+                            resource_name=f"default ({subject.get('namespace', 'unknown')})",
+                            namespace=subject.get("namespace", "unknown"),
+                            severity="HIGH",
+                            issue=f"Default SA bound to ClusterRole '{crb['roleRef']['name']}'",
+                            details="Default service account should not have additional permissions",
+                            remediation="Create dedicated service account, remove default SA binding",
+                        )
+                    )
 
 
 def print_report(report: RBACAuditReport):
@@ -237,8 +273,14 @@ def main():
             "findings": len(report.findings),
         },
         "findings": [
-            {"type": f.resource_type, "name": f.resource_name, "namespace": f.namespace,
-             "severity": f.severity, "issue": f.issue, "remediation": f.remediation}
+            {
+                "type": f.resource_type,
+                "name": f.resource_name,
+                "namespace": f.namespace,
+                "severity": f.severity,
+                "issue": f.issue,
+                "remediation": f.remediation,
+            }
             for f in report.findings
         ],
     }

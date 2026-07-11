@@ -16,29 +16,26 @@ Usage:
     python process.py benchmark
 """
 
-import os
-import sys
-import json
-import time
-import hashlib
 import argparse
-import logging
-import datetime
 import base64
+import contextlib
+import datetime
+import hashlib
+import json
+import logging
+import time
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Optional
 
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
-from cryptography.hazmat.primitives import serialization
 from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
-def generate_ed25519_keypair(
-    output_dir: str, passphrase: Optional[str] = None
-) -> Dict:
+def generate_ed25519_keypair(output_dir: str, passphrase: Optional[str] = None) -> dict:
     """Generate an Ed25519 key pair."""
     private_key = Ed25519PrivateKey.generate()
     public_key = private_key.public_key()
@@ -119,7 +116,7 @@ def verify_data(data: bytes, signature: bytes, public_key: Ed25519PublicKey) -> 
         return False
 
 
-def sign_file(key_path: str, input_path: str, passphrase: Optional[str] = None) -> Dict:
+def sign_file(key_path: str, input_path: str, passphrase: Optional[str] = None) -> dict:
     """Sign a file and save the signature."""
     private_key = load_private_key(key_path, passphrase)
     data = Path(input_path).read_bytes()
@@ -145,7 +142,7 @@ def sign_file(key_path: str, input_path: str, passphrase: Optional[str] = None) 
     }
 
 
-def verify_file(key_path: str, input_path: str, sig_path: str) -> Dict:
+def verify_file(key_path: str, input_path: str, sig_path: str) -> dict:
     """Verify a file's Ed25519 signature."""
     public_key = load_public_key(key_path)
     data = Path(input_path).read_bytes()
@@ -153,10 +150,8 @@ def verify_file(key_path: str, input_path: str, sig_path: str) -> Dict:
 
     # Handle base64 encoded signatures
     if len(signature) != 64:
-        try:
+        with contextlib.suppress(Exception):
             signature = base64.b64decode(signature)
-        except Exception:
-            pass
 
     valid = verify_data(data, signature, public_key)
     logger.info(f"Verification: {'VALID' if valid else 'INVALID'}")
@@ -169,7 +164,7 @@ def verify_file(key_path: str, input_path: str, sig_path: str) -> Dict:
     }
 
 
-def code_sign(key_path: str, artifact_path: str, passphrase: Optional[str] = None) -> Dict:
+def code_sign(key_path: str, artifact_path: str, passphrase: Optional[str] = None) -> dict:
     """Create a code signing manifest for an artifact."""
     private_key = load_private_key(key_path, passphrase)
     data = Path(artifact_path).read_bytes()
@@ -205,7 +200,7 @@ def code_sign(key_path: str, artifact_path: str, passphrase: Optional[str] = Non
     return signed_manifest
 
 
-def verify_code_signature(manifest_path: str, artifact_path: str) -> Dict:
+def verify_code_signature(manifest_path: str, artifact_path: str) -> dict:
     """Verify a code signing manifest."""
     signed_manifest = json.loads(Path(manifest_path).read_text())
     signature = base64.b64decode(signed_manifest["signature"])

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Historian server attack detection agent for ICS/SCADA environments."""
 
-import json
-import sys
 import argparse
+import json
 import socket
+import sys
 from datetime import datetime
 
 try:
@@ -39,7 +39,7 @@ def scan_historian_ports(host):
                 result["finding"] = f"Historian port {port} ({service}) accessible"
                 result["severity"] = "HIGH"
             results.append(result)
-        except socket.error:
+        except OSError:
             pass
     return results
 
@@ -51,34 +51,41 @@ def check_pi_web_api(host, username=None, password=None):
     results = {"host": host, "checks": []}
 
     try:
-        resp = requests.get(f"{base}/system", auth=auth, verify=False, timeout=10)
+        resp = requests.get(f"{base}/system", auth=auth, verify=True, timeout=10)
         if resp.status_code == 200:
             data = resp.json()
             results["product_version"] = data.get("ProductTitle", "")
-            results["checks"].append({
-                "check": "PI Web API accessible",
-                "status": "PASS" if auth else "FAIL",
-                "detail": "Anonymous access enabled" if not auth and resp.status_code == 200 else "",
-                "severity": "CRITICAL" if not auth else "INFO",
-            })
+            results["checks"].append(
+                {
+                    "check": "PI Web API accessible",
+                    "status": "PASS" if auth else "FAIL",
+                    "detail": "Anonymous access enabled"
+                    if not auth and resp.status_code == 200
+                    else "",
+                    "severity": "CRITICAL" if not auth else "INFO",
+                }
+            )
     except requests.exceptions.ConnectionError:
         results["checks"].append({"check": "PI Web API", "status": "UNREACHABLE"})
     except Exception as e:
         results["error"] = str(e)
 
     try:
-        resp = requests.get(f"{base}/points", auth=auth, verify=False,
-                            params={"maxCount": 10}, timeout=10)
+        resp = requests.get(
+            f"{base}/points", auth=auth, verify=True, params={"maxCount": 10}, timeout=10
+        )
         if resp.status_code == 200:
             points = resp.json().get("Items", [])
             results["exposed_points"] = len(points)
             results["sample_points"] = [p.get("Name", "") for p in points[:5]]
             if not auth:
-                results["checks"].append({
-                    "check": "Point data accessible without auth",
-                    "status": "FAIL",
-                    "severity": "CRITICAL",
-                })
+                results["checks"].append(
+                    {
+                        "check": "Point data accessible without auth",
+                        "status": "FAIL",
+                        "severity": "CRITICAL",
+                    }
+                )
     except Exception:
         pass
 
@@ -120,29 +127,33 @@ def analyze_historian_logs(log_entries):
 
     for ip, count in failed_logins.items():
         if count > 5:
-            findings.append({
-                "ip": ip,
-                "issue": f"Brute force attempt: {count} failed logins",
-                "severity": "HIGH",
-            })
+            findings.append(
+                {
+                    "ip": ip,
+                    "issue": f"Brute force attempt: {count} failed logins",
+                    "severity": "HIGH",
+                }
+            )
 
     for ip, points in bulk_reads.items():
         if points > 10000:
-            findings.append({
-                "ip": ip,
-                "issue": f"Bulk data exfiltration: {points} points read",
-                "severity": "CRITICAL",
-            })
+            findings.append(
+                {
+                    "ip": ip,
+                    "issue": f"Bulk data exfiltration: {points} points read",
+                    "severity": "CRITICAL",
+                }
+            )
 
     return findings
 
 
 def run_audit(args):
     """Execute historian server attack detection audit."""
-    print(f"\n{'='*60}")
-    print(f"  HISTORIAN SERVER ATTACK DETECTION")
+    print(f"\n{'=' * 60}")
+    print("  HISTORIAN SERVER ATTACK DETECTION")
     print(f"  Generated: {datetime.utcnow().isoformat()} UTC")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     report = {}
 
@@ -152,21 +163,21 @@ def run_audit(args):
         report["port_scan"] = port_scan
         print(f"--- HISTORIAN PORT SCAN ({args.host}) ---")
         for p in open_ports:
-            print(f"  [{p.get('severity','INFO')}] Port {p['port']}: {p['service']}")
+            print(f"  [{p.get('severity', 'INFO')}] Port {p['port']}: {p['service']}")
         if not open_ports:
             print("  No historian ports detected")
 
     if args.pi_host:
         pi = check_pi_web_api(args.pi_host, args.pi_user, args.pi_pass)
         report["pi_web_api"] = pi
-        print(f"\n--- PI WEB API CHECK ---")
+        print("\n--- PI WEB API CHECK ---")
         for c in pi.get("checks", []):
-            print(f"  [{c.get('severity','INFO')}] {c['check']}: {c['status']}")
+            print(f"  [{c.get('severity', 'INFO')}] {c['check']}: {c['status']}")
 
     if args.ignition_host:
         ign = check_ignition_gateway(args.ignition_host, args.ignition_port or 8088)
         report["ignition_gateway"] = ign
-        print(f"\n--- IGNITION GATEWAY CHECK ---")
+        print("\n--- IGNITION GATEWAY CHECK ---")
         print(f"  Accessible: {ign.get('gateway_accessible', False)}")
         if ign.get("finding"):
             print(f"  [{ign['severity']}] {ign['finding']}")

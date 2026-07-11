@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 """Agent for auditing and configuring Google Workspace SAML SSO."""
 
-import json
 import argparse
-import subprocess
-import re
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -58,11 +56,17 @@ def audit_sso_config(config_path):
     if cert_path and Path(cert_path).exists():
         cert_info = parse_saml_certificate(cert_path)
         if cert_info.get("expired"):
-            findings.append({"issue": "IdP certificate expired", "severity": "CRITICAL",
-                             "detail": cert_info})
+            findings.append(
+                {"issue": "IdP certificate expired", "severity": "CRITICAL", "detail": cert_info}
+            )
         elif cert_info.get("days_until_expiry", 999) < 30:
-            findings.append({"issue": f"IdP cert expires in {cert_info['days_until_expiry']} days",
-                             "severity": "HIGH", "detail": cert_info})
+            findings.append(
+                {
+                    "issue": f"IdP cert expires in {cert_info['days_until_expiry']} days",
+                    "severity": "HIGH",
+                    "detail": cert_info,
+                }
+            )
         key_size = cert_info.get("key_size", 0)
         if key_size and key_size < 2048:
             findings.append({"issue": f"Weak IdP cert key size: {key_size}", "severity": "HIGH"})
@@ -73,8 +77,13 @@ def audit_sso_config(config_path):
         findings.append({"issue": "Domain-specific issuer not enabled", "severity": "MEDIUM"})
 
     if sso.get("allow_password_auth_when_sso_enabled", True):
-        findings.append({"issue": "Password auth still allowed alongside SSO", "severity": "MEDIUM",
-                         "recommendation": "Disable direct password login for SSO users"})
+        findings.append(
+            {
+                "issue": "Password auth still allowed alongside SSO",
+                "severity": "MEDIUM",
+                "recommendation": "Disable direct password login for SSO users",
+            }
+        )
 
     if not findings:
         findings.append({"issue": "No issues found", "severity": "INFO"})
@@ -94,7 +103,7 @@ def generate_saml_config(idp_entity_id, sso_url, slo_url, cert_path, domain):
         "saml_settings": {
             "idp_entity_id": idp_entity_id,
             "sp_entity_id": f"google.com/a/{domain}",
-            "acs_url": f"https://accounts.google.com/samlrp/acs?rpid=RPID",
+            "acs_url": "https://accounts.google.com/samlrp/acs?rpid=RPID",
             "name_id_format": "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",
         },
     }
@@ -125,8 +134,9 @@ def main():
     parser.add_argument("--config", help="SSO config JSON to audit")
     parser.add_argument("--cert", help="IdP SAML certificate PEM file")
     parser.add_argument("--login-log", help="Login activity log JSON")
-    parser.add_argument("--action", choices=["audit", "cert", "activity", "generate", "full"],
-                        default="full")
+    parser.add_argument(
+        "--action", choices=["audit", "cert", "activity", "generate", "full"], default="full"
+    )
     parser.add_argument("--idp-url", help="IdP SSO URL")
     parser.add_argument("--domain", help="Google Workspace domain")
     parser.add_argument("--output", default="gws_sso_report.json")

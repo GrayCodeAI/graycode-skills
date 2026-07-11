@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """URLScan.io Malicious URL Analysis Agent - Submits and analyzes URLs via the urlscan.io API."""
 
-import json
-import time
-import logging
 import argparse
+import json
+import logging
+import time
 from datetime import datetime
 
 import requests
@@ -58,11 +58,30 @@ def analyze_result(result):
     community = verdicts.get("community", {})
 
     if overall.get("malicious"):
-        findings.append({"type": "Malicious verdict", "severity": "critical", "source": "overall", "score": overall.get("score", 0)})
+        findings.append(
+            {
+                "type": "Malicious verdict",
+                "severity": "critical",
+                "source": "overall",
+                "score": overall.get("score", 0),
+            }
+        )
     if urlscan_verdict.get("malicious"):
-        findings.append({"type": "URLScan malicious", "severity": "critical", "score": urlscan_verdict.get("score", 0)})
+        findings.append(
+            {
+                "type": "URLScan malicious",
+                "severity": "critical",
+                "score": urlscan_verdict.get("score", 0),
+            }
+        )
     if community.get("score", 0) < 0:
-        findings.append({"type": "Negative community score", "severity": "high", "score": community.get("score")})
+        findings.append(
+            {
+                "type": "Negative community score",
+                "severity": "high",
+                "score": community.get("score"),
+            }
+        )
 
     page = result.get("page", {})
     lists = result.get("lists", {})
@@ -71,24 +90,41 @@ def analyze_result(result):
     if lists.get("ips", []):
         for ip in lists["ips"]:
             if ip.get("malicious"):
-                findings.append({"type": "Malicious IP contacted", "severity": "high", "ip": ip.get("ip"), "asn": ip.get("asn")})
+                findings.append(
+                    {
+                        "type": "Malicious IP contacted",
+                        "severity": "high",
+                        "ip": ip.get("ip"),
+                        "asn": ip.get("asn"),
+                    }
+                )
 
     for cert in lists.get("certificates", []):
         if cert.get("validTo"):
             try:
                 exp = datetime.fromisoformat(cert["validTo"].replace("Z", "+00:00"))
                 if exp < datetime.now(exp.tzinfo):
-                    findings.append({"type": "Expired TLS certificate", "severity": "medium", "subject": cert.get("subjectName")})
+                    findings.append(
+                        {
+                            "type": "Expired TLS certificate",
+                            "severity": "medium",
+                            "subject": cert.get("subjectName"),
+                        }
+                    )
             except (ValueError, TypeError):
                 pass
 
-    js_count = len([r for r in stats.get("resourceStats", []) if "javascript" in r.get("type", "").lower()])
+    js_count = len(
+        [r for r in stats.get("resourceStats", []) if "javascript" in r.get("type", "").lower()]
+    )
     if js_count > 20:
-        findings.append({"type": "High JavaScript resource count", "severity": "medium", "count": js_count})
+        findings.append(
+            {"type": "High JavaScript resource count", "severity": "medium", "count": js_count}
+        )
 
-    redirects = stats.get("uniqCountries", 0)
+    stats.get("uniqCountries", 0)
     if result.get("data", {}).get("requests"):
-        redirect_chain = [r.get("request", {}).get("redirectHasExtraInfo") for r in result["data"]["requests"][:5]]
+        [r.get("request", {}).get("redirectHasExtraInfo") for r in result["data"]["requests"][:5]]
 
     return {
         "url": page.get("url", ""),
