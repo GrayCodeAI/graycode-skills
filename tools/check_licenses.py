@@ -60,7 +60,8 @@ def main():
         return
 
     print(
-        f"{'⚠' if args.warn else '✗'} {len(violations)} copyleft-licensed skill(s) under an MIT repo:"
+        f"{'⚠' if args.warn else '✗'} {len(violations)} copyleft-licensed "
+        f"skill(s) under an MIT repo:"
     )
     for rel, name in violations:
         print(f"  - {rel}: {name}")

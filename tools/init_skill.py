@@ -39,7 +39,10 @@ def get_existing_skills() -> set:
 def validate_name(name: str, existing: set) -> str | None:
     """Return error message if name is invalid, else None."""
     if not KEBAB_RE.match(name):
-        return "Name must be kebab-case (lowercase letters, numbers, hyphens only, starting with a letter)."
+        return (
+            "Name must be kebab-case (lowercase letters, numbers, "
+            "hyphens only, starting with a letter)."
+        )
     if name in existing:
         return f"Skill '{name}' already exists."
     return None
@@ -95,7 +98,8 @@ def main():
         elif any(not tag_re.match(t) for t in tags):
             bad = [t for t in tags if not tag_re.match(t)]
             console.print(
-                f"[red]Invalid tag(s): {', '.join(bad)}. Must be lowercase alphanumeric with hyphens.[/red]"
+                f"[red]Invalid tag(s): {', '.join(bad)}. "
+                f"Must be lowercase alphanumeric with hyphens.[/red]"
             )
         else:
             break

@@ -121,7 +121,8 @@ def validate_skill(skill_path: Path) -> ValidationResult:
                 result.error("Tags must not be empty strings")
             elif not TAG_PATTERN.match(tag):
                 result.error(
-                    f"Tag '{tag}' is invalid: must be lowercase alphanumeric with hyphens (e.g. 'my-tag')"
+                    f"Tag '{tag}' is invalid: must be lowercase alphanumeric "
+                    f"with hyphens (e.g. 'my-tag')"
                 )
 
     # Check name matches directory
@@ -140,7 +141,8 @@ def validate_skill(skill_path: Path) -> ValidationResult:
         target_path = (skill_path / link_target).resolve()
         if not target_path.is_relative_to(skill_path.resolve()):
             result.warn(
-                f"Path traversal detected: [{link_text}]({link_target}) resolves outside skill directory"
+                f"Path traversal detected: [{link_text}]({link_target}) "
+                f"resolves outside skill directory"
             )
         elif not target_path.exists():
             result.warn(f"Broken internal reference: [{link_text}]({link_target})")
