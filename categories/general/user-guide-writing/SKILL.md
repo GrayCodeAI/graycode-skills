@@ -2,7 +2,7 @@
 name: user-guide-writing
 description: "Write clear and helpful user guides and tutorials for end users. Use when creating onboarding docs, how-to guides, or FAQ pages. Handles user-focused documentation, screenshots, step-by-step instru..."
 license: MIT
-tags: [user-guides, tutorials, documentation, onboarding, how-to, faq]
+tags: [user-guides, tutorials, documentation, onboarding, how-to]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

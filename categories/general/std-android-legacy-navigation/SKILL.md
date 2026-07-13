@@ -18,7 +18,7 @@ keywords: None
 - Use one Host Activity with `NavHostFragment`.
 - Enable SafeArgs plugin — MANDATORY for passing data between fragments.
 
-See [XML graph & SafeArgs examples](references/implementation.md) for NavHostFragment setup.
+See XML graph & SafeArgs examples for NavHostFragment setup.
 
 ## 2. Manage Navigation Graphs
 
@@ -27,7 +27,7 @@ See [XML graph & SafeArgs examples](references/implementation.md) for NavHostFra
 
 ## 3. Navigate with SafeArgs
 
-See [XML graph & SafeArgs examples](references/implementation.md) for type-safe navigation usage.
+See XML graph & SafeArgs examples for type-safe navigation usage.
 
 ## Anti-Patterns
 
@@ -36,4 +36,4 @@ See [XML graph & SafeArgs examples](references/implementation.md) for type-safe 
 
 ## References
 
-- [XML Graph & SafeArgs](references/implementation.md)
+- XML Graph & SafeArgs

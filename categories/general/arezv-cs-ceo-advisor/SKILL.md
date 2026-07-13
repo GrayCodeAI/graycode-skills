@@ -344,15 +344,15 @@ esac
 
 ## Related Agents
 
-- [cs-cto-advisor](cs-cto-advisor.md) - Technology strategy and engineering leadership (CTO counterpart)
-- [cs-product-manager](cs-product-manager.md) - Product strategy and roadmap execution (planned)
-- [cs-growth-strategist](cs-growth-strategist.md) - Growth strategy and market expansion (planned)
+- cs-cto-advisor - Technology strategy and engineering leadership (CTO counterpart)
+- cs-product-manager - Product strategy and roadmap execution (planned)
+- cs-growth-strategist - Growth strategy and market expansion (planned)
 
 ## References
 
 - **Skill Documentation:** [c-level-advisor/skills/ceo-advisor/SKILL.md](SKILL.md)
-- **C-Level Domain Guide:** [c-level-advisor/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **C-Level Domain Guide:** c-level-advisor/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 
 ---
 

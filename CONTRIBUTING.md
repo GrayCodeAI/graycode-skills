@@ -48,7 +48,11 @@ Use the [guided submission form](https://skilled.autohand.ai/submit) on skilled.
 5. **Validate** your skill:
    ```bash
    # Run the validation tool
-   python tools/validate_skill.py SKILL.md
+   python tools/validate_skill.py categories/<category>/<skill-name>
+
+   # Run the full-corpus zero-warning gate
+   python tools/validate_skill.py --all \
+     --warning-budget tools/validation_warning_budget.json
    
    # Update the registry (generates registry.json from all skills)
    python tools/update_registry.py
@@ -253,6 +257,32 @@ Update the `files` array in your registry entry:
    - [ ] No sensitive information (API keys, credentials, etc.)
    - [ ] Skill focuses on a single technology or pattern
    - [ ] License specified in frontmatter
+   - [ ] Full-corpus warning count is zero in every category
+
+### Zero-Warning Gate
+
+Every category in `tools/validation_warning_budget.json` is set to zero, and CI
+requires the live counts to match it exactly:
+
+- Any warning fails CI, even when the skill is otherwise structurally valid.
+- New warning categories start with zero allowance.
+- Never increase a budget or reclassify a warning as `uncategorized` to make CI
+  pass. Fix the source instead.
+
+For large mechanical repairs, use the checked-in migration tools. Both are dry
+runs unless `--write` is supplied:
+
+```bash
+# Preserve readable text while de-linking missing or escaping local references
+python tools/cleanup_internal_references.py --all
+
+# Preserve frontmatter and move oversized bodies into ordered references/
+python tools/migrate_oversized_skills.py --all
+```
+
+Review the proposed paths and counts before applying either migration, then run
+the full-corpus zero-warning command and the test suite. Do not add an allowlist
+entry to avoid fixing an oversized skill.
 
 ## Updating Existing Skills
 

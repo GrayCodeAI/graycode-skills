@@ -2,7 +2,7 @@
 name: implementing-ot-network-traffic-analysis-with-nozomi
 description: "Deploy Nozomi Networks Guardian sensors for passive OT network traffic analysis to achieve comprehensive asset visibility, real-time threat detection, and vulnerability assessment across industrial..."
 license: MIT
-tags: [ot-security, ics, nozomi, guardian, network-monitoring, asset-visibility, anomaly-detection, ndr]
+tags: [ot-security, ics, nozomi, guardian, network-monitoring]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

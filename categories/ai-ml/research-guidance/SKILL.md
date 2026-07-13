@@ -2,7 +2,7 @@
 name: research-guidance
 description: "Control LLM output with regex and grammars, guarantee valid JSON/XML/code generation, enforce structured formats, and build multi-step workflows with Guidance - Microsoft Research's constrained gen..."
 license: MIT
-tags: [prompt-engineering, guidance, constrained-generation, structured-output, json-validation, grammar, microsoft-research, format-enforcement, multi-step-workflows]
+tags: [prompt-engineering, guidance, constrained-generation, structured-output, json-validation]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [guidance, transformers]

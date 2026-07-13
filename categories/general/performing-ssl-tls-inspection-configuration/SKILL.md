@@ -2,7 +2,7 @@
 name: performing-ssl-tls-inspection-configuration
 description: "Configure SSL/TLS inspection on network security devices to decrypt, inspect, and re-encrypt HTTPS traffic for threat detection while managing certificates, exemptions, and privacy compliance."
 license: MIT
-tags: [ssl-inspection, tls-decryption, https-inspection, certificate-management, proxy, man-in-the-middle, network-security, forward-proxy]
+tags: [ssl-inspection, tls-decryption, https-inspection, certificate-management, proxy]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

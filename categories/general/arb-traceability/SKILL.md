@@ -7,7 +7,7 @@ tags: [general]
 
 # OBEY Clean Code by Robert C. Martin
 
-Canonical full source: [full.md](full.md)
+Canonical full source: full.md
 
 ## Compression decisions
 

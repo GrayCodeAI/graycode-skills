@@ -2,7 +2,7 @@
 name: performing-hardware-security-module-integration
 description: "Integrate Hardware Security Modules (HSMs) using PKCS#11 interface for cryptographic key management, signing operations, and secure key storage with python-pkcs11, AWS CloudHSM, and YubiHSM2."
 license: MIT
-tags: [hsm, pkcs11, cloudhsm, yubihsm2, key-management, cryptographic-operations, hardware-security]
+tags: [hsm, pkcs11, cloudhsm, yubihsm2, hardware-security]
 domain: cybersecurity
 subdomain: cryptography
 version: 1.0

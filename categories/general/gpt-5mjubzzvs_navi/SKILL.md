@@ -65,4 +65,4 @@ The badging system in NAVI is a unique feature designed to reward users as they 
 
 GPT Kb Files List:
 
-- [NAVI](./knowledge/NAVI/)
+- NAVI

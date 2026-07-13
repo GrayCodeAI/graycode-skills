@@ -2,7 +2,7 @@
 name: ag-uxui-principles
 description: "Evaluate interfaces against 168 research-backed UX/UI principles, detect antipatterns, and inject UX context into AI coding sessions."
 license: MIT
-tags: [ux, ui, design, evaluation, principles, antipatterns, accessibility]
+tags: [ux, ui, design, evaluation, principles]
 category: design
 risk: safe
 source: community

@@ -2,7 +2,7 @@
 name: reverse-engineering-ransomware-encryption-routine
 description: "Reverse engineer ransomware encryption routines to identify cryptographic algorithms, key generation flaws, and potential decryption opportunities using static and dynamic analysis."
 license: MIT
-tags: [ransomware, encryption, reverse-engineering, cryptanalysis, aes, rsa, decryption, malware-analysis]
+tags: [ransomware, encryption, reverse-engineering, cryptanalysis, aes]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

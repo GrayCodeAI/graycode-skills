@@ -53,7 +53,7 @@ test/**/*.e2e-spec.ts # E2E tests (full app flows)
 ## References
 
 Setup examples, mocking patterns, E2E flows, test builders, coverage config:
-[references/patterns.md](references/patterns.md)
+references/patterns.md
 
 Strict-TypeScript patterns (Jest matchers, mock typing, DTO verification):
-[references/strict-typescript-testing.md](references/strict-typescript-testing.md)
+references/strict-typescript-testing.md

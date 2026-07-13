@@ -74,4 +74,4 @@ Work step by step to search the files. This is very important to get right."
 
 GPT Kb Files List:
 
-- [ALL IN GPT](./knowledge/ALL%20IN%20GPT/)
+- ALL IN GPT

@@ -2,7 +2,7 @@
 name: detecting-service-account-abuse
 description: "Detect abuse of service accounts through anomalous interactive logons, privilege escalation, lateral movement, and unauthorized access patterns."
 license: MIT
-tags: [threat-hunting, mitre-attack, service-accounts, privilege-escalation, t1078, proactive-detection]
+tags: [threat-hunting, mitre-attack, service-accounts, privilege-escalation, t1078]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

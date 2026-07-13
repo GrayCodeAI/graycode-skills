@@ -21,7 +21,7 @@ keywords: None
 - **Universal Links**: Configure Associated Domains (`applinks`) in Entitlements.
 - **Tabs**: Maintain separate `NavigationStack` instances per `TabItem`.
 
-See [NavigationStack and deep linking examples](references/swiftui-navigation.md)
+See NavigationStack and deep linking examples
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [NavigationStack and deep linking examples](references/swiftui-navigation.md
 
 ## References
 
-- [Navigation Patterns](references/swiftui-navigation.md)
+- Navigation Patterns

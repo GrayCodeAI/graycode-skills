@@ -2,7 +2,7 @@
 name: arezv-slo-architect
 description: "Use when defining, reviewing, or operating SLOs/SLIs/error budgets. Triggers on \"define an SLO\", \"what should our SLO be\", \"error budget\", \"burn rate\", \"SLI\", \"service level objective\", \"Google SRE..."
 license: MIT
-tags: [slo, sli, sla, error-budget, burn-rate, sre, reliability, google-sre-workbook, observability]
+tags: [slo, sli, sla, error-budget, burn-rate]
 context: fork
 version: 2.4.4
 author: claude-code-skills

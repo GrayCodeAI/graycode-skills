@@ -2,7 +2,7 @@
 name: performing-privileged-account-discovery
 description: "Discover and inventory all privileged accounts across enterprise infrastructure including domain admins, local admins, service accounts, database admins, cloud IAM roles, and application admin account"
 license: MIT
-tags: [iam, identity, access-control, privileged-access, discovery, inventory]
+tags: [iam, identity, access-control, privileged-access, discovery]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

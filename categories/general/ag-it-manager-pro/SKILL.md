@@ -76,9 +76,9 @@ Leadership in a VUCA environment requires radical empathy and adaptability.
 - **Crisis Communication:** Drafting stakeholder updates during a critical P1 outage.
 
 ## References
-- [IT Manager's Handbook (2026 Edition)](./references/it-manager-handbook.md)
-- [Real-World Management Scenarios](./examples/management-scenarios.md)
-- [IT Management Frameworks (COBIT, TOGAF, NIST)](./references/it-management-frameworks.md)
+- IT Manager's Handbook (2026 Edition)
+- Real-World Management Scenarios
+- IT Management Frameworks (COBIT, TOGAF, NIST)
 - ITIL 5 Strategic Integration (See itil-expert skill)
 
 ## Limitations

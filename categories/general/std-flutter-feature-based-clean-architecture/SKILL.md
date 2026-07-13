@@ -22,7 +22,7 @@ Every feature lives in `lib/features/` with **3-layer separation** (domain/data/
 - `data/` — DTOs, DataSource, and Repository implementations.
 - `presentation/` — BLoC/Cubit, pages, and widgets.
 
-See [references/folder-structure.md](references/folder-structure.md) for complete directory blueprint.
+See references/folder-structure.md for complete directory blueprint.
 
 ## Implementation Workflow
 
@@ -35,12 +35,12 @@ See [references/folder-structure.md](references/folder-structure.md) for complet
 
 ### Feature Directory Example
 
-See [implementation examples](references/implementation.md) for full directory tree and cross-feature import patterns.
+See implementation examples for full directory tree and cross-feature import patterns.
 
 ## Reference & Examples
 
 For feature folder blueprints and cross-layer dependency templates:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Anti-Patterns
 

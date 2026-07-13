@@ -2,7 +2,7 @@
 name: analyzing-cyber-kill-chain
 description: "Analyzes intrusion activity against the Lockheed Martin Cyber Kill Chain framework to identify which phases an adversary has completed, where defenses succeeded or failed, and what controls would h..."
 license: MIT
-tags: [kill-chain, lockheed-martin, mitre-att-ck, intrusion-analysis, defense-in-depth, nist-csf]
+tags: [kill-chain, lockheed-martin, mitre-att-ck, intrusion-analysis, defense-in-depth]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

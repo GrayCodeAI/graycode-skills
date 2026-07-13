@@ -9,7 +9,7 @@ tags: [general]
 
 Handle errors gracefully in your Copilot SDK applications.
 
-> **Runnable example:** [recipe/error_handling.py](recipe/error_handling.py)
+> **Runnable example:** recipe/error_handling.py
 >
 > ```bash
 > cd recipe && pip install -r requirements.txt

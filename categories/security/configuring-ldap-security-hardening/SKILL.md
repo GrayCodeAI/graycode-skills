@@ -2,7 +2,7 @@
 name: configuring-ldap-security-hardening
 description: "Harden LDAP directory services against common attacks including credential harvesting, LDAP injection, anonymous binding, and channel binding bypass. Covers LDAPS enforcement, channel binding, LDAP si"
 license: MIT
-tags: [iam, identity, access-control, ldap, directory-services, hardening]
+tags: [iam, identity, access-control, ldap, hardening]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

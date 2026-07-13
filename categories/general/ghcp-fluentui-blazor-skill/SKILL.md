@@ -220,7 +220,7 @@ Use `FluentValidationMessage` and `FluentValidationSummary` instead of standard 
 
 For detailed guidance on specific topics, see:
 
-- [Setup and configuration](references/SETUP.md)
-- [Layout and navigation](references/LAYOUT-AND-NAVIGATION.md)
-- [Data grid](references/DATAGRID.md)
-- [Theming](references/THEMING.md)
+- Setup and configuration
+- Layout and navigation
+- Data grid
+- Theming

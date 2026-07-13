@@ -2,7 +2,7 @@
 name: authentication-setup
 description: "Design and implement authentication and authorization systems. Use when setting up user login, JWT tokens, OAuth, session management, or role-based access control. Handles password security, token ..."
 license: MIT
-tags: [authentication, authorization, security, jwt, oauth, rbac]
+tags: [authentication, authorization, security, jwt, oauth]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

@@ -30,4 +30,4 @@ keywords: None
 
 ## References
 
-- [Implementation Details](references/implementation.md)
+- Implementation Details

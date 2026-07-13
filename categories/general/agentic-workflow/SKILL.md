@@ -10,7 +10,6 @@ tags:
 - git
 - mcp
 - commands
-- multi-agent
 allowed-tools: Read Write Bash Grep Glob
 metadata: None
 platforms: Claude, Gemini, ChatGPT, Codex

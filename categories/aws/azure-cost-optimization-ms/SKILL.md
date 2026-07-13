@@ -21,7 +21,7 @@ Use this skill when the user asks to:
 - Find orphaned or unused resources
 - Rightsize Azure VMs, containers, or services
 - Identify where they're overspending in Azure
-- **Optimize Redis costs specifically** - See [Azure Redis Cost Optimization](./references/azure-redis.md) for Redis-specific analysis
+- **Optimize Redis costs specifically** - See Azure Redis Cost Optimization for Redis-specific analysis
 
 ## Instructions
 
@@ -34,7 +34,7 @@ Before starting, verify these tools and permissions are available:
 **Required Tools:**
 - Azure CLI installed and authenticated (`az login`)
 - Azure CLI extensions: `costmanagement`, `resource-graph`
-- Azure Quick Review (azqr) installed - See [Azure Quick Review](./references/azure-quick-review.md) for details
+- Azure Quick Review (azqr) installed - See Azure Quick Review for details
 
 **Required Permissions:**
 - Cost Management Reader role
@@ -66,7 +66,7 @@ mcp_azure_mcp_get_azure_bestpractices({
 
 **If the user specifically requests Redis cost optimization**, use the specialized Redis skill:
 
-📋 **Reference**: [Azure Redis Cost Optimization](./references/azure-redis.md)
+📋 **Reference**: Azure Redis Cost Optimization
 
 **When to use Redis-specific analysis:**
 - User mentions "Redis", "Azure Cache for Redis", or "Azure Managed Redis"
@@ -80,8 +80,8 @@ mcp_azure_mcp_get_azure_bestpractices({
 - Uses `redis_list` command
 
 **Report templates available:**
-- [Subscription-level Redis summary](./templates/redis-subscription-level-report.md)
-- [Detailed Redis cache analysis](./templates/redis-detailed-cache-analysis.md)
+- Subscription-level Redis summary
+- Detailed Redis cache analysis
 
 > **Note**: For general subscription-wide cost optimization (including Redis), continue with Step 2. For Redis-only focused analysis, follow the instructions in the Redis-specific reference document.
 ### Step 1.6: Choose Analysis Scope (for Redis-specific analysis)
@@ -101,7 +101,7 @@ Wait for user response before proceeding to Step 2.
 
 Run azqr to find orphaned resources (immediate cost savings):
 
-📋 **Reference**: [Azure Quick Review](./references/azure-quick-review.md) - Detailed instructions for running azqr scans
+📋 **Reference**: Azure Quick Review - Detailed instructions for running azqr scans
 
 ```javascript
 // Use Azure MCP extension_azqr tool
@@ -120,7 +120,7 @@ extension_azqr({
 
 ### Step 3: Discover Resources
 
-For efficient cross-subscription resource discovery, use Azure Resource Graph. See [Azure Resource Graph Queries](references/azure-resource-graph.md) for orphaned resource detection and cost optimization patterns.
+For efficient cross-subscription resource discovery, use Azure Resource Graph. See Azure Resource Graph Queries for orphaned resource detection and cost optimization patterns.
 
 List all resources in the subscription using Azure MCP tools or CLI:
 
@@ -392,4 +392,4 @@ The skill generates:
 
 ## SDK Quick References
 
-- **Redis Management**: [.NET](references/sdk/azure-resource-manager-redis-dotnet.md)
+- **Redis Management**: .NET

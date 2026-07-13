@@ -13,7 +13,7 @@ tags: [general]
 
 **prompts.chat** is a social platform for AI prompts built with Next.js 16 App Router, React 19, TypeScript, and PostgreSQL/Prisma. It allows users to share, discover, and collect prompts.
 
-For detailed agent guidelines, see [AGENTS.md](AGENTS.md).
+For detailed agent guidelines, see AGENTS.md.
 
 ## Quick Commands
 

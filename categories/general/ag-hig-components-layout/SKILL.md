@@ -34,18 +34,18 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [sidebars.md](references/sidebars.md) | Sidebars | Source lists, selection state, collapsible sections, iPad/Mac patterns |
-| [column-views.md](references/column-views.md) | Column Views | Finder-style browsing, progressive disclosure through columns |
-| [outline-views.md](references/outline-views.md) | Outline Views | Expandable hierarchies, disclosure triangles, tree structures |
-| [split-views.md](references/split-views.md) | Split Views | Two/three column layouts, NavigationSplitView, adaptive collapse |
-| [tab-views.md](references/tab-views.md) | Tab Views | Segmented tabs, page-style tabs, macOS tab grouping |
-| [tab-bars.md](references/tab-bars.md) | Tab Bars | Bottom tab bars (iOS), badge counts, max tab count |
-| [scroll-views.md](references/scroll-views.md) | Scroll Views | Paging, scroll indicators, content insets, pull-to-refresh |
-| [windows.md](references/windows.md) | Windows | macOS/visionOS window management, sizing, full-screen, restoration |
-| [panels.md](references/panels.md) | Panels | Inspector panels, utility panels, floating panels, macOS conventions |
-| [lists-and-tables.md](references/lists-and-tables.md) | Lists and Tables | Plain/grouped/inset-grouped styles, swipe actions, section headers |
-| [boxes.md](references/boxes.md) | Boxes | Content grouping containers, labeled boxes, macOS grouping |
-| [ornaments.md](references/ornaments.md) | Ornaments | visionOS toolbar attachments, positioning, visibility |
+| sidebars.md | Sidebars | Source lists, selection state, collapsible sections, iPad/Mac patterns |
+| column-views.md | Column Views | Finder-style browsing, progressive disclosure through columns |
+| outline-views.md | Outline Views | Expandable hierarchies, disclosure triangles, tree structures |
+| split-views.md | Split Views | Two/three column layouts, NavigationSplitView, adaptive collapse |
+| tab-views.md | Tab Views | Segmented tabs, page-style tabs, macOS tab grouping |
+| tab-bars.md | Tab Bars | Bottom tab bars (iOS), badge counts, max tab count |
+| scroll-views.md | Scroll Views | Paging, scroll indicators, content insets, pull-to-refresh |
+| windows.md | Windows | macOS/visionOS window management, sizing, full-screen, restoration |
+| panels.md | Panels | Inspector panels, utility panels, floating panels, macOS conventions |
+| lists-and-tables.md | Lists and Tables | Plain/grouped/inset-grouped styles, swipe actions, section headers |
+| boxes.md | Boxes | Content grouping containers, labeled boxes, macOS grouping |
+| ornaments.md | Ornaments | visionOS toolbar attachments, positioning, visibility |
 
 ## Navigation Pattern Selection
 

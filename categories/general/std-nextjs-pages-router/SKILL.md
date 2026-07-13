@@ -25,7 +25,7 @@ keywords: None
 
 ## getServerSideProps Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -45,4 +45,4 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Server-Side Props Example](references/server-side-props.md)
+- Server-Side Props Example

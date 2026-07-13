@@ -30,7 +30,7 @@ keywords: None
 ## Reference & Examples
 
 For Zustand, Redux Toolkit, and TanStack Query patterns:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Anti-Patterns
 

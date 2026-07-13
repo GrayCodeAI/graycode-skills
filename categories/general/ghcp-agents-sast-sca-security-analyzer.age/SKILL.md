@@ -20,7 +20,7 @@ argument-hint: Describe what to scan (e.g. 'scan src/ for SAST flaws', 'SCA audi
 
 ## Self-Reflection Quality Gate
 
-> **Skill Reference**: See [audit-integrity → self-reflection-quality-gate](self-reflection-quality-gate.md) for the shared 1–10 scoring rubric (≥8 threshold, max 2 rework iterations).
+> **Skill Reference**: See audit-integrity → self-reflection-quality-gate for the shared 1–10 scoring rubric (≥8 threshold, max 2 rework iterations).
 
 **SAST/SCA-specific quality gate categories** (extend the base categories from the skill):
 - **Completeness**: Were all SAST flaw categories and SCA ecosystems evaluated?

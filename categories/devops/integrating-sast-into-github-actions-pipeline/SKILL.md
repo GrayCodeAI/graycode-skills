@@ -2,7 +2,7 @@
 name: integrating-sast-into-github-actions-pipeline
 description: "This skill covers integrating Static Application Security Testing (SAST) tools—CodeQL and Semgrep—into GitHub Actions CI/CD pipelines. It addresses configuring automated code scanning on pull reque..."
 license: MIT
-tags: [devsecops, cicd, sast, codeql, semgrep, secure-sdlc]
+tags: [devsecops, cicd, sast, codeql, semgrep]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

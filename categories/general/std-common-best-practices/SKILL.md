@@ -35,5 +35,5 @@ keywords: None
 
 ## References
 
-- [Code Structure Patterns](references/CODE_STRUCTURE.md) — file/function organization
-- [Effectiveness Guide](references/EFFECTIVENESS.md) — practical application examples
+- Code Structure Patterns — file/function organization
+- Effectiveness Guide — practical application examples

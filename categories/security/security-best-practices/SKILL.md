@@ -2,7 +2,7 @@
 name: security-best-practices
 description: "Implement security best practices for web applications and infrastructure. Use when securing APIs, preventing common vulnerabilities, or implementing security policies. Handles HTTPS, CORS, XSS, SQ..."
 license: MIT
-tags: [security, https, cors, xss, sql-injection, csrf, owasp, rate-limiting]
+tags: [security, https, cors, xss, sql-injection]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

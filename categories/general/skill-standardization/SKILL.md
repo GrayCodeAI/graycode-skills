@@ -39,7 +39,7 @@ Content...
 2. Practice 2
 
 ## References
-- [Link](url)
+- Link
 ```
 
 ## Examples
@@ -77,5 +77,5 @@ grep -E "^## (When to use|Instructions|Examples|Best practices|References)" SKIL
 
 ## References
 
-- [README.md](README.md) - Repository overview and SKILL.md conventions
-- [.agent-skills/README.md](README.md) - Skill repository structure and examples
+- README.md - Repository overview and SKILL.md conventions
+- .agent-skills/README.md - Skill repository structure and examples

@@ -233,6 +233,6 @@ export async function getZoneDetails(zoneId: string) {
 
 ## See Also
 
-- [api.md](./api.md) - Error types, authentication
-- [configuration.md](./configuration.md) - Timeout/retry configuration
-- [patterns.md](./patterns.md) - Error handling patterns
+- api.md - Error types, authentication
+- configuration.md - Timeout/retry configuration
+- patterns.md - Error handling patterns

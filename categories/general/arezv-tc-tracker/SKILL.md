@@ -56,7 +56,7 @@ planned -> in_progress -> implemented -> tested -> deployed
         +-> planned
 ```
 
-> See [references/lifecycle.md](references/lifecycle.md) for the full transition table and recovery flows.
+> See references/lifecycle.md for the full transition table and recovery flows.
 
 ## Workflow Commands
 
@@ -124,7 +124,7 @@ python3 scripts/tc_validator.py --registry docs/TC/tc_registry.json
 
 Validator enforces the schema, checks state-machine legality, verifies sequential `R<n>` and `T<n>` IDs, and asserts approval consistency (`approved=true` requires `approved_by` and `approved_date`).
 
-> See [references/tc-schema.md](references/tc-schema.md) for the full schema.
+> See references/tc-schema.md for the full schema.
 
 ## Slash-Command Dispatcher
 
@@ -154,7 +154,7 @@ The handoff block lives at `session_context.handoff` inside each TC and is the s
 - `files_in_progress` — files being edited and their state (`editing`, `needs_review`, `partially_done`, `ready`)
 - `decisions_made` — architectural decisions with rationale and timestamp
 
-> See [references/handoff-format.md](references/handoff-format.md) for the full structure and fill-out rules.
+> See references/handoff-format.md for the full structure and fill-out rules.
 
 ## Validation Rules (Always Enforced)
 
@@ -204,6 +204,6 @@ For onboarding an existing project with undocumented history, build a `retro_cha
 
 ## References in This Skill
 
-- [references/tc-schema.md](references/tc-schema.md) — Full JSON schema for TC records and the registry.
-- [references/lifecycle.md](references/lifecycle.md) — State machine, valid transitions, and recovery flows.
-- [references/handoff-format.md](references/handoff-format.md) — Session handoff structure and best practices.
+- references/tc-schema.md — Full JSON schema for TC records and the registry.
+- references/lifecycle.md — State machine, valid transitions, and recovery flows.
+- references/handoff-format.md — Session handoff structure and best practices.

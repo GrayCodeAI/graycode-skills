@@ -87,7 +87,7 @@ Configuration.browserCapabilities.setCapability("LT:Options", Map.of(
 ## Setup: Maven `com.codeborne:selenide:7.0.0`
 ## Run: `mvn test` (auto-downloads browser driver)
 
-For TestMu AI cloud execution, see [reference/cloud-integration.md](reference/cloud-integration.md) and [shared/testmu-cloud-reference.md](testmu-cloud-reference.md).
+For TestMu AI cloud execution, see reference/cloud-integration.md and shared/testmu-cloud-reference.md.
 
 ## Deep Patterns
 

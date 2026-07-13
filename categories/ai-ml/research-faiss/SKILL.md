@@ -2,7 +2,7 @@
 name: research-faiss
 description: "Facebook's library for efficient similarity search and clustering of dense vectors. Supports billions of vectors, GPU acceleration, and various index types (Flat, IVF, HNSW). Use for fast k-NN sear..."
 license: MIT
-tags: [rag, faiss, similarity-search, vector-search, facebook-ai, gpu-acceleration, billion-scale, k-nn, hnsw, high-performance, large-scale]
+tags: [rag, faiss, similarity-search, vector-search, facebook-ai]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [faiss-cpu, faiss-gpu, numpy]

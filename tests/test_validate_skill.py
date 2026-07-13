@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 # Add tools/ to path so we can import the module under test
+import json
 import sys
 import textwrap
 from pathlib import Path
@@ -14,8 +15,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "tools"))
 from frontmatter import parse_frontmatter
 from validate_skill import (
     TAG_PATTERN,
+    WARNING_CATEGORIES,
     ValidationResult,
+    compare_warning_budget,
     find_all_skills,
+    load_warning_budget,
+    main,
+    path_exists_with_exact_case,
     validate_skill,
 )
 
@@ -113,6 +119,151 @@ class TestValidationResult:
         r.warn("just a warning")
         assert r.passed is True
         assert len(r.warnings) == 1
+        assert r.warning_counts == {"uncategorized": 1}
+
+    def test_warning_category_is_recorded(self, tmp_path: Path):
+        r = ValidationResult(tmp_path)
+        r.warn("broken", category="broken-internal-reference")
+        assert r.warning_counts == {"broken-internal-reference": 1}
+
+    def test_unknown_warning_category_is_rejected(self, tmp_path: Path):
+        r = ValidationResult(tmp_path)
+        with pytest.raises(ValueError, match="unknown warning category"):
+            r.warn("broken", category="new-unbudgeted-category")
+
+
+# ---------------------------------------------------------------------------
+# Warning budget ratchet
+# ---------------------------------------------------------------------------
+
+
+class TestWarningBudget:
+    @pytest.fixture
+    def budget(self) -> dict[str, int]:
+        return {category: 0 for category in WARNING_CATEGORIES}
+
+    def test_exact_budget_matches(self, budget: dict[str, int]):
+        budget["broken-internal-reference"] = 3
+        assert compare_warning_budget(budget, budget) == []
+
+    def test_growth_fails(self, budget: dict[str, int]):
+        actual = dict(budget)
+        actual["too-many-tags"] = 1
+        differences = compare_warning_budget(actual, budget)
+        assert differences == ["too-many-tags: 1 warnings exceeds the checked-in budget of 0"]
+
+    def test_reduction_requires_ratchet_update(self, budget: dict[str, int]):
+        budget["script-not-executable"] = 2
+        differences = compare_warning_budget({}, budget)
+        assert differences == [
+            "script-not-executable: 0 warnings is below the checked-in budget of 2; "
+            "lower the budget to lock in the improvement"
+        ]
+
+    def test_load_budget_rejects_missing_category(self, tmp_path: Path, budget: dict[str, int]):
+        budget.pop("uncategorized")
+        path = tmp_path / "budget.json"
+        path.write_text(json.dumps(budget), encoding="utf-8")
+        with pytest.raises(ValueError, match="missing categories: uncategorized"):
+            load_warning_budget(path)
+
+    def test_load_budget_rejects_unknown_category(self, tmp_path: Path, budget: dict[str, int]):
+        budget["mystery"] = 1
+        path = tmp_path / "budget.json"
+        path.write_text(json.dumps(budget), encoding="utf-8")
+        with pytest.raises(ValueError, match="unknown categories: mystery"):
+            load_warning_budget(path)
+
+    @pytest.mark.parametrize("invalid", [-1, 1.5, True, "1"])
+    def test_load_budget_rejects_invalid_count(
+        self, tmp_path: Path, budget: dict[str, int], invalid: object
+    ):
+        budget["uncategorized"] = invalid
+        path = tmp_path / "budget.json"
+        path.write_text(json.dumps(budget), encoding="utf-8")
+        with pytest.raises(ValueError, match="must be a non-negative integer"):
+            load_warning_budget(path)
+
+
+class TestWarningBudgetCli:
+    @staticmethod
+    def write_budget(path: Path, **overrides: int) -> None:
+        budget = {category: 0 for category in WARNING_CATEGORIES}
+        budget.update(overrides)
+        path.write_text(json.dumps(budget), encoding="utf-8")
+
+    def test_matching_budget_passes(
+        self,
+        skill_dir: Path,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ):
+        budget_path = tmp_path / "budget.json"
+        self.write_budget(budget_path)
+        monkeypatch.setattr("validate_skill.find_all_skills", lambda: [skill_dir])
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            ["validate_skill.py", "--all", "--warning-budget", str(budget_path)],
+        )
+
+        main()
+
+        output = capsys.readouterr().out
+        assert "Warning budget matches the checked-in baseline." in output
+        assert "TOTAL" in output
+
+    def test_warning_growth_fails(
+        self,
+        skill_dir: Path,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ):
+        content = (skill_dir / "SKILL.md").read_text(encoding="utf-8")
+        (skill_dir / "SKILL.md").write_text(
+            content.replace("tags: [testing, example]", "tags: [one, two, three, four, five, six]"),
+            encoding="utf-8",
+        )
+        budget_path = tmp_path / "budget.json"
+        self.write_budget(budget_path)
+        monkeypatch.setattr("validate_skill.find_all_skills", lambda: [skill_dir])
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            ["validate_skill.py", "--all", "--warning-budget", str(budget_path)],
+        )
+
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+
+        assert exc_info.value.code == 1
+        assert "too-many-tags: 1 warnings exceeds" in capsys.readouterr().out
+
+    def test_warning_reduction_requires_baseline_update(
+        self,
+        skill_dir: Path,
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        capsys: pytest.CaptureFixture[str],
+    ):
+        budget_path = tmp_path / "budget.json"
+        self.write_budget(budget_path, **{"script-not-executable": 1})
+        monkeypatch.setattr("validate_skill.find_all_skills", lambda: [skill_dir])
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            ["validate_skill.py", "--all", "--warning-budget", str(budget_path)],
+        )
+
+        with pytest.raises(SystemExit) as exc_info:
+            main()
+
+        assert exc_info.value.code == 1
+        output = capsys.readouterr().out
+        assert "script-not-executable: 0 warnings is below" in output
+        assert "the budget to lock in the improvement" in output
 
 
 # ---------------------------------------------------------------------------
@@ -290,6 +441,269 @@ class TestFindAllSkills:
 
 
 # ---------------------------------------------------------------------------
+# Markdown internal-reference scanning
+# ---------------------------------------------------------------------------
+
+
+class TestMarkdownInternalReferences:
+    @staticmethod
+    def write_body(skill_dir: Path, body: str, *, description: str = "A test skill") -> None:
+        (skill_dir / "SKILL.md").write_text(
+            textwrap.dedent(
+                f"""\
+                ---
+                name: test-skill
+                description: {description}
+                license: MIT
+                tags: [testing]
+                ---
+
+                {body}
+                """
+            ),
+            encoding="utf-8",
+        )
+
+    def test_code_examples_and_escaped_syntax_are_not_links(self, skill_dir: Path):
+        self.write_body(
+            skill_dir,
+            r"""
+            # Examples
+
+            ```markdown
+            [fenced](missing-fenced.md)
+            [escape](../outside-fence.md)
+            ```
+
+            ~~~~text
+            [tilde fenced](missing-tilde.md)
+            ~~~~
+
+            `[inline](missing-inline.md)` and
+            ``[inline with `](missing-inline-two.md)`` and
+            \[escaped](missing-escaped.md) are examples.
+
+            [real](missing-real.md) is a dependency.
+            """,
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 1
+        assert result.warning_counts["path-traversal"] == 0
+        assert result.warnings == ["SKILL.md: Broken internal reference: [real](missing-real.md)"]
+
+    def test_even_backslash_prefix_does_not_escape_a_real_link(self, skill_dir: Path):
+        self.write_body(skill_dir, r"Two slashes \\[real](missing.md) still precede a link.")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 1
+
+    def test_inline_code_in_real_link_label_is_preserved_in_warning(self, skill_dir: Path):
+        self.write_body(skill_dir, "Read [the `guide`](missing.md).")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == ["SKILL.md: Broken internal reference: [the `guide`](missing.md)"]
+
+    def test_invalid_escape_does_not_turn_whitespace_into_a_path(self, skill_dir: Path):
+        self.write_body(skill_dir, r"This is not a link: [guide](docs/My\ Guide.md).")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 0
+
+    def test_frontmatter_link_like_text_is_not_a_body_dependency(self, skill_dir: Path):
+        self.write_body(
+            skill_dir,
+            "# No body links",
+            description='"Example syntax: [label](missing.md)"',
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 0
+
+    def test_uri_anchor_and_same_document_targets_are_skipped(self, skill_dir: Path):
+        self.write_body(
+            skill_dir,
+            """
+            [HTTPS](HTTPS://example.com/docs?q=1#part)
+            [email](MAILTO:maintainer@example.com)
+            [custom](vscode://example/resource)
+            [cdn](//cdn.example.com/asset.png)
+            [anchor](#overview)
+            [query](?view=raw#overview)
+            [empty]()
+            """,
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 0
+        assert result.warning_counts["path-traversal"] == 0
+
+    def test_query_fragment_titles_and_encoded_paths_preserve_real_checks(self, skill_dir: Path):
+        docs = skill_dir / "docs"
+        docs.mkdir()
+        (docs / "Guide (v1).md").write_text("# Guide\n", encoding="utf-8")
+        self.write_body(
+            skill_dir,
+            """
+            [encoded](docs/Guide%20%28v1%29.md?raw=1#overview "Guide title")
+            [angle](<docs/Guide (v1).md#overview> 'Guide title')
+            ![asset](docs/Guide%20%28v1%29.md?download=1)
+            """,
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 0
+        assert result.warning_counts["path-traversal"] == 0
+
+    def test_query_fragment_does_not_hide_missing_or_wrong_case_path(self, skill_dir: Path):
+        docs = skill_dir / "docs"
+        docs.mkdir()
+        (docs / "Guide.md").write_text("# Guide\n", encoding="utf-8")
+        self.write_body(
+            skill_dir,
+            """
+            [missing](docs/missing.md?raw=1#overview)
+            [wrong case](docs/guide.md?raw=1#overview)
+            """,
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["broken-internal-reference"] == 2
+
+    def test_optional_title_is_not_part_of_missing_path(self, skill_dir: Path):
+        self.write_body(skill_dir, '[missing](docs/missing.md "Human title")')
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == [
+            "SKILL.md: Broken internal reference: [missing](docs/missing.md)"
+        ]
+
+    def test_nested_markdown_links_resolve_from_their_source_directory(self, skill_dir: Path):
+        references = skill_dir / "references"
+        references.mkdir()
+        assets = skill_dir / "assets"
+        assets.mkdir()
+        (assets / "sample.txt").write_text("sample\n", encoding="utf-8")
+        (references / "guide.md").write_text(
+            "[skill](../SKILL.md)\n"
+            "[asset](../assets/sample.txt)\n"
+            "[missing](missing.md?raw=1#example)\n",
+            encoding="utf-8",
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == [
+            "references/guide.md: Broken internal reference: [missing](missing.md?raw=1#example)"
+        ]
+
+    def test_nested_markdown_traversal_is_bounded_by_skill_root(self, skill_dir: Path):
+        nested = skill_dir / "references" / "nested"
+        nested.mkdir(parents=True)
+        (nested / "guide.md").write_text(
+            "[outside](../../../outside.md#example)\n", encoding="utf-8"
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == [
+            "references/nested/guide.md: Path traversal detected: "
+            "[outside](../../../outside.md#example) resolves outside skill directory"
+        ]
+
+    def test_markdown_sources_and_warnings_are_deterministically_ordered(self, skill_dir: Path):
+        self.write_body(skill_dir, "[skill missing](skill-missing.md)")
+        references = skill_dir / "references"
+        references.mkdir()
+        (references / "z.md").write_text("[z](z-missing.md)\n", encoding="utf-8")
+        (references / "a.md").write_text("[a](a-missing.md)\n", encoding="utf-8")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == [
+            "SKILL.md: Broken internal reference: [skill missing](skill-missing.md)",
+            "references/a.md: Broken internal reference: [a](a-missing.md)",
+            "references/z.md: Broken internal reference: [z](z-missing.md)",
+        ]
+
+    def test_markdown_source_symlink_cannot_escape_skill_root(
+        self, skill_dir: Path, tmp_path: Path
+    ):
+        outside = tmp_path / "outside.md"
+        outside.write_text("[external content](not-inside-skill.md)\n", encoding="utf-8")
+        references = skill_dir / "references"
+        references.mkdir()
+        link = references / "outside.md"
+        try:
+            link.symlink_to(outside)
+        except OSError as exc:
+            pytest.skip(f"symlinks are unavailable: {exc}")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["path-traversal"] == 1
+        assert result.warning_counts["broken-internal-reference"] == 0
+        assert result.warnings == [
+            "references/outside.md: Markdown source resolves outside skill directory"
+        ]
+
+    def test_link_target_symlink_cannot_escape_skill_root(self, skill_dir: Path, tmp_path: Path):
+        outside = tmp_path / "outside.txt"
+        outside.write_text("external\n", encoding="utf-8")
+        assets = skill_dir / "assets"
+        assets.mkdir()
+        link = assets / "outside.txt"
+        try:
+            link.symlink_to(outside)
+        except OSError as exc:
+            pytest.skip(f"symlinks are unavailable: {exc}")
+        self.write_body(skill_dir, "[outside](assets/outside.txt)")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["path-traversal"] == 1
+        assert result.warnings == [
+            "SKILL.md: Path traversal detected: [outside](assets/outside.txt) "
+            "resolves outside skill directory"
+        ]
+
+    def test_nested_markdown_keeps_exact_case_checks(self, skill_dir: Path):
+        references = skill_dir / "references"
+        references.mkdir()
+        (references / "Guide.md").write_text("# Guide\n", encoding="utf-8")
+        (references / "index.md").write_text("[guide](guide.md)\n", encoding="utf-8")
+
+        result = validate_skill(skill_dir)
+
+        assert result.warnings == [
+            "references/index.md: Broken internal reference: [guide](guide.md)"
+        ]
+
+    def test_encoded_and_windows_style_traversal_are_detected(self, skill_dir: Path):
+        self.write_body(
+            skill_dir,
+            r"""
+            [encoded](%2e%2e/secrets.md?raw=1#token)
+            [windows](..\secrets.md#token)
+            """,
+        )
+
+        result = validate_skill(skill_dir)
+
+        assert result.warning_counts["path-traversal"] == 2
+        assert result.warning_counts["broken-internal-reference"] == 0
+
+
+# ---------------------------------------------------------------------------
 # Path traversal detection
 # ---------------------------------------------------------------------------
 
@@ -328,6 +742,22 @@ class TestPathTraversal:
         result = validate_skill(skill_dir)
         # Should not have a path traversal warning
         assert not any("Path traversal" in w for w in result.warnings)
+
+    def test_internal_link_case_must_match_on_all_filesystems(self, skill_dir: Path):
+        docs = skill_dir / "docs"
+        docs.mkdir()
+        guide = docs / "Guide.md"
+        guide.write_text("# Guide\n", encoding="utf-8")
+        assert path_exists_with_exact_case(guide, skill_dir.resolve())
+        assert not path_exists_with_exact_case(docs / "guide.md", skill_dir.resolve())
+
+        (skill_dir / "SKILL.md").write_text(
+            "---\nname: test-skill\ndescription: A test\nlicense: MIT\ntags: [a]\n---\n\n"
+            "# Test\n\nSee [guide](docs/guide.md) for details.\n",
+            encoding="utf-8",
+        )
+        result = validate_skill(skill_dir)
+        assert any("Broken internal reference" in warning for warning in result.warnings)
 
     def test_external_url_not_flagged(self, skill_dir: Path):
         """External URLs (http/https) should not be checked for path traversal."""

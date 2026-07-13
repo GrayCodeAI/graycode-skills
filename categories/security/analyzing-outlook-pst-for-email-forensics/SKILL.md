@@ -2,7 +2,7 @@
 name: analyzing-outlook-pst-for-email-forensics
 description: "Analyze Microsoft Outlook PST and OST files for email forensic evidence including message content, headers, attachments, deleted items, and metadata using libpff, pst-utils, and forensic email anal..."
 license: MIT
-tags: [email-forensics, pst, ost, outlook, mapi, email-headers, attachments, deleted-emails, libpff, eml-extraction]
+tags: [email-forensics, pst, ost, outlook, email-headers]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

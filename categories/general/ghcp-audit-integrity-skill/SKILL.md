@@ -24,13 +24,13 @@ This skill provides 7 reusable capabilities. Agents apply all 7 unless their sco
 
 | Component | Reference File | Purpose |
 |-----------|---------------|---------|
-| Clarification Protocol | [clarification-protocol.md](references/clarification-protocol.md) | Ask ≤2 targeted questions before analysis when scope is ambiguous |
-| Anti-Rationalization Guard | [anti-rationalization-guard.md](references/anti-rationalization-guard.md) | Table of prohibited rationalizations with mandatory responses |
-| Self-Critique Loop | [self-critique-loop.md](references/self-critique-loop.md) | Mandatory second-pass review after initial analysis |
-| Retry Protocol | [retry-protocol.md](references/retry-protocol.md) | Tool failure handling — retry once, then document |
-| Non-Negotiable Behaviors | [non-negotiable-behaviors.md](references/non-negotiable-behaviors.md) | Hard rules: never fabricate, always cite evidence, report gaps |
-| Self-Reflection Quality Gate | [self-reflection-quality-gate.md](references/self-reflection-quality-gate.md) | 1–10 scoring rubric with ≥8 threshold per category |
-| Self-Learning System | [self-learning-system.md](references/self-learning-system.md) | Lesson/Memory templates and governance rules |
+| Clarification Protocol | clarification-protocol.md | Ask ≤2 targeted questions before analysis when scope is ambiguous |
+| Anti-Rationalization Guard | anti-rationalization-guard.md | Table of prohibited rationalizations with mandatory responses |
+| Self-Critique Loop | self-critique-loop.md | Mandatory second-pass review after initial analysis |
+| Retry Protocol | retry-protocol.md | Tool failure handling — retry once, then document |
+| Non-Negotiable Behaviors | non-negotiable-behaviors.md | Hard rules: never fabricate, always cite evidence, report gaps |
+| Self-Reflection Quality Gate | self-reflection-quality-gate.md | 1–10 scoring rubric with ≥8 threshold per category |
+| Self-Learning System | self-learning-system.md | Lesson/Memory templates and governance rules |
 
 ## Execution Flow
 

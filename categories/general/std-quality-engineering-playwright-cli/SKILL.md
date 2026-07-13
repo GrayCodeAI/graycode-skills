@@ -52,5 +52,5 @@ keywords: None
 ## 🔗 References
 
 - **Web Visual Testing**: [common-web-visual-testing](SKILL.md) — Methodology for what to verify.
-- **Anti-Patterns Rationale**: [anti-patterns-rationale](references/anti-patterns-rationale.md) — Why these rules exist.
-- **Project Context**: [project-context](references/project-context.md) — Project-specific market/VPN/auth patterns.
+- **Anti-Patterns Rationale**: anti-patterns-rationale — Why these rules exist.
+- **Project Context**: project-context — Project-specific market/VPN/auth patterns.

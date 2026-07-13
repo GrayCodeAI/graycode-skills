@@ -2,7 +2,7 @@
 name: hunting-for-t1098-account-manipulation
 description: "Hunt for MITRE ATT&CK T1098 account manipulation including shadow admin creation, SID history injection, group membership changes, and credential modifications using Windows Security Event Logs."
 license: MIT
-tags: [threat-hunting, mitre-attack, t1098, account-manipulation, active-directory, persistence]
+tags: [threat-hunting, mitre-attack, t1098, account-manipulation, active-directory]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

@@ -13,14 +13,14 @@ This skill is especially useful for gameplay-heavy plugins such as combat system
 
 For grounded implementation patterns drawn from real Paper plugins, load these references as needed:
 
-- [`references/project-patterns.md`](references/project-patterns.md) for high-level architecture patterns seen in real gameplay plugins
-- [`references/bootstrap-registration.md`](references/bootstrap-registration.md) for `onEnable`, command wiring, listener registration, and shutdown expectations
-- [`references/state-sessions-and-phases.md`](references/state-sessions-and-phases.md) for player session modeling, game phases, match state, and reconnect-safe logic
-- [`references/config-data-and-async.md`](references/config-data-and-async.md) for config managers, database-backed player data, async flushes, and UI refresh tasks
-- [`references/maps-heroes-and-feature-modules.md`](references/maps-heroes-and-feature-modules.md) for map rotation, hero or class systems, and modular feature growth
-- [`references/minigame-instance-flow.md`](references/minigame-instance-flow.md) for arena instances, countdowns, loot refreshes, wave systems, visibility isolation, and entity-to-game ownership
-- [`references/persistent-progression-and-events.md`](references/persistent-progression-and-events.md) for long-running PvP servers with profiles, perks, buffs, quests, economy, custom domain events, and extension registries
-- [`references/build-test-and-runtime-validation.md`](references/build-test-and-runtime-validation.md) for Maven or Gradle packaging, shaded dependencies, generated resources, soft dependencies, config validation commands, and first-round server test plans
+- `references/project-patterns.md` for high-level architecture patterns seen in real gameplay plugins
+- `references/bootstrap-registration.md` for `onEnable`, command wiring, listener registration, and shutdown expectations
+- `references/state-sessions-and-phases.md` for player session modeling, game phases, match state, and reconnect-safe logic
+- `references/config-data-and-async.md` for config managers, database-backed player data, async flushes, and UI refresh tasks
+- `references/maps-heroes-and-feature-modules.md` for map rotation, hero or class systems, and modular feature growth
+- `references/minigame-instance-flow.md` for arena instances, countdowns, loot refreshes, wave systems, visibility isolation, and entity-to-game ownership
+- `references/persistent-progression-and-events.md` for long-running PvP servers with profiles, perks, buffs, quests, economy, custom domain events, and extension registries
+- `references/build-test-and-runtime-validation.md` for Maven or Gradle packaging, shaded dependencies, generated resources, soft dependencies, config validation commands, and first-round server test plans
 
 ## Scope
 
@@ -46,13 +46,13 @@ When this skill triggers:
    - config and persistence
 5. Make the smallest coherent change that keeps registration, config, and runtime behavior aligned.
 
-If the plugin is gameplay-heavy or stateful, read [`references/project-patterns.md`](references/project-patterns.md) and [`references/state-sessions-and-phases.md`](references/state-sessions-and-phases.md) before editing.
+If the plugin is gameplay-heavy or stateful, read `references/project-patterns.md` and `references/state-sessions-and-phases.md` before editing.
 
-If the task touches arena isolation, map instances, chest or resource refills, wave spawning, route voting, spectator visibility, or game-specific chat, also read [`references/minigame-instance-flow.md`](references/minigame-instance-flow.md).
+If the task touches arena isolation, map instances, chest or resource refills, wave spawning, route voting, spectator visibility, or game-specific chat, also read `references/minigame-instance-flow.md`.
 
-If the task touches persistent player progression, profile saves, economy rewards, perks, buffs, quests, custom combat events, or long-running shared PvP servers, also read [`references/persistent-progression-and-events.md`](references/persistent-progression-and-events.md).
+If the task touches persistent player progression, profile saves, economy rewards, perks, buffs, quests, custom combat events, or long-running shared PvP servers, also read `references/persistent-progression-and-events.md`.
 
-If the task touches build files, `plugin.yml` metadata, shaded dependencies, generated resource output, deployment to a test server, optional plugin integrations, or release validation, also read [`references/build-test-and-runtime-validation.md`](references/build-test-and-runtime-validation.md).
+If the task touches build files, `plugin.yml` metadata, shaded dependencies, generated resource output, deployment to a test server, optional plugin integrations, or release validation, also read `references/build-test-and-runtime-validation.md`.
 
 ## Project Discovery Checklist
 

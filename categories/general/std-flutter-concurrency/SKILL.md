@@ -45,7 +45,7 @@ Dart uses a single-threaded event loop. All Flutter code runs on the Main Isolat
 - [ ] 4. Store worker's `SendPort` for bidirectional communication.
 - [ ] 5. Close ports and kill isolate on dispose.
 
-See [examples](references/isolate-examples.md) for complete code.
+See examples for complete code.
 
 ## Anti-Patterns
 
@@ -61,4 +61,4 @@ See [examples](references/isolate-examples.md) for complete code.
 
 ## References
 
-- [Isolate Examples](references/isolate-examples.md)
+- Isolate Examples

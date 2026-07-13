@@ -2,7 +2,7 @@
 name: lead-research-assistant
 description: "Identifies high-quality leads for your product or service by analyzing your business, searching for target companies, and providing actionable contact strategies."
 license: MIT
-tags: [sales, lead-generation, business-development, research, prospecting, marketing, outreach]
+tags: [sales, lead-generation, business-development, research, prospecting]
 domain: general
 subdomain: sales
 version: 1.0

@@ -602,4 +602,4 @@ mcp__claude-flow__task_orchestrate {
 }
 ```
 
-See also: [swarm-pr.md](.$swarm-pr.md), [swarm-issue.md](.$swarm-issue.md), [sync-coordinator.md](.$sync-coordinator.md)
+See also: swarm-pr.md, swarm-issue.md, sync-coordinator.md

@@ -2,7 +2,7 @@
 name: research-prompt-guard
 description: "Meta's 86M prompt injection and jailbreak detector. Filters malicious prompts and third-party data for LLM apps. 99%+ TPR, <1% FPR. Fast (<2ms GPU). Multilingual (8 languages). Deploy with HuggingF..."
 license: MIT
-tags: [safety-alignment, prompt-injection, jailbreak-detection, meta, input-validation, security, content-filtering, multilingual]
+tags: [safety-alignment, prompt-injection, jailbreak-detection, meta, input-validation]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch]

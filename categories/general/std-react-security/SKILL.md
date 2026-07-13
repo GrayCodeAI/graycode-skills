@@ -19,7 +19,7 @@ keywords: None
 - **Never use `dangerouslySetInnerHTML`** without sanitization. Use **`DOMPurify.sanitize(input)`** for all user-provided HTML.
 - Avoid `javascript:` protocols in `href` or `src`.
 
-See [implementation examples](references/REFERENCE.md#xss-prevention-with-dompurify) for DOMPurify sanitization and secure cookie configuration.
+See implementation examples for DOMPurify sanitization and secure cookie configuration.
 
 ## Secure Authentication
 
@@ -41,4 +41,4 @@ See [implementation examples](references/REFERENCE.md#xss-prevention-with-dompur
 
 ## References
 
-See [references/REFERENCE.md](references/REFERENCE.md) for DOMPurify usage, CSP headers, OAuth2/JWT auth patterns, and CSRF protection.
+See references/REFERENCE.md for DOMPurify usage, CSP headers, OAuth2/JWT auth patterns, and CSRF protection.

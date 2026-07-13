@@ -119,7 +119,7 @@ python skills/chief-data-officer-advisor/scripts/data_asset_valuator.py corpus.j
 
 ## Related
 
-- Agent: [`cs-cdo-advisor`](cs-cdo-advisor.md)
+- Agent: `cs-cdo-advisor`
 - Skill: [`chief-data-officer-advisor`](SKILL.md)
 - Adjacent: `skills/general-counsel-advisor/` (contractual constraints), `skills/cto-advisor/` (architecture capacity)
 

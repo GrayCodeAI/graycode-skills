@@ -71,4 +71,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [AI Tiny Games](./knowledge/AI%20Tiny%20Games/)
+- AI Tiny Games

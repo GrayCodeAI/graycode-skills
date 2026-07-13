@@ -2,7 +2,7 @@
 name: research-tensorrt-llm
 description: "Optimizes LLM inference with NVIDIA TensorRT for maximum throughput and lowest latency. Use for production deployment on NVIDIA GPUs (A100/H100), when you need 10-100x faster inference than PyTorch..."
 license: MIT
-tags: [inference-serving, tensorrt-llm, nvidia, inference-optimization, high-throughput, low-latency, production, fp8, int4, in-flight-batching, multi-gpu]
+tags: [inference-serving, tensorrt-llm, nvidia, inference-optimization, high-throughput]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [tensorrt-llm, torch]
@@ -174,9 +174,9 @@ outputs = llm.generate(
 
 ## References
 
-- **[Optimization Guide](references/optimization.md)** - Quantization, batching, KV cache tuning
-- **[Multi-GPU Setup](references/multi-gpu.md)** - Tensor/pipeline parallelism, multi-node
-- **[Serving Guide](references/serving.md)** - Production deployment, monitoring, autoscaling
+- **Optimization Guide** - Quantization, batching, KV cache tuning
+- **Multi-GPU Setup** - Tensor/pipeline parallelism, multi-node
+- **Serving Guide** - Production deployment, monitoring, autoscaling
 
 ## Resources
 

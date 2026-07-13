@@ -9,8 +9,6 @@ tags:
 - versioning
 - automation
 - ci-cd
-- swarm
-- orchestration
 version: 2.0.0
 category: github
 author: Claude Flow Team

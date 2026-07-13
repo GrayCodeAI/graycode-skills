@@ -2,7 +2,7 @@
 name: analyzing-browser-forensics-with-hindsight
 description: "Analyze Chromium-based browser artifacts using Hindsight to extract browsing history, downloads, cookies, cached content, autofill data, saved passwords, and browser extensions from Chrome, Edge, B..."
 license: MIT
-tags: [browser-forensics, hindsight, chrome-forensics, chromium, edge, browsing-history, cookies, downloads, cache, web-artifacts]
+tags: [browser-forensics, hindsight, chrome-forensics, chromium, edge]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

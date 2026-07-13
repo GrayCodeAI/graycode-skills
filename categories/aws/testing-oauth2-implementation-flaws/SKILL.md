@@ -2,7 +2,7 @@
 name: testing-oauth2-implementation-flaws
 description: "Tests OAuth 2.0 and OpenID Connect implementations for security flaws including authorization code interception, redirect URI manipulation, CSRF in OAuth flows, token leakage, scope escalation, and..."
 license: MIT
-tags: [api-security, oauth2, oidc, authentication, redirect-uri, token-security]
+tags: [api-security, oauth2, oidc, authentication, redirect-uri]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

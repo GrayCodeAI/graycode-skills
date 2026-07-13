@@ -32,4 +32,4 @@ keywords: None
 
 ## References
 
-- [Composition](references/composition.md)
+- Composition

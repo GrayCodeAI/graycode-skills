@@ -2,7 +2,7 @@
 name: performing-web-cache-poisoning-attack
 description: "Exploiting web cache mechanisms to serve malicious content to other users by poisoning cached responses through unkeyed headers and parameters during authorized security tests."
 license: MIT
-tags: [penetration-testing, cache-poisoning, web-security, cdn, burpsuite, owasp]
+tags: [penetration-testing, cache-poisoning, web-security, cdn, burpsuite]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

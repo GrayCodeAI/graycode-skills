@@ -10,9 +10,6 @@ tags:
 - research-rigor
 - peer-review
 - scoring
-- audit
-- falsifiability
-- research-tooling
 version: 3.0.0
 author: Orchestra Research
 dependencies: []
@@ -20,4 +17,4 @@ dependencies: []
 
 ## Reference
 
-See [references/review-dimensions.md](references/review-dimensions.md) for scoring anchor details and check inventories per dimension.
+See references/review-dimensions.md for scoring anchor details and check inventories per dimension.

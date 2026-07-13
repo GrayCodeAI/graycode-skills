@@ -151,9 +151,9 @@ See `references/ip_and_regulatory.md` for sequencing.
 
 ## References
 
-- [contracts_playbook.md](references/contracts_playbook.md) — Standard contracts, clause checklist, common founder traps
-- [ip_and_regulatory.md](references/ip_and_regulatory.md) — IP protection + regulatory landscape mapping
-- [term_sheet_decoder.md](references/term_sheet_decoder.md) — Term sheet glossary + founder-friendly defaults + pushback strategies
+- contracts_playbook.md — Standard contracts, clause checklist, common founder traps
+- ip_and_regulatory.md — IP protection + regulatory landscape mapping
+- term_sheet_decoder.md — Term sheet glossary + founder-friendly defaults + pushback strategies
 
 ---
 

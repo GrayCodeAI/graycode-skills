@@ -2,7 +2,7 @@
 name: performing-active-directory-penetration-test
 description: "Conduct a focused Active Directory penetration test to enumerate domain objects, discover attack paths with BloodHound, exploit Kerberos weaknesses, escalate privileges via ADCS/DCSync, and demonst..."
 license: MIT
-tags: [active-directory, bloodhound, kerberoasting, impacket, dcsync, adcs, domain-compromise, privilege-escalation]
+tags: [active-directory, bloodhound, kerberoasting, impacket, dcsync]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

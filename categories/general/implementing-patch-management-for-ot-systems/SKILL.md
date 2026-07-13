@@ -2,7 +2,7 @@
 name: implementing-patch-management-for-ot-systems
 description: "This skill covers implementing a structured patch management program for OT/ICS environments where traditional IT patching approaches can cause process disruption or safety hazards. It addresses ve..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, patch-management, vulnerability-management]
+tags: [ot-security, ics, scada, industrial-control, patch-management]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

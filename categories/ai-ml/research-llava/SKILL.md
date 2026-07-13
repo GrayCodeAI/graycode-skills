@@ -2,7 +2,7 @@
 name: research-llava
 description: "Large Language and Vision Assistant. Enables visual instruction tuning and image-based conversations. Combines CLIP vision encoder with Vicuna/LLaMA language models. Supports multi-turn image chat,..."
 license: MIT
-tags: [llava, vision-language, multimodal, visual-question-answering, image-chat, clip, vicuna, conversational-ai, instruction-tuning, vqa]
+tags: [llava, vision-language, multimodal, visual-question-answering, image-chat]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, pillow]

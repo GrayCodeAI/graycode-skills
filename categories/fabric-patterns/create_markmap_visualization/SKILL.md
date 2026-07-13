@@ -62,7 +62,7 @@ console('hello, JavaScript')
 | Apple    | 4     |
 | Banana   | 2     |
 
-![](/favicon.png)
+
 
 ```
 

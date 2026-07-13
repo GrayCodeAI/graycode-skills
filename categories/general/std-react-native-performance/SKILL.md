@@ -21,7 +21,7 @@ keywords: None
 - **`maxToRenderPerBatch`**: Limit to **5-10 items per frame** to prevent JS thread blockage.
 - **`keyExtractor`**: Use **stable unique IDs**, never array index.
 
-See [optimization guide](references/optimization-guide.md) for FlatList configuration examples with `getItemLayout`, `windowSize`, and memoization patterns.
+See optimization guide for FlatList configuration examples with `getItemLayout`, `windowSize`, and memoization patterns.
 
 ## Accelerate Core Rendering
 
@@ -46,4 +46,4 @@ See [optimization guide](references/optimization-guide.md) for FlatList configur
 
 ## References
 
-See [references/optimization-guide.md](references/optimization-guide.md) for FlatList configuration, memoization rules, and bundle analysis.
+See references/optimization-guide.md for FlatList configuration, memoization rules, and bundle analysis.

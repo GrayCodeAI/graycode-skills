@@ -2,7 +2,7 @@
 name: ag-idea-os
 description: "Five-phase pipeline (triage → clarify → research → PRD → plan) that turns a raw idea into four linked files: clarifying questions, deep research, a PRD with non-goals and metrics, and a phased exec..."
 license: MIT
-tags: [product-management, prd, market-research, mvp, idea-validation, jtbd, swot, competitor-analysis, founder, non-technical]
+tags: [product-management, prd, market-research, mvp, idea-validation]
 category: product-management
 risk: safe
 source: community

@@ -2,7 +2,7 @@
 name: implementing-opa-gatekeeper-for-policy-enforcement
 description: "Enforce Kubernetes admission policies using OPA Gatekeeper with ConstraintTemplates, Rego rules, and the Gatekeeper policy library."
 license: MIT
-tags: [opa, gatekeeper, kubernetes, admission-control, policy-as-code, rego]
+tags: [opa, gatekeeper, kubernetes, admission-control, policy-as-code]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

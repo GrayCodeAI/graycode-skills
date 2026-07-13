@@ -117,7 +117,7 @@ When multiple exceptions are active simultaneously (common during peak season or
 
 ## Key Edge Cases
 
-These are situations where the obvious approach is wrong. Brief summaries here — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where the obvious approach is wrong. Brief summaries here — see edge-cases.md for full analysis.
 
 1. **Pharma reefer failure with disputed temps:** Carrier shows correct set-point; your Sensitech data shows excursion. The dispute is about sensor placement and pre-cooling. Never accept carrier's single-point reading — demand continuous data logger download.
 
@@ -149,7 +149,7 @@ Match communication tone to situation severity and relationship:
 
 ### Key Templates
 
-Brief templates below. Full versions with variables in [communication-templates.md](references/communication-templates.md).
+Brief templates below. Full versions with variables in communication-templates.md.
 
 **Initial carrier inquiry:** Subject: `Exception Notice — PRO# {pro} / BOL# {bol}`. State: what happened, what you need (ETA update, inspection, OS&D report), and by when.
 
@@ -193,9 +193,9 @@ Track these metrics weekly and trend monthly:
 
 ## Additional Resources
 
-- For detailed decision frameworks, escalation matrices, and mode-specific workflows, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and tone guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks, escalation matrices, and mode-specific workflows, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For complete communication templates with variables and tone guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you need to **triage and resolve logistics exceptions or design exception-handling playbooks**:

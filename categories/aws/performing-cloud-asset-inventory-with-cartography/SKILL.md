@@ -2,7 +2,7 @@
 name: performing-cloud-asset-inventory-with-cartography
 description: "Perform comprehensive cloud asset inventory and relationship mapping using Cartography to build a Neo4j security graph of infrastructure assets, IAM permissions, and attack paths across AWS, GCP, a..."
 license: MIT
-tags: [cartography, neo4j, cloud-security, asset-inventory, attack-path, graph-database, cncf, lyft]
+tags: [cartography, neo4j, cloud-security, asset-inventory, attack-path]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

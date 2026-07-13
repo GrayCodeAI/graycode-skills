@@ -2,7 +2,7 @@
 name: testing-websocket-api-security
 description: "Tests WebSocket API implementations for security vulnerabilities including missing authentication on WebSocket upgrade, Cross-Site WebSocket Hijacking (CSWSH), injection attacks through WebSocket m..."
 license: MIT
-tags: [api-security, websocket, cswsh, real-time, injection, authentication]
+tags: [api-security, websocket, cswsh, real-time, injection]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

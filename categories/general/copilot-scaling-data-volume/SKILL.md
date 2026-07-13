@@ -18,14 +18,14 @@ and we never need to query across all the data, then we can use multi-tenancy pa
 
 The recommended way is to use multi-tenant workloads with payload partitioning, per-tenant indexes, and tiered multitenancy.
 
-Learn more [Tenant Scaling](tenant-scaling/SKILL.md)
+Learn more Tenant Scaling
 
 ## Sliding Time Window
 
 Some use-cases are based on a sliding time window, where only the most recent data is relevant.
 For example an index for social media posts, where only the last 6 months of data require fast search.
 
-Learn more [Sliding Time Window](sliding-time-window/SKILL.md)
+Learn more Sliding Time Window
 
 ## Global Search
 
@@ -39,10 +39,10 @@ and then horizontal scaling when we reach the limits of vertical scaling.
 When data doesn't fit in a single node, the first approach is to scale the node itself — more RAM, better disk, quantization, mmap.
 Exhaust vertical options before going horizontal, as horizontal scaling adds permanent operational complexity.
 
-Learn more [Vertical Scaling](vertical-scaling/SKILL.md)
+Learn more Vertical Scaling
 
 ### Horizontal Scaling
 
 When a single node can't hold the data even with quantization and mmap, distribute data across multiple nodes via sharding.
 
-Learn more [Horizontal Scaling](horizontal-scaling/SKILL.md)
+Learn more Horizontal Scaling

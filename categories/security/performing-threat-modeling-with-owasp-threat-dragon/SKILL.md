@@ -2,7 +2,7 @@
 name: performing-threat-modeling-with-owasp-threat-dragon
 description: "Use OWASP Threat Dragon to create data flow diagrams, identify threats using STRIDE and LINDDUN methodologies, and generate threat model reports for secure design review."
 license: MIT
-tags: [threat-modeling, owasp, threat-dragon, stride, linddun, secure-design, dfd, data-flow]
+tags: [threat-modeling, owasp, threat-dragon, stride, linddun]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0

@@ -33,4 +33,4 @@ keywords: None
 
 ## References
 
-- [Configuration](references/implementation.md)
+- Configuration

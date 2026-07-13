@@ -36,4 +36,4 @@ keywords: None
 
 ## References
 
-- [Full JUnit 5 + Mockito + AssertJ Template](references/junit-template.md)
+- Full JUnit 5 + Mockito + AssertJ Template

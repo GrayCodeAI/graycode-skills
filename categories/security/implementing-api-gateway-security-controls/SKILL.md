@@ -2,7 +2,7 @@
 name: implementing-api-gateway-security-controls
 description: "Implements security controls at the API gateway layer including authentication enforcement, rate limiting, request validation, IP allowlisting, TLS termination, and threat protection. The engineer ..."
 license: MIT
-tags: [api-security, api-gateway, kong, aws-api-gateway, rate-limiting, waf]
+tags: [api-security, api-gateway, kong, aws-api-gateway, rate-limiting]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

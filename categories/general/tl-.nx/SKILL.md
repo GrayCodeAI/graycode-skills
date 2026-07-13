@@ -18,7 +18,7 @@ This is a TypeScript monorepo managed by Nx, containing:
 - **Skill plugin** - Nx generator for creating new skills
 - **Skills collection** - Pre-built skills for AI agents (Claude, Cursor, Copilot, etc.)
 
-See [AGENTS.md](AGENTS.md) for comprehensive architectural context.
+See AGENTS.md for comprehensive architectural context.
 
 ## Confidence Rules
 
@@ -136,7 +136,7 @@ The following task patterns are safe to auto-apply when the agent has **high con
 
 ## Context
 
-See [AGENTS.md](AGENTS.md) for complete project architecture, monorepo structure, and development guidelines.
+See AGENTS.md for complete project architecture, monorepo structure, and development guidelines.
 
 Key configuration files:
 

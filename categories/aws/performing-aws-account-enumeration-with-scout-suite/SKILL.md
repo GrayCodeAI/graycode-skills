@@ -2,7 +2,7 @@
 name: performing-aws-account-enumeration-with-scout-suite
 description: "Perform comprehensive security posture assessment of AWS accounts using ScoutSuite to enumerate resources, identify misconfigurations, and generate actionable security reports."
 license: MIT
-tags: [aws, scoutsuite, cloud-security, enumeration, misconfiguration, security-audit, cspm, nccgroup]
+tags: [aws, scoutsuite, cloud-security, enumeration, misconfiguration]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

@@ -9,7 +9,6 @@ tags:
 - meta
 - root-cause
 - project-health
-- session-review
 risk: unknown
 source: community
 version: 1.0

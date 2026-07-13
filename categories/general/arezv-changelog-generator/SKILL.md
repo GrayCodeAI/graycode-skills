@@ -123,10 +123,10 @@ SemVer mapping:
 
 ## References
 
-- [references/ci-integration.md](references/ci-integration.md)
-- [references/changelog-formatting-guide.md](references/changelog-formatting-guide.md)
-- [references/monorepo-strategy.md](references/monorepo-strategy.md)
-- [README.md](README.md)
+- references/ci-integration.md
+- references/changelog-formatting-guide.md
+- references/monorepo-strategy.md
+- README.md
 
 ## Release Governance
 

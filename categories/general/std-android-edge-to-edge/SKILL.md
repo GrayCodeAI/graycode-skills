@@ -39,7 +39,7 @@ Choose ONE method per component to avoid double padding:
 2. **Material 3 components**: Use built-in inset handling (`TopAppBar`, `NavigationBar`, etc.).
 3. **Outside Scaffold**: Use `Modifier.safeDrawingPadding()` or `windowInsetsPadding`.
 
-See [inset patterns](references/inset-patterns.md) for RIGHT/WRONG code examples.
+See inset patterns for RIGHT/WRONG code examples.
 
 ## Step 4: Handle IME
 
@@ -48,7 +48,7 @@ For Activities with soft keyboard:
 - Add `imePadding()` or `fitInside(WindowInsetsRulers.Ime.current)` to content container.
 - Place `imePadding` BEFORE `verticalScroll()`.
 
-See [inset patterns](references/inset-patterns.md) for IME-specific RIGHT/WRONG patterns.
+See inset patterns for IME-specific RIGHT/WRONG patterns.
 
 ## Step 5: Lists and FABs
 
@@ -71,4 +71,4 @@ See [inset patterns](references/inset-patterns.md) for IME-specific RIGHT/WRONG 
 
 ## References
 
-- [Inset Patterns (RIGHT/WRONG)](references/inset-patterns.md)
+- Inset Patterns (RIGHT/WRONG)

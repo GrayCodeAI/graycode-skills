@@ -2,7 +2,7 @@
 name: hunting-for-lateral-movement-via-wmi
 description: "Detect WMI-based lateral movement by analyzing Windows Event ID 4688 process creation and Sysmon Event ID 1 for WmiPrvSE.exe child process patterns, remote process execution, and WMI event subscrip..."
 license: MIT
-tags: [threat-hunting, lateral-movement, wmi, sysmon, mitre-attack, process-creation]
+tags: [threat-hunting, lateral-movement, wmi, sysmon, mitre-attack]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

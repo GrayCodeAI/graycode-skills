@@ -84,7 +84,7 @@ If MCPs are unavailable, still produce items 1-3. Include the ffmpeg commands in
 
 ## Scene Design System
 
-See [references/scene-design-system.md](references/scene-design-system.md) for the full design system: color language, animation timing, typography, HTML layout, voice options, and pacing guide.
+See references/scene-design-system.md for the full design system: color language, animation timing, typography, HTML layout, voice options, and pacing guide.
 
 ## Quality Checklist
 

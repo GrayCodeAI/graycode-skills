@@ -15,7 +15,7 @@ keywords: None
 
 ## Structure
 
-See [implementation examples](references/implementation.md#directory-structure) for directory layout.
+See implementation examples for directory layout.
 
 ## Implement PHP Fibers (8.1+)
 
@@ -24,7 +24,7 @@ See [implementation examples](references/implementation.md#directory-structure) 
 - **Resuming**: Call **`$fiber->resume('hello')`** to continue execution. Catch exceptions via **`$fiber->getReturn()`**.
 - **Isolation**: Use **separate PDO connections per Fiber** to avoid shared mutable state.
 
-See [implementation examples](references/implementation.md#fiber-example) for Fiber cooperative multitasking code.
+See implementation examples for Fiber cooperative multitasking code.
 
 ## Configure Non-blocking I/O & Event Loops
 
@@ -33,7 +33,7 @@ See [implementation examples](references/implementation.md#fiber-example) for Fi
 - **I/O Safety**: **Never use blocking `file_get_contents` or `sleep()`** inside Fiber or EventLoop.
 - **Entry Point**: Run **`Loop::run()`** at your application entry point to start async loop.
 
-See [implementation examples](references/implementation.md#guzzle-pool-example) for concurrent HTTP requests with Guzzle Pool.
+See implementation examples for concurrent HTTP requests with Guzzle Pool.
 
 ## Choose Concurrency Strategies
 
@@ -48,4 +48,4 @@ See [implementation examples](references/implementation.md#guzzle-pool-example) 
 
 ## References
 
-- [Fiber Implementation Guide](references/implementation.md)
+- Fiber Implementation Guide

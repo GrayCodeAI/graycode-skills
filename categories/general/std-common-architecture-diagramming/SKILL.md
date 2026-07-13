@@ -17,16 +17,16 @@ keywords: None
 
 - **Use C4 Model**: Context -> Container -> Component -> Code.
 - **Audience-Centric**: Tailor abstraction (Execs vs. Devs).
-- **Select Type**: Sequence (Protocol), ERD (Data), State (Lifecycle), Cloud (Infra). See [Selection](references/diagram-selection.md).
+- **Select Type**: Sequence (Protocol), ERD (Data), State (Lifecycle), Cloud (Infra). See Selection.
 - **Explicit Labels**: Label every arrow (e.g., "Uses", "HTTPS").
 - **Consistent Notation**: Cylinders=DB, Rectangles=Systems, Dashed=Async.
 - **Metadata**: Title, Date, Version, Author.
 - **Legend Mandatory**: Define all shapes/colors/styles.
 - **Direction**: `graph LR` (Flow) or `graph TD` (Hierarchy).
 - **Deployment**: Map containers to infrastructure.
-- **Governance**: CRITICAL: Review [best-practices.md](references/best-practices.md) before starting.
+- **Governance**: CRITICAL: Review best-practices.md before starting.
 
-See [implementation examples](references/implementation.md) for C4 container diagram in Mermaid.
+See implementation examples for C4 container diagram in Mermaid.
 
 ## Anti-Patterns
 
@@ -39,8 +39,8 @@ See [implementation examples](references/implementation.md) for C4 container dia
 
 ## References
 
-- [Diagram Selection](references/diagram-selection.md)
-- [Cloud Architecture](references/cloud-architecture.md)
-- [C4 Model Guide](references/c4-model.md)
-- [Checklist](references/checklist.md)
-- [Best Practices](references/best-practices.md)
+- Diagram Selection
+- Cloud Architecture
+- C4 Model Guide
+- Checklist
+- Best Practices

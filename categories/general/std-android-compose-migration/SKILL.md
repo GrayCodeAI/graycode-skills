@@ -36,7 +36,7 @@ Ask the user for a screenshot, or take one via emulator for visual comparison.
 
 ## Step 5: Set up Compose dependencies
 
-Check `build.gradle.kts` or `libs.versions.toml` for Compose BOM and compiler. If missing, add them. See [dependency setup](references/dependency-setup.md).
+Check `build.gradle.kts` or `libs.versions.toml` for Compose BOM and compiler. If missing, add them. See dependency setup.
 
 ## Step 6: Set up Compose theming
 
@@ -44,11 +44,11 @@ If missing, initialize minimum required theme — map XML colors/styles to Compo
 
 ## Step 7: Migrate the XML layout
 
-Convert each View to its Compose equivalent. See [interop patterns](references/interop-patterns.md) for the View→Composable mapping table, ComposeView, and AndroidView usage. Include a `@Preview` for every new Composable.
+Convert each View to its Compose equivalent. See interop patterns for the View→Composable mapping table, ComposeView, and AndroidView usage. Include a `@Preview` for every new Composable.
 
 ## Step 8: Replace usages
 
-Use `ComposeView` to host Compose in Views, or `AndroidView` for Views in Compose. See [interop patterns](references/interop-patterns.md).
+Use `ComposeView` to host Compose in Views, or `AndroidView` for Views in Compose. See interop patterns.
 
 ## Step 9: Validate
 
@@ -73,5 +73,5 @@ Delete the migrated XML file and legacy tests. Only remove code not referenced e
 
 ## References
 
-- [Dependency Setup](references/dependency-setup.md)
-- [Interop Patterns](references/interop-patterns.md)
+- Dependency Setup
+- Interop Patterns

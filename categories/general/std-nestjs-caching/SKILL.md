@@ -27,14 +27,14 @@ keywords: None
 - **Interceptors**: Use `@UseInterceptors(CacheInterceptor)` for simple GET responses.
  - **Warning**: Default key URL. Ensure consistent query param ordering or use custom key generators.
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Stampede Protection
 
 - **Jitter**: Add random variance to TTLs to prevent simultaneous expiry across keys.
 - **Locking**: One process recomputes while others wait or return stale data.
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Redis Data Structures
 

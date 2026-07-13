@@ -2,7 +2,7 @@
 name: analyzing-phishing-email-headers
 description: "Email headers contain critical metadata that reveals the true origin, routing path, and authentication status of emails. Analyzing these headers is a foundational skill for identifying phishing attemp"
 license: MIT
-tags: [phishing, email-security, social-engineering, dmarc, awareness, header-analysis, forensics]
+tags: [phishing, email-security, social-engineering, dmarc, awareness]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

@@ -26,7 +26,7 @@ keywords: None
 - **Propagation**: Propagate context across threads (`@Async`) and clients.
 - **OpenTelemetry**: Use OTel bridge (`micrometer-tracing-bridge-otel`).
 
-See [implementation examples](references/implementation.md) for application.yaml tracing configuration and actuator exposure.
+See implementation examples for application.yaml tracing configuration and actuator exposure.
 
 ## Configure Structured Logging
 
@@ -34,7 +34,7 @@ See [implementation examples](references/implementation.md) for application.yaml
 - **MDC**: Use MDC for contextual info (userId, tenantId). Always clear MDC in finally block.
 - **Output**: Log to stdout only. Let container handle shipping.
 
-See [implementation examples](references/implementation.md) for structured logging with MDC context and Logstash encoder.
+See implementation examples for structured logging with MDC context and Logstash encoder.
 
 ## Secure Actuator Endpoints
 
@@ -50,4 +50,4 @@ See [implementation examples](references/implementation.md) for structured loggi
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

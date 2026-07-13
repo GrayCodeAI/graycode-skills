@@ -106,7 +106,7 @@ python skills/ciso-advisor/scripts/compliance_tracker.py
 
 ## Related
 
-- Agent: [`cs-ciso-advisor`](cs-ciso-advisor.md)
+- Agent: `cs-ciso-advisor`
 - Skill: [`ciso-advisor`](SKILL.md)
 - Compliance: `ra-qm-team/`
 

@@ -25,7 +25,7 @@ Design decoupled, testable modules with clear boundaries.
 
 ## Module Structure Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -51,5 +51,5 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Advanced Patterns](references/advanced-patterns.md)
-- [Dynamic Modules](references/dynamic-module.md)
+- Advanced Patterns
+- Dynamic Modules

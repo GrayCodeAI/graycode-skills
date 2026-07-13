@@ -15,7 +15,7 @@ keywords: None
 
 ## Structure
 
-See [implementation examples](references/implementation.md#directory-structure) for directory layout.
+See implementation examples for directory layout.
 
 ## Build Exception Hierarchies
 
@@ -23,7 +23,7 @@ See [implementation examples](references/implementation.md#directory-structure) 
 - **Custom Exceptions**: Extend **`RuntimeException`** or **`LogicException`** for domain-specific errors.
 - **Multi-Catch**: Use Union types in catch blocks: **`catch (DomainException | InvalidArgumentException $e)`**.
 
-See [implementation examples](references/implementation.md#exception-hierarchy-example) for domain exception hierarchy with multi-catch and finally.
+See implementation examples for domain exception hierarchy with multi-catch and finally.
 
 ## Configure Global Error Handling
 
@@ -42,4 +42,4 @@ See [implementation examples](references/implementation.md#exception-hierarchy-e
 
 ## References
 
-- [Exception & Logging Patterns](references/implementation.md)
+- Exception & Logging Patterns

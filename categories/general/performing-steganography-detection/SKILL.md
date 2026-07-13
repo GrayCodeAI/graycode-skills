@@ -2,7 +2,7 @@
 name: performing-steganography-detection
 description: "Detect and extract hidden data embedded in images, audio, and other media files using steganalysis tools to uncover covert communication channels."
 license: MIT
-tags: [forensics, steganography, steganalysis, hidden-data, covert-channels, image-analysis]
+tags: [forensics, steganography, steganalysis, hidden-data, covert-channels]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -2,7 +2,7 @@
 name: analyzing-windows-shellbag-artifacts
 description: "Analyze Windows Shellbag registry artifacts to reconstruct folder browsing activity, detect access to removable media and network shares, and establish user interaction with directories even after ..."
 license: MIT
-tags: [shellbags, windows-registry, sbecmd, shellbags-explorer, folder-access, user-activity, removable-media, network-shares, bagmru, dfir]
+tags: [shellbags, windows-registry, sbecmd, shellbags-explorer, folder-access]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

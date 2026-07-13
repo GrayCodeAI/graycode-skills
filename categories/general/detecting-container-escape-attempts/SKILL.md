@@ -2,7 +2,7 @@
 name: detecting-container-escape-attempts
 description: "Container escape is a critical attack technique where an adversary breaks out of container isolation to access the host system or other containers. Detection involves monitoring for escape indicators"
 license: MIT
-tags: [containers, kubernetes, docker, security, runtime-security, escape-detection]
+tags: [containers, kubernetes, docker, security, escape-detection]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

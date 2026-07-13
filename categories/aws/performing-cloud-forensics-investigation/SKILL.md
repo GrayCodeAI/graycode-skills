@@ -2,7 +2,7 @@
 name: performing-cloud-forensics-investigation
 description: "Conduct forensic investigations in cloud environments by collecting and analyzing logs, snapshots, and metadata from AWS, Azure, and GCP services."
 license: MIT
-tags: [forensics, cloud-forensics, aws, azure, gcp, incident-response, log-analysis]
+tags: [forensics, cloud-forensics, aws, azure, gcp]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -13,8 +13,8 @@ Create new documentation for an object-oriented component or update an existing 
 
 Choose the workflow before writing anything:
 
-1. Use **update mode** when the user provides an existing documentation Markdown file, points to a docs path, or explicitly asks to refresh or revise existing documentation. Follow [references/update-mode.md](references/update-mode.md).
-2. Use **create mode** when the user provides a source file or folder, points to a component path, or asks to generate documentation from code. Follow [references/create-mode.md](references/create-mode.md).
+1. Use **update mode** when the user provides an existing documentation Markdown file, points to a docs path, or explicitly asks to refresh or revise existing documentation. Follow references/update-mode.md.
+2. Use **create mode** when the user provides a source file or folder, points to a component path, or asks to generate documentation from code. Follow references/create-mode.md.
 3. If both code and an existing documentation file are provided, treat the existing documentation file as the output target and use the current source code as the source of truth.
 4. If the request is ambiguous, infer the mode from the path type whenever possible: existing Markdown documentation file means update mode; source/component path means create mode.
 
@@ -39,7 +39,7 @@ Choose the workflow before writing anything:
 
 ## Shared output requirements
 
-- Use [assets/documentation-template.md](assets/documentation-template.md) as the canonical section checklist and baseline structure.
+- Use assets/documentation-template.md as the canonical section checklist and baseline structure.
 - Keep the output in Markdown with a clear heading hierarchy, tables where useful, code blocks for examples, and Mermaid diagrams when architecture relationships need to be visualized.
 - Make examples and interface descriptions match the current implementation instead of generic placeholders.
 - Include only information that can be supported by the code, project structure, configuration, or clearly stated assumptions.
@@ -64,8 +64,8 @@ Choose the workflow before writing anything:
 
 1. Determine whether the task is create mode or update mode.
 2. Inspect the component implementation and any related files needed to understand its public surface area and internal structure.
-3. Use [assets/documentation-template.md](assets/documentation-template.md) as the shared documentation scaffold.
-4. Apply the mode-specific rules in [references/create-mode.md](references/create-mode.md) or [references/update-mode.md](references/update-mode.md).
+3. Use assets/documentation-template.md as the shared documentation scaffold.
+4. Apply the mode-specific rules in references/create-mode.md or references/update-mode.md.
 5. Produce or revise the documentation so that diagrams, examples, interfaces, dependencies, and quality attributes reflect the current implementation.
 
 ## Completion criteria

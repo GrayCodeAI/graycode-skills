@@ -2,7 +2,7 @@
 name: research-outlines
 description: "Guarantee valid JSON/XML/code structure during generation, use Pydantic models for type-safe outputs, support local models (Transformers, vLLM), and maximize inference speed with Outlines - dottxt...."
 license: MIT
-tags: [prompt-engineering, outlines, structured-generation, json-schema, pydantic, local-models, grammar-based-generation, vllm, transformers, type-safety]
+tags: [prompt-engineering, outlines, structured-generation, json-schema, pydantic]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [outlines, transformers, vllm, pydantic]

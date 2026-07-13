@@ -2,7 +2,7 @@
 name: implementing-runtime-application-self-protection
 description: "Deploy Runtime Application Self-Protection (RASP) agents to detect and block attacks from within application runtime, covering OpenRASP integration, attack pattern detection, and security policy co..."
 license: MIT
-tags: [rasp, application-security, openrasp, runtime-protection, sqli, xss, rce, devsecops]
+tags: [rasp, application-security, openrasp, runtime-protection, sqli]
 domain: cybersecurity
 subdomain: application-security
 version: 1.0

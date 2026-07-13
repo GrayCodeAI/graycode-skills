@@ -2,7 +2,7 @@
 name: performing-s7comm-protocol-security-analysis
 description: "Perform security analysis of Siemens S7comm and S7CommPlus protocols used by SIMATIC S7 PLCs to identify vulnerabilities including replay attacks, integrity bypass, unauthorized CPU stop commands, ..."
 license: MIT
-tags: [ot-security, ics, s7comm, siemens, plc-security, protocol-analysis, scada, vulnerability-assessment]
+tags: [ot-security, ics, s7comm, plc-security, protocol-analysis]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

@@ -2,7 +2,7 @@
 name: securing-container-registry-images
 description: "Securing container registry images by implementing vulnerability scanning with Trivy and Grype, enforcing image signing with Cosign and Sigstore, configuring registry access controls, and building ..."
 license: MIT
-tags: [cloud-security, containers, registry, image-scanning, trivy, cosign, supply-chain]
+tags: [cloud-security, containers, registry, image-scanning, trivy]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

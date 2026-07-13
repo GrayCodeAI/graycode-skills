@@ -1,7 +1,7 @@
 ---
 name: caveman-stats
 description: >
-  Show real token usage and estimated savings for the current session. Reads directly from the Claude Code session log — no AI estimation. Triggers on /caveman-stats. Output is injected by the mode-tracker hook; the model itself does not compute the numbers.
+  Report measured session token usage and estimated savings from the Claude Code log through the caveman mode-tracker hook.
 license: MIT
 tags: [caveman, prompt-compression]
 ---

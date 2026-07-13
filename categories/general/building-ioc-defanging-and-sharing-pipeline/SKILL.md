@@ -2,7 +2,7 @@
 name: building-ioc-defanging-and-sharing-pipeline
 description: "Build an automated pipeline to defang indicators of compromise (URLs, IPs, domains, emails) for safe sharing and distribute them in STIX format through TAXII feeds and threat intelligence platforms."
 license: MIT
-tags: [ioc, defanging, threat-sharing, stix, pipeline, indicator, automation, threat-intelligence]
+tags: [ioc, defanging, threat-sharing, stix, pipeline]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

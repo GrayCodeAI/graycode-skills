@@ -2,7 +2,7 @@
 name: performing-ot-network-security-assessment
 description: "This skill covers conducting comprehensive security assessments of Operational Technology (OT) networks including SCADA systems, DCS architectures, and industrial control system communication paths..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, network-assessment]
+tags: [ot-security, ics, scada, industrial-control, network-assessment]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

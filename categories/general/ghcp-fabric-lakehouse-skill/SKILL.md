@@ -100,8 +100,8 @@ The Lakehouse item supports lineage, which allows users to track the origin and 
 
 ## PySpark Code Examples
 
-See [PySpark code](references/pyspark.md) for details.
+See PySpark code for details.
 
 ## Getting data into Lakehouse
 
-See [Get data](references/getdata.md) for details.
+See Get data for details.

@@ -25,7 +25,7 @@ Anyone who contributes to the project. This includes submitting prompts through 
 
 ### Maintainers
 
-People with commit access to the repository. Maintainers review and merge pull requests, triage issues, and participate in project decisions. The current list of maintainers is in [OWNERS.md](OWNERS.md).
+People with commit access to the repository. Maintainers review and merge pull requests, triage issues, and participate in project decisions. The current list of maintainers is in OWNERS.md.
 
 Maintainers are expected to:
 - Review pull requests in a timely manner
@@ -65,4 +65,4 @@ Changes to this governance document follow the same decision-making process desc
 
 ## Code of Conduct
 
-All participants in the project are expected to be respectful, constructive, and welcoming. We do not tolerate harassment, discrimination, or abusive behavior in any form. Violations can be reported to the project lead or through the channels listed in [SECURITY.md](SECURITY.md).
+All participants in the project are expected to be respectful, constructive, and welcoming. We do not tolerate harassment, discrimination, or abusive behavior in any form. Violations can be reported to the project lead or through the channels listed in SECURITY.md.

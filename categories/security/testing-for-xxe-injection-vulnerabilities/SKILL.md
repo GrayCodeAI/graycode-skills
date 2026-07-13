@@ -2,7 +2,7 @@
 name: testing-for-xxe-injection-vulnerabilities
 description: "Discovering and exploiting XML External Entity injection vulnerabilities to read server files, perform SSRF, and exfiltrate data during authorized penetration tests."
 license: MIT
-tags: [penetration-testing, xxe, xml-injection, owasp, web-security, burpsuite]
+tags: [penetration-testing, xxe, xml-injection, owasp, web-security]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

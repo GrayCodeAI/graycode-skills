@@ -2,7 +2,7 @@
 name: detecting-t1055-process-injection-with-sysmon
 description: "Detect process injection techniques (T1055) including classic DLL injection, process hollowing, and APC injection by analyzing Sysmon events for cross-process memory operations, remote thread creat..."
 license: MIT
-tags: [threat-hunting, process-injection, sysmon, mitre-t1055, defense-evasion, dll-injection, process-hollowing]
+tags: [threat-hunting, process-injection, sysmon, mitre-t1055, dll-injection]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

@@ -29,7 +29,7 @@ Every test must follow Arrange-Act-Assert:
 - **Arrange**: Set up inputs, stubs, mocks, and expected values.
 - **Act**: Call single unit under test.
 - **Assert**: Verify output and side effects. One logical assertion per test.
- **(See [AAA Example](references/aaa_example.md) for code structure)**.
+ **(See AAA Example for code structure)**.
 
 ## **Step 3: Verification & Thresholds**
 
@@ -37,7 +37,7 @@ Every test must follow Arrange-Act-Assert:
 - **Mocks**:
  - Always mock: HTTP, Time/Date, Filesystem.
  - Never mock: Fast internal services (<200ms), pure domain logic.
-- See [Test Runner Reference](references/test_runners.md) for environment-specific commands.
+- See Test Runner Reference for environment-specific commands.
 
 ## **Step 4: Principles & Mocks**
 
@@ -56,11 +56,11 @@ Every test must follow Arrange-Act-Assert:
 
 ## **Expert References**
 
-- [AAA Example](references/aaa_example.md)
-- [AAA Methodology](references/aaa_methodology.md)
-- [Test Runners](references/test_runners.md)
-- [TDD Patterns](references/tdd_patterns.md)
-- [Testing Anti-Patterns](references/testing_anti_patterns.md)
+- AAA Example
+- AAA Methodology
+- Test Runners
+- TDD Patterns
+- Testing Anti-Patterns
 
 ## Anti-Patterns
 

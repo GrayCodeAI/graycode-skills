@@ -23,7 +23,7 @@ keywords: None
 
 ## Cache-Aside with Tags Example
 
-See [implementation examples](references/implementation.md#cache-aside-with-tags) for cache-aside pattern with tag-based invalidation.
+See implementation examples for cache-aside pattern with tag-based invalidation.
 
 ## Implementation Guidelines
 
@@ -54,4 +54,4 @@ See [implementation examples](references/implementation.md#cache-aside-with-tags
 
 ## References
 
-- [Advanced SQL & Cache Patterns](references/implementation.md)
+- Advanced SQL & Cache Patterns

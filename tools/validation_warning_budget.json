@@ -1,0 +1,11 @@
+{
+  "broken-internal-reference": 0,
+  "description-too-long": 0,
+  "oversized-file": 0,
+  "oversized-skill-md": 0,
+  "path-traversal": 0,
+  "script-missing-shebang": 0,
+  "script-not-executable": 0,
+  "too-many-tags": 0,
+  "uncategorized": 0
+}

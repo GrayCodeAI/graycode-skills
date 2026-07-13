@@ -45,4 +45,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Elan Busk](./knowledge/Elan%20Busk/)
+- Elan Busk

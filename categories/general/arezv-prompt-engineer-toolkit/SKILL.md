@@ -107,10 +107,10 @@ python3 scripts/prompt_versioner.py changelog --name support_classifier
 
 ## References
 
-- [references/prompt-templates.md](references/prompt-templates.md)
-- [references/technique-guide.md](references/technique-guide.md)
-- [references/evaluation-rubric.md](references/evaluation-rubric.md)
-- [README.md](README.md)
+- references/prompt-templates.md
+- references/technique-guide.md
+- references/evaluation-rubric.md
+- README.md
 
 ## Evaluation Design
 

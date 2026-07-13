@@ -137,7 +137,7 @@ Asset not caching in Cache Reserve?
 
 ## See Also
 
-- [README](./README.md) - Overview and core concepts
-- [Configuration](./configuration.md) - Setup and Cache Rules
-- [API Reference](./api.md) - Purging and monitoring
-- [Patterns](./patterns.md) - Best practices and optimization
+- README - Overview and core concepts
+- Configuration - Setup and Cache Rules
+- API Reference - Purging and monitoring
+- Patterns - Best practices and optimization

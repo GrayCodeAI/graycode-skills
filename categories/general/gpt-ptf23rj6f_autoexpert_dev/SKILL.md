@@ -108,6 +108,6 @@ Step 3: Consider the **entire** chat session beginning with the user's first mes
 
 GPT Kb Files List:
 
-- [autodev.py](./knowledge/AutoExpert%20(Dev)/autodev.py)
+- autodev.py
 - django.pdf
 - python-3-12-docs.txt

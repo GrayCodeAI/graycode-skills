@@ -2,7 +2,7 @@
 name: bypassing-authentication-with-forced-browsing
 description: "Discovering and accessing unprotected pages, APIs, and administrative interfaces by enumerating URLs and bypassing authentication controls during authorized security assessments."
 license: MIT
-tags: [penetration-testing, authentication-bypass, forced-browsing, ffuf, directory-enumeration, owasp]
+tags: [penetration-testing, authentication-bypass, forced-browsing, ffuf, directory-enumeration]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

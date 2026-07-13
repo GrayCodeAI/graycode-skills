@@ -380,7 +380,7 @@ The LLM format is a compact XML/text hybrid optimized for token efficiency (40% 
 - **Broken Links**: List of broken external and internal links
 - **Recommendations**: Prioritized action items with fix suggestions
 
-See [OUTPUT-FORMAT.md](references/OUTPUT-FORMAT.md) for detailed format specification.
+See OUTPUT-FORMAT.md for detailed format specification.
 
 ## Examples
 
@@ -466,6 +466,6 @@ The audit is stored in a local database and can be retrieved later with `squirre
 
 ## Additional Resources
 
-- **Output Format Reference**: [OUTPUT-FORMAT.md](references/OUTPUT-FORMAT.md)
+- **Output Format Reference**: OUTPUT-FORMAT.md
 - **squirrelscan Documentation**: https://docs.squirrelscan.com
 - **CLI Help**: `squirrel audit --help`

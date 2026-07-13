@@ -552,8 +552,8 @@ processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Fine-tuning, integration, deployment
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues and solutions
+- **Advanced Usage** - Fine-tuning, integration, deployment
+- **Troubleshooting** - Common issues and solutions
 
 ## Resources
 

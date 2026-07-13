@@ -29,7 +29,7 @@ keywords: None
 4. **Implement adapters** — Outer layer depends on UseCase/Domain. Contains HTTP handlers, DB repos, etc.
 5. **Wire in main** — Compose full dependency graph in `main.go`.
 
-See [constructor injection and wiring examples](references/clean-arch.md)
+See constructor injection and wiring examples
 
 ## Verification Checklist
 
@@ -47,5 +47,5 @@ See [constructor injection and wiring examples](references/clean-arch.md)
 
 ## References
 
-- [Standard Project Layout](references/project-layout.md)
-- [Clean Architecture Layers](references/clean-arch.md)
+- Standard Project Layout
+- Clean Architecture Layers

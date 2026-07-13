@@ -9,7 +9,7 @@ tags: [general]
 
 Save and restore conversation sessions across application restarts.
 
-> **Runnable example:** [recipe/PersistingSessions.java](recipe/PersistingSessions.java)
+> **Runnable example:** recipe/PersistingSessions.java
 >
 > ```bash
 > jbang recipe/PersistingSessions.java

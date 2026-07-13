@@ -2,7 +2,7 @@
 name: implementing-zero-trust-dns-with-nextdns
 description: "Implement NextDNS as a zero trust DNS filtering layer with encrypted resolution, threat intelligence blocking, privacy protection, and organizational policy enforcement across all endpoints."
 license: MIT
-tags: [zero-trust, dns, nextdns, dns-over-https, dns-over-tls, threat-blocking, dns-filtering, privacy, encrypted-dns]
+tags: [zero-trust, dns, nextdns, dns-over-https, dns-over-tls]
 domain: cybersecurity
 subdomain: zero-trust-architecture
 version: 1.0

@@ -35,7 +35,7 @@ Use priority rationale to justify each classification:
 
 ## 4. References
 
-- [Detailed Examples](references/test_case_standards.md)
+- Detailed Examples
 
 ## Anti-Patterns
 

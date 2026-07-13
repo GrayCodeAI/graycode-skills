@@ -2,7 +2,7 @@
 name: conducting-social-engineering-penetration-test
 description: "Design and execute a social engineering penetration test including phishing, vishing, smishing, and physical pretexting campaigns to measure human security resilience and identify training gaps."
 license: MIT
-tags: [social-engineering, phishing, vishing, pretexting, gophish, set, osint, security-awareness, red-team]
+tags: [social-engineering, phishing, vishing, pretexting, gophish]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

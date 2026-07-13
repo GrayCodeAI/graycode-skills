@@ -2,7 +2,7 @@
 name: implementing-memory-protection-with-dep-aslr
 description: "Implements memory protection mechanisms including DEP (Data Execution Prevention), ASLR (Address Space Layout Randomization), CFG (Control Flow Guard), and other exploit mitigations to prevent memo..."
 license: MIT
-tags: [endpoint, memory-protection, dep, aslr, exploit-mitigation, cfg]
+tags: [endpoint, memory-protection, dep, aslr, exploit-mitigation]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

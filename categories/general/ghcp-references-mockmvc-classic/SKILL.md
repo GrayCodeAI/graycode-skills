@@ -16,7 +16,7 @@ Traditional MockMvc API for Spring MVC controller tests (pre-Spring Boot 3.2 or 
 - You need to migrate classic MockMvc tests to `MockMvcTester` (see migration section below)
 - The user explicitly asks about `ResultActions`, `andExpect()`, or Hamcrest-style web assertions
 
-For new tests on Spring Boot 3.2+, prefer [mockmvc-tester.md](mockmvc-tester.md) instead.
+For new tests on Spring Boot 3.2+, prefer mockmvc-tester.md instead.
 
 ## Setup
 
@@ -202,7 +202,7 @@ import static org.hamcrest.Matchers.*;
 | `throws Exception` on every method | No checked exception |
 | Hamcrest matchers | AssertJ fluent assertions |
 
-See [mockmvc-tester.md](mockmvc-tester.md) for the full modern API.
+See mockmvc-tester.md for the full modern API.
 
 ## Key Points
 

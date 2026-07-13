@@ -117,9 +117,9 @@ Load only when needed:
 
 | File                                              | Load When                             |
 | ------------------------------------------------- | ------------------------------------- |
-| [mcp-guide.md](references/mcp-guide.md)           | Optimizing MCP usage, complex queries |
-| [decision-trees.md](references/decision-trees.md) | Service selection questions           |
-| [checklists.md](references/checklists.md)         | Reviews, validations, discovery       |
+| mcp-guide.md           | Optimizing MCP usage, complex queries |
+| decision-trees.md | Service selection questions           |
+| checklists.md         | Reviews, validations, discovery       |
 
 ## Scripts
 

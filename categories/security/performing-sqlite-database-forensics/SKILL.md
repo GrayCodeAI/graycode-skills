@@ -2,7 +2,7 @@
 name: performing-sqlite-database-forensics
 description: "Perform forensic analysis of SQLite databases to recover deleted records from freelists and WAL files, decode encoded timestamps, and extract evidence from browser history, messaging apps, and mobi..."
 license: MIT
-tags: [sqlite, database-forensics, freelist, wal, write-ahead-log, browser-history, mobile-forensics, deleted-records, b-tree, unallocated-space]
+tags: [sqlite, database-forensics, freelist, wal, write-ahead-log]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -2,7 +2,7 @@
 name: performing-network-traffic-analysis-with-zeek
 description: "Deploy Zeek network security monitor to capture, parse, and analyze network traffic metadata for threat detection, anomaly identification, and forensic investigation."
 license: MIT
-tags: [zeek, network-monitoring, traffic-analysis, ids, nids, pcap, threat-detection, forensics, siem-integration]
+tags: [zeek, network-monitoring, traffic-analysis, ids, nids]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

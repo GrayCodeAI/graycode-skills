@@ -2,7 +2,7 @@
 name: conducting-pass-the-ticket-attack
 description: "Pass-the-Ticket (PtT) is a lateral movement technique that uses stolen Kerberos tickets (TGT or TGS) to authenticate to services without knowing the user's password. By extracting Kerberos tickets fro"
 license: MIT
-tags: [red-team, adversary-simulation, mitre-attack, exploitation, post-exploitation, kerberos, pass-the-ticket, lateral-movement]
+tags: [red-team, adversary-simulation, mitre-attack, exploitation, pass-the-ticket]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

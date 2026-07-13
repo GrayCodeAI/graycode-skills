@@ -23,19 +23,19 @@ This skill helps you create importable JSON templates for the Obsidian Web Clipp
 2. **Check Existing Bases:** The user likely has a "Base" schema defined in `Bases/`.
     - **Action:** Read `Bases/*.base` to find a matching category (e.g., `Recipes.base`).
     - **Action:** Use the properties defined in the Base to structure the Clipper template properties.
-    - See [references/bases-workflow.md](references/bases-workflow.md) for details.
+    - See references/bases-workflow.md for details.
 3. **Fetch & Analyze Reference URL:** Validate variables against a real page.
     - **Action:** Ask the user for a sample URL of the content they want to clip (if not provided).
-    - **Action (REQUIRED):** Use **WebFetch** to retrieve page content; if WebFetch is not available, use a browser DOM snapshot. See [references/analysis-workflow.md](references/analysis-workflow.md).
+    - **Action (REQUIRED):** Use **WebFetch** to retrieve page content; if WebFetch is not available, use a browser DOM snapshot. See references/analysis-workflow.md.
     - **Action:** Analyze the HTML for Schema.org JSON, Meta tags, and CSS selectors.
     - **Action (REQUIRED):** Verify each selector against the fetched content. Do not guess selectors.
-    - See [references/analysis-workflow.md](references/analysis-workflow.md) for analysis techniques.
+    - See references/analysis-workflow.md for analysis techniques.
 4. **Draft the JSON:** Create a valid JSON object following the schema.
-    - See [references/json-schema.md](references/json-schema.md).
-5. **Consider template logic:** Use conditionals for optional blocks (e.g. show nutrition only if present), loops for list data, variable assignment to avoid repeating expressions, and fallbacks for missing variables. Use logic only when it improves the template; keep simple templates simple. See [references/logic.md](references/logic.md).
+    - See references/json-schema.md.
+5. **Consider template logic:** Use conditionals for optional blocks (e.g. show nutrition only if present), loops for list data, variable assignment to avoid repeating expressions, and fallbacks for missing variables. Use logic only when it improves the template; keep simple templates simple. See references/logic.md.
 6. **Verify Variables:** Ensure the chosen variables (Preset, Schema, Selector) exist in your analysis.
     - **Action (REQUIRED):** If a selector cannot be verified from the fetched content, state that explicitly and ask for another URL.
-    - See [references/variables.md](references/variables.md).
+    - See references/variables.md.
 
 ## Selector Verification Rules
 
@@ -49,7 +49,7 @@ This skill helps you create importable JSON templates for the Obsidian Web Clipp
 **ALWAYS** output the final result as a JSON code block that the user can copy and import.
 
 The Clipper template editor validates template syntax.
-If you use template logic (conditionals, loops, variable assignment), ensure it follows the syntax in [references/logic.md](references/logic.md) and the official [Logic](https://help.obsidian.md/web-clipper/logic) docs so the template passes validation.
+If you use template logic (conditionals, loops, variable assignment), ensure it follows the syntax in references/logic.md and the official [Logic](https://help.obsidian.md/web-clipper/logic) docs so the template passes validation.
 
 ```json
 {
@@ -61,12 +61,12 @@ If you use template logic (conditionals, loops, variable assignment), ensure it 
 
 ## Resources
 
-- [references/variables.md](references/variables.md) - Available data variables.
-- [references/filters.md](references/filters.md) - Formatting filters.
-- [references/json-schema.md](references/json-schema.md) - JSON structure documentation.
-- [references/logic.md](references/logic.md) - Template logic.
-- [references/bases-workflow.md](references/bases-workflow.md) - How to map Bases to Templates.
-- [references/analysis-workflow.md](references/analysis-workflow.md) - How to validate page data.
+- references/variables.md - Available data variables.
+- references/filters.md - Formatting filters.
+- references/json-schema.md - JSON structure documentation.
+- references/logic.md - Template logic.
+- references/bases-workflow.md - How to map Bases to Templates.
+- references/analysis-workflow.md - How to validate page data.
 
 ### Official Documentation
 
@@ -77,7 +77,7 @@ If you use template logic (conditionals, loops, variable assignment), ensure it 
 
 ## Examples
 
-See [assets/](assets/) for JSON examples.
+See assets/ for JSON examples.
 
 ## Limitations
 - Use this skill only when the task clearly matches the scope described above.

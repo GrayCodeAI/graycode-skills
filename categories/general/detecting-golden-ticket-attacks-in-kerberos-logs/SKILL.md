@@ -2,7 +2,7 @@
 name: detecting-golden-ticket-attacks-in-kerberos-logs
 description: "Detect Golden Ticket attacks in Active Directory by analyzing Kerberos TGT anomalies including mismatched encryption types, impossible ticket lifetimes, non-existent accounts, and forged PAC signat..."
 license: MIT
-tags: [threat-hunting, golden-ticket, kerberos, active-directory, mitre-t1558-001, credential-abuse]
+tags: [threat-hunting, golden-ticket, kerberos, active-directory, mitre-t1558-001]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

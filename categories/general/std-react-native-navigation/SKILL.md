@@ -21,7 +21,7 @@ keywords: None
 - **Deep Links**: Configure `linking` prop in `NavigationContainer`.
 - **Validation**: Validate route parameters (`route.params`) before fetching data.
 
-See [routing patterns](references/routing-patterns.md) for type-safe stack setup and deep linking configuration.
+See routing patterns for type-safe stack setup and deep linking configuration.
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [routing patterns](references/routing-patterns.md) for type-safe stack setup
 
 ## References
 
-See [references/routing-patterns.md](references/routing-patterns.md) for typed param lists and deep linking config.
+See references/routing-patterns.md for typed param lists and deep linking config.

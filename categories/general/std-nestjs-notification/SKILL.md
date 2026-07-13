@@ -24,11 +24,11 @@ Implement "Dual-Write" notification system: persist to Database (In-App) and sen
 
 ## Dual-Write Service Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Structure
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -46,5 +46,5 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Service Pattern (Dual-Write)](references/service.md)
-- [Type Definitions](references/types.md)
+- Service Pattern (Dual-Write)
+- Type Definitions

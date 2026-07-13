@@ -42,7 +42,7 @@ NavDisplay(
 
 ## Migration from Navigation 2
 
-See [migration guide](references/migration-guide.md) for step-by-step conversion from `NavHost`/`NavController` to `NavDisplay`.
+See migration guide for step-by-step conversion from `NavHost`/`NavController` to `NavDisplay`.
 
 Key changes:
 1. Replace string routes with data objects/classes.
@@ -52,7 +52,7 @@ Key changes:
 
 ## Common patterns
 
-See [recipes](references/recipes.md) for code examples:
+See recipes for code examples:
 - Basic navigation with arguments
 - Bottom navigation with multiple backstacks
 - Deep links (basic and with synthetic backstack)
@@ -76,5 +76,5 @@ See [recipes](references/recipes.md) for code examples:
 
 ## References
 
-- [Migration Guide (Nav2 → Nav3)](references/migration-guide.md)
-- [Recipes](references/recipes.md)
+- Migration Guide (Nav2 → Nav3)
+- Recipes

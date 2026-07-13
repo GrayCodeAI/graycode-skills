@@ -2,7 +2,7 @@
 name: research-clip
 description: "OpenAI's model connecting vision and language. Enables zero-shot image classification, image-text matching, and cross-modal retrieval. Trained on 400M image-text pairs. Use for image search, conten..."
 license: MIT
-tags: [multimodal, clip, vision-language, zero-shot, image-classification, openai, image-search, cross-modal-retrieval, content-moderation]
+tags: [multimodal, clip, vision-language, zero-shot, image-classification]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, pillow]

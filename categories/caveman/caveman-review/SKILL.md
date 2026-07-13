@@ -1,7 +1,7 @@
 ---
 name: caveman-review
 description: >
-  Ultra-compressed code review comments. Cuts noise from PR feedback while preserving the actionable signal. Each comment is one line: location, problem, fix. Use when user says "review this PR", "code review", "review the diff", "/review", or invokes /caveman-review. Auto-triggers when reviewing pull requests.
+  Produce terse, actionable code-review findings as one line per issue containing its location, problem, and proposed fix.
 license: MIT
 tags: [caveman, prompt-compression]
 ---

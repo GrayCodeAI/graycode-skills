@@ -2,7 +2,7 @@
 name: securing-helm-chart-deployments
 description: "Secure Helm chart deployments by validating chart integrity, scanning templates for misconfigurations, and enforcing security contexts in Kubernetes releases."
 license: MIT
-tags: [helm, kubernetes, chart-security, supply-chain, configuration-security, deployment]
+tags: [helm, kubernetes, chart-security, supply-chain, configuration-security]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

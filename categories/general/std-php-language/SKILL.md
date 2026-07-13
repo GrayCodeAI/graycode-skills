@@ -47,4 +47,4 @@ src/
 
 ## References
 
-- [Modern PHP Patterns](references/implementation.md)
+- Modern PHP Patterns

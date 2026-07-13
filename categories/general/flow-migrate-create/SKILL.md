@@ -27,7 +27,7 @@ When you need to create a new database migration for schema changes such as crea
 3. **Generate up migration** -- write `NNN_<name>.up.sql` with the appropriate SQL using IF NOT EXISTS for idempotency
 4. **Generate down migration** -- write `NNN_<name>.down.sql` with the reverse operation using IF EXISTS
 5. **Search past patterns** -- call `mcp__claude-flow__agentdb_pattern-search` (ReasoningBank-routed; **don't** pass a `namespace` argument — pattern-* tools ignore it).
-6. **Store metadata** -- call `mcp__claude-flow__memory_store --namespace migrations` to record the migration with number, name, status (pending), and file paths. The `memory_*` tool family routes by namespace; `agentdb_hierarchical-*` does NOT (it routes by tier `working|episodic|semantic`), so use `memory_*` here. See [ruflo-agentdb ADR-0001 §"Namespace convention"](0001-agentdb-optimization.md).
+6. **Store metadata** -- call `mcp__claude-flow__memory_store --namespace migrations` to record the migration with number, name, status (pending), and file paths. The `memory_*` tool family routes by namespace; `agentdb_hierarchical-*` does NOT (it routes by tier `working|episodic|semantic`), so use `memory_*` here. See ruflo-agentdb ADR-0001 §"Namespace convention".
 7. **Report** -- display: migration number, file paths created, template used, any similar past migrations found
 
 ## CLI alternative

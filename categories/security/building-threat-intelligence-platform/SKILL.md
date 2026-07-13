@@ -2,7 +2,7 @@
 name: building-threat-intelligence-platform
 description: "Building a Threat Intelligence Platform (TIP) involves deploying and integrating multiple CTI tools into a unified system for collecting, analyzing, enriching, and disseminating threat intelligence. T"
 license: MIT
-tags: [threat-intelligence, cti, ioc, mitre-attack, stix, platform-building, misp, opencti]
+tags: [threat-intelligence, cti, ioc, mitre-attack, platform-building]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

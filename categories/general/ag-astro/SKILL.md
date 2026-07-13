@@ -9,9 +9,6 @@ tags:
 - ssr
 - islands
 - content
-- markdown
-- mdx
-- performance
 category: frontend
 risk: safe
 source: community

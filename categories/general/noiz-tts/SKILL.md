@@ -37,7 +37,7 @@ python3 skills/tts/scripts/tts.py -t "Hello" --format opus -o voice.opus
 python3 skills/tts/scripts/tts.py -t "Hello" --format ogg -o voice.ogg
 ```
 
-Third-party integration (Feishu/Telegram/Discord) is documented in [ref_3rd_party.md](ref_3rd_party.md).
+Third-party integration (Feishu/Telegram/Discord) is documented in ref_3rd_party.md.
 
 ## Timeline Mode — SRT to time-aligned audio
 
@@ -166,4 +166,4 @@ No files outside the output path and `~/.config/noiz/` are modified. The Kokoro 
 
 Use **only** the base64-encoded API key as `Authorization`—no prefix (e.g. no `APIKEY ` or `Bearer `). Any prefix causes 401.
 
-For backend details and full argument reference, see [reference.md](reference.md).
+For backend details and full argument reference, see reference.md.

@@ -2,7 +2,7 @@
 name: research-openrlhf
 description: "High-performance RLHF framework with Ray+vLLM acceleration. Use for PPO, GRPO, RLOO, DPO training of large models (7B-70B+). Built on Ray, vLLM, ZeRO-3. 2× faster than DeepSpeedChat with distribute..."
 license: MIT
-tags: [post-training, openrlhf, rlhf, ppo, grpo, rloo, dpo, ray, vllm, distributed-training, large-models, zero-3]
+tags: [post-training, openrlhf, rlhf, ppo, grpo]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [openrlhf, ray, vllm, torch, transformers, deepspeed]
@@ -216,13 +216,13 @@ Enable vLLM acceleration:
 
 ## Advanced topics
 
-**Hybrid Engine GPU sharing**: See [references/hybrid-engine.md](references/hybrid-engine.md) for vLLM sleep mode, DeepSpeed sleep mode, and optimal node allocation.
+**Hybrid Engine GPU sharing**: See references/hybrid-engine.md for vLLM sleep mode, DeepSpeed sleep mode, and optimal node allocation.
 
-**Algorithm comparison**: See [references/algorithm-comparison.md](references/algorithm-comparison.md) for PPO vs GRPO vs RLOO vs REINFORCE++ benchmarks and hyperparameters.
+**Algorithm comparison**: See references/algorithm-comparison.md for PPO vs GRPO vs RLOO vs REINFORCE++ benchmarks and hyperparameters.
 
-**Multi-node setup**: See [references/multi-node-training.md](references/multi-node-training.md) for Ray cluster configuration and fault tolerance.
+**Multi-node setup**: See references/multi-node-training.md for Ray cluster configuration and fault tolerance.
 
-**Custom reward functions**: See [references/custom-rewards.md](references/custom-rewards.md) for reinforced fine-tuning and agent RLHF.
+**Custom reward functions**: See references/custom-rewards.md for reinforced fine-tuning and agent RLHF.
 
 ## Hardware requirements
 

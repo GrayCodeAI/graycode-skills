@@ -2,7 +2,7 @@
 name: performing-purple-team-exercise
 description: "Performs purple team exercises by coordinating red team adversary emulation with blue team detection validation using MITRE ATT&CK-mapped attack scenarios, real-time detection testing, and collabor..."
 license: MIT
-tags: [soc, purple-team, red-team, blue-team, mitre-attack, adversary-emulation, detection-validation]
+tags: [soc, purple-team, red-team, blue-team, mitre-attack]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

@@ -38,7 +38,11 @@ jobs:
           changed="$(git diff --name-only "$BASE_REF" HEAD)"
           python3 tools/check_changed_scripts.py $changed
       - name: Validate all skills
-        run: python3 tools/validate_skill.py --all
+        run: >-
+          python3 tools/validate_skill.py --all
+          --warning-budget tools/validation_warning_budget.json
+      - name: Registry drift check
+        run: python3 tools/update_registry.py --check
       - name: Run tests
         run: python -m pytest tests/ -v --cov --cov-report=term-missing --cov-fail-under=88
       - name: Security audit

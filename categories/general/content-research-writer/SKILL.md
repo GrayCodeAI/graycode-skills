@@ -2,7 +2,7 @@
 name: content-research-writer
 description: "Assists in writing high-quality content by conducting research, adding citations, improving hooks, iterating on outlines, and providing real-time feedback on each section."
 license: MIT
-tags: [writing, research, content-creation, blogging, citations, editing, collaboration]
+tags: [writing, research, content-creation, blogging, citations]
 domain: general
 subdomain: writing
 version: 1.0

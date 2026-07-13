@@ -70,19 +70,19 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [gestures.md](references/gestures.md) | Touch gestures | Tap, swipe, pinch, long press, drag, system gestures |
-| [apple-pencil-and-scribble.md](references/apple-pencil-and-scribble.md) | Apple Pencil | Precision, pressure, tilt, hover, handwriting |
-| [keyboards.md](references/keyboards.md) | Keyboards | Shortcuts, navigation, software keyboard, Command key |
-| [game-controls.md](references/game-controls.md) | Game controllers | MFi, extended gamepad, remapping, fallbacks |
-| [pointing-devices.md](references/pointing-devices.md) | Pointer/trackpad | Hover, cursor morphing, trackpad gestures |
-| [digital-crown.md](references/digital-crown.md) | Digital Crown | Scrolling, value adjustment, haptic detents |
-| [eyes.md](references/eyes.md) | Eye tracking | Look and tap, gaze targeting, hit target sizing |
-| [spatial-interactions.md](references/spatial-interactions.md) | Spatial input | Hand gestures, direct manipulation, immersive input |
-| [focus-and-selection.md](references/focus-and-selection.md) | Focus system | tvOS/visionOS navigation, focus indicators, groups |
-| [remotes.md](references/remotes.md) | Remotes | Touch surface, clickpad, simple interactions |
-| [gyro-and-accelerometer.md](references/gyro-and-accelerometer.md) | Motion sensors | Gyroscope, accelerometer, calibration, gaming |
-| [nearby-interactions.md](references/nearby-interactions.md) | Nearby interactions | U1 chip, directional finding, proximity triggers |
-| [camera-control.md](references/camera-control.md) | Camera Control | iPhone camera hardware button, quick launch |
+| gestures.md | Touch gestures | Tap, swipe, pinch, long press, drag, system gestures |
+| apple-pencil-and-scribble.md | Apple Pencil | Precision, pressure, tilt, hover, handwriting |
+| keyboards.md | Keyboards | Shortcuts, navigation, software keyboard, Command key |
+| game-controls.md | Game controllers | MFi, extended gamepad, remapping, fallbacks |
+| pointing-devices.md | Pointer/trackpad | Hover, cursor morphing, trackpad gestures |
+| digital-crown.md | Digital Crown | Scrolling, value adjustment, haptic detents |
+| eyes.md | Eye tracking | Look and tap, gaze targeting, hit target sizing |
+| spatial-interactions.md | Spatial input | Hand gestures, direct manipulation, immersive input |
+| focus-and-selection.md | Focus system | tvOS/visionOS navigation, focus indicators, groups |
+| remotes.md | Remotes | Touch surface, clickpad, simple interactions |
+| gyro-and-accelerometer.md | Motion sensors | Gyroscope, accelerometer, calibration, gaming |
+| nearby-interactions.md | Nearby interactions | U1 chip, directional finding, proximity triggers |
+| camera-control.md | Camera Control | iPhone camera hardware button, quick launch |
 
 ## Output Format
 

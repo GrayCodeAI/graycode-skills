@@ -21,4 +21,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [CodeGPT Decompiler & Cheat Developer](./knowledge/CodeGPT%20Decompiler%20&%20Cheat%20Developer/)
+- CodeGPT Decompiler & Cheat Developer

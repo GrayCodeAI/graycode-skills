@@ -2,7 +2,7 @@
 name: implementing-iec-62443-security-zones
 description: "This skill covers designing and implementing security zones and conduits for industrial automation and control systems (IACS) per IEC 62443-3-2. It addresses zone partitioning based on risk assessm..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, network-segmentation, zones-conduits]
+tags: [ot-security, ics, scada, industrial-control, iec62443]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

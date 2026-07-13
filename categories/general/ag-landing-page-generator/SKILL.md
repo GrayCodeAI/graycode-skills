@@ -10,8 +10,6 @@ tags:
 - tailwind
 - landing-page
 - marketing
-- seo
-- cro
 category: front-end
 risk: safe
 source: community

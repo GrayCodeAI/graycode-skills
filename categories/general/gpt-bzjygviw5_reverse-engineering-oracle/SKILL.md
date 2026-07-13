@@ -21,4 +21,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Reverse Engineering Oracle](./knowledge/Reverse%20Engineering%20Oracle/)
+- Reverse Engineering Oracle

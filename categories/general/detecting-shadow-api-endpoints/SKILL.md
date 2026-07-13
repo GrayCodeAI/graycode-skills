@@ -2,7 +2,7 @@
 name: detecting-shadow-api-endpoints
 description: "Discover and inventory shadow API endpoints that operate outside documented specifications using traffic analysis, code scanning, and API discovery platforms."
 license: MIT
-tags: [api-security, shadow-apis, api-discovery, undocumented-apis, zombie-apis, api-inventory, attack-surface-management, api-governance]
+tags: [api-security, shadow-apis, api-discovery, undocumented-apis, api-inventory]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

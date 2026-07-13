@@ -2,7 +2,7 @@
 name: ag-aws-iam-best-practices
 description: "IAM policy review, hardening, and least privilege implementation"
 license: MIT
-tags: [aws, iam, security, access-control, kiro-cli, least-privilege]
+tags: [aws, iam, security, access-control, kiro-cli]
 category: security
 risk: safe
 source: community

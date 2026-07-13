@@ -13,6 +13,6 @@ version: 1.0.1
 
 ## References
 
-- [KQL Query Library](references/kql-queries.md)
-- [Azure Resource Graph Queries](references/azure-resource-graph.md)
-- [Function Apps Troubleshooting](references/functions/README.md)
+- KQL Query Library
+- Azure Resource Graph Queries
+- Function Apps Troubleshooting

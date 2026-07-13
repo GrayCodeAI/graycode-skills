@@ -79,6 +79,6 @@ Sustainability is a primary metric of success in ITIL 5.
 - Best used in conjunction with "Agile," "Lean," and "DevOps" expert skills.
 
 ## References
-- [ITIL 5 Evolution Guide](./references/itil-5-evolution.md)
-- [Real-World Usage Scenarios](./examples/itil-usage.md)
+- ITIL 5 Evolution Guide
+- Real-World Usage Scenarios
 - [ITIL 5 Extension Modules (2026 Edition)](https://www.peoplecert.org)

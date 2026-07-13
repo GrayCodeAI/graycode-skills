@@ -2,7 +2,7 @@
 name: collecting-open-source-intelligence
 description: "Collects and synthesizes open-source intelligence (OSINT) about threat actors, malicious infrastructure, and attack campaigns using publicly available data sources, passive reconnaissance tools, an..."
 license: MIT
-tags: [osint, maltego, shodan, recon-ng, spiderfoot, threat-intelligence, att-ck-t1591, nist-csf]
+tags: [osint, maltego, shodan, recon-ng, threat-intelligence]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

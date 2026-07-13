@@ -2,7 +2,7 @@
 name: performing-soc-tabletop-exercise
 description: "Performs tabletop exercises for SOC teams simulating security incidents through discussion-based scenarios to test incident response procedures, communication workflows, and decision-making under p..."
 license: MIT
-tags: [soc, tabletop, exercise, incident-response, training, nist, playbook-validation]
+tags: [soc, tabletop, exercise, incident-response, training]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

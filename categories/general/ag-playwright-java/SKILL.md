@@ -9,8 +9,6 @@ tags:
 - e2e-testing
 - junit5
 - page-object-model
-- allure
-- selenium-alternative
 category: test-automation
 risk: safe
 source: community

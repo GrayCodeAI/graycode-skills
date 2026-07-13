@@ -2,7 +2,7 @@
 name: research-crewai
 description: "Multi-agent orchestration framework for autonomous AI collaboration. Use when building teams of specialized agents working together on complex tasks, when you need role-based agent collaboration wi..."
 license: MIT
-tags: [agents, crewai, multi-agent, orchestration, collaboration, role-based, autonomous, workflows, memory, production]
+tags: [agents, crewai, multi-agent, orchestration, collaboration]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [crewai>=1.2.0, crewai-tools>=1.2.0]
@@ -405,7 +405,7 @@ flow = MyFlow()
 result = flow.kickoff()
 ```
 
-See [Flows Guide](references/flows.md) for complete documentation.
+See Flows Guide for complete documentation.
 
 ## Memory system
 
@@ -484,9 +484,9 @@ os.environ["CREWAI_STORAGE_DIR"] = "./my_storage"
 
 ## References
 
-- **[Flows Guide](references/flows.md)** - Event-driven workflows, state management
-- **[Tools Guide](references/tools.md)** - Built-in tools, custom tools, MCP
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging
+- **Flows Guide** - Event-driven workflows, state management
+- **Tools Guide** - Built-in tools, custom tools, MCP
+- **Troubleshooting** - Common issues, debugging
 
 ## Resources
 

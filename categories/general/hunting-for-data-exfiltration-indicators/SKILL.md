@@ -2,7 +2,7 @@
 name: hunting-for-data-exfiltration-indicators
 description: "Hunt for data exfiltration through network traffic analysis, detecting unusual data flows, DNS tunneling, cloud storage uploads, and encrypted channel abuse."
 license: MIT
-tags: [threat-hunting, mitre-attack, data-exfiltration, dlp, network-analysis, proactive-detection]
+tags: [threat-hunting, mitre-attack, data-exfiltration, dlp, network-analysis]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

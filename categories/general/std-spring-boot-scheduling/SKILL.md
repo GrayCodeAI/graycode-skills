@@ -24,7 +24,7 @@ keywords: None
 - **Solution**: Use **ShedLock** to guarantee single execution.
 - **Config**: Set `lockAtMostFor` (deadlock safety) and `lockAtLeastFor` (debounce).
 
-See [implementation examples](references/implementation.md) for ShedLock distributed task configuration and scheduler pool setup.
+See implementation examples for ShedLock distributed task configuration and scheduler pool setup.
 
 ## Anti-Patterns
 
@@ -34,4 +34,4 @@ See [implementation examples](references/implementation.md) for ShedLock distrib
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

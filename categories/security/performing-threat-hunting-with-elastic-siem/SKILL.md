@@ -2,7 +2,7 @@
 name: performing-threat-hunting-with-elastic-siem
 description: "Performs proactive threat hunting in Elastic Security SIEM using KQL/EQL queries, detection rules, and Timeline investigation to identify threats that evade automated detection. Use when SOC teams ..."
 license: MIT
-tags: [soc, elastic, siem, threat-hunting, kql, eql, mitre-attack, kibana]
+tags: [soc, elastic, siem, threat-hunting, kql]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

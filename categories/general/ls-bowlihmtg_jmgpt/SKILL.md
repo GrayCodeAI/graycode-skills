@@ -43,4 +43,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [jmGPT](./knowledge/jmgpt/)
+- jmGPT

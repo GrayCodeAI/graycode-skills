@@ -9,8 +9,6 @@ tags:
 - api
 - fullstack
 - nextjs
-- react
-- type-safety
 category: framework
 risk: none
 source: community

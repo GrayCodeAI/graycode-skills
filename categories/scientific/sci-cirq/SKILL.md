@@ -92,7 +92,7 @@ for params, result in zip(sweep, results):
 
 ### Circuit Building
 For comprehensive information about building quantum circuits, including qubits, gates, operations, custom gates, and circuit patterns, see:
-- **[references/building.md](references/building.md)** - Complete guide to circuit construction
+- **references/building.md** - Complete guide to circuit construction
 
 Common topics:
 - Qubit types (GridQubit, LineQubit, NamedQubit)
@@ -106,7 +106,7 @@ Common topics:
 
 ### Simulation
 For detailed information about simulating quantum circuits, including exact simulation, noisy simulation, parameter sweeps, and the Quantum Virtual Machine, see:
-- **[references/simulation.md](references/simulation.md)** - Complete guide to quantum simulation
+- **references/simulation.md** - Complete guide to quantum simulation
 
 Common topics:
 - Exact simulation (state vector, density matrix)
@@ -120,7 +120,7 @@ Common topics:
 
 ### Circuit Transformation
 For information about optimizing, compiling, and manipulating quantum circuits, see:
-- **[references/transformation.md](references/transformation.md)** - Complete guide to circuit transformations
+- **references/transformation.md** - Complete guide to circuit transformations
 
 Common topics:
 - Transformer framework
@@ -133,7 +133,7 @@ Common topics:
 
 ### Hardware Integration
 For information about running circuits on real quantum hardware from various providers, see:
-- **[references/hardware.md](references/hardware.md)** - Complete guide to hardware integration
+- **references/hardware.md** - Complete guide to hardware integration
 
 Supported providers:
 - **Google Quantum AI** (cirq-google) - Sycamore, Weber processors
@@ -146,7 +146,7 @@ Topics include device representation, qubit selection, authentication, job manag
 
 ### Noise Modeling
 For information about modeling noise, noisy simulation, characterization, and error mitigation, see:
-- **[references/noise.md](references/noise.md)** - Complete guide to noise modeling
+- **references/noise.md** - Complete guide to noise modeling
 
 Common topics:
 - Noise channels (depolarizing, amplitude damping, phase damping)
@@ -159,7 +159,7 @@ Common topics:
 
 ### Quantum Experiments
 For information about designing experiments, parameter sweeps, data collection, and using the ReCirq framework, see:
-- **[references/experiments.md](references/experiments.md)** - Complete guide to quantum experiments
+- **references/experiments.md** - Complete guide to quantum experiments
 
 Common topics:
 - Experiment design patterns

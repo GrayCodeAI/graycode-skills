@@ -78,4 +78,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Cypher's "Hack Me" Booth](./knowledge/Cypher's%20Hack_Me%20Booth/)
+- Cypher's "Hack Me" Booth

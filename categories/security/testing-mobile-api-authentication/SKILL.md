@@ -2,7 +2,7 @@
 name: testing-mobile-api-authentication
 description: "Tests authentication and authorization mechanisms in mobile application APIs to identify broken authentication, insecure token management, session fixation, privilege escalation, and IDOR vulnerabi..."
 license: MIT
-tags: [mobile-security, android, ios, api-security, authentication, penetration-testing]
+tags: [mobile-security, android, ios, api-security, authentication]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

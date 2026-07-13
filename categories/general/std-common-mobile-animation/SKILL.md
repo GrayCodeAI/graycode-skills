@@ -32,11 +32,11 @@ keywords: None
 4. **Wire gestures** using `onPan` / `interactivePopGesture` for fluid, interruptible UX.
 5. **Verify frame rate** in profiler — target 60fps with no jank frames.
 
-See [implementation examples](references/implementation.md) for Flutter and iOS animation patterns.
+See implementation examples for Flutter and iOS animation patterns.
 
 ## References
 
-- [Animation Patterns](references/animation-patterns.md)
+- Animation Patterns
 
 ## Anti-Patterns
 

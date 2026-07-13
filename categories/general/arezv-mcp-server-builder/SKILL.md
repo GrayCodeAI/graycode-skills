@@ -118,11 +118,11 @@ Checks include duplicate names, invalid schema shape, missing descriptions, empt
 
 ## Reference Material
 
-- [references/openapi-extraction-guide.md](references/openapi-extraction-guide.md)
-- [references/python-server-template.md](references/python-server-template.md)
-- [references/typescript-server-template.md](references/typescript-server-template.md)
-- [references/validation-checklist.md](references/validation-checklist.md)
-- [README.md](README.md)
+- references/openapi-extraction-guide.md
+- references/python-server-template.md
+- references/typescript-server-template.md
+- references/validation-checklist.md
+- README.md
 
 ## Architecture Decisions
 

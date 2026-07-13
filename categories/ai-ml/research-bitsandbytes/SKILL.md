@@ -2,7 +2,7 @@
 name: research-bitsandbytes
 description: "Quantizes LLMs to 8-bit or 4-bit for 50-75% memory reduction with minimal accuracy loss. Use when GPU memory is limited, need to fit larger models, or want faster inference. Supports INT8, NF4, FP4..."
 license: MIT
-tags: [optimization, bitsandbytes, quantization, bit, bit, memory-optimization, qlora, nf4, int8, huggingface, efficient-inference]
+tags: [optimization, bitsandbytes, quantization, bit, memory-optimization]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [bitsandbytes, transformers, accelerate, torch]
@@ -382,11 +382,11 @@ model = AutoModelForCausalLM.from_pretrained(
 
 ## Advanced topics
 
-**QLoRA training guide**: See [references/qlora-training.md](references/qlora-training.md) for complete fine-tuning workflows, hyperparameter tuning, and multi-GPU training.
+**QLoRA training guide**: See references/qlora-training.md for complete fine-tuning workflows, hyperparameter tuning, and multi-GPU training.
 
-**Quantization formats**: See [references/quantization-formats.md](references/quantization-formats.md) for INT8, NF4, FP4 comparison, double quantization, and custom quantization configs.
+**Quantization formats**: See references/quantization-formats.md for INT8, NF4, FP4 comparison, double quantization, and custom quantization configs.
 
-**Memory optimization**: See [references/memory-optimization.md](references/memory-optimization.md) for CPU offloading strategies, gradient checkpointing, and memory profiling.
+**Memory optimization**: See references/memory-optimization.md for CPU offloading strategies, gradient checkpointing, and memory profiling.
 
 ## Hardware requirements
 

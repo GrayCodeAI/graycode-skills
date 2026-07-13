@@ -2,7 +2,7 @@
 name: research-phoenix
 description: "Open-source AI observability platform for LLM tracing, evaluation, and monitoring. Use when debugging LLM applications with detailed traces, running evaluations on datasets, or monitoring productio..."
 license: MIT
-tags: [observability, phoenix, arize, tracing, evaluation, monitoring, llm-ops, opentelemetry]
+tags: [observability, phoenix, arize, tracing, evaluation]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [arize-phoenix>=12.0.0]
@@ -463,8 +463,8 @@ phoenix serve --log-level debug
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Custom evaluators, experiments, production setup
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging, performance
+- **Advanced Usage** - Custom evaluators, experiments, production setup
+- **Troubleshooting** - Common issues, debugging, performance
 
 ## Resources
 

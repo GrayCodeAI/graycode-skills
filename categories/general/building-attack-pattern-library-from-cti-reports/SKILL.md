@@ -2,7 +2,7 @@
 name: building-attack-pattern-library-from-cti-reports
 description: "Extract and catalog attack patterns from cyber threat intelligence reports into a structured STIX-based library mapped to MITRE ATT&CK for detection engineering and threat-informed defense."
 license: MIT
-tags: [attack-pattern, cti-reports, mitre-attack, stix, detection-engineering, threat-intelligence, nlp, extraction]
+tags: [attack-pattern, cti-reports, mitre-attack, stix, detection-engineering]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

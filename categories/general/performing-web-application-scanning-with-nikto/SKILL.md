@@ -2,7 +2,7 @@
 name: performing-web-application-scanning-with-nikto
 description: "Nikto is an open-source web server and web application scanner that tests against over 7,000 potentially dangerous files/programs, checks for outdated versions of over 1,250 servers, and identifies ve"
 license: MIT
-tags: [vulnerability-management, cve, nikto, web-scanning, owasp, risk]
+tags: [vulnerability-management, cve, nikto, web-scanning, owasp]
 domain: cybersecurity
 subdomain: vulnerability-management
 version: 1.0

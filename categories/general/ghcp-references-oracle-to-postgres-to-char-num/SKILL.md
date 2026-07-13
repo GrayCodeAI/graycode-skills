@@ -148,5 +148,5 @@ Npgsql.PostgresException: 42883: function to_char(bigint) does not exist
 
 ## See Also
 
-- [oracle-to-postgres-type-coercion.md](oracle-to-postgres-type-coercion.md) - Related type conversion issues
+- oracle-to-postgres-type-coercion.md - Related type conversion issues
 - PostgreSQL Documentation: [Data Type Formatting Functions](https://www.postgresql.org/docs/current/functions-formatting.html)

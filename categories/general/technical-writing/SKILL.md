@@ -2,7 +2,7 @@
 name: technical-writing
 description: "Write clear, comprehensive technical documentation. Use when creating specs, architecture docs, runbooks, or API documentation. Handles technical specifications, system design docs, operational gui..."
 license: MIT
-tags: [technical-writing, documentation, specs, architecture, runbooks, api-docs]
+tags: [technical-writing, documentation, specs, architecture, runbooks]
 allowed-tools: Read Write Edit Glob Grep
 metadata: None
 platforms: Claude, ChatGPT, Gemini
@@ -175,8 +175,8 @@ What this service does
 - Latency
 
 ### Dashboards
-- [Production Dashboard](link)
-- [Alerts](link)
+- Production Dashboard
+- Alerts
 
 ## Common Issues
 ### Issue 1: High latency
@@ -201,7 +201,7 @@ curl https://api/metrics
 ```
 
 ## Emergency Contacts
-- On-call: [PagerDuty](link)
+- On-call: PagerDuty
 - Team Slack: #team-name
 ```
 

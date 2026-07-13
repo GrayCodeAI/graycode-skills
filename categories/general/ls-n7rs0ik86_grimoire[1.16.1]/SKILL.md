@@ -156,4 +156,4 @@ If you think there might not be a correct answer or do not know the answer, say 
 ```
 
 GPT kb files list:
-- [Grimoire[1.16.1]](knowledge%2FGrimoire%5B1.16.1%5D)
+- Grimoire[1.16.1]

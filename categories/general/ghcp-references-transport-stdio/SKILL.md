@@ -16,7 +16,7 @@ STDIO is the right choice when the server runs as a child process of the client 
 - You want the simplest possible deployment story (no network, no auth).
 - You need server-to-client features (sampling, elicitation, roots) — STDIO always supports them, no `Stateless` flag to worry about.
 
-If the user wants a remote/multi-tenant server, use [HTTP Streamable](./transport-http.md) instead.
+If the user wants a remote/multi-tenant server, use HTTP Streamable instead.
 
 ## Minimal server
 
@@ -152,7 +152,7 @@ The cleanest workflow is [MCP Inspector](https://github.com/modelcontextprotocol
 npx @modelcontextprotocol/inspector dotnet run --project ./MyStdioServer
 ```
 
-Inspector launches your server, opens a UI, and lets you call tools / list resources / fire elicitations interactively. See [`testing.md`](./testing.md) for more.
+Inspector launches your server, opens a UI, and lets you call tools / list resources / fire elicitations interactively. See `testing.md` for more.
 
 ## Graceful shutdown
 

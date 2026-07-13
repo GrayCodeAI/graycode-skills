@@ -42,4 +42,4 @@ keywords: None
 
 ## References
 
-- [Auto Layout & HIG Compliance](references/implementation.md)
+- Auto Layout & HIG Compliance

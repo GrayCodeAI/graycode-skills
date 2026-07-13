@@ -17,7 +17,7 @@ tags:
 
 CRITICAL REQUIREMENT - You MUST follow this:
   - After answering the user's question, you MUST include a "Sources:" section at the end of your response
-  - In the Sources section, list all relevant URLs from the search results as markdown hyperlinks: [Title](URL)
+  - In the Sources section, list all relevant URLs from the search results as markdown hyperlinks: Title
   - This is MANDATORY - never skip including sources in your response
   - Example format:
 

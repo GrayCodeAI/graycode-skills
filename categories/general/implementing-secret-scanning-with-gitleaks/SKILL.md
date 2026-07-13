@@ -2,7 +2,7 @@
 name: implementing-secret-scanning-with-gitleaks
 description: "This skill covers implementing Gitleaks for detecting and preventing hardcoded secrets in git repositories. It addresses configuring pre-commit hooks, CI/CD pipeline integration, custom rule author..."
 license: MIT
-tags: [devsecops, cicd, secret-scanning, gitleaks, pre-commit, secure-sdlc]
+tags: [devsecops, cicd, secret-scanning, gitleaks, pre-commit]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

@@ -22,7 +22,7 @@ keywords: None
 
 ## Security Headers Middleware Example
 
-See [implementation examples](references/implementation.md#security-headers-middleware) for security headers middleware and directory structure.
+See implementation examples for security headers middleware and directory structure.
 
 ## Implementation Guidelines
 
@@ -50,4 +50,4 @@ See [implementation examples](references/implementation.md#security-headers-midd
 
 ## References
 
-- [Advanced Middleware Patterns](references/implementation.md)
+- Advanced Middleware Patterns

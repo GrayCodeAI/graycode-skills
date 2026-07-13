@@ -56,4 +56,4 @@ app/
 
 ## References
 
-- [Job Chaining & Event Patterns](references/implementation.md)
+- Job Chaining & Event Patterns

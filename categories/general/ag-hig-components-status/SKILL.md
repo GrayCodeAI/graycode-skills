@@ -52,9 +52,9 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [progress-indicators.md](references/progress-indicators.md) | Progress bars and spinners | Determinate, indeterminate, inline placement, duration |
-| [status-bars.md](references/status-bars.md) | iOS/iPadOS status bar | System info, visibility, style, safe areas |
-| [activity-rings.md](references/activity-rings.md) | watchOS activity rings | Move/Exercise/Stand, HealthKit, fitness tracking, color |
+| progress-indicators.md | Progress bars and spinners | Determinate, indeterminate, inline placement, duration |
+| status-bars.md | iOS/iPadOS status bar | System info, visibility, style, safe areas |
+| activity-rings.md | watchOS activity rings | Move/Exercise/Stand, HealthKit, fitness tracking, color |
 
 ## Output Format
 

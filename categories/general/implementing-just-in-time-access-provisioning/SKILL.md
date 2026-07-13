@@ -2,7 +2,7 @@
 name: implementing-just-in-time-access-provisioning
 description: "Implement Just-In-Time (JIT) access provisioning to eliminate standing privileges by granting temporary, time-bound access only when needed. This skill covers JIT architecture design, approval workflo"
 license: MIT
-tags: [iam, identity, access-control, jit, provisioning, zero-trust, least-privilege]
+tags: [iam, identity, access-control, jit, provisioning]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

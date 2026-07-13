@@ -2,7 +2,7 @@
 name: acquiring-disk-image-with-dd-and-dcfldd
 description: "Create forensically sound bit-for-bit disk images using dd and dcfldd while preserving evidence integrity through hash verification."
 license: MIT
-tags: [forensics, disk-imaging, evidence-acquisition, dd, dcfldd, hash-verification]
+tags: [forensics, disk-imaging, evidence-acquisition, dd, dcfldd]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -2,7 +2,7 @@
 name: aws-agentic-ai
 description: "AWS Bedrock AgentCore comprehensive expert for deploying and managing all AgentCore services including Gateway, Runtime, Memory, Identity, Code Interpreter, Browser, and Observability."
 license: MIT
-tags: [aws, bedrock, agentcore, mcp, ai-agents, serverless, gateway, runtime, memory, identity]
+tags: [aws, bedrock, agentcore, mcp, ai-agents]
 domain: cloud
 subdomain: aws
 version: 1.0

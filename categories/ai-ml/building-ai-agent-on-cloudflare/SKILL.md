@@ -2,7 +2,7 @@
 name: building-ai-agent-on-cloudflare
 description: "Builds AI agents on Cloudflare using the Agents SDK with state management, real-time WebSockets, scheduled tasks, tool integration, and chat capabilities."
 license: MIT
-tags: [ai-agents, cloudflare, workers, agents-sdk, websockets, state-management, chatbot, durable-objects]
+tags: [ai-agents, cloudflare, workers, agents-sdk, websockets]
 domain: ai-ml
 subdomain: cloudflare-agents
 version: 1.0

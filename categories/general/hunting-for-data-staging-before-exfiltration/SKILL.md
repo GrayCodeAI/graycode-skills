@@ -2,7 +2,7 @@
 name: hunting-for-data-staging-before-exfiltration
 description: "Detect data staging activity before exfiltration by monitoring for archive creation with 7-Zip/RAR, unusual temp folder access, large file consolidation, and staging directory patterns via EDR and ..."
 license: MIT
-tags: [data-staging, exfiltration, t1074, archive-detection, edr, threat-hunting, dlp]
+tags: [data-staging, exfiltration, t1074, archive-detection, edr]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

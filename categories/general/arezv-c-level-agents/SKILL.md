@@ -104,9 +104,9 @@ User question
 
 ## References
 
-- [persona-voices.md](persona-voices.md)
-- [llm-wiki-bridge.md](llm-wiki-bridge.md)
-- [Parent c-level CLAUDE.md](CLAUDE.md)
+- persona-voices.md
+- llm-wiki-bridge.md
+- Parent c-level CLAUDE.md
 - [Existing executive-mentor sibling]()
 
 ---

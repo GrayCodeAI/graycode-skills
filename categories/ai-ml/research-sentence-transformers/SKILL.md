@@ -2,7 +2,7 @@
 name: research-sentence-transformers
 description: "Framework for state-of-the-art sentence, text, and image embeddings. Provides 5000+ pre-trained models for semantic similarity, clustering, and retrieval. Supports multilingual, domain-specific, an..."
 license: MIT
-tags: [sentence-transformers, embeddings, semantic-similarity, rag, multilingual, multimodal, pre-trained-models, clustering, semantic-search, production]
+tags: [sentence-transformers, embeddings, semantic-similarity, rag, multilingual]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [sentence-transformers, transformers, torch]

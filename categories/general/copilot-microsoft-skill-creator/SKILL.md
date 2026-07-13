@@ -24,7 +24,7 @@ Orchestration SDK for integrating LLMs into applications with plugins, planners,
 
 ## Quick Start
 
-See [getting-started/hello-kernel.cs](sample_codes/getting-started/hello-kernel.cs)
+See getting-started/hello-kernel.cs
 
 ## Learn More
 

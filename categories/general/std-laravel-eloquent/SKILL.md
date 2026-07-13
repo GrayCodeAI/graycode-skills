@@ -23,7 +23,7 @@ keywords: None
 
 ## Scope + Eager Loading Example
 
-See [implementation examples](references/implementation.md#scope--eager-loading-example) for model scopes, eager loading, and directory structure.
+See implementation examples for model scopes, eager loading, and directory structure.
 
 ## Implementation Guidelines
 
@@ -52,4 +52,4 @@ See [implementation examples](references/implementation.md#scope--eager-loading-
 
 ## References
 
-- [Eloquent Performance Guide](references/implementation.md)
+- Eloquent Performance Guide

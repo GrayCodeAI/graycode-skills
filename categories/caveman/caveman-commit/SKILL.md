@@ -1,7 +1,7 @@
 ---
 name: caveman-commit
 description: >
-  Ultra-compressed commit message generator. Cuts noise from commit messages while preserving intent and reasoning. Conventional Commits format. Subject ≤50 chars, body only when "why" isn't obvious. Use when user says "write a commit", "commit message", "generate commit", "/commit", or invokes /caveman-commit. Auto-triggers when staging changes.
+  Generate terse Conventional Commit messages with a subject of at most 50 characters and a body only when the reason is not obvious.
 license: MIT
 tags: [caveman, prompt-compression]
 ---

@@ -614,3 +614,58 @@ class TestMain:
         content = (tmp_path / "registry.json").read_text(encoding="utf-8")
         # indent=2 means the JSON should contain newlines with 2-space indents
         assert "\n  " in content
+
+    def test_check_succeeds_without_modifying_current_registry(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        self._patch_paths(tmp_path, monkeypatch)
+        _write_skill(tmp_path, "cat", "current-skill")
+        expected = _mod.render_registry(_mod.build_registry())
+        registry_path = tmp_path / "registry.json"
+        registry_path.write_text(expected, encoding="utf-8")
+
+        _mod.main(["--check"])
+
+        assert registry_path.read_text(encoding="utf-8") == expected
+
+    def test_check_rejects_stale_registry_without_modifying_it(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        self._patch_paths(tmp_path, monkeypatch)
+        _write_skill(tmp_path, "cat", "new-skill")
+        registry_path = tmp_path / "registry.json"
+        stale = "[]\n"
+        registry_path.write_text(stale, encoding="utf-8")
+
+        with pytest.raises(SystemExit) as exc_info:
+            _mod.main(["--check"])
+
+        assert exc_info.value.code == 1
+        assert registry_path.read_text(encoding="utf-8") == stale
+
+    def test_check_rejects_missing_registry_without_creating_it(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        self._patch_paths(tmp_path, monkeypatch)
+        _write_skill(tmp_path, "cat", "unregistered-skill")
+        registry_path = tmp_path / "registry.json"
+
+        with pytest.raises(SystemExit) as exc_info:
+            _mod.main(["--check"])
+
+        assert exc_info.value.code == 1
+        assert not registry_path.exists()
+
+    def test_check_rejects_empty_skill_corpus_without_modifying_registry(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        self._patch_paths(tmp_path, monkeypatch)
+        registry_path = tmp_path / "registry.json"
+        original = '[{"name": "existing"}]\n'
+        registry_path.write_text(original, encoding="utf-8")
+
+        with pytest.raises(SystemExit) as exc_info:
+            _mod.main(["--check"])
+
+        assert exc_info.value.code == 1
+        assert registry_path.read_text(encoding="utf-8") == original

@@ -10,7 +10,6 @@ tags:
 - wsus
 - sccm
 - ansible
-- risk
 domain: cybersecurity
 subdomain: vulnerability-management
 version: 1.0

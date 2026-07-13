@@ -34,13 +34,13 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [designing-for-ios.md](references/designing-for-ios.md) | iOS | Touch, tab bars, navigation stacks, gestures, screen sizes, safe areas |
-| [designing-for-ipados.md](references/designing-for-ipados.md) | iPadOS | Multitasking, sidebars, pointer, keyboard, Apple Pencil, Stage Manager |
-| [designing-for-macos.md](references/designing-for-macos.md) | macOS | Menu bars, toolbars, window management, keyboard shortcuts, dense layouts, Dock |
-| [designing-for-tvos.md](references/designing-for-tvos.md) | tvOS | Focus engine, Siri Remote, lean-back experience, content-forward, parallax |
-| [designing-for-visionos.md](references/designing-for-visionos.md) | visionOS | Spatial computing, windows/volumes/spaces, eye tracking, hand gestures, depth |
-| [designing-for-watchos.md](references/designing-for-watchos.md) | watchOS | Glanceable UI, Digital Crown, complications, notifications, haptics |
-| [designing-for-games.md](references/designing-for-games.md) | Games | Controllers, immersive experiences, platform-specific conventions, accessibility |
+| designing-for-ios.md | iOS | Touch, tab bars, navigation stacks, gestures, screen sizes, safe areas |
+| designing-for-ipados.md | iPadOS | Multitasking, sidebars, pointer, keyboard, Apple Pencil, Stage Manager |
+| designing-for-macos.md | macOS | Menu bars, toolbars, window management, keyboard shortcuts, dense layouts, Dock |
+| designing-for-tvos.md | tvOS | Focus engine, Siri Remote, lean-back experience, content-forward, parallax |
+| designing-for-visionos.md | visionOS | Spatial computing, windows/volumes/spaces, eye tracking, hand gestures, depth |
+| designing-for-watchos.md | watchOS | Glanceable UI, Digital Crown, complications, notifications, haptics |
+| designing-for-games.md | Games | Controllers, immersive experiences, platform-specific conventions, accessibility |
 
 ## Decision Framework
 

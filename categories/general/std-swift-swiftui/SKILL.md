@@ -43,4 +43,4 @@ keywords: None
 
 ## References
 
-- [State & Binding](references/implementation.md)
+- State & Binding

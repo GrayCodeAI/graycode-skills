@@ -22,7 +22,7 @@ keywords: None
 - NEVER pass ViewModel to stateless composables.
 - Use `MaterialTheme.colorScheme`, no hardcoded hex.
 
-See [implementation examples](references/implementation.md) for state hoisting patterns.
+See implementation examples for state hoisting patterns.
 
 ## 2. Optimize Recomposition
 
@@ -31,7 +31,7 @@ See [implementation examples](references/implementation.md) for state hoisting p
 - Reuse or make Modifiers static where possible.
 - Use `derivedStateOf` for frequently updating derived values.
 
-See [implementation examples](references/implementation.md) for `derivedStateOf` usage.
+See implementation examples for `derivedStateOf` usage.
 
 ## 3. Handle Side Effects Properly
 
@@ -53,4 +53,4 @@ See [implementation examples](references/implementation.md) for `derivedStateOf`
 
 ## References
 
-- [Optimization Patterns](references/implementation.md)
+- Optimization Patterns

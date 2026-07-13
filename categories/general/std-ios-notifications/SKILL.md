@@ -22,7 +22,7 @@ keywords: None
 - **APNs**: Register for remote notifications in `AppDelegate`.
 - **Badges**: Manage app icon badges manually (set to 0 to clear).
 
-See [APNs registration and permission examples](references/implementation.md)
+See APNs registration and permission examples
 
 ## Anti-Patterns
 
@@ -32,4 +32,4 @@ See [APNs registration and permission examples](references/implementation.md)
 
 ## References
 
-- [Implementation Details](references/implementation.md)
+- Implementation Details

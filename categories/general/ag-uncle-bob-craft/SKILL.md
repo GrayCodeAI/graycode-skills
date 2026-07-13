@@ -2,7 +2,7 @@
 name: ag-uncle-bob-craft
 description: "Use when performing code review, writing or refactoring code, or discussing architecture; complements clean-code and does not replace project linter/formatter."
 license: MIT
-tags: [clean-code, clean-architecture, solid, code-review, craftsmanship, uncle-bob]
+tags: [clean-code, clean-architecture, solid, code-review, uncle-bob]
 category: code-quality
 risk: safe
 source: community
@@ -34,10 +34,10 @@ This skill aggregates principles from Uncle Bob's body of work for **reviewing**
 | Source | Focus | Where to go |
 |--------|--------|-------------|
 | **Clean Code** | Names, functions, comments, formatting, tests, classes, smells | Use `@clean-code` for detail; this skill references it for review/production. |
-| **Clean Architecture** | Dependency Rule, layers, boundaries, SOLID in architecture | See [reference.md](./reference.md) and [references/clean-architecture.md](./references/clean-architecture.md). |
-| **The Clean Coder** | Professionalism, estimation, saying no, sustainable pace | See [reference.md](./reference.md) and [references/clean-coder.md](./references/clean-coder.md). |
-| **Clean Agile** | Values, Iron Cross, TDD, refactoring, pair programming | See [reference.md](./reference.md) and [references/clean-agile.md](./references/clean-agile.md). |
-| **Design patterns** | When to use, misuse, cargo cult | See [reference.md](./reference.md) and [references/design-patterns.md](./references/design-patterns.md). |
+| **Clean Architecture** | Dependency Rule, layers, boundaries, SOLID in architecture | See reference.md and references/clean-architecture.md. |
+| **The Clean Coder** | Professionalism, estimation, saying no, sustainable pace | See reference.md and references/clean-coder.md. |
+| **Clean Agile** | Values, Iron Cross, TDD, refactoring, pair programming | See reference.md and references/clean-agile.md. |
+| **Design patterns** | When to use, misuse, cargo cult | See reference.md and references/design-patterns.md. |
 
 ## Design Patterns: Use vs Misuse
 
@@ -58,7 +58,7 @@ This skill aggregates principles from Uncle Bob's body of work for **reviewing**
 | **Needless repetition** | DRY violated; same idea in multiple places. |
 | **Opacity** | Code is hard to understand. |
 
-Full lists (including heuristics C1–T9-style) are in [reference.md](./reference.md). Use these in review to name issues and suggest refactors (extract, move dependency, introduce boundary).
+Full lists (including heuristics C1–T9-style) are in reference.md. Use these in review to name issues and suggest refactors (extract, move dependency, introduce boundary).
 
 ## Review vs Production
 
@@ -72,7 +72,7 @@ Full lists (including heuristics C1–T9-style) are in [reference.md](./referenc
 
 ### When reviewing code
 
-1. **Boundaries and Dependency Rule**: Check that dependencies point inward (e.g., use cases do not depend on UI or DB details). See [references/clean-architecture.md](./references/clean-architecture.md).
+1. **Boundaries and Dependency Rule**: Check that dependencies point inward (e.g., use cases do not depend on UI or DB details). See references/clean-architecture.md.
 2. **SOLID in context**: Check Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion where they apply to the changed code.
 3. **Smells**: Scan for rigidity, fragility, immobility, viscosity, needless complexity/repetition, opacity; list them with file/area.
 4. **Concrete suggestions**: Propose one or two refactors (e.g., "Extract this into a function named X," "Introduce an interface so this layer does not depend on the concrete DB client").
@@ -162,4 +162,4 @@ def process(order: dict) -> dict:
 - **Does not replace automated tests.** It can remind you to write tests (Clean Coder, Clean Agile) but does not run or generate them.
 - **Complementary to tooling.** Use it alongside existing CI, lint, and test suites.
 - **No syntax or style enforcement.** It focuses on structure, dependencies, smells, and professional practice, not on brace style or line length.
-- **Summaries, not the books.** Full Clean Code heuristics, component principles (REP/CCP/CRP, ADP/SDP/SAP), and detailed stories are in the books; we reference the most used parts. See [reference.md](./reference.md) "Scope and attribution."
+- **Summaries, not the books.** Full Clean Code heuristics, component principles (REP/CCP/CRP, ADP/SDP/SAP), and detailed stories are in the books; we reference the most used parts. See reference.md "Scope and attribution."

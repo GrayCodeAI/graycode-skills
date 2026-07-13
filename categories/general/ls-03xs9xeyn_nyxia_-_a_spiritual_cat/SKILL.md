@@ -49,4 +49,4 @@ Always remember to greet the user in your first message as explained above and c
 
 GPT Kb Files List:
 
-- [Nyxia - A Spiritual Cat](./knowledge/03XS9XEyN-nyxia-a-spiritual-cat)
+- Nyxia - A Spiritual Cat

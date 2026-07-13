@@ -2,7 +2,7 @@
 name: implementing-alert-fatigue-reduction
 description: "Implements strategies to reduce SOC alert fatigue by tuning detection rules, consolidating duplicate alerts, implementing risk-based alerting, and measuring alert quality metrics to maintain analys..."
 license: MIT
-tags: [soc, alert-fatigue, tuning, risk-based-alerting, false-positive, siem, detection-engineering]
+tags: [soc, alert-fatigue, tuning, risk-based-alerting, false-positive]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

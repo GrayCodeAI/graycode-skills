@@ -2,7 +2,7 @@
 name: ag-unslop
 description: "Post-process AI-generated text through the unslop CLI to strip AI writing patterns before publishing"
 license: MIT
-tags: [writing, content-quality, ai-writing, text-processing, cli, publishing]
+tags: [writing, content-quality, ai-writing, text-processing, cli]
 category: writing
 risk: safe
 source: community

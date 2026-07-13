@@ -10,11 +10,6 @@ tags:
 - fully-sharded-data-parallel
 - distributed-training
 - dtensor
-- device-mesh
-- sharded-checkpointing
-- mixed-precision
-- offload
-- torch-distributed
 version: 1.0.0
 author: Orchestra Research
 dependencies:

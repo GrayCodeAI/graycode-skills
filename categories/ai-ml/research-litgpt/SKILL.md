@@ -2,7 +2,7 @@
 name: research-litgpt
 description: "Implements and trains LLMs using Lightning AI's LitGPT with 20+ pretrained architectures (Llama, Gemma, Phi, Qwen, Mistral). Use when need clean model implementations, educational understanding of ..."
 license: MIT
-tags: [model-architecture, litgpt, lightning-ai, llm-implementation, lora, qlora, fine-tuning, llama, gemma, phi, mistral, educational]
+tags: [model-architecture, litgpt, lightning-ai, llm-implementation, lora]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [litgpt, torch, transformers]
@@ -441,13 +441,13 @@ Apply LoRA to fewer layers:
 
 ## Advanced topics
 
-**Supported architectures**: See [references/supported-models.md](references/supported-models.md) for complete list of 20+ model families with sizes and capabilities.
+**Supported architectures**: See references/supported-models.md for complete list of 20+ model families with sizes and capabilities.
 
-**Training recipes**: See [references/training-recipes.md](references/training-recipes.md) for proven hyperparameter configurations for pretraining and fine-tuning.
+**Training recipes**: See references/training-recipes.md for proven hyperparameter configurations for pretraining and fine-tuning.
 
-**FSDP configuration**: See [references/distributed-training.md](references/distributed-training.md) for multi-GPU training with Fully Sharded Data Parallel.
+**FSDP configuration**: See references/distributed-training.md for multi-GPU training with Fully Sharded Data Parallel.
 
-**Custom architectures**: See [references/custom-models.md](references/custom-models.md) for implementing new model architectures in LitGPT style.
+**Custom architectures**: See references/custom-models.md for implementing new model architectures in LitGPT style.
 
 ## Hardware requirements
 

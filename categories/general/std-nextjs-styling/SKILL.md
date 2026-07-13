@@ -24,7 +24,7 @@ Prioritize **Zero-Runtime** CSS for Server Components.
 
 ## cn Utility Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Library Selection
 
@@ -39,16 +39,16 @@ See [implementation examples](references/implementation.md)
 
 For specific library setups, see:
 
-- [references/scss.md](references/scss.md)
-- [references/ant-design.md](references/ant-design.md)
-- [references/tailwind.md](references/tailwind.md) (Tailwind/shadcn)
+- references/scss.md
+- references/ant-design.md
+- references/tailwind.md (Tailwind/shadcn)
 
 ## Patterns
 
 1. **Dynamic Classes**: Use `clsx` + `tailwind-merge` (`cn` utility).
- - _Reference_: [Dynamic Classes & Button Example](references/implementation.md)
+ - _Reference_: Dynamic Classes & Button Example
 2. **Font Optimization**: Use `next/font` to prevent Cumulative Layout Shift (CLS).
- - _Reference_: [Font Setup](references/implementation.md)
+ - _Reference_: Font Setup
 3. **CLS Prevention**: Always specify `width`/`height` on images.
 
 

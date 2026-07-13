@@ -33,4 +33,4 @@ keywords: None
 
 ## References
 
-- [Dispatcher Pattern](references/implementation.md)
+- Dispatcher Pattern

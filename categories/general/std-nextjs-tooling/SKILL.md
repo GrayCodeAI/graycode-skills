@@ -15,11 +15,11 @@ keywords: None
 
 ## Standalone Docker Config
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Environment Variable Validation
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -39,4 +39,4 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [CI/CD & Deployment Guide](references/implementation.md)
+- CI/CD & Deployment Guide

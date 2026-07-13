@@ -27,12 +27,12 @@ keywords: None
 
 ### Repository & BLoC Examples
 
-See [implementation examples](references/implementation.md) for repository error mapping and BLoC consumption patterns.
+See implementation examples for repository error mapping and BLoC consumption patterns.
 
 ## Reference & Examples
 
 For Failure definitions and API error mapping:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Anti-Patterns
 

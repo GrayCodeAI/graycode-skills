@@ -9,7 +9,7 @@ tags: [general]
 
 Run your own prompts.chat instance using Docker Compose.
 
-[`compose.yml`](/compose.yml) supports both the pre-built container image being fetched from ghcr.io, or being built locally.
+`compose.yml` supports both the pre-built container image being fetched from ghcr.io, or being built locally.
 
 ## Quick Start
 

@@ -9,7 +9,7 @@ tags: [general]
 
 Build an interactive CLI tool that visualizes pull request age distribution for a GitHub repository using Copilot's built-in capabilities.
 
-> **Runnable example:** [recipe/pr-visualization.cs](recipe/pr-visualization.cs)
+> **Runnable example:** recipe/pr-visualization.cs
 >
 > ```bash
 > # Auto-detect from current git repo

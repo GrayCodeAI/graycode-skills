@@ -69,7 +69,7 @@ def is_non_public(network):
 
 ## ISO 3166-1 country code validation
 
-Read the valid ISO 2-letter country codes from [assets/iso3166-1.json](iso3166-1.json), specifically the `alpha_2` attribute:
+Read the valid ISO 2-letter country codes from assets/iso3166-1.json, specifically the `alpha_2` attribute:
 
 ```python
 import json
@@ -81,7 +81,7 @@ with open('assets/iso3166-1.json') as f:
 
 ## ISO 3166-2 region code validation
 
-Read the valid region codes from [assets/iso3166-2.json](iso3166-2.json), specifically the `code` attribute. The top-level key is `3166-2` (matching the iso3166-1 pattern):
+Read the valid region codes from assets/iso3166-2.json, specifically the `code` attribute. The top-level key is `3166-2` (matching the iso3166-1 pattern):
 
 ```python
 import json

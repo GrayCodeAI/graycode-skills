@@ -380,7 +380,7 @@ const context = await browser.newContext(
 
 ## Advanced Usage
 
-For comprehensive Playwright API documentation, see [API_REFERENCE.md](API_REFERENCE.md):
+For comprehensive Playwright API documentation, see API_REFERENCE.md:
 
 - Selectors & Locators best practices
 - Network interception & API mocking

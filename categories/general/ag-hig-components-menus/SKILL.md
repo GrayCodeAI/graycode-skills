@@ -38,17 +38,17 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [menus.md](references/menus.md) | General menu design | Item ordering, grouping, shortcuts |
-| [context-menus.md](references/context-menus.md) | Context menus | Right-click, long press, secondary actions |
-| [dock-menus.md](references/dock-menus.md) | Dock menus | macOS app-level actions, running state |
-| [edit-menus.md](references/edit-menus.md) | Edit menus | Undo, copy, paste, standard items |
-| [the-menu-bar.md](references/the-menu-bar.md) | Menu bar | macOS primary command interface, structure |
-| [toolbars.md](references/toolbars.md) | Toolbars | Frequent actions, customization, placement |
-| [buttons.md](references/buttons.md) | Buttons | System styles, sizing, affordance |
-| [action-button.md](references/action-button.md) | Action button | Grouped secondary actions, toolbar use |
-| [pop-up-buttons.md](references/pop-up-buttons.md) | Pop-up buttons | Mutually exclusive choice selection |
-| [pull-down-buttons.md](references/pull-down-buttons.md) | Pull-down buttons | Action lists, no current selection |
-| [disclosure-controls.md](references/disclosure-controls.md) | Disclosure controls | Progressive disclosure, show/hide |
+| menus.md | General menu design | Item ordering, grouping, shortcuts |
+| context-menus.md | Context menus | Right-click, long press, secondary actions |
+| dock-menus.md | Dock menus | macOS app-level actions, running state |
+| edit-menus.md | Edit menus | Undo, copy, paste, standard items |
+| the-menu-bar.md | Menu bar | macOS primary command interface, structure |
+| toolbars.md | Toolbars | Frequent actions, customization, placement |
+| buttons.md | Buttons | System styles, sizing, affordance |
+| action-button.md | Action button | Grouped secondary actions, toolbar use |
+| pop-up-buttons.md | Pop-up buttons | Mutually exclusive choice selection |
+| pull-down-buttons.md | Pull-down buttons | Action lists, no current selection |
+| disclosure-controls.md | Disclosure controls | Progressive disclosure, show/hide |
 
 ## Output Format
 

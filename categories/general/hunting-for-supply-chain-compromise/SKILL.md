@@ -2,7 +2,7 @@
 name: hunting-for-supply-chain-compromise
 description: "Hunt for supply chain compromise indicators including trojanized software updates, compromised dependencies, unauthorized code modifications, and tampered build artifacts."
 license: MIT
-tags: [threat-hunting, mitre-attack, supply-chain, initial-access, t1195, proactive-detection]
+tags: [threat-hunting, mitre-attack, supply-chain, initial-access, t1195]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

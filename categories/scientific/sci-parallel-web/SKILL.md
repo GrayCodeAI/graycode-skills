@@ -42,7 +42,7 @@ Across all capabilities, prefer academic and scientific sources when the query i
 - Institutional and government sources (NIH, WHO, NASA, NIST) over commercial sites
 - Primary research over secondary summaries
 
-When citing academic sources, include author names and publication year where available (e.g., [Smith et al., 2025](url)) in addition to the standard citation format. If a DOI is present, prefer the DOI link.
+When citing academic sources, include author names and publication year where available (e.g., Smith et al., 2025) in addition to the standard citation format. If a DOI is present, prefer the DOI link.
 
 ## Context chaining
 

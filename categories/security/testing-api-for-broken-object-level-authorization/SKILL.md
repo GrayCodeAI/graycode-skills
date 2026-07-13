@@ -2,7 +2,7 @@
 name: testing-api-for-broken-object-level-authorization
 description: "Tests REST and GraphQL APIs for Broken Object Level Authorization (BOLA/IDOR) vulnerabilities where an authenticated user can access or modify resources belonging to other users by manipulating obj..."
 license: MIT
-tags: [api-security, owasp, bola, idor, authorization, rest-security]
+tags: [api-security, owasp, bola, idor, authorization]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

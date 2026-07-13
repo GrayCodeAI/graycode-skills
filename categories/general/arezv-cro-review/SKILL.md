@@ -103,7 +103,7 @@ python skills/cro-advisor/scripts/churn_analyzer.py
 
 ## Related
 
-- Agent: [`cs-cro-advisor`](cs-cro-advisor.md)
+- Agent: `cs-cro-advisor`
 - Skill: [`cro-advisor`](SKILL.md)
 - Execution: `business-growth/`
 

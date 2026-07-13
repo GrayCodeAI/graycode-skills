@@ -2,7 +2,7 @@
 name: implementing-ticketing-system-for-incidents
 description: "Implements an integrated incident ticketing system connecting SIEM alerts to ServiceNow, Jira, or TheHive for structured incident tracking, SLA management, escalation workflows, and compliance docu..."
 license: MIT
-tags: [soc, ticketing, servicenow, jira, thehive, incident-management, sla, workflow]
+tags: [soc, ticketing, servicenow, jira, thehive]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

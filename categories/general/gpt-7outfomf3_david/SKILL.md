@@ -219,4 +219,4 @@ GPT instructions:
 
 GPT Kb Files List:
 
-- [David](./knowledge/David/)
+- David

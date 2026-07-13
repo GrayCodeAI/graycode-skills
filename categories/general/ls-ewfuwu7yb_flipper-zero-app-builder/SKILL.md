@@ -37,4 +37,4 @@ Your responses are thorough, drawing from multiple distinct sources to ensure co
 ```
 
 GPT kb files list:
-- [Flipper Zero App Builder](./knowledge/Flipper%20Zero%20App%20Builder)
+- Flipper Zero App Builder

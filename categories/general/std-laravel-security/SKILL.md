@@ -23,7 +23,7 @@ keywords: None
 
 ## Policy Example
 
-See [implementation examples](references/implementation.md#policy-example) for Policy class with controller authorization.
+See implementation examples for Policy class with controller authorization.
 
 ## Implementation Guidelines
 
@@ -54,4 +54,4 @@ See [implementation examples](references/implementation.md#policy-example) for P
 
 ## References
 
-- [Policy & Env Best Practices](references/implementation.md)
+- Policy & Env Best Practices

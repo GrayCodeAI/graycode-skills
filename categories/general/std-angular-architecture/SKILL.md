@@ -47,4 +47,4 @@ keywords: None
 
 ## References
 
-- [Folder Structure](references/folder-structure.md)
+- Folder Structure

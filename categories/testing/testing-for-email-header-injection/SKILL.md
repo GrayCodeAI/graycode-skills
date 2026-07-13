@@ -2,7 +2,7 @@
 name: testing-for-email-header-injection
 description: "Test web application email functionality for SMTP header injection vulnerabilities that allow attackers to inject additional email headers, modify recipients, and abuse contact forms for spam relay."
 license: MIT
-tags: [email-injection, smtp-injection, crlf-injection, header-injection, spam-relay, contact-form, email-security]
+tags: [email-injection, smtp-injection, crlf-injection, header-injection, spam-relay]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

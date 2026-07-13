@@ -10,8 +10,6 @@ tags:
 - opa
 - gatekeeper
 - policy-as-code
-- kubernetes
-- secure-sdlc
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

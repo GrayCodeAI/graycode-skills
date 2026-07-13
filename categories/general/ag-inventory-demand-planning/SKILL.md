@@ -147,7 +147,7 @@ If flagged, initiate markdown at 30% off for 4 weeks. If still not moving, escal
 
 ## Key Edge Cases
 
-Brief summaries here. Full analysis in [edge-cases.md](references/edge-cases.md).
+Brief summaries here. Full analysis in edge-cases.md.
 
 1. **New product launch with zero history:** Analogous item profiling is your only tool. Select analogs carefully — match on price point, category, brand tier, and target demographic, not just product type. Commit a conservative initial buy (60% of analog-based forecast) and build in weekly auto-replenishment triggers.
 
@@ -176,7 +176,7 @@ Brief summaries here. Full analysis in [edge-cases.md](references/edge-cases.md)
 - **Promotional forecast submission:** Structured, with baseline, lift, and post-promo dip called out separately. Include assumptions and confidence range. "Baseline: 500 units/week. Promotional lift estimate: 180% (900 incremental). Post-promo dip: −35% for 2 weeks. Confidence: ±25%."
 - **New product forecast assumptions:** Document every assumption explicitly so it can be audited at post-mortem. "Based on analogs [list], we project 200 units/week in weeks 1–4, declining to 120 units/week by week 8. Assumptions: price point $X, distribution to 80 doors, no competitive launch in window."
 
-Brief templates above. Full versions with variables in [communication-templates.md](references/communication-templates.md).
+Brief templates above. Full versions with variables in communication-templates.md.
 
 ## Escalation Protocols
 
@@ -214,9 +214,9 @@ Track weekly and trend monthly:
 
 ## Additional Resources
 
-- For detailed decision frameworks, optimization models, and method selection trees, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full resolution playbooks, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and tone guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks, optimization models, and method selection trees, see decision-frameworks.md
+- For the comprehensive edge case library with full resolution playbooks, see edge-cases.md
+- For complete communication templates with variables and tone guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you need to **forecast demand and shape inventory policy across SKUs, stores, and vendors**:

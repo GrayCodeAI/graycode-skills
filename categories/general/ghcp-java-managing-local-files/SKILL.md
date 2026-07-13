@@ -9,7 +9,7 @@ tags: [general]
 
 Use Copilot to intelligently organize files in a folder based on their metadata.
 
-> **Runnable example:** [recipe/ManagingLocalFiles.java](recipe/ManagingLocalFiles.java)
+> **Runnable example:** recipe/ManagingLocalFiles.java
 >
 > ```bash
 > jbang recipe/ManagingLocalFiles.java

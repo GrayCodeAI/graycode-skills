@@ -10,7 +10,6 @@ tags:
 - sglang
 - grpo
 - post-training
-- glm
 version: 1.0.0
 author: Orchestra Research
 dependencies:

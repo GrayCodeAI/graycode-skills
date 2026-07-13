@@ -2,7 +2,7 @@
 name: research-pinecone
 description: "Managed vector database for production AI applications. Fully managed, auto-scaling, with hybrid search (dense + sparse), metadata filtering, and namespaces. Low latency (<100ms p95). Use for produ..."
 license: MIT
-tags: [rag, pinecone, vector-database, managed-service, serverless, hybrid-search, production, auto-scaling, low-latency, recommendations]
+tags: [rag, pinecone, vector-database, managed-service, serverless]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [pinecone-client]

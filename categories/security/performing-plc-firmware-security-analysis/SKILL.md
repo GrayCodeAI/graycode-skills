@@ -2,7 +2,7 @@
 name: performing-plc-firmware-security-analysis
 description: "This skill covers analyzing Programmable Logic Controller (PLC) firmware for security vulnerabilities including hardcoded credentials, insecure update mechanisms, backdoor functions, memory corrupt..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, firmware-analysis, plc-security]
+tags: [ot-security, ics, scada, firmware-analysis, plc-security]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

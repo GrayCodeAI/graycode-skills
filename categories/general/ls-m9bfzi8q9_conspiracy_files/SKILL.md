@@ -75,4 +75,4 @@ Then In a short 1  line response, The game introduces itself as Eli and asks for
 
 GPT Kb Files List:
 
-- [Conspiracy Files](./knowledge/Conspiracy%20Files/)
+- Conspiracy Files

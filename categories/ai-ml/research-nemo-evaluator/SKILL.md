@@ -2,7 +2,7 @@
 name: research-nemo-evaluator
 description: "Evaluates LLMs across 100+ benchmarks from 18+ harnesses (MMLU, HumanEval, GSM8K, safety, VLM) with multi-backend execution. Use when needing scalable evaluation on local Docker, Slurm HPC, or clou..."
 license: MIT
-tags: [evaluation, nemo, nvidia, benchmarking, mmlu, humaneval, multi-backend, slurm, docker, reproducible, enterprise]
+tags: [evaluation, nemo, nvidia, benchmarking, mmlu]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [nemo-evaluator-launcher>=0.1.25, docker]
@@ -474,10 +474,10 @@ result = evaluate(eval_cfg=eval_config, target_cfg=target_config)
 
 ## Advanced Topics
 
-**Multi-backend execution**: See [references/execution-backends.md](references/execution-backends.md)
-**Configuration deep-dive**: See [references/configuration.md](references/configuration.md)
-**Adapter and interceptor system**: See [references/adapter-system.md](references/adapter-system.md)
-**Custom benchmark integration**: See [references/custom-benchmarks.md](references/custom-benchmarks.md)
+**Multi-backend execution**: See references/execution-backends.md
+**Configuration deep-dive**: See references/configuration.md
+**Adapter and interceptor system**: See references/adapter-system.md
+**Custom benchmark integration**: See references/custom-benchmarks.md
 
 ## Requirements
 

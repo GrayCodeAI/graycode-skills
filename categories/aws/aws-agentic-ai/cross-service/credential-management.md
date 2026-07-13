@@ -438,13 +438,13 @@ aws bedrock-agentcore-control get-api-key-credential-provider \
 
 ## References
 
-- **[Identity Service](README.md)**: Credential provider management
-- **[Gateway Service](README.md)**: Uses credentials for API authentication
+- **Identity Service**: Credential provider management
+- **Gateway Service**: Uses credentials for API authentication
 - **AWS Secrets Manager**: [Pricing](https://aws.amazon.com/secrets-manager/pricing/)
 - **AWS Documentation**: [Managing AWS Secrets Manager secrets](https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_create-basic-secret.html)
 
 ---
 
 **Related Guides**:
-- [Observability Service](README.md)
+- Observability Service
 - [AWS AgentCore Identity Documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/identity.html)

@@ -2,7 +2,7 @@
 name: building-incident-response-dashboard
 description: "Builds real-time incident response dashboards in Splunk, Elastic, or Grafana to provide SOC analysts and leadership with situational awareness during active incidents, tracking affected systems, co..."
 license: MIT
-tags: [soc, dashboard, incident-response, splunk, visualization, situational-awareness, metrics]
+tags: [soc, dashboard, incident-response, splunk, visualization]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

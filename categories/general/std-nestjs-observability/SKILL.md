@@ -18,7 +18,7 @@ keywords: None
 
 Use `nestjs-pino` for high-performance, async JSON logging. Node's `console.log` blocking and unstructured.
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Tracing (Correlation)
 
@@ -29,7 +29,7 @@ See [implementation examples](references/example.md)
 
 Expose `/metrics` for Prometheus scraping using `@willsoto/nestjs-prometheus`.
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Health Checks
 

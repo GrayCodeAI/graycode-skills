@@ -27,7 +27,7 @@ Maintain single source of truth for locales and ensure SEO-friendly sub-path rou
 
 ## Middleware Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -42,8 +42,8 @@ See [implementation examples](references/implementation.md)
 
 For detailed setup with common libraries, refer to:
 
-- [references/react-intl.md](references/react-intl.md)
-- [references/next-intl.md](references/next-intl.md)
+- references/react-intl.md
+- references/next-intl.md
 
 ## Anti-Patterns
 

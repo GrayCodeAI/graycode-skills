@@ -63,7 +63,7 @@ export default new LoginPage();
 
 ### TestMu AI Cloud
 
-See [reference/cloud-integration.md](reference/cloud-integration.md) for full cloud setup and [shared/testmu-cloud-reference.md](testmu-cloud-reference.md) for capabilities.
+See reference/cloud-integration.md for full cloud setup and shared/testmu-cloud-reference.md for capabilities.
 
 ```bash
 export LT_USERNAME=your_username

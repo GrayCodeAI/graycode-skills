@@ -68,34 +68,34 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [siri.md](references/siri.md) | Siri | Intents, shortcuts, voice interaction, App Shortcuts |
-| [apple-pay.md](references/apple-pay.md) | Apple Pay | Payment buttons, checkout flow, security |
-| [tap-to-pay-on-iphone.md](references/tap-to-pay-on-iphone.md) | Tap to Pay | Merchant flows, contactless payment |
-| [in-app-purchase.md](references/in-app-purchase.md) | In-app purchase | Subscriptions, one-time purchases, transparency |
-| [healthkit.md](references/healthkit.md) | HealthKit | Health data access, privacy, permissions |
-| [carekit.md](references/carekit.md) | CareKit | Care plans, tasks, health management |
-| [researchkit.md](references/researchkit.md) | ResearchKit | Studies, informed consent, data collection |
-| [homekit.md](references/homekit.md) | HomeKit | Smart home control, device state, scenes |
-| [augmented-reality.md](references/augmented-reality.md) | ARKit | Spatial context, surface detection, setup |
-| [machine-learning.md](references/machine-learning.md) | Core ML | Predictions, smart features, confidence handling |
-| [generative-ai.md](references/generative-ai.md) | Generative AI | Attribution, editing, responsible AI, uncertainty |
-| [icloud.md](references/icloud.md) | iCloud | CloudKit, cross-device sync, conflict resolution |
-| [sign-in-with-apple.md](references/sign-in-with-apple.md) | Sign in with Apple | Authentication, privacy, button styles |
-| [id-verifier.md](references/id-verifier.md) | ID Verifier | Identity verification, document scanning |
-| [shareplay.md](references/shareplay.md) | SharePlay | Shared experiences, participant presence |
-| [airplay.md](references/airplay.md) | AirPlay | Media streaming, Now Playing, wireless display |
-| [carplay.md](references/carplay.md) | CarPlay | Driver safety, permitted app types, large targets |
-| [game-center.md](references/game-center.md) | Game Center | Achievements, leaderboards, multiplayer |
-| [voiceover.md](references/voiceover.md) | VoiceOver | Screen reader, labels, traits, accessibility |
-| [wallet.md](references/wallet.md) | Wallet | Passes, tickets, loyalty cards |
-| [nfc.md](references/nfc.md) | NFC | Tag reading, quick interactions, App Clips |
-| [maps.md](references/maps.md) | Maps | Location display, annotations, directions |
-| [mac-catalyst.md](references/mac-catalyst.md) | Mac Catalyst | iPad to Mac, menu bar, keyboard, pointer |
-| [live-photos.md](references/live-photos.md) | Live Photos | Motion capture, playback, editing |
-| [imessage-apps-and-stickers.md](references/imessage-apps-and-stickers.md) | iMessage apps | Messages extension, stickers, compact UI |
-| [shazamkit.md](references/shazamkit.md) | ShazamKit | Audio recognition, music identification |
-| [always-on.md](references/always-on.md) | Always-on display | Dimmed state, power efficiency, reduced updates |
-| [photo-editing.md](references/photo-editing.md) | Photo editing | System photo editor, filters, adjustments |
+| siri.md | Siri | Intents, shortcuts, voice interaction, App Shortcuts |
+| apple-pay.md | Apple Pay | Payment buttons, checkout flow, security |
+| tap-to-pay-on-iphone.md | Tap to Pay | Merchant flows, contactless payment |
+| in-app-purchase.md | In-app purchase | Subscriptions, one-time purchases, transparency |
+| healthkit.md | HealthKit | Health data access, privacy, permissions |
+| carekit.md | CareKit | Care plans, tasks, health management |
+| researchkit.md | ResearchKit | Studies, informed consent, data collection |
+| homekit.md | HomeKit | Smart home control, device state, scenes |
+| augmented-reality.md | ARKit | Spatial context, surface detection, setup |
+| machine-learning.md | Core ML | Predictions, smart features, confidence handling |
+| generative-ai.md | Generative AI | Attribution, editing, responsible AI, uncertainty |
+| icloud.md | iCloud | CloudKit, cross-device sync, conflict resolution |
+| sign-in-with-apple.md | Sign in with Apple | Authentication, privacy, button styles |
+| id-verifier.md | ID Verifier | Identity verification, document scanning |
+| shareplay.md | SharePlay | Shared experiences, participant presence |
+| airplay.md | AirPlay | Media streaming, Now Playing, wireless display |
+| carplay.md | CarPlay | Driver safety, permitted app types, large targets |
+| game-center.md | Game Center | Achievements, leaderboards, multiplayer |
+| voiceover.md | VoiceOver | Screen reader, labels, traits, accessibility |
+| wallet.md | Wallet | Passes, tickets, loyalty cards |
+| nfc.md | NFC | Tag reading, quick interactions, App Clips |
+| maps.md | Maps | Location display, annotations, directions |
+| mac-catalyst.md | Mac Catalyst | iPad to Mac, menu bar, keyboard, pointer |
+| live-photos.md | Live Photos | Motion capture, playback, editing |
+| imessage-apps-and-stickers.md | iMessage apps | Messages extension, stickers, compact UI |
+| shazamkit.md | ShazamKit | Audio recognition, music identification |
+| always-on.md | Always-on display | Dimmed state, power efficiency, reduced updates |
+| photo-editing.md | Photo editing | System photo editor, filters, adjustments |
 
 ## Output Format
 

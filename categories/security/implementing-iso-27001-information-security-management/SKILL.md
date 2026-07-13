@@ -2,7 +2,7 @@
 name: implementing-iso-27001-information-security-management
 description: "ISO/IEC 27001:2022 is the international standard for establishing, implementing, maintaining, and continually improving an Information Security Management System (ISMS). This skill covers the complete"
 license: MIT
-tags: [compliance, governance, iso27001, isms, risk-management, certification]
+tags: [compliance, governance, iso27001, isms, risk-management]
 domain: cybersecurity
 subdomain: compliance-governance
 version: 1.0

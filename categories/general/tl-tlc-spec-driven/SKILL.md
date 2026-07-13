@@ -30,7 +30,7 @@ Plan and implement projects with precision. Granular tasks. Clear dependencies. 
 | **Small**   | ≤3 files, one sentence   | **Quick mode** — skip pipeline entirely                 | -                                               | -                             | -                                                     |
 | **Medium**  | Clear feature, <10 tasks | Spec (brief)                                            | Skip — design inline                            | Skip — tasks implicit         | Implement + verify                                    |
 | **Large**   | Multi-component feature  | Full spec + requirement IDs                             | Architecture + components                       | Full breakdown + dependencies | Implement + verify per task                           |
-| **Complex** | Ambiguity, new domain    | Full spec + [discuss gray areas](references/discuss.md) | [Research](references/design.md) + architecture | Breakdown + parallel plan     | Implement + [interactive UAT](references/validate.md) |
+| **Complex** | Ambiguity, new domain    | Full spec + discuss gray areas | Research + architecture | Breakdown + parallel plan     | Implement + interactive UAT |
 
 **Rules:**
 
@@ -41,7 +41,7 @@ Plan and implement projects with precision. Granular tasks. Clear dependencies. 
 - **Interactive UAT is triggered within Execute** only for user-facing features with complex behavior
 - **Quick mode** is the express lane — for bug fixes, config changes, and small tweaks
 
-**Safety valve:** Even when Tasks is skipped, Execute ALWAYS starts by listing atomic steps inline (see [implement.md](references/implement.md)). If that listing reveals >5 steps or complex dependencies, STOP and create a formal `tasks.md` — the Tasks phase was wrongly skipped.
+**Safety valve:** Even when Tasks is skipped, Execute ALWAYS starts by listing atomic steps inline (see implement.md). If that listing reveals >5 steps or complex dependencies, STOP and create a formal `tasks.md` — the Tasks phase was wrongly skipped.
 
 ## Project Structure
 
@@ -112,7 +112,7 @@ Plan and implement projects with precision. Granular tasks. Clear dependencies. 
 
 **Target:** <40k tokens total context
 **Reserve:** 160k+ tokens for work, reasoning, outputs
-**Monitoring:** Display status when >40k (see [context-limits.md](references/context-limits.md))
+**Monitoring:** Display status when >40k (see context-limits.md)
 
 ## Sub-Agent Delegation
 
@@ -157,24 +157,24 @@ The orchestrating agent uses this to update tasks.md status, traceability, and d
 **Project-level:**
 | Trigger Pattern | Reference |
 |----------------|-----------|
-| Initialize project, setup project | [project-init.md](references/project-init.md) |
-| Create roadmap, plan features | [roadmap.md](references/roadmap.md) |
-| Map codebase, analyze existing code | [brownfield-mapping.md](references/brownfield-mapping.md) |
-| Document concerns, find tech debt, what's risky | [concerns.md](references/concerns.md) |
-| Record decision, log blocker, add todo | [state-management.md](references/state-management.md) |
-| Pause work, end session | [session-handoff.md](references/session-handoff.md) |
-| Resume work, continue | [session-handoff.md](references/session-handoff.md) |
+| Initialize project, setup project | project-init.md |
+| Create roadmap, plan features | roadmap.md |
+| Map codebase, analyze existing code | brownfield-mapping.md |
+| Document concerns, find tech debt, what's risky | concerns.md |
+| Record decision, log blocker, add todo | state-management.md |
+| Pause work, end session | session-handoff.md |
+| Resume work, continue | session-handoff.md |
 
 **Feature-level (auto-sized):**
 | Trigger Pattern | Reference |
 |----------------|-----------|
-| Specify feature, define requirements | [specify.md](references/specify.md) |
-| Discuss feature, capture context, how should this work | [discuss.md](references/discuss.md) |
-| Design feature, architecture | [design.md](references/design.md) |
-| Break into tasks, create tasks | [tasks.md](references/tasks.md) |
-| Implement task, build, execute | [implement.md](references/implement.md) |
-| Validate, verify, test, UAT, walk me through it | [validate.md](references/validate.md) |
-| Quick fix, quick task, small change, bug fix | [quick-mode.md](references/quick-mode.md) |
+| Specify feature, define requirements | specify.md |
+| Discuss feature, capture context, how should this work | discuss.md |
+| Design feature, architecture | design.md |
+| Break into tasks, create tasks | tasks.md |
+| Implement task, build, execute | implement.md |
+| Validate, verify, test, UAT, walk me through it | validate.md |
+| Quick fix, quick task, small change, bug fix | quick-mode.md |
 
 ## Skill Integrations
 
@@ -186,7 +186,7 @@ Whenever the workflow requires creating or updating a diagram (architecture over
 
 ### Code Exploration → codenavi
 
-Whenever the workflow requires exploring or discovering things in an existing repository (brownfield mapping, code reuse analysis, pattern identification, dependency tracing, etc.), **always** check if the `codenavi` skill is installed in the user's environment before proceeding. If it is installed, delegate code exploration and navigation tasks to it. If it is not installed, fall back to the built-in code analysis tools (see [code-analysis.md](references/code-analysis.md)) and recommend the user install `codenavi` for more effective codebase exploration. Display this recommendation at most once per session.
+Whenever the workflow requires exploring or discovering things in an existing repository (brownfield mapping, code reuse analysis, pattern identification, dependency tracing, etc.), **always** check if the `codenavi` skill is installed in the user's environment before proceeding. If it is installed, delegate code exploration and navigation tasks to it. If it is not installed, fall back to the built-in code analysis tools (see code-analysis.md) and recommend the user install `codenavi` for more effective codebase exploration. Display this recommendation at most once per session.
 
 ## Knowledge Verification Chain
 
@@ -214,4 +214,4 @@ Be conversational, not robotic. Don't interrupt workflow—add as a natural clos
 
 ## Code Analysis
 
-Use available tools with graceful degradation. See [code-analysis.md](references/code-analysis.md).
+Use available tools with graceful degradation. See code-analysis.md.

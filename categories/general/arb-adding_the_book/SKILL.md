@@ -16,5 +16,5 @@ Use lowercase kebab-case for the book directory name.
 3. Ask the chatbot to produce a full `AGENTS.md` in this repository's `full` standard, not a loose summary. It should preserve the book's structure and distinctive bias, express obligations as `MUST`, strong defaults as `SHOULD`, prohibitions as `MUST NOT`, and keep anti-patterns explicit.
 4. Review the generated `AGENTS.md` before importing it. Check that no important local discipline was flattened into generic advice, that modal strength matches the book's intent, and that the chatbot did not invent unsupported rules.
 5. Move the approved file to `_rule-workbench/<book-name>/full.md`.
-6. Ask the chatbot to run the workflow from [_rule-workbench/PROCESS.md](PROCESS.md) for that book.
-7. Ask the chatbot to execute the release instructions from [_rule-workbench/RELEASE.md](RELEASE.md).
+6. Ask the chatbot to run the workflow from _rule-workbench/PROCESS.md for that book.
+7. Ask the chatbot to execute the release instructions from _rule-workbench/RELEASE.md.

@@ -2,7 +2,7 @@
 name: performing-user-behavior-analytics
 description: "Performs User and Entity Behavior Analytics (UEBA) to detect anomalous user activities including impossible travel, unusual access patterns, privilege abuse, and insider threats using SIEM-based be..."
 license: MIT
-tags: [soc, ueba, user-behavior, insider-threat, anomaly-detection, splunk, baseline]
+tags: [soc, ueba, user-behavior, insider-threat, anomaly-detection]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

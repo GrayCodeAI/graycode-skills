@@ -2,7 +2,7 @@
 name: testing-for-xml-injection-vulnerabilities
 description: "Test web applications for XML injection vulnerabilities including XXE, XPath injection, and XML entity attacks to identify data exposure and server-side request forgery risks."
 license: MIT
-tags: [xml-injection, xxe, xpath-injection, xml-parsing, web-security, entity-injection, dtd-attack]
+tags: [xml-injection, xxe, xpath-injection, xml-parsing, entity-injection]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

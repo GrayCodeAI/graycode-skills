@@ -2,7 +2,7 @@
 name: performing-csrf-attack-simulation
 description: "Testing web applications for Cross-Site Request Forgery vulnerabilities by crafting forged requests that exploit authenticated user sessions during authorized security assessments."
 license: MIT
-tags: [penetration-testing, csrf, owasp, web-security, session-management, burpsuite]
+tags: [penetration-testing, csrf, owasp, web-security, session-management]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

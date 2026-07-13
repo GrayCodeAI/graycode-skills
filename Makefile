@@ -1,4 +1,4 @@
-.PHONY: boundary-guard lint format validate test help
+.PHONY: boundary-guard lint format registry-check validate test help
 
 boundary-guard: ## Fail if the skills repo references support engines or Hawk private packages
 	bash ./scripts/check-consumer-boundaries.sh
@@ -9,8 +9,11 @@ lint: ## Run Ruff over all repository Python code
 format: ## Format all repository Python code
 	ruff format .
 
-validate: ## Validate all skills in the registry
-	python3 tools/validate_skill.py --all
+registry-check: ## Fail if registry.json is stale
+	python3 tools/update_registry.py --check
+
+validate: registry-check ## Validate all skills in the registry
+	python3 tools/validate_skill.py --all --warning-budget tools/validation_warning_budget.json
 
 pytest: ## Run pytest unit tests
 	python3 -m pytest tests/ -v

@@ -22,7 +22,7 @@ keywords: None
 5. **Enable strict warnings** — Set `SWIFT_TREAT_WARNINGS_AS_ERRORS` in Release builds.
 6. **Run static analysis** — Use Xcode's "Analyze" (Product > Analyze) to catch logic errors.
 
-See [background processing and cell reuse examples](references/implementation.md)
+See background processing and cell reuse examples
 
 ## Anti-Patterns
 
@@ -32,4 +32,4 @@ See [background processing and cell reuse examples](references/implementation.md
 
 ## References
 
-- [Profiling & Optimization](references/implementation.md)
+- Profiling & Optimization

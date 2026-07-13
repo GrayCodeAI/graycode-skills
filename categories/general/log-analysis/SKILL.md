@@ -2,7 +2,7 @@
 name: log-analysis
 description: "Analyze application logs to identify errors, performance issues, and security anomalies. Use when debugging issues, monitoring system health, or investigating incidents. Handles various log formats..."
 license: MIT
-tags: [logs, analysis, debugging, monitoring, grep, patterns]
+tags: [logs, analysis, debugging, monitoring, grep]
 allowed-tools: Read Grep Glob
 metadata: None
 platforms: Claude, ChatGPT, Gemini

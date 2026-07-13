@@ -2,7 +2,7 @@
 name: performing-dark-web-monitoring-for-threats
 description: "Dark web monitoring involves systematically scanning Tor hidden services, underground forums, paste sites, and dark web marketplaces to identify threats targeting an organization, including leaked cre"
 license: MIT
-tags: [threat-intelligence, cti, ioc, mitre-attack, stix, dark-web, tor, threat-monitoring]
+tags: [threat-intelligence, cti, ioc, mitre-attack, dark-web]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

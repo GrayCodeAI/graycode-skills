@@ -2,7 +2,7 @@
 name: research-nanogpt
 description: "Educational GPT implementation in ~300 lines. Reproduces GPT-2 (124M) on OpenWebText. Clean, hackable code for learning transformers. By Andrej Karpathy. Perfect for understanding GPT architecture ..."
 license: MIT
-tags: [model-architecture, nanogpt, gpt-2, educational, andrej-karpathy, transformer, minimalist, from-scratch, training]
+tags: [model-architecture, nanogpt, gpt-2, educational, andrej-karpathy]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [torch, transformers, datasets, tiktoken, wandb]
@@ -253,11 +253,11 @@ init_from = 'gpt2'  # Valid: gpt2, gpt2-medium, gpt2-large, gpt2-xl
 
 ## Advanced topics
 
-**Model architecture**: See [references/architecture.md](references/architecture.md) for GPT block structure, multi-head attention, and MLP layers explained simply.
+**Model architecture**: See references/architecture.md for GPT block structure, multi-head attention, and MLP layers explained simply.
 
-**Training loop**: See [references/training.md](references/training.md) for learning rate schedule, gradient accumulation, and distributed data parallel setup.
+**Training loop**: See references/training.md for learning rate schedule, gradient accumulation, and distributed data parallel setup.
 
-**Data preparation**: See [references/data.md](references/data.md) for tokenization strategies (character-level vs BPE) and binary format details.
+**Data preparation**: See references/data.md for tokenization strategies (character-level vs BPE) and binary format details.
 
 ## Hardware requirements
 

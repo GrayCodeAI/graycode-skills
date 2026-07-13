@@ -2,7 +2,7 @@
 name: performing-power-grid-cybersecurity-assessment
 description: "This skill covers conducting cybersecurity assessments of electric power grid infrastructure including generation facilities, transmission substations, distribution systems, and energy management s..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, nerc-cip, power-grid, substation]
+tags: [ot-security, ics, scada, industrial-control, power-grid]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

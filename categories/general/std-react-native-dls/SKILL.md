@@ -29,4 +29,4 @@ Enforce design token usage in React Native apps.
 
 ## References
 
-See [references/usage.md](references/usage.md) for design token usage examples.
+See references/usage.md for design token usage examples.

@@ -95,4 +95,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Competency Based Interview Coach](./knowledge/Competency%20Based%20Interview%20Coach/)
+- Competency Based Interview Coach

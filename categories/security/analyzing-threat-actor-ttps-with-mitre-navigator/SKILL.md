@@ -2,7 +2,7 @@
 name: analyzing-threat-actor-ttps-with-mitre-navigator
 description: "Map advanced persistent threat (APT) group tactics, techniques, and procedures (TTPs) to the MITRE ATT&CK framework using the ATT&CK Navigator and attackcti Python library. The analyst queries STIX..."
 license: MIT
-tags: [mitre-attack, navigator, threat-intelligence, apt, ttp-mapping, stix, attackcti]
+tags: [mitre-attack, navigator, threat-intelligence, apt, ttp-mapping]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

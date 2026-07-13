@@ -37,6 +37,6 @@ Strict multi-tenant isolation. All child-centric data must secured via PostgreSQ
 
 ## References
 
-- [Implementation Patterns](references/implementation-patterns.md)
-- [RLS Migration Patterns](references/rls-patterns.md)
-- [Centralized Auth Logic](references/auth-logic.md)
+- Implementation Patterns
+- RLS Migration Patterns
+- Centralized Auth Logic

@@ -2,7 +2,7 @@
 name: research-stable-diffusion
 description: "State-of-the-art text-to-image generation with Stable Diffusion models via HuggingFace Diffusers. Use when generating images from text prompts, performing image-to-image translation, inpainting, or..."
 license: MIT
-tags: [image-generation, stable-diffusion, diffusers, text-to-image, multimodal, computer-vision]
+tags: [image-generation, stable-diffusion, diffusers, text-to-image, multimodal]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [diffusers>=0.30.0, transformers>=4.41.0, accelerate>=0.31.0, torch>=2.0.0]
@@ -508,8 +508,8 @@ image = pipe(prompt, num_inference_steps=20).images[0]
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Custom pipelines, fine-tuning, deployment
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues and solutions
+- **Advanced Usage** - Custom pipelines, fine-tuning, deployment
+- **Troubleshooting** - Common issues and solutions
 
 ## Resources
 

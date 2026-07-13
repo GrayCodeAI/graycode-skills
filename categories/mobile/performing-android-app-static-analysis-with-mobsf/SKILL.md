@@ -2,7 +2,7 @@
 name: performing-android-app-static-analysis-with-mobsf
 description: "Performs automated static analysis of Android applications using Mobile Security Framework (MobSF) to identify hardcoded secrets, insecure permissions, vulnerable components, weak cryptography, and..."
 license: MIT
-tags: [mobile-security, android, mobsf, static-analysis, owasp-mobile, penetration-testing]
+tags: [mobile-security, android, mobsf, static-analysis, owasp-mobile]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

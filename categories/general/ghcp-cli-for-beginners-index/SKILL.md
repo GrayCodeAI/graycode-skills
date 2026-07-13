@@ -8,7 +8,7 @@ authors: None
 lastUpdated: 2026-03-20
 ---
 
-![GitHub Copilot CLI for Beginners](/images/learning-hub/copilot-cli-for-beginners/overview/copilot-banner.png)
+GitHub Copilot CLI for Beginners
 
 # GitHub Copilot CLI for Beginners
 
@@ -61,18 +61,18 @@ This course focuses on **GitHub Copilot CLI**, bringing AI assistance directly t
 
 ## 📚 Course Structure
 
-![GitHub Copilot CLI Learning Path](/images/learning-hub/copilot-cli-for-beginners/overview/learning-path.png)
+GitHub Copilot CLI Learning Path
 
 | Chapter | Title                                                                       | What You'll Build                    |
 | :-----: | --------------------------------------------------------------------------- | ------------------------------------ |
-|   00    | 🚀 [Quick Start](./00-quick-start/)                                         | Installation and verification        |
-|   01    | 👋 [First Steps](./01-setup-and-first-steps/)                               | Live demos + three interaction modes |
-|   02    | 🔍 [Context and Conversations](./02-context-and-conversations/)             | Multi-file project analysis          |
-|   03    | ⚡ [Development Workflows](./03-development-workflows/)                     | Code review, debug, test generation  |
-|   04    | 🤖 [Create Specialized AI Assistants](./04-agents-and-custom-instructions/) | Custom agents for your workflow      |
-|   05    | 🛠️ [Automate Repetitive Tasks](./05-skills/)                                | Skills that load automatically       |
-|   06    | 🔌 [Connect to GitHub, Databases & APIs](./06-mcp-servers/)                 | MCP server integration               |
-|   07    | 🎯 [Putting It All Together](./07-putting-it-all-together/)                 | Complete feature workflows           |
+|   00    | 🚀 Quick Start                                         | Installation and verification        |
+|   01    | 👋 First Steps                               | Live demos + three interaction modes |
+|   02    | 🔍 Context and Conversations             | Multi-file project analysis          |
+|   03    | ⚡ Development Workflows                     | Code review, debug, test generation  |
+|   04    | 🤖 Create Specialized AI Assistants | Custom agents for your workflow      |
+|   05    | 🛠️ Automate Repetitive Tasks                                | Skills that load automatically       |
+|   06    | 🔌 Connect to GitHub, Databases & APIs                 | MCP server integration               |
+|   07    | 🎯 Putting It All Together                 | Complete feature workflows           |
 
 ## 📖 How This Course Works
 

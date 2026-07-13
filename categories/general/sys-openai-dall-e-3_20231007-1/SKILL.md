@@ -66,7 +66,7 @@ seeds?: number[],
 
 } // namespace dalle
 
-![image](./images/openai-dall-e-3_20231007_01.webp)
-![image](./images/openai-dall-e-3_20231007_02.webp)
-![image](./images/openai-dall-e-3_20231007_03.webp)
-![image](./images/openai-dall-e-3_20231007_04.webp)
+image
+image
+image
+image

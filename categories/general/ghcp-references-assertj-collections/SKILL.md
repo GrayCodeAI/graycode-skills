@@ -14,7 +14,7 @@ AssertJ assertions for collections: `List`, `Set`, `Map`, arrays, and streams.
 - The value under test is a `List`, `Set`, `Map`, array, or `Stream`
 - You need to assert on multiple elements, their order, or specific fields within them
 - You are using `extracting()`, `filteredOn()`, `containsExactly()`, or similar collection methods
-- Asserting a single scalar or single object → use [assertj-basics.md](assertj-basics.md) instead
+- Asserting a single scalar or single object → use assertj-basics.md instead
 
 ## Basic Collection Checks
 

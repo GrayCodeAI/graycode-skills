@@ -2,7 +2,7 @@
 name: implementing-deception-based-detection-with-canarytoken
 description: "Deploy and monitor Canary Tokens via the Thinkst Canary API for deception-based breach detection using web bug tokens, DNS tokens, document tokens, and AWS key tokens."
 license: MIT
-tags: [canarytoken, deception, honeytokens, breach-detection, thinkst-canary, tripwire, early-warning]
+tags: [canarytoken, deception, honeytokens, breach-detection, thinkst-canary]
 domain: cybersecurity
 subdomain: deception-technology
 version: 1.0

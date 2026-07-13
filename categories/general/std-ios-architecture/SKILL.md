@@ -49,4 +49,4 @@ keywords: None
 
 ## References
 
-- [MVVM-C & VIP Implementation](references/implementation.md)
+- MVVM-C & VIP Implementation

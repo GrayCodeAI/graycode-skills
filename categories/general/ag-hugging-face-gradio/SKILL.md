@@ -302,7 +302,7 @@ Both commands accept `--token` for accessing private Spaces.
 
 ## Additional Reference
 
-- [End-to-End Examples](examples.md) — complete working apps
+- End-to-End Examples — complete working apps
 
 ## Limitations
 - Use this skill only when the task clearly matches the scope described above.

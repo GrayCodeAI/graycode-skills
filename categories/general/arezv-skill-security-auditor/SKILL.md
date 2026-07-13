@@ -153,7 +153,7 @@ done
 
 ## Threat Model Reference
 
-For the complete threat model, detection patterns, and known attack vectors against AI agent skills, see [references/threat-model.md](references/threat-model.md).
+For the complete threat model, detection patterns, and known attack vectors against AI agent skills, see references/threat-model.md.
 
 ## Limitations
 

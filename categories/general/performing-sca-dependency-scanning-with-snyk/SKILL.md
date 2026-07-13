@@ -2,7 +2,7 @@
 name: performing-sca-dependency-scanning-with-snyk
 description: "This skill covers implementing Software Composition Analysis (SCA) using Snyk to detect vulnerable open-source dependencies in CI/CD pipelines. It addresses scanning package manifests and lockfiles..."
 license: MIT
-tags: [devsecops, cicd, sca, snyk, dependency-scanning, secure-sdlc]
+tags: [devsecops, cicd, sca, snyk, dependency-scanning]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

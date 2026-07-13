@@ -2,7 +2,7 @@
 name: securing-historian-server-in-ot-environment
 description: "This skill covers hardening and securing process historian servers (OSIsoft PI, Honeywell PHD, GE Proficy, AVEVA Historian) in OT environments. It addresses network placement across Purdue levels, ..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, historian, osisoft-pi, data-integrity]
+tags: [ot-security, ics, scada, industrial-control, historian]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

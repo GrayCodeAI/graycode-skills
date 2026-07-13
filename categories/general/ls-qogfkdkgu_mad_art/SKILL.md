@@ -35,4 +35,4 @@ Social Commentary: While the art is humorous, it also serves as a means of socia
 
 GPT Kb Files List:
 
-- [Mad Art](./knowledge/qogfkDKgU-mad-art)
+- Mad Art

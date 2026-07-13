@@ -2,7 +2,7 @@
 name: hunting-for-beaconing-with-frequency-analysis
 description: "Identify command-and-control beaconing patterns in network traffic by applying statistical frequency analysis, jitter calculation, and coefficient of variation scoring to detect periodic callbacks ..."
 license: MIT
-tags: [threat-hunting, beaconing, c2-detection, frequency-analysis, network-traffic, rita, jitter-detection, mitre-t1071]
+tags: [threat-hunting, beaconing, c2-detection, frequency-analysis, network-traffic]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

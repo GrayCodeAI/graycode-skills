@@ -104,4 +104,4 @@ agent-email delete <email|default> <messageId>
 
 ## References
 
-- For command cheat sheet and JSON field map, read [references/commands.md](references/commands.md).
+- For command cheat sheet and JSON field map, read references/commands.md.

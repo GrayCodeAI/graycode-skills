@@ -2,7 +2,7 @@
 name: recovering-deleted-files-with-photorec
 description: "Recover deleted files from disk images and storage media using PhotoRec's file signature-based carving engine regardless of file system damage."
 license: MIT
-tags: [forensics, file-recovery, photorec, file-carving, data-recovery, evidence-recovery]
+tags: [forensics, file-recovery, photorec, file-carving, data-recovery]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

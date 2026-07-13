@@ -30,4 +30,4 @@ keywords: None
 
 ## References
 
-- [MockK Templates & libs.versions.toml Setup](references/testing-tooling.md)
+- MockK Templates & libs.versions.toml Setup

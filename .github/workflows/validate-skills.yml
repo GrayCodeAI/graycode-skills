@@ -2,10 +2,26 @@ name: Validate Skills
 
 on:
   pull_request:
-    paths: ['categories/**', '.claude-plugin/**', '.codex-plugin/**', '.cursor-plugin/**', 'VERSION', 'tools/**']
+    paths:
+      - 'categories/**'
+      - '.claude-plugin/**'
+      - '.codex-plugin/**'
+      - '.cursor-plugin/**'
+      - 'registry.json'
+      - 'VERSION'
+      - 'tools/**'
+      - '.github/workflows/validate-skills.yml'
   push:
     branches: [main]
-    paths: ['categories/**', 'VERSION', 'tools/**', '.github/workflows/validate-skills.yml']
+    paths:
+      - 'categories/**'
+      - 'registry.json'
+      - 'VERSION'
+      - 'tools/**'
+      - '.github/workflows/validate-skills.yml'
+
+permissions:
+  contents: read
 
 jobs:
   validate:
@@ -22,7 +38,13 @@ jobs:
         # in categories/**/scripts/*.py ships undetected.
         run: python3 -m compileall -q categories
       - name: Frontmatter validation
-        run: python3 tools/validate_skill.py --all
+        run: >-
+          python3 tools/validate_skill.py --all
+          --warning-budget tools/validation_warning_budget.json
+      - name: Registry drift check
+        # Keep registry.json synchronized with the canonical category metadata.
+        # Regenerate with: python3 tools/update_registry.py
+        run: python3 tools/update_registry.py --check
       - name: Version sync check
         run: python3 tools/check_version_sync.py
       - name: Marketplace sync check
@@ -34,11 +56,9 @@ jobs:
         run: python3 tools/check_references.py
       - name: Self-containment check
         run: python3 tools/check_self_contained.py
-      - name: Secret scan (warning-only)
-        # Warning mode for now: the security/code-review skills contain
-        # token-shaped example strings. Switch to --strict once the corpus is
-        # confirmed clean so a real leaked credential fails the build.
-        run: python3 tools/check_secrets.py
+      - name: Secret scan
+        # Strict mode makes any high-confidence credential finding fail CI.
+        run: python3 tools/check_secrets.py --strict
       - name: License compatibility gate
         # Strict: copyleft (GPL/LGPL/AGPL) content must not be vendored into the
         # MIT-rooted repo. See NOTICE for the policy.

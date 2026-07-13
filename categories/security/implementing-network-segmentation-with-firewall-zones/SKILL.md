@@ -2,7 +2,7 @@
 name: implementing-network-segmentation-with-firewall-zones
 description: "Design and implement network segmentation using firewall security zones, VLANs, ACLs, and microsegmentation policies to restrict lateral movement and enforce least-privilege network access."
 license: MIT
-tags: [network-segmentation, firewall-zones, vlan, microsegmentation, lateral-movement, zero-trust, acl, east-west-traffic, pci-dss]
+tags: [network-segmentation, firewall-zones, vlan, microsegmentation, lateral-movement]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

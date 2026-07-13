@@ -510,21 +510,21 @@ echo "See: product-team/ui-design-system/references/developer-handoff.md"
 
 ## Related Agents
 
-- [cs-product-manager](cs-product-manager.md) - Product management lifecycle, interview analysis, PRD development
-- [cs-agile-product-owner](cs-agile-product-owner.md) - Translating research findings into user stories
-- [cs-product-strategist](cs-product-strategist.md) - Strategic research to validate product vision and positioning
+- cs-product-manager - Product management lifecycle, interview analysis, PRD development
+- cs-agile-product-owner - Translating research findings into user stories
+- cs-product-strategist - Strategic research to validate product vision and positioning
 - UI Design System - Design handoff and component recommendations (see `product-team/ui-design-system/`)
 
 ## References
 
 - **Primary Skill:** [product-team/ux-researcher-designer/SKILL.md](SKILL.md)
 - **Interview Analyzer:** [product-team/product-manager-toolkit/SKILL.md](SKILL.md)
-- **Persona Methodology:** [product-team/ux-researcher-designer/references/persona-methodology.md](persona-methodology.md)
-- **Journey Mapping Guide:** [product-team/ux-researcher-designer/references/journey-mapping-guide.md](journey-mapping-guide.md)
-- **Usability Testing:** [product-team/ux-researcher-designer/references/usability-testing-frameworks.md](usability-testing-frameworks.md)
+- **Persona Methodology:** product-team/ux-researcher-designer/references/persona-methodology.md
+- **Journey Mapping Guide:** product-team/ux-researcher-designer/references/journey-mapping-guide.md
+- **Usability Testing:** product-team/ux-researcher-designer/references/usability-testing-frameworks.md
 - **Design System:** [product-team/ui-design-system/SKILL.md](SKILL.md)
-- **Product Domain Guide:** [product-team/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **Product Domain Guide:** product-team/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 
 ---
 

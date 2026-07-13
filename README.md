@@ -46,7 +46,11 @@ The repository includes automated validation to ensure skill quality:
 
 ```bash
 # Validate a single skill
-python tools/validate_skill.py categories/python/mdc-fastapi/SKILL.md
+python tools/validate_skill.py categories/python/mdc-fastapi
+
+# Validate the full corpus and enforce the zero-warning gate
+python tools/validate_skill.py --all \
+  --warning-budget tools/validation_warning_budget.json
 
 # Update the registry after adding/removing skills
 python tools/update_registry.py
@@ -60,6 +64,23 @@ ruff format --check .
 ```
 
 Validation checks include frontmatter integrity, required field presence, tag format, name-directory consistency, internal link resolution, script shebangs, and file size limits.
+
+The full-corpus warning budget is zero in every category. CI compares live counts
+with `tools/validation_warning_budget.json` exactly, so any warning fails. New
+warning categories start at zero, and the checked-in budget must never increase.
+
+The maintenance tools are conservative and dry-run by default:
+
+```bash
+# De-link invalid local Markdown references while preserving readable content
+python tools/cleanup_internal_references.py --all
+
+# Move oversized bodies into ordered progressive-disclosure references
+python tools/migrate_oversized_skills.py --all
+```
+
+Inspect the plan before adding `--write`, then rerun the full-corpus zero-warning
+gate.
 
 ## Ecosystem Boundaries
 

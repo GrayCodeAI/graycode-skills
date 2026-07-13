@@ -19,7 +19,7 @@ keywords: None
 - **SecurityFilterChain**: Expose as `@Bean`. not extend `WebSecurityConfigurerAdapter`.
 - **Statelessness**: Enforce `SessionCreationPolicy.STATELESS` for REST APIs.
 
-See [implementation examples](references/implementation.md) for SecurityFilterChain configuration with Lambda DSL and JWT.
+See implementation examples for SecurityFilterChain configuration with Lambda DSL and JWT.
 
 ## Implement Authentication and Authorization
 
@@ -50,6 +50,6 @@ See [implementation examples](references/implementation.md) for SecurityFilterCh
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples
 - common/security-standards
 - architecture

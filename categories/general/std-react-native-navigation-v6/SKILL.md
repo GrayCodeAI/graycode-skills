@@ -20,13 +20,13 @@ Use **React Navigation** (official solution).
 - **Architecture**: Use **Native Stack (`createNativeStackNavigator`)** by default for native performance. Only use **JS Stack** for custom transitions.
 - **Typing**: Use **`NativeStackScreenProps`** for screens. **`CompositeScreenProps`** for nested Navigators.
 
-See [deep linking reference](references/deep-linking.md) for typed param lists and stack navigator setup.
+See deep linking reference for typed param lists and stack navigator setup.
 
 ## Configure Deep Linking
 
 - **Deep Linking**: Use **prefix arrays** in `linking` config. Validate **Universal Links (iOS)** and **App Links (Android)**. Handle **unrecognized paths** with 404 screen.
 
-See [deep linking reference](references/deep-linking.md) for linking configuration with prefix arrays and fallback screens.
+See deep linking reference for linking configuration with prefix arrays and fallback screens.
 
 ## Implement Auth Flow
 
@@ -43,4 +43,4 @@ See [deep linking reference](references/deep-linking.md) for linking configurati
 
 ## References
 
-See [references/deep-linking.md](references/deep-linking.md) for typed param lists, Universal Links, Nested Navigators, and State Persistence.
+See references/deep-linking.md for typed param lists, Universal Links, Nested Navigators, and State Persistence.

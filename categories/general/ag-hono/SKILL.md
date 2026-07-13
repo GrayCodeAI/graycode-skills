@@ -2,7 +2,7 @@
 name: ag-hono
 description: "Build ultra-fast web APIs and full-stack apps with Hono — runs on Cloudflare Workers, Deno, Bun, Node.js, and any WinterCG-compatible runtime."
 license: MIT
-tags: [hono, edge, cloudflare-workers, bun, deno, api, typescript, web-standards]
+tags: [hono, edge, cloudflare-workers, bun, deno]
 category: backend
 risk: safe
 source: community

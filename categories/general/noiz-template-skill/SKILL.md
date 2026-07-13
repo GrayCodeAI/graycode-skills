@@ -7,7 +7,7 @@ tags: [general]
 
 # <skill-name>
 
-[简体中文](./SKILL.zh-CN.md) | English
+简体中文 | English
 
 One-line description of what this skill solves.
 

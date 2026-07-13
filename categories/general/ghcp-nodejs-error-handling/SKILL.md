@@ -9,7 +9,7 @@ tags: [general]
 
 Handle errors gracefully in your Copilot SDK applications.
 
-> **Runnable example:** [recipe/error-handling.ts](recipe/error-handling.ts)
+> **Runnable example:** recipe/error-handling.ts
 >
 > ```bash
 > cd recipe && npm install

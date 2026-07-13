@@ -2,7 +2,7 @@
 name: ag-rayden-use
 description: "Build and maintain Rayden UI components and screens in Figma via Figma MCP with full design token enforcement"
 license: MIT
-tags: [figma, design-system, ui, components, mcp, rayden, rayna-ui]
+tags: [figma, design-system, ui, components, rayden]
 category: design
 risk: safe
 source: https://github.com/playbookTV/rayden-ui-design-skill

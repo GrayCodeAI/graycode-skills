@@ -10,13 +10,6 @@ tags:
 - vla
 - robotics
 - fine-tuning
-- libero
-- aloha
-- lora
-- film
-- action-chunking
-- deployment
-- continuous-actions
 version: 1.0.0
 author: Orchestra Research
 dependencies:
@@ -34,10 +27,10 @@ dependencies:
 
 ## Advanced topics
 
-**Paper summary and checkpoints**: See [references/paper-and-checkpoints.md](references/paper-and-checkpoints.md)
-**Detailed LIBERO workflow**: See [references/libero-workflow.md](references/libero-workflow.md)
-**Detailed ALOHA workflow**: See [references/aloha-workflow.md](references/aloha-workflow.md)
-**Config map and troubleshooting matrix**: See [references/config-troubleshooting.md](references/config-troubleshooting.md)
+**Paper summary and checkpoints**: See references/paper-and-checkpoints.md
+**Detailed LIBERO workflow**: See references/libero-workflow.md
+**Detailed ALOHA workflow**: See references/aloha-workflow.md
+**Config map and troubleshooting matrix**: See references/config-troubleshooting.md
 
 ## Resources
 

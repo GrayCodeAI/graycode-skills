@@ -2,7 +2,7 @@
 name: ag-database-migrations-migration-observability
 description: "Migration monitoring, CDC, and observability infrastructure"
 license: MIT
-tags: [database, cdc, debezium, kafka, prometheus, grafana, monitoring]
+tags: [database, cdc, debezium, kafka, prometheus]
 risk: unknown
 source: community
 date_added: 2026-02-27

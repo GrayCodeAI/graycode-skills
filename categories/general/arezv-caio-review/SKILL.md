@@ -133,7 +133,7 @@ python skills/chief-ai-officer-advisor/scripts/ai_cost_economics.py workload.jso
 
 ## Related
 
-- Agent: [`cs-caio-advisor`](cs-caio-advisor.md)
+- Agent: `cs-caio-advisor`
 - Skill: [`chief-ai-officer-advisor`](SKILL.md)
 - Adjacent: `skills/chief-data-officer-advisor/` (training data rights, data strategy)
 

@@ -121,7 +121,7 @@ graph TB
 
 ### Step 4: File Creation
 
-Use [template-architecture.md](./assets/template-architecture.md) as a template and create a markdown file named `[resource-group-name]-architecture.md` with:
+Use template-architecture.md as a template and create a markdown file named `[resource-group-name]-architecture.md` with:
 
 1. **Header**: Resource group name, subscription, region
 2. **Summary**: Brief overview of the architecture (2-3 paragraphs)

@@ -20,7 +20,7 @@ keywords: None
 - **DTO Pattern**: ALWAYS use DTOs for API inputs/outputs. NEVER return `@Entity` directly.
 - **Java Records**: Use `record` for DTOs to ensure immutability (Java 17+).
 
-See [implementation examples](references/implementation.md) for Java Record DTOs, controller patterns, and global exception handling.
+See implementation examples for Java Record DTOs, controller patterns, and global exception handling.
 
 ## Define Layer Responsibilities
 
@@ -51,4 +51,4 @@ See [implementation examples](references/implementation.md) for Java Record DTOs
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

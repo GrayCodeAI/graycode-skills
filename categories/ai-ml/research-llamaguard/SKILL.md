@@ -2,7 +2,7 @@
 name: research-llamaguard
 description: "Meta's 7-8B specialized moderation model for LLM input/output filtering. 6 safety categories - violence/hate, sexual content, weapons, substances, self-harm, criminal planning. 94-95% accuracy. Dep..."
 license: MIT
-tags: [safety-alignment, llamaguard, content-moderation, meta, guardrails, safety-classification, input-filtering, output-filtering, ai-safety]
+tags: [safety-alignment, llamaguard, content-moderation, meta, guardrails]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, vllm]
@@ -302,11 +302,11 @@ model = AutoModelForCausalLM.from_pretrained(
 
 ## Advanced topics
 
-**Custom categories**: See [references/custom-categories.md](references/custom-categories.md) for fine-tuning LlamaGuard with domain-specific safety categories.
+**Custom categories**: See references/custom-categories.md for fine-tuning LlamaGuard with domain-specific safety categories.
 
-**Performance benchmarks**: See [references/benchmarks.md](references/benchmarks.md) for accuracy comparison with other moderation APIs and latency optimization.
+**Performance benchmarks**: See references/benchmarks.md for accuracy comparison with other moderation APIs and latency optimization.
 
-**Deployment guide**: See [references/deployment.md](references/deployment.md) for Sagemaker, Kubernetes, and scaling strategies.
+**Deployment guide**: See references/deployment.md for Sagemaker, Kubernetes, and scaling strategies.
 
 ## Hardware requirements
 

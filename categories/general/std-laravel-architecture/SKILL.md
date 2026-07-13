@@ -15,7 +15,7 @@ keywords: None
 
 ## Structure
 
-See [project structure](references/implementation.md#project-structure) for recommended directory layout.
+See project structure for recommended directory layout.
 
 ## Workflow
 
@@ -26,7 +26,7 @@ See [project structure](references/implementation.md#project-structure) for reco
 
 ## Controller Pattern
 
-See [implementation examples](references/implementation.md#controller-pattern) for slim controller, action class, and service container binding patterns.
+See implementation examples for slim controller, action class, and service container binding patterns.
 
 ## Validation
 
@@ -43,4 +43,4 @@ See [implementation examples](references/implementation.md#controller-pattern) f
 
 ## References
 
-- [Slim Controller Patterns](references/implementation.md)
+- Slim Controller Patterns

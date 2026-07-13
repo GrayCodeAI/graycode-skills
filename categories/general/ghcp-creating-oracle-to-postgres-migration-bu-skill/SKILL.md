@@ -14,7 +14,7 @@ tags: [general]
 
 ## Bug Report Format
 
-Use the template in [references/BUG-REPORT-TEMPLATE.md](references/BUG-REPORT-TEMPLATE.md). Each report must include:
+Use the template in references/BUG-REPORT-TEMPLATE.md. Each report must include:
 
 - **Status**: ✅ RESOLVED, ⛔ UNRESOLVED, or ⏳ IN PROGRESS
 - **Component**: Affected endpoint, repository, or stored procedure

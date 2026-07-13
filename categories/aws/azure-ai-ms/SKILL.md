@@ -56,13 +56,13 @@ When Azure MCP is enabled:
 
 For programmatic access to these services, see the condensed SDK guides:
 
-- **AI Search**: [Python](references/sdk/azure-search-documents-py.md) | [TypeScript](references/sdk/azure-search-documents-ts.md) | [.NET](references/sdk/azure-search-documents-dotnet.md)
-- **OpenAI**: [.NET](references/sdk/azure-ai-openai-dotnet.md)
-- **Vision**: [Python](references/sdk/azure-ai-vision-imageanalysis-py.md) | [Java](references/sdk/azure-ai-vision-imageanalysis-java.md)
-- **Transcription**: [Python](references/sdk/azure-ai-transcription-py.md)
-- **Translation**: [Python](references/sdk/azure-ai-translation-text-py.md) | [TypeScript](references/sdk/azure-ai-translation-ts.md)
-- **Document Intelligence**: [.NET](references/sdk/azure-ai-document-intelligence-dotnet.md) | [TypeScript](references/sdk/azure-ai-document-intelligence-ts.md)
-- **Content Safety**: [Python](references/sdk/azure-ai-contentsafety-py.md) | [TypeScript](references/sdk/azure-ai-contentsafety-ts.md) | [Java](references/sdk/azure-ai-contentsafety-java.md)
+- **AI Search**: Python | TypeScript | .NET
+- **OpenAI**: .NET
+- **Vision**: Python | Java
+- **Transcription**: Python
+- **Translation**: Python | TypeScript
+- **Document Intelligence**: .NET | TypeScript
+- **Content Safety**: Python | TypeScript | Java
 
 ## Service Details
 

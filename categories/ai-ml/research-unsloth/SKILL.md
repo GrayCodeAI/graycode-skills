@@ -2,7 +2,7 @@
 name: research-unsloth
 description: "Expert guidance for fast fine-tuning with Unsloth - 2-5x faster training, 50-80% less memory, LoRA/QLoRA optimization"
 license: MIT
-tags: [fine-tuning, unsloth, fast-training, lora, qlora, memory-efficient, optimization, llama, mistral, gemma, qwen]
+tags: [fine-tuning, unsloth, fast-training, lora, qlora]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [unsloth, torch, transformers, trl, datasets, peft]

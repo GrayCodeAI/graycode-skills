@@ -2,7 +2,7 @@
 name: research-chroma
 description: "Open-source embedding database for AI applications. Store embeddings and metadata, perform vector and full-text search, filter by metadata. Simple 4-function API. Scales from notebooks to productio..."
 license: MIT
-tags: [rag, chroma, vector-database, embeddings, semantic-search, open-source, self-hosted, document-retrieval, metadata-filtering]
+tags: [rag, chroma, vector-database, embeddings, semantic-search]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [chromadb, sentence-transformers]

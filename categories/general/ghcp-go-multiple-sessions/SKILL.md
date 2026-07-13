@@ -9,7 +9,7 @@ tags: [general]
 
 Manage multiple independent conversations simultaneously.
 
-> **Runnable example:** [recipe/multiple-sessions.go](recipe/multiple-sessions.go)
+> **Runnable example:** recipe/multiple-sessions.go
 >
 > ```bash
 > go run recipe/multiple-sessions.go

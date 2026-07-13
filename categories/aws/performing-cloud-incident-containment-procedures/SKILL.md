@@ -2,7 +2,7 @@
 name: performing-cloud-incident-containment-procedures
 description: "Execute cloud-native incident containment across AWS, Azure, and GCP by isolating compromised resources, revoking credentials, preserving forensic evidence, and applying security group restrictions..."
 license: MIT
-tags: [cloud-security, incident-containment, aws, azure, gcp, cloud-forensics, credential-revocation, network-isolation]
+tags: [cloud-security, incident-containment, aws, azure, cloud-forensics]
 domain: cybersecurity
 subdomain: incident-response
 version: 1.0

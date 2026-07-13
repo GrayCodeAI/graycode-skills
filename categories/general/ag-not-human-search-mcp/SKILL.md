@@ -2,7 +2,7 @@
 name: ag-not-human-search-mcp
 description: "Search AI-ready websites, inspect indexed site details, verify MCP endpoints, and discover tools and APIs using the Not Human Search MCP server"
 license: MIT
-tags: [mcp, search, ai-discovery, api-discovery, mcp-verification, agent-tools]
+tags: [mcp, search, ai-discovery, api-discovery, mcp-verification]
 category: mcp
 risk: safe
 source: https://nothumansearch.ai

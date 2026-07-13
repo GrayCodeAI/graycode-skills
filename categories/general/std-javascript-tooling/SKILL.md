@@ -53,7 +53,7 @@ export default {
 ## Reference & Examples
 
 For testing patterns and CI/CD:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Related Topics
 

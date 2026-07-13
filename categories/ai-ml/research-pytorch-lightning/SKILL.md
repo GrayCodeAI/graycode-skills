@@ -2,7 +2,7 @@
 name: research-pytorch-lightning
 description: "High-level PyTorch framework with Trainer class, automatic distributed training (DDP/FSDP/DeepSpeed), callbacks system, and minimal boilerplate. Scales from laptop to supercomputer with same code. ..."
 license: MIT
-tags: [pytorch-lightning, training-framework, distributed-training, ddp, fsdp, deepspeed, high-level-api, callbacks, best-practices, scalable]
+tags: [pytorch-lightning, training-framework, distributed-training, ddp, fsdp]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [lightning, torch, transformers]
@@ -313,11 +313,11 @@ trainer = L.Trainer(accelerator='gpu', devices=1)
 
 ## Advanced topics
 
-**Callbacks**: See [references/callbacks.md](references/callbacks.md) for EarlyStopping, ModelCheckpoint, custom callbacks, and callback hooks.
+**Callbacks**: See references/callbacks.md for EarlyStopping, ModelCheckpoint, custom callbacks, and callback hooks.
 
-**Distributed strategies**: See [references/distributed.md](references/distributed.md) for DDP, FSDP, DeepSpeed ZeRO integration, multi-node setup.
+**Distributed strategies**: See references/distributed.md for DDP, FSDP, DeepSpeed ZeRO integration, multi-node setup.
 
-**Hyperparameter tuning**: See [references/hyperparameter-tuning.md](references/hyperparameter-tuning.md) for integration with Optuna, Ray Tune, and WandB sweeps.
+**Hyperparameter tuning**: See references/hyperparameter-tuning.md for integration with Optuna, Ray Tune, and WandB sweeps.
 
 ## Hardware requirements
 

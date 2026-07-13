@@ -150,11 +150,11 @@ resp = requests.get(f"{BASE_URL}/v1/accounting/dts/deposits_withdrawals_operatin
 
 ## Reference Files
 
-- **[api-basics.md](references/api-basics.md)** — URL structure, HTTP methods, versioning, data types
-- **[parameters.md](references/parameters.md)** — All parameters with detailed examples and edge cases
-- **[datasets-debt.md](references/datasets-debt.md)** — Debt datasets: Debt to the Penny, Historical Debt, Schedules of Federal Debt, TROR
-- **[datasets-fiscal.md](references/datasets-fiscal.md)** — Daily Treasury Statement, Monthly Treasury Statement, revenue, spending
-- **[datasets-interest-rates.md](references/datasets-interest-rates.md)** — Average interest rates, exchange rates, TIPS/CPI, certified interest rates
-- **[datasets-securities.md](references/datasets-securities.md)** — Treasury auctions, savings bonds, SLGS, buybacks
-- **[response-format.md](references/response-format.md)** — Response objects, error handling, pagination, response codes
-- **[examples.md](references/examples.md)** — Python, R, and pandas code examples for common use cases
+- **api-basics.md** — URL structure, HTTP methods, versioning, data types
+- **parameters.md** — All parameters with detailed examples and edge cases
+- **datasets-debt.md** — Debt datasets: Debt to the Penny, Historical Debt, Schedules of Federal Debt, TROR
+- **datasets-fiscal.md** — Daily Treasury Statement, Monthly Treasury Statement, revenue, spending
+- **datasets-interest-rates.md** — Average interest rates, exchange rates, TIPS/CPI, certified interest rates
+- **datasets-securities.md** — Treasury auctions, savings bonds, SLGS, buybacks
+- **response-format.md** — Response objects, error handling, pagination, response codes
+- **examples.md** — Python, R, and pandas code examples for common use cases

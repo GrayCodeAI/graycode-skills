@@ -101,4 +101,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT KB Files List
 
-- [Mr. Ranedeer](./knowledge/Mr.%20Ranedeer/)
+- Mr. Ranedeer

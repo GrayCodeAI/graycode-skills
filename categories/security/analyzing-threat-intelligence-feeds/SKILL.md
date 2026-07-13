@@ -2,7 +2,7 @@
 name: analyzing-threat-intelligence-feeds
 description: "Analyzes structured and unstructured threat intelligence feeds to extract actionable indicators, adversary tactics, and campaign context. Use when ingesting commercial or open-source CTI feeds, eva..."
 license: MIT
-tags: [stix, taxii, mitre-att-ck, ioc, threatconnect, recorded-future, misp, cti, nist-csf]
+tags: [stix, taxii, mitre-att-ck, ioc, threatconnect]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

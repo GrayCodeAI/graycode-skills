@@ -2,7 +2,7 @@
 name: performing-subdomain-enumeration-with-subfinder
 description: "Enumerate subdomains of target domains using ProjectDiscovery's Subfinder passive reconnaissance tool to map the attack surface during security assessments."
 license: MIT
-tags: [subdomain-enumeration, reconnaissance, bug-bounty, attack-surface, subfinder, passive-recon, osint]
+tags: [subdomain-enumeration, reconnaissance, bug-bounty, attack-surface, subfinder]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

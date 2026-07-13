@@ -2,7 +2,7 @@
 name: implementing-network-intrusion-prevention-with-suricata
 description: "Deploy and configure Suricata as a network intrusion prevention system with custom rules, Emerging Threats rulesets, and inline traffic inspection for real-time threat blocking."
 license: MIT
-tags: [suricata, ips, ids, intrusion-prevention, network-security, emerging-threats, rule-management, nfqueue, inline-mode]
+tags: [suricata, ips, ids, intrusion-prevention, network-security]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

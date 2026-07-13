@@ -2,7 +2,7 @@
 name: implementing-semgrep-for-custom-sast-rules
 description: "Write custom Semgrep SAST rules in YAML to detect application-specific vulnerabilities, enforce coding standards, and integrate into CI/CD pipelines."
 license: MIT
-tags: [semgrep, sast, static-analysis, custom-rules, devsecops, code-security]
+tags: [semgrep, sast, static-analysis, custom-rules, devsecops]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0

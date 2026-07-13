@@ -21,7 +21,7 @@ keywords: None
 4. **Dispatch to main thread** — Use `@MainActor` or `.receive(on: DispatchQueue.main)` for UI updates.
 5. **Use exhaustive ViewState** — Prefer single `ViewState` enum (`.loading`, `.success(data)`, `.error(failure)`).
 
-See [Combine and Observation framework examples](references/implementation.md)
+See Combine and Observation framework examples
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [Combine and Observation framework examples](references/implementation.md)
 
 ## References
 
-- [Combine & Observation Setup](references/implementation.md)
+- Combine & Observation Setup

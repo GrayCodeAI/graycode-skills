@@ -2,7 +2,7 @@
 name: analyzing-dns-logs-for-exfiltration
 description: "Analyzes DNS query logs to detect data exfiltration via DNS tunneling, DGA domain communication, and covert C2 channels using entropy analysis, query volume anomalies, and subdomain length detectio..."
 license: MIT
-tags: [soc, dns, exfiltration, dns-tunneling, dga, c2-detection, splunk, threat-detection]
+tags: [soc, dns, exfiltration, dns-tunneling, dga]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

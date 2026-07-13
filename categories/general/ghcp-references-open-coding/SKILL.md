@@ -7,7 +7,7 @@ tags: [general]
 
 # Open Coding
 
-Free-form note-writing against sampled traces, spans, or sessions, before any taxonomy exists. After you pick a sample at the right unit (see [Choosing the unit of analysis](#choosing-the-unit-of-analysis)), read each one and write a short, specific observation of what went wrong. These raw notes feed [axial coding](axial-coding.md), where they get grouped into named failure categories — and ultimately into eval targets or fix priorities.
+Free-form note-writing against sampled traces, spans, or sessions, before any taxonomy exists. After you pick a sample at the right unit (see [Choosing the unit of analysis](#choosing-the-unit-of-analysis)), read each one and write a short, specific observation of what went wrong. These raw notes feed axial coding, where they get grouped into named failure categories — and ultimately into eval targets or fix priorities.
 
 **Reach for this whenever** the user wants to look at LLM traffic without a fixed taxonomy yet — e.g., "what's going wrong with this agent", "I just instrumented my app, where do I start", "review these traces", "the chatbot keeps losing context", "what kinds of mistakes is the model making", "help me make sense of these conversations", or any framing that needs grounded observations before categories.
 
@@ -207,7 +207,7 @@ The annotation's `--identifier` matches `$CODING_ANNOTATION_IDENTIFIER`, so the 
 | "Retrieval issue"    | Category, not observation | "Retrieved docs about shipping when the question was about returns"        | States what was retrieved vs. needed        |
 | "Model confused"     | Opaque                    | "Answered in Spanish when the user wrote in English"                       | Observable and reproducible                 |
 
-Write what you saw, not the category you think it belongs to — categorization happens in [axial coding](axial-coding.md). Short prefixes like `TONE:` or `FACTUAL:` are a personal shorthand, not a repo convention.
+Write what you saw, not the category you think it belongs to — categorization happens in axial coding. Short prefixes like `TONE:` or `FACTUAL:` are a personal shorthand, not a repo convention.
 
 ## Saturation
 
@@ -217,7 +217,7 @@ Stop writing notes when observations stop being new. Signals:
 - **Paraphrase convergence** — you catch yourself writing minor variations of earlier notes.
 - **Skips outnumber notes** — most recent traces are correct and need no note.
 
-At saturation, move on to [axial coding](axial-coding.md) to group what you have. Continuing past saturation adds traces but not insight. You do not need to annotate every trace — annotating correct ones dilutes signal.
+At saturation, move on to axial coding to group what you have. Continuing past saturation adds traces but not insight. You do not need to annotate every trace — annotating correct ones dilutes signal.
 
 ## Listing what this run produced
 

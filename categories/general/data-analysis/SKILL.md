@@ -2,7 +2,7 @@
 name: data-analysis
 description: "Analyze datasets to extract insights, identify patterns, and generate reports. Use when exploring data, creating visualizations, or performing statistical analysis. Handles CSV, JSON, SQL queries, ..."
 license: MIT
-tags: [data, analysis, pandas, statistics, visualization, csv, sql]
+tags: [data, analysis, pandas, statistics, visualization]
 allowed-tools: Read Grep Glob Bash
 metadata: None
 platforms: Claude, ChatGPT, Gemini

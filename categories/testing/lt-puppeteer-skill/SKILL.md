@@ -89,7 +89,7 @@ page.on('request', request => {
 
 ### TestMu AI Cloud
 
-For full setup, capabilities, and shared capability reference, see [reference/cloud-integration.md](reference/cloud-integration.md).
+For full setup, capabilities, and shared capability reference, see reference/cloud-integration.md.
 
 ```javascript
 const capabilities = {

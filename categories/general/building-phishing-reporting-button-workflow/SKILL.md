@@ -2,7 +2,7 @@
 name: building-phishing-reporting-button-workflow
 description: "Implement a phishing report button in email clients with automated triage workflow that analyzes user-reported suspicious emails and provides feedback to reporters."
 license: MIT
-tags: [phishing-reporting, email-security, incident-response, security-awareness, outlook, microsoft-365, soar]
+tags: [phishing-reporting, email-security, incident-response, security-awareness, outlook]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

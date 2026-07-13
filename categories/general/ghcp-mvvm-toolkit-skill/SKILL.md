@@ -12,11 +12,11 @@ tags:
 
 | Topic | Where |
 |-------|-------|
-| Source generator attribute reference | [`references/source-generators.md`](references/source-generators.md) |
-| RelayCommand recipes | [`references/relaycommand-cookbook.md`](references/relaycommand-cookbook.md) |
-| Validation deep dive | [`references/validation.md`](references/validation.md) |
-| Full Notes-app walkthrough | [`references/end-to-end-walkthrough.md`](references/end-to-end-walkthrough.md) |
-| `MVVMTK0xxx` diagnostics & pitfalls | [`references/troubleshooting.md`](references/troubleshooting.md) |
+| Source generator attribute reference | `references/source-generators.md` |
+| RelayCommand recipes | `references/relaycommand-cookbook.md` |
+| Validation deep dive | `references/validation.md` |
+| Full Notes-app walkthrough | `references/end-to-end-walkthrough.md` |
+| `MVVMTK0xxx` diagnostics & pitfalls | `references/troubleshooting.md` |
 | **Messenger pub/sub** | Companion skill: **`mvvm-toolkit-messenger`** |
 | **`Microsoft.Extensions.DependencyInjection` wiring** | Companion skill: **`mvvm-toolkit-di`** |
 

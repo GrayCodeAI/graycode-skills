@@ -2,7 +2,7 @@
 name: research-peft
 description: "Parameter-efficient fine-tuning for LLMs using LoRA, QLoRA, and 25+ methods. Use when fine-tuning large models (7B-70B) with limited GPU memory, when you need to train <1% of parameters with minima..."
 license: MIT
-tags: [fine-tuning, peft, lora, qlora, parameter-efficient, adapters, low-rank, memory-optimization, multi-adapter]
+tags: [fine-tuning, peft, lora, qlora, parameter-efficient]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [peft>=0.13.0, transformers>=4.45.0, torch>=2.0.0, bitsandbytes>=0.43.0]
@@ -419,8 +419,8 @@ TrainingArguments(learning_rate=1e-4)
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - DoRA, LoftQ, rank stabilization, custom modules
-- **[Troubleshooting](references/troubleshooting.md)** - Common errors, debugging, optimization
+- **Advanced Usage** - DoRA, LoftQ, rank stabilization, custom modules
+- **Troubleshooting** - Common errors, debugging, optimization
 
 ## Resources
 

@@ -11,5 +11,5 @@ category: creative
 
 ## Appendix: Prompt Writing Guide
 
-See [references/prompt_guide.md](references/prompt_guide.md) for the complete prompt writing guide,
+See references/prompt_guide.md for the complete prompt writing guide,
 including genre/vocal/instrument references and BPM tables.

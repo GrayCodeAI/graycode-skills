@@ -2,7 +2,7 @@
 name: detecting-api-enumeration-attacks
 description: "Detect and prevent API enumeration attacks including BOLA and IDOR exploitation by monitoring sequential identifier access patterns and authorization failures."
 license: MIT
-tags: [api-security, enumeration, bola, idor, broken-object-level-authorization, owasp-api-top-10, access-control, rate-limiting]
+tags: [api-security, enumeration, bola, idor, owasp-api-top-10]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

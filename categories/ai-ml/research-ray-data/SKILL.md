@@ -309,8 +309,8 @@ for features, labels in tf_ds:
 
 ## References
 
-- **[Transformations Guide](references/transformations.md)** - Map, filter, groupby operations
-- **[Integration Guide](references/integration.md)** - Ray Train, PyTorch, TensorFlow
+- **Transformations Guide** - Map, filter, groupby operations
+- **Integration Guide** - Ray Train, PyTorch, TensorFlow
 
 ## Resources
 

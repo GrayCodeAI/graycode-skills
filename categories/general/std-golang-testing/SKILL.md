@@ -22,7 +22,7 @@ keywords: None
 5. **Clean up resources** — Use `t.Cleanup()` to reset state or release DB/file resources.
 6. **Check coverage** — Aim for >80% line coverage. Run `go test -cover` to audit.
 
-See [table-driven test examples](references/table-driven-tests.md)
+See table-driven test examples
 
 ## Tools
 
@@ -45,5 +45,5 @@ See [table-driven test examples](references/table-driven-tests.md)
 
 ## References
 
-- [Table-Driven Tests](references/table-driven-tests.md)
-- [Mocking Strategies](references/mocking-strategies.md)
+- Table-Driven Tests
+- Mocking Strategies

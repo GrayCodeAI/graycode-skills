@@ -2,7 +2,7 @@
 name: testing-cors-misconfiguration
 description: "Identifying and exploiting Cross-Origin Resource Sharing misconfigurations that allow unauthorized cross-domain data access and credential theft during security assessments."
 license: MIT
-tags: [penetration-testing, cors, web-security, owasp, same-origin-policy, burpsuite]
+tags: [penetration-testing, cors, web-security, owasp, same-origin-policy]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

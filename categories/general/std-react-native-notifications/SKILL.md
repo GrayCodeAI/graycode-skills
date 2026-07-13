@@ -21,7 +21,7 @@ keywords: None
 - **Lifecycle**: Handle Foreground (`onMessage`), Background (`onNotificationOpenedApp`), and Quit (`getInitialNotification`) states.
 - **Permissions**: Prime users before requesting system authorization.
 
-See [implementation examples](references/implementation.md) for complete FCM handler setup with permission request and lifecycle handlers.
+See implementation examples for complete FCM handler setup with permission request and lifecycle handlers.
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [implementation examples](references/implementation.md) for complete FCM han
 
 ## References
 
-See [references/implementation.md](references/implementation.md) for FCM setup, APNs config, and lifecycle handlers.
+See references/implementation.md for FCM setup, APNs config, and lifecycle handlers.

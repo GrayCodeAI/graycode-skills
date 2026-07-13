@@ -111,7 +111,7 @@ Incoterms define the transfer of costs, risk, and responsibility between buyer a
 
 ### Classification Decision Logic
 
-When classifying a product, follow this sequence without shortcuts. See [decision-frameworks.md](references/decision-frameworks.md) for full decision trees.
+When classifying a product, follow this sequence without shortcuts. See decision-frameworks.md for full decision trees.
 
 1. **Identify the good precisely.** Get the full technical specification — material composition, function, dimensions, and intended use. Never classify from a product name alone.
 2. **Determine the Section and Chapter.** Use the Section and Chapter notes to confirm or exclude. Chapter notes override heading text.
@@ -153,7 +153,7 @@ When a restricted party screening tool returns a match, do not block the transac
 
 ## Key Edge Cases
 
-These are situations where the obvious approach is wrong. Brief summaries here — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where the obvious approach is wrong. Brief summaries here — see edge-cases.md for full analysis.
 
 1. **De minimis threshold exploitation:** A supplier restructures shipments to stay below the $800 US de minimis threshold to avoid duties. Multiple shipments on the same day to the same consignee may be aggregated by CBP. Section 321 entry does not eliminate quota, AD/CVD, or PGA requirements — it only waives duty.
 
@@ -186,7 +186,7 @@ Match communication tone to the counterparty, regulatory context, and risk level
 
 ### Key Templates
 
-Brief templates below. Full versions with variables in [communication-templates.md](references/communication-templates.md).
+Brief templates below. Full versions with variables in communication-templates.md.
 
 **Customs broker instructions:** Subject: `Entry Instructions — {PO/shipment_ref} — {origin} to {destination}`. Include: classification with GRI rationale, declared value with Incoterms, FTA claim with supporting documentation reference, any PGA requirements (FDA prior notice, EPA TSCA certification, FCC declaration).
 
@@ -230,9 +230,9 @@ Track these metrics monthly and trend quarterly:
 
 ## Additional Resources
 
-- For detailed decision frameworks, classification logic, and valuation methodology, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and formatting guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks, classification logic, and valuation methodology, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For complete communication templates with variables and formatting guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you are **planning, auditing, or remediating customs and trade compliance processes**:

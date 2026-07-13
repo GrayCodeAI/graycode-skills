@@ -2,7 +2,7 @@
 name: detecting-cloud-cryptomining-activity
 description: "Detecting unauthorized cryptocurrency mining activity in cloud environments by analyzing compute usage anomalies, network traffic to mining pools, GuardDuty findings, and container workload behavio..."
 license: MIT
-tags: [cloud-security, cryptomining, threat-detection, guardduty, cost-anomaly, incident-response]
+tags: [cloud-security, cryptomining, threat-detection, guardduty, cost-anomaly]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

@@ -2,7 +2,7 @@
 name: building-soc-playbook-for-ransomware
 description: "Builds a structured SOC incident response playbook for ransomware attacks covering detection, containment, eradication, and recovery phases with specific SIEM queries, isolation procedures, and dec..."
 license: MIT
-tags: [soc, ransomware, incident-response, playbook, nist, mitre-attack, containment]
+tags: [soc, ransomware, incident-response, playbook, nist]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

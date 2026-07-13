@@ -9,7 +9,7 @@ tags: [general]
 
 Use Copilot to intelligently organize files in a folder based on their metadata.
 
-> **Runnable example:** [recipe/managing-local-files.ts](recipe/managing-local-files.ts)
+> **Runnable example:** recipe/managing-local-files.ts
 >
 > ```bash
 > cd recipe && npm install

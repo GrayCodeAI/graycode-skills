@@ -2,7 +2,7 @@
 name: performing-mobile-app-certificate-pinning-bypass
 description: "Bypasses SSL/TLS certificate pinning implementations in Android and iOS applications to enable traffic interception during authorized security assessments. Covers OkHttp, TrustManager, NSURLSession..."
 license: MIT
-tags: [mobile-security, android, ios, certificate-pinning, frida, penetration-testing]
+tags: [mobile-security, android, ios, certificate-pinning, frida]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

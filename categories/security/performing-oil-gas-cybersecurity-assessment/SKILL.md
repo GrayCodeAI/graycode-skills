@@ -2,7 +2,7 @@
 name: performing-oil-gas-cybersecurity-assessment
 description: "This skill covers conducting cybersecurity assessments specific to oil and gas facilities including upstream (exploration/production), midstream (pipeline/transport), and downstream (refining/distr..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, oil-gas, pipeline-security, api1164]
+tags: [ot-security, ics, scada, industrial-control, oil-gas]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

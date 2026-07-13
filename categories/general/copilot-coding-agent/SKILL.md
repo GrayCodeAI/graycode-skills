@@ -10,9 +10,6 @@ tags:
 - github-actions
 - issue-to-pr
 - draft-pr
-- graphql
-- automation
-- ai-agent
 allowed-tools: Read Write Bash Grep Glob
 metadata: None
 platforms: Claude, Codex, Gemini

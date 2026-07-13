@@ -12,7 +12,7 @@ tags:
 
 | Topic | File |
 |-------|------|
-| Full deep dive (more channel/lifecycle examples, diagnostics) | [`references/messenger-patterns.md`](references/messenger-patterns.md) |
+| Full deep dive (more channel/lifecycle examples, diagnostics) | `references/messenger-patterns.md` |
 
 External:
 

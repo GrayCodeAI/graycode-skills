@@ -19,11 +19,11 @@ keywords: None
 
 ## gRPC Setup
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## RabbitMQ Setup
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Monorepo Contracts
 
@@ -35,7 +35,7 @@ See [implementation examples](references/example.md)
 
 Standard `HttpException` lost over RPC/TCP. Use `RpcException` with global filters:
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Serialization
 

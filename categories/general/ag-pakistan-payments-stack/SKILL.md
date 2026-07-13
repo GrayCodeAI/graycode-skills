@@ -2,7 +2,7 @@
 name: ag-pakistan-payments-stack
 description: "Design and implement production-grade Pakistani payment integrations (JazzCash, Easypaisa, bank/PSP rails, optional Raast) for SaaS with PKR billing, webhook reliability, and reconciliation."
 license: MIT
-tags: [saas, payments, pakistan, nextjs, b2b, pkr, reconciliation]
+tags: [saas, payments, pakistan, nextjs, b2b]
 category: api-integration
 risk: safe
 source: community

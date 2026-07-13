@@ -80,9 +80,9 @@ Everything in Hospital IT starts with "Do No Harm."
 - **Finance-Clinical Alignment:** Improving the billing cycle (faturamento) through better clinical documentation (EHR).
 
 ## References
-- [Digital Maturity & Acreditation Handbook](./references/hospital-digital-maturity.md)
-- [HIS/PEP & Interoperability Guide](./references/his-pep-guide.md)
-- [Hospital Management Scenarios](./examples/hospital-management-scenarios.md)
+- Digital Maturity & Acreditation Handbook
+- HIS/PEP & Interoperability Guide
+- Hospital Management Scenarios
 
 ## Limitations
 - Provides strategic and operational advice, but is not a substitute for formal clinical, legal, or financial auditing.

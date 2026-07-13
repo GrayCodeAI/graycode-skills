@@ -29,35 +29,35 @@ Read the reference file(s) that match your task:
 
 **Liquid templating** - writing or debugging `.liquid` files:
 
-- [references/liquid-syntax.md](references/liquid-syntax.md) - Tags, control flow, iteration, whitespace, LiquidDoc
-- [references/liquid-filters.md](references/liquid-filters.md) - All filter categories with examples
-- [references/liquid-objects.md](references/liquid-objects.md) - Product, collection, cart, customer, and global objects
+- references/liquid-syntax.md - Tags, control flow, iteration, whitespace, LiquidDoc
+- references/liquid-filters.md - All filter categories with examples
+- references/liquid-objects.md - Product, collection, cart, customer, and global objects
 
 **Theme development** - building or customising themes:
 
-- [references/theme-development.md](references/theme-development.md) - OS 2.0 architecture, sections, blocks, JSON templates, settings schema
+- references/theme-development.md - OS 2.0 architecture, sections, blocks, JSON templates, settings schema
 
 **API integration** - fetching or modifying data programmatically:
 
-- [references/api-admin.md](references/api-admin.md) - GraphQL Admin API (primary), REST (legacy), OAuth, webhooks, rate limiting
-- [references/api-storefront.md](references/api-storefront.md) - Storefront API, Ajax API, cart operations
+- references/api-admin.md - GraphQL Admin API (primary), REST (legacy), OAuth, webhooks, rate limiting
+- references/api-storefront.md - Storefront API, Ajax API, cart operations
 
 **App development** - building Shopify apps:
 
-- [references/app-development.md](references/app-development.md) - Shopify CLI, extensions, Polaris Web Components, App Bridge
+- references/app-development.md - Shopify CLI, extensions, Polaris Web Components, App Bridge
 
 **Serverless logic** - custom business rules:
 
-- [references/functions.md](references/functions.md) - Shopify Functions (replacing Scripts), Rust/JS targets, deployment
+- references/functions.md - Shopify Functions (replacing Scripts), Rust/JS targets, deployment
 
 **Headless commerce** - custom storefronts:
 
-- [references/hydrogen.md](references/hydrogen.md) - Hydrogen framework, React Router 7, Storefront API integration
+- references/hydrogen.md - Hydrogen framework, React Router 7, Storefront API integration
 
 **Optimisation and troubleshooting**:
 
-- [references/performance.md](references/performance.md) - Images, JS, CSS, fonts, Liquid, Core Web Vitals
-- [references/debugging.md](references/debugging.md) - Liquid errors, API errors, cart issues, webhook failures
+- references/performance.md - Images, JS, CSS, fonts, Liquid, Core Web Vitals
+- references/debugging.md - Liquid errors, API errors, cart issues, webhook failures
 
 ## Deprecation Notices
 
@@ -121,14 +121,14 @@ fetch('/cart/add.js', {
 
 | File                                                    | Lines | Coverage                                                                       |
 | ------------------------------------------------------- | ----- | ------------------------------------------------------------------------------ |
-| [liquid-syntax.md](references/liquid-syntax.md)         | ~600  | Tags, control flow, iteration, variables, whitespace, LiquidDoc                |
-| [liquid-filters.md](references/liquid-filters.md)       | ~870  | String, numeric, array, Shopify-specific, date, URL, colour filters            |
-| [liquid-objects.md](references/liquid-objects.md)       | ~695  | All Shopify objects: product, variant, collection, cart, customer, order, etc. |
-| [theme-development.md](references/theme-development.md) | ~1200 | File structure, JSON templates, sections, blocks, settings schema, layout      |
-| [api-admin.md](references/api-admin.md)                 | ~595  | GraphQL queries/mutations, REST (legacy), OAuth, webhooks, rate limiting       |
-| [api-storefront.md](references/api-storefront.md)       | ~235  | Storefront API, Ajax API, cart operations, Customer Account API                |
-| [app-development.md](references/app-development.md)     | ~760  | CLI, app architecture, extensions, Polaris Web Components, deployment          |
-| [functions.md](references/functions.md)                 | ~300  | Function types, Rust/JS targets, CLI workflow, Scripts migration               |
-| [hydrogen.md](references/hydrogen.md)                   | ~375  | Setup, routing, data loading, Storefront API, deployment                       |
-| [performance.md](references/performance.md)             | ~605  | Images, JS, CSS, fonts, Liquid, third-party scripts, Core Web Vitals           |
-| [debugging.md](references/debugging.md)                 | ~650  | Liquid, JavaScript, API, cart, webhook, theme editor troubleshooting           |
+| liquid-syntax.md         | ~600  | Tags, control flow, iteration, variables, whitespace, LiquidDoc                |
+| liquid-filters.md       | ~870  | String, numeric, array, Shopify-specific, date, URL, colour filters            |
+| liquid-objects.md       | ~695  | All Shopify objects: product, variant, collection, cart, customer, order, etc. |
+| theme-development.md | ~1200 | File structure, JSON templates, sections, blocks, settings schema, layout      |
+| api-admin.md                 | ~595  | GraphQL queries/mutations, REST (legacy), OAuth, webhooks, rate limiting       |
+| api-storefront.md       | ~235  | Storefront API, Ajax API, cart operations, Customer Account API                |
+| app-development.md     | ~760  | CLI, app architecture, extensions, Polaris Web Components, deployment          |
+| functions.md                 | ~300  | Function types, Rust/JS targets, CLI workflow, Scripts migration               |
+| hydrogen.md                   | ~375  | Setup, routing, data loading, Storefront API, deployment                       |
+| performance.md             | ~605  | Images, JS, CSS, fonts, Liquid, third-party scripts, Core Web Vitals           |
+| debugging.md                 | ~650  | Liquid, JavaScript, API, cart, webhook, theme editor troubleshooting           |

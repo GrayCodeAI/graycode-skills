@@ -2,7 +2,7 @@
 name: arezv-kubernetes-operator
 description: "Use when building a Kubernetes Operator — custom controllers that reconcile CRD state. Triggers on \"build an operator\", \"CRD design\", \"reconcile loop\", \"controller-runtime\", \"kubebuilder\", \"operato..."
 license: MIT
-tags: [kubernetes, operator, crd, controller-runtime, kubebuilder, operator-sdk, metacontroller, kopf, reconcile, devops]
+tags: [kubernetes, operator, crd, controller-runtime, operator-sdk]
 context: fork
 version: 2.4.0
 author: claude-code-skills

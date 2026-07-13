@@ -55,7 +55,7 @@ Create this structure at the project root:
 - **`src/`**: When you write useful code (plotting functions, data loaders, evaluation helpers), move it here so it can be reused across experiments. Don't duplicate code in every experiment directory.
 - **`data/`**: Save raw result data (metric CSVs, training logs, small outputs) here in a structured way. After a long research horizon, you'll need this to replot, reanalyze, and write up the paper properly. Name files descriptively (e.g., `trajectory_H1_runs001-010.csv`). Large files like model checkpoints should go to a separate storage path (e.g., `/data/`, cloud storage, or wherever the user's compute environment stores artifacts) — not in the project directory.
 
-Initialize `research-state.yaml`, `research-log.md`, and `findings.md` from [templates/](templates/). Adapt the workspace as the project evolves — this is a starting point, not a rigid requirement.
+Initialize `research-state.yaml`, `research-log.md`, and `findings.md` from templates/. Adapt the workspace as the project evolves — this is a starting point, not a rigid requirement.
 
 ## The Two-Loop Architecture
 
@@ -165,7 +165,7 @@ When you need domain-specific execution, search the skills library:
 | Experiment tracking (W&B, MLflow) | `13-mlops/` |
 | Cloud compute | `09-infrastructure/` |
 
-Read the relevant SKILL.md before starting — it has workflows, common issues, and code examples. See [references/skill-routing.md](references/skill-routing.md) for a complete guide.
+Read the relevant SKILL.md before starting — it has workflows, common issues, and code examples. See references/skill-routing.md for a complete guide.
 
 ### Track the Experiment Trajectory
 
@@ -310,7 +310,7 @@ When you have something meaningful to share, create a research presentation — 
 
 For Claude Code: generate HTML and `open` it. If HTML fails to open or render, convert to PDF as fallback (use `weasyprint`, `playwright pdf`, or `wkhtmltopdf`). For OpenClaw: generate PDF directly.
 
-See [references/progress-reporting.md](references/progress-reporting.md) for template scaffolding and the optimization plot approach. Use the template as a starting point — be creative with what you show.
+See references/progress-reporting.md for template scaffolding and the optimization plot approach. Use the template as a starting point — be creative with what you show.
 
 ## Git Protocol
 
@@ -406,6 +406,6 @@ Three questions: Do you have a strongly supported finding? Can you explain WHY i
 
 ## Advanced Topics
 
-- **Detailed agent continuity**: [references/agent-continuity.md](references/agent-continuity.md)
-- **Progress presentation templates**: [references/progress-reporting.md](references/progress-reporting.md)
-- **Complete skill routing**: [references/skill-routing.md](references/skill-routing.md)
+- **Detailed agent continuity**: references/agent-continuity.md
+- **Progress presentation templates**: references/progress-reporting.md
+- **Complete skill routing**: references/skill-routing.md

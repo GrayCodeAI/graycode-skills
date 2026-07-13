@@ -2,7 +2,7 @@
 name: correlating-threat-campaigns
 description: "Correlates disparate security incidents, IOCs, and adversary behaviors across time and organizations to identify unified threat campaigns, attribute them to common threat actors, and extract shared..."
 license: MIT
-tags: [campaign-analysis, correlation, misp, att-ck, threat-actor, intrusion-set, clustering, cti]
+tags: [campaign-analysis, correlation, misp, att-ck, threat-actor]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

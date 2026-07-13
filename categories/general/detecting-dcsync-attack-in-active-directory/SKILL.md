@@ -2,7 +2,7 @@
 name: detecting-dcsync-attack-in-active-directory
 description: "Detect DCSync attacks where adversaries abuse Active Directory replication privileges to extract password hashes by monitoring for non-domain-controller accounts requesting directory replication vi..."
 license: MIT
-tags: [threat-hunting, active-directory, dcsync, credential-theft, mitre-t1003-006, mimikatz, kerberos]
+tags: [threat-hunting, active-directory, dcsync, credential-theft, mitre-t1003-006]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

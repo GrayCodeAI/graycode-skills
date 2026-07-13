@@ -19,7 +19,7 @@ keywords: None
 - **Never AsyncStorage**: Not encrypted. Only for non-sensitive data.
 - **Biometric Auth**: Use `react-native-biometrics` for Face ID/Touch ID.
 
-See [keychain usage reference](references/keychain-usage.md) for Keychain storage with biometric access control.
+See keychain usage reference for Keychain storage with biometric access control.
 
 ## Validate Deep Links
 
@@ -27,7 +27,7 @@ See [keychain usage reference](references/keychain-usage.md) for Keychain storag
 - **Sanitize Params**: Never trust URL params. Validate and sanitize.
 - **Token Extraction**: Avoid passing tokens in deep link URLs. Use secure code exchange.
 
-See [keychain usage reference](references/keychain-usage.md) for deep link URL validation with scheme and host whitelisting.
+See keychain usage reference for deep link URL validation with scheme and host whitelisting.
 
 ## Enforce Network Security
 
@@ -52,4 +52,4 @@ See [keychain usage reference](references/keychain-usage.md) for deep link URL v
 
 ## References
 
-See [references/keychain-usage.md](references/keychain-usage.md) for Keychain, Biometrics, SSL Pinning, and PII Masking.
+See references/keychain-usage.md for Keychain, Biometrics, SSL Pinning, and PII Masking.

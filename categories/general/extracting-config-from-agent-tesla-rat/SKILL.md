@@ -2,7 +2,7 @@
 name: extracting-config-from-agent-tesla-rat
 description: "Extract embedded configuration from Agent Tesla RAT samples including SMTP/FTP/Telegram exfiltration credentials, keylogger settings, and C2 endpoints using .NET decompilation and memory analysis."
 license: MIT
-tags: [agent-tesla, rat, config-extraction, dotnet, malware-analysis, keylogger, credential-theft]
+tags: [agent-tesla, rat, config-extraction, dotnet, malware-analysis]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

@@ -2,7 +2,7 @@
 name: detecting-anomalies-in-industrial-control-systems
 description: "This skill covers deploying anomaly detection systems for industrial control environments using machine learning models trained on OT network baselines, physics-based process models, and behavioral..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, anomaly-detection, machine-learning]
+tags: [ot-security, ics, scada, industrial-control, iec62443]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

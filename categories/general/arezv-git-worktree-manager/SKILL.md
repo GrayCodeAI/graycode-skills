@@ -86,7 +86,7 @@ python scripts/worktree_cleanup.py --repo . --remove-merged --format text
 
 Use per-worktree override files mapped from allocated ports. The script outputs a deterministic port map; apply it to `docker-compose.worktree.yml`.
 
-See [docker-compose-patterns.md](references/docker-compose-patterns.md) for concrete templates.
+See docker-compose-patterns.md for concrete templates.
 
 ### 5. Port Allocation Strategy
 
@@ -97,7 +97,7 @@ Default strategy is `base + (index * stride)` with collision checks:
 - Redis: `6379`
 - Stride: `10`
 
-See [port-allocation-strategy.md](references/port-allocation-strategy.md) for the full strategy and edge cases.
+See port-allocation-strategy.md for the full strategy and edge cases.
 
 ## Script Interfaces
 
@@ -145,9 +145,9 @@ Before claiming setup complete:
 
 ## References
 
-- [port-allocation-strategy.md](references/port-allocation-strategy.md)
-- [docker-compose-patterns.md](references/docker-compose-patterns.md)
-- [README.md](README.md) for quick start and installation details
+- port-allocation-strategy.md
+- docker-compose-patterns.md
+- README.md for quick start and installation details
 
 ## Decision Matrix
 

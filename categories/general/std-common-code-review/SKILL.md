@@ -28,7 +28,7 @@ keywords: None
 - [ ] **Logic**: Requirements met. Edge cases handled.
 - [ ] **Clean Code**: DRY/SOLID. Intent-revealing names.
 
-See [references/checklist.md](references/checklist.md).
+See references/checklist.md.
 
 ## Output Format (Strict)
 
@@ -46,5 +46,5 @@ Fix: 1-2 line code or action.
 
 ## References
 
-- [Output Templates](references/output-format.md)
-- [Full Checklist](references/checklist.md)
+- Output Templates
+- Full Checklist

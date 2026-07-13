@@ -24,11 +24,11 @@ keywords: None
 
 ## SSE Endpoint Example
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## WebSocket Gateway with Auth Example
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Protocol Selection
 

@@ -20,43 +20,43 @@ This skill provides expert guide for testing Spring Boot 4 applications with mod
 
 | Scenario | Annotation | Reference |
 |----------|------------|-----------|
-| Controller + HTTP semantics | `@WebMvcTest` | [references/webmvctest.md](references/webmvctest.md) |
-| Repository + JPA queries | `@DataJpaTest` | [references/datajpatest.md](references/datajpatest.md) |
-| REST client + external APIs | `@RestClientTest` | [references/restclienttest.md](references/restclienttest.md) |
-| JSON (de)serialization | `@JsonTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
-| Full application | `@SpringBootTest` | [references/test-slices-overview.md](references/test-slices-overview.md) |
+| Controller + HTTP semantics | `@WebMvcTest` | references/webmvctest.md |
+| Repository + JPA queries | `@DataJpaTest` | references/datajpatest.md |
+| REST client + external APIs | `@RestClientTest` | references/restclienttest.md |
+| JSON (de)serialization | `@JsonTest` | references/test-slices-overview.md |
+| Full application | `@SpringBootTest` | references/test-slices-overview.md |
 
 ## Test Slices Reference
 
-- [references/test-slices-overview.md](references/test-slices-overview.md) - Decision matrix and comparison
-- [references/webmvctest.md](references/webmvctest.md) - Web layer with MockMvc
-- [references/datajpatest.md](references/datajpatest.md) - Data layer with Testcontainers
-- [references/restclienttest.md](references/restclienttest.md) - REST client testing
+- references/test-slices-overview.md - Decision matrix and comparison
+- references/webmvctest.md - Web layer with MockMvc
+- references/datajpatest.md - Data layer with Testcontainers
+- references/restclienttest.md - REST client testing
 
 ## Testing Tools Reference
 
-- [references/mockmvc-tester.md](references/mockmvc-tester.md) - AssertJ-style MockMvc (3.2+)
-- [references/mockmvc-classic.md](references/mockmvc-classic.md) - Traditional MockMvc (pre-3.2)
-- [references/resttestclient.md](references/resttestclient.md) - Spring Boot 4+ REST client
-- [references/mockitobean.md](references/mockitobean.md) - Mocking dependencies
+- references/mockmvc-tester.md - AssertJ-style MockMvc (3.2+)
+- references/mockmvc-classic.md - Traditional MockMvc (pre-3.2)
+- references/resttestclient.md - Spring Boot 4+ REST client
+- references/mockitobean.md - Mocking dependencies
 
 ## Assertion Libraries
 
-- [references/assertj-basics.md](references/assertj-basics.md) - Scalars, strings, booleans, dates
-- [references/assertj-collections.md](references/assertj-collections.md) - Lists, Sets, Maps, arrays
+- references/assertj-basics.md - Scalars, strings, booleans, dates
+- references/assertj-collections.md - Lists, Sets, Maps, arrays
 
 ## Testcontainers
 
-- [references/testcontainers-jdbc.md](references/testcontainers-jdbc.md) - PostgreSQL, MySQL, etc.
+- references/testcontainers-jdbc.md - PostgreSQL, MySQL, etc.
 
 ## Test Data Generation
 
-- [references/instancio.md](references/instancio.md) - Generate complex test objects (3+ properties)
+- references/instancio.md - Generate complex test objects (3+ properties)
 
 ## Performance & Migration
 
-- [references/context-caching.md](references/context-caching.md) - Speed up test suites
-- [references/sb4-migration.md](references/sb4-migration.md) - Spring Boot 4.0 changes
+- references/context-caching.md - Speed up test suites
+- references/sb4-migration.md - Spring Boot 4.0 changes
 
 ## Quick Decision Tree
 

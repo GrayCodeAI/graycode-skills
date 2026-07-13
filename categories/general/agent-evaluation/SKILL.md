@@ -2,7 +2,7 @@
 name: agent-evaluation
 description: "Design and implement comprehensive evaluation systems for AI agents. Use when building evals for coding agents, conversational agents, research agents, or computer-use agents. Covers grader types, ..."
 license: MIT
-tags: [agent-evaluation, evals, ai-agents, benchmarks, graders, testing, quality-assurance]
+tags: [agent-evaluation, evals, ai-agents, benchmarks, graders]
 allowed-tools: Read Write Shell Grep Glob
 metadata: None
 platforms: Claude, ChatGPT, Gemini

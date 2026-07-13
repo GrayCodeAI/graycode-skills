@@ -9,7 +9,7 @@ tags: [general]
 
 Manage multiple independent conversations simultaneously.
 
-> **Runnable example:** [recipe/MultipleSessions.java](recipe/MultipleSessions.java)
+> **Runnable example:** recipe/MultipleSessions.java
 >
 > ```bash
 > jbang recipe/MultipleSessions.java

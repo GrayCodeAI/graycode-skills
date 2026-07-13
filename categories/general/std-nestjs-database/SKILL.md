@@ -16,7 +16,7 @@ keywords: None
 
 ## Selection Strategy
 
-See [references/persistence_strategy.md](references/persistence_strategy.md) for database selection matrix and scaling patterns (Connection Pooling, Sharding).
+See references/persistence_strategy.md for database selection matrix and scaling patterns (Connection Pooling, Sharding).
 
 ## Patterns
 

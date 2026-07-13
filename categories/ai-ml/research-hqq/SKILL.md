@@ -2,7 +2,7 @@
 name: research-hqq
 description: "Half-Quadratic Quantization for LLMs without calibration data. Use when quantizing models to 4/3/2-bit precision without needing calibration datasets, for fast quantization workflows, or when deplo..."
 license: MIT
-tags: [quantization, hqq, optimization, memory-efficiency, inference, model-compression]
+tags: [quantization, hqq, optimization, memory-efficiency, inference]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [hqq>=0.2.0, torch>=2.0.0]
@@ -433,8 +433,8 @@ config = BaseQuantizeConfig(
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Custom backends, mixed precision, optimization
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging, benchmarks
+- **Advanced Usage** - Custom backends, mixed precision, optimization
+- **Troubleshooting** - Common issues, debugging, benchmarks
 
 ## Resources
 

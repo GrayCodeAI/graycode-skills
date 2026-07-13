@@ -2,7 +2,7 @@
 name: implementing-rapid7-insightvm-for-scanning
 description: "Deploy and configure Rapid7 InsightVM Security Console and Scan Engines for authenticated and unauthenticated vulnerability scanning across enterprise environments."
 license: MIT
-tags: [rapid7, insightvm, vulnerability-scanning, nexpose, scan-engine, asset-discovery, authenticated-scanning]
+tags: [rapid7, insightvm, vulnerability-scanning, nexpose, scan-engine]
 domain: cybersecurity
 subdomain: vulnerability-management
 version: 1.0

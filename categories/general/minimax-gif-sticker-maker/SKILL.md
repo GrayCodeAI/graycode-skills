@@ -29,7 +29,7 @@ Convert user photos into 4 animated GIF stickers (Funko Pop / Pop Mart style).
 
 Before starting any generation step, ensure:
 
-1. **Python venv** is activated with dependencies from [requirements.txt](references/requirements.txt) installed
+1. **Python venv** is activated with dependencies from requirements.txt installed
 2. **`MINIMAX_API_KEY`** is exported (e.g. `export MINIMAX_API_KEY='your-key'`)
 3. **`ffmpeg`** is available on PATH (for Step 3 GIF conversion)
 
@@ -43,14 +43,14 @@ Ask user (in their language):
 > "Would you like to customize the captions for your stickers, or use the defaults?"
 
 - **Custom**: Collect 4 short captions (1–3 words). Actions auto-match caption meaning.
-- **Default**: Look up [captions table](references/captions.md) by **detected user language**. **Never mix languages.**
+- **Default**: Look up captions table by **detected user language**. **Never mix languages.**
 
 ### Step 1: Generate 4 Static Sticker Images
 
 **Tool**: `scripts/minimax_image.py`
 
 1. Analyze the user's photo — identify subject type (person / animal / object / logo).
-2. For each of the 4 stickers, build a prompt from [image-prompt-template.txt](assets/image-prompt-template.txt) by filling `{action}` and `{caption}`.
+2. For each of the 4 stickers, build a prompt from image-prompt-template.txt by filling `{action}` and `{caption}`.
 3. **If subject is a person**: pass `--subject-ref <user_photo_path>` so the generated figurine preserves the person's actual facial likeness.
 4. Generate (all 4 are independent — **run concurrently**):
 
@@ -68,7 +68,7 @@ python3 scripts/minimax_image.py "<prompt>" -o output/sticker_love.png --ratio 1
 
 **Tool**: `scripts/minimax_video.py` with `--image` flag (image-to-video mode)
 
-For each sticker image, build a prompt from [video-prompt-template.txt](assets/video-prompt-template.txt), then:
+For each sticker image, build a prompt from video-prompt-template.txt, then:
 
 ```bash
 python3 scripts/minimax_video.py "<prompt>" --image output/sticker_hi.png -o output/sticker_hi.mp4
@@ -114,11 +114,11 @@ Output format (strict order):
 | 3 | Crying tears | cry | Tears stream, body trembles |
 | 4 | Heart gesture | love | Heart hands, eyes sparkle |
 
-See [references/captions.md](references/captions.md) for multilingual caption defaults.
+See references/captions.md for multilingual caption defaults.
 
 ## Rules
 
 - Detect user's language, all outputs follow it
-- Captions MUST come from [captions.md](references/captions.md) matching user's language column — never mix languages
+- Captions MUST come from captions.md matching user's language column — never mix languages
 - All image prompts must be in **English** regardless of user language (only caption text is localized)
 - `<deliver_assets>` must be LAST in response, no text after

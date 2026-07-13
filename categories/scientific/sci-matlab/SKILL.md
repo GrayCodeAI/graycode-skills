@@ -61,7 +61,7 @@ E = A \ b;           % Solve linear system Ax = b
 F = inv(A);          % Matrix inverse
 ```
 
-For complete matrix operations, see [references/matrices-arrays.md](references/matrices-arrays.md).
+For complete matrix operations, see references/matrices-arrays.md.
 
 ### 2. Linear Algebra
 
@@ -83,7 +83,7 @@ x = linsolve(A, b);  % With options
 x = inv(A) * b;      % Less efficient
 ```
 
-For comprehensive linear algebra, see [references/mathematics.md](references/mathematics.md).
+For comprehensive linear algebra, see references/mathematics.md.
 
 ### 3. Plotting and Visualization
 
@@ -113,7 +113,7 @@ saveas(gcf, 'plot.png');
 print('-dpdf', 'plot.pdf');
 ```
 
-For complete visualization guide, see [references/graphics-visualization.md](references/graphics-visualization.md).
+For complete visualization guide, see references/graphics-visualization.md.
 
 ### 4. Data Import/Export
 
@@ -136,7 +136,7 @@ img = imread('image.png');
 imwrite(img, 'output.jpg');
 ```
 
-For complete I/O guide, see [references/data-import-export.md](references/data-import-export.md).
+For complete I/O guide, see references/data-import-export.md.
 
 ### 5. Control Flow and Functions
 
@@ -169,7 +169,7 @@ f = @(x) x.^2 + 2*x + 1;
 result = f(5);  % 36
 ```
 
-For complete programming guide, see [references/programming.md](references/programming.md).
+For complete programming guide, see references/programming.md.
 
 ### 6. Statistics and Data Analysis
 
@@ -194,7 +194,7 @@ y_fit = polyval(p, x);
 y_smooth = movmean(y, 5);  % 5-point moving average
 ```
 
-For statistics reference, see [references/mathematics.md](references/mathematics.md).
+For statistics reference, see references/mathematics.md.
 
 ### 7. Differential Equations
 
@@ -211,7 +211,7 @@ f = @(t, y) [y(2); -2*y(2) - y(1)];
 [t, y] = ode45(f, [0 10], [1; 0]);
 ```
 
-For ODE solvers guide, see [references/mathematics.md](references/mathematics.md).
+For ODE solvers guide, see references/mathematics.md.
 
 ### 8. Signal Processing
 
@@ -229,7 +229,7 @@ y_filtered = filter(b, 1, signal);
 y = conv(x, h, 'same');
 ```
 
-For signal processing, see [references/mathematics.md](references/mathematics.md).
+For signal processing, see references/mathematics.md.
 
 ## Common Patterns
 
@@ -297,14 +297,14 @@ all_results = vertcat(results{:});
 
 ## Reference Files
 
-- **[matrices-arrays.md](references/matrices-arrays.md)** - Matrix creation, indexing, manipulation, and operations
-- **[mathematics.md](references/mathematics.md)** - Linear algebra, calculus, ODEs, optimization, statistics
-- **[graphics-visualization.md](references/graphics-visualization.md)** - 2D/3D plotting, customization, export
-- **[data-import-export.md](references/data-import-export.md)** - File I/O, tables, data formats
-- **[programming.md](references/programming.md)** - Functions, scripts, control flow, OOP
-- **[python-integration.md](references/python-integration.md)** - Calling Python from MATLAB and vice versa
-- **[octave-compatibility.md](references/octave-compatibility.md)** - Differences between MATLAB and GNU Octave
-- **[executing-scripts.md](references/executing-scripts.md)** - Executing generated scripts and for testing
+- **matrices-arrays.md** - Matrix creation, indexing, manipulation, and operations
+- **mathematics.md** - Linear algebra, calculus, ODEs, optimization, statistics
+- **graphics-visualization.md** - 2D/3D plotting, customization, export
+- **data-import-export.md** - File I/O, tables, data formats
+- **programming.md** - Functions, scripts, control flow, OOP
+- **python-integration.md** - Calling Python from MATLAB and vice versa
+- **octave-compatibility.md** - Differences between MATLAB and GNU Octave
+- **executing-scripts.md** - Executing generated scripts and for testing
 
 ## GNU Octave Compatibility
 
@@ -315,7 +315,7 @@ GNU Octave is highly compatible with MATLAB. Most scripts work without modificat
 - Some toolbox functions unavailable in Octave
 - Use `pkg load` for Octave packages
 
-For complete compatibility guide, see [references/octave-compatibility.md](references/octave-compatibility.md).
+For complete compatibility guide, see references/octave-compatibility.md.
 
 ## Best Practices
 

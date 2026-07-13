@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Cloud Incident Containment Automation Script
 Provides containment procedures for AWS, Azure, and GCP environments.

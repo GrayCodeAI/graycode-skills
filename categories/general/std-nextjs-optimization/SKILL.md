@@ -26,17 +26,17 @@ Core optimization primitives provided by Next.js. **Monitor First, Optimize Late
 
 Always use `next/image` to prevent CLS and enable automatic optimization:
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Fonts
 
 Use `next/font` for zero layout shift — self-hosts fonts and adds `font-display: swap`:
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Metadata (SEO)
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Scripts
 

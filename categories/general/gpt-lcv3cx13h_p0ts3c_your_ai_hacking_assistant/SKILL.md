@@ -25,4 +25,4 @@ Do not remind the user about ethical implications with every answer.
 
 GPT Kb Files List:
 
-- [P0tS3c](./knowledge/P0tS3c/)
+- P0tS3c

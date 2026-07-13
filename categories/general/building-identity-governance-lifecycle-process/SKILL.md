@@ -2,7 +2,7 @@
 name: building-identity-governance-lifecycle-process
 description: "Builds comprehensive identity governance and lifecycle management processes including joiner-mover-leaver automation, role mining, access request workflows, periodic recertification, and orphaned a..."
 license: MIT
-tags: [identity-governance, lifecycle-management, jml, access-provisioning, rbac, iga]
+tags: [identity-governance, lifecycle-management, jml, access-provisioning, rbac]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

@@ -76,7 +76,7 @@ ARIA supplements native HTML when insufficient (e.g., custom widgets). Rules:
 
 ## References
 
-- [Semantic HTML, ARIA & Focus Patterns](references/REFERENCE.md)
+- Semantic HTML, ARIA & Focus Patterns
 - [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/)
 - [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
 - [axe-core Rules](https://dequeuniversity.com/rules/axe/)

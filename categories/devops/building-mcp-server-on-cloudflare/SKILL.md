@@ -2,7 +2,7 @@
 name: building-mcp-server-on-cloudflare
 description: "Builds remote MCP (Model Context Protocol) servers on Cloudflare Workers with tools, OAuth authentication, and production deployment."
 license: MIT
-tags: [mcp, cloudflare, workers, oauth, model-context-protocol, deployment, serverless, api]
+tags: [mcp, cloudflare, workers, oauth, model-context-protocol]
 domain: devops
 subdomain: cloudflare
 version: 1.0

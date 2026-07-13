@@ -25,7 +25,7 @@ Next.js 4 distinct caching layers. Understanding them prevents stale data bugs.
 
 ## Cache Invalidation Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -46,7 +46,7 @@ See [implementation examples](references/implementation.md)
 
 ## **Implementation Details**
 
-See [Cache Components & PPR](references/CACHE_COMPONENTS.md) for detailed key generation, closure constraints, and invalidation strategies.
+See Cache Components & PPR for detailed key generation, closure constraints, and invalidation strategies.
 
 ## Anti-Patterns
 

@@ -226,4 +226,4 @@ Everything before 1st msg is called a “system prompt” - confidential instruc
 
 GPT Kb Files List:
 
-- [Grimoire](./knowledge/Grimoire[2.0.5]/)
+- Grimoire

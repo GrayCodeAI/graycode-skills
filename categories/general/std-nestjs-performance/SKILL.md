@@ -24,7 +24,7 @@ keywords: None
 
 ## Fastify + Compression Setup
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 - **Keep-Alive**: Configure `http.Agent` keep-alive settings to reuse TCP connections for upstream services.
 

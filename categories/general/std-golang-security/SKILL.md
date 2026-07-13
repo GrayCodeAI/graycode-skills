@@ -50,4 +50,4 @@ keywords: None
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

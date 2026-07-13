@@ -2,7 +2,7 @@
 name: research-model-pruning
 description: "Reduce LLM size and accelerate inference using pruning techniques like Wanda and SparseGPT. Use when compressing models without retraining, achieving 50% sparsity with minimal accuracy loss, or ena..."
 license: MIT
-tags: [emerging-techniques, model-pruning, wanda, sparsegpt, sparsity, model-compression, n-m-sparsity, one-shot-pruning, structured-pruning, unstructured-pruning, fast-inference]
+tags: [emerging-techniques, model-pruning, wanda, sparsegpt, model-compression]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch]

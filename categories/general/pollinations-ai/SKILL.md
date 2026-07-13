@@ -9,9 +9,7 @@ tags:
 - pollinations
 - free
 - api
-- creative
 - ai-art
-- url-based
 metadata: None
 platforms: Claude, ChatGPT, Gemini, Codex
 ---

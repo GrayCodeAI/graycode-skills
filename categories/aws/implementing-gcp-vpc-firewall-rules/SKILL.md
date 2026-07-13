@@ -2,7 +2,7 @@
 name: implementing-gcp-vpc-firewall-rules
 description: "Implementing and auditing GCP VPC firewall rules to enforce network segmentation, restrict ingress and egress traffic, apply hierarchical firewall policies across the organization, and monitor fire..."
 license: MIT
-tags: [cloud-security, gcp, vpc, firewall-rules, network-security, segmentation]
+tags: [cloud-security, gcp, vpc, firewall-rules, network-security]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

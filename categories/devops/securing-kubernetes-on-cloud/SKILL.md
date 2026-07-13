@@ -10,7 +10,6 @@ tags:
 - aks
 - gke
 - pod-security-standards
-- container-runtime
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0.0

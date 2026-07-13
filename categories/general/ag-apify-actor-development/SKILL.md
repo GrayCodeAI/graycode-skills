@@ -84,7 +84,7 @@ Use the appropriate CLI command based on the user's language choice. Additional 
    - Python: `pip install -r requirements.txt` (pin exact versions in `requirements.txt`, e.g. `crawlee==1.2.3`, and commit the file to version control)
 3. **Implement logic** - Write the actor code in `src/main.py`, `src/main.js`, or `src/main.ts`
 4. **Configure schemas** - Update input/output schemas in `.actor/input_schema.json`, `.actor/output_schema.json`, `.actor/dataset_schema.json`
-5. **Configure platform settings** - Update `.actor/actor.json` with actor metadata (see [references/actor-json.md](references/actor-json.md))
+5. **Configure platform settings** - Update `.actor/actor.json` with actor metadata (see references/actor-json.md)
 6. **Write documentation** - Create comprehensive README.md for the marketplace
 7. **Test locally** - Run `apify run` to verify functionality (see Local Testing section below)
 8. **Deploy** - Run `apify push` to deploy the actor on the Apify platform (actor name is defined in `.actor/actor.json`)
@@ -137,7 +137,7 @@ Use the appropriate CLI command based on the user's language choice. Additional 
 
 ## Logging
 
-See [references/logging.md](references/logging.md) for complete logging documentation including available log levels and best practices for JavaScript/TypeScript and Python.
+See references/logging.md for complete logging documentation including available log levels and best practices for JavaScript/TypeScript and Python.
 
 Check `usesStandbyMode` in `.actor/actor.json` - only implement if set to `true`.
 
@@ -170,7 +170,7 @@ This file should contain the input parameters defined in your `.actor/input_sche
 
 ## Standby Mode
 
-See [references/standby-mode.md](references/standby-mode.md) for complete standby mode documentation including readiness probe implementation for JavaScript/TypeScript and Python.
+See references/standby-mode.md for complete standby mode documentation including readiness probe implementation for JavaScript/TypeScript and Python.
 
 ## Project Structure
 
@@ -190,23 +190,23 @@ Dockerfile              # Container image definition
 
 ## Actor Configuration
 
-See [references/actor-json.md](references/actor-json.md) for complete actor.json structure and configuration options.
+See references/actor-json.md for complete actor.json structure and configuration options.
 
 ## Input Schema
 
-See [references/input-schema.md](references/input-schema.md) for input schema structure and examples.
+See references/input-schema.md for input schema structure and examples.
 
 ## Output Schema
 
-See [references/output-schema.md](references/output-schema.md) for output schema structure, examples, and template variables.
+See references/output-schema.md for output schema structure, examples, and template variables.
 
 ## Dataset Schema
 
-See [references/dataset-schema.md](references/dataset-schema.md) for dataset schema structure, configuration, and display properties.
+See references/dataset-schema.md for dataset schema structure, configuration, and display properties.
 
 ## Key-Value Store Schema
 
-See [references/key-value-store-schema.md](references/key-value-store-schema.md) for key-value store schema structure, collections, and configuration.
+See references/key-value-store-schema.md for key-value store schema structure, collections, and configuration.
 
 ## Apify MCP Tools
 

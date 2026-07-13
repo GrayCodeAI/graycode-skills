@@ -19,7 +19,7 @@ keywords: None
 - **Modularization**: Break large projects into local packages for faster builds.
 - **Versioning**: Use semantic versioning (Major.Minor.Patch) for shared packages.
 
-See [implementation examples](references/implementation.md) for Package.swift structure, SwiftLint config, and environment-specific code.
+See implementation examples for Package.swift structure, SwiftLint config, and environment-specific code.
 
 ## Enforce Code Quality
 
@@ -41,4 +41,4 @@ See [implementation examples](references/implementation.md) for Package.swift st
 
 ## References
 
-- [SPM Setup & Build Configs](references/implementation.md)
+- SPM Setup & Build Configs

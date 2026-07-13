@@ -2,7 +2,7 @@
 name: detecting-email-forwarding-rules-attack
 description: "Detect malicious email forwarding rules created by adversaries to maintain persistent access to email communications for intelligence collection and BEC attacks."
 license: MIT
-tags: [threat-hunting, mitre-attack, email-forwarding, persistence, bec, t1114, proactive-detection]
+tags: [threat-hunting, mitre-attack, email-forwarding, persistence, bec]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

@@ -2,7 +2,7 @@
 name: ag-kubestellar-console
 description: "Multi-cluster Kubernetes dashboard with AI-powered operations via MCP server and 10+ built-in agent skills"
 license: Apache-2.0
-tags: [kubernetes, multi-cluster, mcp, dashboard, cncf, devops, observability]
+tags: [kubernetes, multi-cluster, mcp, dashboard, cncf]
 category: devops
 risk: critical
 source: community

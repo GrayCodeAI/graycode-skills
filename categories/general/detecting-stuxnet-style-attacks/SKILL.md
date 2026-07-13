@@ -2,7 +2,7 @@
 name: detecting-stuxnet-style-attacks
 description: "This skill covers detecting sophisticated cyber-physical attacks that follow the Stuxnet attack pattern of modifying PLC logic while spoofing sensor readings to hide the manipulation from operators..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, stuxnet, plc-integrity, apt]
+tags: [ot-security, ics, scada, industrial-control, stuxnet]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

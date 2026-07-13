@@ -2,7 +2,7 @@
 name: conducting-full-scope-red-team-engagement
 description: "Plan and execute a comprehensive red team engagement covering reconnaissance through post-exploitation using MITRE ATT&CK-aligned TTPs to evaluate an organization's detection and response capabilit..."
 license: MIT
-tags: [red-team, adversary-emulation, mitre-attack, penetration-testing, offensive-security, purple-team, ttp-mapping]
+tags: [red-team, adversary-emulation, mitre-attack, penetration-testing, purple-team]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

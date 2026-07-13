@@ -2,7 +2,7 @@
 name: testing-android-intents-for-vulnerabilities
 description: "Tests Android inter-process communication (IPC) through intents for vulnerabilities including intent injection, unauthorized component access, broadcast sniffing, pending intent hijacking, and cont..."
 license: MIT
-tags: [mobile-security, android, intents, ipc-security, owasp-mobile, penetration-testing]
+tags: [mobile-security, android, intents, ipc-security, owasp-mobile]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

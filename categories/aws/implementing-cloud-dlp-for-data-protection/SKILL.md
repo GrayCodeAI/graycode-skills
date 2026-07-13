@@ -2,7 +2,7 @@
 name: implementing-cloud-dlp-for-data-protection
 description: "Implementing Cloud Data Loss Prevention (DLP) using Amazon Macie, Azure Information Protection, and Google Cloud DLP API to discover, classify, and protect sensitive data across cloud storage, data..."
 license: MIT
-tags: [cloud-security, dlp, data-protection, macie, data-classification, privacy]
+tags: [cloud-security, dlp, data-protection, macie, data-classification]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

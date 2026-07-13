@@ -2,7 +2,7 @@
 name: ag-bdistill-behavioral-xray
 description: "X-ray any AI model's behavioral patterns — refusal boundaries, hallucination tendencies, reasoning style, formatting defaults. No API key needed."
 license: MIT
-tags: [ai, testing, behavioral-analysis, model-evaluation, red-team, compliance, mcp]
+tags: [ai, testing, behavioral-analysis, model-evaluation, red-team]
 category: ai-testing
 risk: safe
 source: community

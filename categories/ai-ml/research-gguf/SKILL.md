@@ -2,7 +2,7 @@
 name: research-gguf
 description: "GGUF format and llama.cpp quantization for efficient CPU/GPU inference. Use when deploying models on consumer hardware, Apple Silicon, or when needing flexible quantization from 2-8 bit without GPU..."
 license: MIT
-tags: [gguf, quantization, llama-cpp, cpu-inference, apple-silicon, model-compression, optimization]
+tags: [gguf, quantization, llama-cpp, cpu-inference, apple-silicon]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [llama-cpp-python>=0.2.0]
@@ -415,8 +415,8 @@ python server.py --model model-q4_k_m.gguf --loader llama.cpp --n-gpu-layers 35
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Batching, speculative decoding, custom builds
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging, benchmarks
+- **Advanced Usage** - Batching, speculative decoding, custom builds
+- **Troubleshooting** - Common issues, debugging, benchmarks
 
 ## Resources
 

@@ -2,7 +2,7 @@
 name: analyzing-windows-event-logs-in-splunk
 description: "Analyzes Windows Security, System, and Sysmon event logs in Splunk to detect authentication attacks, privilege escalation, persistence mechanisms, and lateral movement using SPL queries mapped to M..."
 license: MIT
-tags: [soc, splunk, windows-events, sysmon, event-logs, mitre-attack, active-directory]
+tags: [soc, splunk, windows-events, sysmon, event-logs]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

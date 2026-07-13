@@ -28,7 +28,7 @@ keywords: None
 - **Do-Catch**: Handle close to source; specific catch clauses per error type. Catch-all `catch`: last resort.
 - **Error Types**: Define custom errors as enums conforming to `Error`:
 
-See [implementation examples](references/implementation.md) for custom error enums, do-catch patterns, and Result type usage.
+See implementation examples for custom error enums, do-catch patterns, and Result type usage.
 
 - **Optional Try**: Use `try?` only for non-critical errors where nil acceptable.
 
@@ -51,4 +51,4 @@ See [implementation examples](references/implementation.md) for custom error enu
 
 ## References
 
-- [Error Types & Result](references/implementation.md)
+- Error Types & Result

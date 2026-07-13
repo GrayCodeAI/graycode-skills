@@ -2,7 +2,7 @@
 name: detecting-pass-the-hash-attacks
 description: "Detect Pass-the-Hash attacks by analyzing NTLM authentication patterns, identifying Type 3 logons with NTLM where Kerberos is expected, and correlating with credential dumping."
 license: MIT
-tags: [threat-hunting, mitre-attack, pass-the-hash, credential-access, t1550, proactive-detection]
+tags: [threat-hunting, mitre-attack, pass-the-hash, credential-access, t1550]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

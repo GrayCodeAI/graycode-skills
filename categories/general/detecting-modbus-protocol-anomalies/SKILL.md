@@ -2,7 +2,7 @@
 name: detecting-modbus-protocol-anomalies
 description: "This skill covers detecting anomalies in Modbus/TCP and Modbus RTU communications in industrial control systems. It addresses function code monitoring, register range validation, timing analysis, u..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, modbus, protocol-anomaly]
+tags: [ot-security, ics, scada, industrial-control, modbus]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

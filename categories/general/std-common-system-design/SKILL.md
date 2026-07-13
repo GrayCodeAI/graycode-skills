@@ -33,7 +33,7 @@ keywords: None
 - **Loose Coupling**: Use interfaces for communication.
 - **DI**: Inject dependencies, don't hardcode.
 
-See [implementation examples](references/implementation.md) for dependency flow diagrams.
+See implementation examples for dependency flow diagrams.
 
 ## Common Patterns
 
@@ -44,10 +44,10 @@ See [implementation examples](references/implementation.md) for dependency flow 
 
 ## Distributed Systems
 
-- **CAP**: Trade-off Consistency/Availability/Partition tolerance. See [CAP & Consistency Patterns](references/distributed-systems.md).
-- **Idempotency**: Operations repeatable without side effects. See [Idempotency Patterns](references/distributed-systems.md#idempotency).
-- **Circuit Breaker**: Fail fast on failing services. See [Resilience Patterns](references/resilience-patterns.md).
-- **Eventual Consistency**: Design for async data sync. See [CAP & Consistency Patterns](references/distributed-systems.md#eventual-consistency).
+- **CAP**: Trade-off Consistency/Availability/Partition tolerance. See CAP & Consistency Patterns.
+- **Idempotency**: Operations repeatable without side effects. See Idempotency Patterns.
+- **Circuit Breaker**: Fail fast on failing services. See Resilience Patterns.
+- **Eventual Consistency**: Design for async data sync. See CAP & Consistency Patterns.
 
 ## Documentation & Evolution
 
@@ -57,8 +57,8 @@ See [implementation examples](references/implementation.md) for dependency flow 
 
 ## References
 
-- [Distributed Systems & CAP Theorem](references/distributed-systems.md)
-- [Resilience Patterns (Circuit Breaker, Bulkhead, Retry)](references/resilience-patterns.md)
+- Distributed Systems & CAP Theorem
+- Resilience Patterns (Circuit Breaker, Bulkhead, Retry)
 
 ## Anti-Patterns
 

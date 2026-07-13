@@ -2,7 +2,7 @@
 name: detecting-t1548-abuse-elevation-control-mechanism
 description: "Detect abuse of elevation control mechanisms including UAC bypass, sudo exploitation, and setuid/setgid manipulation by monitoring registry modifications, process elevation flags, and unusual paren..."
 license: MIT
-tags: [threat-hunting, uac-bypass, privilege-escalation, mitre-t1548, elevation-control, windows-security]
+tags: [threat-hunting, uac-bypass, privilege-escalation, mitre-t1548, elevation-control]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

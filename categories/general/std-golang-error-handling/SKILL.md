@@ -34,4 +34,4 @@ keywords: None
 
 ## References
 
-- [Error Wrapping Patterns](references/error-wrapping.md)
+- Error Wrapping Patterns

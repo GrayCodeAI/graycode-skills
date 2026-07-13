@@ -2,7 +2,7 @@
 name: hunting-for-webshell-activity
 description: "Hunt for web shell deployments on internet-facing servers by analyzing file creation in web directories, suspicious process spawning from web servers, and anomalous HTTP patterns."
 license: MIT
-tags: [threat-hunting, mitre-attack, webshell, persistence, web-server, t1505, proactive-detection]
+tags: [threat-hunting, mitre-attack, webshell, persistence, web-server]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

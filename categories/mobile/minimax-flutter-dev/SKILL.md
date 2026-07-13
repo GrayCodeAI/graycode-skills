@@ -107,18 +107,18 @@ A practical guide for building cross-platform applications with Flutter 3 and Da
 
 | Topic | Reference |
 |-------|-----------|
-| Widget patterns, const optimization, responsive layout | [Widget Patterns](references/widget-patterns.md) |
-| Riverpod providers, notifiers, async state | [Riverpod State Management](references/riverpod-state.md) |
-| Bloc, Cubit, event-driven state | [Bloc State Management](references/bloc-state.md) |
-| GoRouter setup, routes, deep linking | [GoRouter Navigation](references/gorouter-navigation.md) |
-| Feature-based structure, dependencies | [Project Structure](references/project-structure.md) |
-| Profiling, const optimization, DevTools | [Performance Optimization](references/performance.md) |
-| Widget tests, integration tests, mocking | [Testing Strategies](references/testing.md) |
-| iOS/Android/Web specific implementations | [Platform Integration](references/platform-specific.md) |
-| Implicit/explicit animations, Hero, transitions | [Animations](references/animations.md) |
-| Dio, interceptors, error handling, caching | [Networking](references/networking.md) |
-| Form validation, FormField, input formatters | [Forms](references/forms.md) |
-| i18n, flutter_localizations, intl | [Localization](references/localization.md) |
+| Widget patterns, const optimization, responsive layout | Widget Patterns |
+| Riverpod providers, notifiers, async state | Riverpod State Management |
+| Bloc, Cubit, event-driven state | Bloc State Management |
+| GoRouter setup, routes, deep linking | GoRouter Navigation |
+| Feature-based structure, dependencies | Project Structure |
+| Profiling, const optimization, DevTools | Performance Optimization |
+| Widget tests, integration tests, mocking | Testing Strategies |
+| iOS/Android/Web specific implementations | Platform Integration |
+| Implicit/explicit animations, Hero, transitions | Animations |
+| Dio, interceptors, error handling, caching | Networking |
+| Form validation, FormField, input formatters | Forms |
+| i18n, flutter_localizations, intl | Localization |
 
 ---
 

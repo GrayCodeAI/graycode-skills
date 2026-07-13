@@ -2,7 +2,7 @@
 name: performing-log-source-onboarding-in-siem
 description: "Perform structured log source onboarding into SIEM platforms by configuring collectors, parsers, normalization, and validation for complete security visibility."
 license: MIT
-tags: [siem, log-onboarding, log-management, data-ingestion, parsing, normalization, soc]
+tags: [siem, log-onboarding, log-management, data-ingestion, parsing]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

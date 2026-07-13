@@ -74,7 +74,7 @@ private getHeavyData() {
 
 **Problem:** 503 errors under load  
 **Cause:** Single DO exceeding ~1K req/s throughput limit  
-**Solution:** Shard across multiple DOs (see [Patterns: Sharding](./patterns.md))
+**Solution:** Shard across multiple DOs (see Patterns: Sharding)
 
 ### "Storage Quota Exceeded (Write failures)"
 
@@ -202,6 +202,6 @@ export default {
 
 ## See Also
 
-- **[Patterns](./patterns.md)** - Workarounds for common limitations
-- **[API](./api.md)** - Storage limits and quotas
-- **[Configuration](./configuration.md)** - Setting CPU limits
+- **Patterns** - Workarounds for common limitations
+- **API** - Storage limits and quotas
+- **Configuration** - Setting CPU limits

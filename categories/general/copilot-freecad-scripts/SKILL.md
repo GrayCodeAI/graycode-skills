@@ -682,10 +682,10 @@ When interpreting shorthand or quasi-code for FreeCAD scripts:
 
 ### Bundled Reference Documents
 
-See the [references/](references/) directory for topic-organized guides:
+See the references/ directory for topic-organized guides:
 
-1. [scripting-fundamentals.md](references/scripting-fundamentals.md) — Core scripting, document model, console
-2. [geometry-and-shapes.md](references/geometry-and-shapes.md) — Part, Mesh, Sketcher, topology
-3. [parametric-objects.md](references/parametric-objects.md) — FeaturePython, properties, scripted objects
-4. [gui-and-interface.md](references/gui-and-interface.md) — PySide, dialogs, task panels, Coin3D
-5. [workbenches-and-advanced.md](references/workbenches-and-advanced.md) — Workbenches, macros, FEM, Path, recipes
+1. scripting-fundamentals.md — Core scripting, document model, console
+2. geometry-and-shapes.md — Part, Mesh, Sketcher, topology
+3. parametric-objects.md — FeaturePython, properties, scripted objects
+4. gui-and-interface.md — PySide, dialogs, task panels, Coin3D
+5. workbenches-and-advanced.md — Workbenches, macros, FEM, Path, recipes

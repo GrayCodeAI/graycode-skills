@@ -15,21 +15,21 @@ keywords: None
 
 ## Structure
 
-See [implementation examples](references/implementation.md#directory-structure) for test directory layout.
+See implementation examples for test directory layout.
 
 ## Write Tests with PHPUnit and Pest
 
 - **Standards**: Use **`PHPUnit`** (9/10+) or **`Pest`**. Organize into **`Unit/`**, **`Integration/`**, and **`Feature/`**. Class names should extend **`TestCase`**.
 - **TDD Workflow**: Follow **Red-Green-Refactor**. Write failing test first, implement minimal logic, then refactor.
 
-See [implementation examples](references/implementation.md#phpunit-service-test) for PHPUnit service test with mock.
+See implementation examples for PHPUnit service test with mock.
 
 ## Apply Assertions and Data Providers
 
 - **Fluent Assertions**: Use **`assertSame`** (`===`) over `assertEquals` to avoid type coercion. Also use **`assertCount()`** and **`assertMatchesRegularExpression()`**.
 - **Data Providers**: Use **`#[DataProvider('statusProvider')]`** (PHPUnit 10+) or **`dataset`** (Pest).
 
-See [implementation examples](references/implementation.md#pest-dataset-example) for Pest expressive syntax with datasets.
+See implementation examples for Pest expressive syntax with datasets.
 
 ## Isolate Test Dependencies
 
@@ -47,4 +47,4 @@ See [implementation examples](references/implementation.md#pest-dataset-example)
 
 ## References
 
-- [Testing Patterns & Mocks](references/implementation.md)
+- Testing Patterns & Mocks

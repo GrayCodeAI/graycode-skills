@@ -2,7 +2,7 @@
 name: implementing-next-generation-firewall-with-palo-alto
 description: "Configure and deploy Palo Alto Networks next-generation firewalls with App-ID, User-ID, zone-based policies, SSL decryption, and threat prevention profiles for enterprise network security."
 license: MIT
-tags: [palo-alto, ngfw, firewall, app-id, user-id, threat-prevention, network-security, ssl-decryption, zone-protection]
+tags: [palo-alto, ngfw, firewall, app-id, user-id]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

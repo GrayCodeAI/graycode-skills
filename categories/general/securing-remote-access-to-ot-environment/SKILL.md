@@ -2,7 +2,7 @@
 name: securing-remote-access-to-ot-environment
 description: "This skill covers implementing secure remote access to OT/ICS environments for operators, engineers, and vendors while preventing unauthorized access that could compromise industrial operations. It..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, remote-access, jump-server, mfa]
+tags: [ot-security, ics, scada, industrial-control, remote-access]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

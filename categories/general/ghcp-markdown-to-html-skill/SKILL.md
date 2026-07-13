@@ -25,7 +25,7 @@ The conversion script or tool should handle single files, batch conversions, and
 
 ### Essential Basic Conversions
 
-For more see [basic-markdown-to-html.md](references/basic-markdown-to-html.md)
+For more see basic-markdown-to-html.md
 
 ```text
     ```markdown
@@ -104,7 +104,7 @@ For more see [basic-markdown-to-html.md](references/basic-markdown-to-html.md)
 
 ### Code Block Conversions
 
-For more see [code-blocks-to-html.md](references/code-blocks-to-html.md)
+For more see code-blocks-to-html.md
 
 ```text
 
@@ -151,7 +151,7 @@ For more see [code-blocks-to-html.md](references/code-blocks-to-html.md)
 
 ### Collapsed Section Conversions
 
-For more see [collapsed-sections-to-html.md](references/collapsed-sections-to-html.md)
+For more see collapsed-sections-to-html.md
 
 ```text
     ```markdown
@@ -193,7 +193,7 @@ For more see [collapsed-sections-to-html.md](references/collapsed-sections-to-ht
 
 ### Mathematical Expression Conversions
 
-For more see [writing-mathematical-expressions-to-html.md](references/writing-mathematical-expressions-to-html.md)
+For more see writing-mathematical-expressions-to-html.md
 
 ```text
     ```markdown
@@ -255,7 +255,7 @@ For more see [writing-mathematical-expressions-to-html.md](references/writing-ma
 
 ### Table Conversions
 
-For more see [tables-to-html.md](references/tables-to-html.md)
+For more see tables-to-html.md
 
 ```text
     ```markdown
@@ -307,7 +307,7 @@ For more see [tables-to-html.md](references/tables-to-html.md)
     ```
 ```
 
-## Working with [`markedJS/marked`](references/marked.md)
+## Working with `markedJS/marked`
 
 ### Prerequisites
 
@@ -317,11 +317,11 @@ For more see [tables-to-html.md](references/tables-to-html.md)
 
 ### Quick Conversion Methods
 
-See [marked.md](references/marked.md) **Quick Conversion Methods**
+See marked.md **Quick Conversion Methods**
 
 ### Step-by-Step Workflows
 
-See [marked.md](references/marked.md) **Step-by-Step Workflows**
+See marked.md **Step-by-Step Workflows**
 
 ### CLI Configuration
 
@@ -390,7 +390,7 @@ Recommended sanitizers:
 | Line breaks ignored | Set `breaks: true` in options |
 | XSS vulnerability concerns | Use DOMPurify to sanitize output |
 
-## Working with [`pandoc`](references/pandoc.md)
+## Working with `pandoc`
 
 ### Prerequisites
 
@@ -486,7 +486,7 @@ pandoc --sandbox input.md -o output.html
 | Math not rendering | Use `--mathml` or `--mathjax` option |
 | Tables not rendering | Ensure proper table syntax with pipes and dashes |
 
-## Working with [`gomarkdown/markdown`](references/gomarkdown.md)
+## Working with `gomarkdown/markdown`
 
 ### Prerequisites
 
@@ -612,7 +612,7 @@ Recommended sanitizer: [Bluemonday](https://github.com/microcosm-cc/bluemonday)
 | Math not rendering | Enable `parser.MathJax` extension |
 | XSS vulnerabilities | Use Bluemonday to sanitize output |
 
-## Working with [`jekyll`](references/jekyll.md)
+## Working with `jekyll`
 
 ### Prerequisites
 
@@ -722,7 +722,7 @@ kramdown:
 | Liquid syntax errors | Check for unescaped `{` in content |
 | Plugin not loading | Add to `_config.yml` plugins list |
 
-## Working with [`hugo`](references/hugo.md)
+## Working with `hugo`
 
 ### Prerequisites
 
@@ -867,36 +867,36 @@ Configure markdown in `hugo.toml`:
 
 ### Writing and Styling Markdown
 
-- [basic-markdown.md](references/basic-markdown.md)
-- [code-blocks.md](references/code-blocks.md)
-- [collapsed-sections.md](references/collapsed-sections.md)
-- [tables.md](references/tables.md)
-- [writing-mathematical-expressions.md](references/writing-mathematical-expressions.md)
+- basic-markdown.md
+- code-blocks.md
+- collapsed-sections.md
+- tables.md
+- writing-mathematical-expressions.md
 - Markdown Guide: <https://www.markdownguide.org/basic-syntax/>
 - Styling Markdown: <https://github.com/sindresorhus/github-markdown-css>
 
-### [`markedJS/marked`](references/marked.md)
+### `markedJS/marked`
 
 - Official documentation: <https://marked.js.org/>
 - Advanced options: <https://marked.js.org/using_advanced>
 - Extensibility: <https://marked.js.org/using_pro>
 - GitHub repository: <https://github.com/markedjs/marked>
 
-### [`pandoc`](references/pandoc.md)
+### `pandoc`
 
 - Getting started: <https://pandoc.org/getting-started.html>
 - Official documentation: <https://pandoc.org/MANUAL.html>
 - Extensibility: <https://pandoc.org/extras.html>
 - GitHub repository: <https://github.com/jgm/pandoc>
 
-### [`gomarkdown/markdown`](references/gomarkdown.md)
+### `gomarkdown/markdown`
 
 - Official documentation: <https://pkg.go.dev/github.com/gomarkdown/markdown>
 - Advanced configuration: <https://pkg.go.dev/github.com/gomarkdown/markdown@v0.0.0-20250810172220-2e2c11897d1a/html>
 - Markdown processing: <https://blog.kowalczyk.info/article/cxn3/advanced-markdown-processing-in-go.html>
 - GitHub repository: <https://github.com/gomarkdown/markdown>
 
-### [`jekyll`](references/jekyll.md)
+### `jekyll`
 
 - Official documentation: <https://jekyllrb.com/docs/>
 - Configuration options: <https://jekyllrb.com/docs/configuration/options/>
@@ -910,7 +910,7 @@ Configure markdown in `hugo.toml`:
   - [Hooks](https://jekyllrb.com/docs/plugins/hooks/)
 - GitHub repository: <https://github.com/jekyll/jekyll>
 
-### [`hugo`](references/hugo.md)
+### `hugo`
 
 - Official documentation: <https://gohugo.io/documentation/>
 - All Settings: <https://gohugo.io/configuration/all/>

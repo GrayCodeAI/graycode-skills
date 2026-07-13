@@ -2,7 +2,7 @@
 name: flow-verification-quality
 description: "Comprehensive truth scoring, code quality verification, and automatic rollback system with 0.95 accuracy threshold for ensuring high-quality agent outputs and codebase reliability."
 license: MIT
-tags: [verification, truth-scoring, quality, rollback, metrics, ci-cd]
+tags: [verification, truth-scoring, quality, rollback, metrics]
 version: 2.0.0
 category: quality-assurance
 ---
@@ -24,7 +24,7 @@ This skill provides a comprehensive verification and quality assurance system th
 
 ## CI Guards — what's actually shipped (current state)
 
-Ruflo's regression protection is three layers, all gated before publish. Authoritative reference: [`verification/README.md`](README.md).
+Ruflo's regression protection is three layers, all gated before publish. Authoritative reference: `verification/README.md`.
 
 | Layer | What | CI job(s) in `.github/workflows/v3-ci.yml` | ADR |
 |---|---|---|---|

@@ -36,4 +36,4 @@ keywords: None
 
 ## References
 
-See [references/patterns.md](references/patterns.md) for Container/Presentational split, HOCs, Render Props, Compound Components, and Slot patterns.
+See references/patterns.md for Container/Presentational split, HOCs, Render Props, Compound Components, and Slot patterns.

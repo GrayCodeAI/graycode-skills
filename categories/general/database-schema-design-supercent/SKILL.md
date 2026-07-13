@@ -2,7 +2,7 @@
 name: database-schema-design-supercent
 description: "Design and optimize database schemas for SQL and NoSQL databases. Use when creating new databases, designing tables, defining relationships, indexing strategies, or database migrations. Handles Pos..."
 license: MIT
-tags: [database, schema, sql, nosql, postgresql, mysql, mongodb, migration]
+tags: [database, schema, sql, nosql, postgresql]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

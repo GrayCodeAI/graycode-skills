@@ -220,10 +220,10 @@ python skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json
 
 ## References
 
-- [delivery_throughput.md](references/delivery_throughput.md) — Full DORA framework + 4 common bottlenecks + what to fix first + anti-patterns
-- [engineering_hiring_funnel.md](references/engineering_hiring_funnel.md) — 7-stage funnel + conversion benchmarks + common leakage + sourcing channel diversification + technical interview design
-- [eng_team_structure.md](references/eng_team_structure.md) — Squad/chapter/tribe model + headcount-to-structure map + Conway's Law + EM-vs-tech-lead split + span-of-control
-- [production_discipline.md](references/production_discipline.md) — On-call rotation design + incident response + blameless postmortem culture + deployment cadence + SLO discipline integration
+- delivery_throughput.md — Full DORA framework + 4 common bottlenecks + what to fix first + anti-patterns
+- engineering_hiring_funnel.md — 7-stage funnel + conversion benchmarks + common leakage + sourcing channel diversification + technical interview design
+- eng_team_structure.md — Squad/chapter/tribe model + headcount-to-structure map + Conway's Law + EM-vs-tech-lead split + span-of-control
+- production_discipline.md — On-call rotation design + incident response + blameless postmortem culture + deployment cadence + SLO discipline integration
 
 ---
 

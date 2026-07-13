@@ -2,7 +2,7 @@
 name: ag-unity-ai-game-creator
 description: "Transform raw game ideas into complete Unity projects with AI-powered asset generation, scene blueprints, music/SFX prompts, and step-by-step development procedures using Unity 6+ and modern AI tools."
 license: MIT
-tags: [unity, game-development, ai-generation, asset-pipeline, scene-design, music-generation, game-design-document]
+tags: [unity, game-development, ai-generation, asset-pipeline, scene-design]
 category: game-development
 risk: safe
 source: community

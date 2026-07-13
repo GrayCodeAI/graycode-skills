@@ -533,8 +533,8 @@ python inference.py \
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Multi-node training, API automation
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues and solutions
+- **Advanced Usage** - Multi-node training, API automation
+- **Troubleshooting** - Common issues and solutions
 
 ## Resources
 

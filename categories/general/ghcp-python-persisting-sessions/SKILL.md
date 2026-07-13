@@ -13,7 +13,7 @@ Save and restore conversation sessions across application restarts.
 
 You want users to be able to continue a conversation even after closing and reopening your application.
 
-> **Runnable example:** [recipe/persisting_sessions.py](recipe/persisting_sessions.py)
+> **Runnable example:** recipe/persisting_sessions.py
 >
 > ```bash
 > cd recipe && pip install -r requirements.txt

@@ -13,7 +13,7 @@ keywords: None
 ## Step 5 — Skill Applicability & Iteration
 
 For every `❌ FAIL`, identify the root cause using the **Iteration Table** in:
-[benchmark.md](benchmark.md#2-iteration-table-root-cause-analysis)
+benchmark.md
 
 1. Signal not matching file? → Refine trigger.
 2. Rule too vague? → Add Anti-Pattern rule.

@@ -2,7 +2,7 @@
 name: implementing-soar-automation-with-phantom
 description: "Implements Security Orchestration, Automation, and Response (SOAR) workflows using Splunk SOAR (formerly Phantom) to automate alert triage, IOC enrichment, containment actions, and incident respons..."
 license: MIT
-tags: [soc, soar, phantom, splunk-soar, automation, playbook, orchestration, incident-response]
+tags: [soc, soar, phantom, splunk-soar, automation]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

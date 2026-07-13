@@ -20,7 +20,7 @@ keywords: None
 - **Security**: Run as **`non-root`** user. Use **`eclipse-temurin`** or Distroless as base image.
 - **Secrets**: NEVER commit secrets to Git. Inject via environment variables, Kubernetes Secrets, or Vault (spring.config.import). Never bake secrets into image layers.
 
-See [implementation examples](references/implementation.md) for multi-stage layered Dockerfile and graceful shutdown configuration.
+See implementation examples for multi-stage layered Dockerfile and graceful shutdown configuration.
 
 ## Build GraalVM Native Images (AOT)
 
@@ -42,4 +42,4 @@ See [implementation examples](references/implementation.md) for multi-stage laye
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

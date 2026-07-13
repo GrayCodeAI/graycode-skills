@@ -2,7 +2,7 @@
 name: ag-ai-engineering-toolkit
 description: "6 production-ready AI engineering workflows: prompt evaluation (8-dimension scoring), context budget planning, RAG pipeline design, agent security audit (65-point checklist), eval harness building,..."
 license: MIT
-tags: [prompt-engineering, rag, security, evaluation, ai-engineering, llm]
+tags: [prompt-engineering, rag, security, evaluation, ai-engineering]
 category: data-ai
 risk: offensive
 source: community

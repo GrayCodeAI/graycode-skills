@@ -1,0 +1,1371 @@
+Take my entire portion of the deal. I had a real hard time coming up with
+the money. Based on the cash we have in the bank right now, we will
+bounce payroll next week. So unless you’ve got another idea, can you either
+just participate as much as you’d like, or allow the round to go through
+because otherwise we will be bankrupt.’” Salzman balked and told Musk to
+come in the following week at 7 A.M. to present to VantagePoint’s top brass.
+Not having a week of time to work with, Musk asked to come in the next
+day, and Salzman refused that offer, forcing Musk to continue taking on
+loans. “The only reason he wanted the meeting at his office was for me to
+come on bended knee begging for money so he could say, ‘No,’” Musk
+theorized. “What a fuckhead.”
+VantagePoint declined to speak about this period, but Musk believed
+that Salzman’s tactics were part of a mission to bankrupt Tesla. Musk feared
+that VantagePoint would oust him as CEO, recapitalize Tesla, and emerge as
+the major owner of the carmaker. It could then sell Tesla to a Detroit
+automaker or focus on selling electric drivetrains and battery packs instead
+of making cars. Such reasoning would have been quite practical from a
+business standpoint but did not match up with Musk’s goals for Tesla.
+“VantagePoint was forcing that wisdom down the throat of an entrepreneur
+who wanted to do something bigger and bolder,” said Steve Jurvetson, a
+partner at Draper Fisher Jurvetson and Tesla investor. “Maybe they’re used
+to a CEO buckling, but Elon doesn’t do that.” Instead, Musk took another
+huge risk. Tesla recharacterized the funding as a debt round rather than an
+equity round, knowing that VantagePoint could not interfere with a debt
+deal. The tricky part of this strategy was that investors like Jurvetson who
+wanted to help Tesla were put in a bind because venture capital firms are
+not structured to do debt deals, and convincing their backers to alter their
+normal rules of engagement for a company that could very well go bankrupt
+in a matter of days would be a very tough ask. Knowing this, Musk bluffed.
+He told the investors that he would take another loan from SpaceX and fund
+the entire round—all $40 million—himself. The tactic worked. “When you
+have scarcity, it naturally reinforces greed and leads to more interest,”
+Jurvetson said. “It was also easier for us to go back to our firms and say,
+‘Here is the deal. Go or no go?’” The deal ended up closing on Christmas
+Eve, hours before Tesla would have gone bankrupt. Musk had just a few
+hundred thousand dollars left and could not have made payroll the next day.
+Musk ultimately put in $12 million, and the investment firms put up the
+rest. As for Salzman, Musk said, “He should be ashamed of himself.”
+At SpaceX, Musk and the company’s top executives had spent most of
+December in a state of fear. According to reports in the press, SpaceX, the
+onetime front-runner for the large NASA contract, had suddenly lost favor
+with the space agency. Michael Griffin, who had once almost been a
+cofounder of SpaceX, was the head of NASA and had turned on Musk.
+Griffin did not care for Musk’s aggressive business tactics, seeing him as
+borderline unethical. Others have suggested that Griffin ended up being
+jealous of Musk and SpaceX.* On December 23, 2008, however, SpaceX
+received a shock. People inside NASA had backed SpaceX to become a
+supplier for the ISS. The company received $1.6 billion as payment for
+twelve flights to the space station. Staying with Kimbal in Boulder,
+Colorado, for the holidays, Musk broke down in tears as the SpaceX and
+Tesla transactions processed. “I hadn’t had an opportunity to buy a
+Christmas present for Talulah or anything,” he said. “I went running down
+the fucking street in Boulder, and the only place that was open sold these
+shitty trinkets, and they were about to close. The best thing I could find
+were these plastic monkeys with coconuts—those ‘see no evil, hear no evil’
+monkeys.”
+For Gracias, the Tesla and SpaceX investor and Musk’s friend, the 2008
+period told him everything he would ever need to know about Musk’s
+character. He saw a man who arrived in the United States with nothing, who
+had lost a child, who was being pilloried in the press by reporters and his
+ex-wife and who verged on having his life’s work destroyed. “He has the
+ability to work harder and endure more stress than anyone I’ve ever met,”
+Gracias said. “What he went through in 2008 would have broken anyone
+else. He didn’t just survive. He kept working and stayed focused.” That
+ability to stay focused in the midst of a crisis stands as one of Musk’s main
+advantages over other executives and competitors. “Most people who are
+under that sort of pressure fray,” Gracias said. “Their decisions go bad. Elon
+gets hyperrational. He’s still able to make very clear, long-term decisions.
+The harder it gets, the better he gets. Anyone who saw what he went
+through firsthand came away with more respect for the guy. I’ve just never
+seen anything like his ability to take pain.”
+9
+LIFTOFF
+THE FALCON 9 HAS BECOME SPACEX’S WORKHORSE. The rocket
+looks—let’s face it—like a giant white phallus. It stands 224.4 feet tall, is
+12 feet across, and weighs 1.1 million pounds. The rocket is powered by
+nine engines arranged in an “octaweb” pattern at its base with one engine in
+the center and eight others encircling it. The engines connect to the first
+stage, or the main body of the rocket, which bears the blue SpaceX insignia
+and an American flag. The shorter second stage of the rocket sits on top of
+the first and is the one that actually ends up doing things in space. It can be
+outfitted with a rounded container for carrying satellites or a capsule
+capable of transporting humans. By design, there’s nothing particularly
+flashy about the Falcon 9’s outward appearance. It’s the spaceship
+equivalent of an Apple laptop or a Braun kettle—an elegant, purposeful
+machine stripped of frivolity and waste.
+SpaceX sometimes uses Vandenberg Air Force Base in Southern
+California to send up these Falcon 9 rockets. Were it not owned by the
+military, the base would be a resort. The Pacific Ocean runs for miles along
+its border, and its grounds have wide-open shrubby fields dotted by green
+hills. Nestled into one hilly spot just at the ocean’s edge are a handful of
+launchpads. On launch days, the white Falcon 9 breaks up the blue and
+green landscape, pointing skyward and leaving no doubt about its
+intentions.
+About four hours before a launch, the Falcon 9 starts getting filled with
+an immense amount of liquid oxygen and rocket-grade kerosene. Some of
+the liquid oxygen vents out of the rocket as it awaits launch and is kept so
+cold that it boils off on contact with the metal and air, forming white plumes
+that stream down the rocket’s sides. This gives the impression of the Falcon
+9 huffing and puffing as it limbers up before the journey. The engineers
+inside of SpaceX’s mission control monitor these fuel systems and all
+manner of other items. They chat back and forth through headsets and begin
+cycling through their launch checklist, consumed by what people in the
+business call “go fever” as they move from one approval to the next. Ten
+minutes before launch, the humans step out of the way and leave the
+remaining processes up to automated machines. Everything goes quiet, and
+the tension builds until right before the main event. That’s when, out of
+nowhere, the Falcon 9 breaks the silence by letting out a loud gasp.
+A white latticed support structure pulls away from its body. The Tminus-
+ten-seconds countdown begins. Nothing much happens from ten
+down to four. At the count of three, however, the engines ignite, and the
+computers conduct a last, oh-so-rapid, health check. Four enormous metal
+clamps hold the rocket down, as computing systems evaluate all nine
+engines and measure if there’s sufficient downward force being produced.
+By the time zero arrives, the rocket has decided that all is well enough to go
+through with its mission, and the clamps release. The rocket goes to war
+with inertia, and then, with flames surrounding its base and snow-thick
+plumes of the liquid oxygen filling the air, it shoots up. Seeing something so
+large hold so straight and steady while suspended in midair is hard for the
+brain to register. It is foreign, inexplicable. About twenty seconds after
+liftoff, the spectators placed safely a few miles away catch the first faceful
+of the Falcon 9’s rumble. It’s a distinct sound—a sort of staccato crackling
+that arises from chemicals whipped into a violent frenzy. Pant legs vibrate
+from shock waves produced by a stream of sonic booms coming out of the
+Falcon 9’s exhaust. The white rocket climbs higher and higher with
+impressive stamina. After about a minute, it’s just a red spot in the sky, and
+then—poof—it’s gone. Only a cynical dullard could come away from
+witnessing this feeling anything other than wonder at what man can
+accomplish.
+For Elon Musk, this spectacle has turned into a familiar experience.
+SpaceX has metamorphosed from the joke of the aeronautics industry into
+one of its most consistent operators. SpaceX sends a rocket up about once a
+month, carrying satellites for companies and nations and supplies to the
+International Space Station. Where the Falcon 1 blasting off from Kwajalein
+was the work of a start-up, the Falcon 9 taking off from Vandenberg is the
+work of an aerospace superpower. SpaceX can undercut its U.S.
+competitors—Boeing, Lockheed Martin, Orbital Sciences—on price by a
+ridiculous margin. It also offers U.S. customers a peace of mind that its
+rivals can’t. Where these competitors rely on Russian and other foreign
+suppliers, SpaceX makes all of its machines from scratch in the United
+States. Because of its low costs, SpaceX has once again made the United
+States a player in the worldwide commercial launch market. Its $60 million
+per launch cost is much less than what Europe and Japan charge and trumps
+even the relative bargains offered by the Russians and Chinese, who have
+the added benefit of decades of sunk government investment into their
+space programs as well as cheap labor.
+The United States continues to take great pride in having Boeing
+compete against Airbus and other foreign aircraft makers. For some reason,
+though, government leaders and the public have been willing to concede
+much of the commercial launch market. It’s a disheartening and
+shortsighted position. The total market for satellites, related services, and
+the rocket launches needed to carry them to space has exploded over the
+past decade from about $60 billion per year to more than $200 billion.11 A
+number of countries pay to send up their own spy, communication, and
+weather satellites. Companies then turn to space for television, Internet,
+radio, weather, navigation, and imaging services. The machines in space
+supply the fabric of modern life, and they’re going to become more capable
+and interesting at a rapid pace. A whole new breed of satellite makers has
+just appeared on the scene with the ability to answer Google-like queries
+about our planet. These satellites can zoom in on Iowa and determine when
+cornfields are at peak yields and ready to harvest, and they can count cars in
+Wal-Mart parking lots throughout California to calculate shopping demand
+during the holiday season. The start-ups making these types of innovative
+machines must often turn to the Russians to get them into space, but
+SpaceX intends to change that.
+The United States has remained competitive in the most lucrative parts
+of the space industry, building the actual satellites and complementary
+systems and services to run them. Each year, the United States makes about
+one-third of all satellites and takes about 60 percent of the global satellite
+revenue. The majority of this revenue comes from business done with the
+U.S. government. China, Europe, and Russia account for almost all of the
+remaining satellite sales and launches. It’s expected that China’s role in the
+space industry will increase, while Russia has vowed to spend $50 billion
+on revitalizing its space program. This leaves the United States dealing with
+two of its least-favored nations in space matters and doing so without much
+leverage. Case in point: the retirement of the space shuttle made the United
+States totally dependent on the Russians to get astronauts to the ISS. Russia
+gets to charge $70 million per person for the trip and to cut the United
+States off as it sees fit during political rifts. At present, SpaceX looks like
+the best hope of breaking this cycle and giving back to America its ability to
+take people into space.
+SpaceX has become the free radical trying to upend everything about
+this industry. It doesn’t want to handle a few launches per year or to rely on
+government contracts for survival. Musk’s goal is to use manufacturing
+breakthroughs and launchpad advances to create a drastic drop in the cost of
+getting things to space. Most significant, he’s been testing rockets that can
+push their payload to space and then return to Earth and land with supreme
+accuracy on a pad floating at sea or even their original launchpad. Instead of
+having its rockets break apart after crashing into the sea, SpaceX will use
+reverse thrusters to lower them down softly and reuse them. Within the next
+few years, SpaceX expects to cut its price to at least one-tenth that of its
+rivals. Reusing its rockets will drive the bulk of this reduction and SpaceX’s
+competitive advantage. Imagine one airline that flies the same plane over
+and over again, competing against others that dispose of their planes after
+every flight.* Through its cost advantages, SpaceX hopes to take over the
+majority of the world’s commercial launches, and there’s evidence that the
+company is on its way toward doing just that. To date, it has flown satellites
+for Canadian, European, and Asian customers and completed about two
+dozen launches. Its public launch manifest stretches out for a number of
+years, and SpaceX has more than fifty flights planned, which are all
+together worth more than $5 billion. The company remains privately owned
+with Musk as the largest shareholder alongside outside investors including
+venture capital firms like the Founders Fund and Draper Fisher Jurvetson,
+giving it a competitive ethos its rivals lack. Since getting past its near-death
+experience in 2008, SpaceX has been profitable and is estimated to be
+worth $12 billion.
+Zip2, PayPal, Tesla, SolarCity—they are all expressions of Musk.
+SpaceX is Musk. Its foibles emanate directly from him, as do its successes.
+Part of this comes from Musk’s maniacal attention to detail and
+involvement in every SpaceX endeavor. He’s hands-on to a degree that
+would make Hugh Hefner feel inadequate. Part of it stems from SpaceX
+being the apotheosis of the Cult of Musk. Employees fear Musk. They
+adore Musk. The give up their lives for Musk, and they usually do all of this
+simultaneously.
+Musk’s demanding management style can only flourish because of the
+otherworldly—in a literal sense—aspirations of the company. While the rest
+of the aerospace industry has been content to keep sending what look like
+relics from the 1960s into space, SpaceX has made a point of doing just the
+opposite. Its reusable rockets and reusable spaceships look like true twentyfirst-
+century machines. The modernization of the equipment is not just for
+show. It reflects SpaceX’s constant push to advance its technology and
+change the economics of the industry. Musk does not simply want to lower
+the cost of deploying satellites and resupplying the space station. He wants
+to lower the cost of launches to the point that it becomes economical and
+practical to fly thousands upon thousands of supply trips to Mars and start a
+colony. Musk wants to conquer the solar system, and, as it stands, there’s
+just one company where you can work if that sort of quest gets you out of
+bed in the morning.
+It seems unfathomable, but the rest of the space industry has made space
+boring. The Russians, who dominate much of the business of sending things
+and people to space, do so with decades-old equipment. The cramped Soyuz
+capsule that takes people to the space station has mechanical knobs and
+computer screens that appear unchanged from its inaugural 1966 flight.
+Countries new to the space race have mimicked the antiquated Russian and
+American equipment with maddening accuracy. When young people get
+into the aerospace industry, they’re forced to either laugh or cry at the state
+of the machines. Nothing sucks the fun out of working on a spaceship like
+controlling it with mechanisms last seen in a 1960s laundromat. And the
+actual work environment is as outmoded as the machines. Hotshot college
+graduates have historically been forced to pick between a variety of slowmoving
+military contractors and interesting but ineffectual start-ups.
+Musk has managed to take these negatives surrounding the aerospace
+business and turn them into gains for SpaceX. He’s presented the company
+as anything but another aerospace contractor. SpaceX is the hip, forwardthinking
+place that’s brought the perks of Silicon Valley—namely frozen
+yogurt, stock options, speedy decision making, and a flat corporate structure
+—to a staid industry. People who know Musk well tend to describe him
+more as a general than a CEO, and this is apt. He’s built an engineering
+army by having the pick of just about anyone in the business that SpaceX
+wants.
+The SpaceX hiring model places some emphasis on getting top marks at
+top schools. But most of the attention goes toward spotting engineers who
+have exhibited type A personality traits over the course of their lives. The
+company’s recruiters look for people who might excel at robot-building
+competitions or who are car-racing hobbyists who have built unusual
+vehicles. The object is to find individuals who ooze passion, can work well
+as part of a team, and have real-world experience bending metal. “Even if
+you’re someone who writes code for your job, you need to understand how
+mechanical things work,” said Dolly Singh, who spent five years as the
+head of talent acquisition at SpaceX. “We were looking for people that had
+been building things since they were little.”
+Sometimes these people walked through the front door. Other times,
+Singh relied on a handful of enterprising techniques to find them. She
+became famous for trawling through academic papers to find engineers with
+very specific skills, cold-calling researchers at labs and plucking possessed
+engineers out of college. At trade shows and conferences, SpaceX recruiters
+wooed interesting candidates they had spotted with a cloak-and-dagger
+shtick. They would hand out blank envelopes that contained invitations to
+meet at a specific time and place, usually a bar or restaurant near the event,
+for an initial interview. The candidates that showed up would discover they
+were among only a handful of people who been anointed out of all the
+conference attendees. They were immediately made to feel special and
+inspired.
+Like many tech companies, SpaceX subjects potential hires to a gauntlet
+of interviews and tests. Some of the interviews are easygoing chats in which
+both parties get to feel each other out; others are filled with quizzes that can
+be quite hard. Engineers tend to face the most rigorous interrogations,
+although business types and salesmen are made to suffer, too. Coders who
+expect to pass through standard challenges have rude awakenings.
+Companies will typically challenge software developers on the spot by
+asking them to solve problems that require a couple of dozen lines of code.
+The standard SpaceX problem requires five hundred or more lines of code.
+All potential employees who make their way to the end of the interview
+process then handle one more task. They’re asked to write an essay for
+Musk about why they want to work at SpaceX.
+The reward for solving the puzzles, acting clever in interviews, and
+penning up a good essay is a meeting with Musk. He interviewed almost
+every one of SpaceX’s first one thousand hires, including the janitors and
+technicians, and has continued to interview the engineers as the company’s
+workforce swelled. Each employee receives a warning before going to meet
+with Musk. The interview, he or she is told, could last anywhere from thirty
+seconds to fifteen minutes. Elon will likely keep on writing e-mails and
+working during the initial part of the interview and not speak much. Don’t
+panic. That’s normal. Eventually, he will turn around in his chair to face
+you. Even then, though, he might not make actual eye contact with you or
+fully acknowledge your presence. Don’t panic. That’s normal. In due course,
+he will speak to you. From that point, the tales of engineers who have
+interviewed with Musk run the gamut from torturous experiences to the
+sublime. He might ask one question or he might ask several. You can be
+sure, though, that he will roll out the Riddle: “You’re standing on the
+surface of the Earth. You walk one mile south, one mile west, and one mile
+north. You end up exactly where you started. Where are you?” One answer
+to that is the North Pole, and most of the engineers get it right away. That’s
+when Musk will follow with “Where else could you be?” The other answer
+is somewhere close to the South Pole where, if you walk one mile south, the
+circumference of the Earth becomes one mile. Fewer engineers get this
+answer, and Musk will happily walk them through that riddle and others and
+cite any relevant equations during his explanations. He tends to care less
+about whether or not the person gets the answer than about how they
+describe the problem and their approach to solving it.
+When speaking to potential recruits, Singh tried to energize them and be
+up front about the demands of SpaceX and of Musk at the same time. “The
+recruiting pitch was SpaceX is special forces,” she said. “If you want as
+hard as it gets, then great. If not, then you shouldn’t come here.” Once at
+SpaceX, the new employees found out very quickly if they were indeed up
+for the challenge. Many of them would quit within the first few months
+because of the ninety-plus-hour workweeks. Others quit because they could
+not handle just how direct Musk and the other executives were during
+meetings. “Elon doesn’t know about you and he hasn’t thought through
+whether or not something is going to hurt your feelings,” Singh said. “He
+just knows what the fuck he wants done. People who did not normalize to
+his communication style did not do well.”
+There’s an impression that SpaceX suffers from incredibly high
+turnover, and the company has without question churned through a fair
+number of bodies. Many of the key executives who helped start the
+company, however, have hung on for a decade or more. Among the rankand-
+file engineers, most people stay on for at least five years to have their
+stock options vest and to see their projects through. This is typical behavior
+for any technology company. SpaceX and Musk also seem to inspire an
+unusual level of loyalty. Musk has managed to conjure up that Steve Jobs–
+like zeal among his troops. “His vision is so clear,” Singh said. “He almost
+hypnotizes you. He gives you the crazy eye, and it’s like, yes, we can get to
+Mars.” Take that a bit further and you arrive at a pleasure-pain,
+sadomasochistic vibe that comes with working for Musk. Numerous people
+interviewed for this book decried the work hours, Musk’s blunt style, and
+his sometimes ludicrous expectations. Yet almost every person—even those
+who had been fired—still worshipped Musk and talked about him in terms
+usually reserved for superheroes or deities.
+SpaceX’s original headquarters in El Segundo were not quite up to the
+company’s desired image as a place where the cool kids want to work. This
+is not a problem for SpaceX’s new facility in Hawthorne. The building’s
+address is 1 Rocket Road, and it has the Hawthorne Municipal Airport and
+several tooling and manufacturing companies as neighbors. While the
+SpaceX building resembles the others in size and shape, its all-white color
+makes it the obvious outlier. The structure looks like a gargantuan,
+rectangular glacier that’s been planted in the midst of a particularly soulless
+portion of Los Angeles County’s sprawl.
+Visitors to SpaceX have to walk past a security guard and through a
+small executive parking lot where Musk parks his black Model S, which
+flanks the building’s entryway. The front doors are reflective and hide
+what’s on the inside, which is more white. There are white walls in the
+foyer, a funky white table in the waiting area, and a white check-in desk
+with a pair of orchids sitting in white pots. After going through the
+registration process, guests are given a name badge and led into the main
+SpaceX office space. Musk’s cubicle—a supersize unit—sits to the right
+where he has a couple of celebratory Aviation Week magazine covers up on
+the wall, pictures of his boys, next to a huge flat-screen monitor, and
+various knickknacks on his desk, including a boomerang, some books, a
+bottle of wine, and a giant samurai sword named Lady Vivamus, which
+Musk received when he won the Heinlein Prize, an award given for big
+achievements in commercial space. Hundreds of other people work in
+cubicles amid the big, wide-open area, most of them executives, engineers,
+software developers, and salespeople tapping away on their computers. The
+conference rooms that surround their desks all have space-themed names
+like Apollo or Wernher von Braun and little nameplates that explain the
+label’s significance. The largest conference rooms have ultramodern chairs
+—high-backed, sleek red jobs that surround large glass tables—while
+panoramic photos of a Falcon 1 taking off from Kwaj or the Dragon capsule
+docking with the ISS hang on the walls in the background.
+Take away the rocket swag and the samurai sword and this central part
+of the SpaceX office looks just like what you might find at your run-of-themill
+Silicon Valley headquarters. The same thing cannot be said for what
+visitors encounter as they pass through a pair of double doors into the heart
+of the SpaceX factory.
+The 550,000-square-foot factory floor is difficult to process at first
+glance. It’s one continuous space with grayish epoxied floors, white walls,
+and white support columns. A small city’s worth of stuff—people,
+machines, noise—has been piled into this area. Just near the entryway, one
+of the Dragon capsules that has gone to the ISS and returned to Earth hangs
+from the ceiling with black burn marks running down its side. Just under the
+capsule on the ground are a pair of the twenty-five-foot-long landing legs
+built by SpaceX to let the Falcon rocket come to a gentle rest on the ground
+after a flight so it can be flown again. To the left side of this entryway area
+there’s a kitchen, and to the right side there’s the mission control room. It’s
+a closed-off area with expansive glass windows and fronted by wall-size
+screens for tracking a rocket’s progress. It has four rows of desks with about
+ten computers each for the mission control staff. Step a bit farther into the
+factory and there are a handful of industrial work areas separated from each
+other in the most informal of ways. In some spots there are blue lines on the
+floor to mark off an area and in other spots blue workbenches have been
+arranged in squares to cordon off the space. It’s a common sight to have one
+of the Merlin engines raised up in the middle of one of these work areas
+with a half dozen technicians wiring it up and tuning its bits and pieces.
+Just behind these workspaces is a glass-enclosed square big enough to
+fit two of the Dragon capsules. This is a clean room where people must
+wear lab coats and hairnets to fiddle with the capsules without
+contaminating them. About forty feet to the left, there are several Falcon 9
+rockets lying next to each other horizontally that have been painted and
+await transport. There are some areas tucked in between all of this that have
+blue walls and appear to have been covered by fabric. These are top-secret
+zones where SpaceX might be working on a fanciful astronaut’s outfit or
+rocket part that it has to hide from visitors and employees not tied to the
+projects. There’s a large area off to the side where SpaceX builds all of its
+electronics, another area for creating specialized composite materials, and
+another for making the bus-sized fairings that wrap around the satellites.
+Hundreds of people move about at the same time through the factory—a
+mix of gritty technicians with tattoos and bandanas, and young, white-collar
+engineers. The sweaty smell of kids who have just come off the playground
+permeates the building and hints at its nonstop activity.
+Musk has left his personal touches throughout the factory. There are
+small things like the data center that has been bathed in blue lights to give it
+a sci-fi feel. The refrigerator-sized computers under the lights have been
+labeled with big block letters to make it look like they were made by
+Cyberdyne Systems, the fictional company from the Terminator movie
+franchise. Near the elevators, Musk has placed a glowing life-size Iron Man
+figure. Surely the factory’s most Muskian element is the office space that
+has been built smack-dab in its center. This is a three-story glass structure
+with meeting rooms and desks that rises up between various welding and
+construction areas. It looks and feels bizarre to have a see-through office
+inside this hive of industry. Musk, though, wanted his engineers to watch
+what was going on with the machines at all times and to make sure they had
+to walk through the factory and talk to the technicians on the way to their
+desks.
+The factory is a temple devoted to what SpaceX sees as its major
+weapon in the rocket-building game, in-house manufacturing. SpaceX
+manufactures between 80 percent and 90 percent of its rockets, engines,
+electronics, and other parts. It’s a strategy that flat-out dumbfounds
+SpaceX’s competitors, like United Launch Alliance, or ULA, which openly
+brags about depending on more than 1,200 suppliers to make its end
+products. (ULA, a partnership between Lockheed Martin and Boeing, sees
+itself as an engine of job creation rather than a model of inefficiency.)
+A typical aerospace company comes up with the list of parts that it
+needs for a launch system and then hands off their design and specifications
+to myriad third parties who then actually build the hardware. SpaceX tends
+to buy as little as possible to save money and because it sees depending on
+suppliers—especially foreign ones—as a weakness. This approach comes
+off as excessive at first blush. Companies have made things like radios and
+power distribution units for decades. Reinventing the wheel for every
+computer and machine on a rocket could introduce more chances for error
+and, in general, be a waste of time. But for SpaceX, the strategy works. In
+addition to building its own engines, rocket bodies, and capsules, SpaceX
+designs its own motherboards and circuits, sensors to detect vibrations,
+flight computers, and solar panels. Just by streamlining a radio, for instance,
+SpaceX’s engineers have found that they can reduce the weight of the
+device by about 20 percent. And the cost savings for a homemade radio are
+dramatic, dropping from between $50,000 to $100,000 for the industrialgrade
+equipment used by aerospace companies to $5,000 for SpaceX’s unit.
+It’s hard to believe these kinds of price differentials at first, but there are
+dozens if not hundreds of places where SpaceX has secured such savings.
+The equipment at SpaceX tends to be built out of readily available
+consumer electronics as opposed to “space grade” equipment used by others
+in the industry. SpaceX has had to work for years to prove to NASA that
+standard electronics have gotten good enough to compete with the more
+expensive, specialized gear trusted in years past. “Traditional aerospace has
+been doing things the same way for a very, very long time,” said Drew
+Eldeen, a former SpaceX engineer. “The biggest challenge was convincing
+NASA to give something new a try and building a paper trail that showed
+the parts were high enough quality.” To prove that it’s making the right
+choice to NASA and itself, SpaceX will sometimes load a rocket with both
+the standard equipment and prototypes of its own design for testing during
+flight. Engineers then compare the performance characteristics of the
+devices. Once a SpaceX design equals or outperforms the commercial
+products, it becomes the de facto hardware.
+There have also been numerous times when SpaceX has done
+pioneering work on advancing very complex hardware systems. A classic
+example of this is one of the factory’s weirder-looking contraptions, a twostory
+machine designed to perform what’s known as friction stir welding.
+The machine allows SpaceX to automate the welding process for massive
+sheets of metal like the ones that make up the bodies of the Falcon rockets.
+An arm takes one of the rocket’s body panels, lines it up against another
+body panel, and then joins them together with a weld that could run twenty
+feet or more. Aerospace companies typically try to avoid welds whenever
+possible because they create weaknesses in the metal, and that’s limited the
+size of metal sheets they can use and forced other design constraints. From
+the early days of SpaceX, Musk pushed the company to master friction stir
+welding, in which a spinning head is smashed at high speeds into the join
+between two pieces of metal in a bid to make their crystalline structures
+merge. It’s as if you heated two sheets of aluminum foil and then joined
+them by putting your thumb down on the seam and twisting the metal
+together. This type of welding tends to result in much stronger bonds than
+traditional welds. Companies had performed friction stir welding before but
+not on structures as large as a rocket’s body or to the degree to which
+SpaceX has used the technique. As a result of its trials and errors, SpaceX
+can now join large, thin sheets of metal and shave hundreds of pounds off
+the weight of the Falcon rockets, as it’s able to use lighter-weight alloys and
+avoid using rivets, fasteners, and other support structures. Musk’s
+competitors in the auto industry might soon need to do the same because
+SpaceX has transferred some of the equipment and techniques to Tesla. The
+hope is that Tesla will be able to make lighter, stronger cars.
+The technology has proven so valuable that SpaceX’s competitors have
+started to copy it and have tried to poach some of the company’s experts in
+the field. Blue Origin, Jeff Bezos’s secretive rocket company, has been
+particularly aggressive, hiring away Ray Miryekta, one of the world’s
+foremost friction stir welding experts and igniting a major rift with Musk.
+“Blue Origin does these surgical strikes on specialized talent* offering like
+double their salaries. I think it’s unnecessary and a bit rude,” Musk said.
+Within SpaceX, Blue Origin is mockingly referred to as BO and at one
+point the company created an e-mail filter to detect messages with “blue”
+and “origin” to block the poaching. The relationship between Musk and
+Bezos has soured, and they no longer chat about their shared ambition of
+getting to Mars. “I do think Bezos has an insatiable desire to be King
+Bezos,” Musk said. “He has a relentless work ethic and wants to kill
+everything in e-commerce. But he’s not the most fun guy, honestly.”*
+In the early days of SpaceX, Musk knew little about the machines and
+amount of grunt work that goes into making rockets. He rebuffed requests
+to buy specialized tooling equipment, until the engineers could explain in
+clear terms why they needed certain things and until experience taught him
+better. Musk also had yet to master some of the management techniques for
+which he would become both famous and to some degree infamous.
+Musk’s growth as a CEO and rocket expert occurred alongside
+SpaceX’s maturation as a company. At the start of the Falcon 1 journey,
+Musk was a forceful software executive trying to learn some basic things
+about a very different world. At Zip2 and PayPal, he felt comfortable
+standing up for his positions and directing teams of coders. At SpaceX, he
+had to pick things up on the job. Musk initially relied on textbooks to form
+the bulk of his rocketry knowledge. But as SpaceX hired one brilliant
+person after another, Musk realized he could tap into their stores of
+knowledge. He would trap an engineer in the SpaceX factory and set to
+work grilling him about a type of valve or specialized material. “I thought at
+first that he was challenging me to see if I knew my stuff,” said Kevin
+Brogan, one of the early engineers. “Then I realized he was trying to learn
+things. He would quiz you until he learned ninety percent of what you
+know.” People who have spent significant time with Musk will attest to his
+abilities to absorb incredible quantities of information with near-flawless
+recall. It’s one of his most impressive and intimidating skills and seems to
+work just as well in the present day as it did when he was a child
+vacuuming books into his brain. After a couple of years running SpaceX,
+Musk had turned into an aerospace expert on a level that few technology
+CEOs ever approach in their respective fields. “He was teaching us about
+the value of time, and we were teaching him about rocketry,” Brogan said.
+In regards to time, Musk may well set more aggressive delivery targets
+for very difficult-to-make products than any executive in history. Both his
+employees and the public have found this to be one of the more jarring
+aspects of Musk’s character. “Elon has always been optimistic,” Brogan
+said. “That’s the nice word. He can be a downright liar about when things
+need to get done. He will pick the most aggressive time schedule
+imaginable assuming everything goes right, and then accelerate it by
+assuming that everyone can work harder.”
+Musk has been pilloried by the press for setting and then missing
+product delivery dates. It’s one of the habits that got him in the most trouble
+as SpaceX and Tesla tried to bring their first products to market. Time and
+again, Musk found himself making a public appearance where he had to
+come up with a new batch of excuses for a delay. Reminded about the initial
+2003 target date to fly the Falcon 1, Musk acted shocked. “Are you
+serious?” he said. “We said that? Okay, that’s ridiculous. I think I just didn’t
+know what the hell I was talking about. The only thing I had prior
+experience in was software, and, yeah, you can write a bunch of software
+and launch a website in a year. No problem. This isn’t like software. It
+doesn’t work that way with rockets.” Musk simply cannot help himself.
+He’s an optimist by nature, and it can feel like he makes calculations for
+how long it will take to do something based on the idea that things will
+progress without flaw at every step and that all the members of his team
+have Muskian abilities and work ethics. As Brogan joked, Musk might
+forecast how long a software project will take by timing the amount of
+seconds needed physically to write a line of code and then extrapolating that
+out to match however many lines of code he expects the final piece of
+software to be. It’s an imperfect analogy but one that does not seem that far
+off from Musk’s worldview. “Everything he does is fast,” Brogan said. “He
+pees fast. It’s like a fire hose—three seconds and out. He’s authentically in a
+hurry.”
+Asked about his approach, Musk said,
+I certainly don’t try to set impossible goals. I think impossible
+goals are demotivating. You don’t want to tell people to go through a
+wall by banging their head against it. I don’t ever set intentionally
+impossible goals. But I’ve certainly always been optimistic on time
+frames. I’m trying to recalibrate to be a little more realistic.
+I don’t assume that it’s just like 100 of me or something like that.
+I mean, in the case of the early SpaceX days, it would have been just
+the lack of understanding of what it takes to develop a rocket. In that
+case I was off by, say, 200 percent. I think future programs might be
+off by anywhere from like 25 percent to 50 percent as opposed to
+200 percent.
+So, I think generally you do want to have a timeline where,
+based on everything you know about, the schedule should be X, and
+you execute towards that, but with the understanding that there will
+be all sorts of things that you don’t know about that you will
+encounter that will push the date beyond that. It doesn’t mean that
+you shouldn’t have tried to aim for that date from the beginning
+because aiming for something else would have been an arbitrary
+time increase.
+It’s different to say, “Well, what do you promise people?”
+Because you want to try to promise people something that includes
+schedule margin. But in order to achieve the external promised
+schedule, you’ve got to have an internal schedule that’s more
+aggressive than that. Sometimes you still miss the external schedule.
+SpaceX, by the way, is not alone here. Being late is par for the
+course in the aerospace industry. It’s not a question of if it’s late, it’s
+how late will the program be. I don’t think an aerospace program
+has been completed on time since bloody World War II.
+Dealing with the epically aggressive schedules and Musk’s expectations
+has required SpaceX’s engineers to develop a variety of survival techniques.
+Musk often asks for highly detailed proposals for how projects will be
+accomplished. The employees have learned never to break the time needed
+to accomplish something down into months or weeks. Musk wants day-byday
+and hour-by-hour forecasts and sometimes even minute-by-minute
+countdowns, and the fallout from missed schedules is severe. “You had to
+put in when you would go to the bathroom,” Brogan said. “I’m like, ‘Elon,
+sometimes people need to take a long dump.’” SpaceX’s top managers work
+together to, in essence, create fake schedules that they know will please
+Musk but that are basically impossible to achieve. This would not be such a
+horrible situation if the targets were kept internal. Musk, however, tends to
+quote these fake schedules to customers, unintentionally giving them false
+hope. Typically, it falls to Gwynne Shotwell, SpaceX’s president, to clean
+up the resulting mess. She will either need to ring up a customer to give
+them a more realistic timeline or concoct a litany of excuses to explain
+away the inevitable delays. “Poor Gwynne,” Brogan said. “Just to hear her
+on the phone with the customers is agonizing.”
+There can be no question that Musk has mastered the art of getting the
+most out of his employees. Interview three dozen SpaceX engineers and
+each one of them will have picked up on a managerial nuance that Musk has
+used to get people to meet his deadlines. One example from Brogan: Where
+a typical manager may set the deadline for the employee, Musk guides his
+engineers into taking ownership of their own delivery dates. “He doesn’t
+say, ‘You have to do this by Friday at two P.M.,’” Brogan said. “He says, ‘I
+need the impossible done by Friday at two P.M. Can you do it?’ Then, when
+you say yes, you are not working hard because he told you to. You’re
+working hard for yourself. It’s a distinction you can feel. You have signed
+up to do your own work.” And by recruiting hundreds of bright, selfmotivated
+people, SpaceX has maximized the power of the individual. One
+person putting in a sixteen-hour day ends up being much more effective
+than two people working eight-hour days together. The individual doesn’t
+have to hold meetings, reach a consensus, or bring other people up to speed
+on a project. He just keeps working and working and working. The ideal
+SpaceX employee is someone like Steve Davis, the director of advanced
+projects at SpaceX. “He’s been working sixteen hours a day every day for
+years,” Brogan said. “He gets more done than eleven people working
+together.”
+To find Davis, Musk called a teaching assistant* in Stanford’s
+aeronautics department and asked him if there were any hardworking,
+bright master’s and doctoral candidates who didn’t have families. The TA
+pointed Musk to Davis, who was pursuing a master’s degree in aerospace
+engineering to add to degrees in finance, mechanical engineering, and
+particle physics. Musk called Davis on a Wednesday and offered him a job
+the following Friday. Davis was the twenty-second SpaceX hire and has
+ended up the twelfth most senior person still at the company. He turned
+thirty-five in 2014.
+Davis did his tour of duty on Kwaj and considered it the greatest time of
+his life. “Every night, you could either sleep by the rocket in this tent shelter
+where the geckos crawled all over you or take this one-hour boat ride that
+made you seasick back to the main island,” he said. “Every night, you had
+to pick the pain that you remembered least. You got so hot and exhausted. It
+was just amazing.” After working on the Falcon 1, Davis moved to the
+Falcon 9 and then Dragon.
+The Dragon capsule took SpaceX four years to design. It’s likely the
+fastest project of its ilk done in the history of the aerospace industry. The
+project started with Musk and a handful of engineers, most of them under
+thirty years old, and peaked at one hundred people.* They cribbed from past
+capsule work and read over every paper published by NASA and other
+aeronautics bodies around projects like Gemini and Apollo. “If you go
+search for something like Apollo’s reentry guidance algorithm, there are
+these great databases that will just spit out the answer,” Davis said. The
+engineers at SpaceX then had to figure out how to advance these past efforts
+and bring the capsule into the modern age. Some of the areas of
+improvement were obvious and easily accomplished, while others required
+more ingenuity. Saturn 5 and Apollo had colossal computing bays that
+produced only a fraction of the computer horsepower that can be achieved
+today on, say, an iPad. The SpaceX engineers knew they could save a lot of
+room by cutting out some of the computers while also adding capabilities
+with their more powerful equipment. The engineers decided that while
+Dragon would look a lot like Apollo, it would have steeper wall angles, to
+clear space for gear and for the astronauts that the company hoped to fly.
+SpaceX also got the recipe for its heat shield material, called PICA, through
+a deal with NASA. The SpaceX engineers found out how to make the PICA
+material less expensively and improved the underlying recipe so that
+Dragon—from day one—could withstand the heat of a reentry coming back
+from Mars.* The total cost for Dragon came in at $300 million, which
+would be on the order of 10 to 30 times less than capsule projects built by
+other companies. “The metal comes in, we roll it out, weld it, and make
+things,” Davis said. “We build almost everything in-house. That is why the
+costs have come down.”
+Davis, like Brogan and plenty of other SpaceX engineers, has had Musk
+ask for the seemingly impossible. His favorite request dates back to 2004.
+SpaceX needed an actuator that would trigger the gimbal action used to
+steer the upper stage of Falcon 1. Davis had never built a piece of hardware
+before in his life and naturally went out to find some suppliers who could
+make an electromechanical actuator for him. He got a quote back for
+$120,000. “Elon laughed,” Davis said. “He said, ‘That part is no more
+complicated than a garage door opener. Your budget is five thousand
+dollars. Go make it work.’” Davis spent nine months building the actuator.
+At the end of the process, he toiled for three hours writing an e-mail to
+Musk covering the pros and cons of the device. The e-mail went into gory
+detail about how Davis had designed the part, why he had made various
+choices, and what its cost would be. As he pressed send, Davis felt anxiety
+surge through his body knowing that he’d given his all for almost a year to
+do something an engineer at another aerospace company would not even
+attempt. Musk rewarded all of this toil and angst with one of his standard
+responses. He wrote back, “Ok.” The actuator Davis designed ended up
+costing $3,900 and flew with Falcon 1 into space. “I put every ounce of
+intellectual capital I had into that e-mail and one minute later got that
+simple response,” Davis said. “Everyone in the company was having that
+same experience. One of my favorite things about Elon is his ability to
+make enormous decisions very quickly. That is still how it works today.”
+Kevin Watson can attest to that. He arrived at SpaceX in 2008 after
+spending twenty-four years at NASA’s Jet Propulsion Laboratory. Watson
+worked on a wide variety of projects at JPL, including building and testing
+computing systems that could withstand the harsh conditions of space. JPL
+would typically buy expensive, specially toughened computers, and this
+frustrated Watson. He daydreamed about ways to handcraft much cheaper,
+equally effective computers. While having his job interview with Musk,
+Watson learned that SpaceX needed just this type of thinking. Musk wanted
+the bulk of a rocket’s computing systems to cost no more than $10,000. It
+was an insane figure by aerospace industry standards, where the avionics
+systems for a rocket typically cost well over $10 million. “In traditional
+aerospace, it would cost you more than ten thousand dollars just for the
+food at a meeting to discuss the cost of the avionics,” Watson said.
+During the job interview, Watson promised Musk that he could do the
+improbable and deliver the $10,000 avionics system. He began working on
+making the computers for Dragon right after being hired. The first system
+was called CUCU, pronounced “cuckoo.” This communications box would
+go inside the International Space Station and communicate back with
+Dragon. A number of people at NASA referred to the SpaceX engineers as
+“the guys in the garage” and were cynical about the start-up’s ability to do
+much of anything, including building this type of machine. But SpaceX
+produced the communication computer in record time, and it ended up as
+the first system of its kind to pass NASA’s protocol tests on the first try.
+NASA officials were forced to say “cuckoo” over and over again during
+meetings—a small act of defiance SpaceX had planned all along to torture
+NASA. As the months went on, Watson and other engineers built out the
+complete computing systems for Dragon and then adapted the technology
+for Falcon 9. The result was a fully redundant avionics platform that used a
+mix of off-the-shelf computing gear and products built in-house by SpaceX.
+It cost a bit more than $10,000 but came close to meeting Musk’s goal.
+SpaceX reinvigorated Watson, who had become disenchanted with
+JPL’s acceptance of wasteful spending and bureaucracy. Musk had to sign
+off on every expenditure over $10,000. “It was his money that we were
+spending, and he was keeping an eye on it, as he damn well should,”
+Watson said. “He made sure nothing stupid was happening.” Decisions
+were made quickly during weekly meetings, and the entire company bought
+into them. “It was amazing how fast people would adapt to what came out
+of those meetings,” Watson said. “The entire ship could turn ninety degrees
+instantly. Lockheed Martin could never do anything like that.” Watson
+continued:
+Elon is brilliant. He’s involved in just about everything. He
+understands everything. If he asks you a question, you learn very
+quickly not to go give him a gut reaction. He wants answers that get
+down to the fundamental laws of physics. One thing he understands
+really well is the physics of the rockets. He understands that like
+nobody else. The stuff I have seen him do in his head is crazy. He
+can get in discussions about flying a satellite and whether we can
+make the right orbit and deliver Dragon at the same time and solve
+all these equations in real time. It’s amazing to watch the amount of
+knowledge he has accumulated over the years. I don’t want to be the
+person who ever has to compete with Elon. You might as well leave
+the business and find something else fun to do. He will outmaneuver
+you, outthink you, and out-execute you.
+One of Watson’s top discoveries at SpaceX was the test bed on the third
+floor of the Hawthorne factory. SpaceX has test versions of all the hardware
+and electronics that go into a rocket laid out on metal tables. It has in effect
+replicated the innards of a rocket end to end in order to run thousands of
+flight simulations. Someone “launches” the rocket from a computer and
+then every piece of mechanical and computing hardware is monitored with
+sensors. An engineer can tell a valve to open, then check to see if it opened,
+how quickly it opened, and the level of current running to it. This testing
+apparatus lets SpaceX engineers practice ahead of launches and figure out
+how they would deal with all manner of anomalies. During the actual
+flights, SpaceX has people in the test facility who can replicate errors seen
+on Falcon or Dragon and make adjustments accordingly. SpaceX has made
+numerous changes on the fly with this system. In one case someone spotted
+an error in a software file in the hours right before a launch. SpaceX’s
+engineers changed the file, checked how it affected the test hardware, and,
+when no problems were detected, sent the file to the Falcon 9, waiting on
+the launchpad, all in less than thirty minutes. “NASA wasn’t used to this,”
+Watson said. “If something went wrong with the shuttle, everyone was just
+resigned to waiting three weeks before they could try and launch again.”12
+From time to time, Musk will send out an e-mail to the entire company
+to enforce a new policy or let them know about something that’s bothering
+him. One of the more famous e-mails arrived in May 2010 with the subject
+line: Acronyms Seriously Suck:
+There is a creeping tendency to use made up acronyms at SpaceX.
+Excessive use of made up acronyms is a significant impediment to
+communication and keeping communication good as we grow is
+incredibly important. Individually, a few acronyms here and there
+may not seem so bad, but if a thousand people are making these up,
+over time the result will be a huge glossary that we have to issue to
+new employees. No one can actually remember all these acronyms
+and people don’t want to seem dumb in a meeting, so they just sit
+there in ignorance. This is particularly tough on new employees.
+That needs to stop immediately or I will take drastic action—I
+have given enough warnings over the years. Unless an acronym is
+approved by me, it should not enter the SpaceX glossary. If there is
+an existing acronym that cannot reasonably be justified, it should be
+eliminated, as I have requested in the past.
+For example, there should be no “HTS” [horizontal test stand] or
+“VTS” [vertical test stand] designations for test stands. Those are
+particularly dumb, as they contain unnecessary words. A “stand” at
+our test site is obviously a *test* stand. VTS-3 is four syllables
+compared with “Tripod,” which is two, so the bloody acronym
+version actually takes longer to say than the name!
+The key test for an acronym is to ask whether it helps or hurts
+communication. An acronym that most engineers outside of SpaceX
+already know, such as GUI, is fine to use. It is also ok to make up a
+few acronyms/contractions every now and again, assuming I have
+approved them, eg MVac and M9 instead of Merlin 1C-Vacuum or
+Merlin 1C-Sea Level, but those need to be kept to a minimum.
+This was classic Musk. The e-mail is rough in its tone and yet not really
+unwarranted for a guy who just wants things done as efficiently as possible.
+It obsesses over something that other people might find trivial and yet he
+has a definite point. It’s comical in that Musk wants all acronym approvals
+to run directly through him, but that’s entirely in keeping with the hands-on
+management style that has, mainly, worked well at both SpaceX and Tesla.
+Employees have since dubbed the acronym policy the ASS Rule.
+The guiding principle at SpaceX is to embrace your work and get stuff
+done. People who await guidance or detailed instructions languish. The
+same goes for workers who crave feedback. And the absolute worst thing
+that someone can do is inform Musk that what he’s asking is impossible. An
+employee could be telling Musk that there’s no way to get the cost on
+something like that actuator down to where he wants it or that there is
+simply not enough time to build a part by Musk’s deadline. “Elon will say,
+‘Fine. You’re off the project, and I am now the CEO of the project. I will do
+your job and be CEO of two companies at the same time. I will deliver it,’”
+Brogan said. “What’s crazy is that Elon actually does it. Every time he’s
+fired someone and taken their job, he’s delivered on whatever the project
+was.”
+It is jarring for both parties when the SpaceX culture rubs against more
+bureaucratic bodies like NASA, the U.S. Air Force, and the Federal
+Aviation Administration. The first inklings of these difficulties appeared on
+Kwaj, where government officials sometimes questioned what they saw as
+SpaceX’s cavalier approach to the launch process. There were times when
+SpaceX would want to make a change to its launch procedures and any such
+change would require a pile of paperwork. SpaceX, for example, would
+have written down all the steps needed to replace a filter—put on gloves,
+wear safety goggles, remove a nut—and then want to alter this procedure or
+use a different type of filter. The FAA would need a week to review the new
+process before SpaceX could actually go about changing the filter on the
+rocket, a lag that both the engineers and Musk found ridiculous. On one
+occasion after this type of thing happened, Musk laid into an FAA official
+while on a conference call with members of the SpaceX team and NASA.
+“It got hot and heated, and he berated this guy on a personal level for like
+ten minutes,” Brogan said.
+Musk did not recall this incident but did remember other confrontations
+with the FAA. One time he compiled a list of things an FAA subordinate
+had said during a meeting that Musk found silly and sent the list along to
+the guy’s boss. “And then his dingbat manager sent me this long e-mail
+about how he had been in the shuttle program and in charge of twenty
+launches or something like that and how dare I say that the other guy was
+wrong,” Musk said. “I told him, ‘Not only is he wrong, and let me
+rearticulate the reasons, but you’re wrong, and let me articulate the
+reasons.’ I don’t think he sent me another e-mail after that. We’re trying to
+have a really big impact on the space industry. If the rules are such that you
+can’t make progress, then you have to fight the rules.
+“There is a fundamental problem with regulators. If a regulator agrees to
+change a rule and something bad happens, they could easily lose their
+career. Whereas if they change a rule and something good happens, they
+don’t even get a reward. So, it’s very asymmetric. It’s then very easy to
+understand why regulators resist changing the rules. It’s because there’s a
+big punishment on one side and no reward on the other. How would any
+rational person behave in such a scenario?”
+In the middle of 2009, SpaceX hired Ken Bowersox, a former astronaut,
+as its vice president of astronaut safety and mission assurance. Bowersox fit
+the mold of recruit prized by a classic big aerospace company. He had a
+degree in aerospace engineering from the U.S. Naval Academy, had been a
+test pilot in the air force, and flew on the space shuttle a handful of times.
+Many people within SpaceX saw his arrival at the company as a good thing.
+He was considered a diligent, dignified sort who would provide a second set
+of eyes to many of SpaceX’s procedures, checking to make sure the
+company went about things in a safe, standardized manner. Bowersox ended
+up smack in the middle of the constant pull and push at SpaceX between
+doing things efficiently and agonizing over traditional procedures. He and
+Musk were increasingly at odds as the months passed, and Bowersox started
+to feel as if his opinions were being ignored. During one incident in
+particular, a part made it all the way to the test stand with a major flaw—
+described by one engineer as the equivalent of a coffee cup not having a
+bottom—instead of being caught at the factory. According to observers,
+Bowersox argued that SpaceX should go back and investigate the process
+that led to the mistake and fix its root cause. Musk had already decided that
+he knew the basis of the problem and dismissed Bowersox after a couple of
+years on the job. (Bowersox declined to speak on the record about his time
+at SpaceX.) A number of people inside SpaceX saw the Bowersox incident
+as an example of Musk’s hard-charging manner undermining some muchneeded
+process. Musk had a totally different take on the situation, casting
+Bowersox as not being up to the engineering demands at SpaceX.
+A handful of high-ranking government officials gave me their candid
+takes on Musk, albeit without being willing to put their names to the
+remarks. One found Musk’s treatment of air force generals and military men
+of similar rank appalling. Musk has been known to let even high-ranking
+officials have it when he thinks they’re off base and is not apologetic about
+this. Another could not believe it when Musk would call very intelligent
+people idiots. “Imagine the worst possible way that could come out, and it
+would come out,” this person said. “Life with Elon is like being in a very
+intimate married couple. He can be so gentle and loyal and then really hard
+on people when it isn’t necessary.” One former official felt that Musk would
+need to temper himself better in the years to come if SpaceX was to keep
+currying favor with the military and government agencies in its bid to defeat
+the incumbent contractors. “His biggest enemy will be himself and the way
+he treats people,” this person said.
+When Musk rubs outsiders the wrong way, Shotwell is often there to try
+to smooth over the situation. Like Musk, she has a salty tongue and a fiery
+personality, but Shotwell is willing to play the role of the conciliator. These
+skills have allowed her to handle the day-to-day operations at SpaceX,
+leaving Musk to focus on the company’s overall strategy, the product
+designs, marketing, and motivating employees. Like all of Musk’s most
+trusted lieutenants, Shotwell has been willing to stay largely in the
+background, do her work, and focus on the company’s cause.
+Shotwell grew up in the suburbs of Chicago, the daughter of an artist
+(mom) and a neurosurgeon (dad). She played the part of a bright, pretty girl,
+getting straight A’s at school and joining the cheerleading squad. Shotwell
+had not expressed a major inclination toward the sciences and knew only
+one version of an engineer—the guy who drives a train. But there were
+clues that she was wired a bit different. She was the daughter who mowed
+the lawn and helped put the family basketball hoop together. In third grade,
+Shotwell developed a brief interest in car engines, and her mom bought a
+book detailing how they work. Later, in high school, Shotwell’s mom
+forced her to attend a lecture at the Illinois Institute of Technology on a
+Saturday afternoon. As Shotwell listened to one of the panels, she grew
+enamored with a fifty-year-old mechanical engineer. “She had these
+beautiful clothes, this suit and shoes that I loved,” Shotwell said. “She was
+tall and carried off the heels really well.” Shotwell chatted with the engineer
+after the talk, learning about her job. “That was the day I decided to become
+a mechanical engineer,” she said.
+Shotwell went on to receive an undergraduate degree in mechanical
+engineering and a master’s degree in applied mathematics from
+Northwestern University. Then she took a job at Chrysler. It was a type of
+management training program meant for hotshot recent graduates who
+appeared to have leadership potential. Shotwell started out going to auto
+mechanics school—“I loved that”—and then from department to
+department. While working on engines research, Shotwell found that there
+were two very expensive Cray supercomputers sitting idle because none of
+the veterans knew how to use them. A short while later, she logged onto the
+computers and set them up to run computational fluid dynamics, or CFD,
+operations to simulate the performance of valves and other components.
+The work kept Shotwell interested, but the environment started to grate on
+her. There were rules for everything, including lots of union regulations
+around who could operate certain machines. “I picked up a tool once, and
+got written up,” she said. “Then I opened a bottle of liquid nitrogen and got
+written up. I started thinking that the job was not what I had anticipated it
+would be.”
+Shotwell pulled out of the Chrysler training program, regrouped at
+home, and then briefly pursued her doctorate in applied mathematics. While
+back on the Northwestern campus, one of her professors mentioned an
+opportunity at the Aerospace Corporation. Anything but a household name,
+Aerospace Corporation has been headquartered in El Segundo since 1960,
+serving as a kind of neutral, nonprofit organization that advises the air
+force, NASA, and other federal bodies on space programs. The company
+has a bureaucratic feel but has proved very useful over the years with its
+research activities and ability to champion and nix costly endeavors.
+Shotwell started at Aerospace in October 1988 and worked on a wide range
+of projects. One job required her to develop a thermal model that depicted
+how temperature fluctuations in the space shuttle’s cargo bay affected the
+performance of equipment on various payloads. She spent ten years at
+Aerospace and honed her skills as a systems engineer. By the end, though,
+Shotwell had become irritated by the pace of the industry. “I didn’t
+understand why it had to take fifteen years to make a military satellite,” she
+said. “You could see my interest was waning.”
+For the next four years, Shotwell worked at Microcosm, a space start-up
+just down the road from the Aerospace Corporation, and became the head
+of its space systems division and business development. Boasting a
+combination of smarts, confidence, direct talk, and good looks, Shotwell
+developed a reputation as a strong saleswoman. In 2002, one of her
+coworkers, Hans Koenigsmann, left for SpaceX. Shotwell took
+Koenigsmann out for a going-away lunch and dropped him off at SpaceX’s
+then rinky-dink headquarters. “Hans told me to go in and meet Elon,”
+Shotwell said. “I did, and that’s when I told him, ‘You need a good business
+development person.’” The next day Mary Beth Brown called Shotwell and
+told her that Musk wanted to interview her for the new vice president of
+business development position. Shotwell ended up as employee No. 7. “I
+gave three weeks’ notice at Microcosm and remodeled my bathroom
+because I knew I would not have a life after taking the job,” she said.
+Through the early years of SpaceX, Shotwell pulled off the miraculous
+feat of selling something the company did not have. It took SpaceX so
+much longer than it had planned to have a successful flight. The failures
+along the way were embarrassing and bad for business. Nonetheless,
+Shotwell managed to sell about a dozen flights to a mix of government and
+commercial customers before SpaceX put its first Falcon 1 into orbit. Her
+deal-making skills extended to negotiating the big-ticket contracts with
+NASA that kept SpaceX alive during its leanest years, including a $278
+million contract in August 2006 to begin work on vehicles that could ferry
+supplies to the ISS. Shotwell’s track record of success turned her into
+Musk’s ultimate confidante at SpaceX, and at the end of 2008, she became
+president and chief operating officer at the company.
+Part of Shotwell’s duties include reinforcing the SpaceX culture as the
+company grows larger and larger and starts to resemble the traditional
+aerospace giants that it likes to mock. Shotwell can switch on an easygoing,
+affable air and address the entire company during a meeting or convince a
+collection of possible recruits why they should sign up to be worked to the
+bone. During one such meeting with a group of interns, Shotwell pulled
+about a hundred people into the corner of the cafeteria. She wore high-heel
+black boots, skintight jeans, a tan jacket, and a scarf and had big hoop
+earnings dangling beside her shoulder-length blond hair. Pacing back and
+forth in front of the group with a microphone in hand, she asked them to
+announce what school they came from and what project they were working
+on while at SpaceX. One student went to Cornell and worked on Dragon,
+another went to USC and did propulsion system design, and another went to
+the University of Illinois and worked with the aerodynamics group. It took
+about thirty minutes to make it all the way around the room, and the
+students were, at least by academic pedigree and bright-eyed enthusiasm,
+among the most impressive youngsters in the world. The students peppered
+Shotwell with questions—her best moment, her advice for being successful,
+SpaceX’s competitive threats—and she replied with a mix of earnest
+answers and rah-rah stuff. Shotwell made sure to emphasize the lean,
+innovative edge SpaceX has over the more traditional aerospace companies.
+“Our competitors are scared shitless of us,” Shotwell told the group. “The
+behemoths are going to have to figure out how to get it together and
+compete. And it is our job to have them die.”
+One of SpaceX’s biggest goals, Shotwell said, was to fly as often as
+possible. The company has never sought to make a fortune off each flight. It
+would rather make a little on each launch and keep the flights flowing. A
+Falcon 9 flight costs $60 million, and the company would like to see that
+figure drop to about $20 million through economies of scale and
+improvements in launch technology. SpaceX spent $2.5 billion to get four
+Dragon capsules to the ISS, nine flights with the Falcon 9, and five flights
+with the Falcon 1. It’s a price-per-launch total that the rest of the players in
+the industry cannot comprehend let alone aspire to. “I don’t know what
+those guys do with their money,” Shotwell said. “They are smoking it. I just
+don’t know.” As Shotwell saw it, a number of new nations were showing
+interest in launches, eyeing communications technology as essential to
+growing their economies and leveling their status with developed nations.
+Cheaper flights would help SpaceX take the majority of the business from
+that new customer set. The company also expected to participate in an
+expanding market for human flights. SpaceX has never had any interest in
+doing the five-minute tourist flights to low Earth orbit like Virgin Galactic
+and XCOR. It does, however, have the ability to carry researchers to
+orbiting habitats being built by Bigelow Aerospace and to orbiting science
+labs being constructed by various countries. SpaceX will also start making
+its own satellites, turning the company into a one-stop space shop. All of
+these plans hinge on SpaceX being able to prove that it can fly on schedule
+every month and churn through the $5 billion backlog of launches. “Most of
+our customers signed up early and wanted to be supportive and got good
+deals on their missions,” she said. “We are in a phase now where we need to
+launch on time and make launching Dragons more efficient.”
+For a short while, the conversation with the interns bogged down. It
+turned to some of the annoyances of SpaceX’s campus. The company leases
+its facility and has not been able to build things like a massive parking
+structure that would make life easier for its three-thousand-person
+workforce. Shotwell promised that more parking, more bathrooms, and
+more of the freebies that technology start-ups in Silicon Valley offer their
+employees would be on the way. “I want a day care,” she said.
+But it was while discussing SpaceX’s grandest missions that Shotwell
+really came into her own and seemed to inspire the interns. Some of them
+clearly dreamed of becoming astronauts, and Shotwell said that working at
+SpaceX was almost certainly their best chance to get to space now that
+NASA’s astronaut corps had dwindled. Musk had made designing coollooking,
+“non–Stay Puft” spacesuits a personal priority. “They can’t be
+clunky and nasty,” Shotwell said. “You have to do better than that.” As for
+where the astronauts would go: well, there were the space habitats, the
+moon, and, of course, Mars as options. SpaceX has already started testing a
+giant rocket, called the Falcon Heavy, that will take it much farther into
+space than the Falcon 9, and it has another, even larger spaceship on the
+way. “Our Falcon Heavy rocket will not take a busload of people to Mars,”
+she said. “So, there’s something after Heavy. We’re working on it.” To
+make something like that vehicle happen, she said, the SpaceX employees
+needed to be effective and pushy. “Make sure your output is high,” Shotwell
+said. “If we’re throwing a bunch of shit in your way, you need to be mouthy
+about it. That’s not a quality that’s widely accepted elsewhere, but it is at
+SpaceX.” And, if that sounded harsh, so be it. As Shotwell saw it, the
+commercial space race was coming down to SpaceX and China and that’s it.
+And in the bigger picture, the race was on to ensure man’s survival. “If you
+hate people and think human extinction is okay, then fuck it,” Shotwell said.
+“Don’t go to space. If you think it is worth humans doing some risk
+management and finding a second place to go live, then you should be
+focused on this issue and willing to spend some money. I am pretty sure we
+will be selected by NASA to drop landers and rovers off on Mars. Then the
+first SpaceX mission will be to drop off a bunch of supplies, so that once
+people get there, there will be places to live and food to eat and stuff for
+them to do.”
+It’s talk like this that thrills and amazes people in the aerospace industry,
+who have long been hoping that some company would come along and truly
+revolutionize space travel. Aeronautics experts will point out that twenty
+years after the Wright brothers started their experiments, air travel had
+become routine. The launch business, by contrast, appears to have frozen.
+We’ve been to the moon, sent research vehicles to Mars, and explored the
+solar system, but all of these things are still immensely expensive one-off
+projects. “The cost remains extraordinarily high because of the rocket
+equation,” said Carol Stoker, the planetary scientist at NASA. Thanks to
+military and government contracts from agencies like NASA, the aerospace
+industry has historically had massive budgets to work with and tried to
+make the biggest, most reliable machines it could. The business has been
+tuned to strive for maximum performance, so that the aerospace contractors
+can say they met their requirements. That strategy makes sense if you’re
+trying to send up a $1 billion military satellite for the U.S. government and
+simply cannot afford for the payload to blow up. But on the whole, this
+approach stifles the pursuit of other endeavors. It leads to bloat and excess
+and a crippling of the commercial space industry.
+Outside of SpaceX, the American launch providers are no longer
+competitive against their peers in other countries. They have limited launch
+abilities and questionable ambition. SpaceX’s main competitor for domestic
+military satellites and other large payloads is United Launch Alliance
+(ULA), a joint venture formed in 2006 when Boeing and Lockheed Martin
+combined forces. The thinking at the time about the union was that the
+government did not have enough business for two companies and that
+combining the research and manufacturing work of Boeing and Lockheed
+would result in cheaper, safer launches. ULA has leaned on decades of work
+around the Delta (Boeing) and Atlas (Lockheed) launch vehicles and has
+flown many dozens of rockets successfully, making it a model of reliability.
+But neither the joint venture nor Boeing nor Lockheed, both of which can
+offer commercial services on their own, come close to competing on price
+against SpaceX, the Russians, or the Chinese. “For the most part, the global
+commercial market is dominated by Arianespace [Europe], Long March
+[China] or Russian vehicles,” said Dave Bearden, the general manager of
+civil and commercial programs at the Aerospace Corporation. “There are
+just different labor rates and differences in the way they are built.”
+To put things more bluntly, ULA has turned into an embarrassment for
+the United States. In March 2014, ULA’s then CEO, Michael Gass, faced
+off against Musk during a congressional hearing that dealt, in part, with
+SpaceX’s request to take on more of the government’s annual launch load.
+A series of slides were rolled out that showed how the government
+payments for launches have skyrocketed since Boeing and Lockheed went
+from a duopoly to a monopoly. According to Musk’s math presented at the
+hearing, ULA charged $380 million per flight, while SpaceX would charge
+$90 million per flight. (The $90 million figure was higher than SpaceX’s
+standard $60 million because the government has certain additional
+requirements for particularly sensitive launches.) By simply picking
+SpaceX as its launch provider, Musk pointed out, the government would
+save enough money to pay for the satellite going on the rocket. Gass had no
+real retort. He claimed Musk’s figures for the ULA launch price were
+inaccurate but failed to provide a figure of his own. The hearing also came
+as tensions between the United States and Russia were running high due to
+Russia’s aggressive actions in Ukraine. Musk rightly noted that the United
+States could soon be placing sanctions on Russia that could carry over to
+aerospace equipment. ULA, as it happens, relies on Russian-made engines
+to send up sensitive U.S. military equipment in its Atlas V rockets. “Our
+Falcon 9 and Falcon Heavy launch vehicles are truly American,” Musk
+said. “We design and manufacture our rockets in California and Texas.”
+Gass countered that ULA had bought a two-year supply of Russian engines
+and purchased the blueprints to the machines and had them translated from
+Russian to English, and he said this with a straight face. (A few months
+after the hearing, ULA replaced Gass as CEO and signed a deal with Blue
+Origin to develop American-made rockets.)
+Some of the most disheartening moments of the hearing arrived when
+Senator Richard Shelby of Alabama took the microphone for questioning.
+ULA has manufacturing facilities in Alabama and close ties to the senator.
+Shelby felt compelled to play the role of hometown booster by repeatedly
+pointing out that ULA had enjoyed sixty-eight successful launches and then
+asking Musk what he made of that accomplishment. The aerospace industry
+stands as one of Shelby’s biggest donors and he’s ended up surprisingly probureaucracy
+and anticompetition when it comes to getting things into space.
+“Typically competition results in better quality and lower-priced contracts
+—but the launch market is not typical,” Shelby said. “It is limited demand
+framed by government-industrial policies.” The March hearing in which
+Shelby made these statements would turn out to be something of a sham.
+The government had agreed to put fourteen of its sensitive launches up for
+bid instead of just awarding them directly to ULA. Musk had come to
+Congress to present his case for why SpaceX made sense as a viable
+candidate for those and other launches. The day after the hearing, the air
+force cut the number of launches up for bid from fourteen to between seven
+and one. One month later, SpaceX filed a lawsuit against the air force
+asking for a chance to earn its launch business. “SpaceX is not seeking to be
+awarded contracts for these launches,” the company said on its
+freedomtolaunch.com website. “We are simply seeking the right to
+compete.”*
+SpaceX’s main competitor for ISS resupply missions and commercial
+satellites in the United States is Orbital Sciences Corporation. Founded in
+Virginia in 1982, the company started out not unlike SpaceX, as the new kid
+that raised outside funding and focused on putting smaller satellites into
+low-Earth orbit. Orbital is more experienced, although it has a limited roster
+of machine types. Orbital depends on suppliers, including Russian and
+Ukrainian companies, for its engines and rocket bodies, making it more of
+an assembler of spacecraft than a true builder like SpaceX. And, also unlike
+SpaceX, Orbital’s capsules cannot withstand the journey back from the ISS
+to Earth, so it’s unable to return experiments and other goods. In October
+2014, one of Orbital’s rockets blew up on the launchpad. With its ability to
+launch on hold while it investigated the incident, Orbital reached out to
+SpaceX for help. It wanted to see if Musk had any extra capacity to take
+care of some of Orbital’s customers. The company also signaled that it
+would move away from using Russian engines as well.
+As for getting humans to space, SpaceX and Boeing were the victors in
+a four-year NASA competition to fly astronauts to the ISS. SpaceX will get
+$2.6 billion, and Boeing will get $4.2 billion to develop their capsules and
+ferry people to the ISS by 2017. The companies would, in effect, be
+replacing the space shuttle and restoring the United States’ ability to
+conduct manned flights. “I actually don’t mind that Boeing gets twice as
+much money for meeting the same NASA requirements as SpaceX with
+worse technology,” Musk said. “Having two companies involved is better
+for the advancement of human spaceflight.”
+SpaceX had once looked like it too would be a one-trick pony. The
+company’s original plans were to have the smallish Falcon 1 function as its
+primary workhorse. At $6 million to $12 million per flight, the Falcon 1
+was by far the cheapest means of getting something into orbit, thrilling
+people in the space industry. When Google announced its Lunar X Prize in
+2007—$30 million in awards to people who could land a robot on the moon
+—many of the proposals that followed selected the Falcon 1 as their
+preferred launch vehicle because it seemed like the only reasonably priced
+option for getting something to the moon. Scientists around the world were
+equally excited, thinking that for the first time they had a means of placing
+experiments into orbit in a cost-effective way. But for all the enthusiastic
+talk about the Falcon 1, the demand never arrived. “It became very clear
+that there was a huge need for the Falcon 1 but no money for it,” said
+Shotwell. “The market has to be able to sustain a certain amount of
+vehicles, and three Falcon 1s per year does not make a business.” The last
+Falcon 1 launch took place in July 2009 from Kwajalein, when SpaceX
+carried a satellite into orbit for the Malaysian government. People in the
+aerospace industry have been grumbling ever since. “We gave Falcon 1 a
+hell of a shot,” Shotwell said. “I was emotional about it and disappointed.
+I’d anticipated a flood of orders but, after eight years, they just did not
+come.”
+SpaceX has since expanded its launch capabilities at a remarkable pace
+and looks like it might be on the verge of getting that $12 million per flight
+option back. In June 2010, the Falcon 9 flew for the first time and orbited
+Earth successfully. In December 2010, SpaceX proved that the Falcon 9
+could carry the Dragon capsule into space and that the capsule could be
+recovered safely after an ocean landing.* It became the first commercial
+company ever to pull off this feat. Then, in May 2012, SpaceX went
+through the most significant moment in the company’s history since that
+first successful launch on Kwajalein.
+On May 22, at 3:44 A.M., a Falcon 9 rocket took off from the Kennedy
+Space Center in Cape Canaveral, Florida. The rocket did its yeoman-like
+work boosting Dragon into space. Then the capsule’s solar panels fanned
+out and Dragon became dependent on its eighteen Draco thrusters, or small
+rocket engines, to guide its path to the International Space Station. The
+SpaceX engineers worked in shifts—some of them sleeping on cots at the
+factory—as it took the capsule three days for Dragon to make its journey.
+They spent most of the time observing Dragon’s flight and checking to see
+that its sensor systems were picking up the ISS. Originally, Dragon planned
+to dock with the ISS around 4 A.M. on the twenty-fifth, but as the capsule
+approached the space station, an unexpected glint kept throwing off the
+calculations of a laser used to measure the distance between Dragon and the
+ISS. “I remember it being two and a half hours of struggle,” Shotwell said.
+Her outfit of Uggs, a fishnet sweater, and leggings started to feel like
+pajamas as the night wore on, and the engineers battled this unplanned
+difficulty. Fearing all the time that the mission would be aborted, SpaceX
+decided to upload some new software to the Dragon that would cut the size
+of the visual frame used by the sensors to eliminate the effect of the sunlight
+on the machine. Then, just before 7 A.M., Dragon got close enough to the
+ISS for Don Pettit, an astronaut, to use a fifty-eight-foot robotic arm to
+reach out and grab the resupply capsule. “Houston, Station, it looks like
+we’ve got us a dragon by the tail,” Pettit said.13
+“I’d been digesting my guts,” Shotwell said. “And then I am drinking
+champagne at six in the morning.” About thirty people were in the control
+room when the docking happened. Over the next couple of hours, workers
+streamed into the SpaceX factory to soak up the elation of the moment.
+SpaceX had set another first, as the only private company to dock with the
+ISS. A couple of months later SpaceX received $440 million from NASA to
+keep developing Dragon so that it could transport people. “Elon is changing
+the way aerospace business is done,” said NASA’s Stoker. “He’s managed
+to keep the safety factor up while cutting costs. He’s just taken the best
+things from the tech industry like the open-floor office plans and having
+everyone talking and all this human interaction. It’s a very different way to
+most of the aerospace industry, which is designed to produce requirements
+documents and project reviews.”
+In May 2014, Musk invited the press to SpaceX’s headquarters to
+demonstrate what some of that NASA money had bought. He unveiled the
+Dragon V2, or version two, spacecraft. Unlike most executives, who like to
+show their products off at trade shows or daytime events, Musk prefers to
+hold true Hollywood-style galas in the evenings. People arrived in
+Hawthorne by the hundreds and snacked on hors d’oeuvres until the 7:30
+P.M. showing. Musk appeared wearing a purplish velvet jacket and popping
+open the capsule’s door with a bump of his fist like the Fonz. What he
+revealed was spectacular. The cramped quarters of past capsules were gone.
+There were seven thin, sturdy, contoured seats arranged with four seats
+close to the main console and a row of three seats in the back. Musk walked
+around in the capsule to show how roomy it was and then plopped down in
+the central captain’s chair. He reached up and unlocked a four-paneled flatscreen
+console that gracefully slid down right in front of the first row of
+seats.* In the middle of the console was a joystick for flying the aircraft and
+some physical buttons for essential functions that astronauts could press in
+case of an emergency or a malfunctioning touch-screen. The inside of the
+capsule had a bright, metallic finish. Someone had finally built a spaceship
+worthy of scientist and moviemaker dreams.
+There was substance to go with the style. The Dragon 2 will be able to
+dock with the ISS and other space habitats automatically without needing
+the intervention of a robotic arm. It will run on a SuperDraco engine—a
+thruster made by SpaceX and the first engine ever built completely by a 3-D
+printer to go into space. This means that a machine guided by a computer
+formed the engine out of single piece of metal—in this case the highstrength
+alloy Inconel—so that its strength and performance should exceed
+anything built by humans by welding various parts together. And most
+mind-boggling of all, Musk revealed that the Dragon 2 will be able to land
+anywhere on Earth that SpaceX wants by using the SuperDraco engines and
+thrusters to come to a gentle stop on the ground. No more landings at sea.
+No more throwing spaceships away. “That is how a twenty-first-century
+spaceship should land,” Musk said. “You can just reload propellant and fly
+again. So long as we continue to throw away rockets and spacecraft, we will
+never have true access to space.”
+The Dragon 2 is just one of the machines that SpaceX continues to
+develop in parallel. One of the company’s next milestones will be the first
+flight of the Falcon Heavy, which is designed to be the world’s most
+powerful rocket.* SpaceX has found a way to combine three Falcon 9s into
+a single craft with 27 of the Merlin engines and the ability to carry more
+than 53 metric tons of stuff into orbit. Part of the genius of Musk and
+Mueller’s designs is that SpaceX can reuse the same engine in different
+configurations—from the Falcon 1 up to the Falcon Heavy—saving on cost
+and time. “We make our main combustion chambers, turbo pump, gas
+generators, injectors, and main valves,” Mueller said. “We have complete
+control. We have our own test site, while most of the other guys use
+government test sites. The labor hours are cut in half and so is the work
+around the materials. Four years ago, we could make two rockets a year and
+now we can make twenty a year.” SpaceX boasts that the Falcon Heavy can
+take up twice the payload of the nearest competitor—the Delta IV Heavy
+from Boeing/ULA—at one-third the cost. SpaceX is also busy building a
+spaceport from the ground up. The goal is to be able to launch many rockets
+an hour from this facility located in Brownsville, Texas, by automating the
+processes needed to stand a rocket up on the pad, fuel it, and send it off.
+Just as it did in the early days, SpaceX continues to experiment with
+these new vehicles during actual launches in ways that other companies
+would dare not do. SpaceX will often announce that it’s trying out a new
+engine or its landing legs and place the emphasis on that one upgrade in the
+marketing material leading up to a launch. It’s common, though, for SpaceX
+to test out a dozen other objectives in secret during a mission. Musk
+essentially asks employees to do the impossible on top of the impossible.
+One former SpaceX executive described the working atmosphere as a
+perpetual-motion machine that runs on a weird mix of dissatisfaction and
+eternal hope. “It’s like he has everyone working on this car that is meant to
+get from Los Angeles to New York on one tank of gas,” this executive said.
+“They will work on the car for a year and test all of its parts. Then, when
+they set off for New York after that year, all of the vice presidents think
+privately that the car will be lucky to get to Las Vegas. What ends up
+happening is that the car gets to New Mexico—twice as far as they ever
+expected—and Elon is still mad. He gets twice as much as anyone else out
+of people.”
+There’s a degree to which it’s just never enough for Musk, no matter
+what it is. Case in point: the December 2010 launch in which SpaceX got
+the Dragon capsule to orbit Earth and return successfully. This had been one
+of the company’s great achievements, and people had worked tirelessly for
+months, if not years. The launch had taken place on December 8, and
+SpaceX had a Christmas party on December 16. About ninety minutes
+before the party started, Musk had called his top executives to SpaceX for a
+meeting. Six of them, including Mueller, were decked out in party attire and
+ready to celebrate the holidays and SpaceX’s historic achievement around
+Dragon. Musk laid into them for about an hour because the truss structure
+for a future rocket was running behind schedule. “Their wives were sitting
+three cubes over waiting for the berating to end,” Brogan said. Other
+examples of similar behavior have cropped up from time to time. Musk, for
+example, rewarded a group of thirty employees who had pulled off a tough
+project for NASA with bonuses that consisted of additional stock option
+grants. Many of the employees, seeking instant, more tangible gratification,
+demanded cash. “He chided us for not valuing the stock,” Drew Eldeen, a
+former engineer, said. “He said, ‘In the long run, this is worth a lot more
+than a thousand dollars in cash.’ He wasn’t screaming or anything like that,
+but he seemed disappointed in us. It was hard to hear that.”
+The lingering question for many SpaceX employees is when exactly
+they will see a big reward for all their work. SpaceX’s staff is paid well but
+by no means exorbitantly. Many of them expect to make their money when
+SpaceX files for an initial public offering. The thing is that Musk does not
+want to go public anytime soon, and understandably so. It’s a bit hard to
+explain the whole Mars thing to investors, when it’s unclear what the
+business model around starting a colony on another planet will be. When
+the employees heard Musk say that an IPO was years away and would not
+occur until the Mars mission looked more secure, they started to grumble,
+and when Musk found out, he addressed all of SpaceX in an e-mail that is a
+fantastic window into his thinking and how it differs from almost every
+other CEO’s. (The full e-mail appears in Appendix 3.)
+June 7, 2013
+Going Public
+Per my recent comments, I am increasingly concerned about
+SpaceX going public before the Mars transport system is in place.
+Creating the technology needed to establish life on Mars is and
+always has been the fundamental goal of SpaceX. If being a public
+company diminishes that likelihood, then we should not do so until
+Mars is secure. This is something that I am open to reconsidering,
+but, given my experiences with Tesla and SolarCity, I am hesitant to
+foist being public on SpaceX, especially given the long term nature
+of our mission.
+Some at SpaceX who have not been through a public company
+experience may think that being public is desirable. This is not so.
+Public company stocks, particularly if big step changes in
+technology are involved, go through extreme volatility, both for
+reasons of internal execution and for reasons that have nothing to do
+with anything except the economy. This causes people to be
+distracted by the manic-depressive nature of the stock instead of
+creating great products.
+For those who are under the impression that they are so clever
+that they can outsmart public market investors and would sell
+SpaceX stock at the “right time,” let me relieve you of any such
+notion. If you really are better than most hedge fund managers, then
+there is no need to worry about the value of your SpaceX stock, as
+you can just invest in other public company stocks and make
+billions of dollars in the market.
+Elon
+10
+THE REVENGE OF THE ELECTRIC CAR
+THERE ARE SO MANY TELEVISION COMMERCIALS FOR CARS
+AND TRUCKS that it’s easy to become immune to them and ignore what’s
+taking place in the ads. That’s okay. Because there’s not really much of note
+happening. Carmakers looking to put a modicum of effort into their ads
+have been hawking the exact same things for decades: a car with a bit more
+room, a few extra miles per gallon, better handling, or an extra cup holder.
+Those that can’t find anything interesting at all to tout about their cars turn
+to scantily clad women, men with British accents, and, when necessary,
+dancing mice in tuxedos to try and convince people that their products are
+better than the rest. Next time a car ad appears on your television, pause for
+a moment and really listen to what’s being said. When you realize that the
+Volkswagen sign-and-drive “event” is code for “we’re making the

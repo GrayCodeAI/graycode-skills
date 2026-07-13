@@ -43,4 +43,4 @@ keywords: None
 
 ## References
 
-- [Naming Conventions](references/naming-convention.md)
+- Naming Conventions

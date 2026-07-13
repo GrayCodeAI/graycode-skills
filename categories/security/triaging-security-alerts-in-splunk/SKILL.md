@@ -2,7 +2,7 @@
 name: triaging-security-alerts-in-splunk
 description: "Triages security alerts in Splunk Enterprise Security by classifying severity, investigating notable events, correlating related telemetry, and making escalation or closure decisions using SPL quer..."
 license: MIT
-tags: [soc, splunk, alert-triage, siem, notable-events, correlation-search, incident-review]
+tags: [soc, splunk, alert-triage, siem, notable-events]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

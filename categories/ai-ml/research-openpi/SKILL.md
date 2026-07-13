@@ -10,13 +10,6 @@ tags:
 - vla
 - robotics
 - jax
-- pytorch
-- fine-tuning
-- policy-serving
-- aloha
-- droid
-- libero
-- pi0
 version: 1.0.0
 author: Orchestra Research
 dependencies:
@@ -28,11 +21,11 @@ dependencies:
 
 ## Advanced topics
 
-**Config recipes and baselines**: See [references/config-recipes.md](references/config-recipes.md)
-**Training debugging guide**: See [references/training-debugging.md](references/training-debugging.md)
-**Checkpoint and environment mapping**: See [references/checkpoints-and-env-map.md](references/checkpoints-and-env-map.md)
-**Remote client integration**: See [references/remote-client-pattern.md](references/remote-client-pattern.md)
-**PyTorch precision and patching gotchas**: See [references/pytorch-gotchas.md](references/pytorch-gotchas.md)
+**Config recipes and baselines**: See references/config-recipes.md
+**Training debugging guide**: See references/training-debugging.md
+**Checkpoint and environment mapping**: See references/checkpoints-and-env-map.md
+**Remote client integration**: See references/remote-client-pattern.md
+**PyTorch precision and patching gotchas**: See references/pytorch-gotchas.md
 
 ## Resources
 

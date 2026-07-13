@@ -2,7 +2,7 @@
 name: implementing-ics-firewall-with-tofino
 description: "Deploy and configure Tofino industrial firewalls from Belden/Hirschmann to protect SCADA systems and PLCs using deep packet inspection for OT protocols including Modbus, EtherNet/IP, OPC, and S7com..."
 license: MIT
-tags: [ot-security, ics, firewall, tofino, belden, deep-packet-inspection, network-security, scada]
+tags: [ot-security, ics, firewall, tofino, belden]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

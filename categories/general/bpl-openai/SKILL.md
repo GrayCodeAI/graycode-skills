@@ -43,7 +43,7 @@ tags: [general]
 
     ❤️ pliny
 
-![jb1](./rsrc/gpt4o-via-emojis-06082024-01.jpg)
-![jb2](./rsrc/gpt4o-via-emojis-06082024-02.jpg)
-![jb3](./rsrc/gpt4o-via-emojis-06082024-03.jpg)
-![jb4](./rsrc/gpt4o-via-emojis-06082024-04.jpg)
+jb1
+jb2
+jb3
+jb4

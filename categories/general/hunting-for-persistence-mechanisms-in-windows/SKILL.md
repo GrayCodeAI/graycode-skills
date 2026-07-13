@@ -2,7 +2,7 @@
 name: hunting-for-persistence-mechanisms-in-windows
 description: "Systematically hunt for adversary persistence mechanisms across Windows endpoints including registry, services, startup folders, and WMI subscriptions."
 license: MIT
-tags: [threat-hunting, mitre-attack, persistence, windows, registry, siem, proactive-detection]
+tags: [threat-hunting, mitre-attack, persistence, windows, registry]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

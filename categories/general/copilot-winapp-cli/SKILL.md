@@ -34,7 +34,7 @@ tags: [general]
 | `tool` | Run Windows SDK build tools with paths configured. |
 | `store` | Run Microsoft Store Developer CLI for store submission/validation/publishing. |
 | `create-external-catalog` | Generate `CodeIntegrityExternal.cat` for TrustedLaunch sparse packages. |
-| `ui list-windows` / `inspect` / `click` / `search` / `wait-for` / `get-focused` | UI automation via Microsoft UI Automation. All support `--json`. **JSON envelopes for `inspect`, `get-focused`, `search`, and `wait-for` changed in v0.3.1** — see [`references/ui-json-envelope.md`](./references/ui-json-envelope.md) (other `ui` subcommands keep their pre-0.3.1 output). (v0.3.0+) |
+| `ui list-windows` / `inspect` / `click` / `search` / `wait-for` / `get-focused` | UI automation via Microsoft UI Automation. All support `--json`. **JSON envelopes for `inspect`, `get-focused`, `search`, and `wait-for` changed in v0.3.1** — see `references/ui-json-envelope.md` (other `ui` subcommands keep their pre-0.3.1 output). (v0.3.0+) |
 | `node create-addon` / `add-electron-debug-identity` / `clear-electron-debug-identity` | Electron/Node helpers. All commands also exposed as typed JS/TS functions from `@microsoft/winappcli` (v0.2.1+). |
 
 CI tip: pass `--no-prompt` to skip interactive prompts.
@@ -96,7 +96,7 @@ Standard init → package flow:
 
 ## Gotchas
 
-- **`winapp ui --json` envelope reshaped in v0.3.1** — `ui inspect`, `ui get-focused`, `ui search`, and `ui wait-for` use new shapes; per-element `id` / `parentSelector` / `windowHandle` are removed (use `selector`). Full schemas in [`references/ui-json-envelope.md`](./references/ui-json-envelope.md).
+- **`winapp ui --json` envelope reshaped in v0.3.1** — `ui inspect`, `ui get-focused`, `ui search`, and `ui wait-for` use new shapes; per-element `id` / `parentSelector` / `windowHandle` are removed (use `selector`). Full schemas in `references/ui-json-envelope.md`.
 - **`winapp init` no longer auto-generates a certificate** (v0.2.0+) — run `winapp cert generate` explicitly. The old `--no-cert` flag was removed.
 - **`.csproj` projects skip `winapp.yaml`** — SDK packages live in the project file. Hybrid setups need adjustment.
 - **NuGet global cache, not `%userprofile%/.winapp/packages`** (v0.2.0+) — scripts depending on the old folder will break.

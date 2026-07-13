@@ -96,7 +96,7 @@ Founders have authority. Without an explicit lock + log, every wobble produces a
 ## Related
 
 - Skill: [`decision-logger`](SKILL.md)
-- Agent: [`cs-chief-of-staff`](cs-chief-of-staff.md) — enforces freezes in routing
+- Agent: `cs-chief-of-staff` — enforces freezes in routing
 
 ---
 

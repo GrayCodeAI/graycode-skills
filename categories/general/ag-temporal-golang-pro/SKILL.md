@@ -206,8 +206,8 @@ func ApprovalWorkflow(ctx workflow.Context) (string, error) {
 
 ## Resources
 
-- [Implementation Playbook](resources/implementation-playbook.md) - Deep dive into Go SDK patterns.
-- [Testing Strategies](resources/testing-strategies.md) - Unit, Replay, and Integration testing for Go.
+- Implementation Playbook - Deep dive into Go SDK patterns.
+- Testing Strategies - Unit, Replay, and Integration testing for Go.
 - [Temporal Go SDK Reference](https://pkg.go.dev/go.temporal.io/sdk)
 - [Temporal Go Samples](https://github.com/temporalio/samples-go)
 

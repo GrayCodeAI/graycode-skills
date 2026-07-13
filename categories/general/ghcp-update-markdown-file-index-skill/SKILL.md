@@ -45,8 +45,8 @@ Choose format based on file types and existing content:
 
 | File | Type | Description |
 |------|------|-------------|
-| [filename.ext](path/to/filename.ext) | Extension | Description |
-| [filename2.ext](path/to/filename2.ext) | Extension | Description |
+| filename.ext | Extension | Description |
+| filename2.ext | Extension | Description |
 
 ### Option 3: Categorized Sections
 

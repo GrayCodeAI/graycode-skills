@@ -20,7 +20,7 @@ keywords: None
 - **Pagination**: ALWAYS use **`Pageable`** and **`Slice`** (or `Page`) to prevent loading massive datasets.
 - **Spring Data**: Prefer **`JpaRepository`** and **`Query methods`**. Use **`@Query`** with JPQL for complex logic. Use Flyway or Liquibase for migrations; never use `ddl-auto=create` in production.
 
-See [implementation examples](references/implementation.md) for repository projections, EntityGraph, and transactional patterns.
+See implementation examples for repository projections, EntityGraph, and transactional patterns.
 
 ## Optimize Queries and Transactions
 
@@ -38,4 +38,4 @@ See [implementation examples](references/implementation.md) for repository proje
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

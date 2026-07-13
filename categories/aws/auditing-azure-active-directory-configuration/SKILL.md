@@ -2,7 +2,7 @@
 name: auditing-azure-active-directory-configuration
 description: "Auditing Microsoft Entra ID (Azure Active Directory) configuration to identify risky authentication policies, overly permissive role assignments, stale accounts, conditional access gaps, and guest ..."
 license: MIT
-tags: [cloud-security, azure, entra-id, active-directory, iam-audit, conditional-access]
+tags: [cloud-security, azure, entra-id, active-directory, iam-audit]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

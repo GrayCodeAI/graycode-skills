@@ -2,7 +2,7 @@
 name: processing-stix-taxii-feeds
 description: "Processes STIX 2.1 threat intelligence bundles delivered via TAXII 2.1 servers, normalizing objects into platform-native schemas and routing them to appropriate consuming systems. Use when onboardi..."
 license: MIT
-tags: [stix-2-1, taxii-2-1, oasis, misp, cti, ioc, threat-intelligence, nist-sp-800-150]
+tags: [stix-2-1, taxii-2-1, oasis, misp, cti]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

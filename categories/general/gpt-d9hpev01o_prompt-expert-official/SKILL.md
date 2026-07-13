@@ -55,4 +55,4 @@ End of copied content
 
 GPT Kb Files List:
 
-- [Prompt Expert Official](./knowledge/Prompt%20Expert%20Official/)
+- Prompt Expert Official

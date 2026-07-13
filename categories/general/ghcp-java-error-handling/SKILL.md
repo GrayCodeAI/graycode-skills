@@ -9,7 +9,7 @@ tags: [general]
 
 Handle errors gracefully in your Copilot SDK applications.
 
-> **Runnable example:** [recipe/ErrorHandling.java](recipe/ErrorHandling.java)
+> **Runnable example:** recipe/ErrorHandling.java
 >
 > ```bash
 > jbang recipe/ErrorHandling.java

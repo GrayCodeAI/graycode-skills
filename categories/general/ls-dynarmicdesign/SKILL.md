@@ -12,14 +12,14 @@ support for other versions of the ARM architecture, having a interpreter mode, a
 for other architectures.
 
 Users of this library interact with it primarily through the interface provided in
-[`src/dynarmic/interface`](interface). Users specify how dynarmic's CPU core interacts with
+`src/dynarmic/interface`. Users specify how dynarmic's CPU core interacts with
 the rest of their system providing an implementation of the relevant `UserCallbacks` interface.
 Users setup the CPU state using member functions of `Jit`, then call `Jit::Execute` to start CPU
 execution. The callbacks defined on `UserCallbacks` may be called from dynamically generated code,
 so users of the library should not depend on the stack being in a walkable state for unwinding.
 
-* A32: [`Jit`](a32.h), [`UserCallbacks`](config.h)
-* A64: [`Jit`](a64.h), [`UserCallbacks`](config.h)
+* A32: `Jit`, `UserCallbacks`
+* A64: `Jit`, `UserCallbacks`
 
 Dynarmic reads instructions from memory by calling `UserCallbacks::MemoryReadCode`. These
 instructions then pass through several stages:
@@ -35,7 +35,7 @@ Using the A32 frontend with the x64 backend as an example:
 * Decoding is done by [double dispatch](https://en.wikipedia.org/wiki/Visitor_pattern) in
   [`src/frontend/A32/decoder/{arm.h,thumb16.h,thumb32.h}`]().
 * Translation is done by the visitors in [`src/dynarmic/frontend/A32/translate/translate_{arm,thumb}.cpp`]().
-  The function [`Translate`](translate.h) takes a starting memory location,
+  The function `Translate` takes a starting memory location,
   some CPU state, and memory reader callback and returns a basic block of IR.
 * The IR can be found under [`src/frontend/ir/`]().
 * Optimizations can be found under [`src/ir_opt/`]().
@@ -45,7 +45,7 @@ Using the A32 frontend with the x64 backend as an example:
 ## Decoder
 
 The decoder is a double dispatch decoder. Each instruction is represented by a line in the relevant
-instruction table. Here is an example line from [`arm.h`](arm.h):
+instruction table. Here is an example line from `arm.h`:
 
     INST(&V::arm_ADC_imm,     "ADC (imm)",           "cccc0010101Snnnnddddrrrrvvvvvvvv")
 
@@ -68,7 +68,7 @@ error results.
 ## Translator
 
 The translator is a visitor that uses the decoder to decode instructions. The translator generates IR code with the
-help of the [`IREmitter` class](ir_emitter.h). An example of a translation function follows:
+help of the `IREmitter` class. An example of a translation function follows:
 
     bool ArmTranslatorVisitor::arm_ADC_imm(Cond cond, bool S, Reg n, Reg d, int rotate, Imm8 imm8) {
         u32 imm32 = ArmExpandImm(rotate, imm8);
@@ -114,7 +114,7 @@ function analyser in the medium-term future.
 Dynarmic's intermediate representation is typed. Each microinstruction may take zero or more arguments and may
 return zero or more arguments. A subset of the microinstructions available is documented below.
 
-A complete list of microinstructions can be found in [src/dynarmic/ir/opcodes.inc](opcodes.inc).
+A complete list of microinstructions can be found in src/dynarmic/ir/opcodes.inc.
 
 The below lists some commonly used microinstructions.
 

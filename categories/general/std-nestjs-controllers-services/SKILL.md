@@ -77,4 +77,4 @@ findOne(@Param('id', ParseIntPipe) id: number) { ... }
 
 ## References
 
-- [Decorator, Pipe & Lifecycle Examples](references/REFERENCE.md)
+- Decorator, Pipe & Lifecycle Examples

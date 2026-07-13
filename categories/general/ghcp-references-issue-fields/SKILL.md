@@ -195,4 +195,4 @@ gh api "search/issues?q=repo:owner/repo+field.priority:P0+is:open&advanced_searc
   --jq '.items[] | "#\(.number): \(.title)"'
 ```
 
-> **Warning:** The colon notation (`field:Priority:P1`) is silently ignored. If using search qualifiers, always use dot notation (`field.priority:P1`). However, the GraphQL bulk query approach above is more reliable. See [search.md](search.md) for the full search guide.
+> **Warning:** The colon notation (`field:Priority:P1`) is silently ignored. If using search qualifiers, always use dot notation (`field.priority:P1`). However, the GraphQL bulk query approach above is more reliable. See search.md for the full search guide.

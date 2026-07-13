@@ -95,9 +95,9 @@ This creates:
 
 Choose based on your project's language:
 
-- **JavaScript/TypeScript**: See [js-ts-actorization.md](references/js-ts-actorization.md)
-- **Python**: See [python-actorization.md](references/python-actorization.md)
-- **Other Languages (CLI-based)**: See [cli-actorization.md](references/cli-actorization.md)
+- **JavaScript/TypeScript**: See js-ts-actorization.md
+- **Python**: See python-actorization.md
+- **Other Languages (CLI-based)**: See cli-actorization.md
 
 ### Quick Reference
 
@@ -109,7 +109,7 @@ Choose based on your project's language:
 
 ## Steps 4-6: Configure Schemas
 
-See [schemas-and-output.md](references/schemas-and-output.md) for detailed configuration of:
+See schemas-and-output.md for detailed configuration of:
 - Input schema (`.actor/input_schema.json`)
 - Output schema (`.actor/output_schema.json`)
 - Actor configuration (`.actor/actor.json`)

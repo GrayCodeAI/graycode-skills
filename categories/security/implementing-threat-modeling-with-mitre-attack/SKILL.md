@@ -2,7 +2,7 @@
 name: implementing-threat-modeling-with-mitre-attack
 description: "Implements threat modeling using the MITRE ATT&CK framework to map adversary TTPs against organizational assets, assess detection coverage gaps, and prioritize defensive investments. Use when SOC t..."
 license: MIT
-tags: [soc, mitre-attack, threat-modeling, ttp, detection-coverage, attack-navigator, risk-assessment]
+tags: [soc, mitre-attack, threat-modeling, ttp, attack-navigator]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

@@ -9,7 +9,7 @@ tags: [general]
 
 Handle errors gracefully in your Copilot SDK applications.
 
-> **Runnable example:** [recipe/error-handling.cs](recipe/error-handling.cs)
+> **Runnable example:** recipe/error-handling.cs
 >
 > ```bash
 > dotnet run recipe/error-handling.cs

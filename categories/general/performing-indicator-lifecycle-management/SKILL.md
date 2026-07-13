@@ -2,7 +2,7 @@
 name: performing-indicator-lifecycle-management
 description: "Indicator lifecycle management tracks IOCs from initial discovery through validation, enrichment, deployment, monitoring, and eventual retirement. This skill covers implementing systematic processes f"
 license: MIT
-tags: [threat-intelligence, cti, ioc, mitre-attack, stix, indicator-lifecycle, ioc-management]
+tags: [threat-intelligence, cti, ioc, mitre-attack, indicator-lifecycle]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

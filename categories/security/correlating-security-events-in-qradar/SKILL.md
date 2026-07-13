@@ -2,7 +2,7 @@
 name: correlating-security-events-in-qradar
 description: "Correlates security events in IBM QRadar SIEM using AQL (Ariel Query Language), custom rules, building blocks, and offense management to detect multi-stage attacks across network, endpoint, and app..."
 license: MIT
-tags: [soc, qradar, siem, aql, correlation, offense-management, ibm]
+tags: [soc, qradar, siem, aql, correlation]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

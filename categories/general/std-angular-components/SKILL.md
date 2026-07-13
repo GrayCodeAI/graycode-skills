@@ -42,5 +42,5 @@ keywords: None
 
 ## References
 
-- [Standalone Pattern](references/standalone-pattern.md)
-- [Control Flow](references/control-flow.md)
+- Standalone Pattern
+- Control Flow

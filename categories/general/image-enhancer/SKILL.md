@@ -2,7 +2,7 @@
 name: image-enhancer
 description: "Improves image quality including resolution, sharpness, and clarity. Perfect for preparing screenshots for presentations, documentation, or social media."
 license: MIT
-tags: [image-processing, screenshots, enhancement, upscaling, media, productivity]
+tags: [image-processing, screenshots, enhancement, upscaling, media]
 domain: general
 subdomain: media
 version: 1.0

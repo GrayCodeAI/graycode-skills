@@ -2,7 +2,7 @@
 name: research-sentencepiece
 description: "Language-independent tokenizer treating text as raw Unicode. Supports BPE and Unigram algorithms. Fast (50k sentences/sec), lightweight (6MB memory), deterministic vocabulary. Used by T5, ALBERT, X..."
 license: MIT
-tags: [tokenization, sentencepiece, language-independent, bpe, unigram, multilingual, cjk-languages, unicode, deterministic, google]
+tags: [tokenization, sentencepiece, language-independent, bpe, unigram]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [sentencepiece, transformers]
@@ -223,8 +223,8 @@ inputs = tokenizer('translate English to French: Hello', return_tensors='pt')
 
 ## References
 
-- **[Training Guide](references/training.md)** - Detailed options, corpus preparation
-- **[Algorithms](references/algorithms.md)** - BPE vs Unigram, subword regularization
+- **Training Guide** - Detailed options, corpus preparation
+- **Algorithms** - BPE vs Unigram, subword regularization
 
 ## Resources
 

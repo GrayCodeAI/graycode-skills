@@ -55,4 +55,4 @@ Analyze diff + answer:
 ## 🔗 References
 
 - **appium-mcp**: [appium-mcp](SKILL.md)
-- **Scenario Details**: [scenarios](references/scenarios.md)
+- **Scenario Details**: scenarios

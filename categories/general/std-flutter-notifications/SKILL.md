@@ -24,9 +24,9 @@ keywords: None
 
 ### Lifecycle Handlers Example
 
-See [implementation examples](references/implementation.md) for foreground, background, and terminated state notification handling.
+See implementation examples for foreground, background, and terminated state notification handling.
 
-[Implementation Details](references/implementation.md)
+Implementation Details
 
 ## Anti-Patterns
 

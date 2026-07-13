@@ -505,7 +505,7 @@ gcloud beta compute ssh instance-name --zone us-central1-a --project target-proj
 
 ## References
 
-- [Advanced Cloud Scripts](references/advanced-cloud-scripts.md) - Azure Automation runbooks, Function Apps enumeration, AWS data exfiltration, GCP advanced exploitation
+- Advanced Cloud Scripts - Azure Automation runbooks, Function Apps enumeration, AWS data exfiltration, GCP advanced exploitation
 
 ## When to Use
 This skill is applicable to execute the workflow or actions described in the overview.

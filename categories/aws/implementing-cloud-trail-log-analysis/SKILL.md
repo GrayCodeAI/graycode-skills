@@ -2,7 +2,7 @@
 name: implementing-cloud-trail-log-analysis
 description: "Implementing AWS CloudTrail log analysis for security monitoring, threat detection, and forensic investigation using Athena, CloudWatch Logs Insights, and SIEM integration to identify unauthorized ..."
 license: MIT
-tags: [cloud-security, aws, cloudtrail, log-analysis, threat-detection, forensics]
+tags: [cloud-security, aws, cloudtrail, log-analysis, threat-detection]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Timesketch Timeline Builder Script
 Automates creation, import, and analysis of forensic timelines in Timesketch.

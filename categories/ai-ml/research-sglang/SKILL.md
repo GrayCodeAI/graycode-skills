@@ -2,7 +2,7 @@
 name: research-sglang
 description: "Fast structured generation and serving for LLMs with RadixAttention prefix caching. Use for JSON/regex outputs, constrained decoding, agentic workflows with tool calls, or when you need 5× faster i..."
 license: MIT
-tags: [inference-serving, sglang, structured-generation, radixattention, prefix-caching, constrained-decoding, agents, json-output, fast-inference, production-scale]
+tags: [inference-serving, sglang, structured-generation, radixattention, prefix-caching]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [sglang, torch, transformers]
@@ -428,9 +428,9 @@ response = client.chat.completions.create(
 
 ## References
 
-- **[Structured Generation Guide](references/structured-generation.md)** - JSON schemas, regex, grammars, validation
-- **[RadixAttention Deep Dive](references/radix-attention.md)** - How it works, optimization, benchmarks
-- **[Production Deployment](references/deployment.md)** - Multi-GPU, monitoring, autoscaling
+- **Structured Generation Guide** - JSON schemas, regex, grammars, validation
+- **RadixAttention Deep Dive** - How it works, optimization, benchmarks
+- **Production Deployment** - Multi-GPU, monitoring, autoscaling
 
 ## Resources
 

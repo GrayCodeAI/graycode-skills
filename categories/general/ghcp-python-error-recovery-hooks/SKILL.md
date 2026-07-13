@@ -120,4 +120,4 @@ def on_error_occurred(input_data, env):
 
 ## Runnable Example
 
-See [`recipe/error_recovery_hooks.py`](recipe/error_recovery_hooks.py) for a complete working example.
+See `recipe/error_recovery_hooks.py` for a complete working example.

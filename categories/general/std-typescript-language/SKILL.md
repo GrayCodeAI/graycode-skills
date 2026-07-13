@@ -41,7 +41,7 @@ keywords: None
 
 - **Mocking**: Use `jest.Mocked<T>` or `as unknown as T`.
 - **Checklist**: Check method existence, match error constants, satisfy required properties.
-- **References**: See [references/TESTING.md](references/TESTING.md) for common issues/solutions.
+- **References**: See references/TESTING.md for common issues/solutions.
 
 ## Code
 
@@ -63,4 +63,4 @@ After any type change that crosses module boundaries or involves generics, union
 ## References
 
 For advanced type patterns and utility types:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.

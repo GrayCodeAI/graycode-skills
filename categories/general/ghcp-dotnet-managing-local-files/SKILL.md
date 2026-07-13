@@ -9,7 +9,7 @@ tags: [general]
 
 Use Copilot to intelligently organize files in a folder based on their metadata.
 
-> **Runnable example:** [recipe/managing-local-files.cs](recipe/managing-local-files.cs)
+> **Runnable example:** recipe/managing-local-files.cs
 >
 > ```bash
 > dotnet run recipe/managing-local-files.cs

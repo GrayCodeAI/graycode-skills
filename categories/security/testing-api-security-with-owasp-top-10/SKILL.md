@@ -2,7 +2,7 @@
 name: testing-api-security-with-owasp-top-10
 description: "Systematically assessing REST and GraphQL API endpoints against the OWASP API Security Top 10 risks using automated and manual testing techniques."
 license: MIT
-tags: [penetration-testing, api-security, owasp, rest-api, graphql, burpsuite, postman]
+tags: [penetration-testing, api-security, owasp, rest-api, graphql]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

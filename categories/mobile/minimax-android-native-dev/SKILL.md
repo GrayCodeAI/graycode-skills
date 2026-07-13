@@ -88,7 +88,7 @@ android {
 | UI Automator       | `src/androidTest/` | Device/Emulator         | ~seconds             | System dialogs, notifications, multi-app         |
 | Managed Device     | `src/androidTest/` | Gradle-managed AVD      | ~minutes (first run) | CI, matrix testing across API levels             |
 
-See [Testing](references/testing.md) for detailed examples, code patterns, and Gradle Managed Device configuration.
+See Testing for detailed examples, code patterns, and Gradle Managed Device configuration.
 
 ### 8.3 Testing Commands
 

@@ -9,7 +9,6 @@ tags:
 - deployment
 - payments
 - gamification
-- cloud
 category: platform
 version: 1.0.0
 author: Flow Nexus

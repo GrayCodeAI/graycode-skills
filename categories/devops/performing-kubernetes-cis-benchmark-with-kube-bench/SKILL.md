@@ -2,7 +2,7 @@
 name: performing-kubernetes-cis-benchmark-with-kube-bench
 description: "Audit Kubernetes cluster security posture against CIS benchmarks using kube-bench with automated checks for control plane, worker nodes, and RBAC."
 license: MIT
-tags: [kube-bench, cis-benchmark, kubernetes, compliance, hardening, aquasecurity]
+tags: [kube-bench, cis-benchmark, kubernetes, compliance, hardening]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

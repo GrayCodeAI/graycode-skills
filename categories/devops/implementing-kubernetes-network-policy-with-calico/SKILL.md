@@ -9,7 +9,6 @@ tags:
 - network-policy
 - network-segmentation
 - zero-trust
-- cni
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

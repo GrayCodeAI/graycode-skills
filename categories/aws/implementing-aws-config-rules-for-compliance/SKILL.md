@@ -2,7 +2,7 @@
 name: implementing-aws-config-rules-for-compliance
 description: "Implementing AWS Config rules for continuous compliance monitoring of AWS resources, deploying managed and custom rules aligned to CIS and PCI DSS frameworks, configuring automatic remediation with..."
 license: MIT
-tags: [cloud-security, aws, config-rules, compliance, automation, remediation]
+tags: [cloud-security, aws, config-rules, compliance, remediation]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

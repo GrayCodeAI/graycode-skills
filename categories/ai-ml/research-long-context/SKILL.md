@@ -2,7 +2,7 @@
 name: research-long-context
 description: "Extend context windows of transformer models using RoPE, YaRN, ALiBi, and position interpolation techniques. Use when processing long documents (32k-128k+ tokens), extending pre-trained models beyo..."
 license: MIT
-tags: [emerging-techniques, long-context, rope, yarn, alibi, position-interpolation, extended-context, rotary-embeddings, attention-bias, context-extension, positional-encoding]
+tags: [emerging-techniques, long-context, rope, yarn, alibi]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, flash-attn]

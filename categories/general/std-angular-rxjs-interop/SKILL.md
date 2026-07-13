@@ -35,4 +35,4 @@ keywords: None
 
 ## References
 
-- [Signals vs Observables](references/observables-vs-signals.md)
+- Signals vs Observables

@@ -2,7 +2,7 @@
 name: performing-timeline-reconstruction-with-plaso
 description: "Build comprehensive forensic super-timelines using Plaso (log2timeline) to correlate events across file systems, logs, and artifacts into a unified chronological view."
 license: MIT
-tags: [forensics, timeline-analysis, plaso, log2timeline, super-timeline, event-correlation]
+tags: [forensics, timeline-analysis, plaso, log2timeline, super-timeline]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

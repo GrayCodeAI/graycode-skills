@@ -10,10 +10,6 @@ tags:
 - robotics
 - libero
 - robocasa
-- simulation
-- evaluation
-- profiling
-- egl-rendering
 version: 1.0.0
 author: Orchestra Research
 dependencies:
@@ -27,8 +23,8 @@ dependencies:
 
 ## Advanced topics
 
-**LIBERO command matrix**: See [references/libero-commands.md](references/libero-commands.md)
-**RoboCasa command matrix**: See [references/robocasa-commands.md](references/robocasa-commands.md)
+**LIBERO command matrix**: See references/libero-commands.md
+**RoboCasa command matrix**: See references/robocasa-commands.md
 
 ## Resources
 

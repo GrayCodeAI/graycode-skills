@@ -23,7 +23,7 @@ Execute the project's test suite:
 4. Summarize failed tests with relevant file locations
 5. Suggest potential fixes based on error messages
 
-Use [scripts/parse-test-output.sh](scripts/parse-test-output.sh) to extract structured failure data.
+Use scripts/parse-test-output.sh to extract structured failure data.
 ```
 
 ## Common Questions

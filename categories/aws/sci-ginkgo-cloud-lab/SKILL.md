@@ -20,21 +20,21 @@ The platform also includes **EstiMate**, an AI agent that accepts human-language
 Rapid go/no-go expression screening using reconstituted E. coli CFPS. Submit a FASTA sequence (up to 1800 bp) and receive expression confirmation, baseline titer (mg/L), and initial purity with virtual gel images.
 
 - **Price:** $39/sample | **Turnaround:** 5-10 days | **Status:** Certified
-- **Details:** See [references/cell-free-protein-expression-validation.md](references/cell-free-protein-expression-validation.md)
+- **Details:** See references/cell-free-protein-expression-validation.md
 
 ### 2. Cell Free Protein Expression Optimization
 
 DoE-based optimization across up to 24 conditions per protein (lysates, temperatures, chaperones, disulfide enhancers, cofactors). Designed for difficult-to-express and membrane proteins.
 
 - **Price:** $199/sample | **Turnaround:** 6-11 days | **Status:** Certified
-- **Details:** See [references/cell-free-protein-expression-optimization.md](references/cell-free-protein-expression-optimization.md)
+- **Details:** See references/cell-free-protein-expression-optimization.md
 
 ### 3. Fluorescent Pixel Art Generation
 
 Transform a pixel art image (48x48 to 96x96 px, PNG/SVG) into fluorescent bacterial artwork using up to 11 E. coli strains via acoustic dispensing. Delivered as high-res UV photographs.
 
 - **Price:** $25/plate | **Turnaround:** 5-7 days | **Status:** Beta
-- **Details:** See [references/fluorescent-pixel-art-generation.md](references/fluorescent-pixel-art-generation.md)
+- **Details:** See references/fluorescent-pixel-art-generation.md
 
 ## General Ordering Workflow
 

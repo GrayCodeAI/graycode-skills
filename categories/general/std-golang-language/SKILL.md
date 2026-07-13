@@ -42,5 +42,5 @@ After writing or modifying Go code:
 
 ## References
 
-- [Idioms](references/idioms.md)
-- [Effective Go Summary](references/effective-go-summary.md)
+- Idioms
+- Effective Go Summary

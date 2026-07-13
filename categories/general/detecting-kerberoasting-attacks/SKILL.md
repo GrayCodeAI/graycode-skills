@@ -2,7 +2,7 @@
 name: detecting-kerberoasting-attacks
 description: "Detect Kerberoasting attacks by monitoring for anomalous Kerberos TGS requests targeting service accounts with SPNs for offline password cracking."
 license: MIT
-tags: [threat-hunting, mitre-attack, kerberoasting, credential-access, kerberos, t1558, proactive-detection]
+tags: [threat-hunting, mitre-attack, kerberoasting, credential-access, kerberos]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

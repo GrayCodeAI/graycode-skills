@@ -2,7 +2,7 @@
 name: implementing-attack-path-analysis-with-xm-cyber
 description: "Deploy XM Cyber's continuous exposure management platform to map attack paths, identify choke points, and prioritize the 2% of exposures that threaten critical assets."
 license: MIT
-tags: [xm-cyber, attack-path-analysis, exposure-management, ctem, choke-points, breach-simulation, attack-surface]
+tags: [xm-cyber, attack-path-analysis, exposure-management, ctem, choke-points]
 domain: cybersecurity
 subdomain: vulnerability-management
 version: 1.0

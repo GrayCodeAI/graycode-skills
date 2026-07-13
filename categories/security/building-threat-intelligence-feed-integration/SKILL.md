@@ -2,7 +2,7 @@
 name: building-threat-intelligence-feed-integration
 description: "Builds automated threat intelligence feed integration pipelines connecting STIX/TAXII feeds, open-source threat intel, and commercial TI platforms into SIEM and security tools for real-time IOC mat..."
 license: MIT
-tags: [soc, threat-intelligence, stix, taxii, misp, feeds, ioc, siem-integration]
+tags: [soc, threat-intelligence, stix, taxii, misp]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

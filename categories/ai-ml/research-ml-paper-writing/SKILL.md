@@ -8,13 +8,7 @@ tags:
 - academic-writing
 - neurips
 - icml
-- iclr
-- acl
-- aaai
-- colm
-- latex
 - paper-writing
-- citations
 - research
 version: 1.2.0
 author: Orchestra Research
@@ -31,11 +25,11 @@ dependencies:
 
 | Document | Contents |
 |----------|----------|
-| [writing-guide.md](references/writing-guide.md) | Gopen & Swan 7 principles, Ethan Perez micro-tips, word choice |
-| [citation-workflow.md](references/citation-workflow.md) | Citation APIs, Python code, BibTeX management |
-| [checklists.md](references/checklists.md) | NeurIPS 16-item, ICML, ICLR, ACL requirements |
-| [reviewer-guidelines.md](references/reviewer-guidelines.md) | Evaluation criteria, scoring, rebuttals |
-| [sources.md](references/sources.md) | Complete bibliography of all sources |
+| writing-guide.md | Gopen & Swan 7 principles, Ethan Perez micro-tips, word choice |
+| citation-workflow.md | Citation APIs, Python code, BibTeX management |
+| checklists.md | NeurIPS 16-item, ICML, ICLR, ACL requirements |
+| reviewer-guidelines.md | Evaluation criteria, scoring, rebuttals |
+| sources.md | Complete bibliography of all sources |
 
 ### LaTeX Templates
 
@@ -48,7 +42,7 @@ Templates in `templates/` directory:
 - **Command line**: `latexmk -pdf main.tex` or `pdflatex` + `bibtex` workflow
 - **Online**: Upload to [Overleaf](https://overleaf.com)
 
-See [templates/README.md](templates/README.md) for detailed setup instructions.
+See templates/README.md for detailed setup instructions.
 
 ### Key External Sources
 

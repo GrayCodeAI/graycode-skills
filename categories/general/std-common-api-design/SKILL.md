@@ -69,4 +69,4 @@ keywords: None
 
 ## References
 
-- [URL Examples, Status Codes & Pagination Envelope](references/REFERENCE.md)
+- URL Examples, Status Codes & Pagination Envelope

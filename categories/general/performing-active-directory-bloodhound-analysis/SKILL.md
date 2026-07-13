@@ -2,7 +2,7 @@
 name: performing-active-directory-bloodhound-analysis
 description: "Use BloodHound and SharpHound to enumerate Active Directory relationships and identify attack paths from compromised users to Domain Admin."
 license: MIT
-tags: [bloodhound, active-directory, sharphound, attack-path, ad-enumeration, graph-theory, privilege-escalation]
+tags: [bloodhound, active-directory, sharphound, attack-path, ad-enumeration]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

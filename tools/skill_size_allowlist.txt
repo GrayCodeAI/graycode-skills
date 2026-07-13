@@ -1,14 +1,2 @@
-# Grandfathered skills whose SKILL.md exceeds the 500KB hard limit.
-# These predate the limit (introduced 2026-06) and only produce a warning.
-# Do NOT add new entries — shrink the skill instead.
-categories/general/bpl-txt-all-in-pod-1-18
-categories/general/bpl-txt-all-in-pod-100-113
-categories/general/bpl-txt-all-in-pod-114-127
-categories/general/bpl-txt-all-in-pod-128-140
-categories/general/bpl-txt-all-in-pod-141-152
-categories/general/bpl-txt-all-in-pod-19-36
-categories/general/bpl-txt-all-in-pod-37-52
-categories/general/bpl-txt-all-in-pod-53-70
-categories/general/bpl-txt-all-in-pod-71-84
-categories/general/bpl-txt-all-in-pod-85-99
-categories/general/bpl-txt-elon-musk-books
+# Zero exceptions: oversized skill bodies now use progressive-disclosure references.
+# Do not add entries; migrate oversized SKILL.md content instead.

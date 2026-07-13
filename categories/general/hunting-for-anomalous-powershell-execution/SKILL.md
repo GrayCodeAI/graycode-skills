@@ -2,7 +2,7 @@
 name: hunting-for-anomalous-powershell-execution
 description: "Hunt for malicious PowerShell activity by analyzing Script Block Logging (Event 4104), Module Logging (Event 4103), and process creation events. The analyst parses Windows Event Log EVTX files to d..."
 license: MIT
-tags: [powershell, script-block-logging, event-4104, amsi, threat-hunting, evtx, obfuscation]
+tags: [powershell, script-block-logging, event-4104, amsi, threat-hunting]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

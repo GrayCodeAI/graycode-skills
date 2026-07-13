@@ -45,7 +45,7 @@ Accepted input: a list of `{impediment, countermeasure}` pairs. Sources include 
 
 ## Scoring Rubric (1–10 scales)
 
-Score each impediment's countermeasure against all four criteria. See [references/scoring-rubric.md](./references/scoring-rubric.md) for anchoring examples at the 1 / 5 / 10 levels across multiple domains (platform engineering, security, SRE, application development, governance).
+Score each impediment's countermeasure against all four criteria. See references/scoring-rubric.md for anchoring examples at the 1 / 5 / 10 levels across multiple domains (platform engineering, security, SRE, application development, governance).
 
 | Criterion | Scale | Definition |
 |-----------|-------|------------|

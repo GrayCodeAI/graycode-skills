@@ -50,4 +50,4 @@ src/
 
 ## References
 
-- [Clean Code Patterns](references/implementation.md)
+- Clean Code Patterns

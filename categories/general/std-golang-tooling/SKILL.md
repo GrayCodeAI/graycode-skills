@@ -42,7 +42,7 @@ Configure via `.golangci.yml` at repo root. Recommended linters:
 - `revive` — style enforcement
 - `gosec` — security issues
 
-See [golangci.yml example](references/golangci.md).
+See golangci.yml example.
 
 ## gopls Integration
 
@@ -61,4 +61,4 @@ go install golang.org/x/tools/gopls@latest
 
 ## References
 
-- [golangci.yml example](references/golangci.md)
+- golangci.yml example

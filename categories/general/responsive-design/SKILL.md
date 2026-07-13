@@ -2,7 +2,7 @@
 name: responsive-design
 description: "Create responsive web designs that work across all devices and screen sizes. Use when building mobile-first layouts, implementing breakpoints, or optimizing for different viewports. Handles CSS Gri..."
 license: MIT
-tags: [responsive, mobile-first, css, flexbox, grid, media-query, viewport]
+tags: [responsive, mobile-first, css, flexbox, grid]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

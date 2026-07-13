@@ -38,4 +38,4 @@ const isSmall = width < 375;
 
 ## References
 
-See [references/theming.md](references/theming.md) for StyleSheet examples, Design Tokens, Theme Systems, Responsive Scaling, and Shadow Helpers.
+See references/theming.md for StyleSheet examples, Design Tokens, Theme Systems, Responsive Scaling, and Shadow Helpers.

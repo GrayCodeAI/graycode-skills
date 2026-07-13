@@ -2,7 +2,7 @@
 name: research-llamaindex
 description: "Data framework for building LLM applications with RAG. Specializes in document ingestion (300+ connectors), indexing, and querying. Features vector indices, query engines, agents, and multi-modal s..."
 license: MIT
-tags: [agents, llamaindex, rag, document-ingestion, vector-indices, query-engines, knowledge-retrieval, data-framework, multimodal, private-data, connectors]
+tags: [agents, llamaindex, rag, document-ingestion, vector-indices]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [llama-index, openai, anthropic]
@@ -552,9 +552,9 @@ while True:
 
 ## References
 
-- **[Query Engines Guide](references/query_engines.md)** - Query modes, customization, streaming
-- **[Agents Guide](references/agents.md)** - Tool creation, RAG agents, multi-step reasoning
-- **[Data Connectors Guide](references/data_connectors.md)** - 300+ connectors, custom loaders
+- **Query Engines Guide** - Query modes, customization, streaming
+- **Agents Guide** - Tool creation, RAG agents, multi-step reasoning
+- **Data Connectors Guide** - 300+ connectors, custom loaders
 
 ## Resources
 

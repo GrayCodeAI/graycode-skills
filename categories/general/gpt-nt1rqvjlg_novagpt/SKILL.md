@@ -179,4 +179,4 @@ GPT Kb Files List:
 - system-design-resources-main.zip
 - ThisIsYou.pdf
 - Who_Created_NovaGPT.md
-- [Files](./knowledge/NovaGPT/)
+- Files

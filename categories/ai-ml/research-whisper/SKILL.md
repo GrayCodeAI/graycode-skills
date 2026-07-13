@@ -2,7 +2,7 @@
 name: research-whisper
 description: "OpenAI's general-purpose speech recognition model. Supports 99 languages, transcription, translation to English, and language identification. Six model sizes from tiny (39M params) to large (1550M ..."
 license: MIT
-tags: [whisper, speech-recognition, asr, multimodal, multilingual, openai, speech-to-text, transcription, translation, audio-processing]
+tags: [whisper, speech-recognition, asr, multimodal, multilingual]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [openai-whisper, transformers, torch]

@@ -2,7 +2,7 @@
 name: performing-graphql-security-assessment
 description: "Assessing GraphQL API endpoints for introspection leaks, injection attacks, authorization flaws, and denial-of-service vulnerabilities during authorized security tests."
 license: MIT
-tags: [penetration-testing, graphql, api-security, owasp, web-security, introspection]
+tags: [penetration-testing, graphql, api-security, owasp, web-security]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

@@ -15,9 +15,9 @@ Qdrant monitoring allows tracking performance and health of your deployment, and
 
 ## Monitoring Setup
 
-Prometheus scraping, health probes, Hybrid Cloud specifics, alerting, and log centralization. [Monitoring Setup](setup/SKILL.md)
+Prometheus scraping, health probes, Hybrid Cloud specifics, alerting, and log centralization. Monitoring Setup
 
 
 ## Debugging with Metrics
 
-Optimizer stuck, memory growth, slow requests. Using metrics to diagnose active production issues. [Debugging with Metrics](debugging/SKILL.md)
+Optimizer stuck, memory growth, slow requests. Using metrics to diagnose active production issues. Debugging with Metrics

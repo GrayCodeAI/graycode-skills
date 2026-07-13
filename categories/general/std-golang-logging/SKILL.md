@@ -33,11 +33,11 @@ keywords: None
 3. Use `slog.With()` to add correlation IDs per request
 4. Pass logger via context or dependency injection
 
-See [slog setup and usage examples](references/slog-patterns.md)
+See slog setup and usage examples
 
 ## References
 
-- [Slog Patterns](references/slog-patterns.md)
+- Slog Patterns
 
 ## Anti-Patterns
 

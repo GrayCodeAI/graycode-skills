@@ -2,7 +2,7 @@
 name: performing-thick-client-application-penetration-test
 description: "Conduct a thick client application penetration test to identify insecure local storage, hardcoded credentials, DLL hijacking, memory manipulation, and insecure API communication in desktop applicat..."
 license: MIT
-tags: [thick-client, desktop-application, dnspy, procmon, dll-hijacking, binary-analysis, api-interception]
+tags: [thick-client, desktop-application, dnspy, procmon, dll-hijacking]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

@@ -523,4 +523,4 @@ npx ruv-swarm github cross-team \
   --track-progress
 ```
 
-See also: [swarm-pr.md](.$swarm-pr.md), [project-board-sync.md](.$project-board-sync.md)
+See also: swarm-pr.md, project-board-sync.md

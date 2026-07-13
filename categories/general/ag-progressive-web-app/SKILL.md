@@ -10,7 +10,6 @@ tags:
 - service-worker
 - frontend
 - offline
-- caching
 risk: safe
 source: community
 date_added: 2026-03-17

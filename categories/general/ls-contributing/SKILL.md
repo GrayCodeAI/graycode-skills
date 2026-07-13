@@ -7,7 +7,7 @@ tags: [general]
 
 # Contributing Guidelines
 
-Please follow the format below; it is important to keep the format consistent for the [`idxtool`](./.scripts/README.md).
+Please follow the format below; it is important to keep the format consistent for the `idxtool`.
 
 ```markdown
 GPT URL: You put the GPT url here
@@ -28,9 +28,9 @@ kb folder and upload there. Do not upload/contribute pirated material.
 GPT Extras: Put a list of extra stuff, for example Chrome Extension links, etc.
 ```
 
-Please check a simple GPT file [here](./prompts/gpts/Animal%20Chefs.md) and mimic the format.
+Please check a simple GPT file here and mimic the format.
 
-Alternatively, use the [`idxtool`](./.scripts/README.md) to create a template file:
+Alternatively, use the `idxtool` to create a template file:
 
 ```bash
 python idxtool.py --template https://chat.openai.com/g/g-3ngv8eP6R-gpt-white-hack

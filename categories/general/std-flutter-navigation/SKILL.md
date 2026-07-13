@@ -24,9 +24,9 @@ keywords: None
 
 ### Route Configuration Example
 
-See [implementation examples](references/implementation.md) for GoRouter configuration with parameter validation and redirects.
+See implementation examples for GoRouter configuration with parameter validation and redirects.
 
-[Routing Patterns & Examples](references/routing-patterns.md)
+Routing Patterns & Examples
 
 ## Anti-Patterns
 

@@ -10,11 +10,6 @@ tags:
 - pptx
 - slides
 - speaker-notes
-- osdi
-- sosp
-- asplos
-- neurips
-- icml
 version: 1.0.0
 author: Orchestra Research
 dependencies:
@@ -23,5 +18,5 @@ dependencies:
 
 ## References
 
-- [references/slide-templates.md](references/slide-templates.md) — Complete Beamer template code and python-pptx generation script
+- references/slide-templates.md — Complete Beamer template code and python-pptx generation script
 - Mike Dahlin, "Giving a Conference Talk" — https://www.cs.utexas.edu/~dahlin/professional/goodTalk.pdf

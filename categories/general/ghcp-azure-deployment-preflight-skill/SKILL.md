@@ -149,7 +149,7 @@ For modified resources, capture the specific property changes.
 Create a Markdown report file in the **project root** named:
 - `preflight-report.md`
 
-Use the template structure from [references/REPORT-TEMPLATE.md](references/REPORT-TEMPLATE.md).
+Use the template structure from references/REPORT-TEMPLATE.md.
 
 **Report sections:**
 1. **Summary** - Overall status, timestamp, files validated, target scope
@@ -173,7 +173,7 @@ If required information is missing, prompt the user before proceeding.
 
 ## Error Handling
 
-See [references/ERROR-HANDLING.md](references/ERROR-HANDLING.md) for detailed error handling guidance.
+See references/ERROR-HANDLING.md for detailed error handling guidance.
 
 **Key principle:** Continue validation even when errors occur. Capture all issues in the final report.
 
@@ -213,6 +213,6 @@ bicep --version
 
 ## Reference Documentation
 
-- [Validation Commands Reference](references/VALIDATION-COMMANDS.md)
-- [Report Template](references/REPORT-TEMPLATE.md)
-- [Error Handling Guide](references/ERROR-HANDLING.md)
+- Validation Commands Reference
+- Report Template
+- Error Handling Guide

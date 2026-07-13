@@ -2,7 +2,7 @@
 name: performing-oauth-scope-minimization-review
 description: "Performs OAuth 2.0 scope minimization review to identify over-permissioned third-party application integrations, excessive API scopes, unused token grants, and risky OAuth consent patterns across i..."
 license: MIT
-tags: [oauth, scope-minimization, api-security, consent-review, third-party-risk, token-audit]
+tags: [oauth, scope-minimization, api-security, consent-review, third-party-risk]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

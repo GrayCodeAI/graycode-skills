@@ -194,10 +194,10 @@ python scripts/data_product_strategy_picker.py profile.json
 
 ## References
 
-- [ai_training_data_rights.md](references/ai_training_data_rights.md) — The training-rights matrix + GDPR Art. 6 / EU AI Act decision tree
-- [data_product_strategy.md](references/data_product_strategy.md) — Warehouse / lakehouse / mesh kill criteria + build-vs-buy decision tree
-- [customer_data_as_asset.md](references/customer_data_as_asset.md) — Valuation framework + M&A diligence prep + productization paths
-- [data_team_org_evolution.md](references/data_team_org_evolution.md) — Stage-to-role map + centralize-vs-embed trigger
+- ai_training_data_rights.md — The training-rights matrix + GDPR Art. 6 / EU AI Act decision tree
+- data_product_strategy.md — Warehouse / lakehouse / mesh kill criteria + build-vs-buy decision tree
+- customer_data_as_asset.md — Valuation framework + M&A diligence prep + productization paths
+- data_team_org_evolution.md — Stage-to-role map + centralize-vs-embed trigger
 
 ---
 

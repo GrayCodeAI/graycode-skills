@@ -9,7 +9,7 @@ tags: [general]
 
 Build a CLI tool that analyzes web page accessibility using the Playwright MCP server and generates detailed WCAG-compliant reports with optional test generation.
 
-> **Runnable example:** [recipe/AccessibilityReport.java](recipe/AccessibilityReport.java)
+> **Runnable example:** recipe/AccessibilityReport.java
 >
 > ```bash
 > jbang recipe/AccessibilityReport.java

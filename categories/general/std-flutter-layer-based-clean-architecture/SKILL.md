@@ -41,7 +41,7 @@ lib/
 - **Functional Error Handling**: Repositories must return `Either<Failure, Success>`.
 - **Always Map**: Infrastructure must map DTOs to Domain Entities; not leak DTOs to UI.
 
-See [DTO-to-Entity mapping example](references/REFERENCE.md).
+See DTO-to-Entity mapping example.
 
 - **Immutability**: Use `@freezed` for all entities and failures.
 - **Logic Placement**: No business logic in UI; widgets only display state and emit events.
@@ -56,7 +56,7 @@ See [DTO-to-Entity mapping example](references/REFERENCE.md).
 ## Reference & Examples
 
 For full implementation templates and DTO-to-Domain mapping examples:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## References
 

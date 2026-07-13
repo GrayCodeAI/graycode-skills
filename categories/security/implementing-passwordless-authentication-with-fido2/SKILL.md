@@ -2,7 +2,7 @@
 name: implementing-passwordless-authentication-with-fido2
 description: "Deploy FIDO2/WebAuthn passwordless authentication using security keys and platform authenticators. Covers WebAuthn API integration, FIDO2 server configuration, passkey enrollment, biometric authentica"
 license: MIT
-tags: [iam, identity, access-control, authentication, fido2, webauthn, passwordless]
+tags: [iam, identity, authentication, fido2, passwordless]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

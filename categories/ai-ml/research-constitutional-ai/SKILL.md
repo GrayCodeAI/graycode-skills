@@ -2,7 +2,7 @@
 name: research-constitutional-ai
 description: "Anthropic's method for training harmless AI through self-improvement. Two-phase approach - supervised learning with self-critique/revision, then RLAIF (RL from AI Feedback). Use for safety alignmen..."
 license: MIT
-tags: [safety-alignment, constitutional-ai, rlaif, self-critique, harmlessness, anthropic, ai-safety, rl-from-ai-feedback, claude]
+tags: [safety-alignment, constitutional-ai, rlaif, self-critique, harmlessness]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, trl]
@@ -259,11 +259,11 @@ final_preference = majority_vote(prefs_1, prefs_2, prefs_3)
 
 ## Advanced topics
 
-**Constitution design**: See [references/constitution-design.md](references/constitution-design.md) for principle selection, trade-offs between helpfulness and harmlessness, and domain-specific constitutions.
+**Constitution design**: See references/constitution-design.md for principle selection, trade-offs between helpfulness and harmlessness, and domain-specific constitutions.
 
-**RLAIF vs RLHF**: See [references/rlaif-comparison.md](references/rlaif-comparison.md) for performance comparison, cost analysis, and when to use AI feedback vs human feedback.
+**RLAIF vs RLHF**: See references/rlaif-comparison.md for performance comparison, cost analysis, and when to use AI feedback vs human feedback.
 
-**Chain-of-thought reasoning**: See [references/cot-critique.md](references/cot-critique.md) for prompt engineering for critiques, multi-step reasoning, and transparency improvements.
+**Chain-of-thought reasoning**: See references/cot-critique.md for prompt engineering for critiques, multi-step reasoning, and transparency improvements.
 
 ## Hardware requirements
 

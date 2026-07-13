@@ -256,6 +256,6 @@ For secrets and configuration:
 
 ## Bundled References (Load As Needed)
 
-- [CLI commands](references/cli-commands.md)
-- [Deployment patterns](references/deployment-patterns.md)
-- [netlify.toml guide](references/netlify-toml.md)
+- CLI commands
+- Deployment patterns
+- netlify.toml guide

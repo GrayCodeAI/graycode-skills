@@ -2,7 +2,7 @@
 name: performing-false-positive-reduction-in-siem
 description: "Perform systematic SIEM false positive reduction through rule tuning, threshold adjustment, correlation refinement, and threat intelligence enrichment to combat alert fatigue."
 license: MIT
-tags: [siem, false-positive, alert-tuning, detection-engineering, alert-fatigue, soc, correlation]
+tags: [siem, false-positive, alert-tuning, detection-engineering, alert-fatigue]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

@@ -20,7 +20,7 @@ keywords: None
 - **Task Groups**: Use **`withTaskGroup`** or `withThrowingTaskGroup` for spawning dynamic number of tasks.
 - **Error Handling**: Combine with **`throws`**. Always handle `CancellationError`.
 
-See [implementation examples](references/implementation.md) for parallel fetch with `async let` and Task Groups.
+See implementation examples for parallel fetch with `async let` and Task Groups.
 
 ## Isolate State with Actors
 
@@ -29,7 +29,7 @@ See [implementation examples](references/implementation.md) for parallel fetch w
 - **Global Actors**: Use **`@GlobalActor`** for specific thread-bound resources.
 - **nonisolated**: Use **`nonisolated`** for methods that don't access actor state to avoid unnecessary hops.
 
-See [implementation examples](references/implementation.md) for Actor-based state isolation and `nonisolated` methods.
+See implementation examples for Actor-based state isolation and `nonisolated` methods.
 
 ## Manage Task Lifecycle
 
@@ -45,4 +45,4 @@ See [implementation examples](references/implementation.md) for Actor-based stat
 
 ## References
 
-- [async/await & Actors](references/implementation.md)
+- async/await & Actors

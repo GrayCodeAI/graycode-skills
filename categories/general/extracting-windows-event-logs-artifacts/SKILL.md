@@ -2,7 +2,7 @@
 name: extracting-windows-event-logs-artifacts
 description: "Extract, parse, and analyze Windows Event Logs (EVTX) using Chainsaw, Hayabusa, and EvtxECmd to detect lateral movement, persistence, and privilege escalation."
 license: MIT
-tags: [forensics, windows-event-logs, evtx, chainsaw, hayabusa, sigma-rules, incident-response]
+tags: [forensics, windows-event-logs, evtx, chainsaw, hayabusa]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

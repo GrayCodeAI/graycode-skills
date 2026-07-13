@@ -10,7 +10,6 @@ tags:
 - context-management
 - automation
 - ai-collaboration
-- universal
 allowed-tools: Read Write Bash Grep Glob
 metadata: None
 platforms: Claude, ChatGPT, Gemini

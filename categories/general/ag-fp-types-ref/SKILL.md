@@ -2,7 +2,7 @@
 name: ag-fp-types-ref
 description: "Quick reference for fp-ts types. Use when user asks which type to use, needs Option/Either/Task decision help, or wants fp-ts imports."
 license: MIT
-tags: [fp-ts, typescript, quick-reference, option, either, task]
+tags: [fp-ts, typescript, quick-reference, option, either]
 risk: safe
 source: community
 version: 1.0.0

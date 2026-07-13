@@ -2,7 +2,7 @@
 name: performing-authenticated-scan-with-openvas
 description: "Configure and execute authenticated vulnerability scans using OpenVAS/Greenbone Vulnerability Management with SSH and SMB credentials for comprehensive host-level assessment."
 license: MIT
-tags: [openvas, gvm, authenticated-scan, vulnerability-scanning, greenbone, network-security, credentialed-scan]
+tags: [openvas, gvm, authenticated-scan, vulnerability-scanning, greenbone]
 domain: cybersecurity
 subdomain: vulnerability-management
 version: 1.0

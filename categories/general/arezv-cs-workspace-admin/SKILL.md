@@ -153,8 +153,8 @@ gws helpers morning-briefing --json | python3 engineering-team/google-workspace-
 
 ## Related Agents
 
-- [cs-engineering-lead](cs-engineering-lead.md) — Engineering team coordination
-- [cs-senior-engineer](cs-senior-engineer.md) — Architecture and CI/CD
+- cs-engineering-lead — Engineering team coordination
+- cs-senior-engineer — Architecture and CI/CD
 
 ## References
 

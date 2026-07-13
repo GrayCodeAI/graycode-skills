@@ -2,7 +2,7 @@
 name: detecting-insider-threat-behaviors
 description: "Detect insider threat behavioral indicators including unusual data access, off-hours activity, mass file downloads, privilege abuse, and resignation-correlated data theft."
 license: MIT
-tags: [threat-hunting, mitre-attack, insider-threat, data-theft, ueba, proactive-detection]
+tags: [threat-hunting, mitre-attack, insider-threat, data-theft, ueba]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

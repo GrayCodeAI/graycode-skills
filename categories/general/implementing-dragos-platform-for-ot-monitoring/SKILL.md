@@ -2,7 +2,7 @@
 name: implementing-dragos-platform-for-ot-monitoring
 description: "Deploy and configure the Dragos Platform for OT network monitoring, leveraging its 600+ industrial protocol parsers, intelligence-driven threat detection analytics, and asset visibility capabilitie..."
 license: MIT
-tags: [ot-security, ics, dragos, threat-detection, ot-monitoring, scada, threat-intelligence, ndr]
+tags: [ot-security, ics, dragos, threat-detection, ot-monitoring]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

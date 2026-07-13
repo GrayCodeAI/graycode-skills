@@ -43,4 +43,4 @@ src/
 
 ## References
 
-- [Secure Implementation Patterns](references/implementation.md)
+- Secure Implementation Patterns

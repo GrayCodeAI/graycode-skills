@@ -73,7 +73,7 @@ gdf.to_file("output.gpkg")
 - **GeoSeries**: Vector of geometries with spatial operations
 - **GeoDataFrame**: Tabular data structure with geometry column
 
-See [data-structures.md](references/data-structures.md) for details.
+See data-structures.md for details.
 
 ### Reading and Writing Data
 
@@ -87,7 +87,7 @@ gdf = gpd.read_file("data.gpkg", bbox=(xmin, ymin, xmax, ymax))
 gdf.to_file("output.gpkg", use_arrow=True)
 ```
 
-See [data-io.md](references/data-io.md) for comprehensive I/O operations.
+See data-io.md for comprehensive I/O operations.
 
 ### Coordinate Reference Systems
 
@@ -104,7 +104,7 @@ gdf_projected = gdf.to_crs("EPSG:3857")
 gdf = gdf.set_crs("EPSG:4326")
 ```
 
-See [crs-management.md](references/crs-management.md) for CRS operations.
+See crs-management.md for CRS operations.
 
 ## Common Operations
 
@@ -123,7 +123,7 @@ simplified = gdf.geometry.simplify(tolerance=5, preserve_topology=True)
 centroids = gdf.geometry.centroid
 ```
 
-See [geometric-operations.md](references/geometric-operations.md) for all operations.
+See geometric-operations.md for all operations.
 
 ### Spatial Analysis
 
@@ -143,7 +143,7 @@ intersection = gpd.overlay(gdf1, gdf2, how='intersection')
 dissolved = gdf.dissolve(by='region', aggfunc='sum')
 ```
 
-See [spatial-analysis.md](references/spatial-analysis.md) for analysis operations.
+See spatial-analysis.md for analysis operations.
 
 ### Visualization
 
@@ -163,16 +163,16 @@ gdf1.plot(ax=ax, color='blue')
 gdf2.plot(ax=ax, color='red')
 ```
 
-See [visualization.md](references/visualization.md) for mapping techniques.
+See visualization.md for mapping techniques.
 
 ## Detailed Documentation
 
-- **[Data Structures](references/data-structures.md)** - GeoSeries and GeoDataFrame fundamentals
-- **[Data I/O](references/data-io.md)** - Reading/writing files, PostGIS, Parquet
-- **[Geometric Operations](references/geometric-operations.md)** - Buffer, simplify, affine transforms
-- **[Spatial Analysis](references/spatial-analysis.md)** - Joins, overlay, dissolve, clipping
-- **[Visualization](references/visualization.md)** - Plotting, choropleth maps, interactive maps
-- **[CRS Management](references/crs-management.md)** - Coordinate reference systems and projections
+- **Data Structures** - GeoSeries and GeoDataFrame fundamentals
+- **Data I/O** - Reading/writing files, PostGIS, Parquet
+- **Geometric Operations** - Buffer, simplify, affine transforms
+- **Spatial Analysis** - Joins, overlay, dissolve, clipping
+- **Visualization** - Plotting, choropleth maps, interactive maps
+- **CRS Management** - Coordinate reference systems and projections
 
 ## Common Workflows
 

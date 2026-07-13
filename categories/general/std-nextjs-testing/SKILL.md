@@ -28,7 +28,7 @@ keywords: None
 
 ## Component Test Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -49,4 +49,4 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Next.js Test Patterns](references/implementation.md)
+- Next.js Test Patterns

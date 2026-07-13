@@ -2,7 +2,7 @@
 name: hardening-windows-endpoint-with-cis-benchmark
 description: "Hardens Windows endpoints using CIS (Center for Internet Security) Benchmark recommendations to reduce attack surface, enforce security baselines, and meet compliance requirements. Use when deployi..."
 license: MIT
-tags: [endpoint, hardening, windows-security, cis-benchmark, gpo, baseline-configuration]
+tags: [endpoint, hardening, windows-security, cis-benchmark, gpo]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

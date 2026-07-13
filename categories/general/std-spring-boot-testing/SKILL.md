@@ -26,7 +26,7 @@ keywords: None
 - **Assertions**: Use **AssertJ** (`assertThat`) over JUnit assertions.
 - **Isolation**: Use `@MockBean` for downstream dependencies in Slice Tests.
 
-See [implementation examples](references/implementation.md) for WebMvcTest slice tests and Testcontainers integration tests.
+See implementation examples for WebMvcTest slice tests and Testcontainers integration tests.
 
 ## Anti-Patterns
 
@@ -36,4 +36,4 @@ See [implementation examples](references/implementation.md) for WebMvcTest slice
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

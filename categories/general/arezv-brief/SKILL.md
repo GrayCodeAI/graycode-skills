@@ -107,7 +107,7 @@ This is also the **artifact handoff** — the next command consumes this file, n
 
 ## Related
 
-- Agent: [`cs-chief-of-staff`](cs-chief-of-staff.md)
+- Agent: `cs-chief-of-staff`
 - Skills: [`context-engine`](SKILL.md), [`board-meeting`](SKILL.md)
 
 ---

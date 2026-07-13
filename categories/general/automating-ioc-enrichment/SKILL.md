@@ -2,7 +2,7 @@
 name: automating-ioc-enrichment
 description: "Automates the enrichment of raw indicators of compromise with multi-source threat intelligence context using SOAR platforms, Python pipelines, or TIP playbooks to reduce analyst triage time and sta..."
 license: MIT
-tags: [soar, enrichment, ioc, cortex-xsoar, splunk-soar, virustotal, automation, cti, nist-csf]
+tags: [soar, enrichment, ioc, cortex-xsoar, splunk-soar]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

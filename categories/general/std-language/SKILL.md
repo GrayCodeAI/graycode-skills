@@ -60,7 +60,7 @@ class Service {
 ## Reference & Examples
 
 For advanced patterns and functional programming:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Related Topics
 

@@ -18,17 +18,17 @@ A practical guide for building production-ready React Native and Expo applicatio
 
 Consult these resources as needed:
 
-- [references/navigation.md](references/navigation.md) — Expo Router: Stack, Tabs, NativeTabs (`headerLargeTitle`, `headerBackButtonDisplayMode`), links, modals, sheets, context menus
-- [references/components.md](references/components.md) — FlashList patterns, `expo-image`, safe areas (`contentInsetAdjustmentBehavior`), native controls, blur/glass effects, storage
-- [references/styling.md](references/styling.md) — StyleSheet, NativeWind/Tailwind, platform styles, theming, dark mode
-- [references/animations.md](references/animations.md) — Reanimated 3: entering/exiting, shared values, gestures, scroll-driven
-- [references/state-management.md](references/state-management.md) — Zustand (selectors, persist), Jotai (atoms, derived), React Query, Context
-- [references/forms.md](references/forms.md) — React Hook Form + Zod: validation, multi-step, dynamic arrays
-- [references/networking.md](references/networking.md) — fetch wrapper, React Query (optimistic updates), auth tokens, offline, API routes, webhooks
-- [references/performance.md](references/performance.md) — Profiling workflow, FlashList + `memo`, bundle analysis, TTI, memory leaks, animation perf
-- [references/testing.md](references/testing.md) — Jest, React Native Testing Library, E2E with Maestro
-- [references/native-capabilities.md](references/native-capabilities.md) — Camera, location, permissions (`use*Permissions` hooks), haptics, notifications, biometrics
-- [references/engineering.md](references/engineering.md) — Project layout (`components/ui/`, `stores/`, `services/`), path aliases, SDK upgrades, EAS build/submit, CI/CD, DOM components
+- references/navigation.md — Expo Router: Stack, Tabs, NativeTabs (`headerLargeTitle`, `headerBackButtonDisplayMode`), links, modals, sheets, context menus
+- references/components.md — FlashList patterns, `expo-image`, safe areas (`contentInsetAdjustmentBehavior`), native controls, blur/glass effects, storage
+- references/styling.md — StyleSheet, NativeWind/Tailwind, platform styles, theming, dark mode
+- references/animations.md — Reanimated 3: entering/exiting, shared values, gestures, scroll-driven
+- references/state-management.md — Zustand (selectors, persist), Jotai (atoms, derived), React Query, Context
+- references/forms.md — React Hook Form + Zod: validation, multi-step, dynamic arrays
+- references/networking.md — fetch wrapper, React Query (optimistic updates), auth tokens, offline, API routes, webhooks
+- references/performance.md — Profiling workflow, FlashList + `memo`, bundle analysis, TTI, memory leaks, animation perf
+- references/testing.md — Jest, React Native Testing Library, E2E with Maestro
+- references/native-capabilities.md — Camera, location, permissions (`use*Permissions` hooks), haptics, notifications, biometrics
+- references/engineering.md — Project layout (`components/ui/`, `stores/`, `services/`), path aliases, SDK upgrades, EAS build/submit, CI/CD, DOM components
 
 ## Quick Reference
 
@@ -97,7 +97,7 @@ Then configure:
 3. Delete `App.tsx` and `index.ts`
 4. Create `app/_layout.tsx` as root Stack layout
 5. Create `app/(tabs)/_layout.tsx` for tab navigation
-6. Create route files in `app/(tabs)/` (see [navigation.md](references/navigation.md))
+6. Create route files in `app/(tabs)/` (see navigation.md)
 
 For web support, also install: `npx expo install react-native-web react-dom @expo/metro-runtime`
 

@@ -33,4 +33,4 @@ keywords: None
 
 ## References
 
-- [Signing & R8](references/implementation.md)
+- Signing & R8

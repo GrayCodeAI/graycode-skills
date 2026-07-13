@@ -2,7 +2,7 @@
 name: hunting-for-living-off-the-cloud-techniques
 description: "Hunt for adversary abuse of legitimate cloud services for C2, data staging, and exfiltration including abuse of Azure, AWS, GCP services, and SaaS platforms."
 license: MIT
-tags: [threat-hunting, mitre-attack, cloud-abuse, c2, lotc, saas, proactive-detection]
+tags: [threat-hunting, mitre-attack, cloud-abuse, c2, lotc]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

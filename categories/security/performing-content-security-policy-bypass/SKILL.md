@@ -2,7 +2,7 @@
 name: performing-content-security-policy-bypass
 description: "Analyze and bypass Content Security Policy implementations to achieve cross-site scripting by exploiting misconfigurations, JSONP endpoints, unsafe directives, and policy injection techniques."
 license: MIT
-tags: [csp-bypass, content-security-policy, xss, script-injection, nonce-bypass, jsonp, policy-misconfiguration]
+tags: [csp-bypass, content-security-policy, xss, script-injection, nonce-bypass]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

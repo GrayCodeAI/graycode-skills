@@ -163,4 +163,4 @@ When working in team environments, using the `.roo/rules/` directory structure (
 
 ## Combining with Custom Modes
 
-For advanced customization, combine with [Custom Modes](/features/custom-modes) to create specialized environments with specific tool access, file restrictions, and tailored instructions.
+For advanced customization, combine with Custom Modes to create specialized environments with specific tool access, file restrictions, and tailored instructions.

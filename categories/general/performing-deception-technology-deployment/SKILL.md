@@ -2,7 +2,7 @@
 name: performing-deception-technology-deployment
 description: "Deploys deception technology including honeypots, honeytokens, and decoy systems to detect attackers who have bypassed perimeter defenses, providing high-fidelity alerts with near-zero false positi..."
 license: MIT
-tags: [soc, deception, honeypot, honeytoken, canary, lateral-movement, detection]
+tags: [soc, deception, honeypot, honeytoken, canary]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

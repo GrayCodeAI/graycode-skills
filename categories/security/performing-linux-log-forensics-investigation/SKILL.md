@@ -2,7 +2,7 @@
 name: performing-linux-log-forensics-investigation
 description: "Perform forensic investigation of Linux system logs including syslog, auth.log, systemd journal, kern.log, and application logs to reconstruct user activity, detect unauthorized access, and establi..."
 license: MIT
-tags: [linux-forensics, syslog, auth-log, systemd-journal, journalctl, linux-logs, ssh-forensics, cron, audit-log, log-analysis]
+tags: [linux-forensics, syslog, auth-log, systemd-journal, linux-logs]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -2,7 +2,7 @@
 name: implementing-code-signing-for-artifacts
 description: "This skill covers implementing code signing for build artifacts to ensure integrity and authenticity throughout the software supply chain. It addresses signing binaries, packages, and containers us..."
 license: MIT
-tags: [devsecops, cicd, code-signing, supply-chain, sigstore, secure-sdlc]
+tags: [devsecops, cicd, code-signing, supply-chain, sigstore]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

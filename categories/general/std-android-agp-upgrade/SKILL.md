@@ -31,13 +31,13 @@ Step-by-step workflow for upgrading an Android project to AGP 9.
 
 AGP 9 includes built-in Kotlin support — the `org.jetbrains.kotlin.android` plugin is no longer needed.
 
-See [migration guide](references/built-in-kotlin.md) for detailed steps.
+See migration guide for detailed steps.
 
 ## Step 3: Migrate to the new AGP DSL
 
 AGP 9 introduces a new DSL for `android {}` blocks. Key changes include namespace handling, build type configuration, and source set declarations.
 
-See [DSL migration](references/dsl-migration.md) for before/after examples.
+See DSL migration for before/after examples.
 
 ## Step 4: Migrate kapt to KSP or legacy-kapt
 
@@ -71,5 +71,5 @@ Remove these flags after migration:
 
 ## References
 
-- [Built-in Kotlin Migration](references/built-in-kotlin.md)
-- [DSL Migration Guide](references/dsl-migration.md)
+- Built-in Kotlin Migration
+- DSL Migration Guide

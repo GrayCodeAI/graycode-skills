@@ -2,7 +2,7 @@
 name: conducting-cloud-infrastructure-penetration-test
 description: "Perform a cloud infrastructure penetration test across AWS, Azure, and GCP to identify IAM misconfigurations, exposed storage buckets, insecure serverless functions, and cloud-native attack paths u..."
 license: MIT
-tags: [cloud-pentest, aws, azure, gcp, pacu, scoutsuite, prowler, iam, s3, cloud-security]
+tags: [cloud-pentest, aws, azure, gcp, pacu]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

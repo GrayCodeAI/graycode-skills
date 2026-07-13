@@ -2,7 +2,7 @@
 name: performing-entitlement-review-with-sailpoint-iiq
 description: "Performs entitlement review and access certification campaigns using SailPoint IdentityIQ including manager certifications, targeted entitlement reviews, role-based access validation, SOD violation..."
 license: MIT
-tags: [sailpoint, identityiq, access-review, entitlement-certification, iga, access-governance]
+tags: [sailpoint, identityiq, access-review, entitlement-certification, iga]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

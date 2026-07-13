@@ -2,7 +2,7 @@
 name: conducting-social-engineering-pretext-call
 description: "Plan and execute authorized vishing (voice phishing) pretext calls to assess employee susceptibility to social engineering and evaluate security awareness controls."
 license: MIT
-tags: [social-engineering, vishing, pretext-call, security-awareness, red-team, phishing, human-risk]
+tags: [social-engineering, vishing, pretext-call, security-awareness, red-team]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

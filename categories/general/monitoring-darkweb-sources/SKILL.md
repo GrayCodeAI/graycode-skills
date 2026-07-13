@@ -2,7 +2,7 @@
 name: monitoring-darkweb-sources
 description: "Monitors dark web forums, marketplaces, paste sites, and ransomware leak sites for mentions of organizational assets, leaked credentials, threatened attacks, and threat actor communications to prov..."
 license: MIT
-tags: [dark-web, osint, credential-monitoring, ransomware-leaks, recorded-future, spiderfoot, cti]
+tags: [dark-web, osint, credential-monitoring, ransomware-leaks, recorded-future]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

@@ -2,7 +2,7 @@
 name: hardening-linux-endpoint-with-cis-benchmark
 description: "Hardens Linux endpoints using CIS Benchmark recommendations for Ubuntu, RHEL, and CentOS to reduce attack surface, enforce security baselines, and meet compliance requirements. Use when deploying n..."
 license: MIT
-tags: [endpoint, hardening, linux-security, cis-benchmark, ubuntu, rhel]
+tags: [endpoint, hardening, linux-security, cis-benchmark, ubuntu]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

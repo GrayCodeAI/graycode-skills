@@ -2,7 +2,7 @@
 name: generating-threat-intelligence-reports
 description: "Generates structured cyber threat intelligence reports at strategic, operational, and tactical levels tailored to specific audiences including executives, security operations teams, and technical a..."
 license: MIT
-tags: [cti, threat-intelligence, intelligence-products, tlp, pir, report-writing, nist-csf]
+tags: [cti, threat-intelligence, intelligence-products, tlp, pir]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

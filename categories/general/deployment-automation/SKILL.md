@@ -9,8 +9,6 @@ tags:
 - ci-cd
 - docker
 - kubernetes
-- aws
-- github-actions
 - automation
 metadata: None
 platforms: Claude, ChatGPT, Gemini

@@ -10,8 +10,8 @@ expression failures. Requires a FlowStudio MCP subscription — see https: //mcp
 
 ## Reference Files
 
-- [common-errors.md](references/common-errors.md) — Error codes, likely causes, and fixes
-- [debug-workflow.md](references/debug-workflow.md) — Full decision tree for complex failures
+- common-errors.md — Error codes, likely causes, and fixes
+- debug-workflow.md — Full decision tree for complex failures
 
 ## Related Skills
 

@@ -2,7 +2,7 @@
 name: research-axolotl
 description: "Expert guidance for fine-tuning LLMs with Axolotl - YAML configs, 100+ models, LoRA/QLoRA, DPO/KTO/ORPO/GRPO, multimodal support"
 license: MIT
-tags: [fine-tuning, axolotl, llm, lora, qlora, dpo, kto, orpo, grpo, yaml, huggingface, deepspeed, multimodal]
+tags: [fine-tuning, axolotl, llm, lora, qlora]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [axolotl, torch, transformers, datasets, peft, accelerate, deepspeed]

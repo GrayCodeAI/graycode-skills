@@ -91,4 +91,4 @@ The contents of the file programming_languages_libraries.json are copied here.
 
 GPT Kb Files List:
 
-- [programming_languages_libraries.json](./knowledge/Code%20Optimizer/programming_languages_libraries.json)
+- programming_languages_libraries.json

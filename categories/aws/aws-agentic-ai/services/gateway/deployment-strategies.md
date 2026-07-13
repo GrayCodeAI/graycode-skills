@@ -410,7 +410,7 @@ done
 
 ## Additional References
 
-- **Main Skill Documentation**: [`SKILL.md`](SKILL.md)
+- **Main Skill Documentation**: `SKILL.md`
 - **Troubleshooting Guide**: [`./troubleshooting-guide.md`](./troubleshooting-guide.md)
 - **Deployment Template Script**: [`./deploy-template.sh`](./deploy-template.sh)
-- **Credential Management**: [`cross-service/credential-management.md`](credential-management.md)
+- **Credential Management**: `cross-service/credential-management.md`

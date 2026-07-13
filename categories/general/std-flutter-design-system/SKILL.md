@@ -32,7 +32,7 @@ Before UI refactoring, identify project's Theme Archetype:
 - **Borders**: Use tokens (`VBorders.*`), never raw `BorderRadius.`
 - **Components**: Use DLS widgets (`VButton`) over raw Material widgets (`ElevatedButton`) if available.
 
-[Detailed Examples](references/usage.md)
+Detailed Examples
 
 ## Anti-Patterns
 

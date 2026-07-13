@@ -2,7 +2,7 @@
 name: implementing-privileged-identity-management-with-azure
 description: "Configure Azure AD Privileged Identity Management (PIM) using Microsoft Graph API to manage eligible role assignments, just-in-time activation, access reviews, and role management policies for zero..."
 license: MIT
-tags: [azure-ad, pim, privileged-access, just-in-time, eligible-roles, microsoft-graph, zero-trust, access-reviews, entra-id]
+tags: [azure-ad, pim, privileged-access, just-in-time, eligible-roles]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

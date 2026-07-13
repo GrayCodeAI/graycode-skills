@@ -17,14 +17,14 @@ keywords: None
 - Always use Reactive Forms over Template-Driven for complex inputs.
 - Define typed `FormGroup<T>` with explicit control types — never use untyped FormGroup.
 
-See [typed forms](references/typed-forms.md) for typed FormGroup examples.
+See typed forms for typed FormGroup examples.
 
 ## 2. Extract Validation Logic
 
 - Create standalone validator functions in separate file.
 - Sync `valueChanges` to stores using `takeUntilDestroyed()`.
 
-See [typed forms](references/typed-forms.md) for standalone validator examples.
+See typed forms for standalone validator examples.
 
 ## 3. Ensure NonNullable Controls
 
@@ -39,4 +39,4 @@ See [typed forms](references/typed-forms.md) for standalone validator examples.
 
 ## References
 
-- [Typed Forms](references/typed-forms.md)
+- Typed Forms

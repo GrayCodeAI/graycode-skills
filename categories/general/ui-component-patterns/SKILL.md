@@ -2,7 +2,7 @@
 name: ui-component-patterns
 description: "Build reusable, maintainable UI components following modern design patterns. Use when creating component libraries, implementing design systems, or building scalable frontend architectures. Handles..."
 license: MIT
-tags: [ui-components, react, design-patterns, composition, typescript, reusable]
+tags: [ui-components, react, design-patterns, composition, typescript]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

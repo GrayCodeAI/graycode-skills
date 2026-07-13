@@ -10,12 +10,6 @@ tags:
 - matplotlib
 - seaborn
 - plotting
-- figures
-- diagrams
-- neurips
-- icml
-- iclr
-- latex
 version: 1.0.0
 author: Orchestra Research
 dependencies:

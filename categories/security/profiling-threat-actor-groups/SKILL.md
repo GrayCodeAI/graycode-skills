@@ -2,7 +2,7 @@
 name: profiling-threat-actor-groups
 description: "Develops comprehensive threat actor profiles for APT groups, criminal organizations, and hacktivist collectives by aggregating TTP documentation, historical campaign data, tooling fingerprints, and..."
 license: MIT
-tags: [mitre-att-ck, threat-actor, apt, crowdstrike, mandiant, attribution, kill-chain, nist-csf]
+tags: [mitre-att-ck, threat-actor, apt, crowdstrike, mandiant]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

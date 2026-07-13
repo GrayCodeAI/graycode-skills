@@ -2,7 +2,7 @@
 name: performing-mobile-device-forensics-with-cellebrite
 description: "Acquire and analyze mobile device data using Cellebrite UFED and open-source tools to extract communications, location data, and application artifacts."
 license: MIT
-tags: [forensics, mobile-forensics, cellebrite, smartphone-analysis, ios-forensics, android-forensics]
+tags: [forensics, mobile-forensics, cellebrite, smartphone-analysis, ios-forensics]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

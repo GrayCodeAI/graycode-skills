@@ -104,7 +104,7 @@ browser.assert.elementsCount('li', 5);
 
 ### TestMu AI Cloud Config
 
-For full capabilities and shared reference, see [reference/cloud-integration.md](reference/cloud-integration.md).
+For full capabilities and shared reference, see reference/cloud-integration.md.
 
 ```javascript
 // nightwatch.conf.js

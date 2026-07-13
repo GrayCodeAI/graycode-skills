@@ -2,7 +2,7 @@
 name: implementing-network-segmentation-for-ot
 description: "This skill covers implementing network segmentation in Operational Technology environments using VLANs, industrial firewalls, data diodes, and software-defined networking. It addresses the Purdue M..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, network-segmentation, vlan]
+tags: [ot-security, ics, scada, industrial-control, network-segmentation]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

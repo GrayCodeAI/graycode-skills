@@ -2,7 +2,7 @@
 name: implementing-disk-encryption-with-bitlocker
 description: "Implements full disk encryption using Microsoft BitLocker on Windows endpoints to protect data at rest from unauthorized access in case of device loss or theft. Use when deploying encryption for co..."
 license: MIT
-tags: [endpoint, encryption, bitlocker, tpm, data-protection, windows-security]
+tags: [endpoint, encryption, bitlocker, tpm, data-protection]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

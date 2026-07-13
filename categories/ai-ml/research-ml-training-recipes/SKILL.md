@@ -10,11 +10,6 @@ tags:
 - optimization
 - llm
 - vision
-- diffusion
-- biomedical
-- muon
-- adamw
-- debugging
 version: 1.0.0
 author: dailycafi
 dependencies:

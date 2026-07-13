@@ -2,7 +2,7 @@
 name: research-accelerate
 description: "Simplest distributed training API. 4 lines to add distributed support to any PyTorch script. Unified API for DeepSpeed/FSDP/Megatron/DDP. Automatic device placement, mixed precision (FP16/BF16/FP8)..."
 license: MIT
-tags: [distributed-training, huggingface, accelerate, deepspeed, fsdp, mixed-precision, pytorch, ddp, unified-api, simple]
+tags: [distributed-training, huggingface, accelerate, deepspeed, fsdp]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [accelerate, torch, transformers]
@@ -298,11 +298,11 @@ set_seed(42)
 
 ## Advanced topics
 
-**Megatron integration**: See [references/megatron-integration.md](references/megatron-integration.md) for tensor parallelism, pipeline parallelism, and sequence parallelism setup.
+**Megatron integration**: See references/megatron-integration.md for tensor parallelism, pipeline parallelism, and sequence parallelism setup.
 
-**Custom plugins**: See [references/custom-plugins.md](references/custom-plugins.md) for creating custom distributed plugins and advanced configuration.
+**Custom plugins**: See references/custom-plugins.md for creating custom distributed plugins and advanced configuration.
 
-**Performance tuning**: See [references/performance.md](references/performance.md) for profiling, memory optimization, and best practices.
+**Performance tuning**: See references/performance.md for profiling, memory optimization, and best practices.
 
 ## Hardware requirements
 

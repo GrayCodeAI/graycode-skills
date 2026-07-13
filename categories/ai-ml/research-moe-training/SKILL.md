@@ -2,7 +2,7 @@
 name: research-moe-training
 description: "Train Mixture of Experts (MoE) models using DeepSpeed or HuggingFace. Use when training large-scale models with limited compute (5× cost reduction vs dense models), implementing sparse architecture..."
 license: MIT
-tags: [emerging-techniques, moe, mixture-of-experts, sparse-models, deepspeed, expert-parallelism, mixtral, deepseek, routing, load-balancing, efficient-training]
+tags: [emerging-techniques, moe, mixture-of-experts, sparse-models, deepspeed]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [deepspeed, transformers, torch, accelerate]

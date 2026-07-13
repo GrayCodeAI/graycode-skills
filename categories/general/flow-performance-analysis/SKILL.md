@@ -2,7 +2,7 @@
 name: flow-performance-analysis
 description: "Comprehensive performance analysis, bottleneck detection, and optimization recommendations for Claude Flow swarms"
 license: MIT
-tags: [performance, bottleneck, optimization, profiling, metrics, analysis]
+tags: [performance, bottleneck, optimization, profiling, analysis]
 version: 1.0.0
 category: monitoring
 author: Claude Flow Team
@@ -551,11 +551,11 @@ npx claude-flow bottleneck detect --fix
 
 ## See Also
 
-- [Bottleneck Detection Guide]($workspaces$claude-code-flow/.claude$commands$analysis$bottleneck-detect.md)
-- [Performance Report Guide]($workspaces$claude-code-flow/.claude$commands$analysis$performance-report.md)
-- [Performance Bottlenecks Overview]($workspaces$claude-code-flow/.claude$commands$analysis$performance-bottlenecks.md)
-- [Swarm Monitoring Documentation](..$swarm-orchestration/SKILL.md)
-- [Memory Management Documentation](..$memory-management/SKILL.md)
+- Bottleneck Detection Guide
+- Performance Report Guide
+- Performance Bottlenecks Overview
+- Swarm Monitoring Documentation
+- Memory Management Documentation
 
 ---
 

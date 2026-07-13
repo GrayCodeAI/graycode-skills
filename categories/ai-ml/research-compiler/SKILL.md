@@ -2,7 +2,7 @@
 name: research-compiler
 description: "Compiles any research input — PDF papers, GitHub repositories, experiment logs, code directories, or raw notes — into a complete Agent-Native Research Artifact (ARA) with cognitive layer (claims, c..."
 license: MIT
-tags: [ara, research-artifacts, knowledge-extraction, paper-ingestion, exploration-graph, provenance, research-tooling, epistemic-compilation]
+tags: [ara, research-artifacts, knowledge-extraction, paper-ingestion, exploration-graph]
 version: 1.0.0
 author: Orchestra Research
 dependencies: []
@@ -141,7 +141,7 @@ Reconstruct the research DAG for `/trace/exploration_tree.yaml`:
 
 ### Step 3: Generate Files
 
-Write ALL mandatory files. See [references/ara-schema.md](references/ara-schema.md) for the complete
+Write ALL mandatory files. See references/ara-schema.md for the complete
 directory structure and field-level requirements for every file.
 
 **Mandatory files** (all must exist and be non-trivial):
@@ -240,6 +240,6 @@ Print a summary:
 ## Reference Files
 
 For detailed schema specifications, load these on demand:
-- [references/ara-schema.md](references/ara-schema.md) — Complete ARA directory schema with field-level format for every file
-- [references/exploration-tree-spec.md](references/exploration-tree-spec.md) — Detailed exploration tree YAML specification with examples
-- [references/validation-checklist.md](references/validation-checklist.md) — All Seal Level 1 checks (what the validator looks for)
+- references/ara-schema.md — Complete ARA directory schema with field-level format for every file
+- references/exploration-tree-spec.md — Detailed exploration tree YAML specification with examples
+- references/validation-checklist.md — All Seal Level 1 checks (what the validator looks for)

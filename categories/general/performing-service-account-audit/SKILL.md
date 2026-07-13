@@ -2,7 +2,7 @@
 name: performing-service-account-audit
 description: "Audit service accounts across enterprise infrastructure to identify orphaned, over-privileged, and non-compliant accounts. This skill covers discovery of service accounts in Active Directory, cloud pl"
 license: MIT
-tags: [iam, identity, access-control, service-accounts, audit, governance]
+tags: [iam, identity, access-control, service-accounts, audit]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

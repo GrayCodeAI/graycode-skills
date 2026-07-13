@@ -40,4 +40,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [google-content-quality-questions-answers - Sheet1.csv](./knowledge/Content%20Helpfulness%20and%20Quality%20SEO%20Analyzer/google-content-quality-questions-answers%20-%20Sheet1.csv)
+- google-content-quality-questions-answers - Sheet1.csv

@@ -22,15 +22,15 @@ keywords: None
 
 ## URL-Driven State
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Server State (SWR / TanStack Query)
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Client State (Zustand)
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Hydration Safety
 
@@ -45,13 +45,13 @@ If project already uses `redux@4` + `createStore` + `redux-thunk` + `next-redux-
 - Avoid adding Zustand or TanStack Query on top of existing Redux codebase — migrate incrementally if needed.
 - Migration path: Redux Toolkit (`@reduxjs/toolkit`) → RTK Query → then consider TanStack Query.
 
-See [references/redux.md](references/redux.md) for typed selector and thunk patterns.
+See references/redux.md for typed selector and thunk patterns.
 
 ## Library Patterns
 
-- [references/redux.md](references/redux.md)
-- [references/zustand.md](references/zustand.md)
-- [references/url-state.md](references/url-state.md)
+- references/redux.md
+- references/zustand.md
+- references/url-state.md
 
 ## Anti-Patterns
 

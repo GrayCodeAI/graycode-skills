@@ -273,16 +273,16 @@ fi
 
 ## Related Agents
 
-- [cs-content-creator](cs-content-creator.md) - Content creation for demand gen campaigns
+- cs-content-creator - Content creation for demand gen campaigns
 - cs-product-marketing - Product positioning and messaging (planned)
 - cs-growth-marketer - Growth hacking and viral acquisition (planned)
 
 ## References
 
 - **Skill Documentation:** [marketing-skill/marketing-demand-acquisition/SKILL.md](SKILL.md)
-- **Marketing Domain Guide:** [marketing-skill/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
-- **Marketing Roadmap:** [marketing-skill/marketing_skills_roadmap.md](marketing_skills_roadmap.md)
+- **Marketing Domain Guide:** marketing-skill/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
+- **Marketing Roadmap:** marketing-skill/marketing_skills_roadmap.md
 
 ---
 

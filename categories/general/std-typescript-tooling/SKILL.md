@@ -28,7 +28,7 @@ keywords: None
 
 Enable `@typescript-eslint/recommended` at minimum. When `strict: false` in tsconfig, `no-unsafe-*` rules may produce excessive noise — suppress selectively with `@ts-expect-error` rather than disabling globally.
 
-See [reference](references/REFERENCE.md) for common linting issues (request typing, unused params, test mock typing) and tsconfig migration examples.
+See reference for common linting issues (request typing, unused params, test mock typing) and tsconfig migration examples.
 
 ## Verification Workflow (Mandatory)
 
@@ -51,4 +51,4 @@ After editing any `.ts` / `.tsx` file:
 
 ## References
 
-- [Config Examples & Linting Patterns](references/REFERENCE.md)
+- Config Examples & Linting Patterns

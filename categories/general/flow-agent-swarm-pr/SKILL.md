@@ -396,4 +396,4 @@ mcp__claude-flow__memory_usage {
 }
 ```
 
-See also: [swarm-issue.md](.$swarm-issue.md), [sync-coordinator.md](.$sync-coordinator.md), [workflow-automation.md](.$workflow-automation.md)
+See also: swarm-issue.md, sync-coordinator.md, workflow-automation.md

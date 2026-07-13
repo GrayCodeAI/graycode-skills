@@ -2,7 +2,7 @@
 name: ag-skyvern-browser-automation
 description: "AI-powered browser automation — navigate sites, fill forms, extract structured data, log in with stored credentials, and build reusable workflows."
 license: AGPL-3.0
-tags: [browser-automation, mcp, web-scraping, form-filling, ai-agents, workflow-automation]
+tags: [browser-automation, mcp, web-scraping, form-filling, workflow-automation]
 category: browser-automation
 risk: safe
 source: community

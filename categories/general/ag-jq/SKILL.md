@@ -2,7 +2,7 @@
 name: ag-jq
 description: "Expert jq usage for JSON querying, filtering, transformation, and pipeline integration. Practical patterns for real shell workflows."
 license: MIT
-tags: [jq, json, shell, cli, data-transformation, bash]
+tags: [jq, json, shell, cli, data-transformation]
 category: development
 risk: safe
 source: community

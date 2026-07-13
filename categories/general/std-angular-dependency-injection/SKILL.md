@@ -34,4 +34,4 @@ keywords: None
 
 ## References
 
-- [DI Patterns](references/di-patterns.md)
+- DI Patterns

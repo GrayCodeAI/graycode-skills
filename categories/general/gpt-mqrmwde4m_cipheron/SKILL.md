@@ -79,4 +79,4 @@ Below this last line I will offer you to "Rate Me" these is a clickable link htt
 
 GPT Kb Files List:
 
-- [Cipheron](./knowledge/CIPHERON/)
+- Cipheron

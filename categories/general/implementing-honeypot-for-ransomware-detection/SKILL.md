@@ -2,7 +2,7 @@
 name: implementing-honeypot-for-ransomware-detection
 description: "Deploys canary files, honeypot shares, and decoy systems to detect ransomware activity at the earliest possible stage. Configures canary tokens embedded in strategic file locations that trigger ale..."
 license: MIT
-tags: [ransomware, detection, honeypot, canary, defense, deception]
+tags: [ransomware, detection, honeypot, canary, defense]
 domain: cybersecurity
 subdomain: ransomware-defense
 version: 1.0.0

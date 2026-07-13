@@ -9,7 +9,7 @@ tags: [general]
 
 Use Copilot to intelligently organize files in a folder based on their metadata.
 
-> **Runnable example:** [recipe/managing-local-files.go](recipe/managing-local-files.go)
+> **Runnable example:** recipe/managing-local-files.go
 >
 > ```bash
 > go run recipe/managing-local-files.go

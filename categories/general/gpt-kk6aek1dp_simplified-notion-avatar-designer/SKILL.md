@@ -23,4 +23,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT KB Files list:
 
-- [Images](./knowledge/Simplified%20Notion%20Avatar%20Designer/)
+- Images

@@ -13,7 +13,7 @@ compatibility: Requires Python 3
 
 This skill helps you create and improve IP geolocation feeds in CSV format by:
 - Ensuring your CSV is well-formed and consistent
-- Checking alignment with [RFC 8805](references/rfc8805.txt) (the industry standard)
+- Checking alignment with RFC 8805 (the industry standard)
 - Applying **opinionated best practices** learned from real-world deployments
 - Suggesting improvements for accuracy, completeness, and privacy
 
@@ -95,7 +95,7 @@ The plan MUST:
 
 ### Phase 1: Understand the Standard
 
-The key requirements from RFC 8805 that this skill enforces are summarized below. **Use this summary as your working reference.** Only consult the full [RFC 8805 text](references/rfc8805.txt) for edge cases, ambiguous situations, or when the user asks a standards question not covered here.
+The key requirements from RFC 8805 that this skill enforces are summarized below. **Use this summary as your working reference.** Only consult the full RFC 8805 text for edge cases, ambiguous situations, or when the user asks a standards question not covered here.
 
 #### RFC 8805 Key Facts
 
@@ -151,7 +151,7 @@ The key requirements from RFC 8805 that this skill enforces are summarized below
 - Generate a **script** for this phase.
 - Do NOT combine this phase with others.
 - Do NOT precompute future-phase data.
-- Store the output as a JSON file at: [`./run/data/report-data.json`](./run/data/report-data.json)
+- Store the output as a JSON file at: `./run/data/report-data.json`
 
 #### Schema Definition
 
@@ -338,7 +338,7 @@ The goal is to ensure the file can be parsed reliably and normalized into a **co
     ip_prefix, alpha2code, region, city, postal code (deprecated)
     ```
   - Refer to the example input file:
-    [`assets/example/01-user-input-rfc8805-feed.csv`](assets/example/01-user-input-rfc8805-feed.csv)
+    `assets/example/01-user-input-rfc8805-feed.csv`
 
 - **CSV Cleansing and Normalization**
   - Clean and normalize the CSV using Python logic equivalent to the following operations:
@@ -349,7 +349,7 @@ The goal is to ensure the file can be parsed reliably and normalized into a **co
     - Remove comment rows where the **first column begins with `#`**.
     - This also removes a header row if it begins with `#`.
     - Create a map of comments using the **1-based line number** as the key and the full original line as the value. Also store blank lines.
-    - Store this map in a JSON file at: [`./run/data/comments.json`](./run/data/comments.json)
+    - Store this map in a JSON file at: `./run/data/comments.json`
     - Example: `{ "4": "# It's OK for small city states to leave state ISO2 code unspecified" }`
 
 - **Notes**
@@ -401,7 +401,7 @@ Analyze the **accuracy and consistency** of geolocation data:
 This phase runs after structural checks pass.
 
 ##### Country Code Analysis
-  - Use the locally available data table [`ISO3166-1`](assets/iso3166-1.json) for checking.
+  - Use the locally available data table `ISO3166-1` for checking.
     - JSON array of countries and territories with ISO codes
     - Each object includes:
       - `alpha_2`: two-letter country code
@@ -411,7 +411,7 @@ This phase runs after structural checks pass.
   - Check the entry's `CountryCode` (RFC 8805 Section 2.1.1.2, column `alpha2code`) against the `alpha_2` attribute.
   - Sample code is available in the `references/` directory.
 
-  - If a country is found in [`assets/small-territories.json`](assets/small-territories.json), mark the entry internally as a small territory. This flag is used in later checks and suggestions but is **not stored in the output JSON** (it is transient validation state).
+  - If a country is found in `assets/small-territories.json`, mark the entry internally as a small territory. This flag is used in later checks and suggestions but is **not stored in the output JSON** (it is transient validation state).
 
   - **Note:** `small-territories.json` contains some historic/disputed codes (`AN`, `CS`, `XK`) that are not present in `iso3166-1.json`. An entry using one of these as its `CountryCode` will fail the country code validation (ERROR) even though it matches as a small territory. The country code ERROR takes precedence — do not suppress it based on the small-territory flag.
 
@@ -433,7 +433,7 @@ This phase runs after structural checks pass.
 
 
 ##### Region Code Analysis
-  - Use the locally available data table [`ISO3166-2`](assets/iso3166-2.json) for checking.
+  - Use the locally available data table `ISO3166-2` for checking.
     - JSON array of country subdivisions with ISO-assigned codes
     - Each object includes:
       - `code`: subdivision code prefixed with country code (e.g., `US-CA`)
@@ -537,7 +537,7 @@ Lookup all the `Entries` using Fastah's `rfc8805-row-place-search` tool.
 
 #### Step 1: Build Lookup Payload with Deduplication
 
-Load the dataset from: [./run/data/report-data.json](./run/data/report-data.json)
+Load the dataset from: ./run/data/report-data.json
 - Read the `Entries` array. Each entry will be used to build the MCP lookup payload.
 
 Reduce server requests by deduplicating identical entries:
@@ -563,7 +563,7 @@ Build request batches:
 - When reading responses, match each response `rowKey` field to the corresponding deduplication entry to retrieve all associated `entryIndices`.
 
 Rules:
-- Write payload to: [./run/data/mcp-server-payload.json](./run/data/mcp-server-payload.json)
+- Write payload to: ./run/data/mcp-server-payload.json
 - Exit the script after writing the payload.
 
 #### Step 2: Invoke Fastah MCP Tool
@@ -627,7 +627,7 @@ The `TunedEntry` field is a **single object** (not an array). It holds the best 
 
 Entries with no UUID match (i.e. the MCP server returned no response for their UUID) must receive an empty `TunedEntry: {}` object — never leave the field absent.
 
-- Write the dataset back to: [./run/data/report-data.json](./run/data/report-data.json)
+- Write the dataset back to: ./run/data/report-data.json
 - Rules:
   - Maintain all existing validation flags.
   - Do NOT create additional intermediate files.

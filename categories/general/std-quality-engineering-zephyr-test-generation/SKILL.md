@@ -19,12 +19,12 @@ keywords: None
  - Extract: Summary, ACs, Platform per AC row, Market, Components.
  - Fetch Jira with `?expand=renderedFields` — HTML authoritative for platform colors:
  `#00B8D9` = Web · `#36B37E` = Mobile · `#FF991F` = Web+Mobile
- - See [Actor/Permission Matrix](analysis_patterns.md) for role/market logic.
+ - See Actor/Permission Matrix for role/market logic.
 
 2. **Impact Analysis** (run before any TC creation)
  - **Step — Direct Lookup**: Call `Get Issue Link Test Cases` with Jira issue key (e.g., `{PROJECT}-{ID}`).
  - **Step B — Supplemental**: If Step 0, search by `[Module]` and `[Screen]` keywords + check sibling issue links.
- - See [Discovery Protocol](references/impact_analysis.md) for full chain.
+ - See Discovery Protocol for full chain.
  - Map each AC to coverage status:
  - **Covered** → ask user: skip or update to current format?
  - **Partial** → always propose NEW TC.
@@ -32,7 +32,7 @@ keywords: None
 
 3. **Draft Artifact**:
  - Delete any existing `zephyr_test_plan.md` before writing.
- - Follow 4-section format in [TC Format Reference](references/tc_format.md) exactly.
+ - Follow 4-section format in TC Format Reference exactly.
  - After writing: read back file and print full content in chat so user can review without opening it.
  - Ask for: review approval, handling of Covered ACs, and Zephyr Folder ID.
 

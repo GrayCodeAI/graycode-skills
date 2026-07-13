@@ -21,7 +21,7 @@ keywords: None
 5. **Automate TestFlight uploads** — Trigger on every successful merge to staging.
 6. **Set export compliance** — Automate in `Info.plist` or Fastlane to avoid metadata pauses.
 
-See [Fastlane and Match setup examples](references/implementation.md)
+See Fastlane and Match setup examples
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [Fastlane and Match setup examples](references/implementation.md)
 
 ## References
 
-- [Fastlane & Signing Setup](references/implementation.md)
+- Fastlane & Signing Setup

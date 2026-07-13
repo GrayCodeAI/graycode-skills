@@ -186,7 +186,7 @@ LINE 1: SELECT * FROM (TABLE_NAME) WHERE ...
 
 ## Related Files
 
-- Reference: [oracle-to-postgres-type-coercion.md](oracle-to-postgres-type-coercion.md) - Other syntax differences
+- Reference: oracle-to-postgres-type-coercion.md - Other syntax differences
 - PostgreSQL Documentation: [SELECT Statement](https://www.postgresql.org/docs/current/sql-select.html)
 
 ## Migration Notes

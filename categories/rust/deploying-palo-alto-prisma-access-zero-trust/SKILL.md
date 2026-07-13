@@ -2,7 +2,7 @@
 name: deploying-palo-alto-prisma-access-zero-trust
 description: "Deploying Palo Alto Networks Prisma Access for SASE-based zero trust network access using GlobalProtect agents, ZTNA Connectors, security policy enforcement, and integration with Strata Cloud Manag..."
 license: MIT
-tags: [prisma-access, palo-alto, ztna, sase, globalprotect, strata-cloud-manager, zero-trust]
+tags: [prisma-access, palo-alto, ztna, sase, zero-trust]
 domain: cybersecurity
 subdomain: zero-trust-architecture
 version: 1.0

@@ -20,7 +20,7 @@ keywords: None
 3. **Handle deep links** — Prefer Universal Links over custom URL schemes. Handle via `scene(_:continue:userActivity:)`. Route through Root Coordinator.
 4. **Schedule background tasks** — Use `BGTaskScheduler` for periodic data refresh. Always handle `expirationHandler` to avoid system kill.
 
-See [bootstrapper pattern and background task examples](references/implementation.md)
+See bootstrapper pattern and background task examples
 
 ## Anti-Patterns
 
@@ -30,4 +30,4 @@ See [bootstrapper pattern and background task examples](references/implementatio
 
 ## References
 
-- [Lifecycle & Background Tasks](references/implementation.md)
+- Lifecycle & Background Tasks

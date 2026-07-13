@@ -11,7 +11,7 @@ Expert guidance for automating Adobe Illustrator through ExtendScript (JavaScrip
 
 ## Bundled Assets
 
-- [`references/object-model-quick-reference.md`](references/object-model-quick-reference.md): Use this as a quick lookup for the Illustrator scripting object model, common document and page item types, and related DOM concepts while writing or debugging scripts.
+- `references/object-model-quick-reference.md`: Use this as a quick lookup for the Illustrator scripting object model, common document and page item types, and related DOM concepts while writing or debugging scripts.
 - `scripts/`: Contains example Illustrator automation scripts you can use as starting points or implementation patterns for common tasks such as document manipulation, exports, batch processing, and DOM usage. Review and adapt these examples when you need working JSX patterns or want to compare behavior while debugging.
 ## When to Use This Skill
 

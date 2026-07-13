@@ -213,7 +213,7 @@ const worker = await startWorker({
 
 ## See Also
 
-- [README.md](./README.md) - Commands
-- [configuration.md](./configuration.md) - Config
-- [api.md](./api.md) - Programmatic API
-- [patterns.md](./patterns.md) - Workflows
+- README.md - Commands
+- configuration.md - Config
+- api.md - Programmatic API
+- patterns.md - Workflows

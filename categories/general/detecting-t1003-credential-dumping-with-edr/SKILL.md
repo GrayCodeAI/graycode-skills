@@ -2,7 +2,7 @@
 name: detecting-t1003-credential-dumping-with-edr
 description: "Detect OS credential dumping techniques targeting LSASS memory, SAM database, NTDS.dit, and cached credentials using EDR telemetry, Sysmon process access monitoring, and Windows security event corr..."
 license: MIT
-tags: [threat-hunting, credential-dumping, lsass, mitre-t1003, edr, mimikatz, ntds, sam-database]
+tags: [threat-hunting, credential-dumping, lsass, mitre-t1003, edr]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

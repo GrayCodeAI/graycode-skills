@@ -2,7 +2,7 @@
 name: building-threat-feed-aggregation-with-misp
 description: "Deploy MISP (Malware Information Sharing Platform) to aggregate, correlate, and distribute threat intelligence feeds from multiple sources for centralized IOC management and automated SIEM integrat..."
 license: MIT
-tags: [misp, threat-feed, aggregation, indicator, sharing, correlation, siem-integration, threat-intelligence]
+tags: [misp, threat-feed, aggregation, indicator, sharing]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

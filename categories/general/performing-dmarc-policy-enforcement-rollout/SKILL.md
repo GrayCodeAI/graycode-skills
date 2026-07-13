@@ -2,7 +2,7 @@
 name: performing-dmarc-policy-enforcement-rollout
 description: "Execute a phased DMARC rollout from p=none monitoring through p=quarantine to p=reject enforcement, ensuring all legitimate email sources are authenticated before blocking unauthorized senders."
 license: MIT
-tags: [dmarc, spf, dkim, email-authentication, anti-spoofing, phishing, dns, email-security]
+tags: [dmarc, spf, dkim, email-authentication, anti-spoofing]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

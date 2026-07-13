@@ -125,7 +125,7 @@ The `cs-general-counsel-advisor` agent orchestrates both tools plus 3 references
 ## Related
 
 - Skill: [`general-counsel-advisor`](SKILL.md) — full skill with Python tools + references
-- Agent: [`cs-general-counsel-advisor`](cs-general-counsel-advisor.md)
+- Agent: `cs-general-counsel-advisor`
 - Compliance execution: `ra-qm-team/`
 - Adjacent: `skills/ma-playbook/`
 

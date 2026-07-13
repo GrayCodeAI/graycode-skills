@@ -2,7 +2,7 @@
 name: building-soc-metrics-and-kpi-tracking
 description: "Builds SOC performance metrics and KPI tracking dashboards measuring Mean Time to Detect (MTTD), Mean Time to Respond (MTTR), alert quality ratios, analyst productivity, and detection coverage usin..."
 license: MIT
-tags: [soc, metrics, kpi, mttd, mttr, dashboard, reporting, continuous-improvement]
+tags: [soc, metrics, kpi, mttd, mttr]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

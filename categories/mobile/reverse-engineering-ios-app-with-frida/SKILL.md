@@ -2,7 +2,7 @@
 name: reverse-engineering-ios-app-with-frida
 description: "Reverse engineers iOS applications using Frida dynamic instrumentation to understand internal logic, extract encryption keys, bypass security controls, and discover hidden functionality without sou..."
 license: MIT
-tags: [mobile-security, ios, frida, reverse-engineering, owasp-mobile, penetration-testing]
+tags: [mobile-security, ios, frida, reverse-engineering, owasp-mobile]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

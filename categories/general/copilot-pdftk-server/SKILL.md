@@ -157,8 +157,8 @@ pdftk A=even.pdf B=odd.pdf shuffle A B output collated.pdf
 
 Bundled reference documents in the `references/` folder:
 
-- [pdftk-man-page.md](references/pdftk-man-page.md) - Complete manual reference with all operations, options, and syntax
-- [pdftk-cli-examples.md](references/pdftk-cli-examples.md) - Practical command-line examples for common tasks
-- [download.md](references/download.md) - Installation and download instructions for all platforms
-- [pdftk-server-license.md](references/pdftk-server-license.md) - PDFtk Server licensing information
-- [third-party-materials.md](references/third-party-materials.md) - Third-party library licenses
+- pdftk-man-page.md - Complete manual reference with all operations, options, and syntax
+- pdftk-cli-examples.md - Practical command-line examples for common tasks
+- download.md - Installation and download instructions for all platforms
+- pdftk-server-license.md - PDFtk Server licensing information
+- third-party-materials.md - Third-party library licenses

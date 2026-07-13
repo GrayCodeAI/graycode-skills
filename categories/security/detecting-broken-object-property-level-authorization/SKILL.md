@@ -2,7 +2,7 @@
 name: detecting-broken-object-property-level-authorization
 description: "Detect and test for OWASP API3:2023 Broken Object Property Level Authorization vulnerabilities including excessive data exposure and mass assignment attacks."
 license: MIT
-tags: [api-security, bopla, owasp-api3, mass-assignment, excessive-data-exposure, property-level-authorization, api-testing, penetration-testing]
+tags: [api-security, bopla, owasp-api3, mass-assignment, property-level-authorization]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

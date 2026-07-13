@@ -32,5 +32,5 @@ keywords: None
 
 ## References
 
-- [Security Best Practices](references/security-best-practices.md)
+- Security Best Practices
 - common/security-standards

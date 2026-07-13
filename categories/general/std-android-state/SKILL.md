@@ -19,14 +19,14 @@ keywords: None
 - Use `viewModelScope` for all coroutines.
 - Trigger initial load in `init` block.
 
-See [templates](references/implementation.md) for ViewModel and UiState examples.
+See templates for ViewModel and UiState examples.
 
 ## 2. Define UI State (LCE Pattern)
 
 - Use sealed interface with Loading, Content, Error variants.
 - Mark data classes `@Immutable`.
 
-See [templates](references/implementation.md) for sealed UiState pattern.
+See templates for sealed UiState pattern.
 
 ## 3. Collect State Lifecycle-Safely
 
@@ -48,4 +48,4 @@ See [templates](references/implementation.md) for sealed UiState pattern.
 
 ## References
 
-- [Templates](references/implementation.md)
+- Templates

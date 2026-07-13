@@ -64,5 +64,5 @@ Growth-focused operator covering the full revenue lifecycle: pipeline management
 
 ## Related Agents
 
-- [cs-product-manager](cs-product-manager.md) -- Product roadmap alignment for sales positioning and feature prioritization
-- [cs-financial-analyst](cs-financial-analyst.md) -- Revenue forecasting validation and financial modeling support
+- cs-product-manager -- Product roadmap alignment for sales positioning and feature prioritization
+- cs-financial-analyst -- Revenue forecasting validation and financial modeling support

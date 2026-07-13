@@ -20,7 +20,7 @@ keywords: None
 3. **Choose DI library** — Use `Factory` for lightweight DI, `Swinject` for enterprise-grade container-based projects.
 4. **Apply correct scoping** — Singleton for app-wide services (Auth, Network); Unique/Transient for ViewModels; Graph/Cached for feature flows.
 
-See [protocol-based DI and Factory registration examples](references/implementation.md)
+See protocol-based DI and Factory registration examples
 
 ## Anti-Patterns
 
@@ -30,4 +30,4 @@ See [protocol-based DI and Factory registration examples](references/implementat
 
 ## References
 
-- [Manual & Library DI Setup](references/implementation.md)
+- Manual & Library DI Setup

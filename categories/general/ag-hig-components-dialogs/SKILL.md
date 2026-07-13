@@ -38,11 +38,11 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [alerts.md](references/alerts.md) | Alerts | Button ordering, title/message text, confirmation, destructive actions |
-| [action-sheets.md](references/action-sheets.md) | Action sheets | Multiple actions, cancel option, destructive handling |
-| [popovers.md](references/popovers.md) | Popovers | Non-modal, dismiss on tap outside, iPad/Mac |
-| [sheets.md](references/sheets.md) | Sheets | Modal task, context preservation |
-| [digit-entry-views.md](references/digit-entry-views.md) | Digit entry | PIN input, autofill, auto-advance |
+| alerts.md | Alerts | Button ordering, title/message text, confirmation, destructive actions |
+| action-sheets.md | Action sheets | Multiple actions, cancel option, destructive handling |
+| popovers.md | Popovers | Non-modal, dismiss on tap outside, iPad/Mac |
+| sheets.md | Sheets | Modal task, context preservation |
+| digit-entry-views.md | Digit entry | PIN input, autofill, auto-advance |
 
 ## Output Format
 

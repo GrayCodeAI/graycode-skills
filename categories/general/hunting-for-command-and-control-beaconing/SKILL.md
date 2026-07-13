@@ -2,7 +2,7 @@
 name: hunting-for-command-and-control-beaconing
 description: "Detect C2 beaconing patterns in network traffic using frequency analysis, jitter detection, and domain reputation to identify compromised endpoints communicating with adversary infrastructure."
 license: MIT
-tags: [threat-hunting, mitre-attack, c2, beaconing, network-analysis, proactive-detection]
+tags: [threat-hunting, mitre-attack, c2, beaconing, network-analysis]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

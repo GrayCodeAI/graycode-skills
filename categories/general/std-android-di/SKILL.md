@@ -18,14 +18,14 @@ keywords: None
 - Annotate `Application` class with `@HiltAndroidApp`.
 - Annotate Activities/Fragments with `@AndroidEntryPoint`.
 
-See [module templates](references/files.md) for bootstrap and module examples.
+See module templates for bootstrap and module examples.
 
 ## 2. Define Modules
 
 - Use `@Binds` (abstract class) over `@Provides` when possible — generates smaller code.
 - explicit with `@InstallIn` (`SingletonComponent`, `ViewModelComponent`).
 
-See [module templates](references/files.md) for `@Binds` examples.
+See module templates for `@Binds` examples.
 
 ## 3. Prefer Constructor Injection
 
@@ -39,4 +39,4 @@ See [module templates](references/files.md) for `@Binds` examples.
 
 ## References
 
-- [Module Templates](references/files.md)
+- Module Templates

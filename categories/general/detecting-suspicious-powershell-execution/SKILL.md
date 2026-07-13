@@ -2,7 +2,7 @@
 name: detecting-suspicious-powershell-execution
 description: "Detect suspicious PowerShell execution patterns including encoded commands, download cradles, AMSI bypass attempts, and constrained language mode evasion."
 license: MIT
-tags: [threat-hunting, mitre-attack, powershell, execution, t1059, amsi, proactive-detection]
+tags: [threat-hunting, mitre-attack, powershell, execution, t1059]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

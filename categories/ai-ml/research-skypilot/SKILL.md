@@ -2,7 +2,7 @@
 name: research-skypilot
 description: "Multi-cloud orchestration for ML workloads with automatic cost optimization. Use when you need to run training or batch jobs across multiple clouds, leverage spot instances with auto-recovery, or o..."
 license: MIT
-tags: [infrastructure, multi-cloud, orchestration, gpu, cost-optimization, skypilot]
+tags: [infrastructure, multi-cloud, orchestration, gpu, skypilot]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [skypilot>=0.7.0]
@@ -498,8 +498,8 @@ sky jobs logs my-job
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Multi-cloud, optimization, production patterns
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues and solutions
+- **Advanced Usage** - Multi-cloud, optimization, production patterns
+- **Troubleshooting** - Common issues and solutions
 
 ## Resources
 

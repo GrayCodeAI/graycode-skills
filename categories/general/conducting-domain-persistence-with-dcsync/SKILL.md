@@ -2,7 +2,7 @@
 name: conducting-domain-persistence-with-dcsync
 description: "Perform DCSync attacks to replicate Active Directory credentials and establish domain persistence by extracting KRBTGT, Domain Admin, and service account hashes for Golden Ticket creation."
 license: MIT
-tags: [red-team, active-directory, dcsync, persistence, credential-dumping, golden-ticket, mimikatz]
+tags: [red-team, active-directory, dcsync, persistence, credential-dumping]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

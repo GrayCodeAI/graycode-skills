@@ -175,4 +175,4 @@ if (!host || !ALLOWED.includes(host)) return new Response('Forbidden', { status:
 
 - [Hyperdrive]() - Database connections
 - [Smart Placement]() - Latency optimization
-- [Tunnel Troubleshooting](gotchas.md)
+- Tunnel Troubleshooting

@@ -140,6 +140,6 @@ gh pr create --draft --title "feat(scope): Your title" --body-file pr-template.m
 
 ## Related Documentation
 
-- [PR Template](.github/pull_request_template.md)
+- PR Template
 - [Conventional Commits](https://www.conventionalcommits.org/)
 - [GitHub CLI documentation](https://cli.github.com/manual/)

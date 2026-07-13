@@ -2,7 +2,7 @@
 name: research-swanlab
 description: "Provides guidance for experiment tracking with SwanLab. Use when you need open-source run tracking, local or self-hosted dashboards, and lightweight media logging for ML workflows."
 license: MIT
-tags: [mlops, swanlab, experiment-tracking, open-source, visualization, pytorch, transformers, pytorch-lightning, fastai, self-hosted]
+tags: [mlops, swanlab, experiment-tracking, open-source, visualization]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [swanlab>=0.7.11, pillow>=9.0.0, soundfile>=0.12.0]
@@ -227,7 +227,7 @@ line.set_global_opts(
 swanlab.log({"charts/loss_curve": line})
 ```
 
-See [references/visualization.md](references/visualization.md) for more chart and media patterns.
+See references/visualization.md for more chart and media patterns.
 
 ### 5. Local and Self-Hosted Workflows
 
@@ -286,7 +286,7 @@ trainer = Trainer(
 trainer.train()
 ```
 
-See [references/integrations.md](references/integrations.md) for callback-based setups and additional framework patterns.
+See references/integrations.md for callback-based setups and additional framework patterns.
 
 ### PyTorch Lightning
 
@@ -328,7 +328,7 @@ learn.fit(
 )
 ```
 
-See [references/integrations.md](references/integrations.md) for fuller framework examples.
+See references/integrations.md for fuller framework examples.
 
 ## Best Practices
 
@@ -390,8 +390,8 @@ run.finish()
 
 ### 5. Keep Advanced Patterns in References
 
-- Use [references/visualization.md](references/visualization.md) for advanced chart and media patterns
-- Use [references/integrations.md](references/integrations.md) for callback-based and framework-specific integration details
+- Use references/visualization.md for advanced chart and media patterns
+- Use references/integrations.md for callback-based and framework-specific integration details
 
 ## Resources
 
@@ -402,5 +402,5 @@ run.finish()
 
 ## See Also
 
-- [references/integrations.md](references/integrations.md) - Framework-specific examples
-- [references/visualization.md](references/visualization.md) - Charts and media logging patterns
+- references/integrations.md - Framework-specific examples
+- references/visualization.md - Charts and media logging patterns

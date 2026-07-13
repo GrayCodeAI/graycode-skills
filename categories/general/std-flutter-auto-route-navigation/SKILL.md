@@ -34,12 +34,12 @@ core/router/
 
 Use `children` in `AutoRoute` for tabs. Pass `children` parameter to define initial active sub-route.
 
-See [implementation examples](references/implementation.md) for nested route navigation and router configuration patterns.
+See implementation examples for nested route navigation and router configuration patterns.
 
 ## Reference & Examples
 
 For full Router configuration and Auth Guard implementation:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Anti-Patterns
 

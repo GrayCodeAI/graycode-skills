@@ -2,7 +2,7 @@
 name: implementing-azure-defender-for-cloud
 description: "Implementing Microsoft Defender for Cloud to enable cloud security posture management, workload protection across VMs, containers, databases, and storage, configure security recommendations, and se..."
 license: MIT
-tags: [cloud-security, azure, defender-for-cloud, cspm, cwpp, security-recommendations]
+tags: [cloud-security, azure, defender-for-cloud, cspm, cwpp]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

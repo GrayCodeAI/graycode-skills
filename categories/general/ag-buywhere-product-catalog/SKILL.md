@@ -2,7 +2,7 @@
 name: ag-buywhere-product-catalog
 description: "Use BuyWhere's MCP and API surfaces to add product search, price comparison, and deal discovery to AI shopping agents."
 license: Not declared
-tags: [buywhere, ecommerce, shopping, mcp, api, product-catalog]
+tags: [buywhere, ecommerce, shopping, mcp, product-catalog]
 category: ecommerce
 risk: safe
 source: official

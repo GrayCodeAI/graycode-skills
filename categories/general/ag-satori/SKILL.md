@@ -2,7 +2,7 @@
 name: ag-satori
 description: "Clinically informed wisdom companion blending psychology and philosophy into a structured thinking partner"
 license: MIT
-tags: [mental-health, psychology, wisdom, philosophy, ifs, stoicism, jungian, conversation]
+tags: [mental-health, psychology, wisdom, philosophy, ifs]
 category: personal-development
 risk: safe
 source: community

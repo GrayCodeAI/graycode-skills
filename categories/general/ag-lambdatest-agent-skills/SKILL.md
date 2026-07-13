@@ -2,7 +2,7 @@
 name: ag-lambdatest-agent-skills
 description: "Production-grade test automation skills for 46 frameworks across E2E, unit, mobile, BDD, visual, and cloud testing in 15+ languages."
 license: MIT
-tags: [testing, test-automation, e2e, unit-testing, mobile-testing, bdd, selenium, playwright, cypress, jest, pytest, appium, lambdatest]
+tags: [testing, test-automation, e2e, unit-testing, lambdatest]
 category: testing
 risk: safe
 source: community

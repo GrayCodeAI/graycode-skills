@@ -2,7 +2,7 @@
 name: detecting-compromised-cloud-credentials
 description: "Detecting compromised cloud credentials across AWS, Azure, and GCP by analyzing anomalous API activity, impossible travel patterns, unauthorized resource provisioning, and credential abuse indicato..."
 license: MIT
-tags: [cloud-security, credential-compromise, threat-detection, guardduty, incident-response, anomaly-detection]
+tags: [cloud-security, credential-compromise, threat-detection, guardduty, incident-response]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

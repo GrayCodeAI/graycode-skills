@@ -2,7 +2,7 @@
 name: testing-api-authentication-weaknesses
 description: "Tests API authentication mechanisms for weaknesses including broken token validation, missing authentication on endpoints, weak password policies, credential stuffing susceptibility, token leakage ..."
 license: MIT
-tags: [api-security, owasp, authentication, jwt, session-management, credential-security]
+tags: [api-security, owasp, authentication, jwt, session-management]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

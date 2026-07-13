@@ -22,7 +22,7 @@ keywords: None
 
 ## Custom Artisan Command Example
 
-See [implementation examples](references/implementation.md#custom-artisan-command-example) for Artisan command pattern and project structure.
+See implementation examples for Artisan command pattern and project structure.
 
 ## Implementation Guidelines
 
@@ -56,4 +56,4 @@ See [implementation examples](references/implementation.md#custom-artisan-comman
 
 ## References
 
-- [Artisan & Vite Patterns](references/implementation.md)
+- Artisan & Vite Patterns

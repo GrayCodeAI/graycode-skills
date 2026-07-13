@@ -18,7 +18,7 @@ keywords: None
 - Run `ng add @angular/ssr`.
 - Add `provideClientHydration(withEventReplay())` to `app.config.ts` providers.
 
-See [hydration examples](references/hydration.md) for app config and hydration setup.
+See hydration examples for app config and hydration setup.
 
 ## 2. Guard Browser-Only Code
 
@@ -51,4 +51,4 @@ Export `ServerRoute[]` in `app.routes.server.ts`:
 
 ## References
 
-- [Hydration](references/hydration.md)
+- Hydration

@@ -44,7 +44,7 @@ Visual test best as **Comparative Audit** loop:
 ## 🔗 References
 
 - **playwright-cli**: [playwright-cli](SKILL.md)
-- **Diagnostic Decoder**: [diagnostic-decoder](references/diagnostic-decoder.md)
-- **DOM vs Screenshot**: [dom-snapshot-vs-screenshot](references/dom-snapshot-vs-screenshot.md)
-- **Login & Data**: [login-and-test-data](references/login-and-test-data.md)
-- **Scenario Details**: [scenarios](references/scenarios.md)
+- **Diagnostic Decoder**: diagnostic-decoder
+- **DOM vs Screenshot**: dom-snapshot-vs-screenshot
+- **Login & Data**: login-and-test-data
+- **Scenario Details**: scenarios

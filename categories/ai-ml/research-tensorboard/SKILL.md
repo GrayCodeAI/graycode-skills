@@ -2,7 +2,7 @@
 name: research-tensorboard
 description: "Visualize training metrics, debug models with histograms, compare experiments, visualize model graphs, and profile performance with TensorBoard - Google's ML visualization toolkit"
 license: MIT
-tags: [mlops, tensorboard, visualization, training-metrics, model-debugging, pytorch, tensorflow, experiment-tracking, performance-profiling]
+tags: [mlops, tensorboard, visualization, training-metrics, model-debugging]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [tensorboard, torch, tensorflow]

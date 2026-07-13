@@ -19,7 +19,7 @@ CHAIN spans represent orchestration layers in your application (LangChain chains
 
 ## Common Attributes
 
-CHAIN spans typically use [Universal Attributes](fundamentals-universal-attributes.md):
+CHAIN spans typically use Universal Attributes:
 
 - `input.value` - Input to the chain (user query, request payload)
 - `output.value` - Output from the chain (final response)

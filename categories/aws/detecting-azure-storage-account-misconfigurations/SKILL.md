@@ -2,7 +2,7 @@
 name: detecting-azure-storage-account-misconfigurations
 description: "Audit Azure Blob and ADLS storage accounts for public access exposure, weak or long-lived SAS tokens, missing encryption at rest, disabled HTTPS-only traffic, and outdated TLS versions using the az..."
 license: MIT
-tags: [azure, storage-accounts, blob-storage, adls, sas-tokens, encryption, public-access, cloud-misconfiguration, azure-mgmt-storage]
+tags: [azure, storage-accounts, blob-storage, adls, sas-tokens]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

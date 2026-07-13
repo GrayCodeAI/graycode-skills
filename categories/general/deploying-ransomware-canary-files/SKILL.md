@@ -2,7 +2,7 @@
 name: deploying-ransomware-canary-files
 description: "Deploys and monitors ransomware canary files across critical directories using Python's watchdog library for real-time filesystem event detection. Places strategically named decoy files that mimic ..."
 license: MIT
-tags: [ransomware, canary-files, watchdog, detection, early-warning, deception, defense]
+tags: [ransomware, canary-files, watchdog, detection, early-warning]
 domain: cybersecurity
 subdomain: ransomware-defense
 version: 1.0.0

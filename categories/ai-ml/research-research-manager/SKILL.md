@@ -2,7 +2,7 @@
 name: research-research-manager
 description: "Records research provenance as a post-task epilogue, scanning conversation history at the end of a coding or research session to extract decisions, experiments, dead ends, claims, heuristics, and p..."
 license: MIT
-tags: [ara, research-recording, provenance, session-logging, knowledge-management, exploration-tree, research-tooling]
+tags: [ara, research-recording, provenance, session-logging, knowledge-management]
 version: 1.0.0
 author: Orchestra Research
 dependencies: []
@@ -319,6 +319,6 @@ While reviewing `staging/observations.yaml`:
 ## Reference Files
 
 For detailed protocol and taxonomy specifications, load on demand:
-- [references/event-taxonomy.md](references/event-taxonomy.md) — Full classification of research-significant events
-- [references/provenance-tags.md](references/provenance-tags.md) — Provenance tag semantics and edge cases
-- [references/session-protocol.md](references/session-protocol.md) — Step-by-step session recording protocol
+- references/event-taxonomy.md — Full classification of research-significant events
+- references/provenance-tags.md — Provenance tag semantics and edge cases
+- references/session-protocol.md — Step-by-step session recording protocol

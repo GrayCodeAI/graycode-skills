@@ -2,7 +2,7 @@
 name: intercepting-mobile-traffic-with-burpsuite
 description: "Intercepts and analyzes HTTP/HTTPS traffic from mobile applications using Burp Suite proxy to identify insecure API communications, authentication flaws, data leakage, and server-side vulnerabiliti..."
 license: MIT
-tags: [mobile-security, android, ios, burp-suite, traffic-interception, penetration-testing]
+tags: [mobile-security, android, ios, burp-suite, traffic-interception]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

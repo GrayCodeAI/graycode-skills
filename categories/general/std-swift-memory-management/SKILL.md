@@ -41,4 +41,4 @@ keywords: None
 
 ## References
 
-- [Capture Lists & Retain Cycles](references/implementation.md)
+- Capture Lists & Retain Cycles

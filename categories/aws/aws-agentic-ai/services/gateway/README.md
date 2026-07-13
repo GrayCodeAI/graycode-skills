@@ -95,6 +95,6 @@ aws bedrock-agentcore-control delete-gateway-target \
 
 ## Related Resources
 
-- [Cross-Service Credential Management](credential-management.md)
+- Cross-Service Credential Management
 - [AWS Gateway Documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)
 - [Bedrock AgentCore CLI Reference](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/bedrock-agentcore-control/index.html)

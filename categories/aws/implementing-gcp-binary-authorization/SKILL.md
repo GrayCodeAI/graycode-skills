@@ -2,7 +2,7 @@
 name: implementing-gcp-binary-authorization
 description: "Implement GCP Binary Authorization to enforce deploy-time security controls that ensure only trusted, attested container images are deployed to Google Kubernetes Engine and Cloud Run."
 license: MIT
-tags: [gcp, binary-authorization, container-security, supply-chain, gke, cloud-run, attestation, software-integrity]
+tags: [gcp, binary-authorization, container-security, supply-chain, gke]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

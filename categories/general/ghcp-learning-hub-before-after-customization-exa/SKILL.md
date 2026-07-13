@@ -44,7 +44,7 @@ Use markdown with code blocks for suggestions. For each issue, provide:
 - Why it matters
 - Suggested fix with code example
 
-See [references/review-checklist.md](references/review-checklist.md) for the standard review checklist.
+See references/review-checklist.md for the standard review checklist.
 
 Example format:
 ## 🔴 Critical Issues

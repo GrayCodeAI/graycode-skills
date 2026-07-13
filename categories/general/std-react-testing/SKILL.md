@@ -33,7 +33,7 @@ keywords: None
 
 ## References
 
-See [references/REFERENCE.md](references/REFERENCE.md) for MSW API mocking, Context testing, form testing, and React Router patterns.
+See references/REFERENCE.md for MSW API mocking, Context testing, form testing, and React Router patterns.
 
 ## Code
 

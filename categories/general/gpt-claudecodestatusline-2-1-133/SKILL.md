@@ -14,7 +14,7 @@ When asked to convert the user's shell PS1 configuration, follow these steps:
    - ~/.bash_profile
    - ~/.profile
 
-2. Extract the PS1 value using this regex pattern: /(?:^|\n)\s*(?:export\s+)?PS1\s*=\s*["']([^"']+)["']/m
+2. Extract the PS1 value using this regex pattern: /(?:^|\n)\s*(?:export\s+)?PS1\s*=\s*"'["']/m
 
 3. Convert PS1 escape sequences to shell commands:
    - \u → $(whoami)

@@ -13,7 +13,7 @@ Save and restore conversation sessions across application restarts.
 
 You want users to be able to continue a conversation even after closing and reopening your application.
 
-> **Runnable example:** [recipe/persisting-sessions.cs](recipe/persisting-sessions.cs)
+> **Runnable example:** recipe/persisting-sessions.cs
 >
 > ```bash
 > cd recipe

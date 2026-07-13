@@ -39,4 +39,4 @@ keywords: None
 
 ## References
 
-- [Bug Report Template](references/bug-report-template.md)
+- Bug Report Template

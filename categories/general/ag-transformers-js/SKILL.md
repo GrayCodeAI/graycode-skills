@@ -59,7 +59,7 @@ const result = await pipe('I love transformers!');
 await classifier.dispose();
 ```
 
-**⚠️ Memory Management:** All pipelines must be disposed with `pipe.dispose()` when finished to prevent memory leaks. See examples in [Code Examples](./references/EXAMPLES.md) for cleanup patterns across different environments.
+**⚠️ Memory Management:** All pipelines must be disposed with `pipe.dispose()` when finished to prevent memory leaks. See examples in Code Examples for cleanup patterns across different environments.
 
 ### 2. Model Selection
 You can specify a custom model as the second argument:
@@ -141,7 +141,7 @@ const text = await generator('Once upon a time', {
 });
 ```
 
-**For streaming and chat:** See **[Text Generation Guide](./references/TEXT_GENERATION.md)** for:
+**For streaming and chat:** See **Text Generation Guide** for:
 - Streaming token-by-token output with `TextStreamer`
 - Chat/conversation format with system/user/assistant roles
 - Generation parameters (temperature, top_k, top_p)
@@ -413,7 +413,7 @@ env.useBrowserCache = false;
 
 For complete documentation on all configuration options, caching strategies, cache management, pre-downloading models, and more, see:
 
-**→ [Configuration Reference](./references/CONFIGURATION.md)**
+**→ Configuration Reference**
 
 ### Working with Tensors
 
@@ -512,7 +512,7 @@ interface ProgressInfo {
 
 For complete examples including browser UIs, React components, CLI progress bars, and retry logic, see:
 
-**→ [Pipeline Options - Progress Callback](./references/PIPELINE_OPTIONS.md#progress-callback)**
+**→ Pipeline Options - Progress Callback**
 
 ## Error Handling
 
@@ -536,7 +536,7 @@ try {
 1. **Reuse Pipelines**: Create pipeline once, reuse for multiple inferences
 2. **Use Quantization**: Start with `q8` or `q4` for faster inference
 3. **Batch Processing**: Process multiple inputs together when possible
-4. **Cache Models**: Models are cached automatically (see **[Caching Reference](./references/CACHE.md)** for details on browser Cache API, Node.js filesystem cache, and custom implementations)
+4. **Cache Models**: Models are cached automatically (see **Caching Reference** for details on browser Cache API, Node.js filesystem cache, and custom implementations)
 5. **WebGPU for Large Models**: Use WebGPU for models that benefit from GPU acceleration
 6. **Prune Context**: For text generation, limit `max_new_tokens` to avoid memory issues
 7. **Clean Up Resources**: Call `pipe.dispose()` when done to free memory
@@ -558,7 +558,7 @@ await pipe.dispose();  // ✓ Free memory (100MB - several GB per model)
 
 Models consume significant memory and hold GPU/CPU resources. Disposal is critical for browser memory limits and server stability.
 
-For detailed patterns (React cleanup, servers, browser), see **[Code Examples](./references/EXAMPLES.md)**
+For detailed patterns (React cleanup, servers, browser), see **Code Examples**
 
 ## Troubleshooting
 
@@ -580,12 +580,12 @@ For detailed patterns (React cleanup, servers, browser), see **[Code Examples](.
 ## Reference Documentation
 
 ### This Skill
-- **[Pipeline Options](./references/PIPELINE_OPTIONS.md)** - Configure `pipeline()` with `progress_callback`, `device`, `dtype`, etc.
-- **[Configuration Reference](./references/CONFIGURATION.md)** - Global `env` configuration for caching and model loading
-- **[Caching Reference](./references/CACHE.md)** - Browser Cache API, Node.js filesystem cache, and custom cache implementations
-- **[Text Generation Guide](./references/TEXT_GENERATION.md)** - Streaming, chat format, and generation parameters
-- **[Model Architectures](./references/MODEL_ARCHITECTURES.md)** - Supported models and selection tips
-- **[Code Examples](./references/EXAMPLES.md)** - Real-world implementations for different runtimes
+- **Pipeline Options** - Configure `pipeline()` with `progress_callback`, `device`, `dtype`, etc.
+- **Configuration Reference** - Global `env` configuration for caching and model loading
+- **Caching Reference** - Browser Cache API, Node.js filesystem cache, and custom cache implementations
+- **Text Generation Guide** - Streaming, chat format, and generation parameters
+- **Model Architectures** - Supported models and selection tips
+- **Code Examples** - Real-world implementations for different runtimes
 
 ### Official Transformers.js
 - Official docs: https://huggingface.co/docs/transformers.js

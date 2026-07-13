@@ -19,7 +19,7 @@ keywords: None
 - Use imperative mood: "add feature" not "added feature".
 - One commit = one logical change — no mega-commits.
 
-See [implementation examples](references/implementation.md) for conventional commit examples.
+See implementation examples for conventional commit examples.
 
 ## 2. Manage Branches
 
@@ -51,4 +51,4 @@ See [implementation examples](references/implementation.md) for conventional com
 
 ## References
 
-- [Clean Linear History & Rebase Examples](references/CLEAN_HISTORY.md)
+- Clean Linear History & Rebase Examples

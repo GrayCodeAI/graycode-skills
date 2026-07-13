@@ -20,7 +20,7 @@ keywords: None
 - **Tracing**: Use OpenTelemetry. Propagate W3C `traceparent`.
 - **Spans**: Name spans like `<HTTP_METHOD> <route>` (`GET /users/:id`).
 
-See [implementation examples](references/implementation.md) for structured logger setup with Pino.
+See implementation examples for structured logger setup with Pino.
 
 ## Metrics
 
@@ -35,4 +35,4 @@ See [implementation examples](references/implementation.md) for structured logge
 - **Missing Cleanup**: Always end tracing spans.
 
 ## References
-- [Observability Data Formats](references/observability-formats.md)
+- Observability Data Formats

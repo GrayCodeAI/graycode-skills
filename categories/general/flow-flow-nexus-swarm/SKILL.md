@@ -2,7 +2,7 @@
 name: flow-flow-nexus-swarm
 description: "Cloud-based AI swarm deployment and event-driven workflow automation with Flow Nexus platform"
 license: MIT
-tags: [swarm, workflow, cloud, agents, automation, message-queue]
+tags: [swarm, workflow, cloud, agents, automation]
 category: orchestration
 version: 1.0.0
 requires: None

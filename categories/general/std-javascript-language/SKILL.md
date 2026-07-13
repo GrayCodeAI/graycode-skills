@@ -35,7 +35,7 @@ keywords: None
 
 ## Code & Reference
 
-See [references/REFERENCE.md](references/REFERENCE.md) for modern syntax, async patterns, private fields, and functional programming examples.
+See references/REFERENCE.md for modern syntax, async patterns, private fields, and functional programming examples.
 
 ## Related Topics
 

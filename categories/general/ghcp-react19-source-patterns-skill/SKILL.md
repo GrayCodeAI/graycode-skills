@@ -20,8 +20,8 @@ Reference for every source-file migration required for React 19.
 | `forwardRef(...)` wrapper | → ref as direct prop | See references/api-migrations.md |
 | `Component.defaultProps = {}` | → ES6 default params | See references/api-migrations.md |
 | `useRef()` no arg | → `useRef(null)` | Inline fix  add `null` |
-| Legacy Context | → `createContext` | [→ api-migrations.md#legacy-context](references/api-migrations.md#legacy-context) |
-| String refs `this.refs.x` | → `createRef()` | [→ api-migrations.md#string-refs](references/api-migrations.md#string-refs) |
+| Legacy Context | → `createContext` | → api-migrations.md#legacy-context |
+| String refs `this.refs.x` | → `createRef()` | → api-migrations.md#string-refs |
 | `import React from 'react'` (unused) | Remove | Only if no `React.` usage in file |
 
 ## PropTypes Rule

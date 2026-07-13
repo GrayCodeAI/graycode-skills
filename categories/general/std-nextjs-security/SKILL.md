@@ -23,7 +23,7 @@ keywords: None
 
 ## Secure Server Action Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -44,4 +44,4 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Secure App Router Patterns](references/implementation.md)
+- Secure App Router Patterns

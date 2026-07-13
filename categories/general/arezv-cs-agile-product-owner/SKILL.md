@@ -398,17 +398,17 @@ echo "Location: product-team/agile-product-owner/references/user-story-templates
 
 ## Related Agents
 
-- [cs-product-manager](cs-product-manager.md) - Full product management lifecycle (RICE, interviews, PRDs)
-- [cs-product-strategist](cs-product-strategist.md) - OKR cascade and strategic planning for roadmap alignment
-- [cs-ux-researcher](cs-ux-researcher.md) - User research to inform story requirements and acceptance criteria
+- cs-product-manager - Full product management lifecycle (RICE, interviews, PRDs)
+- cs-product-strategist - OKR cascade and strategic planning for roadmap alignment
+- cs-ux-researcher - User research to inform story requirements and acceptance criteria
 - Scrum Master - Velocity context and sprint execution (see `project-management/scrum-master/`)
 
 ## References
 
 - **Primary Skill:** [product-team/agile-product-owner/SKILL.md](SKILL.md)
 - **RICE Framework:** [product-team/product-manager-toolkit/SKILL.md](SKILL.md)
-- **Product Domain Guide:** [product-team/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **Product Domain Guide:** product-team/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 - **Scrum Master Skill:** [project-management/scrum-master/SKILL.md](SKILL.md)
 
 ---

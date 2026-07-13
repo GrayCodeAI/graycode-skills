@@ -23,11 +23,11 @@ keywords: None
 
 ## Response Wrapper Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Entity-to-DTO Mapping Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Deep Validation (Critical)
 
@@ -37,11 +37,11 @@ See [implementation examples](references/implementation.md)
 
 - **DTOs**: Use strict `PageOptionsDto` (page/take/order) and `PageDto<T>` (data/meta).
 - **Swagger Logic**: Generics require `ApiExtraModels` and schema path resolution.
-- **Reference**: See [Pagination Wrapper Implementation](references/pagination-wrapper.md) for complete `ApiPaginatedResponse` decorator code.
+- **Reference**: See Pagination Wrapper Implementation for complete `ApiPaginatedResponse` decorator code.
 
 ## Custom Error Response
 
-- **Standard Error Object**: Define `ApiErrorResponse` with `statusCode`, `message`, `error`, `timestamp`, `path`. See [Error Response Class](references/error-response.md).
+- **Standard Error Object**: Define `ApiErrorResponse` with `statusCode`, `message`, `error`, `timestamp`, `path`. See Error Response Class.
 - **Docs**: Apply `@ApiBadRequestResponse({ type: ApiErrorResponse })` globally or per controller.
 
 ## Anti-Patterns
@@ -52,5 +52,5 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Pagination Wrapper](references/pagination-wrapper.md)
-- [Error Response Class](references/error-response.md)
+- Pagination Wrapper
+- Error Response Class

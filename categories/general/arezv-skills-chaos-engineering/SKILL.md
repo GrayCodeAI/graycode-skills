@@ -2,7 +2,7 @@
 name: arezv-skills-chaos-engineering
 description: "Use when planning, running, or learning from chaos engineering experiments. Triggers on \"chaos experiment\", \"fault injection\", \"gameday\", \"resilience test\", \"blast radius\", \"steady state\", \"abort c..."
 license: MIT
-tags: [chaos-engineering, resilience, fault-injection, gameday, sre, reliability, chaos-toolkit, chaos-mesh, litmus, gremlin, aws-fis]
+tags: [chaos-engineering, resilience, fault-injection, gameday, sre]
 context: fork
 version: 2.4.0
 author: claude-code-skills

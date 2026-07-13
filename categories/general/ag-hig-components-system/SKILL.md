@@ -64,15 +64,15 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [widgets.md](references/widgets.md) | Widgets | Glanceable info, sizes, deep linking, timeline |
-| [live-activities.md](references/live-activities.md) | Live Activities | Real-time tracking, Dynamic Island, Lock Screen |
-| [notifications.md](references/notifications.md) | Notifications | Attention, actions, grouping, content |
-| [complications.md](references/complications.md) | Complications | Watch face data, families, budgeted updates |
-| [home-screen-quick-actions.md](references/home-screen-quick-actions.md) | Quick actions | Haptic Touch, common tasks, SF Symbols |
-| [top-shelf.md](references/top-shelf.md) | Top shelf | Featured content, showcase |
-| [app-clips.md](references/app-clips.md) | App Clips | Instant use, lightweight, focused task, NFC/QR |
-| [watch-faces.md](references/watch-faces.md) | Watch faces | Custom complications, face sharing |
-| [app-shortcuts.md](references/app-shortcuts.md) | App Shortcuts | Siri, Spotlight, voice triggers |
+| widgets.md | Widgets | Glanceable info, sizes, deep linking, timeline |
+| live-activities.md | Live Activities | Real-time tracking, Dynamic Island, Lock Screen |
+| notifications.md | Notifications | Attention, actions, grouping, content |
+| complications.md | Complications | Watch face data, families, budgeted updates |
+| home-screen-quick-actions.md | Quick actions | Haptic Touch, common tasks, SF Symbols |
+| top-shelf.md | Top shelf | Featured content, showcase |
+| app-clips.md | App Clips | Instant use, lightweight, focused task, NFC/QR |
+| watch-faces.md | Watch faces | Custom complications, face sharing |
+| app-shortcuts.md | App Shortcuts | Siri, Spotlight, voice triggers |
 
 ## Output Format
 

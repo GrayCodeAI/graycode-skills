@@ -2,7 +2,7 @@
 name: ag-production-audit
 description: "Audit a shipped repo for production-readiness gaps across RLS, webhooks, secrets, grants, Stripe idempotency, mobile UX, and deployment health."
 license: MIT
-tags: [security, audit, production, vibe-coding, rls, webhook, stripe, supabase, mobile]
+tags: [security, audit, production, vibe-coding, rls]
 category: security
 risk: critical
 source: community

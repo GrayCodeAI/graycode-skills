@@ -2,7 +2,7 @@
 name: ag-global-chat-agent-discovery
 description: "Discover and search 18K+ MCP servers and AI agents across 6+ registries using Global Chat's cross-protocol directory and MCP server."
 license: MIT
-tags: [mcp, ai-agents, agent-discovery, agents-txt, a2a, developer-tools]
+tags: [mcp, ai-agents, agent-discovery, agents-txt, a2a]
 category: development
 risk: safe
 source: community

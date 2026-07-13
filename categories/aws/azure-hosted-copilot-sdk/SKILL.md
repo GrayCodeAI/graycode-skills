@@ -17,22 +17,22 @@ version: 1.0.0
 | Build new (empty project) | Step 2A (scaffold) |
 | Add new SDK service to existing repo | Step 2B (scaffold alongside) |
 | Deploy existing SDK app to Azure | Step 2C (add infra to existing SDK app) |
-| Add SDK to existing app code | [Integrate SDK](references/existing-project-integration.md) |
+| Add SDK to existing app code | Integrate SDK |
 | Use Azure/own model | Step 3 (BYOM config) |
 
 ## Step 2A: Scaffold New (Greenfield)
 
 `azd init --template azure-samples/copilot-sdk-service`
 
-Template includes API (Express/TS) + Web UI (React/Vite) + infra (Bicep) + Dockerfiles + token scripts — do NOT recreate. See [SDK ref](references/copilot-sdk.md).
+Template includes API (Express/TS) + Web UI (React/Vite) + infra (Bicep) + Dockerfiles + token scripts — do NOT recreate. See SDK ref.
 
 ## Step 2B: Add SDK Service to Existing Repo
 
-User has existing code and wants a new Copilot SDK service alongside it. Scaffold template to a temp dir, copy the API service + infra into the user's repo, adapt `azure.yaml` to include both existing and new services. See [deploy existing ref](references/deploy-existing.md).
+User has existing code and wants a new Copilot SDK service alongside it. Scaffold template to a temp dir, copy the API service + infra into the user's repo, adapt `azure.yaml` to include both existing and new services. See deploy existing ref.
 
 ## Step 2C: Deploy Existing SDK App
 
-User already has a working Copilot SDK app and needs Azure infra. See [deploy existing ref](references/deploy-existing.md).
+User already has a working Copilot SDK app and needs Azure infra. See deploy existing ref.
 
 ## Step 3: Model Configuration
 
@@ -44,7 +44,7 @@ Three model paths (layers on top of 2A/2B):
 | **GitHub specific** | `model: "<name>"` — use `listModels()` to discover |
 | **Azure BYOM** | `model` + `provider` with `bearerToken` via `DefaultAzureCredential` |
 
-See [model config ref](references/azure-model-config.md).
+See model config ref.
 
 ## Step 4: Deploy
 

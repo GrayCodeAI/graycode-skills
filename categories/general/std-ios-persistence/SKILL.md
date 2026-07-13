@@ -21,7 +21,7 @@ keywords: None
 4. **Perform background writes** — Use `newBackgroundContext()` (Core Data) to avoid UI lag; never heavy I/O on `viewContext`.
 5. **Secure sensitive data** — Use Keychain for tokens and PII; never store in `UserDefaults`.
 
-See [SwiftData and Core Data implementation examples](references/implementation.md)
+See SwiftData and Core Data implementation examples
 
 ## Anti-Patterns
 
@@ -31,4 +31,4 @@ See [SwiftData and Core Data implementation examples](references/implementation.
 
 ## References
 
-- [SwiftData & Core Data Implementation](references/implementation.md)
+- SwiftData & Core Data Implementation

@@ -19,7 +19,7 @@ keywords: None
 - **Data**: Repository impl, DataSources (API/DB). Maps DTO -> Domain.
 - **UI**: ViewModel + Composable. Maps Domain -> UiState.
 
-See [structure & examples](references/implementation.md) for Clean Architecture layer examples.
+See structure & examples for Clean Architecture layer examples.
 
 ## 2. Modularize by Feature and Core
 
@@ -27,7 +27,7 @@ See [structure & examples](references/implementation.md) for Clean Architecture 
 - **Core Modules**: `:core:ui` (Design System), `:core:network`, `:core:database`.
 - **App Module**: DI Root and Navigation Guard.
 
-See [structure & examples](references/implementation.md) for module configuration.
+See structure & examples for module configuration.
 
 ## 3. Enforce Unidirectional Data Flow (UDF)
 
@@ -56,5 +56,5 @@ See [structure & examples](references/implementation.md) for module configuratio
 
 ## References
 
-- [Structure & Examples](references/implementation.md)
-- [Jetpack Compose Best Practices](references/compose-standards.md)
+- Structure & Examples
+- Jetpack Compose Best Practices

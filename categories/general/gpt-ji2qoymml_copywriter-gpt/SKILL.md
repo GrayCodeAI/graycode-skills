@@ -43,4 +43,4 @@ End of copied content
 
 GPT Kb Files List
 
-- [Copywriter GPT](./knowledge/Copywriter%20GPT/)
+- Copywriter GPT

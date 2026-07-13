@@ -2,7 +2,7 @@
 name: performing-paste-site-monitoring-for-credentials
 description: "Monitor paste sites like Pastebin and GitHub Gists for leaked credentials, API keys, and sensitive data dumps using automated scraping and keyword matching to detect breaches early."
 license: MIT
-tags: [paste-monitoring, credential-leak, pastebin, data-breach, threat-intelligence, osint, early-warning]
+tags: [paste-monitoring, credential-leak, pastebin, data-breach, threat-intelligence]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

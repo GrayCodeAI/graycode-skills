@@ -169,7 +169,7 @@ repo:owner/repo type:"Epic" label:P1 is:open
 
 ## Issue Field Search
 
-> **Reliability warning:** The `field.name:value` search qualifier syntax is experimental and may return 0 results even when matching issues exist. For reliable filtering by field values, use the GraphQL bulk query approach documented in [issue-fields.md](issue-fields.md#searching-by-field-values).
+> **Reliability warning:** The `field.name:value` search qualifier syntax is experimental and may return 0 results even when matching issues exist. For reliable filtering by field values, use the GraphQL bulk query approach documented in issue-fields.md.
 
 Issue fields can theoretically be searched via the `field.name:value` qualifier using **advanced search mode**. This works in the web UI but results from the API are inconsistent.
 

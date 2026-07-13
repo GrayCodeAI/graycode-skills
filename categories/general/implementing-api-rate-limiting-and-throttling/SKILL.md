@@ -2,7 +2,7 @@
 name: implementing-api-rate-limiting-and-throttling
 description: "Implements API rate limiting and throttling controls using token bucket, sliding window, and fixed window algorithms to protect against brute force attacks, credential stuffing, resource exhaustion..."
 license: MIT
-tags: [api-security, rate-limiting, throttling, redis, token-bucket, abuse-prevention]
+tags: [api-security, rate-limiting, throttling, redis, token-bucket]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

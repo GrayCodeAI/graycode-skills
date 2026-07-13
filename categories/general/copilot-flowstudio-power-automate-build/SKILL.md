@@ -10,12 +10,12 @@ Requires a FlowStudio MCP subscription — see https: //mcp.flowstudio.app
 
 ## Reference Files
 
-- [flow-schema.md](references/flow-schema.md) — Full flow definition JSON schema
-- [trigger-types.md](references/trigger-types.md) — Trigger type templates
-- [action-patterns-core.md](references/action-patterns-core.md) — Variables, control flow, expressions
-- [action-patterns-data.md](references/action-patterns-data.md) — Array transforms, HTTP, parsing
-- [action-patterns-connectors.md](references/action-patterns-connectors.md) — SharePoint, Outlook, Teams, Approvals
-- [build-patterns.md](references/build-patterns.md) — Complete flow definition templates (Recurrence+SP+Teams, HTTP trigger)
+- flow-schema.md — Full flow definition JSON schema
+- trigger-types.md — Trigger type templates
+- action-patterns-core.md — Variables, control flow, expressions
+- action-patterns-data.md — Array transforms, HTTP, parsing
+- action-patterns-connectors.md — SharePoint, Outlook, Teams, Approvals
+- build-patterns.md — Complete flow definition templates (Recurrence+SP+Teams, HTTP trigger)
 
 ## Related Skills
 

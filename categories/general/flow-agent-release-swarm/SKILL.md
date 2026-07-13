@@ -548,4 +548,4 @@ npx ruv-swarm github rollback \
   --notify-users
 ```
 
-See also: [workflow-automation.md](.$workflow-automation.md), [multi-repo-swarm.md](.$multi-repo-swarm.md)
+See also: workflow-automation.md, multi-repo-swarm.md

@@ -13,7 +13,7 @@ keywords: None
 
 ## **Priority: P0 (CRITICAL)**
 
-Choose rendering strategy based on data freshness and scaling needs. See [Strategy Matrix](references/strategy-matrix.md).
+Choose rendering strategy based on data freshness and scaling needs. See Strategy Matrix.
 
 ## Workflow: Choose Rendering Strategy
 
@@ -24,7 +24,7 @@ Choose rendering strategy based on data freshness and scaling needs. See [Strate
 
 ## ISR with generateStaticParams Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -45,6 +45,6 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Strategy Selection Matrix](references/strategy-matrix.md)
-- [Implementation Details](references/implementation-details.md)
-- [Scaling Patterns](references/scaling-patterns.md)
+- Strategy Selection Matrix
+- Implementation Details
+- Scaling Patterns

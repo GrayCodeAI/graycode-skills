@@ -358,8 +358,8 @@ done
 ```
 
 **References**:
-- [OWASP Guide](link)
-- [Security Best Practices](link)
+- OWASP Guide
+- Security Best Practices
 ```
 
 ### Batch Comment Management
@@ -518,4 +518,4 @@ npx ruv-swarm github review-report \
   --email-stakeholders
 ```
 
-See also: [swarm-pr.md](.$swarm-pr.md), [workflow-automation.md](.$workflow-automation.md)
+See also: swarm-pr.md, workflow-automation.md

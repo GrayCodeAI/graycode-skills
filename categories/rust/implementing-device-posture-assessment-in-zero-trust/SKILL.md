@@ -2,7 +2,7 @@
 name: implementing-device-posture-assessment-in-zero-trust
 description: "Implementing device posture assessment as a zero trust access control by integrating endpoint health signals from CrowdStrike ZTA, Microsoft Intune, and Jamf into conditional access policies that e..."
 license: MIT
-tags: [device-posture, zero-trust, endpoint-compliance, crowdstrike-zta, intune, conditional-access, jamf]
+tags: [device-posture, zero-trust, endpoint-compliance, crowdstrike-zta, intune]
 domain: cybersecurity
 subdomain: zero-trust-architecture
 version: 1.0

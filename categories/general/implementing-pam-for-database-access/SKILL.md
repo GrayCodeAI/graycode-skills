@@ -2,7 +2,7 @@
 name: implementing-pam-for-database-access
 description: "Deploy privileged access management for database systems including Oracle, SQL Server, PostgreSQL, and MySQL. Covers session proxy configuration, credential vaulting, query auditing, dynamic credentia"
 license: MIT
-tags: [iam, identity, access-control, privileged-access, pam, database, dba]
+tags: [iam, identity, access-control, privileged-access, database]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

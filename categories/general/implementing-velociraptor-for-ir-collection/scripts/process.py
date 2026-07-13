@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Velociraptor IR Collection Automation Script
 Manages artifact collection, hunt creation, and result analysis via Velociraptor API.

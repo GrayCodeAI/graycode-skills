@@ -2,7 +2,7 @@
 name: research-bigcode-evaluation-harness
 description: "Evaluates code generation models across HumanEval, MBPP, MultiPL-E, and 15+ benchmarks with pass@k metrics. Use when benchmarking code models, comparing coding abilities, testing multi-language sup..."
 license: MIT
-tags: [evaluation, code-generation, humaneval, mbpp, multipl-e, pass-k, bigcode, benchmarking, code-models]
+tags: [evaluation, code-generation, humaneval, mbpp, bigcode]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [bigcode-evaluation-harness, transformers>=4.25.1, accelerate>=0.13.2, datasets>=2.6.1]

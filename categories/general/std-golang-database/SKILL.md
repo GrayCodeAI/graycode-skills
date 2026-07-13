@@ -29,7 +29,7 @@ keywords: None
 5. **Close rows** — Always `defer rows.Close()` and check `rows.Err()` after iteration.
 6. **Wrap in transactions** — Use transactions for multi-step operations requiring atomicity.
 
-See [repository pattern and connection pool examples](references/repository-pattern.md)
+See repository pattern and connection pool examples
 
 ## Anti-Patterns
 
@@ -39,5 +39,5 @@ See [repository pattern and connection pool examples](references/repository-patt
 
 ## References
 
-- [Repository Pattern Implementation](references/repository-pattern.md)
-- [Connection Tuning](references/connection-tuning.md)
+- Repository Pattern Implementation
+- Connection Tuning

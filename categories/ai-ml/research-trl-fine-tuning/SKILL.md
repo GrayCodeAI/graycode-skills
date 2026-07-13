@@ -2,7 +2,7 @@
 name: research-trl-fine-tuning
 description: "Fine-tune LLMs using reinforcement learning with TRL - SFT for instruction tuning, DPO for preference alignment, PPO/GRPO for reward optimization, and reward model training. Use when need RLHF, ali..."
 license: MIT
-tags: [post-training, trl, reinforcement-learning, fine-tuning, sft, dpo, ppo, grpo, rlhf, preference-alignment, huggingface]
+tags: [post-training, trl, reinforcement-learning, fine-tuning, sft]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [trl, transformers, datasets, peft, accelerate, torch]
@@ -417,13 +417,13 @@ config = PPOConfig(
 
 ## Advanced topics
 
-**SFT training guide**: See [references/sft-training.md](references/sft-training.md) for dataset formats, chat templates, packing strategies, and multi-GPU training.
+**SFT training guide**: See references/sft-training.md for dataset formats, chat templates, packing strategies, and multi-GPU training.
 
-**DPO variants**: See [references/dpo-variants.md](references/dpo-variants.md) for IPO, cDPO, RPO, and other DPO loss functions with recommended hyperparameters.
+**DPO variants**: See references/dpo-variants.md for IPO, cDPO, RPO, and other DPO loss functions with recommended hyperparameters.
 
-**Reward modeling**: See [references/reward-modeling.md](references/reward-modeling.md) for outcome vs process rewards, Bradley-Terry loss, and reward model evaluation.
+**Reward modeling**: See references/reward-modeling.md for outcome vs process rewards, Bradley-Terry loss, and reward model evaluation.
 
-**Online RL methods**: See [references/online-rl.md](references/online-rl.md) for PPO, GRPO, RLOO, and OnlineDPO with detailed configurations.
+**Online RL methods**: See references/online-rl.md for PPO, GRPO, RLOO, and OnlineDPO with detailed configurations.
 
 ## Hardware requirements
 

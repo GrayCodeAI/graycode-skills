@@ -2,7 +2,7 @@
 name: implementing-hashicorp-vault-dynamic-secrets
 description: "Implements HashiCorp Vault dynamic secrets engines for database credentials, AWS IAM keys, and PKI certificates with automatic generation, lease management, and credential rotation to eliminate sta..."
 license: MIT
-tags: [hashicorp-vault, dynamic-secrets, secrets-management, database-credentials, aws-secrets, pki]
+tags: [hashicorp-vault, dynamic-secrets, secrets-management, database-credentials, aws-secrets]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

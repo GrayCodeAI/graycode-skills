@@ -7,7 +7,7 @@ tags: [general]
 
 # Gotchas
 
-See [README.md](./README.md), [configuration.md](./configuration.md), [api.md](./api.md), [patterns.md](./patterns.md).
+See README.md, configuration.md, api.md, patterns.md.
 
 ## Common Errors
 
@@ -49,7 +49,7 @@ See [README.md](./README.md), [configuration.md](./configuration.md), [api.md](.
 ### "Slow multi-query Workers despite Hyperdrive"
 
 **Cause:** Worker executing at edge, each query round-trips to DB region  
-**Solution:** Enable Smart Placement (`"placement": {"mode": "smart"}` in wrangler.jsonc) to execute Worker near DB. See [patterns.md](./patterns.md) Multi-Query pattern.
+**Solution:** Enable Smart Placement (`"placement": {"mode": "smart"}` in wrangler.jsonc) to execute Worker near DB. See patterns.md Multi-Query pattern.
 
 ### "Local database connection failed"
 

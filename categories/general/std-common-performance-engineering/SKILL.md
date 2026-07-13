@@ -31,7 +31,7 @@ keywords: None
  - Offload heavy computations to background threads or workers.
  - Memoize pure, expensive functions.
 
-See [implementation examples](references/implementation.md) for memoization and batching patterns.
+See implementation examples for memoization and batching patterns.
 
 ## Network & I/O
 
@@ -60,4 +60,4 @@ See [implementation examples](references/implementation.md) for memoization and 
 
 ## References
 
-- [Implementation Patterns](references/implementation.md) — profiling patterns, benchmark setup
+- Implementation Patterns — profiling patterns, benchmark setup

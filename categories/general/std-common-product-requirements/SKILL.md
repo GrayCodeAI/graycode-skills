@@ -47,5 +47,5 @@ keywords: None
 
 ## References
 
-- [Full PRD Template](references/prd-template.md)
-- [Validation Checklist](references/checklist.md)
+- Full PRD Template
+- Validation Checklist

@@ -2,7 +2,7 @@
 name: implementing-api-abuse-detection-with-rate-limiting
 description: "Implement API abuse detection using token bucket, sliding window, and adaptive rate limiting algorithms to prevent DDoS, brute force, and credential stuffing attacks."
 license: MIT
-tags: [api-security, rate-limiting, token-bucket, sliding-window, ddos-protection, brute-force-prevention, api-abuse, api-gateway]
+tags: [api-security, rate-limiting, token-bucket, sliding-window, api-abuse]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

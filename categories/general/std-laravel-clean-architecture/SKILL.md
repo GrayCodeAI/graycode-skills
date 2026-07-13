@@ -24,7 +24,7 @@ keywords: None
 
 ## Action + DTO Example
 
-See [implementation examples](references/implementation.md#action--dto-example) for Action class with DTO and domain structure patterns.
+See implementation examples for Action class with DTO and domain structure patterns.
 
 ## Implementation Guidelines
 
@@ -54,4 +54,4 @@ See [implementation examples](references/implementation.md#action--dto-example) 
 
 ## References
 
-- [DDD & Repository Patterns](references/implementation.md)
+- DDD & Repository Patterns

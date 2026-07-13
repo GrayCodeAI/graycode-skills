@@ -32,7 +32,7 @@ keywords: None
 
 ## Code & Reference
 
-See [references/REFERENCE.md](references/REFERENCE.md) for constants, custom errors, async patterns, and module structure examples.
+See references/REFERENCE.md for constants, custom errors, async patterns, and module structure examples.
 
 ## Related Topics
 

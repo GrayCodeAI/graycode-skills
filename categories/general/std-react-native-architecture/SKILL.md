@@ -20,7 +20,7 @@ keywords: None
 - **Colocation**: Keep related files together (screens, components, hooks within feature).
 - **Separation**: UI (screens/components) separate from logic (hooks/services).
 
-See [folder structure reference](references/folder-structure.md) for full directory tree and path alias configuration.
+See folder structure reference for full directory tree and path alias configuration.
 
 - **Atomic Components**: Reusable components in `/components`. Feature-specific in feature folder.
 - **Absolute Imports**: Configure tsconfig.json paths for clean imports.
@@ -48,4 +48,4 @@ See [folder structure reference](references/folder-structure.md) for full direct
 
 ## References
 
-See [references/folder-structure.md](references/folder-structure.md) for full directory tree, path alias config, and service layer patterns.
+See references/folder-structure.md for full directory tree, path alias config, and service layer patterns.

@@ -2,7 +2,7 @@
 name: research-awq
 description: "Activation-aware weight quantization for 4-bit LLM compression with 3x speedup and minimal accuracy loss. Use when deploying large models (7B-70B) on limited GPU memory, when you need faster infere..."
 license: MIT
-tags: [optimization, awq, quantization, bit, activation-aware, memory-optimization, fast-inference, vllm-integration, marlin-kernels]
+tags: [optimization, awq, quantization, bit, activation-aware]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [autoawq, transformers>=4.45.0, torch>=2.0.0]

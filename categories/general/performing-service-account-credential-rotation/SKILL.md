@@ -2,7 +2,7 @@
 name: performing-service-account-credential-rotation
 description: "Automate credential rotation for service accounts across Active Directory, cloud platforms, and application databases to eliminate stale secrets and reduce compromise risk."
 license: MIT
-tags: [service-accounts, credential-rotation, secrets-management, pam, automation, vault]
+tags: [service-accounts, credential-rotation, secrets-management, pam, automation]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

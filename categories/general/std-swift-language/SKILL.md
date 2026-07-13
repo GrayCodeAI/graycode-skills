@@ -42,4 +42,4 @@ keywords: None
 
 ## References
 
-- [Optionals & Protocols](references/implementation.md)
+- Optionals & Protocols

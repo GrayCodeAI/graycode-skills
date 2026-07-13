@@ -2,7 +2,7 @@
 name: implementing-gcp-organization-policy-constraints
 description: "Implement GCP Organization Policy constraints to enforce security guardrails across the entire resource hierarchy, restricting risky configurations and ensuring compliance at organization, folder, ..."
 license: MIT
-tags: [gcp, organization-policy, constraints, governance, compliance, cloud-security, resource-manager]
+tags: [gcp, organization-policy, constraints, governance, compliance]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

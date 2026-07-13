@@ -2,7 +2,7 @@
 name: extracting-credentials-from-memory-dump
 description: "Extract cached credentials, password hashes, Kerberos tickets, and authentication tokens from memory dumps using Volatility and Mimikatz for forensic investigation."
 license: MIT
-tags: [forensics, credential-extraction, memory-forensics, volatility, mimikatz, password-hashes, incident-response]
+tags: [forensics, credential-extraction, memory-forensics, volatility, mimikatz]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

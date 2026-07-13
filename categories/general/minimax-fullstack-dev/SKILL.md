@@ -19,11 +19,11 @@ This skill includes deep-dive references for specialized topics. Read the releva
 
 | Need to… | Reference |
 |----------|-----------|
-| Write backend tests (unit, integration, e2e, contract, performance) | [references/testing-strategy.md](references/testing-strategy.md) |
-| Validate a release before deployment (6-gate checklist) | [references/release-checklist.md](references/release-checklist.md) |
-| Choose a tech stack (language, framework, database, infra) | [references/technology-selection.md](references/technology-selection.md) |
-| Build with Django / DRF (models, views, serializers, admin) | [references/django-best-practices.md](references/django-best-practices.md) |
-| Design REST/GraphQL/gRPC endpoints (URLs, status codes, pagination) | [references/api-design.md](references/api-design.md) |
-| Design database schema, indexes, migrations, multi-tenancy | [references/db-schema.md](references/db-schema.md) |
-| Auth flow (JWT bearer, token refresh, Next.js SSR, RBAC, middleware order) | [references/auth-flow.md](references/auth-flow.md) |
-| CORS config, env vars per environment, common CORS issues | [references/environment-management.md](references/environment-management.md) |
+| Write backend tests (unit, integration, e2e, contract, performance) | references/testing-strategy.md |
+| Validate a release before deployment (6-gate checklist) | references/release-checklist.md |
+| Choose a tech stack (language, framework, database, infra) | references/technology-selection.md |
+| Build with Django / DRF (models, views, serializers, admin) | references/django-best-practices.md |
+| Design REST/GraphQL/gRPC endpoints (URLs, status codes, pagination) | references/api-design.md |
+| Design database schema, indexes, migrations, multi-tenancy | references/db-schema.md |
+| Auth flow (JWT bearer, token refresh, Next.js SSR, RBAC, middleware order) | references/auth-flow.md |
+| CORS config, env vars per environment, common CORS issues | references/environment-management.md |

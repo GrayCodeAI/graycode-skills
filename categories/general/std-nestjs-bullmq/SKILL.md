@@ -15,14 +15,14 @@ keywords: None
 
 ## Guidelines
 
-- **Set idle polling**: Add `drainDelay` + `stalledInterval` + `maxStalledCount` to every `@Processor`. Default `drainDelay` (5 ms) burns 570M Redis commands/day at idle. See [patterns.md](references/patterns.md#3-processor-consumer-with-correct-worker-options).
-- **Throttle worker error logs**: BullMQ workers emit raw unhandled ReplyErrors on Redis failure (e.g. Upstash rate limits). Always extend `BaseProcessor` instead of `WorkerHost` to rate-limit these logs. See [patterns.md](references/patterns.md#4-base-processor-for-error-rate-limiting).
-- **Set job retention**: Add `removeOnComplete`, `removeOnFail`, `attempts`, `backoff` to every `BullModule.registerQueue`. See [patterns.md](references/patterns.md#2-module-registration-with-defaultjoboptions).
+- **Set idle polling**: Add `drainDelay` + `stalledInterval` + `maxStalledCount` to every `@Processor`. Default `drainDelay` (5 ms) burns 570M Redis commands/day at idle. See patterns.md.
+- **Throttle worker error logs**: BullMQ workers emit raw unhandled ReplyErrors on Redis failure (e.g. Upstash rate limits). Always extend `BaseProcessor` instead of `WorkerHost` to rate-limit these logs. See patterns.md.
+- **Set job retention**: Add `removeOnComplete`, `removeOnFail`, `attempts`, `backoff` to every `BullModule.registerQueue`. See patterns.md.
 - **Use shared constants**: All numeric options live in `src/common/constants/bull-queue.constants.ts`. Key constants: `QUEUE_DRAIN_DELAY_MS` (10 000 ms), `QUEUE_STALLED_INTERVAL_MS` (60 000 ms). Use `getSharedBullQueueOptions` helper for `registerQueue`. Queue/job names go in `{feature}.constants.ts`. Never inline magic numbers.
-- **Wrap every `queue.add()`**: Persist DB record first, then enqueue inside try-catch. Redis errors must not surface as 500s. See [patterns.md](references/patterns.md#5-producer-queue-service-with-isolated-queueadd).
-- **Throttler fail-open**: `ThrottlerGuard` registered as global `APP_GUARD` — Redis blip propagates errors to ALL HTTP routes. `RedisThrottlerStorage.increment()` must catch all Redis errors and return fail-open pass-through record. Redis blip must not kill all HTTP routes. See [patterns.md](references/patterns.md#6-throttler-fail-open-pattern).
+- **Wrap every `queue.add()`**: Persist DB record first, then enqueue inside try-catch. Redis errors must not surface as 500s. See patterns.md.
+- **Throttler fail-open**: `ThrottlerGuard` registered as global `APP_GUARD` — Redis blip propagates errors to ALL HTTP routes. `RedisThrottlerStorage.increment()` must catch all Redis errors and return fail-open pass-through record. Redis blip must not kill all HTTP routes. See patterns.md.
 - **Guard new queues**: Follow `isRedisEnabled()` conditional + mock token pattern in every module. NestJS DI throws on startup without mock.
-- **Keep processor and cron**: Cron schedules; processor executes. Both always required — they complementary. See [patterns.md](references/patterns.md#7-processor-vs-cron--when-both-exist).
+- **Keep processor and cron**: Cron schedules; processor executes. Both always required — they complementary. See patterns.md.
 - **Use local Redis in dev**: Never point dev machines at Upstash — idle workers exhaust free tier (500K/day) in minutes.
 
 ## Anti-Patterns
@@ -39,5 +39,5 @@ keywords: None
 
 ## References
 
-- [All Code Patterns](references/patterns.md)
-- [Evals](evals/evals.json)
+- All Code Patterns
+- Evals

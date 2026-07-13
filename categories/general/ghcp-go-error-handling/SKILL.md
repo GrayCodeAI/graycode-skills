@@ -9,7 +9,7 @@ tags: [general]
 
 Handle errors gracefully in your Copilot SDK applications.
 
-> **Runnable example:** [recipe/error-handling.go](recipe/error-handling.go)
+> **Runnable example:** recipe/error-handling.go
 >
 > ```bash
 > go run recipe/error-handling.go

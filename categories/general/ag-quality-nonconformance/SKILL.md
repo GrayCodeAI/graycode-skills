@@ -149,7 +149,7 @@ Before closing any CAPA, verify:
 
 ## Key Edge Cases
 
-These are situations where the obvious approach is wrong. Brief summaries here — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where the obvious approach is wrong. Brief summaries here — see edge-cases.md for full analysis.
 
 1. **Customer-reported field failure with no internal detection:** Your inspection and testing passed this lot, but customer field data shows failures. The instinct is to question the customer's data — resist it. Check whether your inspection plan covers the actual failure mode. Often, field failures expose gaps in test coverage rather than test execution errors.
 
@@ -181,7 +181,7 @@ Match communication tone to situation severity and audience:
 
 ### Key Templates
 
-Brief templates below. Full versions with variables in [communication-templates.md](references/communication-templates.md).
+Brief templates below. Full versions with variables in communication-templates.md.
 
 **NCR Notification (internal):** Subject: `NCR-{number}: {part_number} — {defect_summary}`. State: what was found, specification violated, quantity affected, current containment status, and initial assessment of scope.
 
@@ -225,9 +225,9 @@ Track these metrics weekly and trend monthly:
 
 ## Additional Resources
 
-- For detailed decision frameworks, MRB processes, and SPC decision logic, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and tone guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks, MRB processes, and SPC decision logic, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For complete communication templates with variables and tone guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you need to **run or improve non‑conformance and CAPA processes in regulated manufacturing**:

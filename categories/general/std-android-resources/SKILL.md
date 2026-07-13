@@ -36,4 +36,4 @@ keywords: None
 
 ## References
 
-- [XML Structure](references/implementation.md)
+- XML Structure

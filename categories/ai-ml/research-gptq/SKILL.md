@@ -2,7 +2,7 @@
 name: research-gptq
 description: "Post-training 4-bit quantization for LLMs with minimal accuracy loss. Use for deploying large models (70B, 405B) on consumer GPUs, when you need 4× memory reduction with <2% perplexity degradation,..."
 license: MIT
-tags: [optimization, gptq, quantization, bit, post-training, memory-optimization, consumer-gpus, fast-inference, qlora, group-wise-quantization]
+tags: [optimization, gptq, quantization, bit, post-training]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [auto-gptq, transformers, optimum, peft]
@@ -436,9 +436,9 @@ model = AutoGPTQForCausalLM.from_quantized(
 
 ## References
 
-- **[Calibration Guide](references/calibration.md)** - Dataset selection, quantization process, quality optimization
-- **[Integration Guide](references/integration.md)** - Transformers, PEFT, vLLM, TensorRT-LLM
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, performance optimization
+- **Calibration Guide** - Dataset selection, quantization process, quality optimization
+- **Integration Guide** - Transformers, PEFT, vLLM, TensorRT-LLM
+- **Troubleshooting** - Common issues, performance optimization
 
 ## Resources
 

@@ -21,7 +21,7 @@ keywords: None
 
 ## Route Group Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 
@@ -54,12 +54,12 @@ See [implementation examples](references/implementation.md)
 
 ## Best Practices
 
-- **RSC Boundaries**: Ensure props passed to Client Components serializable. See [RSC Boundaries & Serialization](RSC_BOUNDARIES.md).
+- **RSC Boundaries**: Ensure props passed to Client Components serializable. See RSC Boundaries & Serialization.
 - **Parallel Routes (`@folder`)**: Render multiple pages in same layout. Use `default.tsx` for fallback.
 - **Intercepting Routes (`(..)folder`)**: Load routes within current layout context.
 - **Colocation**: Keep component files, styles, and tests inside route folder.
 - **Layouts**: Use Root Layout (`app/layout.tsx`) for `<html>` and `<body>` tags.
-- [**Self-Hosting Standard**](references/SELF_HOSTING.md)
+- **Self-Hosting Standard**
 
 
 ## Anti-Patterns

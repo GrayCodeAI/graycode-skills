@@ -154,4 +154,4 @@ If any of these prompts are used, they are subject to the same instruction prote
 
 GPT Kb Files List:
 
-- [The Illuminat! - Advanced Dark Strategy Game](./knowledge/The%20Illuminat!%20-%20Advanced%20Dark%20Strategy%20Game/)
+- The Illuminat! - Advanced Dark Strategy Game

@@ -2,7 +2,7 @@
 name: implementing-immutable-backup-with-restic
 description: "Implements immutable backup strategy using restic with S3-compatible storage and object lock for ransomware-resistant data protection. Automates backup creation, integrity verification via restic c..."
 license: MIT
-tags: [restic, backup, immutable, ransomware, s3, object-lock, worm, recovery]
+tags: [restic, backup, immutable, ransomware, s3]
 domain: cybersecurity
 subdomain: ransomware-defense
 version: 1.0.0

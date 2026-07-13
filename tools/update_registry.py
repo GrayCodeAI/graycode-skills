@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Regenerate registry.json from all skill directories."""
 
+import argparse
 import json
 import os
 import sys
@@ -159,11 +160,50 @@ def validate_entries(entries: list[dict]) -> list[str]:
     return violations
 
 
-def main():
+def render_registry(entries: list[dict]) -> str:
+    """Render registry entries in the canonical on-disk format."""
+    return json.dumps(entries, indent=2, ensure_ascii=False) + "\n"
+
+
+def registry_is_current(expected: str) -> bool:
+    """Return whether registry.json exactly matches the generated registry."""
+    try:
+        actual = REGISTRY_PATH.read_text(encoding="utf-8")
+    except OSError as exc:
+        console.print(
+            f"[bold red]Registry check failed:[/bold red] "
+            f"cannot read {_display_path(REGISTRY_PATH)}: {exc}"
+        )
+        return False
+
+    if actual == expected:
+        return True
+
+    console.print(
+        f"[bold red]Registry check failed:[/bold red] {_display_path(REGISTRY_PATH)} is stale."
+    )
+    console.print("  Regenerate it with: [cyan]python3 tools/update_registry.py[/cyan]")
+    return False
+
+
+def main(argv: list[str] | None = None):
+    parser = argparse.ArgumentParser(
+        description="Regenerate registry.json from all skill directories"
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="fail if registry.json is stale without modifying it",
+    )
+    args = parser.parse_args([] if argv is None else argv)
+
     console.print("[dim]Scanning categories for skills...[/dim]")
     entries, duplicates = _build_registry_with_duplicates()
 
     if not entries:
+        if args.check:
+            console.print("[bold red]Registry check failed:[/bold red] no valid skills found.")
+            sys.exit(1)
         console.print("[yellow]No valid skills found.[/yellow]")
         sys.exit(0)
 
@@ -189,11 +229,16 @@ def main():
             print(f"  - {v}", file=sys.stderr)
         sys.exit(1)
 
+    rendered = render_registry(entries)
+    if args.check:
+        if not registry_is_current(rendered):
+            sys.exit(1)
+        console.print("[bold green]Registry is current.[/bold green]")
+        console.print(f"  Skills indexed: [cyan]{len(entries)}[/cyan]")
+        return
+
     # Write registry
-    REGISTRY_PATH.write_text(
-        json.dumps(entries, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+    REGISTRY_PATH.write_text(rendered, encoding="utf-8")
 
     console.print("[bold green]Registry updated![/bold green]")
     console.print(f"  Skills indexed: [cyan]{len(entries)}[/cyan]")
@@ -210,4 +255,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

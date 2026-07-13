@@ -7,7 +7,7 @@ tags: [testing]
 
 # Robot Framework Skill
 
-For TestMu AI cloud execution, see [reference/cloud-integration.md](reference/cloud-integration.md) and [shared/testmu-cloud-reference.md](testmu-cloud-reference.md).
+For TestMu AI cloud execution, see reference/cloud-integration.md and shared/testmu-cloud-reference.md.
 
 ## Core Patterns
 

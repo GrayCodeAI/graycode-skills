@@ -2,7 +2,7 @@
 name: research-simpo
 description: "Simple Preference Optimization for LLM alignment. Reference-free alternative to DPO with better performance (+6.4 points on AlpacaEval 2.0). No reference model needed, more efficient than DPO. Use ..."
 license: MIT
-tags: [post-training, simpo, preference-optimization, alignment, dpo-alternative, reference-free, llm-alignment, efficient-training]
+tags: [post-training, simpo, preference-optimization, alignment, dpo-alternative]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [torch, transformers, datasets, trl, accelerate]
@@ -187,11 +187,11 @@ gradient_checkpointing: true
 
 ## Advanced topics
 
-**Loss functions**: See [references/loss-functions.md](references/loss-functions.md) for sigmoid vs hinge loss, mathematical formulations, and when to use each.
+**Loss functions**: See references/loss-functions.md for sigmoid vs hinge loss, mathematical formulations, and when to use each.
 
-**Hyperparameter tuning**: See [references/hyperparameters.md](references/hyperparameters.md) for beta, gamma, learning rate selection guide, and model-size-specific recommendations.
+**Hyperparameter tuning**: See references/hyperparameters.md for beta, gamma, learning rate selection guide, and model-size-specific recommendations.
 
-**Dataset preparation**: See [references/datasets.md](references/datasets.md) for preference data formats, quality filtering, and custom dataset creation.
+**Dataset preparation**: See references/datasets.md for preference data formats, quality filtering, and custom dataset creation.
 
 ## Hardware requirements
 

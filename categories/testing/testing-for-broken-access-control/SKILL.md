@@ -2,7 +2,7 @@
 name: testing-for-broken-access-control
 description: "Systematically testing web applications for broken access control vulnerabilities including privilege escalation, missing function-level checks, and insecure direct object references."
 license: MIT
-tags: [penetration-testing, access-control, authorization, owasp, privilege-escalation, web-security]
+tags: [penetration-testing, access-control, authorization, owasp, privilege-escalation]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

@@ -2,7 +2,7 @@
 name: building-threat-hunt-hypothesis-framework
 description: "Build a systematic threat hunt hypothesis framework that transforms threat intelligence, attack patterns, and environmental data into testable hunting hypotheses."
 license: MIT
-tags: [threat-hunting, methodology, hypothesis, threat-intelligence, hunting-framework, proactive-detection]
+tags: [threat-hunting, methodology, hypothesis, threat-intelligence, hunting-framework]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

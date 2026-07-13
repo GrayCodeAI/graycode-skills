@@ -229,7 +229,7 @@ WHERE timestamp >= '2025-01-15T00:00:00Z' AND status = 404 AND method = 'GET' LI
 
 ## See Also
 
-- [api.md](api.md) - SQL syntax
-- [patterns.md](patterns.md) - Query optimization
-- [configuration.md](configuration.md) - Setup
+- api.md - SQL syntax
+- patterns.md - Query optimization
+- configuration.md - Setup
 - [Cloudflare R2 SQL Docs](https://developers.cloudflare.com/r2-sql/)

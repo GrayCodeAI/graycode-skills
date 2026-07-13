@@ -2,7 +2,7 @@
 name: research-llama-factory
 description: "Expert guidance for fine-tuning LLMs with LLaMA-Factory - WebUI no-code, 100+ models, 2/3/4/5/6/8-bit QLoRA, multimodal support"
 license: MIT
-tags: [fine-tuning, llama-factory, llm, webui, no-code, qlora, lora, multimodal, huggingface, llama, qwen, gemma]
+tags: [fine-tuning, llama-factory, llm, webui, llama]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [llmtuner, torch, transformers, datasets, peft, accelerate, gradio]

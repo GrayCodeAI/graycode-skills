@@ -15,9 +15,9 @@ Trackio is an experiment tracking library for logging and visualizing ML trainin
 
 | Task | Interface | Reference |
 |------|-----------|-----------|
-| **Logging metrics** during training | Python API | [references/logging_metrics.md](references/logging_metrics.md) |
-| **Firing alerts** for training diagnostics | Python API | [references/alerts.md](references/alerts.md) |
-| **Retrieving metrics & alerts** after/during training | CLI | [references/retrieving_metrics.md](references/retrieving_metrics.md) |
+| **Logging metrics** during training | Python API | references/logging_metrics.md |
+| **Firing alerts** for training diagnostics | Python API | references/alerts.md |
+| **Retrieving metrics & alerts** after/during training | CLI | references/retrieving_metrics.md |
 
 ## When to Use Each
 
@@ -31,7 +31,7 @@ Use `import trackio` in your training scripts to log metrics:
 
 **Key concept**: For remote/cloud training, pass `space_id` — metrics sync to a Space dashboard so they persist after the instance terminates.
 
-→ See [references/logging_metrics.md](references/logging_metrics.md) for setup, TRL integration, and configuration options.
+→ See references/logging_metrics.md for setup, TRL integration, and configuration options.
 
 ### Python API → Alerts
 
@@ -43,7 +43,7 @@ Insert `trackio.alert()` calls in training code to flag important events — lik
 
 **Key concept for LLM agents**: Alerts are the primary mechanism for autonomous experiment iteration. An agent should insert alerts into training code for diagnostic conditions (loss spikes, NaN gradients, low accuracy, training stalls). Since alerts are printed to the terminal, an agent that is watching the training script's output will see them automatically. For background or detached runs, the agent can poll via CLI instead.
 
-→ See [references/alerts.md](references/alerts.md) for the full alerts API, webhook setup, and autonomous agent workflows.
+→ See references/alerts.md for the full alerts API, webhook setup, and autonomous agent workflows.
 
 ### CLI → Retrieving
 
@@ -57,7 +57,7 @@ Use the `trackio` command to query logged metrics and alerts:
 
 **Key concept**: Add `--json` for programmatic output suitable for automation and LLM agents.
 
-→ See [references/retrieving_metrics.md](references/retrieving_metrics.md) for all commands, workflows, and JSON output formats.
+→ See references/retrieving_metrics.md for all commands, workflows, and JSON output formats.
 
 ## Minimal Logging Setup
 

@@ -669,15 +669,15 @@ echo "Report: $QUARTER-roadmap.txt"
 
 ## Related Agents
 
-- [cs-agile-product-owner](cs-agile-product-owner.md) - Sprint planning and user story generation
-- [cs-product-strategist](cs-product-strategist.md) - OKR cascade and strategic planning
-- [cs-ux-researcher](cs-ux-researcher.md) - Persona generation and user research
+- cs-agile-product-owner - Sprint planning and user story generation
+- cs-product-strategist - OKR cascade and strategic planning
+- cs-ux-researcher - Persona generation and user research
 
 ## References
 
 - **Skill Documentation:** [product-team/product-manager-toolkit/SKILL.md](SKILL.md)
-- **Product Domain Guide:** [product-team/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **Product Domain Guide:** product-team/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 
 ---
 

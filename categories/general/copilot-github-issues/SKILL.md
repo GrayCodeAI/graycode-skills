@@ -40,7 +40,7 @@ The MCP server does not currently support creating, updating, or commenting on i
 
 1. **Determine action**: Create, update, or query?
 2. **Gather context**: Get repo info, existing labels, milestones if needed
-3. **Structure content**: Use appropriate template from [references/templates.md](references/templates.md)
+3. **Structure content**: Use appropriate template from references/templates.md
 4. **Execute**: Use MCP tools for reads, `gh api` for writes
 5. **Confirm**: Report the issue URL to user
 
@@ -87,7 +87,7 @@ gh api graphql -f query='{ organization(login: "ORG") { issueTypes(first: 10) { 
 
 ### Body Structure
 
-Always use the templates in [references/templates.md](references/templates.md). Choose based on issue type:
+Always use the templates in references/templates.md. Choose based on issue type:
 
 | User Request | Template |
 |--------------|----------|
@@ -194,10 +194,10 @@ The following features require REST or GraphQL APIs beyond the basic MCP tools. 
 
 | Capability | When to use | Reference |
 |------------|-------------|-----------|
-| Advanced search | Complex queries with boolean logic, date ranges, cross-repo search, issue field filters (`field.name:value`) | [references/search.md](references/search.md) |
-| Sub-issues & parent issues | Breaking work into hierarchical tasks | [references/sub-issues.md](references/sub-issues.md) |
-| Issue dependencies | Tracking blocked-by / blocking relationships | [references/dependencies.md](references/dependencies.md) |
-| Issue types (advanced) | GraphQL operations beyond MCP `list_issue_types` / `type` param | [references/issue-types.md](references/issue-types.md) |
-| Projects V2 | Project boards, progress reports, field management | [references/projects.md](references/projects.md) |
-| Issue fields | Custom metadata: dates, priority, text, numbers (private preview) | [references/issue-fields.md](references/issue-fields.md) |
-| Images in issues | Embedding images in issue bodies and comments via CLI | [references/images.md](references/images.md) |
+| Advanced search | Complex queries with boolean logic, date ranges, cross-repo search, issue field filters (`field.name:value`) | references/search.md |
+| Sub-issues & parent issues | Breaking work into hierarchical tasks | references/sub-issues.md |
+| Issue dependencies | Tracking blocked-by / blocking relationships | references/dependencies.md |
+| Issue types (advanced) | GraphQL operations beyond MCP `list_issue_types` / `type` param | references/issue-types.md |
+| Projects V2 | Project boards, progress reports, field management | references/projects.md |
+| Issue fields | Custom metadata: dates, priority, text, numbers (private preview) | references/issue-fields.md |
+| Images in issues | Embedding images in issue bodies and comments via CLI | references/images.md |

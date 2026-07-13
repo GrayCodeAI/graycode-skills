@@ -34,4 +34,4 @@ keywords: None
 
 ## References
 
-- [Test Rules](references/implementation.md)
+- Test Rules

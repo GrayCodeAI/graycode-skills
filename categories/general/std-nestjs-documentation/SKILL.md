@@ -23,7 +23,7 @@ keywords: None
 
 ## Setup
 
-See [implementation examples](references/example.md) for `nest-cli.json` plugin config and Swagger bootstrap.
+See implementation examples for `nest-cli.json` plugin config and Swagger bootstrap.
 
 ## Response Documentation
 
@@ -42,7 +42,7 @@ See [implementation examples](references/example.md) for `nest-cli.json` plugin 
 - **Tags**: Mandatory `@ApiTags('domains')` on every Controller.
 - **Multiple Docs**: Generate separate docs for different audiences (Public vs Internal).
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Anti-Patterns
 

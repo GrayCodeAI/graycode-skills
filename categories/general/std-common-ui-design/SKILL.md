@@ -30,7 +30,7 @@ Bold maximalism and refined minimalism both work — intentionality, not intensi
 
 - Pair distinctive **display font** + refined **body font**; never default to system fonts.
 - Self-host via `next/font`, `@font-face`, or Google Fonts API — never CDN `<link>` in production.
-- See [Font Pairing & Tone Examples](references/tones.md)
+- See Font Pairing & Tone Examples
 
 ### Color & Theme
 
@@ -42,7 +42,7 @@ Bold maximalism and refined minimalism both work — intentionality, not intensi
 
 - One well-orchestrated entrance (staggered reveals, `animation-delay`) > scattered micro-interactions.
 - CSS-first: `@keyframes`, `transition`, `animation-delay`; React: Motion library for complex sequences.
-- See [Motion Patterns](references/motion.md)
+- See Motion Patterns
 
 ### Spatial Composition
 
@@ -65,5 +65,5 @@ Bold maximalism and refined minimalism both work — intentionality, not intensi
 
 ## References
 
-- [Tone Palette & Font Pairings](references/tones.md) — load when choosing aesthetic direction or fonts
-- [Motion Patterns](references/motion.md) — load when implementing animations or transitions
+- Tone Palette & Font Pairings — load when choosing aesthetic direction or fonts
+- Motion Patterns — load when implementing animations or transitions

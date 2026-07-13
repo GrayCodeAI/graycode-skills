@@ -65,7 +65,7 @@ public class WeatherTools
 }
 ```
 
-For STDIO servers, remember: console logging **must** go to stderr (`LogToStandardErrorThreshold = LogLevel.Trace`) — otherwise it corrupts the JSON-RPC stream. See [`transport-stdio.md`](./transport-stdio.md).
+For STDIO servers, remember: console logging **must** go to stderr (`LogToStandardErrorThreshold = LogLevel.Trace`) — otherwise it corrupts the JSON-RPC stream. See `transport-stdio.md`.
 
 To send a log specifically over the MCP channel (so the *host UI* sees it, not just your container logs):
 

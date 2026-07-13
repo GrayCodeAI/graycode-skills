@@ -33,4 +33,4 @@ keywords: None
 
 ## References
 
-See [references/example.md](references/example.md) for typed props, generic components, and hook ref patterns.
+See references/example.md for typed props, generic components, and hook ref patterns.

@@ -54,7 +54,7 @@ export async function getData(id) {
 ## Reference & Examples
 
 For module patterns and project structure:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Related Topics
 

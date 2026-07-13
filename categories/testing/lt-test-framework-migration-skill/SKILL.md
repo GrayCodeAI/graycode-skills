@@ -50,7 +50,7 @@ If the user only names the source (e.g. "convert my Selenium tests"), ask: "Whic
 | Playwright/Puppeteer/Cypress → Selenium | Target can be Java, Python, JS, C#. Prefer same as project or ask. |
 | Playwright ↔ Puppeteer ↔ Cypress | Typically stay in JS/TS. |
 
-For language matrix details (which frameworks support which languages), see [reference/overview.md](reference/overview.md).
+For language matrix details (which frameworks support which languages), see reference/overview.md.
 
 ## Step 4 — Route to Reference
 
@@ -58,16 +58,16 @@ For language matrix details (which frameworks support which languages), see [ref
 
 | Source → Target | Reference file |
 |----------------|----------------|
-| Selenium → Playwright | [reference/selenium-to-playwright.md](reference/selenium-to-playwright.md) |
-| Playwright → Selenium | [reference/playwright-to-selenium.md](reference/playwright-to-selenium.md) |
-| Selenium → Puppeteer | [reference/selenium-to-puppeteer.md](reference/selenium-to-puppeteer.md) |
-| Puppeteer → Selenium | [reference/puppeteer-to-selenium.md](reference/puppeteer-to-selenium.md) |
-| Puppeteer → Playwright | [reference/puppeteer-to-playwright.md](reference/puppeteer-to-playwright.md) |
-| Playwright → Puppeteer | [reference/playwright-to-puppeteer.md](reference/playwright-to-puppeteer.md) |
-| Cypress → Playwright | [reference/cypress-to-playwright.md](reference/cypress-to-playwright.md) |
-| Playwright → Cypress | [reference/playwright-to-cypress.md](reference/playwright-to-cypress.md) |
-| Selenium → Cypress | [reference/selenium-to-cypress.md](reference/selenium-to-cypress.md) |
-| Cypress → Selenium | [reference/cypress-to-selenium.md](reference/cypress-to-selenium.md) |
+| Selenium → Playwright | reference/selenium-to-playwright.md |
+| Playwright → Selenium | reference/playwright-to-selenium.md |
+| Selenium → Puppeteer | reference/selenium-to-puppeteer.md |
+| Puppeteer → Selenium | reference/puppeteer-to-selenium.md |
+| Puppeteer → Playwright | reference/puppeteer-to-playwright.md |
+| Playwright → Puppeteer | reference/playwright-to-puppeteer.md |
+| Cypress → Playwright | reference/cypress-to-playwright.md |
+| Playwright → Cypress | reference/playwright-to-cypress.md |
+| Selenium → Cypress | reference/selenium-to-cypress.md |
+| Cypress → Selenium | reference/cypress-to-selenium.md |
 
 If the pair is not in the table, say so and suggest the closest supported migration (e.g. add WebDriverIO later as a new reference file).
 
@@ -88,11 +88,11 @@ After generating migrated code, validate against the "Gotchas" section of the re
 
 | Need | Where to look |
 |------|----------------|
-| Full Playwright patterns, POM, cloud | `playwright-skill` and [playwright-skill/reference/cloud-integration.md](cloud-integration.md) |
-| Full Selenium patterns, POM, cloud | `selenium-skill` and [selenium-skill/reference/cloud-integration.md](cloud-integration.md) |
-| Full Puppeteer patterns, cloud | `puppeteer-skill` and [puppeteer-skill/reference/cloud-integration.md](cloud-integration.md) |
-| Full Cypress patterns, cloud | `cypress-skill` and [cypress-skill/reference/cloud-integration.md](cloud-integration.md) |
-| TestMu capabilities (all frameworks) | [shared/testmu-cloud-reference.md](testmu-cloud-reference.md) |
+| Full Playwright patterns, POM, cloud | `playwright-skill` and playwright-skill/reference/cloud-integration.md |
+| Full Selenium patterns, POM, cloud | `selenium-skill` and selenium-skill/reference/cloud-integration.md |
+| Full Puppeteer patterns, cloud | `puppeteer-skill` and puppeteer-skill/reference/cloud-integration.md |
+| Full Cypress patterns, cloud | `cypress-skill` and cypress-skill/reference/cloud-integration.md |
+| TestMu capabilities (all frameworks) | shared/testmu-cloud-reference.md |
 
 ## Validation Workflow
 
@@ -108,6 +108,6 @@ After generating migrated code:
 
 | File | When to read |
 |------|--------------|
-| [reference/overview.md](reference/overview.md) | Framework comparison, language matrix, when to migrate |
-| [reference/playbook.md](reference/playbook.md) | Full migration workflow, debugging table, CI/CD checklist, best practices |
+| reference/overview.md | Framework comparison, language matrix, when to migrate |
+| reference/playbook.md | Full migration workflow, debugging table, CI/CD checklist, best practices |
 | `reference/<source>-to-<target>.md` | Before converting any script for that pair |

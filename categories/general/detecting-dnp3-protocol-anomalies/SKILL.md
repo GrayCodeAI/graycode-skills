@@ -2,7 +2,7 @@
 name: detecting-dnp3-protocol-anomalies
 description: "Detect anomalies in DNP3 (Distributed Network Protocol 3) communications used in SCADA systems by monitoring for unauthorized control commands, firmware update attempts, protocol violations, and de..."
 license: MIT
-tags: [ot-security, ics, dnp3, scada, anomaly-detection, protocol-analysis, energy-sector, ids]
+tags: [ot-security, ics, dnp3, scada, protocol-analysis]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

@@ -26,11 +26,11 @@ lib/
 
 ## Provider Definition (Generator-First)
 
-Use `@riverpod` annotations for all provider definitions. See [implementation examples](references/implementation.md) for full provider and consumer patterns.
+Use `@riverpod` annotations for all provider definitions. See implementation examples for full provider and consumer patterns.
 
 ## Consuming Providers
 
-Use `ConsumerWidget` with `ref.watch()` and `AsyncValue.when()` for reactive UI. See [implementation examples](references/implementation.md).
+Use `ConsumerWidget` with `ref.watch()` and `AsyncValue.when()` for reactive UI. See implementation examples.
 
 ## Implementation Guidelines
 

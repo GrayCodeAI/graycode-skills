@@ -45,4 +45,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Security Test 🔏 v1.1.1](./knowledge/Security%20Test%20v1.1.1/)
+- Security Test 🔏 v1.1.1

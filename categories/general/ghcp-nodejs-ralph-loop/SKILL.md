@@ -9,7 +9,7 @@ tags: [general]
 
 Build autonomous coding loops where an AI agent picks tasks, implements them, validates against backpressure (tests, builds), commits, and repeats — each iteration in a fresh context window.
 
-> **Runnable example:** [recipe/ralph-loop.ts](recipe/ralph-loop.ts)
+> **Runnable example:** recipe/ralph-loop.ts
 >
 > ```bash
 > npm install
@@ -244,5 +244,5 @@ npm run build
 
 ## See Also
 
-- [Error Handling](error-handling.md) — timeout patterns and graceful shutdown for long-running sessions
-- [Persisting Sessions](persisting-sessions.md) — save and resume sessions across restarts
+- Error Handling — timeout patterns and graceful shutdown for long-running sessions
+- Persisting Sessions — save and resume sessions across restarts

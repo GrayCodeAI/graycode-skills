@@ -85,27 +85,27 @@ workspace/
 
 ## Detailed Resources
 
-**Configuration**: See [reference/configuration.md](reference/configuration.md) for:
+**Configuration**: See reference/configuration.md for:
 
 - nx.json templates and options
 - project.json structure
 - Module boundary rules
 - Remote caching setup
 
-**Commands**: See [reference/commands.md](reference/commands.md) for:
+**Commands**: See reference/commands.md for:
 
 - Complete command reference
 - Advanced filtering options
 - Common workflows
 
-**CI/CD**: See [reference/ci-cd.md](reference/ci-cd.md) for:
+**CI/CD**: See reference/ci-cd.md for:
 
 - GitHub Actions configuration
 - GitLab CI setup
 - Jenkins, Azure Pipelines, CircleCI examples
 - Affected commands in pipelines
 
-**Best Practices**: See [reference/best-practices.md](reference/best-practices.md) for:
+**Best Practices**: See reference/best-practices.md for:
 
 - Do's and don'ts
 - Complete troubleshooting guide
@@ -139,4 +139,4 @@ nx show projects --affected --base=main
 - **Affected not working**: Ensure git history available (`fetch-depth: 0` in CI)
 - **Cache issues**: Run `nx reset`
 
-For detailed troubleshooting, see [reference/best-practices.md](reference/best-practices.md).
+For detailed troubleshooting, see reference/best-practices.md.

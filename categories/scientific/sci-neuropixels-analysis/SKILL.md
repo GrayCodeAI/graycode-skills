@@ -284,16 +284,16 @@ Comprehensive visualization guide for publication-quality figures.
 
 | Topic | Reference |
 |-------|-----------|
-| Full workflow | [references/standard_workflow.md](references/standard_workflow.md) |
-| API reference | [references/api_reference.md](references/api_reference.md) |
-| Plotting guide | [references/plotting_guide.md](references/plotting_guide.md) |
-| Preprocessing | [references/PREPROCESSING.md](references/PREPROCESSING.md) |
-| Spike sorting | [references/SPIKE_SORTING.md](references/SPIKE_SORTING.md) |
-| Motion correction | [references/MOTION_CORRECTION.md](references/MOTION_CORRECTION.md) |
-| Quality metrics | [references/QUALITY_METRICS.md](references/QUALITY_METRICS.md) |
-| Automated curation | [references/AUTOMATED_CURATION.md](references/AUTOMATED_CURATION.md) |
-| AI-assisted curation | [references/AI_CURATION.md](references/AI_CURATION.md) |
-| Waveform analysis | [references/ANALYSIS.md](references/ANALYSIS.md) |
+| Full workflow | references/standard_workflow.md |
+| API reference | references/api_reference.md |
+| Plotting guide | references/plotting_guide.md |
+| Preprocessing | references/PREPROCESSING.md |
+| Spike sorting | references/SPIKE_SORTING.md |
+| Motion correction | references/MOTION_CORRECTION.md |
+| Quality metrics | references/QUALITY_METRICS.md |
+| Automated curation | references/AUTOMATED_CURATION.md |
+| AI-assisted curation | references/AI_CURATION.md |
+| Waveform analysis | references/ANALYSIS.md |
 
 ## Installation
 

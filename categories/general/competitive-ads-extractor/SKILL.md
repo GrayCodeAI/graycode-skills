@@ -2,7 +2,7 @@
 name: competitive-ads-extractor
 description: "Extracts and analyzes competitors' ads from ad libraries (Facebook, LinkedIn, etc.) to understand messaging, problems, and creative approaches that work."
 license: MIT
-tags: [marketing, advertising, competitive-analysis, facebook-ads, linkedin, research, business]
+tags: [marketing, advertising, competitive-analysis, facebook-ads, linkedin]
 domain: general
 subdomain: marketing
 version: 1.0

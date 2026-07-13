@@ -72,11 +72,11 @@ Every packet must include:
 5. Required checks.
 6. Integration notes for main thread.
 
-Use [`references/work-packet-template.md`](references/work-packet-template.md) for the exact shape.
+Use `references/work-packet-template.md` for the exact shape.
 
 ## Agent Prompting Contract
 
-- Use the prompt templates in [`references/agent-prompt-templates.md`](references/agent-prompt-templates.md).
+- Use the prompt templates in `references/agent-prompt-templates.md`.
 - Explorer prompts focus on analysis and decomposition.
 - Worker prompts focus on implementation and validation with strict ownership boundaries.
 

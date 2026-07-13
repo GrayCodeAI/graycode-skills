@@ -106,7 +106,7 @@ class Login
 
 ### Cloud (TestMu AI)
 
-Full setup: [reference/cloud-integration.md](reference/cloud-integration.md). Capabilities reference: [shared/testmu-cloud-reference.md](testmu-cloud-reference.md).
+Full setup: reference/cloud-integration.md. Capabilities reference: shared/testmu-cloud-reference.md.
 
 ### Cloud Config (acceptance.suite.yml)
 

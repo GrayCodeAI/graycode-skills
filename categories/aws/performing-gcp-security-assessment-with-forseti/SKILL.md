@@ -2,7 +2,7 @@
 name: performing-gcp-security-assessment-with-forseti
 description: "Performing comprehensive security assessments of Google Cloud Platform environments using Forseti Security, Security Command Center, and gcloud CLI to audit IAM policies, firewall rules, storage pe..."
 license: MIT
-tags: [cloud-security, gcp, forseti, security-command-center, iam-audit, cis-benchmark]
+tags: [cloud-security, gcp, forseti, security-command-center, iam-audit]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

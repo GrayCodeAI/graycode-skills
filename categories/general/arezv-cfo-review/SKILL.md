@@ -99,7 +99,7 @@ The numerate skeptic stress-tests anything that touches money. Six questions bef
 
 ## Related
 
-- Agent: [`cs-cfo-advisor`](cs-cfo-advisor.md)
+- Agent: `cs-cfo-advisor`
 - Skill: [`cfo-advisor`](SKILL.md)
 
 ---

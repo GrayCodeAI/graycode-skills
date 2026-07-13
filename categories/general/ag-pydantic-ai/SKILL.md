@@ -2,7 +2,7 @@
 name: ag-pydantic-ai
 description: "Build production-ready AI agents with PydanticAI — type-safe tool use, structured outputs, dependency injection, and multi-model support."
 license: MIT
-tags: [pydantic-ai, ai-agents, llm, openai, anthropic, gemini, tool-use, structured-output, python]
+tags: [pydantic-ai, ai-agents, llm, openai, anthropic]
 category: ai-agents
 risk: safe
 source: community

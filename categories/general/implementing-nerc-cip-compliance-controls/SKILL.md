@@ -2,7 +2,7 @@
 name: implementing-nerc-cip-compliance-controls
 description: "This skill covers implementing North American Electric Reliability Corporation Critical Infrastructure Protection (NERC CIP) compliance controls for Bulk Electric System (BES) cyber systems. It add..."
 license: MIT
-tags: [ot-security, ics, scada, industrial-control, iec62443, nerc-cip, power-grid, compliance]
+tags: [ot-security, ics, scada, nerc-cip, compliance]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0.0

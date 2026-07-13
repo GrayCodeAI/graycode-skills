@@ -2,7 +2,7 @@
 name: performing-network-packet-capture-analysis
 description: "Perform forensic analysis of network packet captures (PCAP/PCAPNG) using Wireshark, tshark, and tcpdump to reconstruct network communications, extract transferred files, identify malicious traffic,..."
 license: MIT
-tags: [pcap, wireshark, tshark, tcpdump, network-forensics, packet-capture, protocol-analysis, traffic-analysis, pcapng, network-evidence]
+tags: [pcap, wireshark, tshark, network-forensics, packet-capture]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

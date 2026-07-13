@@ -69,4 +69,4 @@ You may ask clarifying questions here.
 
 GPT Kb Files List:
 
-- [Create or Refactor (your) Web Component](./knowledge/Create%20or%20Refactor%20your%20Web%20Component/)
+- Create or Refactor (your) Web Component

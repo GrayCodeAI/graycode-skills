@@ -25,9 +25,9 @@ Maximize **Token ROI**. Every line in SKILL.md must provide specific procedural 
 
 **New skill:**
 
-1. **Research** — web-search domain best practices, checklists, and standards; extract key terms → triggers, workflows → guidelines, mistakes → anti-patterns. See [Web Search Research](references/web-search-research.md).
+1. **Research** — web-search domain best practices, checklists, and standards; extract key terms → triggers, workflows → guidelines, mistakes → anti-patterns. See Web Search Research.
 2. **Capture intent** — what it , when it trigger, expected output format?
-3. **Write SKILL.md** — draft using [TEMPLATE.md](references/TEMPLATE.md)
+3. **Write SKILL.md** — draft using TEMPLATE.md
 4. **Test** — spawn parallel subagents: one with-skill, one without-skill (baseline)
 5. **Evaluate** — grade assertions, review benchmark (pass rate, tokens, time)
 6. **Iterate** — rewrite based on feedback, rerun into next iteration dir, repeat
@@ -42,7 +42,7 @@ Maximize **Token ROI**. Every line in SKILL.md must provide specific procedural 
 5. **Evaluate & iterate** — same as steps 4–5 above
 6. **Optimize description** — re-run trigger eval if description changed
 
-See [Eval Workflow](references/eval-workflow.md) for full testing + iteration details.
+See Eval Workflow for full testing + iteration details.
 
 ## Description Quality (Activation)
 
@@ -80,11 +80,11 @@ See [Eval Workflow](references/eval-workflow.md) for full testing + iteration de
 
 ## References
 
-- [Skill Template](references/TEMPLATE.md) — load when starting new skill from scratch
-- [Anti-Patterns Detail](references/anti-patterns.md) — load when fixing or reviewing anti-pattern format
-- [Size & Limits](references/size-limits.md) — load when SKILL.md approaches 100 lines
-- [Resource Organization](references/resource-organization.md) — load when deciding where to place content (scripts/, references/, assets/)
-- [Testing & Trigger Rate](references/testing.md) — load when writing evals or measuring trigger rate
-- [Eval Workflow](references/eval-workflow.md) — load when running parallel subagent tests
-- [Full Lifecycle](references/lifecycle.md) — load for complete phase-by-phase creation guide
-- [Web Search Research](references/web-search-research.md) — load when creating skill for unfamiliar or non-engineering domain
+- Skill Template — load when starting new skill from scratch
+- Anti-Patterns Detail — load when fixing or reviewing anti-pattern format
+- Size & Limits — load when SKILL.md approaches 100 lines
+- Resource Organization — load when deciding where to place content (scripts/, references/, assets/)
+- Testing & Trigger Rate — load when writing evals or measuring trigger rate
+- Eval Workflow — load when running parallel subagent tests
+- Full Lifecycle — load for complete phase-by-phase creation guide
+- Web Search Research — load when creating skill for unfamiliar or non-engineering domain

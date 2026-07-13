@@ -21,11 +21,11 @@ This skill defines the mandatory conventions and behavioral rules for developing
 
 ## Guides
 
-- [Core Technical Skills & Architecture](core-technical-skills.md): Fundamental skills and architectural principles.
-- [Naming & Coding Standards](naming-standards.md): Rules for naming, fields, and error handling.
-- [Avalonia, Zafiro & Reactive Rules](avalonia-reactive-rules.md): Specific guidelines for UI, Zafiro integration, and DynamicData pipelines.
-- [Zafiro Shortcuts](zafiro-shortcuts.md): Concise mappings for common Rx/Zafiro operations.
-- [Common Patterns](patterns.md): Advanced patterns like `RefreshableCollection` and Validation.
+- Core Technical Skills & Architecture: Fundamental skills and architectural principles.
+- Naming & Coding Standards: Rules for naming, fields, and error handling.
+- Avalonia, Zafiro & Reactive Rules: Specific guidelines for UI, Zafiro integration, and DynamicData pipelines.
+- Zafiro Shortcuts: Concise mappings for common Rx/Zafiro operations.
+- Common Patterns: Advanced patterns like `RefreshableCollection` and Validation.
 
 ## Procedure Before Writing Code
 

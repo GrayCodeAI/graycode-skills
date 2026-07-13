@@ -2,7 +2,7 @@
 name: analyzing-malicious-pdf-with-peepdf
 description: "Perform static analysis of malicious PDF documents using peepdf, pdfid, and pdf-parser to extract embedded JavaScript, shellcode, and suspicious objects."
 license: MIT
-tags: [malware-analysis, pdf, peepdf, pdfid, pdf-parser, static-analysis, reverse-engineering, dfir]
+tags: [malware-analysis, pdf, peepdf, pdfid, pdf-parser]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

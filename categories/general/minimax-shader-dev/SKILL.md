@@ -50,42 +50,42 @@ shader-dev/
 
 | User wants to create... | Primary technique | Combine with |
 |---|---|---|
-| 3D objects / scenes from math | [ray-marching](techniques/ray-marching.md) + [sdf-3d](techniques/sdf-3d.md) | lighting-model, shadow-techniques |
-| Complex 3D shapes (booleans, blends) | [csg-boolean-operations](techniques/csg-boolean-operations.md) | sdf-3d, ray-marching |
-| Infinite repeating patterns in 3D | [domain-repetition](techniques/domain-repetition.md) | sdf-3d, ray-marching |
-| Organic / warped shapes | [domain-warping](techniques/domain-warping.md) | procedural-noise |
-| Fluid / smoke / ink effects | [fluid-simulation](techniques/fluid-simulation.md) | multipass-buffer |
-| Particle effects (fire, sparks, snow) | [particle-system](techniques/particle-system.md) | procedural-noise, color-palette |
-| Physically-based simulations | [simulation-physics](techniques/simulation-physics.md) | multipass-buffer |
-| Game of Life / reaction-diffusion | [cellular-automata](techniques/cellular-automata.md) | multipass-buffer, color-palette |
-| Ocean / water surface | [water-ocean](techniques/water-ocean.md) | atmospheric-scattering, lighting-model |
-| Terrain / landscape | [terrain-rendering](techniques/terrain-rendering.md) | atmospheric-scattering, procedural-noise |
-| Clouds / fog / volumetric fire | [volumetric-rendering](techniques/volumetric-rendering.md) | procedural-noise, atmospheric-scattering |
-| Sky / sunset / atmosphere | [atmospheric-scattering](techniques/atmospheric-scattering.md) | volumetric-rendering |
-| Realistic lighting (PBR, Phong) | [lighting-model](techniques/lighting-model.md) | shadow-techniques, ambient-occlusion |
-| Shadows (soft / hard) | [shadow-techniques](techniques/shadow-techniques.md) | lighting-model |
-| Ambient occlusion | [ambient-occlusion](techniques/ambient-occlusion.md) | lighting-model, normal-estimation |
-| Path tracing / global illumination | [path-tracing-gi](techniques/path-tracing-gi.md) | analytic-ray-tracing, multipass-buffer |
-| Precise ray-geometry intersections | [analytic-ray-tracing](techniques/analytic-ray-tracing.md) | lighting-model |
-| Voxel worlds (Minecraft-style) | [voxel-rendering](techniques/voxel-rendering.md) | lighting-model, shadow-techniques |
-| Noise / FBM textures | [procedural-noise](techniques/procedural-noise.md) | domain-warping |
-| Tiled 2D patterns | [procedural-2d-pattern](techniques/procedural-2d-pattern.md) | polar-uv-manipulation |
-| Voronoi / cell patterns | [voronoi-cellular-noise](techniques/voronoi-cellular-noise.md) | color-palette |
-| Fractals (Mandelbrot, Julia, 3D) | [fractal-rendering](techniques/fractal-rendering.md) | color-palette, polar-uv-manipulation |
-| Color grading / palettes | [color-palette](techniques/color-palette.md) | — |
-| Bloom / tone mapping / glitch | [post-processing](techniques/post-processing.md) | multipass-buffer |
-| Multi-pass ping-pong buffers | [multipass-buffer](techniques/multipass-buffer.md) | — |
-| Texture / sampling techniques | [texture-sampling](techniques/texture-sampling.md) | — |
-| Camera / matrix transforms | [matrix-transform](techniques/matrix-transform.md) | — |
-| Surface normals | [normal-estimation](techniques/normal-estimation.md) | — |
-| Polar coords / kaleidoscope | [polar-uv-manipulation](techniques/polar-uv-manipulation.md) | procedural-2d-pattern |
-| 2D shapes / UI from SDF | [sdf-2d](techniques/sdf-2d.md) | color-palette |
-| Procedural audio / music | [sound-synthesis](techniques/sound-synthesis.md) | — |
-| SDF tricks / optimization | [sdf-tricks](techniques/sdf-tricks.md) | sdf-3d, ray-marching |
-| Anti-aliased rendering | [anti-aliasing](techniques/anti-aliasing.md) | sdf-2d, post-processing |
-| Depth of field / motion blur / lens effects | [camera-effects](techniques/camera-effects.md) | post-processing, multipass-buffer |
-| Advanced texture mapping / no-tile textures | [texture-mapping-advanced](techniques/texture-mapping-advanced.md) | terrain-rendering, texture-sampling |
-| WebGL2 shader errors / debugging | [webgl-pitfalls](techniques/webgl-pitfalls.md) | — |
+| 3D objects / scenes from math | ray-marching + sdf-3d | lighting-model, shadow-techniques |
+| Complex 3D shapes (booleans, blends) | csg-boolean-operations | sdf-3d, ray-marching |
+| Infinite repeating patterns in 3D | domain-repetition | sdf-3d, ray-marching |
+| Organic / warped shapes | domain-warping | procedural-noise |
+| Fluid / smoke / ink effects | fluid-simulation | multipass-buffer |
+| Particle effects (fire, sparks, snow) | particle-system | procedural-noise, color-palette |
+| Physically-based simulations | simulation-physics | multipass-buffer |
+| Game of Life / reaction-diffusion | cellular-automata | multipass-buffer, color-palette |
+| Ocean / water surface | water-ocean | atmospheric-scattering, lighting-model |
+| Terrain / landscape | terrain-rendering | atmospheric-scattering, procedural-noise |
+| Clouds / fog / volumetric fire | volumetric-rendering | procedural-noise, atmospheric-scattering |
+| Sky / sunset / atmosphere | atmospheric-scattering | volumetric-rendering |
+| Realistic lighting (PBR, Phong) | lighting-model | shadow-techniques, ambient-occlusion |
+| Shadows (soft / hard) | shadow-techniques | lighting-model |
+| Ambient occlusion | ambient-occlusion | lighting-model, normal-estimation |
+| Path tracing / global illumination | path-tracing-gi | analytic-ray-tracing, multipass-buffer |
+| Precise ray-geometry intersections | analytic-ray-tracing | lighting-model |
+| Voxel worlds (Minecraft-style) | voxel-rendering | lighting-model, shadow-techniques |
+| Noise / FBM textures | procedural-noise | domain-warping |
+| Tiled 2D patterns | procedural-2d-pattern | polar-uv-manipulation |
+| Voronoi / cell patterns | voronoi-cellular-noise | color-palette |
+| Fractals (Mandelbrot, Julia, 3D) | fractal-rendering | color-palette, polar-uv-manipulation |
+| Color grading / palettes | color-palette | — |
+| Bloom / tone mapping / glitch | post-processing | multipass-buffer |
+| Multi-pass ping-pong buffers | multipass-buffer | — |
+| Texture / sampling techniques | texture-sampling | — |
+| Camera / matrix transforms | matrix-transform | — |
+| Surface normals | normal-estimation | — |
+| Polar coords / kaleidoscope | polar-uv-manipulation | procedural-2d-pattern |
+| 2D shapes / UI from SDF | sdf-2d | color-palette |
+| Procedural audio / music | sound-synthesis | — |
+| SDF tricks / optimization | sdf-tricks | sdf-3d, ray-marching |
+| Anti-aliased rendering | anti-aliasing | sdf-2d, post-processing |
+| Depth of field / motion blur / lens effects | camera-effects | post-processing, multipass-buffer |
+| Advanced texture mapping / no-tile textures | texture-mapping-advanced | terrain-rendering, texture-sampling |
+| WebGL2 shader errors / debugging | webgl-pitfalls | — |
 
 ## Technique Index
 

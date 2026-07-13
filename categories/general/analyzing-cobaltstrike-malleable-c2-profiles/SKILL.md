@@ -2,7 +2,7 @@
 name: analyzing-cobaltstrike-malleable-c2-profiles
 description: "Parse and analyze Cobalt Strike Malleable C2 profiles using dissect.cobaltstrike and pyMalleableC2 to extract C2 indicators, detect evasion techniques, and generate network detection signatures."
 license: MIT
-tags: [cobalt-strike, malleable-c2, c2-detection, beacon-analysis, network-signatures, threat-hunting, red-team-tools]
+tags: [cobalt-strike, malleable-c2, c2-detection, beacon-analysis, network-signatures]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

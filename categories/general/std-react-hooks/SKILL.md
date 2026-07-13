@@ -43,4 +43,4 @@ keywords: None
 
 ## References
 
-- [Optimization Patterns](references/REFERENCE.md)
+- Optimization Patterns

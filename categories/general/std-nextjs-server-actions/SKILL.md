@@ -35,7 +35,7 @@ Handle form submissions and mutations without creating API endpoints.
 
 ### **1. Secure & Validate**
 
-Always validate inputs with `z.object({` schema and `safeParse` before processing. Check authorization within action. See [Secure Action Example](references/secure-actions.md).
+Always validate inputs with `z.object({` schema and `safeParse` before processing. Check authorization within action. See Secure Action Example.
 
 ### **2. Pending States**
 

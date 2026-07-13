@@ -2,7 +2,7 @@
 name: research-rwkv
 description: "RNN+Transformer hybrid with O(n) inference. Linear time, infinite context, no KV cache. Train like GPT (parallel), infer like RNN (sequential). Linux Foundation AI project. Production at Windows, O..."
 license: MIT
-tags: [rwkv, model-architecture, rnn, transformer-hybrid, linear-complexity, infinite-context, efficient-inference, linux-foundation, alternative-architecture]
+tags: [rwkv, model-architecture, rnn, transformer-hybrid, linear-complexity]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [rwkv, torch, transformers]
@@ -223,11 +223,11 @@ out2, state = model.forward(tokens2, state)  # Has context from tokens1
 
 ## Advanced topics
 
-**Time-mixing and channel-mixing**: See [references/architecture-details.md](references/architecture-details.md) for WKV operation, time-decay mechanism, and receptance gates.
+**Time-mixing and channel-mixing**: See references/architecture-details.md for WKV operation, time-decay mechanism, and receptance gates.
 
-**State management**: See [references/state-management.md](references/state-management.md) for att_x_prev, att_kv, ffn_x_prev states, and numerical stability considerations.
+**State management**: See references/state-management.md for att_x_prev, att_kv, ffn_x_prev states, and numerical stability considerations.
 
-**RWKV-7 improvements**: See [references/rwkv7.md](references/rwkv7.md) for latest architectural improvements (March 2025) and multimodal capabilities.
+**RWKV-7 improvements**: See references/rwkv7.md for latest architectural improvements (March 2025) and multimodal capabilities.
 
 ## Hardware requirements
 

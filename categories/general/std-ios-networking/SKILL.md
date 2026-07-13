@@ -22,7 +22,7 @@ keywords: None
 5. **Handle token refresh** — On 401, use `RequestInterceptor.onRetry` to call `refreshToken()` and retry.
 6. **Pin certificates** — Use `ServerTrustManager` or `TrustKit` for production-grade security.
 
-See [URLSession and Alamofire implementation examples](references/implementation.md)
+See URLSession and Alamofire implementation examples
 
 ## Anti-Patterns
 
@@ -32,4 +32,4 @@ See [URLSession and Alamofire implementation examples](references/implementation
 
 ## References
 
-- [Native & Alamofire Implementation](references/implementation.md)
+- Native & Alamofire Implementation

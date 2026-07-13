@@ -2,7 +2,7 @@
 name: securing-github-actions-workflows
 description: "This skill covers hardening GitHub Actions workflows against supply chain attacks, credential theft, and privilege escalation. It addresses pinning actions to SHA digests, minimizing GITHUB_TOKEN p..."
 license: MIT
-tags: [devsecops, cicd, github-actions, supply-chain, workflow-security, secure-sdlc]
+tags: [devsecops, cicd, github-actions, supply-chain, workflow-security]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

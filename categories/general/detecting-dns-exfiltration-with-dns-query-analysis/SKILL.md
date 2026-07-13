@@ -2,7 +2,7 @@
 name: detecting-dns-exfiltration-with-dns-query-analysis
 description: "Detect data exfiltration through DNS tunneling by analyzing query entropy, subdomain length, query volume, TXT record abuse, and response payload sizes using passive DNS monitoring."
 license: MIT
-tags: [dns-exfiltration, dns-tunneling, data-exfiltration, threat-detection, entropy-analysis, passive-dns, network-monitoring, iodine, dnscat2]
+tags: [dns-exfiltration, dns-tunneling, data-exfiltration, entropy-analysis, passive-dns]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

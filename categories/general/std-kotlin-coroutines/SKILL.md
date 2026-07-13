@@ -37,4 +37,4 @@ keywords: None
 
 ## References
 
-- [Advanced Patterns & Flow Examples](references/advanced-patterns.md)
+- Advanced Patterns & Flow Examples

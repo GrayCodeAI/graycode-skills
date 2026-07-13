@@ -161,15 +161,15 @@ A practical guide for building iOS applications using UIKit, SnapKit, and SwiftU
 
 | Topic | Reference |
 |-------|-----------|
-| Touch Targets, Safe Area, CollectionView | [Layout System](references/layout-system.md) |
-| TabBar, NavigationController, Modal | [Navigation Patterns](references/navigation-patterns.md) |
-| StackView, Button, Alert, Search, ContextMenu | [UIKit Components](references/uikit-components.md) |
-| CAShapeLayer, CAGradientLayer, Core Animation | [Graphics & Animation](references/graphics-animation.md) |
-| Dynamic Type, Semantic Colors, VoiceOver | [Accessibility](references/accessibility.md) |
-| Permissions, Location, Share, Lifecycle, Haptics | [System Integration](references/system-integration.md) |
-| Metal Shaders & GPU | [Metal Shader Reference](references/metal-shader.md) |
-| SwiftUI HIG, Components, Patterns, Anti-Patterns | [SwiftUI Design Guidelines](references/swiftui-design-guidelines.md) |
-| Optionals, Protocols, async/await, ARC, Error Handling | [Swift Coding Standards](references/swift-coding-standards.md) |
+| Touch Targets, Safe Area, CollectionView | Layout System |
+| TabBar, NavigationController, Modal | Navigation Patterns |
+| StackView, Button, Alert, Search, ContextMenu | UIKit Components |
+| CAShapeLayer, CAGradientLayer, Core Animation | Graphics & Animation |
+| Dynamic Type, Semantic Colors, VoiceOver | Accessibility |
+| Permissions, Location, Share, Lifecycle, Haptics | System Integration |
+| Metal Shaders & GPU | Metal Shader Reference |
+| SwiftUI HIG, Components, Patterns, Anti-Patterns | SwiftUI Design Guidelines |
+| Optionals, Protocols, async/await, ARC, Error Handling | Swift Coding Standards |
 
 ---
 

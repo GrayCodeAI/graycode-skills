@@ -22,7 +22,7 @@ keywords: None
 
 ## Setup
 
-See [implementation examples](references/example.md#strictmode--why-did-you-render-setup) for StrictMode, why-did-you-render, and custom hook debug label setup.
+See implementation examples for StrictMode, why-did-you-render, and custom hook debug label setup.
 
 ## Implementation Guidelines
 

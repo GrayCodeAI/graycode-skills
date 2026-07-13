@@ -24,11 +24,11 @@ keywords: None
 
 ### Secure Storage & Release Build Examples
 
-See [implementation examples](references/implementation.md) for secure storage usage and obfuscated release build commands.
+See implementation examples for secure storage usage and obfuscated release build commands.
 
 ## Reference & Examples
 
-SSL Pinning & Secure Storage: [references/REFERENCE.md](references/REFERENCE.md).
+SSL Pinning & Secure Storage: references/REFERENCE.md.
 
 ## Anti-Patterns
 

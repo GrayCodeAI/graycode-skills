@@ -10,18 +10,6 @@ tags:
 - specification-first
 - socratic
 - interview
-- seed
-- evaluate
-- evolve
-- loop
-- completion
-- self-referential
-- multi-platform
-- claude
-- codex
-- gemini
-- boulder
-- ooo
 allowed-tools: Read Write Bash Grep Glob WebFetch
 metadata: None
 platforms: Claude Code, Codex, Gemini-CLI, OpenCode

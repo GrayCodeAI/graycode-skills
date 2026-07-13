@@ -2,7 +2,7 @@
 name: building-detection-rules-with-sigma
 description: "Builds vendor-agnostic detection rules using the Sigma rule format for threat detection across SIEM platforms including Splunk, Elastic, and Microsoft Sentinel. Use when creating portable detection..."
 license: MIT
-tags: [soc, sigma, detection-rules, siem, mitre-attack, splunk, elastic, sentinel]
+tags: [soc, sigma, detection-rules, siem, mitre-attack]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

@@ -2,7 +2,7 @@
 name: research-mamba
 description: "State-space model with O(n) complexity vs Transformers' O(n²). 5× faster inference, million-token sequences, no KV cache. Selective SSM with hardware-aware design. Mamba-1 (d_state=16) and Mamba-2 ..."
 license: MIT
-tags: [model-architecture, mamba, state-space-models, ssm, linear-complexity, long-context, efficient-inference, hardware-aware, alternative-to-transformers]
+tags: [model-architecture, mamba, state-space-models, ssm, linear-complexity]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [mamba-ssm, torch, transformers, causal-conv1d]
@@ -226,11 +226,11 @@ model = MambaLMHeadModel.from_pretrained("state-spaces/mamba-2.8b")
 
 ## Advanced topics
 
-**Selective SSM**: See [references/selective-ssm.md](references/selective-ssm.md) for mathematical formulation, state-space equations, and how selectivity enables O(n) complexity.
+**Selective SSM**: See references/selective-ssm.md for mathematical formulation, state-space equations, and how selectivity enables O(n) complexity.
 
-**Mamba-2 architecture**: See [references/mamba2-details.md](references/mamba2-details.md) for multi-head structure, tensor parallelism, and distributed training setup.
+**Mamba-2 architecture**: See references/mamba2-details.md for multi-head structure, tensor parallelism, and distributed training setup.
 
-**Performance optimization**: See [references/performance.md](references/performance.md) for hardware-aware design, CUDA kernels, and memory efficiency techniques.
+**Performance optimization**: See references/performance.md for hardware-aware design, CUDA kernels, and memory efficiency techniques.
 
 ## Hardware requirements
 

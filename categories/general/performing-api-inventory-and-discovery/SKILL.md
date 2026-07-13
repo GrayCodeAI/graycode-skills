@@ -2,7 +2,7 @@
 name: performing-api-inventory-and-discovery
 description: "Performs API inventory and discovery to identify all API endpoints in an organization's environment including documented, undocumented, shadow, zombie, and deprecated APIs. The tester uses passive ..."
 license: MIT
-tags: [api-security, owasp, api-discovery, shadow-api, inventory, attack-surface]
+tags: [api-security, owasp, api-discovery, shadow-api, inventory]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

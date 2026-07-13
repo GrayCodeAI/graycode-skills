@@ -122,7 +122,7 @@ python skills/vpe-advisor/scripts/eng_team_structure_designer.py team.json
 
 ## Related
 
-- Agent: [`cs-vpe-advisor`](cs-vpe-advisor.md)
+- Agent: `cs-vpe-advisor`
 - Skill: [`vpe-advisor`](SKILL.md)
 - Adjacent: `engineering/slo-architect/`, `engineering/feature-flags-architect/`, `engineering/chaos-engineering/`
 

@@ -469,8 +469,8 @@ gh api repos/$OWNER/$REPO/pulls/$PR/reviews --jq '.[] | select(.state=="PENDING"
 - [GitHub API: Pull Request Review Comments](https://docs.github.com/rest/pulls/comments)
 - [GitHub API: Pull Request Reviews](https://docs.github.com/rest/pulls/reviews)
 - [GitHub CLI Manual](https://cli.github.com/manual/)
-- [Create PR Command](./create-pr.md)
-- [Commit Command](./commit.md)
+- Create PR Command
+- Commit Command
 
 ## API Reference
 

@@ -2,7 +2,7 @@
 name: implementing-ransomware-backup-strategy
 description: "Designs and implements a ransomware-resilient backup strategy following the 3-2-1-1-0 methodology (3 copies, 2 media types, 1 offsite, 1 immutable/air-gapped, 0 errors on restore verification). Con..."
 license: MIT
-tags: [ransomware, backup, incident-response, defense, recovery, immutable-storage]
+tags: [ransomware, backup, incident-response, defense, recovery]
 domain: cybersecurity
 subdomain: ransomware-defense
 version: 1.0.0

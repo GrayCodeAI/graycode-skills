@@ -40,7 +40,7 @@ keywords: None
 
 ### Expo (EAS Build)
 
-See [deployment reference](references/codepush-setup.md) for EAS build profile configuration and CLI commands.
+See deployment reference for EAS build profile configuration and CLI commands.
 
 ### React Native CLI
 
@@ -61,4 +61,4 @@ See [deployment reference](references/codepush-setup.md) for EAS build profile c
 
 ## References
 
-See [references/codepush-setup.md](references/codepush-setup.md) for CodePush config, EAS profiles, and Fastlane automation.
+See references/codepush-setup.md for CodePush config, EAS profiles, and Fastlane automation.

@@ -2,7 +2,7 @@
 name: performing-web-application-firewall-bypass
 description: "Bypass Web Application Firewall protections using encoding techniques, HTTP method manipulation, parameter pollution, and payload obfuscation to deliver SQL injection, XSS, and other attack payload..."
 license: MIT
-tags: [waf-bypass, waf-evasion, sql-injection, xss, payload-obfuscation, encoding-bypass, web-security]
+tags: [waf-bypass, waf-evasion, sql-injection, xss, encoding-bypass]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

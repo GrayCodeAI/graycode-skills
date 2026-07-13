@@ -25,6 +25,6 @@ Use `list_integrations` for the full live list. This summary covers the major ca
 | **Security**        | Keycloak                                                                              | `Aspire.Hosting.Keycloak`                |
 | **Frameworks**      | JavaScript, Python, Go, Java, Rust, Bun, Deno, Orleans, MAUI, Dapr, PowerShell        | `Aspire.Hosting.Python`                  |
 
-For polyglot framework method signatures, see [Polyglot APIs](polyglot-apis.md).
+For polyglot framework method signatures, see Polyglot APIs.
 
 ---

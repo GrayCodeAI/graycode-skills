@@ -38,4 +38,4 @@ keywords: None
 
 ## References
 
-See [references/examples.md](references/examples.md) for Immutable Interfaces, Exhaustiveness Checking, Assertion Functions, DI Patterns, and Import Organization.
+See references/examples.md for Immutable Interfaces, Exhaustiveness Checking, Assertion Functions, DI Patterns, and Import Organization.

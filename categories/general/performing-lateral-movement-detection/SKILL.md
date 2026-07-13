@@ -2,7 +2,7 @@
 name: performing-lateral-movement-detection
 description: "Detects lateral movement techniques including Pass-the-Hash, PsExec, WMI execution, RDP pivoting, and SMB-based spreading using SIEM correlation of Windows event logs, network flow data, and endpoi..."
 license: MIT
-tags: [soc, lateral-movement, mitre-attack, pass-the-hash, psexec, wmi, rdp, smb, detection]
+tags: [soc, lateral-movement, mitre-attack, pass-the-hash, detection]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

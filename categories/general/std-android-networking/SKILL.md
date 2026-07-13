@@ -19,14 +19,14 @@ keywords: None
 - Use **Kotlinx Serialization** with `@SerialName` for JSON field mapping.
 - Implement **Certificate Pinning** for sensitive production domains.
 
-See [setup & wrappers](references/implementation.md) for DTO and API examples.
+See setup & wrappers for DTO and API examples.
 
 ## 2. Define API Endpoints
 
 - All API calls must `suspend` functions.
 - Declare endpoints only in API interface — handle errors in Repository.
 
-See [setup & wrappers](references/implementation.md) for API endpoint definitions.
+See setup & wrappers for API endpoint definitions.
 
 ## 3. Add Cross-Cutting Concerns
 
@@ -43,4 +43,4 @@ See [setup & wrappers](references/implementation.md) for API endpoint definition
 
 ## References
 
-- [Setup & Wrappers](references/implementation.md)
+- Setup & Wrappers

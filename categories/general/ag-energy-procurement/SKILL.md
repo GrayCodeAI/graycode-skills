@@ -119,11 +119,11 @@ Never try to "call the bottom" on energy markets. Instead:
 - Monitor the forward curve relative to the 5-year historical range. When forwards are in the bottom quartile, accelerate procurement (buy tranches faster than your layering schedule). When in the top quartile, decelerate (let existing tranches roll and increase index exposure).
 - Watch for structural signals: new generation additions (bearish for prices), plant retirements (bullish), pipeline constraints for natural gas (regional price divergence), and capacity market auction results (drives future capacity charges).
 
-For the complete decision framework library, see [decision-frameworks.md](references/decision-frameworks.md).
+For the complete decision framework library, see decision-frameworks.md.
 
 ## Key Edge Cases
 
-These are situations where standard procurement playbooks produce poor outcomes. Brief summaries here — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where standard procurement playbooks produce poor outcomes. Brief summaries here — see edge-cases.md for full analysis.
 
 1. **ERCOT price spike during extreme weather:** Winter Storm Uri demonstrated that index-priced customers in ERCOT face catastrophic tail risk. A 5 MW facility on index pricing incurred $1.5M+ in a single week. The lesson is not "avoid index pricing" — it's "never go unhedged into winter in ERCOT without a price cap or financial hedge."
 
@@ -157,7 +157,7 @@ Energy supplier negotiations are multi-year relationships. Calibrate tone:
 - **Sustainability:** Map procurement decisions to Scope 2 targets. "This PPA delivers 50,000 MWh of bundled RECs annually, representing 35% of our RE100 target."
 - **Operations:** Focus on operational requirements and constraints. "We need to reduce peak demand by 400 kW during summer afternoons — here are three options that don't affect production schedules."
 
-For full communication templates, see [communication-templates.md](references/communication-templates.md).
+For full communication templates, see communication-templates.md.
 
 ## Escalation Protocols
 
@@ -193,9 +193,9 @@ Track monthly, review quarterly with finance and sustainability:
 
 ## Additional Resources
 
-- For detailed decision frameworks on procurement strategy, PPA evaluation, hedging, and multi-facility optimization, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For communication templates covering RFPs, PPA negotiations, rate cases, and internal reporting, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks on procurement strategy, PPA evaluation, hedging, and multi-facility optimization, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For communication templates covering RFPs, PPA negotiations, rate cases, and internal reporting, see communication-templates.md
 
 ### When to Use
 Use this skill when you need to **design, audit, or optimise an energy procurement strategy** for commercial or industrial facilities:

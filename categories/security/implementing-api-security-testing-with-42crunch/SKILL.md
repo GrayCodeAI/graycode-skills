@@ -2,7 +2,7 @@
 name: implementing-api-security-testing-with-42crunch
 description: "Implement comprehensive API security testing using the 42Crunch platform to perform static audit and dynamic conformance scanning of OpenAPI specifications."
 license: MIT
-tags: [api-security, crunch, openapi, api-audit, api-scan, conformance-testing, shift-left, ci-cd-security, owasp-api-top-10]
+tags: [api-security, crunch, openapi, api-audit, api-scan]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

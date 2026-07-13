@@ -34,31 +34,31 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [charting-data.md](references/charting-data.md) | Charting Data | Data visualization patterns, accessible charts, interactive elements |
-| [collaboration-and-sharing.md](references/collaboration-and-sharing.md) | Collaboration & Sharing | Share sheets, activity views, collaborative editing, SharePlay |
-| [drag-and-drop.md](references/drag-and-drop.md) | Drag and Drop | Drag sources, drop targets, spring loading, multi-item drag, visual feedback |
-| [entering-data.md](references/entering-data.md) | Entering Data | Text fields, pickers, steppers, input validation, keyboard types, autofill |
-| [feedback.md](references/feedback.md) | Feedback | Alerts, action sheets, haptic patterns, sound feedback, visual indicators |
-| [file-management.md](references/file-management.md) | File Management | Document browser, file providers, iCloud integration, document lifecycle |
-| [going-full-screen.md](references/going-full-screen.md) | Going Full Screen | Full-screen transitions, immersive content, exiting full screen |
-| [launching.md](references/launching.md) | Launching | Launch screens, state restoration, cold vs warm launch |
-| [live-viewing-apps.md](references/live-viewing-apps.md) | Live Viewing Apps | Live content display, real-time updates, Live Activities, Dynamic Island |
-| [loading.md](references/loading.md) | Loading | Activity indicators, progress views, skeleton screens, lazy loading, placeholders |
-| [managing-accounts.md](references/managing-accounts.md) | Managing Accounts | Sign in with Apple, passkeys, account creation, credential autofill, account deletion |
-| [managing-notifications.md](references/managing-notifications.md) | Managing Notifications | Permission requests, grouping, actionable notifications, provisional delivery |
-| [modality.md](references/modality.md) | Modality | Sheets, alerts, popovers, full-screen modals, when to use each |
-| [multitasking.md](references/multitasking.md) | Multitasking | iPad Split View, Slide Over, Stage Manager, responsive layout, size class transitions |
-| [offering-help.md](references/offering-help.md) | Offering Help | Contextual tips, onboarding hints, help menus, support links |
-| [onboarding.md](references/onboarding.md) | Onboarding | Welcome screens, feature highlights, progressive onboarding, skip options |
-| [playing-audio.md](references/playing-audio.md) | Playing Audio | Audio sessions, background audio, Now Playing, audio routing, interruptions |
-| [playing-haptics.md](references/playing-haptics.md) | Playing Haptics | Core Haptics, UIFeedbackGenerator, haptic patterns, custom haptics |
-| [playing-video.md](references/playing-video.md) | Playing Video | Video player controls, picture-in-picture, AirPlay, full-screen video |
-| [printing.md](references/printing.md) | Printing | Print dialogs, page setup, AirPrint integration |
-| [ratings-and-reviews.md](references/ratings-and-reviews.md) | Ratings & Reviews | SKStoreReviewController, timing, frequency limits, in-app feedback |
-| [searching.md](references/searching.md) | Searching | Search bars, suggestions, scoped search, results display, recents |
-| [settings.md](references/settings.md) | Settings | In-app vs Settings app, preference organization, toggles, defaults |
-| [undo-and-redo.md](references/undo-and-redo.md) | Undo and Redo | Shake to undo, undo/redo stack, multi-level undo |
-| [workouts.md](references/workouts.md) | Workouts | Workout sessions, live metrics, Always On display, summaries, HealthKit |
+| charting-data.md | Charting Data | Data visualization patterns, accessible charts, interactive elements |
+| collaboration-and-sharing.md | Collaboration & Sharing | Share sheets, activity views, collaborative editing, SharePlay |
+| drag-and-drop.md | Drag and Drop | Drag sources, drop targets, spring loading, multi-item drag, visual feedback |
+| entering-data.md | Entering Data | Text fields, pickers, steppers, input validation, keyboard types, autofill |
+| feedback.md | Feedback | Alerts, action sheets, haptic patterns, sound feedback, visual indicators |
+| file-management.md | File Management | Document browser, file providers, iCloud integration, document lifecycle |
+| going-full-screen.md | Going Full Screen | Full-screen transitions, immersive content, exiting full screen |
+| launching.md | Launching | Launch screens, state restoration, cold vs warm launch |
+| live-viewing-apps.md | Live Viewing Apps | Live content display, real-time updates, Live Activities, Dynamic Island |
+| loading.md | Loading | Activity indicators, progress views, skeleton screens, lazy loading, placeholders |
+| managing-accounts.md | Managing Accounts | Sign in with Apple, passkeys, account creation, credential autofill, account deletion |
+| managing-notifications.md | Managing Notifications | Permission requests, grouping, actionable notifications, provisional delivery |
+| modality.md | Modality | Sheets, alerts, popovers, full-screen modals, when to use each |
+| multitasking.md | Multitasking | iPad Split View, Slide Over, Stage Manager, responsive layout, size class transitions |
+| offering-help.md | Offering Help | Contextual tips, onboarding hints, help menus, support links |
+| onboarding.md | Onboarding | Welcome screens, feature highlights, progressive onboarding, skip options |
+| playing-audio.md | Playing Audio | Audio sessions, background audio, Now Playing, audio routing, interruptions |
+| playing-haptics.md | Playing Haptics | Core Haptics, UIFeedbackGenerator, haptic patterns, custom haptics |
+| playing-video.md | Playing Video | Video player controls, picture-in-picture, AirPlay, full-screen video |
+| printing.md | Printing | Print dialogs, page setup, AirPrint integration |
+| ratings-and-reviews.md | Ratings & Reviews | SKStoreReviewController, timing, frequency limits, in-app feedback |
+| searching.md | Searching | Search bars, suggestions, scoped search, results display, recents |
+| settings.md | Settings | In-app vs Settings app, preference organization, toggles, defaults |
+| undo-and-redo.md | Undo and Redo | Shake to undo, undo/redo stack, multi-level undo |
+| workouts.md | Workouts | Workout sessions, live metrics, Always On display, summaries, HealthKit |
 
 ## Pattern Selection Guide
 

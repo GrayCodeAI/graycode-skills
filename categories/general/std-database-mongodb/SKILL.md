@@ -24,7 +24,7 @@ keywords: None
 
 - **ESR Rule**: Equality, Sort, Range. Order your index keys `(status, date, price)` if you query `status='A'`, sort by `date`, filter `price > 10`.
 
-See [implementation examples](references/implementation.md) for compound index and pagination patterns.
+See implementation examples for compound index and pagination patterns.
 
 - **Text Search**: Use `$text` search instead of `$regex` for keywords. `$regex` slow (linear scan) unless anchored (`^prefix`).
 - **Covered Queries**: Project only indexed fields to avoid fetching document (`PROJECTION` key).
@@ -53,6 +53,6 @@ See [implementation examples](references/implementation.md) for compound index a
 
 ## References
 
-- [Best Practices Guide](references/best-practices.md)
-- [Anti-Patterns](references/anti-patterns.md)
-- [Postgres vs Mongo Comparison](references/postgres-comparison.md)
+- Best Practices Guide
+- Anti-Patterns
+- Postgres vs Mongo Comparison

@@ -230,16 +230,16 @@ cat marketing-skill/content-creator/references/analytics_guide.md
 
 ## Related Agents
 
-- [cs-demand-gen-specialist](cs-demand-gen-specialist.md) - Demand generation and acquisition campaigns
+- cs-demand-gen-specialist - Demand generation and acquisition campaigns
 - cs-product-marketing - Product positioning and messaging (planned)
 - cs-social-media-manager - Social media management and scheduling (planned)
 
 ## References
 
 - **Skill Documentation:** [marketing-skill/content-creator/SKILL.md](SKILL.md)
-- **Marketing Domain Guide:** [marketing-skill/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
-- **Marketing Roadmap:** [marketing-skill/marketing_skills_roadmap.md](marketing_skills_roadmap.md)
+- **Marketing Domain Guide:** marketing-skill/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
+- **Marketing Roadmap:** marketing-skill/marketing_skills_roadmap.md
 
 ---
 

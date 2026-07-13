@@ -45,17 +45,17 @@ To effectively contribute, both human developers and AI assistants need to under
 
 For a broad understanding of the project's goals, architecture, and features, please refer to:
 
-- **Product Requirement Document (PRD):** [`memory/docs/product_requirement_docs.md`](./memory/docs/product_requirement_docs.md) - Understand the "why" behind the project.
-- **Architecture Design:** [`memory/docs/architecture.md`](./memory/docs/architecture.md) - Get an overview of the system's structure.
-- **Feature Overview:** [`memory/docs/feature_tasks.md`](./memory/docs/feature_tasks.md) - See a high-level list and plan for project features.
+- **Product Requirement Document (PRD):** `memory/docs/product_requirement_docs.md` - Understand the "why" behind the project.
+- **Architecture Design:** `memory/docs/architecture.md` - Get an overview of the system's structure.
+- **Feature Overview:** `memory/docs/feature_tasks.md` - See a high-level list and plan for project features.
 
 ### Low-Level & Implementation Context
 
 For detailed technical information:
 
-- **Detailed Feature Specs:** The [`memory/docs/features/`](./memory/docs/features/) directory contains detailed engineering design documents for individual features. This is the best place to understand the implementation details of a specific feature.
-- **Technical Details:** [`memory/docs/technical.md`](./memory/docs/technical.md) - Find overall low-level design and technical specifications.
-- **Design Analysis:** The [`memory/docs/analysis/`](./memory/docs/analysis/) directory contains deep-dive design documents for various components.
+- **Detailed Feature Specs:** The `memory/docs/features/` directory contains detailed engineering design documents for individual features. This is the best place to understand the implementation details of a specific feature.
+- **Technical Details:** `memory/docs/technical.md` - Find overall low-level design and technical specifications.
+- **Design Analysis:** The `memory/docs/analysis/` directory contains deep-dive design documents for various components.
 - **Source Code:** The `src/` directory is the ultimate source of truth for implementation.
 
 ## Contribution Workflow: Step-by-Step

@@ -2,7 +2,7 @@
 name: detecting-insider-threat-with-ueba
 description: "Implement User and Entity Behavior Analytics using Elasticsearch/OpenSearch to build behavioral baselines, calculate anomaly scores, perform peer group analysis, and detect insider threat indicator..."
 license: MIT
-tags: [ueba, insider-threat, anomaly-detection, elasticsearch, behavior-analytics, machine-learning, siem]
+tags: [ueba, insider-threat, anomaly-detection, elasticsearch, behavior-analytics]
 domain: cybersecurity
 subdomain: threat-detection
 version: 1.0

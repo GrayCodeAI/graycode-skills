@@ -9,7 +9,7 @@ tags: [general]
 
 Manage multiple independent conversations simultaneously.
 
-> **Runnable example:** [recipe/multiple_sessions.py](recipe/multiple_sessions.py)
+> **Runnable example:** recipe/multiple_sessions.py
 >
 > ```bash
 > cd recipe && pip install -r requirements.txt

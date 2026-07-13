@@ -81,4 +81,4 @@ The numeric codes decode to:
 
 GPT Kb Files List:
 
-- [Aria](./knowledge/Aria/)
+- Aria

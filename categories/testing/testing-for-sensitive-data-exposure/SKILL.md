@@ -2,7 +2,7 @@
 name: testing-for-sensitive-data-exposure
 description: "Identifying sensitive data exposure vulnerabilities including API key leakage, PII in responses, insecure storage, and unprotected data transmission during security assessments."
 license: MIT
-tags: [penetration-testing, data-exposure, pii, owasp, web-security, api-keys, secrets]
+tags: [penetration-testing, data-exposure, pii, owasp, web-security]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

@@ -9,7 +9,7 @@ tags: [general]
 
 Manage multiple independent conversations simultaneously.
 
-> **Runnable example:** [recipe/multiple-sessions.ts](recipe/multiple-sessions.ts)
+> **Runnable example:** recipe/multiple-sessions.ts
 >
 > ```bash
 > cd recipe && npm install

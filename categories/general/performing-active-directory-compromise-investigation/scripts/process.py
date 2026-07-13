@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Active Directory Compromise Investigation Script
 Analyzes Windows Security event logs for indicators of AD compromise

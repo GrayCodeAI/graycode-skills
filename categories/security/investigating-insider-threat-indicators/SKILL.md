@@ -2,7 +2,7 @@
 name: investigating-insider-threat-indicators
 description: "Investigates insider threat indicators including data exfiltration attempts, unauthorized access patterns, policy violations, and pre-departure behaviors using SIEM analytics, DLP alerts, and HR da..."
 license: MIT
-tags: [soc, insider-threat, data-exfiltration, dlp, ueba, investigation, hr-correlation]
+tags: [soc, insider-threat, data-exfiltration, dlp, ueba]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

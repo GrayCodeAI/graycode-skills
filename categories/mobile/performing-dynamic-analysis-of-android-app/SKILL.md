@@ -2,7 +2,7 @@
 name: performing-dynamic-analysis-of-android-app
 description: "Performs runtime dynamic analysis of Android applications using Frida, Objection, and Android Debug Bridge to observe application behavior during execution, intercept function calls, modify runtime..."
 license: MIT
-tags: [mobile-security, android, frida, dynamic-analysis, owasp-mobile, penetration-testing]
+tags: [mobile-security, android, frida, dynamic-analysis, owasp-mobile]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

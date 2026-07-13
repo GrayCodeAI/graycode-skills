@@ -2,7 +2,7 @@
 name: scanning-container-images-with-grype
 description: "Scan container images for known vulnerabilities using Anchore Grype with SBOM-based matching and configurable severity thresholds."
 license: MIT
-tags: [grype, vulnerability-scanning, container-security, sbom, anchore, supply-chain]
+tags: [grype, vulnerability-scanning, container-security, sbom, anchore]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

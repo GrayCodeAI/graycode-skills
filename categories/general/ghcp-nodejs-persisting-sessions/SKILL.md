@@ -13,7 +13,7 @@ Save and restore conversation sessions across application restarts.
 
 You want users to be able to continue a conversation even after closing and reopening your application.
 
-> **Runnable example:** [recipe/persisting-sessions.ts](recipe/persisting-sessions.ts)
+> **Runnable example:** recipe/persisting-sessions.ts
 >
 > ```bash
 > cd recipe && npm install

@@ -37,4 +37,4 @@ keywords: None
 
 ## References
 
-- [Records, Pattern Matching & Virtual Threads](references/example.md)
+- Records, Pattern Matching & Virtual Threads

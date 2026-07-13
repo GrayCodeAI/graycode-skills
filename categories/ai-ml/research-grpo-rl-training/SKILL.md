@@ -9,11 +9,6 @@ tags:
 - grpo
 - trl
 - rlhf
-- reward-modeling
-- reasoning
-- dpo
-- ppo
-- structured-output
 version: 1.0.0
 author: Orchestra Research
 dependencies:

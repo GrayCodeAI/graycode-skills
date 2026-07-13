@@ -2,7 +2,7 @@
 name: arezv-karpathy-coder
 description: "Use when writing, reviewing, or committing code to enforce Karpathy's 4 coding principles — surface assumptions before coding, keep it simple, make surgical changes, define verifiable goals. Trigge..."
 license: MIT
-tags: [code-quality, discipline, karpathy, simplicity, surgical-changes, anti-patterns, review]
+tags: [code-quality, discipline, karpathy, simplicity, surgical-changes]
 context: fork
 version: 2.3.0
 author: claude-code-skills

@@ -35,11 +35,11 @@ Append `$filter` as a query parameter using OData filter syntax. Always use `api
 If anything is unclear about the user's request, ask clarifying questions to identify the correct filter fields and values before calling the API.
 
 1. **Identify filter fields** from the user's request (service name, region, SKU, price type).
-2. **Resolve the region**: the API requires `armRegionName` values in lowercase with no spaces (e.g. "East US" → `eastus`, "West Europe" → `westeurope`, "Southeast Asia" → `southeastasia`). See [references/REGIONS.md](references/REGIONS.md) for a complete list.
+2. **Resolve the region**: the API requires `armRegionName` values in lowercase with no spaces (e.g. "East US" → `eastus`, "West Europe" → `westeurope`, "Southeast Asia" → `southeastasia`). See references/REGIONS.md for a complete list.
 3. **Build the filter string** using the fields below and fetch the URL.
 4. **Parse the `Items` array** from the JSON response. Each item contains price and metadata.
 5. **Follow pagination** via `NextPageLink` if you need more than the first 1000 results (rarely needed).
-6. **Calculate cost estimates** using the formulas in [references/COST-ESTIMATOR.md](references/COST-ESTIMATOR.md) to produce monthly/annual estimates.
+6. **Calculate cost estimates** using the formulas in references/COST-ESTIMATOR.md to produce monthly/annual estimates.
 7. **Present results** in a clear summary table with service, SKU, region, unit price, and monthly/annual estimates.
 
 ## Filterable Fields
@@ -129,9 +129,9 @@ Only use items where `isPrimaryMeterRegion` is `true` unless the user specifical
 - If results are empty, try broadening the filter (e.g., remove `priceType` or region constraints first).
 - Prices are always in USD unless `currencyCode` is specified in the request.
 - For savings plan prices, look for the `savingsPlan` array on each item (only in `2023-01-01-preview`).
-- See [references/SERVICE-NAMES.md](references/SERVICE-NAMES.md) for a catalog of common service names and their correct casing.
-- See [references/COST-ESTIMATOR.md](references/COST-ESTIMATOR.md) for cost estimation formulas and patterns.
-- See [references/COPILOT-STUDIO-RATES.md](references/COPILOT-STUDIO-RATES.md) for Copilot Studio billing rates and estimation formulas.
+- See references/SERVICE-NAMES.md for a catalog of common service names and their correct casing.
+- See references/COST-ESTIMATOR.md for cost estimation formulas and patterns.
+- See references/COPILOT-STUDIO-RATES.md for Copilot Studio billing rates and estimation formulas.
 
 ## Troubleshooting
 
@@ -188,4 +188,4 @@ When answering Copilot Studio pricing questions, fetch the latest content from t
 
 Fetch at least the first URL (billing rates) before calculating. The second URL provides supplementary context for licensing questions.
 
-See [references/COPILOT-STUDIO-RATES.md](references/COPILOT-STUDIO-RATES.md) for a cached snapshot of rates, formulas, and billing examples (use as fallback if web fetch is unavailable).
+See references/COPILOT-STUDIO-RATES.md for a cached snapshot of rates, formulas, and billing examples (use as fallback if web fetch is unavailable).

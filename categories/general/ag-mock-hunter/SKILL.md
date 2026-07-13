@@ -2,7 +2,7 @@
 name: ag-mock-hunter
 description: "Audit a live web page in five phases (catalog, click, trace, classify, report) to identify mock data, hardcoded values, LLM-generated metrics, and broken endpoints. Outputs a markdown report with R..."
 license: MIT
-tags: [testing, qa, playwright, mock-detection, web-audit, ai-testing, vibe-coding, claude-code]
+tags: [testing, qa, playwright, mock-detection, web-audit]
 category: testing
 risk: critical
 source: community

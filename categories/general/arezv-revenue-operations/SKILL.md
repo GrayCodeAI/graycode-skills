@@ -12,8 +12,8 @@ tags:
 
 | Template | Use Case |
 |----------|----------|
-| [Pipeline Review Template](assets/pipeline_review_template.md) | Weekly/monthly pipeline inspection documentation |
-| [Forecast Report Template](assets/forecast_report_template.md) | Forecast accuracy reporting and trend analysis |
-| [GTM Dashboard Template](assets/gtm_dashboard_template.md) | GTM efficiency dashboard for leadership review |
-| [Sample Pipeline Data](assets/sample_pipeline_data.json) | Example input for pipeline_analyzer.py |
-| [Expected Output](assets/expected_output.json) | Reference output from pipeline_analyzer.py |
+| Pipeline Review Template | Weekly/monthly pipeline inspection documentation |
+| Forecast Report Template | Forecast accuracy reporting and trend analysis |
+| GTM Dashboard Template | GTM efficiency dashboard for leadership review |
+| Sample Pipeline Data | Example input for pipeline_analyzer.py |
+| Expected Output | Reference output from pipeline_analyzer.py |

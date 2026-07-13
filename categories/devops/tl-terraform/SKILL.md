@@ -150,8 +150,8 @@ wrangler d1 migrations apply <db-name>
 
 ## See Also
 
-- [README](./README.md) - Provider setup
-- [Configuration](./configuration.md) - Resources
-- [API](./api.md) - Data sources
-- [Patterns](./patterns.md) - Use cases
+- README - Provider setup
+- Configuration - Resources
+- API - Data sources
+- Patterns - Use cases
 - Provider docs: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs

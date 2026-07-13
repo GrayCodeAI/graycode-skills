@@ -29,4 +29,4 @@ tags: [general]
 
 ## References
 
-- [Sealed Class, When Expression & Extension Examples](references/example.md)
+- Sealed Class, When Expression & Extension Examples

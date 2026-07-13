@@ -2,7 +2,7 @@
 name: implementing-infrastructure-as-code-security-scanning
 description: "This skill covers implementing automated security scanning for Infrastructure as Code (IaC) templates using tools like Checkov, tfsec, and KICS. It addresses detecting misconfigurations in Terrafor..."
 license: MIT
-tags: [devsecops, cicd, iac-security, checkov, tfsec, terraform, secure-sdlc]
+tags: [devsecops, cicd, iac-security, checkov, tfsec]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

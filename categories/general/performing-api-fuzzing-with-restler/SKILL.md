@@ -2,7 +2,7 @@
 name: performing-api-fuzzing-with-restler
 description: "Uses Microsoft RESTler to perform stateful REST API fuzzing by automatically generating and executing test sequences that exercise API endpoints, discover producer-consumer dependencies between req..."
 license: MIT
-tags: [api-security, fuzzing, restler, automated-testing, openapi, stateful-testing]
+tags: [api-security, fuzzing, restler, automated-testing, openapi]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

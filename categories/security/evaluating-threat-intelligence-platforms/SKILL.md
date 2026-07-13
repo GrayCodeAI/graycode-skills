@@ -2,7 +2,7 @@
 name: evaluating-threat-intelligence-platforms
 description: "Evaluates and selects Threat Intelligence Platform (TIP) products based on organizational requirements including feed integration capability, STIX/TAXII support, workflow automation, analyst interf..."
 license: MIT
-tags: [tip, threatconnect, misp, opencti, anomali, eclecticiq, stix-taxii, cti-program, procurement]
+tags: [tip, threatconnect, misp, opencti, anomali]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

@@ -35,7 +35,7 @@ If a resource group is specified, validate it exists and proceed.
 
 ### Step 2: Resource Discovery & Analysis
 
-For bulk resource discovery across subscriptions, use Azure Resource Graph queries. See [Azure Resource Graph Queries](references/azure-resource-graph.md) for cross-subscription inventory and relationship discovery patterns.
+For bulk resource discovery across subscriptions, use Azure Resource Graph queries. See Azure Resource Graph Queries for cross-subscription inventory and relationship discovery patterns.
 
 Once you have the resource group:
 
@@ -60,7 +60,7 @@ Once you have the resource group:
 
 Create a **detailed Mermaid diagram** using the `graph TB` (top-to-bottom) or `graph LR` (left-to-right) format.
 
-See [example-diagram.md](./assets/example-diagram.md) for a complete sample architecture diagram.
+See example-diagram.md for a complete sample architecture diagram.
 
 **Key Diagram Requirements:**
 
@@ -84,7 +84,7 @@ See [example-diagram.md](./assets/example-diagram.md) for a complete sample arch
 
 ### Step 4: File Creation
 
-Use [template-architecture.md](./assets/template-architecture.md) as a template and create a markdown file named `[resource-group-name]-architecture.md` with:
+Use template-architecture.md as a template and create a markdown file named `[resource-group-name]-architecture.md` with:
 
 1. **Header**: Resource group name, subscription, region
 2. **Summary**: Brief overview of the architecture (2-3 paragraphs)

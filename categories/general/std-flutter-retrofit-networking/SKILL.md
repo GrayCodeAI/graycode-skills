@@ -38,7 +38,7 @@ infrastructure/
 
 ### Retrofit Client & Safe Enum DTO Examples
 
-See [implementation examples](references/implementation.md) for RestClient definitions and safe enum DTO patterns.
+See implementation examples for RestClient definitions and safe enum DTO patterns.
 
 ## Anti-Patterns
 
@@ -50,7 +50,7 @@ See [implementation examples](references/implementation.md) for RestClient defin
 ## Reference & Examples
 
 For RestClient definitions and Auth Interceptor implementation:
-See [references/REFERENCE.md](references/REFERENCE.md).
+See references/REFERENCE.md.
 
 ## Related Topics
 

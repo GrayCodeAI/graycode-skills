@@ -9,7 +9,7 @@ tags: [general]
 
 Use Copilot to intelligently organize files in a folder based on their metadata.
 
-> **Runnable example:** [recipe/managing_local_files.py](recipe/managing_local_files.py)
+> **Runnable example:** recipe/managing_local_files.py
 >
 > ```bash
 > cd recipe && pip install -r requirements.txt

@@ -2,7 +2,7 @@
 name: research-langsmith
 description: "LLM observability platform for tracing, evaluation, and monitoring. Use when debugging LLM applications, evaluating model outputs against datasets, monitoring production systems, or building system..."
 license: MIT
-tags: [observability, langsmith, tracing, evaluation, monitoring, debugging, testing, llm-ops, production]
+tags: [observability, langsmith, tracing, evaluation, monitoring]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [langsmith>=0.2.0]
@@ -410,8 +410,8 @@ def my_function(data):
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Custom evaluators, distributed tracing, hub prompts
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging, performance
+- **Advanced Usage** - Custom evaluators, distributed tracing, hub prompts
+- **Troubleshooting** - Common issues, debugging, performance
 
 ## Resources
 

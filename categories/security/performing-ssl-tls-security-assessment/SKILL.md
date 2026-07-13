@@ -2,7 +2,7 @@
 name: performing-ssl-tls-security-assessment
 description: "Assess SSL/TLS server configurations using the sslyze Python library to evaluate cipher suites, certificate chains, protocol versions, HSTS headers, and known vulnerabilities like Heartbleed and RO..."
 license: MIT
-tags: [network-security, ssl, tls, sslyze, certificate, cipher-suites, vulnerability-assessment]
+tags: [network-security, ssl, tls, sslyze, certificate]
 domain: cybersecurity
 subdomain: network-security
 version: 1.0

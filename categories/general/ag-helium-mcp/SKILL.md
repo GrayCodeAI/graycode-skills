@@ -2,7 +2,7 @@
 name: ag-helium-mcp
 description: "Connect to Helium's MCP server for news research, media bias analysis, balanced perspectives, stock/options data, and semantic meme search across 3.2M+ articles and 5,000+ sources"
 license: MIT
-tags: [mcp, news, media-bias, stocks, options, finance, research]
+tags: [mcp, news, media-bias, stocks, options]
 risk: safe
 source: https://heliumtrades.com/mcp-page/
 source_repo: connerlambden/helium-mcp

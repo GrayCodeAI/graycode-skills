@@ -9,11 +9,6 @@ tags:
 - typescript
 - hooks
 - state-management
-- forms
-- data-fetching
-- remote-data
-- react-19
-- next-js
 risk: unknown
 source: community
 version: 2.0.0

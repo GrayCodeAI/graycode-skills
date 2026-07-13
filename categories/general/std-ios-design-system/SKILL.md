@@ -17,7 +17,7 @@ Enforce design token usage in SwiftUI. Follow Apple HIG for iOS-native feel.
 
 ## Token Structure
 
-Define tokens in `Theme/` folder: Colors via Asset Catalog (`Color("Name")`), `Spacing` enum for all margins, `Font` extensions for typography. See [Token Structure & Examples](references/example.md).
+Define tokens in `Theme/` folder: Colors via Asset Catalog (`Color("Name")`), `Spacing` enum for all margins, `Font` extensions for typography. See Token Structure & Examples.
 
 ## Anti-Patterns
 
@@ -27,4 +27,4 @@ Define tokens in `Theme/` folder: Colors via Asset Catalog (`Color("Name")`), `S
 
 ## References
 
-- [Token Structure & Usage Examples](references/example.md)
+- Token Structure & Usage Examples

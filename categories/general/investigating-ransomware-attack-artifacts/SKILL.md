@@ -2,7 +2,7 @@
 name: investigating-ransomware-attack-artifacts
 description: "Identify, collect, and analyze ransomware attack artifacts to determine the variant, initial access vector, encryption scope, and recovery options."
 license: MIT
-tags: [forensics, ransomware, malware-analysis, incident-response, encryption-recovery, evidence-collection]
+tags: [forensics, ransomware, malware-analysis, incident-response, encryption-recovery]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

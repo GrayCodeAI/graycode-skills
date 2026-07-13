@@ -23,4 +23,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Unity 6A](./knowledge/Unity%206A/)
+- Unity 6A

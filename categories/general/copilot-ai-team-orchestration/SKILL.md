@@ -64,7 +64,7 @@ git clone <repo> project-devops # DevOps (only when needed)
 
 ### 1. Create PROJECT_BRIEF.md
 
-The single source of truth across all chats. See the [project brief template](./references/project-brief-template.md).
+The single source of truth across all chats. See the project brief template.
 
 **Required sections (do not abbreviate):**
 1. Project Overview
@@ -84,11 +84,11 @@ The single source of truth across all chats. See the [project brief template](./
 
 ### 2. Run a Brainstorm
 
-See the [brainstorm format](./references/brainstorm-format.md). Key: name each agent explicitly with distinct personality and perspective. Require at least 2 genuine disagreements to prevent groupthink.
+See the brainstorm format. Key: name each agent explicitly with distinct personality and perspective. Require at least 2 genuine disagreements to prevent groupthink.
 
 ### 3. Create Sprint Plans
 
-See the [sprint plan template](./references/sprint-plan-template.md). Every sprint gets:
+See the sprint plan template. Every sprint gets:
 - `docs/sprint-N/plan.md` — prioritized tasks, success criteria
 - `docs/sprint-N/progress.md` — live tracker, enables recovery
 - `docs/sprint-N/done.md` — handoff doc written at sprint end
@@ -132,7 +132,7 @@ Continue from where it left off.
 
 ## Anti-Patterns
 
-See [anti-patterns reference](./references/anti-patterns.md) for the full list. Top 5:
+See anti-patterns reference for the full list. Top 5:
 
 | Don't | Do Instead |
 |-------|------------|

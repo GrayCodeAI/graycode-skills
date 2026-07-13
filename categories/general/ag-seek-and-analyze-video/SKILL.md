@@ -2,7 +2,7 @@
 name: ag-seek-and-analyze-video
 description: "Seek and analyze video content using Memories.ai Large Visual Memory Model for persistent video intelligence"
 license: MIT
-tags: [video, ai, memories, social-media, youtube, tiktok, analysis]
+tags: [video, ai, memories, social-media, youtube]
 category: data-ai
 risk: safe
 source: https://github.com/kennyzheng-builds/seek-and-analyze-video

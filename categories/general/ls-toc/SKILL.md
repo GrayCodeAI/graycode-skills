@@ -11,6 +11,6 @@ This document contains a table of contents for the ChatGPT System Prompts reposi
 
 ## Prompt Collections
 
-- [gpts Collection](./prompts/gpts/TOC.md)
-- [official-product Collection](./prompts/official-product/TOC.md)
-- [opensource-prj Collection](./prompts/opensource-prj/TOC.md)
+- gpts Collection
+- official-product Collection
+- opensource-prj Collection

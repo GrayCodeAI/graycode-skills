@@ -2,7 +2,7 @@
 name: implementing-diamond-model-analysis
 description: "The Diamond Model of Intrusion Analysis provides a structured framework for analyzing cyber intrusions by examining four core features: Adversary, Capability, Infrastructure, and Victim. This skill co"
 license: MIT
-tags: [threat-intelligence, cti, ioc, mitre-attack, stix, diamond-model, intrusion-analysis]
+tags: [threat-intelligence, cti, ioc, mitre-attack, diamond-model]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

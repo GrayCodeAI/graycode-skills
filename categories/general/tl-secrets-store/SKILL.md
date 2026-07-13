@@ -101,4 +101,4 @@ try {
 | Local dev               | Separate local secrets      | Use without `--remote` flag           |
 | Regional availability   | Global except China Network | Unavailable in China Network          |
 
-See: [configuration.md](./configuration.md), [api.md](./api.md), [patterns.md](./patterns.md)
+See: configuration.md, api.md, patterns.md

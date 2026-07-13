@@ -23,4 +23,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Headspace OS](./knowledge/Headspace%20OS/)
+- Headspace OS

@@ -16,7 +16,7 @@ version: 1.0
 
 > **Protractor reached end-of-life in 2023.** Angular team recommends Playwright or Cypress.
 
-For TestMu AI cloud execution, see [reference/cloud-integration.md](reference/cloud-integration.md) and [shared/testmu-cloud-reference.md](testmu-cloud-reference.md).
+For TestMu AI cloud execution, see reference/cloud-integration.md and shared/testmu-cloud-reference.md.
 
 ## Core Patterns
 

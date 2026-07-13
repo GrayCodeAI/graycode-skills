@@ -2,7 +2,7 @@
 name: analyzing-ethereum-smart-contract-vulnerabilities
 description: "Perform static and symbolic analysis of Solidity smart contracts using Slither and Mythril to detect reentrancy, integer overflow, access control, and other vulnerability classes before deployment ..."
 license: MIT
-tags: [ethereum, solidity, smart-contract, slither, mythril, blockchain, defi, audit]
+tags: [ethereum, solidity, smart-contract, slither, mythril]
 domain: cybersecurity
 subdomain: blockchain-security
 version: 1.0

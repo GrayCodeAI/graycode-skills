@@ -11,7 +11,7 @@ tags: [general]
 
 This document breaks down the work performed during the internal refactoring of the `rulebook-ai` core and CLI components. The objective was to improve code modularity, maintainability, and extensibility by separating declarative assistant specifications from the file-generation engine.
 
-This plan is a historical record of the tasks completed, based on the final design in the [Refactoring Plan](./refactoring_plan.md).
+This plan is a historical record of the tasks completed, based on the final design in the Refactoring Plan.
 
 ---
 

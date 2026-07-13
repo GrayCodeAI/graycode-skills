@@ -2,7 +2,7 @@
 name: ag-tmux
 description: "Expert tmux session, window, and pane management for terminal multiplexing, persistent remote workflows, and shell scripting automation."
 license: MIT
-tags: [tmux, terminal, multiplexer, sessions, shell, remote, automation]
+tags: [tmux, terminal, multiplexer, sessions, shell]
 category: development
 risk: safe
 source: community

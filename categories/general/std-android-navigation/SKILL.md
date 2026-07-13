@@ -29,4 +29,4 @@ keywords: None
 
 ## References
 
-- [Navigation Patterns](references/navigation-patterns.md)
+- Navigation Patterns

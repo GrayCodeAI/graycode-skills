@@ -514,4 +514,4 @@ aws logs describe-log-groups \
 - [Gateway Service](README.md) - Gateway monitoring
 - [Runtime Service](README.md) - Runtime tracing
 - [Memory Service](README.md) - Memory metrics
-- [Credential Management](credential-management.md) - Cross-service credential patterns
+- Credential Management - Cross-service credential patterns

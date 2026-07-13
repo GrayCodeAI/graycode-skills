@@ -9,10 +9,7 @@ tags:
 - code-quality
 - dry
 - solid
-- design-patterns
 - clean-code
-- simplification
-- behavior-preservation
 metadata: None
 platforms: Claude, ChatGPT, Gemini, Codex
 ---

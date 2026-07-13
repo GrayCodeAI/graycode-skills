@@ -2,7 +2,7 @@
 name: research-modal
 description: "Serverless GPU cloud platform for running ML workloads. Use when you need on-demand GPU access without infrastructure management, deploying ML models as APIs, or running batch jobs with automatic s..."
 license: MIT
-tags: [infrastructure, serverless, gpu, cloud, deployment, modal]
+tags: [infrastructure, serverless, gpu, cloud, modal]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [modal>=0.64.0]
@@ -330,8 +330,8 @@ if __name__ == "__main__":
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Multi-GPU, distributed training, cost optimization
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues and solutions
+- **Advanced Usage** - Multi-GPU, distributed training, cost optimization
+- **Troubleshooting** - Common issues and solutions
 
 ## Resources
 

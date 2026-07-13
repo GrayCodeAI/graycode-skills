@@ -82,6 +82,6 @@ For existing users, this is a non-breaking change:
 
 ## Related Documentation
 
-- [MCP Feature Documentation](./FEATURE-MCP.md) - Similar scaffolding pattern
-- [Adapter Development](./ADAPTER_DEVELOPMENT.md) - How to extend adapters
-- [Design Overview](./DESIGN.md) - Overall architecture
+- MCP Feature Documentation - Similar scaffolding pattern
+- Adapter Development - How to extend adapters
+- Design Overview - Overall architecture

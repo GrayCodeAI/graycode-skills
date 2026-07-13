@@ -24,7 +24,7 @@ keywords: None
 
 - Identify all **Actors** (e.g., `Customer`, `Sales Rep`, `Admin`).
 - Use **Actor/Permission Matrix** to map specific constraints per Actor.
-- [Permissions Patterns](references/analysis_patterns.md)
+- Permissions Patterns
 
 ## 3. Edge Case & Boundary Analysis
 
@@ -48,7 +48,7 @@ keywords: None
 - **Scope Fence**: Include explicit `## In Scope`, `## Out of Scope`, and `## Deferred` sections. Deferred items must link to Jira ticket — never write "to discuss".
 - **Translation AC**: Language/locale behavior separate AC, not inline note.
 
-See [User Story Template](references/user_story_template.md) for full authoring template.
+See User Story Template for full authoring template.
 
 ## 6. Anti-Patterns (Story Authoring)
 

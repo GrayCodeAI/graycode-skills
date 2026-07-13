@@ -23,7 +23,7 @@ keywords: None
 
 ## API Resource Example
 
-See [implementation examples](references/implementation.md#api-resource-example) for complete API Resource with collection usage.
+See implementation examples for complete API Resource with collection usage.
 
 ## Implementation Guidelines
 
@@ -57,4 +57,4 @@ See [implementation examples](references/implementation.md#api-resource-example)
 
 ## References
 
-- [API Resource Patterns](references/implementation.md)
+- API Resource Patterns

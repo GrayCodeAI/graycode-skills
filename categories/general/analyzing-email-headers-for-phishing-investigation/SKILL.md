@@ -2,7 +2,7 @@
 name: analyzing-email-headers-for-phishing-investigation
 description: "Parse and analyze email headers to trace the origin of phishing emails, verify sender authenticity, and identify spoofing through SPF, DKIM, and DMARC validation."
 license: MIT
-tags: [forensics, email-analysis, phishing, spf, dkim, dmarc, header-analysis]
+tags: [forensics, email-analysis, phishing, spf, dkim]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

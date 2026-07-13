@@ -348,9 +348,9 @@ For detailed API documentation, tutorials, and advanced usage, see the `referenc
 
 | File | Contents |
 |------|----------|
-| [references/README.md](references/README.md) | Overview and quick start guide |
-| [references/api.md](references/api.md) | Complete API reference for SAE, TrainingSAE, configurations |
-| [references/tutorials.md](references/tutorials.md) | Step-by-step tutorials for training, analysis, steering |
+| references/README.md | Overview and quick start guide |
+| references/api.md | Complete API reference for SAE, TrainingSAE, configurations |
+| references/tutorials.md | Step-by-step tutorials for training, analysis, steering |
 
 ## External Resources
 

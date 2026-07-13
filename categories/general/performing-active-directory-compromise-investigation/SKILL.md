@@ -2,7 +2,7 @@
 name: performing-active-directory-compromise-investigation
 description: "Investigate Active Directory compromise by analyzing authentication logs, replication metadata, Group Policy changes, and Kerberos ticket anomalies to identify attacker persistence and lateral move..."
 license: MIT
-tags: [active-directory, compromise-investigation, identity-forensics, kerberos, lateral-movement, dfir, ntds-dit, golden-ticket]
+tags: [active-directory, compromise-investigation, identity-forensics, kerberos, lateral-movement]
 domain: cybersecurity
 subdomain: incident-response
 version: 1.0

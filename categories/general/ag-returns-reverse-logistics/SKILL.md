@@ -134,7 +134,7 @@ When a return falls outside standard policy, evaluate in this order:
 
 ## Key Edge Cases
 
-These are situations where standard workflows fail. Brief summaries — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where standard workflows fail. Brief summaries — see edge-cases.md for full analysis.
 
 1. **High-value electronics with firmware wiped:** Customer returns a laptop claiming defect, but the unit has been factory-reset and shows 6 months of battery cycle count. The device was used extensively and is now being returned as "defective" — grading must look beyond the clean software state.
 
@@ -164,7 +164,7 @@ These are situations where standard workflows fail. Brief summaries — see [edg
 
 ### Key Templates
 
-Brief templates below. Full versions with variables in [communication-templates.md](references/communication-templates.md).
+Brief templates below. Full versions with variables in communication-templates.md.
 
 **RMA approval:** Subject: `Return Approved — Order #{order_id}`. Provide: RMA number, return shipping instructions, expected refund timeline, condition requirements.
 
@@ -206,9 +206,9 @@ Level 1 (Returns Associate) → Level 2 (Team Lead, 2 hours) → Level 3 (Return
 
 ## Additional Resources
 
-- For detailed disposition trees, fraud scoring, vendor recovery frameworks, and grading standards, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and tone guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed disposition trees, fraud scoring, vendor recovery frameworks, and grading standards, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For complete communication templates with variables and tone guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you need to **design, improve, or troubleshoot returns and reverse logistics operations**:

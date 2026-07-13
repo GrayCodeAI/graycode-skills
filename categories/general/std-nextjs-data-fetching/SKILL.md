@@ -44,5 +44,5 @@ Fetch data directly in Server Components using `async/await`.
 
 ## Examples & References
 
-- [Usage Examples](references/usage-examples.md)
+- Usage Examples
 - [Caching Documentation](https://nextjs.org/docs/app/building-your-application/caching)

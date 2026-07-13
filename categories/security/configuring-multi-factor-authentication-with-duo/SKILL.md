@@ -2,7 +2,7 @@
 name: configuring-multi-factor-authentication-with-duo
 description: "Deploy Cisco Duo multi-factor authentication across enterprise applications, VPN, RDP, and SSH access points. This skill covers Duo integration methods, adaptive authentication policies, device trust"
 license: MIT
-tags: [iam, identity, access-control, authentication, mfa, duo, multi-factor]
+tags: [iam, identity, access-control, authentication, multi-factor]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

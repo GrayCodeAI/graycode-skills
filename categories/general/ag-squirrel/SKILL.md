@@ -2,7 +2,7 @@
 name: ag-squirrel
 description: "Full-cycle AI coding skill: plans, builds, tests, lints, fixes bugs, and writes production-grade docs. Auto-detects project state and adapts its 8-phase pipeline."
 license: Apache-2.0
-tags: [development, testing, planning, code-review, documentation, ci-cd]
+tags: [development, testing, planning, code-review, documentation]
 category: development
 risk: safe
 source: community

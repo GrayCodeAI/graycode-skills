@@ -2,7 +2,7 @@
 name: conducting-mobile-application-penetration-test
 description: "Perform a mobile application penetration test on Android and iOS apps to identify insecure data storage, certificate pinning bypass, API vulnerabilities, binary protections, and runtime manipulatio..."
 license: MIT
-tags: [mobile-pentest, android, ios, frida, objection, mobsf, owasp-mastg, certificate-pinning, apk-analysis]
+tags: [mobile-pentest, android, ios, frida, objection]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

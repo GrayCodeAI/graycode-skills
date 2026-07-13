@@ -2,7 +2,7 @@
 name: arezv-llm-wiki
 description: "Use when building or maintaining a persistent personal knowledge base (second brain) in Obsidian where an LLM incrementally ingests sources, updates entity/concept pages, maintains cross-references..."
 license: MIT
-tags: [knowledge-management, obsidian, second-brain, pkm, rag-alternative, wiki, karpathy, memex]
+tags: [knowledge-management, obsidian, second-brain, pkm, wiki]
 context: fork
 version: 1.0.0
 author: claude-code-skills

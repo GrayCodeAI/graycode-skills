@@ -26,11 +26,11 @@ keywords: None
 
 `App (app/) -> Widgets -> Features -> Entities -> Shared`
 
-See [implementation examples](references/implementation.md) for thin page example.
+See implementation examples for thin page example.
 
 ## Strategy
 
-1. **RSC Boundaries**: Enforce strict serialization rules for props passed from Server to Client. See [RSC Boundaries & Serialization](references/RSC_BOUNDARIES.md).
+1. **RSC Boundaries**: Enforce strict serialization rules for props passed from Server to Client. See RSC Boundaries & Serialization.
 2. **App Layer Thin**: `app/` directory (App Router) **only** for Routing.
  - _Rule_: `page.tsx` should only import Widgets/Features. No business logic (`useEffect`, `fetch`) directly in pages.
 3. **Slices over Types**: Group code by **Business Domain** (User, Product, Cart), not by File Type (Components, Hooks, Utils).
@@ -49,10 +49,10 @@ See [implementation examples](references/implementation.md) for thin page exampl
 
 For specific directory layout and layer definitions, see reference documentation.
 
-- [**FSD Folder Structure**](references/fsd-structure.md)
-- [**Bundling & Compatibility**](references/BUNDLING.md)
-- [**Runtime Selection (Edge/Node)**](references/RUNTIME_SELECTION.md)
-- [**Debug Tricks & MCP**](references/DEBUG_TRICKS.md)
+- **FSD Folder Structure**
+- **Bundling & Compatibility**
+- **Runtime Selection (Edge/Node)**
+- **Debug Tricks & MCP**
 
 ## Architecture Checklist (Mandatory)
 

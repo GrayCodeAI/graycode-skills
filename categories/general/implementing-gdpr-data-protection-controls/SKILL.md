@@ -2,7 +2,7 @@
 name: implementing-gdpr-data-protection-controls
 description: "The General Data Protection Regulation (EU) 2016/679 (GDPR) is the EU's comprehensive data protection law governing the collection, processing, storage, and transfer of personal data. This skill cover"
 license: MIT
-tags: [compliance, governance, gdpr, privacy, data-protection, eu-regulation]
+tags: [compliance, governance, gdpr, privacy, data-protection]
 domain: cybersecurity
 subdomain: compliance-governance
 version: 1.0

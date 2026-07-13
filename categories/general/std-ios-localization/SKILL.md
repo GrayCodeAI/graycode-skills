@@ -22,7 +22,7 @@ keywords: [{'String(localized': ')'}]
 5. **Organize assets** — Use `.xcassets` with "Provides Namespace" enabled. Prefer SF Symbols for standard icons.
 6. **Complete Base localization** — Ensure `Base` complete before adding other languages.
 
-See [localization and asset catalog examples](references/implementation.md)
+See localization and asset catalog examples
 
 ## Anti-Patterns
 
@@ -32,4 +32,4 @@ See [localization and asset catalog examples](references/implementation.md)
 
 ## References
 
-- [L10n & Asset Organization](references/implementation.md)
+- L10n & Asset Organization

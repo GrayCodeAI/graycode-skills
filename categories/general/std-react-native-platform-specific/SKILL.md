@@ -17,7 +17,7 @@ keywords: None
 
 Use `.ios.` and `.android.` for platform-specific files:
 
-See [native modules reference](references/native-modules.md) for platform-specific file naming, `Platform.select` usage, and native bridge examples.
+See native modules reference for platform-specific file naming, `Platform.select` usage, and native bridge examples.
 
 React Native automatically picks right file:
 
@@ -42,4 +42,4 @@ Use `Platform.select` or `Platform.OS` for small differences within shared file.
 
 ## References
 
-See [references/native-modules.md](references/native-modules.md) for Platform detection examples, Native Bridge (iOS/Android), Expo JSI Modules, and SafeArea handling.
+See references/native-modules.md for Platform detection examples, Native Bridge (iOS/Android), Expo JSI Modules, and SafeArea handling.

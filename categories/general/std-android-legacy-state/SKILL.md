@@ -32,4 +32,4 @@ keywords: None
 
 ## References
 
-- [Flow Consumption Template](references/implementation.md)
+- Flow Consumption Template

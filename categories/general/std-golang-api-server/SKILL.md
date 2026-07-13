@@ -28,7 +28,7 @@ keywords: None
 5. **Enforce content types** — Require `application/json` for REST APIs.
 6. **Implement graceful shutdown** — Handle SIGINT/SIGTERM to drain in-flight requests.
 
-See [graceful shutdown example](references/graceful-shutdown.md) and [Echo handler patterns](references/middleware-patterns.md)
+See graceful shutdown example and Echo handler patterns
 
 ## Anti-Patterns
 
@@ -38,5 +38,5 @@ See [graceful shutdown example](references/graceful-shutdown.md) and [Echo handl
 
 ## References
 
-- [Middleware Patterns](references/middleware-patterns.md)
-- [Graceful Shutdown](references/graceful-shutdown.md)
+- Middleware Patterns
+- Graceful Shutdown

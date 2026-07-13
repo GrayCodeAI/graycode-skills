@@ -2,7 +2,7 @@
 name: implementing-supply-chain-security-with-in-toto
 description: "Implement software supply chain integrity verification for container builds using the in-toto framework to create cryptographically signed attestations across CI/CD pipeline steps."
 license: MIT
-tags: [in-toto, supply-chain-security, attestation, slsa, sigstore, container-security, cncf, provenance, sbom]
+tags: [in-toto, supply-chain-security, attestation, slsa, container-security]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

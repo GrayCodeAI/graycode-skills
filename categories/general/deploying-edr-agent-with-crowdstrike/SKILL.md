@@ -2,7 +2,7 @@
 name: deploying-edr-agent-with-crowdstrike
 description: "Deploys and configures CrowdStrike Falcon EDR agents across enterprise endpoints to enable real-time threat detection, behavioral analysis, and automated response. Use when onboarding endpoints to ..."
 license: MIT
-tags: [endpoint, edr, crowdstrike, falcon, threat-detection, sensor-deployment]
+tags: [endpoint, edr, crowdstrike, falcon, threat-detection]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

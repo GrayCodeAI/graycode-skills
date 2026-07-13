@@ -467,20 +467,20 @@ python product-team/product-strategist/scripts/okr_cascade_generator.py growth
 
 ## Related Agents
 
-- [cs-product-manager](cs-product-manager.md) - Feature-level execution, RICE prioritization, PRD development
-- [cs-agile-product-owner](cs-agile-product-owner.md) - Sprint-level planning and backlog management
-- [cs-ux-researcher](cs-ux-researcher.md) - User research to validate strategic assumptions
-- [cs-ceo-advisor](cs-ceo-advisor.md) - Company-level strategic alignment
+- cs-product-manager - Feature-level execution, RICE prioritization, PRD development
+- cs-agile-product-owner - Sprint-level planning and backlog management
+- cs-ux-researcher - User research to validate strategic assumptions
+- cs-ceo-advisor - Company-level strategic alignment
 - Senior PM Skill - Portfolio context (see `project-management/senior-pm/`)
 
 ## References
 
 - **Primary Skill:** [product-team/product-strategist/SKILL.md](SKILL.md)
 - **Competitive Teardown Skill:** [product-team/competitive-teardown/SKILL.md](SKILL.md)
-- **OKR Framework:** [product-team/product-strategist/references/okr_framework.md](okr_framework.md)
-- **Strategy Types:** [product-team/product-strategist/references/strategy_types.md](strategy_types.md)
-- **Product Domain Guide:** [product-team/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **OKR Framework:** product-team/product-strategist/references/okr_framework.md
+- **Strategy Types:** product-team/product-strategist/references/strategy_types.md
+- **Product Domain Guide:** product-team/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 
 ---
 

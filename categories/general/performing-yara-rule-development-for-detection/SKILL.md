@@ -2,7 +2,7 @@
 name: performing-yara-rule-development-for-detection
 description: "Develop precise YARA rules for malware detection by identifying unique byte patterns, strings, and behavioral indicators in executable files while minimizing false positives."
 license: MIT
-tags: [yara, malware-detection, signature-development, threat-hunting, pattern-matching, yara-x, indicator-development]
+tags: [yara, malware-detection, signature-development, threat-hunting, yara-x]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

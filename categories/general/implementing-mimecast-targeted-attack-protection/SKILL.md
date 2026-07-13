@@ -2,7 +2,7 @@
 name: implementing-mimecast-targeted-attack-protection
 description: "Deploy Mimecast Targeted Threat Protection including URL Protect, Attachment Protect, Impersonation Protect, and Internal Email Protect to defend against advanced phishing and spearphishing attacks."
 license: MIT
-tags: [mimecast, email-security, targeted-threat-protection, url-protect, impersonation, attachment-sandboxing, phishing]
+tags: [mimecast, email-security, targeted-threat-protection, url-protect, impersonation]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

@@ -2,7 +2,7 @@
 name: research-autogpt
 description: "Autonomous AI agent platform for building and deploying continuous agents. Use when creating visual workflow agents, deploying persistent autonomous agents, or building complex multi-step AI automa..."
 license: MIT
-tags: [agents, autogpt, autonomous-agents, workflow-automation, visual-builder, ai-platform]
+tags: [agents, autogpt, autonomous-agents, workflow-automation, visual-builder]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [autogpt-platform>=0.4.0]
@@ -392,8 +392,8 @@ docker compose restart executor
 
 ## References
 
-- **[Advanced Usage](references/advanced-usage.md)** - Custom blocks, deployment, scaling
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging
+- **Advanced Usage** - Custom blocks, deployment, scaling
+- **Troubleshooting** - Common issues, debugging
 
 ## Resources
 

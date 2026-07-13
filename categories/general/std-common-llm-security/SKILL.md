@@ -18,7 +18,7 @@ keywords: None
 - **Check LLM06 next**: Agent tools with write/delete/execute capabilities without confirmation P0.
 - **Mark each item**: ✅ not affected | ⚠️ needs review | 🔴 confirmed finding.
 - **P0 finding caps Security score at 40/100** — not skip any item.
-- See [references/owasp-llm.md](references/owasp-llm.md) for full detection signals.
+- See references/owasp-llm.md for full detection signals.
 
 ## OWASP LLM Top 10 (2025)
 
@@ -43,4 +43,4 @@ keywords: None
 
 ## References
 
-- [OWASP LLM — Full Detection Signals](references/owasp-llm.md) — load when auditing any LLM client code
+- OWASP LLM — Full Detection Signals — load when auditing any LLM client code

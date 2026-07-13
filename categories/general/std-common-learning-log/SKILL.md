@@ -24,7 +24,7 @@ Write structured mistake entry to `AGENTS_LEARNING.md` in project root before re
 - `Session retrospective` — correction loop found during `common-session-retrospective`
 
 2. **Read `AGENTS_LEARNING.md`** — count existing `## Agent Learning Log: Iteration` headers → N
-3. **Append entry** — write Iteration #(N+1) using format in [Log Entry Format](references/log-format.md)
+3. **Append entry** — write Iteration #(N+1) using format in Log Entry Format
 4. **Continue** — proceed with corrected action (non-blocking)
 
 ## Guidelines
@@ -32,7 +32,7 @@ Write structured mistake entry to `AGENTS_LEARNING.md` in project root before re
 - **One entry per correction event** — not one per file or per task
 - **Concrete mistakes only** — name specific file, rule, or action that wrong
 - ** "Better Approach" must actionable** — state what to , not what to avoid
-- **Create file if missing** — bootstrap with header from [Log Entry Format](references/log-format.md)
+- **Create file if missing** — bootstrap with header from Log Entry Format
 - **Never skip for "minor" corrections** — all corrections learning signals
 
 ## Anti-Patterns
@@ -44,4 +44,4 @@ Write structured mistake entry to `AGENTS_LEARNING.md` in project root before re
 
 ## References
 
-- [Log Entry Format](references/log-format.md) — full entry template + AGENTS_LEARNING.md bootstrap
+- Log Entry Format — full entry template + AGENTS_LEARNING.md bootstrap

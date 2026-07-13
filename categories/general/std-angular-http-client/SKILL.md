@@ -45,4 +45,4 @@ Use **resource<T, P>({ request: () => params(), loader: ... })** for non-HTTP as
 
 ## References
 
-- [Interceptors](references/interceptors.md)
+- Interceptors

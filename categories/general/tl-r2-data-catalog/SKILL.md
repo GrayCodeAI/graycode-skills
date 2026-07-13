@@ -72,7 +72,7 @@ Common problems → causes → solutions.
 
 **Error:** Performance degrades over time.  
 **Cause:** Too many small files.  
-**Solution:** Check file count, compact if >1000 or avg <10MB. See [api.md](api.md#compaction).
+**Solution:** Check file count, compact if >1000 or avg <10MB. See api.md.
 
 ### Type Mismatch
 
@@ -102,7 +102,7 @@ Common problems → causes → solutions.
 
 **Problem:** `CommitFailedException` with multiple writers.  
 **Cause:** Optimistic locking - simultaneous commits.  
-**Solution:** Add retry with exponential backoff (see [patterns.md](patterns.md#pattern-6-concurrent-writes-with-retry)).
+**Solution:** Add retry with exponential backoff (see patterns.md).
 
 ### Stale Metadata
 
@@ -173,5 +173,5 @@ logging.basicConfig(level=logging.DEBUG)
 
 ## Next Steps
 
-- [patterns.md](patterns.md) - Working examples
-- [api.md](api.md) - API reference
+- patterns.md - Working examples
+- api.md - API reference

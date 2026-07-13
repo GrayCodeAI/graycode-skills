@@ -2,7 +2,7 @@
 name: performing-api-rate-limiting-bypass
 description: "Tests API rate limiting implementations for bypass vulnerabilities by manipulating request headers, IP addresses, HTTP methods, API versions, and encoding schemes to circumvent request throttling c..."
 license: MIT
-tags: [api-security, owasp, rate-limiting, throttling, brute-force, dos-prevention]
+tags: [api-security, owasp, rate-limiting, throttling, brute-force]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0.0

@@ -50,4 +50,4 @@ keywords: None
 
 ## References
 
-- [Guard Patterns & Immutability](references/implementation.md)
+- Guard Patterns & Immutability

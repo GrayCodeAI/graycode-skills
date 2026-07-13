@@ -2,7 +2,7 @@
 name: mapping-mitre-attack-techniques
 description: "Maps observed adversary behaviors, security alerts, and detection rules to MITRE ATT&CK techniques and sub-techniques to quantify detection coverage and guide control prioritization. Use when build..."
 license: MIT
-tags: [mitre-att-ck, att-ck-navigator, sigma, d3fend, ttp, detection-engineering, nist-csf]
+tags: [mitre-att-ck, att-ck-navigator, sigma, d3fend, ttp]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

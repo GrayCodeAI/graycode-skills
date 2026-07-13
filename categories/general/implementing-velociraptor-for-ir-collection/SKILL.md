@@ -2,7 +2,7 @@
 name: implementing-velociraptor-for-ir-collection
 description: "Deploy and configure Velociraptor for scalable endpoint forensic artifact collection during incident response using VQL queries, hunts, and pre-built artifact packs across Windows, Linux, and macOS..."
 license: MIT
-tags: [velociraptor, dfir, endpoint-collection, vql, forensic-artifacts, rapid7, threat-hunting, incident-response]
+tags: [velociraptor, dfir, endpoint-collection, vql, forensic-artifacts]
 domain: cybersecurity
 subdomain: incident-response
 version: 1.0

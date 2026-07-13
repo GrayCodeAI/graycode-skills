@@ -2,7 +2,7 @@
 name: hunting-for-dns-tunneling-with-zeek
 description: "Detect DNS tunneling and data exfiltration by analyzing Zeek dns.log for high-entropy subdomain queries, excessive query volume, long query lengths, and unusual DNS record types indicating covert c..."
 license: MIT
-tags: [threat-hunting, dns-tunneling, zeek, data-exfiltration, covert-channel, mitre-t1071-004, network-monitoring]
+tags: [threat-hunting, dns-tunneling, zeek, data-exfiltration, covert-channel]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

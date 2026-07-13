@@ -2,7 +2,7 @@
 name: aws-cost-operations
 description: "AWS cost optimization, monitoring, and operational best practices with integrated MCP servers for billing analysis, cost estimation, observability, and security assessment."
 license: MIT
-tags: [aws, cost-optimization, cloudwatch, billing, monitoring, observability, security, well-architected]
+tags: [aws, cost-optimization, cloudwatch, billing, monitoring]
 domain: cloud
 subdomain: aws
 version: 1.0

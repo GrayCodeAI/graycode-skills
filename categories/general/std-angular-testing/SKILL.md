@@ -18,14 +18,14 @@ keywords: None
 - Use `ComponentHarness` (e.g., `MatButtonHarness`) not CSS selectors — stable across DOM changes.
 - `loader.getHarness(MatButtonHarness)` + `await button.click()`. Never query by CSS class.
 
-See [harness pattern](references/harness-pattern.md) for ComponentHarness examples.
+See harness pattern for ComponentHarness examples.
 
 ## 2. Mock HTTP with HttpTestingController
 
 - `provideHttpClientTesting()` not manual HttpClient mocks.
 - Call `expectOne`, `.flush(mockData)`, `verify()` in `afterEach`.
 
-See [harness pattern](references/harness-pattern.md) for HttpTestingController examples.
+See harness pattern for HttpTestingController examples.
 
 ## 3. Test Signal Inputs Correctly
 
@@ -47,4 +47,4 @@ See [harness pattern](references/harness-pattern.md) for HttpTestingController e
 
 ## References
 
-- [Harness Pattern](references/harness-pattern.md)
+- Harness Pattern

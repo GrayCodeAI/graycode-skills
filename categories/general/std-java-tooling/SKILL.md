@@ -32,4 +32,4 @@ keywords: None
 
 ## References
 
-- [Gradle Kotlin DSL & Spotless Setup](references/example.md)
+- Gradle Kotlin DSL & Spotless Setup

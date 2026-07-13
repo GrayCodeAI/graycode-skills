@@ -17,7 +17,7 @@ When you need to understand how a task was executed across agents -- which spans
 
 ## Steps
 
-1. **Collect spans** -- call `mcp__claude-flow__memory_search --namespace observability` (or `memory_list`) to retrieve all spans matching the `<task-id>`. The `memory_*` tool family routes by namespace; `agentdb_hierarchical-*` does NOT (it routes by tier `working|episodic|semantic`), so use `memory_*` here. See [ruflo-agentdb ADR-0001 §"Namespace convention"](0001-agentdb-optimization.md).
+1. **Collect spans** -- call `mcp__claude-flow__memory_search --namespace observability` (or `memory_list`) to retrieve all spans matching the `<task-id>`. The `memory_*` tool family routes by namespace; `agentdb_hierarchical-*` does NOT (it routes by tier `working|episodic|semantic`), so use `memory_*` here. See ruflo-agentdb ADR-0001 §"Namespace convention".
 2. **Build trace tree** -- organize spans into a parent-child hierarchy using `parentSpanId` references, with the root span at the top
 3. **Calculate timing** -- for each span, compute duration (endTime - startTime), and identify the critical path (longest chain of sequential spans)
 4. **Identify bottlenecks** -- flag spans where duration exceeds the p95 for that operation type, or where gaps between spans suggest idle time

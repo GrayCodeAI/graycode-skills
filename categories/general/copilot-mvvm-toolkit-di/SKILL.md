@@ -12,7 +12,7 @@ tags:
 
 | Topic | File |
 |-------|------|
-| Full deep dive (Generic Host setup, lifetimes, keyed services, testing patterns, legacy Ioc) | [`references/dependency-injection.md`](references/dependency-injection.md) |
+| Full deep dive (Generic Host setup, lifetimes, keyed services, testing patterns, legacy Ioc) | `references/dependency-injection.md` |
 
 External:
 

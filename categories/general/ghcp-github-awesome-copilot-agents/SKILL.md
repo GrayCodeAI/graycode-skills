@@ -170,7 +170,7 @@ When adding a new agent, instruction, skill, hook, workflow, or plugin:
 **For External Plugins:**
 
 1. Edit `plugins/external.json` and add an entry with `name`, `source`, `description`, and `version`
-2. The `source` field should be an object specifying a GitHub repo, git URL, npm package, or pip package (see [CONTRIBUTING.md](CONTRIBUTING.md#adding-external-plugins))
+2. The `source` field should be an object specifying a GitHub repo, git URL, npm package, or pip package (see CONTRIBUTING.md)
 3. Run `npm run build` to regenerate marketplace.json
 4. Verify the external plugin appears in `.github/plugin/marketplace.json`
 
@@ -303,9 +303,9 @@ For plugins (plugins/\*/):
 
 This is a community-driven project. Contributions are welcome! Please see:
 
-- [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines
-- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards
-- [SECURITY.md](SECURITY.md) for security policies
+- CONTRIBUTING.md for contribution guidelines
+- CODE_OF_CONDUCT.md for community standards
+- SECURITY.md for security policies
 
 ## MCP Server
 
@@ -313,4 +313,4 @@ The repository includes an MCP (Model Context Protocol) Server for searching and
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details
+MIT License - see LICENSE for details

@@ -2,7 +2,7 @@
 name: performing-kubernetes-etcd-security-assessment
 description: "Assess the security posture of Kubernetes etcd clusters by evaluating encryption at rest, TLS configuration, access controls, backup encryption, and network isolation."
 license: MIT
-tags: [kubernetes, etcd, encryption, tls, security-assessment, backup, secrets, control-plane]
+tags: [kubernetes, etcd, encryption, tls, security-assessment]
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

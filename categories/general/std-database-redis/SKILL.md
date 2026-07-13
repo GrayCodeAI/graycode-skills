@@ -44,5 +44,5 @@ keywords: None
 
 ## References
 
-- [Best Practices Guide](references/best-practices.md)
-- [Checklist](references/checklist.md)
+- Best Practices Guide
+- Checklist

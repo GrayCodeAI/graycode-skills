@@ -112,10 +112,10 @@ npx skills add inference-sh/skills@background-removal
 
 ## Reference Files
 
-- [Authentication & Setup](references/authentication.md)
-- [Discovering Apps](references/app-discovery.md)
-- [Running Apps](references/running-apps.md)
-- [CLI Reference](references/cli-reference.md)
+- Authentication & Setup
+- Discovering Apps
+- Running Apps
+- CLI Reference
 
 ## Documentation
 

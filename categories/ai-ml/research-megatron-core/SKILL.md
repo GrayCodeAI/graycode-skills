@@ -2,7 +2,7 @@
 name: research-megatron-core
 description: "Trains large language models (2B-462B parameters) using NVIDIA Megatron-Core with advanced parallelism strategies. Use when training models >1B parameters, need maximum GPU efficiency (47% MFU on H..."
 license: MIT
-tags: [megatron-core, large-scale-training, nvidia, tensor-parallelism, pipeline-parallelism, model-parallelism, h100, distributed-training, production]
+tags: [megatron-core, large-scale-training, nvidia, tensor-parallelism, pipeline-parallelism]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [megatron-core, torch, apex, transformer-engine]
@@ -334,13 +334,13 @@ Stabilize training:
 
 ## Advanced topics
 
-**Parallelism strategies**: See [references/parallelism-guide.md](references/parallelism-guide.md) for detailed comparison of TP/PP/DP/CP/EP with performance analysis and when to use each.
+**Parallelism strategies**: See references/parallelism-guide.md for detailed comparison of TP/PP/DP/CP/EP with performance analysis and when to use each.
 
-**Performance benchmarks**: See [references/benchmarks.md](references/benchmarks.md) for MFU numbers across different model sizes and GPU configurations.
+**Performance benchmarks**: See references/benchmarks.md for MFU numbers across different model sizes and GPU configurations.
 
-**Production configurations**: See [references/production-examples.md](references/production-examples.md) for real-world setups from LLaMA 3 405B, Nemotron-4 340B, and DeepSeek-V3 671B.
+**Production configurations**: See references/production-examples.md for real-world setups from LLaMA 3 405B, Nemotron-4 340B, and DeepSeek-V3 671B.
 
-**Training recipes**: See [references/training-recipes.md](references/training-recipes.md) for complete hyperparameter configurations for GPT/LLaMA/Mixtral architectures.
+**Training recipes**: See references/training-recipes.md for complete hyperparameter configurations for GPT/LLaMA/Mixtral architectures.
 
 ## Hardware requirements
 

@@ -138,4 +138,4 @@ See [Cloudflare API Rate Limits](https://developers.cloudflare.com/fundamentals/
 | Outbound Worker subrequests | Not intercepted for DO/mTLS | Only regular fetch() calls            |
 | TCP sockets with outbound   | Disabled                    | `connect()` API unavailable           |
 
-See [README.md](./README.md), [configuration.md](./configuration.md), [api.md](./api.md), [patterns.md](./patterns.md)
+See README.md, configuration.md, api.md, patterns.md

@@ -32,4 +32,4 @@ keywords: None
 
 ## References
 
-- [Worker Template](references/implementation.md)
+- Worker Template

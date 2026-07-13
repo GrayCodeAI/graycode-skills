@@ -9,7 +9,7 @@ tags: [general]
 
 Build a CLI tool that analyzes web page accessibility using the Playwright MCP server and generates detailed WCAG-compliant reports with optional test generation.
 
-> **Runnable example:** [recipe/accessibility-report.ts](recipe/accessibility-report.ts)
+> **Runnable example:** recipe/accessibility-report.ts
 >
 > ```bash
 > cd recipe && npm install

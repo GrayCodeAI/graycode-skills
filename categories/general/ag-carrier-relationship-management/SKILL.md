@@ -110,7 +110,7 @@ Remove a carrier from your active routing guide when any of these thresholds are
 
 ## Key Edge Cases
 
-These are situations where standard playbook decisions lead to poor outcomes. Brief summaries here — see [edge-cases.md](references/edge-cases.md) for full analysis.
+These are situations where standard playbook decisions lead to poor outcomes. Brief summaries here — see edge-cases.md for full analysis.
 
 1. **Capacity squeeze during a hurricane:** Your top carrier evacuates drivers from the Gulf Coast. Spot rates triple. The temptation is to pay any rate to move freight. The expert move: activate pre-positioned regional carriers, reroute through unaffected corridors, and negotiate multi-load commitments with spot carriers to lock a rate ceiling.
 
@@ -141,7 +141,7 @@ Rate negotiations are long-term relationship conversations, not one-time transac
 - **Positive reviews:** Be specific. "Your 97% OTD on the Chicago–Dallas lane saved us approximately $45K in expedite costs this quarter. We're increasing your allocation from 60% to 75% on that lane." Carriers invest in relationships that reward performance.
 - **Corrective reviews:** Lead with data, not accusations. Present the scorecard. Identify the specific metrics below threshold. Ask for a corrective action plan with a 30/60/90-day timeline. Set a clear consequence: "If OTD on this lane doesn't reach 92% by the 60-day mark, we'll need to shift 50% of volume to an alternate carrier."
 
-For full communication templates, see [communication-templates.md](references/communication-templates.md).
+For full communication templates, see communication-templates.md.
 
 ## Escalation Protocols
 
@@ -179,9 +179,9 @@ Track weekly, review monthly with carrier management team, share quarterly with 
 
 ## Additional Resources
 
-- For detailed decision frameworks on rate negotiation, portfolio optimization, and RFP execution, see [decision-frameworks.md](references/decision-frameworks.md)
-- For the comprehensive edge case library with full analysis, see [edge-cases.md](references/edge-cases.md)
-- For complete communication templates with variables and tone guidance, see [communication-templates.md](references/communication-templates.md)
+- For detailed decision frameworks on rate negotiation, portfolio optimization, and RFP execution, see decision-frameworks.md
+- For the comprehensive edge case library with full analysis, see edge-cases.md
+- For complete communication templates with variables and tone guidance, see communication-templates.md
 
 ### When to Use
 Use this skill when you are **designing or tuning your carrier portfolio, routing guides, and freight procurement strategy**:

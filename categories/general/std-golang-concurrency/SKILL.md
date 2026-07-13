@@ -27,7 +27,7 @@ keywords: None
 4. **Use select for multiplexing** — Handle multiple channels or timeouts with `select`.
 5. **Test with race detector** — Run `go test -race` in CI.
 
-See [ErrGroup and concurrency patterns](references/concurrency-patterns.md) and [context timeout examples](references/context-usage.md)
+See ErrGroup and concurrency patterns and context timeout examples
 
 ## Anti-Patterns
 
@@ -37,5 +37,5 @@ See [ErrGroup and concurrency patterns](references/concurrency-patterns.md) and 
 
 ## References
 
-- [Concurrency Patterns](references/concurrency-patterns.md)
-- [Context Usage](references/context-usage.md)
+- Concurrency Patterns
+- Context Usage

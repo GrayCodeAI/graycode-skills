@@ -14,13 +14,13 @@ compatibility: Requires Azure CLI (az) for configuration and testing
 
 ## References
 
-- [**Detailed Policies**](references/policies.md) - Full policy examples
-- [**Configuration Patterns**](references/patterns.md) - Step-by-step patterns
-- [**Troubleshooting**](references/troubleshooting.md) - Common issues
+- **Detailed Policies** - Full policy examples
+- **Configuration Patterns** - Step-by-step patterns
+- **Troubleshooting** - Common issues
 - [AI-Gateway Samples](https://github.com/Azure-Samples/AI-Gateway)
 - [GenAI Gateway Docs](https://learn.microsoft.com/azure/api-management/genai-gateway-capabilities)
 
 ## SDK Quick References
 
-- **Content Safety**: [Python](references/sdk/azure-ai-contentsafety-py.md) | [TypeScript](references/sdk/azure-ai-contentsafety-ts.md)
-- **API Management**: [Python](references/sdk/azure-mgmt-apimanagement-py.md) | [.NET](references/sdk/azure-mgmt-apimanagement-dotnet.md)
+- **Content Safety**: Python | TypeScript
+- **API Management**: Python | .NET

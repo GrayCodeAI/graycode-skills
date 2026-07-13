@@ -16,7 +16,7 @@ tags: [general]
 | **TypeScript errors on `ctx.env`** | Missing type definition                                                       | Run `wrangler types` or define `interface Env {}`                                         |
 | **Middleware not running**         | Wrong filename/location or missing `ctx.next()`                               | Name exactly `_middleware.js`, export `onRequest`, call `ctx.next()`                      |
 | **Secrets missing in production**  | `.dev.vars` not deployed                                                      | `.dev.vars` is local only - set production secrets via dashboard or `wrangler secret put` |
-| **Type mismatch on binding**       | Wrong interface type                                                          | See [api.md](./api.md) bindings table for correct types                                   |
+| **Type mismatch on binding**       | Wrong interface type                                                          | See api.md bindings table for correct types                                   |
 | **"KV key not found" but exists**  | Key in wrong namespace or env                                                 | Verify namespace binding, check preview vs production env                                 |
 | **Function times out**             | Synchronous wait or missing `await`                                           | All I/O must be async/await, use `ctx.waitUntil()` for background tasks                   |
 
@@ -106,4 +106,4 @@ npx wrangler pages deployment tail --status error
 - [Examples](https://github.com/cloudflare/pages-example-projects)
 - [Discord](https://discord.gg/cloudflaredev)
 
-**See also:** [configuration.md](./configuration.md) for TypeScript setup | [patterns.md](./patterns.md) for middleware/auth | [api.md](./api.md) for bindings
+**See also:** configuration.md for TypeScript setup | patterns.md for middleware/auth | api.md for bindings

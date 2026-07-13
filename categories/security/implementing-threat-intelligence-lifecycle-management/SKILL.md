@@ -2,7 +2,7 @@
 name: implementing-threat-intelligence-lifecycle-management
 description: "Implement a structured threat intelligence lifecycle encompassing planning, collection, processing, analysis, dissemination, and feedback stages to produce actionable intelligence for organizationa..."
 license: MIT
-tags: [threat-intelligence, lifecycle, intelligence-cycle, collection, analysis, dissemination, strategic-intelligence, cti-program]
+tags: [threat-intelligence, lifecycle, intelligence-cycle, collection, analysis]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

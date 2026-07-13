@@ -2,7 +2,7 @@
 name: analyzing-certificate-transparency-for-phishing
 description: "Monitor Certificate Transparency logs using crt.sh and Certstream to detect phishing domains, lookalike certificates, and unauthorized certificate issuance targeting your organization."
 license: MIT
-tags: [certificate-transparency, ct-logs, phishing, crt-sh, certstream, ssl, domain-monitoring, threat-intelligence]
+tags: [certificate-transparency, ct-logs, phishing, crt-sh, certstream]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

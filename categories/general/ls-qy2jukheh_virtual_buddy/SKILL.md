@@ -27,4 +27,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Virtual Buddy](./knowledge/Virtual%20Buddy/)
+- Virtual Buddy

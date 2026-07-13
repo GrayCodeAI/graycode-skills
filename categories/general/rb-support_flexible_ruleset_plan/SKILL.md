@@ -9,7 +9,7 @@ tags: [general]
 
 This document provides the canonical implementation plan for refactoring `rulebook-ai` to a composable "Pack" model. It combines the high-level architectural vision with a detailed, phased roadmap for developers.
 
-Commands not covered here—such as `bug-report` or `rate-ruleset`—retain their legacy behavior documented in [`spec.md`](spec.md).
+Commands not covered here—such as `bug-report` or `rate-ruleset`—retain their legacy behavior documented in `spec.md`.
 
 ## 1. First Principles
 

@@ -23,7 +23,7 @@ keywords: None
 
 ## Pest Feature Test Example
 
-See [implementation examples](references/implementation.md#pest-feature-test-example) for Pest feature tests and test directory structure.
+See implementation examples for Pest feature tests and test directory structure.
 
 ## Implementation Guidelines
 
@@ -59,4 +59,4 @@ See [implementation examples](references/implementation.md#pest-feature-test-exa
 
 ## References
 
-- [Testing & Mocking Guide](references/implementation.md)
+- Testing & Mocking Guide

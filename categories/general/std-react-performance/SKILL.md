@@ -20,7 +20,7 @@ keywords: None
 - **Preload**: Start fetches before render (in event handlers or **route loaders**).
 - **Suspense**: Use **Suspense boundaries** to stream partial content and show partial content early.
 
-See [implementation examples](references/REFERENCE.md#parallel-fetch-with-suspense) for parallel fetch with Suspense boundary and lazy loading patterns.
+See implementation examples for parallel fetch with Suspense boundary and lazy loading patterns.
 
 ## Reduce Bundle Size (P0)
 
@@ -56,4 +56,4 @@ See [implementation examples](references/REFERENCE.md#parallel-fetch-with-suspen
 
 ## References
 
-See [references/REFERENCE.md](references/REFERENCE.md) for Profiler usage, bundle analysis, Web Workers, and debounce patterns.
+See references/REFERENCE.md for Profiler usage, bundle analysis, Web Workers, and debounce patterns.

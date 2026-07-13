@@ -22,7 +22,7 @@ keywords: None
 5. **Pin certificates** — Use `ServerTrustManager` or `TrustKit` for production apps to prevent MITM attacks.
 6. **Strip sensitive logs** — Ensure PII and tokens removed from logs in Release builds.
 
-See [Keychain and biometrics implementation examples](references/implementation.md)
+See Keychain and biometrics implementation examples
 
 ## Anti-Patterns
 
@@ -32,7 +32,7 @@ See [Keychain and biometrics implementation examples](references/implementation.
 
 ## References
 
-- [Keychain & Biometrics Implementation](references/implementation.md)
+- Keychain & Biometrics Implementation
 
 ## Related Topics
 

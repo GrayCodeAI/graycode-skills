@@ -35,7 +35,7 @@ common/session-retrospective/
 
 ## Trigger Miss Output
 
-Emit trigger miss block (schema in [references/methodology.md](references/methodology.md#trigger-miss-schema)) for each miss detected.
+Emit trigger miss block (schema in references/methodology.md) for each miss detected.
 
 ## Guidelines
 
@@ -54,4 +54,4 @@ Emit trigger miss block (schema in [references/methodology.md](references/method
 ## References
 
 Signal tables, root cause taxonomy, report template, real-world example:
-[references/methodology.md](references/methodology.md)
+references/methodology.md

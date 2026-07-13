@@ -34,13 +34,13 @@ keywords: None
 
 - **Implementation**:
 
- See [implementation examples](references/example.md)
+ See implementation examples
 
 - **Tools**: Use `nestjs-redlock` or custom Redis wrapper via `redlock` library.
 
 ## Cron-to-Queue Offload
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Job Robustness
 

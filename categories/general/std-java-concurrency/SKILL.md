@@ -34,4 +34,4 @@ keywords: None
 
 ## References
 
-- [StructuredTaskScope & VirtualThread Examples](references/structured-concurrency.md)
+- StructuredTaskScope & VirtualThread Examples

@@ -2,7 +2,7 @@
 name: testing-strategies-supercent
 description: "Design comprehensive testing strategies for software quality assurance. Use when planning test coverage, implementing test pyramids, or setting up testing infrastructure. Handles unit testing, inte..."
 license: MIT
-tags: [testing, test-strategy, tdd, unit-test, integration-test, e2e, test-pyramid]
+tags: [testing, test-strategy, tdd, unit-test, integration-test]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

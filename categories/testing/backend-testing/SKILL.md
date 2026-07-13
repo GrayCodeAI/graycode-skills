@@ -2,7 +2,7 @@
 name: backend-testing
 description: "Write comprehensive backend tests including unit tests, integration tests, and API tests. Use when testing REST APIs, database operations, authentication flows, or business logic. Handles Jest, Pyt..."
 license: MIT
-tags: [testing, backend, unit-test, integration-test, api-test, jest, pytest, tdd]
+tags: [testing, backend, unit-test, integration-test, api-test]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

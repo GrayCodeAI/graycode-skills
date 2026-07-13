@@ -58,4 +58,4 @@ test('fetches and displays data', async () => {
 
 ## References
 
-See [references/testing-library.md](references/testing-library.md) for RNTL setup, mocking providers, and integration flow examples.
+See references/testing-library.md for RNTL setup, mocking providers, and integration flow examples.

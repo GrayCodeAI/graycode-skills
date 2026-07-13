@@ -27,4 +27,4 @@ None yet.
 
 ---
 
-We are actively looking to grow the maintainer team. If you are interested in becoming a maintainer, please see [GOVERNANCE.md](GOVERNANCE.md) for how the process works. Sustained contributions and involvement in code review are the best way to get started.
+We are actively looking to grow the maintainer team. If you are interested in becoming a maintainer, please see GOVERNANCE.md for how the process works. Sustained contributions and involvement in code review are the best way to get started.

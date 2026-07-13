@@ -40,7 +40,7 @@ The JSON above contains the project config and installed components. Use `npx sh
 
 These rules are **always enforced**. Each links to a file with Incorrect/Correct code pairs.
 
-### Styling & Tailwind → [styling.md](./rules/styling.md)
+### Styling & Tailwind → styling.md
 
 - **`className` for layout, not styling.** Never override component colors or typography.
 - **No `space-x-*` or `space-y-*`.** Use `flex` with `gap-*`. For vertical stacks, `flex flex-col gap-*`.
@@ -50,7 +50,7 @@ These rules are **always enforced**. Each links to a file with Incorrect/Correct
 - **Use `cn()` for conditional classes.** Don't write manual template literal ternaries.
 - **No manual `z-index` on overlay components.** Dialog, Sheet, Popover, etc. handle their own stacking.
 
-### Forms & Inputs → [forms.md](./rules/forms.md)
+### Forms & Inputs → forms.md
 
 - **Forms use `FieldGroup` + `Field`.** Never use raw `div` with `space-y-*` or `grid gap-*` for form layout.
 - **`InputGroup` uses `InputGroupInput`/`InputGroupTextarea`.** Never raw `Input`/`Textarea` inside `InputGroup`.
@@ -59,17 +59,17 @@ These rules are **always enforced**. Each links to a file with Incorrect/Correct
 - **`FieldSet` + `FieldLegend` for grouping related checkboxes/radios.** Don't use a `div` with a heading.
 - **Field validation uses `data-invalid` + `aria-invalid`.** `data-invalid` on `Field`, `aria-invalid` on the control. For disabled: `data-disabled` on `Field`, `disabled` on the control.
 
-### Component Structure → [composition.md](./rules/composition.md)
+### Component Structure → composition.md
 
 - **Items always inside their Group.** `SelectItem` → `SelectGroup`. `DropdownMenuItem` → `DropdownMenuGroup`. `CommandItem` → `CommandGroup`.
-- **Use `asChild` (radix) or `render` (base) for custom triggers.** Check `base` field from `npx shadcn@latest info`. → [base-vs-radix.md](./rules/base-vs-radix.md)
+- **Use `asChild` (radix) or `render` (base) for custom triggers.** Check `base` field from `npx shadcn@latest info`. → base-vs-radix.md
 - **Dialog, Sheet, and Drawer always need a Title.** `DialogTitle`, `SheetTitle`, `DrawerTitle` required for accessibility. Use `className="sr-only"` if visually hidden.
 - **Use full Card composition.** `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`. Don't dump everything in `CardContent`.
 - **Button has no `isPending`/`isLoading`.** Compose with `Spinner` + `data-icon` + `disabled`.
 - **`TabsTrigger` must be inside `TabsList`.** Never render triggers directly in `Tabs`.
 - **`Avatar` always needs `AvatarFallback`.** For when the image fails to load.
 
-### Use Components, Not Custom Markup → [composition.md](./rules/composition.md)
+### Use Components, Not Custom Markup → composition.md
 
 - **Use existing components before custom markup.** Check if a component exists before writing a styled `div`.
 - **Callouts use `Alert`.** Don't build custom styled divs.
@@ -79,7 +79,7 @@ These rules are **always enforced**. Each links to a file with Incorrect/Correct
 - **Use `Skeleton`** for loading placeholders. No custom `animate-pulse` divs.
 - **Use `Badge`** instead of custom styled spans.
 
-### Icons → [icons.md](./rules/icons.md)
+### Icons → icons.md
 
 - **Icons in `Button` use `data-icon`.** `data-icon="inline-start"` or `data-icon="inline-end"` on the icon.
 - **No sizing classes on icons inside components.** Components handle icon sizing via CSS. No `size-4` or `w-4 h-4`.
@@ -161,7 +161,7 @@ The injected project context contains these key fields:
 - **`framework`** → routing and file conventions (e.g. Next.js App Router vs Vite SPA).
 - **`packageManager`** → use this for any non-shadcn dependency installs (e.g. `pnpm add date-fns` vs `npm install date-fns`).
 
-See [cli.md — `info` command](./cli.md) for the full field reference.
+See cli.md — `info` command for the full field reference.
 
 ## Component Docs, Examples, and Usage
 
@@ -242,13 +242,13 @@ npx shadcn@latest view @shadcn/button
 
 ## Detailed References
 
-- [rules/forms.md](./rules/forms.md) — FieldGroup, Field, InputGroup, ToggleGroup, FieldSet, validation states
-- [rules/composition.md](./rules/composition.md) — Groups, overlays, Card, Tabs, Avatar, Alert, Empty, Toast, Separator, Skeleton, Badge, Button loading
-- [rules/icons.md](./rules/icons.md) — data-icon, icon sizing, passing icons as objects
-- [rules/styling.md](./rules/styling.md) — Semantic colors, variants, className, spacing, size, truncate, dark mode, cn(), z-index
-- [rules/base-vs-radix.md](./rules/base-vs-radix.md) — asChild vs render, Select, ToggleGroup, Slider, Accordion
-- [cli.md](./cli.md) — Commands, flags, presets, templates
-- [customization.md](./customization.md) — Theming, CSS variables, extending components
+- rules/forms.md — FieldGroup, Field, InputGroup, ToggleGroup, FieldSet, validation states
+- rules/composition.md — Groups, overlays, Card, Tabs, Avatar, Alert, Empty, Toast, Separator, Skeleton, Badge, Button loading
+- rules/icons.md — data-icon, icon sizing, passing icons as objects
+- rules/styling.md — Semantic colors, variants, className, spacing, size, truncate, dark mode, cn(), z-index
+- rules/base-vs-radix.md — asChild vs render, Select, ToggleGroup, Slider, Accordion
+- cli.md — Commands, flags, presets, templates
+- customization.md — Theming, CSS variables, extending components
 
 ## Limitations
 - Use this skill only when the task clearly matches the scope described above.

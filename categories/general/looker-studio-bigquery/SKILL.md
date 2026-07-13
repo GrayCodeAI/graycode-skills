@@ -2,7 +2,7 @@
 name: looker-studio-bigquery
 description: "Design and configure Looker Studio dashboards with BigQuery data sources. Use when creating analytics dashboards, connecting BigQuery to visualization tools, or optimizing data pipeline performance..."
 license: MIT
-tags: [looker-studio, bigquery, dashboard, analytics, visualization, gcp, data-studio, sql]
+tags: [looker-studio, bigquery, dashboard, analytics, visualization]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

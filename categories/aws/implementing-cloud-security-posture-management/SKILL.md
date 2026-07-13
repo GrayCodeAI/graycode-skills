@@ -2,7 +2,7 @@
 name: implementing-cloud-security-posture-management
 description: "Implementing Cloud Security Posture Management (CSPM) to continuously monitor multi-cloud environments for misconfigurations, compliance violations, and security risks using Prowler, ScoutSuite, AW..."
 license: MIT
-tags: [cloud-security, cspm, multi-cloud, compliance, prowler, scoutsuite]
+tags: [cloud-security, cspm, multi-cloud, compliance, prowler]
 domain: cybersecurity
 subdomain: cloud-security
 version: 1.0

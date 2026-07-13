@@ -9,7 +9,7 @@ tags: [general]
 
 Build autonomous coding loops where an AI agent picks tasks, implements them, validates against backpressure (tests, builds), commits, and repeats — each iteration in a fresh context window.
 
-> **Runnable example:** [recipe/ralph_loop.py](recipe/ralph_loop.py)
+> **Runnable example:** recipe/ralph_loop.py
 >
 > From the repository root, install dependencies and run:
 >
@@ -256,5 +256,5 @@ python -m pytest
 
 ## See Also
 
-- [Error Handling](error-handling.md) — timeout patterns and graceful shutdown for long-running sessions
-- [Persisting Sessions](persisting-sessions.md) — save and resume sessions across restarts
+- Error Handling — timeout patterns and graceful shutdown for long-running sessions
+- Persisting Sessions — save and resume sessions across restarts

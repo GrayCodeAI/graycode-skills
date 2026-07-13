@@ -2,7 +2,7 @@
 name: performing-second-order-sql-injection
 description: "Detect and exploit second-order SQL injection vulnerabilities where malicious input is stored in a database and later executed in an unsafe SQL query during a different application operation."
 license: MIT
-tags: [second-order-sqli, stored-sql-injection, sql-injection, database-security, web-security, blind-injection, persistent-sqli]
+tags: [second-order-sqli, stored-sql-injection, sql-injection, database-security, blind-injection]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

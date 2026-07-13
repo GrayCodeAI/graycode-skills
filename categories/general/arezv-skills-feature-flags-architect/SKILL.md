@@ -2,7 +2,7 @@
 name: arezv-skills-feature-flags-architect
 description: "Use when adding, retiring, or auditing feature flags. Triggers on \"add a flag\", \"ship behind a flag\", \"rollout plan\", \"kill switch\", \"stale flags\", \"flag debt\", \"LaunchDarkly\", \"GrowthBook\", \"Stats..."
 license: MIT
-tags: [feature-flags, progressive-delivery, rollout, kill-switch, launchdarkly, growthbook, statsig, unleash, flipt, release-engineering]
+tags: [feature-flags, progressive-delivery, rollout, kill-switch, launchdarkly]
 context: fork
 version: 2.4.0
 author: claude-code-skills

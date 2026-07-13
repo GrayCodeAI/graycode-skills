@@ -19,7 +19,7 @@ keywords: None
 - Verify `resolveActivity` before starting implicit intents.
 - Treat all incoming Intent extras as untrusted — validate all schema/data types.
 
-See [hardening examples](references/implementation.md) for manifest and component restrictions.
+See hardening examples for manifest and component restrictions.
 
 ## 2. Lock Down WebViews
 
@@ -27,7 +27,7 @@ See [hardening examples](references/implementation.md) for manifest and componen
 - Disable `allowFileAccess` and `allowFileAccessFromFileURLs` to prevent local file theft via XSS.
 - If using `@JavascriptInterface` (API 17+), strictly limit exposed API surface.
 
-See [hardening examples](references/implementation.md) for WebView lockdown patterns.
+See hardening examples for WebView lockdown patterns.
 
 ## 3. Protect Storage and Files
 
@@ -42,4 +42,4 @@ See [hardening examples](references/implementation.md) for WebView lockdown patt
 
 ## References
 
-- [Hardening Examples](references/implementation.md)
+- Hardening Examples

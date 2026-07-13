@@ -2,7 +2,7 @@
 name: testing-for-host-header-injection
 description: "Test web applications for HTTP Host header injection vulnerabilities to identify password reset poisoning, web cache poisoning, SSRF, and virtual host routing manipulation risks."
 license: MIT
-tags: [host-header-injection, password-reset-poisoning, cache-poisoning, virtual-host, web-security, header-manipulation, ssrf]
+tags: [host-header-injection, password-reset-poisoning, cache-poisoning, virtual-host, header-manipulation]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

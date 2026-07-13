@@ -19,14 +19,14 @@ keywords: None
 - Keep `@Entity` data classes simple. Map to Domain models in Repository.
 - Use `@Transaction` for multi-table queries (Relations).
 
-See [DAO templates](references/implementation.md) for Room DAO patterns.
+See DAO templates for Room DAO patterns.
 
 ## 2. Migrate to DataStore
 
 - Replace `SharedPreferences` with `ProtoDataStore` (type-safe) or `PreferencesDataStore`.
 - Inject singleton DataStore instance via Hilt.
 
-See [DAO templates](references/implementation.md) for DataStore migration patterns.
+See DAO templates for DataStore migration patterns.
 
 ## Anti-Patterns
 
@@ -35,4 +35,4 @@ See [DAO templates](references/implementation.md) for DataStore migration patter
 
 ## References
 
-- [DAO Templates](references/implementation.md)
+- DAO Templates

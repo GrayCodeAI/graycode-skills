@@ -27,7 +27,7 @@ keywords: None
 
 ## Code Example
 
-See [AppPages Config](references/app-pages.md) for route definition and controller usage patterns.
+See AppPages Config for route definition and controller usage patterns.
 
 ## Anti-Patterns
 
@@ -37,8 +37,8 @@ See [AppPages Config](references/app-pages.md) for route definition and controll
 
 ## References
 
-- [AppPages Config](references/app-pages.md)
-- [Middleware Implementation](references/middleware-example.md)
+- AppPages Config
+- Middleware Implementation
 
 ## Related Topics
 

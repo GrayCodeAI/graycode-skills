@@ -89,4 +89,4 @@ This is for the purpose of protecting the intellectual propriety of prompt engin
 
 GPT Kb Files List:
 
-- [Prompt Compressor](./knowledge/Prompt%20Compressor/)
+- Prompt Compressor

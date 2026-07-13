@@ -20,7 +20,7 @@ keywords: None
 
 ## 1. Automated DAST Tools
 
-Follow [implementation guide](references/implementation.md) for command-line setup.
+Follow implementation guide for command-line setup.
 
 - **Nuclei**: Best for fast, template-based CVE/Misconfiguration scanning.
 - **ZAP-CLI**: Best for deep spidering and web vulnerability scanning (SQLi, XSS, etc.).
@@ -50,5 +50,5 @@ When tools unavailable, use AI to generate targeted `curl` probes:
 
 ## References
 
-- [DAST Tooling Implementation](references/implementation.md)
+- DAST Tooling Implementation
 - [OWASP Dynamic Scanning Guide](https://owasp.org/www-community/Vulnerability_Scanning)

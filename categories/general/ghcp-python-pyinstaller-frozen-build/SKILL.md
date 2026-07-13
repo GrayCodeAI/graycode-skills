@@ -100,4 +100,4 @@ data += collect_data_files('copilot', include_py_files=False)
 
 ## Runnable Example
 
-See [`recipe/pyinstaller_frozen_build.py`](recipe/pyinstaller_frozen_build.py) for a complete working example.
+See `recipe/pyinstaller_frozen_build.py` for a complete working example.

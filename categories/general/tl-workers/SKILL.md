@@ -126,7 +126,7 @@ app.use('*', async (c, next) => {
 })
 ```
 
-See [frameworks.md](./frameworks.md) for full patterns
+See frameworks.md for full patterns
 
 ## Limits
 
@@ -143,7 +143,7 @@ See [frameworks.md](./frameworks.md) for full patterns
 
 ## See Also
 
-- [Patterns](./patterns.md) - Best practices
-- [API](./api.md) - Runtime APIs
-- [Configuration](./configuration.md) - Setup
-- [Frameworks](./frameworks.md) - Hono, routing, validation
+- Patterns - Best practices
+- API - Runtime APIs
+- Configuration - Setup
+- Frameworks - Hono, routing, validation

@@ -2,7 +2,7 @@
 name: analyzing-ios-app-security-with-objection
 description: "Performs runtime mobile security exploration of iOS applications using Objection, a Frida-powered toolkit that enables security testers to interact with app internals without jailbreaking. Use when..."
 license: MIT
-tags: [mobile-security, ios, objection, frida, owasp-mobile, penetration-testing]
+tags: [mobile-security, ios, objection, frida, owasp-mobile]
 domain: cybersecurity
 subdomain: mobile-security
 author: mahipal

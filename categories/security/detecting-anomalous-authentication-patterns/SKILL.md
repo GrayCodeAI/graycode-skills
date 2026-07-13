@@ -2,7 +2,7 @@
 name: detecting-anomalous-authentication-patterns
 description: "Detects anomalous authentication patterns using UEBA analytics, statistical baselines, and machine learning models to identify impossible travel, credential stuffing, brute force, password spraying..."
 license: MIT
-tags: [ueba, authentication-anomaly, impossible-travel, brute-force, credential-stuffing, behavioral-analytics]
+tags: [ueba, authentication-anomaly, impossible-travel, brute-force, credential-stuffing]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

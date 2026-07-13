@@ -29,7 +29,7 @@ keywords: None
 5. **Validate at startup** — Crash immediately on missing required config.
 6. **Inject via constructor** — Pass Config to services; never use global config vars.
 
-See [config struct and usage examples](references/config-patterns.md)
+See config struct and usage examples
 
 ## Libraries
 
@@ -46,4 +46,4 @@ See [config struct and usage examples](references/config-patterns.md)
 
 ## References
 
-- [Config Pattern](references/config-patterns.md)
+- Config Pattern

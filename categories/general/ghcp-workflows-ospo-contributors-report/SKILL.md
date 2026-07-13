@@ -103,7 +103,7 @@ Sort contributors by commit count descending.
 
 | # | Username | Contribution Count | New Contributor | Sponsor URL | Commits |
 |---|---|---|---|---|---|
-| 1 | @username | 42 | Yes | [Sponsor](url) | [View](commits-url) |
+| 1 | @username | 42 | Yes | Sponsor | View |
 
 - The **Username** column should link to the contributor's GitHub profile.
 - The **Sponsor URL** column should show "N/A" if `sponsor_info` is false or the user has no Sponsors page.

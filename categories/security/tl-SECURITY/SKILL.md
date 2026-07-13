@@ -121,7 +121,7 @@ The log is **append-only** — entries are never overwritten. It is the forensic
 
 ## 🔍 Security Scanning
 
-Every skill in the catalog is scanned with [**Snyk Agent Scan**](https://github.com/snyk/agent-scan) (formerly `mcp-scan`) before publishing. The scan is **incremental** — only skills whose content has changed since the last run are re-scanned. The scanner requires a `SNYK_TOKEN` environment variable (see [Security scan setup](docs/security-scan.md) for CI and fork PR behavior).
+Every skill in the catalog is scanned with [**Snyk Agent Scan**](https://github.com/snyk/agent-scan) (formerly `mcp-scan`) before publishing. The scan is **incremental** — only skills whose content has changed since the last run are re-scanned. The scanner requires a `SNYK_TOKEN` environment variable (see Security scan setup for CI and fork PR behavior).
 
 ```bash
 export SNYK_TOKEN=your-token   # Required; get it from https://app.snyk.io/account
@@ -167,7 +167,7 @@ entries:
 
 ### Security Scan in CI/CD
 
-The scan must pass before any release. The release pipeline (`release.yml`) runs `npm run scan` as a required step when the run has access to secrets (same-repo PRs and push to `main`). **PRs from forks do not run the scan** in the normal PR workflow (GitHub does not expose repository secrets to fork workflows). To **block merge until the scan passes** for all PRs (including forks), use [GitHub Merge Queue](docs/security-scan.md#blocking-merge-for-fork-prs-merge-queue) and require the "Security Scan (merge queue)" status check. See [Security scan setup](docs/security-scan.md) for details. A failed scan blocks the release when the scan runs.
+The scan must pass before any release. The release pipeline (`release.yml`) runs `npm run scan` as a required step when the run has access to secrets (same-repo PRs and push to `main`). **PRs from forks do not run the scan** in the normal PR workflow (GitHub does not expose repository secrets to fork workflows). To **block merge until the scan passes** for all PRs (including forks), use GitHub Merge Queue and require the "Security Scan (merge queue)" status check. See Security scan setup for details. A failed scan blocks the release when the scan runs.
 
 ## 🔌 MCP Server Security
 
@@ -185,7 +185,7 @@ This repository is a collection of curated skills intended to benefit the commun
 
 **If you are the author of any content included here** and would like it removed or updated, please [open an issue](https://github.com/tech-leads-club/agent-skills/issues/new) or contact the maintainers directly. We will act promptly.
 
-For licensing details, see **[📄 License and Attribution](README.md#-license-and-attribution)** in the README.
+For licensing details, see **📄 License and Attribution** in the README.
 
 ## 🚨 Reporting a Vulnerability
 

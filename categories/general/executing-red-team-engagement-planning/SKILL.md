@@ -2,7 +2,7 @@
 name: executing-red-team-engagement-planning
 description: "Red team engagement planning is the foundational phase that defines scope, objectives, rules of engagement (ROE), threat model selection, and operational timelines before any offensive testing begins."
 license: MIT
-tags: [red-team, adversary-simulation, mitre-attack, exploitation, post-exploitation, engagement-planning, rules-of-engagement]
+tags: [red-team, adversary-simulation, mitre-attack, exploitation, engagement-planning]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

@@ -2,7 +2,7 @@
 name: flow-swarm-advanced
 description: "Advanced swarm orchestration patterns for research, development, testing, and complex distributed workflows"
 license: MIT
-tags: [swarm, distributed, parallel, research, testing, development, coordination]
+tags: [swarm, distributed, parallel, research, testing]
 version: 2.0.0
 category: orchestration
 author: Claude Flow Team

@@ -2,7 +2,7 @@
 name: building-red-team-c2-infrastructure-with-havoc
 description: "Deploy and configure the Havoc C2 framework with teamserver, HTTPS listeners, redirectors, and Demon agents for authorized red team operations."
 license: MIT
-tags: [havoc-c2, command-and-control, red-team-infrastructure, post-exploitation, adversary-emulation, demon-agent]
+tags: [havoc-c2, command-and-control, red-team-infrastructure, post-exploitation, adversary-emulation]
 domain: cybersecurity
 subdomain: red-teaming
 version: 1.0

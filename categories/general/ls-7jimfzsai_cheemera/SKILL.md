@@ -58,4 +58,4 @@ In the results, new discoveries and deductions are found in results.reasoningSte
 
 GPT Kb Files List:
 
-- [Cheemera](./knowledge/Cheemera/)
+- Cheemera

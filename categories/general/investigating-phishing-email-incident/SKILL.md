@@ -2,7 +2,7 @@
 name: investigating-phishing-email-incident
 description: "Investigates phishing email incidents from initial user report through header analysis, URL/attachment detonation, impacted user identification, and containment actions using SOC tools like Splunk,..."
 license: MIT
-tags: [soc, phishing, incident-response, email-security, splunk, defender, sandbox]
+tags: [soc, phishing, incident-response, email-security, splunk]
 domain: cybersecurity
 subdomain: soc-operations
 version: 1.0

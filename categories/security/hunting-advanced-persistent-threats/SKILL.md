@@ -2,7 +2,7 @@
 name: hunting-advanced-persistent-threats
 description: "Proactively hunts for Advanced Persistent Threat (APT) activity within enterprise environments using hypothesis-driven searches across endpoint telemetry, network logs, and memory artifacts. Use wh..."
 license: MIT
-tags: [mitre-att-ck, threat-hunting, apt, velociraptor, osquery, zeek, ttp, nist-csf, edr]
+tags: [mitre-att-ck, threat-hunting, apt, velociraptor, osquery]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

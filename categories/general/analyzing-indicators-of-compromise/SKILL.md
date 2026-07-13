@@ -2,7 +2,7 @@
 name: analyzing-indicators-of-compromise
 description: "Analyzes indicators of compromise (IOCs) including IP addresses, domains, file hashes, URLs, and email artifacts to determine maliciousness confidence, campaign attribution, and blocking priority. ..."
 license: MIT
-tags: [ioc, virustotal, abuseipdb, malwarebazaar, misp, threat-intelligence, stix, nist-csf]
+tags: [ioc, virustotal, abuseipdb, malwarebazaar, misp]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

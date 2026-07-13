@@ -22,7 +22,7 @@ keywords: None
 - **Contracts**: Share DTO Records via Maven BOM or API Contract module.
 - **Tracing**: Ensure Micrometer propagation for Distributed Tracing.
 
-See [implementation examples](references/implementation.md) for Feign client with Circuit Breaker fallback.
+See implementation examples for Feign client with Circuit Breaker fallback.
 
 ### Async Communication (Spring Cloud Stream)
 
@@ -31,7 +31,7 @@ See [implementation examples](references/implementation.md) for Feign client wit
 - **Serialization**: Use JSON or Avro for events.
 - **Reliability**: Implement Dead Letter Queues (DLQ) and idempotent consumers.
 
-See [implementation examples](references/implementation.md) for Spring Cloud Stream event consumer with idempotency.
+See implementation examples for Spring Cloud Stream event consumer with idempotency.
 
 ### Data & Isolation
 
@@ -47,4 +47,4 @@ See [implementation examples](references/implementation.md) for Spring Cloud Str
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples

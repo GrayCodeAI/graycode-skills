@@ -2,7 +2,7 @@
 name: performing-memory-forensics-with-volatility3-plugins
 description: "Analyze memory dumps using Volatility3 plugins to detect injected code, rootkits, credential theft, and malware artifacts in Windows, Linux, and macOS memory images."
 license: MIT
-tags: [memory-forensics, volatility3, malware-analysis, incident-response, process-injection, rootkit-detection, dfir]
+tags: [memory-forensics, volatility3, malware-analysis, incident-response, process-injection]
 domain: cybersecurity
 subdomain: malware-analysis
 version: 1.0

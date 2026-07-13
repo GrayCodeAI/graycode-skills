@@ -2,7 +2,7 @@
 name: implementing-saml-sso-with-okta
 description: "Implement SAML 2.0 Single Sign-On (SSO) using Okta as the Identity Provider (IdP). This skill covers end-to-end configuration of SAML authentication flows, attribute mapping, certificate management, a"
 license: MIT
-tags: [iam, identity, access-control, authentication, saml, sso, okta]
+tags: [iam, identity, access-control, saml, okta]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

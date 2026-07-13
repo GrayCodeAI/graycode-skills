@@ -2,7 +2,7 @@
 name: implementing-web-application-logging-with-modsecurity
 description: "Configure ModSecurity WAF with OWASP Core Rule Set (CRS) for web application logging, tune rules to reduce false positives, analyze audit logs for attack detection, and implement custom SecRules fo..."
 license: MIT
-tags: [modsecurity, waf, crs, owasp, web-security, audit-logging, rule-tuning]
+tags: [modsecurity, waf, crs, owasp, web-security]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

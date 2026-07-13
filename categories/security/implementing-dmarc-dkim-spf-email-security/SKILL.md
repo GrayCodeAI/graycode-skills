@@ -2,7 +2,7 @@
 name: implementing-dmarc-dkim-spf-email-security
 description: "SPF, DKIM, and DMARC form the three pillars of email authentication. Together they prevent domain spoofing, validate message integrity, and define policies for handling unauthenticated mail. Proper im"
 license: MIT
-tags: [phishing, email-security, social-engineering, dmarc, awareness, dkim, spf, dns]
+tags: [phishing, email-security, social-engineering, dmarc, dkim]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

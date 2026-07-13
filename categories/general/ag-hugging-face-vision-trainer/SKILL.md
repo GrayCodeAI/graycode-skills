@@ -181,7 +181,7 @@ AskUserQuestion({
 
 **Step 4: Prepare training script**
 
-For object detection, use [scripts/object_detection_training.py](scripts/object_detection_training.py) as the production-ready template. For image classification, use [scripts/image_classification_training.py](scripts/image_classification_training.py). For SAM/SAM2 segmentation, use [scripts/sam_segmentation_training.py](scripts/sam_segmentation_training.py). All scripts use `HfArgumentParser` — all configuration is passed via CLI arguments in `script_args`, NOT by editing Python variables. For timm model details, see [references/timm_trainer.md](references/timm_trainer.md). For SAM2 training details, see [references/finetune_sam2_trainer.md](references/finetune_sam2_trainer.md).
+For object detection, use scripts/object_detection_training.py as the production-ready template. For image classification, use scripts/image_classification_training.py. For SAM/SAM2 segmentation, use scripts/sam_segmentation_training.py. All scripts use `HfArgumentParser` — all configuration is passed via CLI arguments in `script_args`, NOT by editing Python variables. For timm model details, see references/timm_trainer.md. For SAM2 training details, see references/finetune_sam2_trainer.md.
 
 **Step 5: Save script, submit job, and report**
 
@@ -335,7 +335,7 @@ Start with `ustc-community/dfine-small-coco` for fast iteration. Move to D-FINE 
 
 ### Recommended image classification models
 
-All `timm/` models work out of the box via `AutoModelForImageClassification` (loaded as `TimmWrapperForImageClassification`). See [references/timm_trainer.md](references/timm_trainer.md) for details.
+All `timm/` models work out of the box via `AutoModelForImageClassification` (loaded as `TimmWrapperForImageClassification`). See references/timm_trainer.md for details.
 
 | Model | Params | Use case |
 |-------|--------|----------|
@@ -564,21 +564,21 @@ The object detection training script handles this gracefully — it falls back t
 ### Poor detection performance (mAP < 0.15)
 Increase epochs (30-50), ensure 500+ images, check per-class mAP for imbalanced classes, try different learning rates (1e-5 to 1e-4), increase image size.
 
-For comprehensive troubleshooting: see [references/reliability_principles.md](references/reliability_principles.md)
+For comprehensive troubleshooting: see references/reliability_principles.md
 
 ## Reference files
 
-- [scripts/object_detection_training.py](scripts/object_detection_training.py) — Production-ready object detection training script
-- [scripts/image_classification_training.py](scripts/image_classification_training.py) — Production-ready image classification training script (supports timm models)
-- [scripts/sam_segmentation_training.py](scripts/sam_segmentation_training.py) — Production-ready SAM/SAM2 segmentation training script (bbox & point prompts)
-- [scripts/dataset_inspector.py](scripts/dataset_inspector.py) — Validate dataset format for OD, classification, and SAM segmentation
-- [scripts/estimate_cost.py](scripts/estimate_cost.py) — Estimate training costs for any vision model (includes SAM/SAM2)
-- [references/object_detection_training_notebook.md](references/object_detection_training_notebook.md) — Object detection training workflow, augmentation strategies, and training patterns
-- [references/image_classification_training_notebook.md](references/image_classification_training_notebook.md) — Image classification training workflow with ViT, preprocessing, and evaluation
-- [references/finetune_sam2_trainer.md](references/finetune_sam2_trainer.md) — SAM2 fine-tuning walkthrough with MicroMat dataset, DiceCE loss, and Trainer integration
-- [references/timm_trainer.md](references/timm_trainer.md) — Using timm models with HF Trainer (TimmWrapper, transforms, full example)
-- [references/hub_saving.md](references/hub_saving.md) — Detailed Hub persistence guide and verification checklist
-- [references/reliability_principles.md](references/reliability_principles.md) — Failure prevention principles from production experience
+- scripts/object_detection_training.py — Production-ready object detection training script
+- scripts/image_classification_training.py — Production-ready image classification training script (supports timm models)
+- scripts/sam_segmentation_training.py — Production-ready SAM/SAM2 segmentation training script (bbox & point prompts)
+- scripts/dataset_inspector.py — Validate dataset format for OD, classification, and SAM segmentation
+- scripts/estimate_cost.py — Estimate training costs for any vision model (includes SAM/SAM2)
+- references/object_detection_training_notebook.md — Object detection training workflow, augmentation strategies, and training patterns
+- references/image_classification_training_notebook.md — Image classification training workflow with ViT, preprocessing, and evaluation
+- references/finetune_sam2_trainer.md — SAM2 fine-tuning walkthrough with MicroMat dataset, DiceCE loss, and Trainer integration
+- references/timm_trainer.md — Using timm models with HF Trainer (TimmWrapper, transforms, full example)
+- references/hub_saving.md — Detailed Hub persistence guide and verification checklist
+- references/reliability_principles.md — Failure prevention principles from production experience
 
 ## External links
 

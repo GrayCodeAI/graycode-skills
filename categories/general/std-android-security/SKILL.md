@@ -37,6 +37,6 @@ keywords: None
 
 ## References
 
-- [Setup Examples](references/implementation.md)
+- Setup Examples
 - [common/common-security-standards] — shared OWASP baselines
 - [android/android-legacy-security] — Intent, WebView, and FileProvider hardening

@@ -60,4 +60,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [AI Tools Consultant](./knowledge/AI%20Tools%20Consultant/)
+- AI Tools Consultant

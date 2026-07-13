@@ -18,7 +18,7 @@ Streamable HTTP is the modern remote transport. A single endpoint accepts JSON-R
 - Horizontally scaled deployments (with `Stateless = true`).
 - Containers, Azure Container Apps, Kubernetes, etc.
 
-For local single-user scenarios, [STDIO](./transport-stdio.md) is simpler.
+For local single-user scenarios, STDIO is simpler.
 
 ## Minimal server
 

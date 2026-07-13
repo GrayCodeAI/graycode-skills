@@ -37,4 +37,4 @@ keywords: None
 
 ## References
 
-- [Static Factory & Composition Examples](references/example.md)
+- Static Factory & Composition Examples

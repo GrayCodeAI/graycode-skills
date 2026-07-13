@@ -18,7 +18,7 @@ keywords: None
 - Generate **Baseline Profiles** for all production apps — pre-compiles critical paths (30-40% startup improvement).
 - Defer heavy SDK init using `App Startup` or lazy Singletons. Never block `Application.onCreate`.
 
-See [baseline & startup](references/implementation.md) for lazy initialization patterns.
+See baseline & startup for lazy initialization patterns.
 
 ## 2. Eliminate UI Jank
 
@@ -26,7 +26,7 @@ See [baseline & startup](references/implementation.md) for lazy initialization p
 - Load images with Coil/Glide using proper caching and resizing (`.crossfade()`).
 - `LazyColumn` must use `key` and stable item classes.
 
-See [baseline & startup](references/implementation.md) for LazyColumn optimization.
+See baseline & startup for LazyColumn optimization.
 
 ## 3. Avoid Layout Bottlenecks
 
@@ -40,4 +40,4 @@ See [baseline & startup](references/implementation.md) for LazyColumn optimizati
 
 ## References
 
-- [Baseline & Startup](references/implementation.md)
+- Baseline & Startup

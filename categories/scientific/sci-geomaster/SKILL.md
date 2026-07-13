@@ -347,19 +347,19 @@ rf = RandomForestClassifier(n_jobs=-1)  # All cores
 
 ## Detailed Documentation
 
-- **[Coordinate Systems](references/coordinate-systems.md)** - CRS fundamentals, UTM, transformations
-- **[Core Libraries](references/core-libraries.md)** - GDAL, Rasterio, GeoPandas, Shapely
-- **[Remote Sensing](references/remote-sensing.md)** - Satellite missions, spectral indices, SAR
-- **[Machine Learning](references/machine-learning.md)** - Deep learning, CNNs, GNNs for RS
-- **[GIS Software](references/gis-software.md)** - QGIS, ArcGIS, GRASS integration
-- **[Scientific Domains](references/scientific-domains.md)** - Marine, hydrology, agriculture, forestry
-- **[Advanced GIS](references/advanced-gis.md)** - 3D GIS, spatiotemporal, topology
-- **[Big Data](references/big-data.md)** - Distributed processing, GPU acceleration
-- **[Industry Applications](references/industry-applications.md)** - Urban planning, disaster management
-- **[Programming Languages](references/programming-languages.md)** - Python, R, Julia, JS, C++, Java, Go, Rust
-- **[Data Sources](references/data-sources.md)** - Satellite catalogs, APIs
-- **[Troubleshooting](references/troubleshooting.md)** - Common issues, debugging, error reference
-- **[Code Examples](references/code-examples.md)** - 500+ examples
+- **Coordinate Systems** - CRS fundamentals, UTM, transformations
+- **Core Libraries** - GDAL, Rasterio, GeoPandas, Shapely
+- **Remote Sensing** - Satellite missions, spectral indices, SAR
+- **Machine Learning** - Deep learning, CNNs, GNNs for RS
+- **GIS Software** - QGIS, ArcGIS, GRASS integration
+- **Scientific Domains** - Marine, hydrology, agriculture, forestry
+- **Advanced GIS** - 3D GIS, spatiotemporal, topology
+- **Big Data** - Distributed processing, GPU acceleration
+- **Industry Applications** - Urban planning, disaster management
+- **Programming Languages** - Python, R, Julia, JS, C++, Java, Go, Rust
+- **Data Sources** - Satellite catalogs, APIs
+- **Troubleshooting** - Common issues, debugging, error reference
+- **Code Examples** - 500+ examples
 
 ---
 

@@ -110,7 +110,7 @@ python skills/cto-advisor/scripts/team_scaling_calculator.py
 
 ## Related
 
-- Agent: [`cs-cto-advisor`](cs-cto-advisor.md)
+- Agent: `cs-cto-advisor`
 - Skill: [`cto-advisor`](SKILL.md)
 - SLO: `engineering/slo-architect/`
 

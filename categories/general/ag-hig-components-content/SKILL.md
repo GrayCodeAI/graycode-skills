@@ -32,14 +32,14 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [charts.md](references/charts.md) | Charts | Swift Charts, bar/line/area/point marks, chart accessibility, audio graphs |
-| [collections.md](references/collections.md) | Collections | Grid/list layouts, compositional layout, selection, reordering, diffable data sources |
-| [image-views.md](references/image-views.md) | Image Views | Aspect ratio handling, content modes, SF Symbol images, accessibility |
-| [image-wells.md](references/image-wells.md) | Image Wells | Drag-and-drop image selection, macOS-specific, placeholder content |
-| [color-wells.md](references/color-wells.md) | Color Wells | Color selection UI, system color picker, custom color spaces |
-| [web-views.md](references/web-views.md) | Web Views | WKWebView, SFSafariViewController, navigation controls, content restrictions |
-| [activity-views.md](references/activity-views.md) | Activity Views | Share sheets, activity items, custom activities, action extensions |
-| [lockups.md](references/lockups.md) | Lockups | Image+text elements, tvOS card layouts, focus effects, shelf layouts |
+| charts.md | Charts | Swift Charts, bar/line/area/point marks, chart accessibility, audio graphs |
+| collections.md | Collections | Grid/list layouts, compositional layout, selection, reordering, diffable data sources |
+| image-views.md | Image Views | Aspect ratio handling, content modes, SF Symbol images, accessibility |
+| image-wells.md | Image Wells | Drag-and-drop image selection, macOS-specific, placeholder content |
+| color-wells.md | Color Wells | Color selection UI, system color picker, custom color spaces |
+| web-views.md | Web Views | WKWebView, SFSafariViewController, navigation controls, content restrictions |
+| activity-views.md | Activity Views | Share sheets, activity items, custom activities, action extensions |
+| lockups.md | Lockups | Image+text elements, tvOS card layouts, focus effects, shelf layouts |
 
 ## Component Selection Guide
 

@@ -2,7 +2,7 @@
 name: meeting-insights-analyzer
 description: "Analyzes meeting transcripts to uncover behavioral patterns, communication insights, and actionable feedback for improving leadership and communication skills."
 license: MIT
-tags: [meetings, communication, leadership, analysis, transcripts, feedback, coaching, productivity]
+tags: [meetings, communication, leadership, analysis, transcripts]
 domain: general
 subdomain: productivity
 version: 1.0

@@ -9,7 +9,7 @@ tags: [general]
 
 OpenAI announced the general availability of the [memories](https://x.com/OpenAI/status/1784992796669096181) feature today!
 
-The memory functionality is backed by a new tool called `bio` (read the newly updated [system prompt here](gpt4_bio_04262024.md)).
+The memory functionality is backed by a new tool called `bio` (read the newly updated system prompt here).
 
 Here's relevant excerpt from the system prompt:
 
@@ -58,15 +58,15 @@ There are many ways to add memories.
 
 1. Explicitly ask the model to remember:
 
-![Remember that I love fast yellow cars](./memory-added-1.png)
+Remember that I love fast yellow cars
 
 2. Speak it naturally:
 
-![I love dogs](./memory-added-2.png)
+I love dogs
 
 3. Address it to the `bio` tool directly as such:
 
-![I love dogs](./memory-added-3.png)
+I love dogs
 
 Note that memories are summarized and combined together as applicable:
 
@@ -85,11 +85,11 @@ To remove memories, just ask it to forget or use the user interface:
 1. Asking to forget:
     Forget: my love for fast cars
 
-![Forget](./memory-removed-1.png)
+Forget
    
 2. Deleting the memory from the user interface:
 
-![Delete](./personalization-memory-list.png)
+Delete
 
 (Just click the "trash bin" icon)
 
@@ -97,4 +97,4 @@ To remove memories, just ask it to forget or use the user interface:
 
 As easy as asking the model to "forget everything"
 
-![Forget everything](./memory-remove-all-1.png)
+Forget everything

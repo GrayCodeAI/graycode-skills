@@ -20,10 +20,10 @@ Keep this short and repeatable. If any check fails, fix it before redeploying.
 3. Scan recent error logs for a clear failure signature
 4. Verify required env vars and port binding (`0.0.0.0:$PORT`)
 
-Detailed checklist and commands: [references/post-deploy-checks.md](references/post-deploy-checks.md)
+Detailed checklist and commands: references/post-deploy-checks.md
 
 If the service fails to start or health checks time out, use the basic triage guide:
-[references/troubleshooting-basics.md](references/troubleshooting-basics.md)
+references/troubleshooting-basics.md
 
 ## Troubleshooting
 

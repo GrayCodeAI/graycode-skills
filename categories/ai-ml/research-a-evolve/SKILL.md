@@ -10,8 +10,6 @@ tags:
 - prompt-optimization
 - llm
 - benchmark-evaluation
-- skill-discovery
-- agentic-ai
 version: 1.0.0
 author: A-EVO Lab
 dependencies:

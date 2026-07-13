@@ -475,4 +475,4 @@ npx ruv-swarm github team-metrics \
   --anonymous-option
 ```
 
-See also: [swarm-issue.md](.$swarm-issue.md), [multi-repo-swarm.md](.$multi-repo-swarm.md)
+See also: swarm-issue.md, multi-repo-swarm.md

@@ -49,8 +49,8 @@ Activate this skill when user wants to:
 
 1. Run after azure-prepare and azure-validate
 2. `.azure/plan.md` must exist with status `Validated`
-3. **Pre-deploy checklist required** — [Pre-Deploy Checklist](references/pre-deploy-checklist.md)
-4. ⛔ **Destructive actions require `ask_user`** — [global-rules](references/global-rules.md)
+3. **Pre-deploy checklist required** — Pre-Deploy Checklist
+4. ⛔ **Destructive actions require `ask_user`** — global-rules
 5. **Scope: deployment execution only** — This skill owns execution of `azd up`, `azd deploy`, `terraform apply`, and `az deployment` commands. These commands are run through this skill's error recovery and verification pipeline.
 
 ---
@@ -60,12 +60,12 @@ Activate this skill when user wants to:
 | # | Action | Reference |
 |---|--------|-----------|
 | 1 | **Check Plan** — Read `.azure/plan.md`, verify status = `Validated` AND **Validation Proof** section is populated | `.azure/plan.md` |
-| 2 | **Pre-Deploy Checklist** — MUST complete ALL steps | [Pre-Deploy Checklist](references/pre-deploy-checklist.md) |
-| 3 | **Load Recipe** — Based on `recipe.type` in `.azure/plan.md` | [recipes/README.md](references/recipes/README.md) |
+| 2 | **Pre-Deploy Checklist** — MUST complete ALL steps | Pre-Deploy Checklist |
+| 3 | **Load Recipe** — Based on `recipe.type` in `.azure/plan.md` | recipes/README.md |
 | 4 | **Execute Deploy** — Follow recipe steps | Recipe README |
-| 5 | **Post-Deploy** — Configure SQL managed identity and apply EF migrations if applicable | [Post-Deployment](references/recipes/azd/post-deployment.md) |
+| 5 | **Post-Deploy** — Configure SQL managed identity and apply EF migrations if applicable | Post-Deployment |
 | 6 | **Handle Errors** — See recipe's `errors.md` | — |
-| 7 | **Verify Success** — Confirm deployment completed and endpoints are accessible | [Verification](references/recipes/azd/verify.md) |
+| 7 | **Verify Success** — Confirm deployment completed and endpoints are accessible | Verification |
 
 > **⛔ VALIDATION PROOF CHECK**
 >
@@ -73,8 +73,8 @@ Activate this skill when user wants to:
 
 ## SDK Quick References
 
-- **Azure Developer CLI**: [azd](references/sdk/azd-deployment.md)
-- **Azure Identity**: [Python](references/sdk/azure-identity-py.md) | [.NET](references/sdk/azure-identity-dotnet.md) | [TypeScript](references/sdk/azure-identity-ts.md) | [Java](references/sdk/azure-identity-java.md)
+- **Azure Developer CLI**: azd
+- **Azure Identity**: Python | .NET | TypeScript | Java
 
 ## MCP Tools
 
@@ -86,5 +86,5 @@ Activate this skill when user wants to:
 
 ## References
 
-- [Troubleshooting](references/troubleshooting.md) - Common issues and solutions
-- [Post-Deployment Steps](references/recipes/azd/post-deployment.md) - SQL + EF Core setup
+- Troubleshooting - Common issues and solutions
+- Post-Deployment Steps - SQL + EF Core setup

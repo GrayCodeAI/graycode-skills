@@ -143,5 +143,5 @@ Jos käyttäjä pyytää vain tekstiä ilman selityksiä, jätä muutosyhteenvet
 
 ## References
 
-- Full 26-pattern list with examples: [references/patterns.md](references/patterns.md)
+- Full 26-pattern list with examples: references/patterns.md
 - Source repository: [Hakku/finnish-humanizer](https://github.com/Hakku/finnish-humanizer) (MIT)

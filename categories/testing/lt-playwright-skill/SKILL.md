@@ -16,15 +16,15 @@ version: 1.0
 
 | File | When to read |
 |------|-------------|
-| [reference/cloud-integration.md](reference/cloud-integration.md) | Cloud execution, 3 integration patterns, parallel browsers |
-| [reference/page-object-model.md](reference/page-object-model.md) | POM architecture, base page, fixtures, full examples |
-| [reference/mobile-testing.md](reference/mobile-testing.md) | Android + iOS real device testing |
-| [reference/debugging-flaky.md](reference/debugging-flaky.md) | Flaky test checklist, common fixes |
-| [reference/api-mocking-visual.md](reference/api-mocking-visual.md) | API mocking + visual regression patterns |
-| [reference/python-patterns.md](reference/python-patterns.md) | Python-specific: pytest-playwright, sync/async |
-| [reference/java-patterns.md](reference/java-patterns.md) | Java-specific: Maven, JUnit, Gradle |
-| [reference/csharp-patterns.md](reference/csharp-patterns.md) | C#-specific: NUnit, MSTest, .NET config |
-| [shared/testmu-cloud-reference.md](testmu-cloud-reference.md) | Full device catalog, capabilities, geo-location |
+| reference/cloud-integration.md | Cloud execution, 3 integration patterns, parallel browsers |
+| reference/page-object-model.md | POM architecture, base page, fixtures, full examples |
+| reference/mobile-testing.md | Android + iOS real device testing |
+| reference/debugging-flaky.md | Flaky test checklist, common fixes |
+| reference/api-mocking-visual.md | API mocking + visual regression patterns |
+| reference/python-patterns.md | Python-specific: pytest-playwright, sync/async |
+| reference/java-patterns.md | Java-specific: Maven, JUnit, Gradle |
+| reference/csharp-patterns.md | C#-specific: NUnit, MSTest, .NET config |
+| shared/testmu-cloud-reference.md | Full device catalog, capabilities, geo-location |
 
 ## Advanced Playbook
 

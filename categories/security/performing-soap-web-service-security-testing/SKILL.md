@@ -2,7 +2,7 @@
 name: performing-soap-web-service-security-testing
 description: "Perform security testing of SOAP web services by analyzing WSDL definitions and testing for XML injection, XXE, WS-Security bypass, and SOAPAction spoofing."
 license: MIT
-tags: [soap, web-services, wsdl, xml-injection, xxe, ws-security, penetration-testing, soapaction-spoofing, xpath-injection]
+tags: [soap, web-services, wsdl, xml-injection, ws-security]
 domain: cybersecurity
 subdomain: api-security
 version: 1.0

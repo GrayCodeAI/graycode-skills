@@ -20,7 +20,7 @@ Create professional, user-centered designs in Penpot using the `penpot/penpot-mc
 
 ## MCP Server Setup
 
-The Penpot MCP tools require the `penpot/penpot-mcp` server running locally. For detailed installation and troubleshooting, see [setup-troubleshooting.md](references/setup-troubleshooting.md).
+The Penpot MCP tools require the `penpot/penpot-mcp` server running locally. For detailed installation and troubleshooting, see setup-troubleshooting.md.
 
 ### Before Setup: Check If Already Running
 
@@ -80,10 +80,10 @@ Add to `settings.json`:
 
 | Task | Reference File |
 | ---- | -------------- |
-| MCP server installation & troubleshooting | [setup-troubleshooting.md](references/setup-troubleshooting.md) |
-| Component specs (buttons, forms, nav) | [component-patterns.md](references/component-patterns.md) |
-| Accessibility (contrast, touch targets) | [accessibility.md](references/accessibility.md) |
-| Screen sizes & platform specs | [platform-guidelines.md](references/platform-guidelines.md) |
+| MCP server installation & troubleshooting | setup-troubleshooting.md |
+| Component specs (buttons, forms, nav) | component-patterns.md |
+| Accessibility (contrast, touch targets) | accessibility.md |
+| Screen sizes & platform specs | platform-guidelines.md |
 
 ## Core Design Principles
 
@@ -150,7 +150,7 @@ return { colors: [...colors], textStyles, componentCount: components.length };
 
 - Use the default tokens below as a starting point
 - Offer to help establish consistent patterns
-- Reference specs in [component-patterns.md](references/component-patterns.md)
+- Reference specs in component-patterns.md
 
 ## Key Penpot API Gotchas
 

@@ -2,7 +2,7 @@
 name: ag-x-twitter-scraper
 description: "X/Twitter automation skill for tweet search, follower export, media download, posting, replies, DMs, webhooks, MCP, SDKs, and the TweetClaw OpenClaw plugin."
 license: MIT
-tags: [twitter, x-api, tweet-search, twitter-api, twitter-scraper, follower-export, automation, mcp, sdk, webhooks, openclaw, tweetclaw]
+tags: [twitter, x-api, tweet-search, twitter-api, twitter-scraper]
 category: data
 risk: safe
 source: community

@@ -13,11 +13,11 @@ String refs (`ref="myInput"` + `this.refs.myInput`) were deprecated in React 16.
 
 | Pattern | Reference |
 |---|---|
-| Single ref on a DOM element | [→ patterns.md#single-ref](references/patterns.md#single-ref) |
-| Multiple refs in one component | [→ patterns.md#multiple-refs](references/patterns.md#multiple-refs) |
-| Refs in a list / dynamic refs | [→ patterns.md#list-refs](references/patterns.md#list-refs) |
-| Callback refs (alternative approach) | [→ patterns.md#callback-refs](references/patterns.md#callback-refs) |
-| Ref passed to a child component | [→ patterns.md#forwarded-refs](references/patterns.md#forwarded-refs) |
+| Single ref on a DOM element | → patterns.md#single-ref |
+| Multiple refs in one component | → patterns.md#multiple-refs |
+| Refs in a list / dynamic refs | → patterns.md#list-refs |
+| Callback refs (alternative approach) | → patterns.md#callback-refs |
+| Ref passed to a child component | → patterns.md#forwarded-refs |
 
 ## Scan Command
 

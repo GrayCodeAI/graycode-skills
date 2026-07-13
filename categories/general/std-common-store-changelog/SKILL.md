@@ -29,7 +29,7 @@ keywords: None
 4. **Draft — Google Play**: Compress App Store draft to ≤ 500 chars. Prioritise top 3–5 user-facing changes.
 5. **Validate**: Count characters per store. Check every bullet maps to real commit. Remove jargon.
 
-See [Commit-to-Bullet Examples](references/commit_examples.md) for mapping patterns.
+See Commit-to-Bullet Examples for mapping patterns.
 
 ## Output Format
 
@@ -60,4 +60,4 @@ What's New in Version X.Y
 
 ## References
 
-- [Commit-to-Bullet Examples](references/commit_examples.md) — load when mapping specific commits to bullets
+- Commit-to-Bullet Examples — load when mapping specific commits to bullets

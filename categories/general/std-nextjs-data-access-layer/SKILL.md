@@ -23,7 +23,7 @@ Centralize all data access (Database & External APIs) to ensure consistent secur
 4. **Wrap** with `cache()` from React to deduplicate requests within render cycle.
 5. **Taint-check** sensitive objects to prevent accidental client exposure.
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Implementation Guidelines
 

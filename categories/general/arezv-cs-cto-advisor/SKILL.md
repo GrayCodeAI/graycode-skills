@@ -396,15 +396,15 @@ echo "- Process improvements identified"
 
 ## Related Agents
 
-- [cs-ceo-advisor](cs-ceo-advisor.md) - Strategic leadership and organizational development (CEO counterpart)
-- [cs-fullstack-engineer](cs-fullstack-engineer.md) - Fullstack development coordination (planned)
-- [cs-devops-specialist](cs-devops-specialist.md) - DevOps and infrastructure automation (planned)
+- cs-ceo-advisor - Strategic leadership and organizational development (CEO counterpart)
+- cs-fullstack-engineer - Fullstack development coordination (planned)
+- cs-devops-specialist - DevOps and infrastructure automation (planned)
 
 ## References
 
 - **Skill Documentation:** [c-level-advisor/skills/cto-advisor/SKILL.md](SKILL.md)
-- **C-Level Domain Guide:** [c-level-advisor/CLAUDE.md](CLAUDE.md)
-- **Agent Development Guide:** [CLAUDE.md](CLAUDE.md)
+- **C-Level Domain Guide:** c-level-advisor/CLAUDE.md
+- **Agent Development Guide:** CLAUDE.md
 
 ---
 

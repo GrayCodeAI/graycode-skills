@@ -2,7 +2,7 @@
 name: performing-log-analysis-for-forensic-investigation
 description: "Collect, parse, and correlate system, application, and security logs to reconstruct events and establish timelines during forensic investigations."
 license: MIT
-tags: [forensics, log-analysis, siem, event-correlation, timeline-analysis, evidence-collection]
+tags: [forensics, log-analysis, siem, event-correlation, timeline-analysis]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

@@ -15,7 +15,7 @@ keywords: None
 
 ## 1. Scan for Hardcoded Secrets
 
-See [implementation examples](references/implementation.md) for secrets scanning commands.
+See implementation examples for secrets scanning commands.
 
 ## 2. Detect Data Leakage in Logs
 
@@ -30,7 +30,7 @@ Identify sensitive info printed to logs or stdout.
 
 Detect raw string concatenation in queries or system commands.
 
-See [implementation examples](references/implementation.md) for injection surface detection.
+See implementation examples for injection surface detection.
 
 ## 4. Measure Auth Coverage vs Exposure
 
@@ -51,7 +51,7 @@ Compare total routes against protected endpoints.
 
 ## 6. Audit Infrastructure Hardening
 
-See [implementation examples](references/implementation.md) for infrastructure hardening checks.
+See implementation examples for infrastructure hardening checks.
 
 ## 7. Detect Adversarial Entry Points (RCE/SSRF/Path Traversal)
 
@@ -80,4 +80,4 @@ Identify where user input reaches dangerous sinks without sanitization.
 
 ## References
 
-- [Vulnerability Remediation Protocols](references/REMEDIATION.md)
+- Vulnerability Remediation Protocols

@@ -83,7 +83,7 @@ python scripts/a11y_scanner.py /path/to/project --format table
 
 **Phase 2: Fix** -- Apply framework-specific fixes for each violation.
 
-> See [references/framework-a11y-patterns.md](references/framework-a11y-patterns.md) for the complete fix patterns catalog.
+> See references/framework-a11y-patterns.md for the complete fix patterns catalog.
 
 **Phase 3: Verify** -- Re-run the scanner to confirm fixes and check for regressions.
 
@@ -128,7 +128,7 @@ function ProductCard({ product }) {
 }
 ```
 
-> See [references/examples-by-framework.md](references/examples-by-framework.md) for Vue, Angular, Next.js, and Svelte examples.
+> See references/examples-by-framework.md for Vue, Angular, Next.js, and Svelte examples.
 
 ## Tools Reference
 
@@ -195,15 +195,15 @@ Options:
 
 | Reference | Description |
 |-----------|-------------|
-| [wcag-quick-ref.md](references/wcag-quick-ref.md) | WCAG 2.2 Level A & AA criteria quick reference |
-| [wcag-22-new-criteria.md](references/wcag-22-new-criteria.md) | New WCAG 2.2 success criteria (Focus Appearance, Target Size, etc.) |
-| [aria-patterns.md](references/aria-patterns.md) | ARIA patterns, keyboard interaction, and live regions |
-| [framework-a11y-patterns.md](references/framework-a11y-patterns.md) | Framework-specific fix patterns (React, Vue, Angular, Svelte, HTML) |
-| [color-contrast-guide.md](references/color-contrast-guide.md) | Color contrast checker details, Tailwind palette mapping, sr-only class |
-| [ci-cd-integration.md](references/ci-cd-integration.md) | GitHub Actions, GitLab CI, Azure DevOps, pre-commit hook configs |
-| [audit-report-template.md](references/audit-report-template.md) | Stakeholder-ready audit report template |
-| [testing-checklist.md](references/testing-checklist.md) | Manual testing checklist (keyboard, screen reader, visual, forms) |
-| [examples-by-framework.md](references/examples-by-framework.md) | Full audit examples for Vue, Angular, Next.js, and Svelte |
+| wcag-quick-ref.md | WCAG 2.2 Level A & AA criteria quick reference |
+| wcag-22-new-criteria.md | New WCAG 2.2 success criteria (Focus Appearance, Target Size, etc.) |
+| aria-patterns.md | ARIA patterns, keyboard interaction, and live regions |
+| framework-a11y-patterns.md | Framework-specific fix patterns (React, Vue, Angular, Svelte, HTML) |
+| color-contrast-guide.md | Color contrast checker details, Tailwind palette mapping, sr-only class |
+| ci-cd-integration.md | GitHub Actions, GitLab CI, Azure DevOps, pre-commit hook configs |
+| audit-report-template.md | Stakeholder-ready audit report template |
+| testing-checklist.md | Manual testing checklist (keyboard, screen reader, visual, forms) |
+| examples-by-framework.md | Full audit examples for Vue, Angular, Next.js, and Svelte |
 
 ## Resources
 

@@ -22,7 +22,9 @@ def test_changed_tls_docs_includes_markdown_files(tmp_path: Path, monkeypatch: p
     assert changed_tls_docs(paths) == [doc]
 
 
-def test_find_insecure_tls_reports_markdown_examples(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def test_find_insecure_tls_reports_markdown_examples(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     monkeypatch.chdir(tmp_path)
     doc = Path("categories/example/SKILL.md")
     doc.parent.mkdir(parents=True)

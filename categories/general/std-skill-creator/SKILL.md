@@ -142,10 +142,10 @@ Extract to `references/` when:
 ## Reference & Examples
 
 Use the enhanced template below to generate new skills:
-[references/TEMPLATE.md](references/TEMPLATE.md)
+references/TEMPLATE.md
 
 For comprehensive lifecycle guidance:
-[references/lifecycle.md](references/lifecycle.md)
+references/lifecycle.md
 
 For resource organization patterns:
-[references/resource-organization.md](references/resource-organization.md)
+references/resource-organization.md

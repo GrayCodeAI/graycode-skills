@@ -2,7 +2,7 @@
 name: state-management
 description: "Implement state management patterns for frontend applications. Use when managing global state, handling complex data flows, or coordinating state across components. Handles React Context, Redux, Zu..."
 license: MIT
-tags: [state-management, react, redux, context, zustand, recoil, global-state]
+tags: [state-management, react, redux, context, global-state]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

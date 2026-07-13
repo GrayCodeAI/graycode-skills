@@ -160,6 +160,6 @@ For running audits, reading reports, and setting budgets, use the **perf-lightho
 
 For in-depth optimization patterns, see:
 
-- [references/core-web-vitals.md](references/core-web-vitals.md) - Fixing LCP, CLS, INP issues
-- [references/bundle-optimization.md](references/bundle-optimization.md) - Reducing JS bundle size
-- [references/image-optimization.md](references/image-optimization.md) - Image formats, responsive images, sharp scripts
+- references/core-web-vitals.md - Fixing LCP, CLS, INP issues
+- references/bundle-optimization.md - Reducing JS bundle size
+- references/image-optimization.md - Image formats, responsive images, sharp scripts

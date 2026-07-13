@@ -121,7 +121,7 @@ STRUCTURE:
 - Build information only in build-system.md
 - Code style and patterns only in development.md
 - Deployment information only in deployment.md
-- Cross-references using: "See [docs/filename.md](docs/filename.md)"
+- Cross-references using: "See docs/filename.md"
 
 ### FILE REFERENCE FORMAT
 Always include specific file references:

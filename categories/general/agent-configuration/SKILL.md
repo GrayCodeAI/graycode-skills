@@ -10,9 +10,6 @@ tags:
 - spw
 - security
 - hooks
-- skills
-- plugins
-- multi-agent
 allowed-tools: Read Write Bash Grep Glob
 metadata: None
 platforms: Claude, Gemini, ChatGPT, Codex

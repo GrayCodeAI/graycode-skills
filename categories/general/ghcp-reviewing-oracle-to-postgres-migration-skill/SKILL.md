@@ -36,7 +36,7 @@ List the affected database objects (procedures, triggers, queries, views) and th
 
 **Step 2: Screen each insight for applicability**
 
-Review the reference index in [references/REFERENCE.md](references/REFERENCE.md). For each entry, determine whether the migration scope contains patterns affected by that insight. Read the full reference file only when the insight is potentially relevant.
+Review the reference index in references/REFERENCE.md. For each entry, determine whether the migration scope contains patterns affected by that insight. Read the full reference file only when the insight is potentially relevant.
 
 **Step 3: Document risks and recommended actions**
 
@@ -58,7 +58,7 @@ Identify the migrated object and summarize the change set.
 
 **Step 2: Cross-check applicable insights**
 
-For each reference in [references/REFERENCE.md](references/REFERENCE.md), confirm the behavior or test requirement is acknowledged and addressed in the migration work.
+For each reference in references/REFERENCE.md, confirm the behavior or test requirement is acknowledged and addressed in the migration work.
 
 **Step 3: Verify integration test coverage**
 

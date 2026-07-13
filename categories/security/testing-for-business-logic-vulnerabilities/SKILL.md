@@ -2,7 +2,7 @@
 name: testing-for-business-logic-vulnerabilities
 description: "Identifying flaws in application business logic that allow price manipulation, workflow bypass, and privilege escalation beyond what technical vulnerability scanners can detect."
 license: MIT
-tags: [penetration-testing, business-logic, owasp, web-security, burpsuite, manual-testing]
+tags: [penetration-testing, business-logic, owasp, web-security, burpsuite]
 domain: cybersecurity
 subdomain: web-application-security
 version: 1.0

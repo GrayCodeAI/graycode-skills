@@ -25,4 +25,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [MatPlotLib Assistant](./knowledge/MatPlotLib%20Assistant/)
+- MatPlotLib Assistant

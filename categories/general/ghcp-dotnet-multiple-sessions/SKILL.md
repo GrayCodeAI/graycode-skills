@@ -9,7 +9,7 @@ tags: [general]
 
 Manage multiple independent conversations simultaneously.
 
-> **Runnable example:** [recipe/multiple-sessions.cs](recipe/multiple-sessions.cs)
+> **Runnable example:** recipe/multiple-sessions.cs
 >
 > ```bash
 > dotnet run recipe/multiple-sessions.cs

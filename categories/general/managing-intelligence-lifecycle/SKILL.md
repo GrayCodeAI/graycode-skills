@@ -2,7 +2,7 @@
 name: managing-intelligence-lifecycle
 description: "Manages the end-to-end cyber threat intelligence lifecycle from planning and direction through collection, processing, analysis, dissemination, and feedback to ensure intelligence products meet sta..."
 license: MIT
-tags: [cti, intelligence-lifecycle, pir, nist-sp-800-150, threat-intelligence-program, nist-csf]
+tags: [cti, intelligence-lifecycle, pir, nist-sp-800-150, threat-intelligence-program]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0.0

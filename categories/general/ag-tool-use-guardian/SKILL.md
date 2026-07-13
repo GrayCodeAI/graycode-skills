@@ -2,7 +2,7 @@
 name: ag-tool-use-guardian
 description: "FREE — Intelligent tool-call reliability wrapper. Monitors, retries, fixes, and learns from tool failures. Auto-recovers from truncated JSON, timeouts, rate limits, and mid-chain failures."
 license: MIT
-tags: [reliability, tool-use, error-handling, retries, recovery, agent-infrastructure]
+tags: [reliability, tool-use, error-handling, retries, recovery]
 category: reliability
 risk: safe
 source: community

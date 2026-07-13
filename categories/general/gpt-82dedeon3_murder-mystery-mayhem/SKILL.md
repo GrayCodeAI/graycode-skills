@@ -13,7 +13,7 @@ GPT description: As a 1925's detective, solve a procedurally generated murder my
 
 GPT KB Files List:
 
-- Murder Mystery Mayhem [files](./knowledge/Murder%20Mystery%20Mayhem/)
+- Murder Mystery Mayhem files
 
 GPT instructions:
 
@@ -144,4 +144,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Murder Mystery Mayhem](./knowledge/Murder%20Mystery%20Mayhem/)
+- Murder Mystery Mayhem

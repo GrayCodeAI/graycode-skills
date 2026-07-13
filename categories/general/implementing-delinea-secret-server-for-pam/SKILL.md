@@ -2,7 +2,7 @@
 name: implementing-delinea-secret-server-for-pam
 description: "Implements Delinea Secret Server for privileged access management (PAM) including secret vault configuration, role-based access policies, automated password rotation, session recording, and integra..."
 license: MIT
-tags: [pam, delinea, secret-server, privileged-access, password-vault, credential-management]
+tags: [pam, delinea, secret-server, privileged-access, password-vault]
 domain: cybersecurity
 subdomain: identity-access-management
 version: 1.0

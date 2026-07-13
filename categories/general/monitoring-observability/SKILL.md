@@ -2,7 +2,7 @@
 name: monitoring-observability
 description: "Set up monitoring, logging, and observability for applications and infrastructure. Use when implementing health checks, metrics collection, log aggregation, or alerting systems. Handles Prometheus,..."
 license: MIT
-tags: [monitoring, observability, logging, metrics, prometheus, grafana, alerts]
+tags: [monitoring, observability, logging, metrics, prometheus]
 metadata: None
 platforms: Claude, ChatGPT, Gemini
 ---

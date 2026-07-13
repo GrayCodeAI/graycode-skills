@@ -2,7 +2,7 @@
 name: ag-fp-taskeither-ref
 description: "Quick reference for TaskEither. Use when user needs async error handling, API calls, or Promise-based operations that can fail."
 license: MIT
-tags: [fp-ts, taskeither, async, promise, error-handling, quick-reference]
+tags: [fp-ts, taskeither, async, promise, error-handling]
 risk: unknown
 source: community
 version: 1.0.0

@@ -2,7 +2,7 @@
 name: configuring-windows-defender-advanced-settings
 description: "Configures Microsoft Defender for Endpoint (MDE) advanced protection settings including attack surface reduction rules, controlled folder access, network protection, and exploit protection. Use whe..."
 license: MIT
-tags: [endpoint, windows-security, microsoft-defender, asr, exploit-protection, mde]
+tags: [endpoint, windows-security, microsoft-defender, asr, exploit-protection]
 domain: cybersecurity
 subdomain: endpoint-security
 version: 1.0.0

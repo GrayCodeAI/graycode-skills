@@ -2,7 +2,7 @@
 name: research-model-merging
 description: "Merge multiple fine-tuned models using mergekit to combine capabilities without retraining. Use when creating specialized models by blending domain-specific expertise (math + coding + chat), improv..."
 license: MIT
-tags: [emerging-techniques, model-merging, mergekit, slerp, ties, dare, task-arithmetic, model-fusion, no-retraining, multi-capability, arcee-ai]
+tags: [emerging-techniques, model-merging, mergekit, slerp, ties]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [mergekit, transformers, torch]

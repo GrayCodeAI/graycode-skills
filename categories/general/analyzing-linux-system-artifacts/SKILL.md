@@ -2,7 +2,7 @@
 name: analyzing-linux-system-artifacts
 description: "Examine Linux system artifacts including auth logs, cron jobs, shell history, and system configuration to uncover evidence of compromise or unauthorized activity."
 license: MIT
-tags: [forensics, linux-forensics, system-artifacts, log-analysis, persistence-detection, incident-investigation]
+tags: [forensics, linux-forensics, system-artifacts, log-analysis, persistence-detection]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

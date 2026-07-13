@@ -30,7 +30,7 @@ The script checks:
 
 All ERROR-level checks must pass. WARNING-level items (missing `license`, `metadata`) should be flagged but are not blockers.
 
-See [references/structure-rules.md](references/structure-rules.md) for the complete hard rules specification.
+See references/structure-rules.md for the complete hard rules specification.
 
 ## Phase 2: Content Review (Soft Guidelines)
 
@@ -44,7 +44,7 @@ After automated checks pass, review the PR against quality guidelines:
 6. **Language** — Are SKILL.md and code written in English?
 7. **README sync** — Are `README.md` and `README_zh.md` updated for new skills?
 
-See [references/quality-guidelines.md](references/quality-guidelines.md) for soft guidelines details.
+See references/quality-guidelines.md for soft guidelines details.
 
 ## Review Checklist Summary
 

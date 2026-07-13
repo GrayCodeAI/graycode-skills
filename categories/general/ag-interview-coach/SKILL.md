@@ -2,7 +2,7 @@
 name: ag-interview-coach
 description: "Full job search coaching system — JD decoding, resume, storybank, mock interviews, transcript analysis, comp negotiation. 23 commands, persistent state."
 license: MIT
-tags: [interview, job-search, coaching, career, storybank, negotiation]
+tags: [interview, job-search, coaching, career, storybank]
 category: productivity
 risk: safe
 source: community

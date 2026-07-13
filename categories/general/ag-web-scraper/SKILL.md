@@ -14,13 +14,13 @@ tools: None
 
 ## References
 
-- **Extraction patterns**: [references/extraction-patterns.md](references/extraction-patterns.md)
+- **Extraction patterns**: references/extraction-patterns.md
   CSS selectors, JavaScript snippets, JSON-LD parsing, domain tips.
 
-- **Output templates**: [references/output-templates.md](references/output-templates.md)
+- **Output templates**: references/output-templates.md
   Markdown, JSON, CSV templates with complete examples.
 
-- **Data transforms**: [references/data-transforms.md](references/data-transforms.md)
+- **Data transforms**: references/data-transforms.md
   Cleaning, normalization, deduplication, enrichment patterns.
 
 ## Best Practices

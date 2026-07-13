@@ -19,7 +19,7 @@ keywords: None
 - **Setup/Teardown**: Use `setUpWithError()` and `tearDownWithError()` for environment management.
 - **Assertions**: Use specific assertions: `XCTAssertEqual`, `XCTAssertNil`, `XCTAssertTrue`, etc.
 
-See [implementation examples](references/implementation.md) for XCTest setup/teardown, async tests, and UI test patterns.
+See implementation examples for XCTest setup/teardown, async tests, and UI test patterns.
 
 ## Test Async Code
 
@@ -41,4 +41,4 @@ See [implementation examples](references/implementation.md) for XCTest setup/tea
 
 ## References
 
-- [XCTest Patterns & Async Tests](references/implementation.md)
+- XCTest Patterns & Async Tests

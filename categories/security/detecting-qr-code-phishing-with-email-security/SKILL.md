@@ -2,7 +2,7 @@
 name: detecting-qr-code-phishing-with-email-security
 description: "Detect and prevent QR code phishing (quishing) attacks that bypass traditional email security by embedding malicious URLs in QR code images within emails."
 license: MIT
-tags: [quishing, qr-code, phishing, email-security, image-analysis, ocr, mobile-security]
+tags: [quishing, qr-code, phishing, email-security, image-analysis]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

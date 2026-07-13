@@ -2,7 +2,7 @@
 name: research-instructor
 description: "Extract structured data from LLM responses with Pydantic validation, retry failed extractions automatically, parse complex JSON with type safety, and stream partial results with Instructor - battle..."
 license: MIT
-tags: [prompt-engineering, instructor, structured-output, pydantic, data-extraction, json-parsing, type-safety, validation, streaming, openai, anthropic]
+tags: [prompt-engineering, instructor, structured-output, pydantic, data-extraction]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [instructor, pydantic, openai, anthropic]

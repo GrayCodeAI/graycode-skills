@@ -2,7 +2,7 @@
 name: detecting-rdp-brute-force-attacks
 description: "Detect RDP brute force attacks by analyzing Windows Security Event Logs for failed authentication patterns (Event ID 4625), successful logons after failures (Event ID 4624), NLA failures, and sourc..."
 license: MIT
-tags: [threat-detection, rdp, brute-force, windows-event-logs, blue-team, siem]
+tags: [threat-detection, rdp, brute-force, windows-event-logs, blue-team]
 domain: cybersecurity
 subdomain: threat-detection
 version: 1.0

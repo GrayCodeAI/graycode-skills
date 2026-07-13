@@ -2,7 +2,7 @@
 name: conducting-internal-network-penetration-test
 description: "Execute an internal network penetration test simulating an insider threat or post-breach attacker to identify lateral movement paths, privilege escalation vectors, and sensitive data exposure withi..."
 license: MIT
-tags: [internal-pentest, lateral-movement, privilege-escalation, responder, impacket, assumed-breach, network-security]
+tags: [internal-pentest, lateral-movement, privilege-escalation, responder, impacket]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

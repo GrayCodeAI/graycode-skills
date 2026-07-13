@@ -10,8 +10,6 @@ tags:
 - grpo
 - sft
 - monarch
-- torchtitan
-- meta
 version: 1.0.0
 author: Orchestra Research
 dependencies:

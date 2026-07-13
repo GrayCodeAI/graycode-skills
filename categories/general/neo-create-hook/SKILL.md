@@ -117,7 +117,7 @@ Exit codes let you allow or block, but JSON output gives you finer-grained contr
   You must choose one approach per hook, not both: either use exit codes alone for signaling, or exit 0 and print JSON for structured control. Claude Code only processes JSON on exit 0. If you exit 2, any JSON is ignored.
 </Note>
 
-Your hook's stdout must contain only the JSON object. If your shell profile prints text on startup, it can interfere with JSON parsing. See [JSON validation failed](/en/hooks-guide#json-validation-failed) in the troubleshooting guide.
+Your hook's stdout must contain only the JSON object. If your shell profile prints text on startup, it can interfere with JSON parsing. See JSON validation failed in the troubleshooting guide.
 
 The JSON object supports three kinds of fields:
 
@@ -195,7 +195,7 @@ Here are examples of each pattern in action:
   </Tab>
 </Tabs>
 
-For extended examples including Bash command validation, prompt filtering, and auto-approval scripts, see [What you can automate](/en/hooks-guide#what-you-can-automate) in the guide and the [Bash command validator reference implementation](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py).
+For extended examples including Bash command validation, prompt filtering, and auto-approval scripts, see What you can automate in the guide and the [Bash command validator reference implementation](https://github.com/anthropics/claude-code/blob/main/examples/hooks/bash_command_validator_example.py).
 
 ## Hook events
 
@@ -203,7 +203,7 @@ Each event corresponds to a point in Claude Code's lifecycle where hooks can run
 
 ### SessionStart
 
-Runs when Claude Code starts a new session or resumes an existing session. Useful for loading development context like existing issues or recent changes to your codebase, or setting up environment variables. For static context that does not require a script, use [CLAUDE.md](/en/memory) instead.
+Runs when Claude Code starts a new session or resumes an existing session. Useful for loading development context like existing issues or recent changes to your codebase, or setting up environment variables. For static context that does not require a script, use CLAUDE.md instead.
 
 SessionStart runs on every session, so keep these hooks fast.
 
@@ -442,7 +442,7 @@ Searches the web.
 
 ##### Task
 
-Spawns a [subagent](/en/sub-agents).
+Spawns a subagent.
 
 | Field           | Type   | Example                    | Description                                  |
 | :-------------- | :----- | :------------------------- | :------------------------------------------- |
@@ -907,7 +907,7 @@ The LLM must respond with JSON containing:
 
 ### Example: Multi-criteria Stop hook
 
-This `Stop` hook uses a detailed prompt to check three conditions before allowing Claude to stop. If `"ok"` is `false`, Claude continues working with the provided reason as its next instruction. `SubagentStop` hooks use the same format to evaluate whether a [subagent](/en/sub-agents) should stop:
+This `Stop` hook uses a detailed prompt to check three conditions before allowing Claude to stop. If `"ok"` is `false`, Claude continues working with the provided reason as its next instruction. `SubagentStop` hooks use the same format to evaluate whether a subagent should stop:
 
 ```json  theme={null}
 {
@@ -1106,4 +1106,4 @@ Run `claude --debug` to see hook execution details, including which hooks matche
 [DEBUG] Hook command completed with status 0: <Your stdout>
 ```
 
-For troubleshooting common issues like hooks not firing, infinite Stop hook loops, or configuration errors, see [Limitations and troubleshooting](/en/hooks-guide#limitations-and-troubleshooting) in the guide.
+For troubleshooting common issues like hooks not firing, infinite Stop hook loops, or configuration errors, see Limitations and troubleshooting in the guide.

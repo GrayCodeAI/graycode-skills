@@ -33,9 +33,9 @@ keywords: None
 
 ## Reference
 
-- [**GitHub Actions Template**](references/github-actions.md) - Standard workflow file.
-- [**Advanced Large-Scale Workflow**](references/advanced-workflow.md) - Parallel jobs, Caching, Strict Mode.
-- [**Fastlane Standards**](references/fastlane.md) - Automated Signing & Deployment.
+- **GitHub Actions Template** - Standard workflow file.
+- **Advanced Large-Scale Workflow** - Parallel jobs, Caching, Strict Mode.
+- **Fastlane Standards** - Automated Signing & Deployment.
 
 ## Anti-Patterns
 

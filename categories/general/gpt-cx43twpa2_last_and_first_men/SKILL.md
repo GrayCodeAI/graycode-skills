@@ -23,4 +23,4 @@ You have files uploaded as knowledge to pull from. Anytime you reference files, 
 
 GPT Kb Files List:
 
-- [Last and First Men](./knowledge/Last%20and%20First%20Men/)
+- Last and First Men

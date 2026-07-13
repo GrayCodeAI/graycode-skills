@@ -24,11 +24,11 @@ keywords: None
 
 ## Global Auth Guard Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Argon2id Hashing Example
 
-See [implementation examples](references/implementation.md)
+See implementation examples
 
 ## Authentication (JWT)
 
@@ -46,21 +46,21 @@ See [implementation examples](references/implementation.md)
 
 ## Cryptography
 
-- **Hashing**: Use **Argon2id**, not Bcrypt. See [implementation](references/implementation.md).
-- **Encryption**: Use **AES-256-GCM** with KMS rotation. See [implementation](references/implementation.md).
+- **Hashing**: Use **Argon2id**, not Bcrypt. See implementation.
+- **Encryption**: Use **AES-256-GCM** with KMS rotation. See implementation.
 
 ## Hardening
 
 - **Helmet**: Mandatory. Enable HSTS, CSP.
 - **CORS**: Explicit origins only. No `*`.
 - **Throttling**: Use Redis-backed `@nestjs/throttler` in production.
-- **CSRF**: Required for cookie-based auth. See [implementation](references/implementation.md).
+- **CSRF**: Required for cookie-based auth. See implementation.
 
 ## Data Protection
 
 - **Sanitization**: Use `ClassSerializerInterceptor` + `@Exclude()`.
 - **Validation**: `ValidationPipe({ whitelist: true })` to prevent mass assignment.
-- **Audit**: Log mutations (Who, What, When). See [implementation](references/implementation.md).
+- **Audit**: Log mutations (Who, What, When). See implementation.
 
 ## Secrets Management
 
@@ -76,5 +76,5 @@ See [implementation examples](references/implementation.md)
 
 ## References
 
-- [Implementation Examples](references/implementation.md)
+- Implementation Examples
 - [common/security-standards](SKILL.md)

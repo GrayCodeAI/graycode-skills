@@ -2,7 +2,7 @@
 name: detecting-modbus-command-injection-attacks
 description: "Detect command injection attacks against Modbus TCP/RTU protocol in ICS environments by monitoring for unauthorized write operations, anomalous function codes, malformed frames, and deviations from..."
 license: MIT
-tags: [ot-security, ics, modbus, command-injection, protocol-analysis, ids, scada, threat-detection]
+tags: [ot-security, ics, modbus, command-injection, protocol-analysis]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

@@ -44,7 +44,7 @@ Before file write?
 
 **SKILL.md**: 105 lines → Rule: ≤100 lines max → Report + extract to references/
 
-[More examples →](references/violation-examples.md)
+More examples →
 
 ## Violation Report Format
 

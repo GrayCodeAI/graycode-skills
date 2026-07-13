@@ -2,7 +2,7 @@
 name: analyzing-disk-image-with-autopsy
 description: "Perform comprehensive forensic analysis of disk images using Autopsy to recover files, examine artifacts, and build investigation timelines."
 license: MIT
-tags: [forensics, autopsy, disk-analysis, sleuth-kit, file-recovery, artifact-analysis]
+tags: [forensics, autopsy, disk-analysis, sleuth-kit, file-recovery]
 domain: cybersecurity
 subdomain: digital-forensics
 version: 1.0

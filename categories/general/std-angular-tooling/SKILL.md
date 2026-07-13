@@ -66,6 +66,6 @@ npx esbuild-visualizer --metadata dist/my-app/browser/stats.json --open
 
 ## References
 
-- [CLI Commands & Build Examples](references/REFERENCE.md)
+- CLI Commands & Build Examples
 
 - [Angular CLI Docs](https://angular.dev/tools/cli)

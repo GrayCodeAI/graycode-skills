@@ -47,7 +47,7 @@ lib/app/modules/home/
 
 ## Code Example
 
-See [references/controller-example.md](references/controller-example.md) for controller + view implementation pattern.
+See references/controller-example.md for controller + view implementation pattern.
 
 ## Related Topics
 

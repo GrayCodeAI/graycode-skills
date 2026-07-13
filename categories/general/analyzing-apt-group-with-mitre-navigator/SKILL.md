@@ -2,7 +2,7 @@
 name: analyzing-apt-group-with-mitre-navigator
 description: "Analyze advanced persistent threat (APT) group techniques using MITRE ATT&CK Navigator to create layered heatmaps of adversary TTPs for detection gap analysis and threat-informed defense."
 license: MIT
-tags: [mitre-attack, navigator, apt, threat-actor, ttp-analysis, heatmap, detection-gap, threat-intelligence]
+tags: [mitre-attack, navigator, apt, threat-actor, ttp-analysis]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0

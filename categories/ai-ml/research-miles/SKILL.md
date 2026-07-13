@@ -10,8 +10,6 @@ tags:
 - fp8
 - int4
 - enterprise
-- sglang
-- megatron-lm
 version: 1.0.0
 author: Orchestra Research
 dependencies:

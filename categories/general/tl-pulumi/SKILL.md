@@ -209,4 +209,4 @@ const deployment = new cloudflare.WorkersDeployment('prod', {
 
 ---
 
-See: [README.md](./README.md), [configuration.md](./configuration.md), [api.md](./api.md), [patterns.md](./patterns.md)
+See: README.md, configuration.md, api.md, patterns.md

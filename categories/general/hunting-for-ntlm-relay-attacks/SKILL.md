@@ -2,7 +2,7 @@
 name: hunting-for-ntlm-relay-attacks
 description: "Detect NTLM relay attacks by analyzing Windows Event 4624 logon type 3 with NTLMSSP authentication, identifying IP-to-hostname mismatches, Responder traffic signatures, SMB signing status, and susp..."
 license: MIT
-tags: [ntlm-relay, windows-events, event-4624, ntlmssp, responder, smb-signing, credential-access, t1557-001, active-directory]
+tags: [ntlm-relay, windows-events, event-4624, ntlmssp, responder]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

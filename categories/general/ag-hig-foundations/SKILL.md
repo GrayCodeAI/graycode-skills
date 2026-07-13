@@ -34,24 +34,24 @@ Check for `.claude/apple-design-context.md` before asking questions. Use existin
 
 | Reference | Topic | Key content |
 |---|---|---|
-| [accessibility.md](references/accessibility.md) | Accessibility | VoiceOver, Dynamic Type, color contrast, motor accessibility, Switch Control, audio descriptions |
-| [app-icons.md](references/app-icons.md) | App Icons | Icon grid, platform-specific sizes, single focal point, no transparency |
-| [branding.md](references/branding.md) | Branding | Integrating brand identity within Apple's design language, subtle branding, custom tints |
-| [color.md](references/color.md) | Color | System colors, Dynamic Colors, semantic colors, custom palettes, contrast ratios |
-| [dark-mode.md](references/dark-mode.md) | Dark Mode | Elevated surfaces, semantic colors, adapted palettes, vibrancy, testing in both modes |
-| [icons.md](references/icons.md) | Icons | Glyph icons, SF Symbols integration, custom icon design, icon weights, optical alignment |
-| [images.md](references/images.md) | Images | Image resolution, @2x/@3x assets, vector assets, image accessibility |
-| [immersive-experiences.md](references/immersive-experiences.md) | Immersive Experiences | AR/VR design, spatial immersion, comfort zones, progressive immersion levels |
-| [inclusion.md](references/inclusion.md) | Inclusion | Diverse representation, non-gendered language, cultural sensitivity, inclusive defaults |
-| [layout.md](references/layout.md) | Layout | Margins, spacing, alignment, safe areas, adaptive layouts, readable content guides |
-| [materials.md](references/materials.md) | Materials | Vibrancy, blur, translucency, system materials, material thickness |
-| [motion.md](references/motion.md) | Motion | Animation curves, transitions, continuity, Reduce Motion support, physics-based motion |
-| [privacy.md](references/privacy.md) | Privacy | Permission requests, usage descriptions, privacy nutrition labels, minimal data collection |
-| [right-to-left.md](references/right-to-left.md) | Right-to-Left | RTL layout mirroring, bidirectional text, icons that flip, exceptions |
-| [sf-symbols.md](references/sf-symbols.md) | SF Symbols | Symbol categories, rendering modes, variable color, custom symbols, weight matching |
-| [spatial-layout.md](references/spatial-layout.md) | Spatial Layout | visionOS window placement, depth, ergonomic zones, Z-axis design |
-| [typography.md](references/typography.md) | Typography | SF Pro, Dynamic Type sizes, text styles, custom fonts, font weight hierarchy, line spacing |
-| [writing.md](references/writing.md) | Writing | UI copy guidelines, tone, capitalization rules, error messages, button labels, conciseness |
+| accessibility.md | Accessibility | VoiceOver, Dynamic Type, color contrast, motor accessibility, Switch Control, audio descriptions |
+| app-icons.md | App Icons | Icon grid, platform-specific sizes, single focal point, no transparency |
+| branding.md | Branding | Integrating brand identity within Apple's design language, subtle branding, custom tints |
+| color.md | Color | System colors, Dynamic Colors, semantic colors, custom palettes, contrast ratios |
+| dark-mode.md | Dark Mode | Elevated surfaces, semantic colors, adapted palettes, vibrancy, testing in both modes |
+| icons.md | Icons | Glyph icons, SF Symbols integration, custom icon design, icon weights, optical alignment |
+| images.md | Images | Image resolution, @2x/@3x assets, vector assets, image accessibility |
+| immersive-experiences.md | Immersive Experiences | AR/VR design, spatial immersion, comfort zones, progressive immersion levels |
+| inclusion.md | Inclusion | Diverse representation, non-gendered language, cultural sensitivity, inclusive defaults |
+| layout.md | Layout | Margins, spacing, alignment, safe areas, adaptive layouts, readable content guides |
+| materials.md | Materials | Vibrancy, blur, translucency, system materials, material thickness |
+| motion.md | Motion | Animation curves, transitions, continuity, Reduce Motion support, physics-based motion |
+| privacy.md | Privacy | Permission requests, usage descriptions, privacy nutrition labels, minimal data collection |
+| right-to-left.md | Right-to-Left | RTL layout mirroring, bidirectional text, icons that flip, exceptions |
+| sf-symbols.md | SF Symbols | Symbol categories, rendering modes, variable color, custom symbols, weight matching |
+| spatial-layout.md | Spatial Layout | visionOS window placement, depth, ergonomic zones, Z-axis design |
+| typography.md | Typography | SF Pro, Dynamic Type sizes, text styles, custom fonts, font weight hierarchy, line spacing |
+| writing.md | Writing | UI copy guidelines, tone, capitalization rules, error messages, button labels, conciseness |
 
 ## Applying Foundations Together
 

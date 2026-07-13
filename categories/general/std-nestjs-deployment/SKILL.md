@@ -24,7 +24,7 @@ keywords: None
 
 ## Dockerfile Example
 
-See [implementation examples](references/example.md)
+See implementation examples
 
 ## Runtime Tuning (Node.js)
 

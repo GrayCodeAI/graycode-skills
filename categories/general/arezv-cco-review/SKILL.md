@@ -123,7 +123,7 @@ python skills/chief-customer-officer-advisor/scripts/cs_coverage_calculator.py b
 
 ## Related
 
-- Agent: [`cs-cco-advisor`](cs-cco-advisor.md)
+- Agent: `cs-cco-advisor`
 - Skill: [`chief-customer-officer-advisor`](SKILL.md)
 - Adjacent: `business-growth/` (tactical CS execution)
 

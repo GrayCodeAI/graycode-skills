@@ -2,7 +2,7 @@
 name: research-langchain
 description: "Framework for building LLM-powered applications with agents, chains, and RAG. Supports multiple providers (OpenAI, Anthropic, Google), 500+ integrations, ReAct agents, tool calling, memory manageme..."
 license: MIT
-tags: [agents, langchain, rag, tool-calling, react, memory-management, vector-stores, llm-applications, chatbots, production]
+tags: [agents, langchain, rag, tool-calling, react]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [langchain, langchain-core, langchain-openai, langchain-anthropic]
@@ -464,9 +464,9 @@ splitter = SemanticChunker(OpenAIEmbeddings())
 
 ## References
 
-- **[Agents Guide](references/agents.md)** - ReAct, tool calling, streaming
-- **[RAG Guide](references/rag.md)** - Document loaders, retrievers, QA chains
-- **[Integration Guide](references/integration.md)** - Vector stores, LangSmith, deployment
+- **Agents Guide** - ReAct, tool calling, streaming
+- **RAG Guide** - Document loaders, retrievers, QA chains
+- **Integration Guide** - Vector stores, LangSmith, deployment
 
 ## Resources
 

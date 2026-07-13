@@ -22,7 +22,7 @@ keywords: None
 3. **Mask** by rewriting history to replace raw data with summary placeholder.
 4. **See** `references/masking.md` for patterns.
 
-See [implementation examples](references/implementation.md) for masking patterns.
+See implementation examples for masking patterns.
 
 ## 2. Context Compaction (State Preservation)
 
@@ -36,7 +36,7 @@ See [implementation examples](references/implementation.md) for masking patterns
 3. **Format**: Update System Prompt or Memory File with compacted state.
 4. **See** `references/compaction.md` for algorithms.
 
-See [implementation examples](references/implementation.md) for compacted state format.
+See implementation examples for compacted state format.
 
 ## 3. KV-Cache Awareness (Latency)
 
@@ -47,8 +47,8 @@ See [implementation examples](references/implementation.md) for compacted state 
 
 ## References
 
-- [Observation Masking Patterns](references/masking.md)
-- [Compaction Algorithms](references/compaction.md)
+- Observation Masking Patterns
+- Compaction Algorithms
 
 ## Anti-Patterns
 

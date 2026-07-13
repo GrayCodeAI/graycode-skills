@@ -2,7 +2,7 @@
 name: hunting-for-cobalt-strike-beacons
 description: "Detect Cobalt Strike beacon network activity using default TLS certificate signatures (serial 8BB00EE), JA3/JA3S/JARM fingerprints, HTTP C2 profile pattern matching, beacon jitter analysis, and nam..."
 license: MIT
-tags: [cobalt-strike, beacon, threat-hunting, c2, zeek, suricata, ja3, jarm, network-forensics]
+tags: [cobalt-strike, beacon, threat-hunting, c2, zeek]
 domain: cybersecurity
 subdomain: threat-hunting
 version: 1.0

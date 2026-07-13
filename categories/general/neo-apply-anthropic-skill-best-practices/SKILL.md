@@ -21,9 +21,9 @@ with pdfplumber.open("file.pdf") as pdf:
 
 ## Advanced features
 
-**Form filling**: See [FORMS.md](FORMS.md) for complete guide
-**API reference**: See [REFERENCE.md](REFERENCE.md) for all methods
-**Examples**: See [EXAMPLES.md](EXAMPLES.md) for common patterns
+**Form filling**: See FORMS.md for complete guide
+**API reference**: See REFERENCE.md for all methods
+**Examples**: See EXAMPLES.md for common patterns
 ````
 
 Claude loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed.
@@ -742,11 +742,11 @@ Skills run in the code execution environment with platform-specific limitations:
 - **claude.ai**: Can install packages from npm and PyPI and pull from GitHub repositories
 - **Anthropic API**: Has no network access and no runtime package installation
 
-List required packages in your SKILL.md and verify they're available in the [code execution tool documentation](docs.claude.com/en/docs/agents-and-tools/tool-use/code-execution-tool).
+List required packages in your SKILL.md and verify they're available in the code execution tool documentation.
 
 ### Runtime environment
 
-Skills run in a code execution environment with filesystem access, bash commands, and code execution capabilities. For the conceptual explanation of this architecture, see [The Skills architecture](docs.claude.com/en/docs/agents-and-tools/agent-skills/overview#the-skills-architecture) in the overview.
+Skills run in a code execution environment with filesystem access, bash commands, and code execution capabilities. For the conceptual explanation of this architecture, see The Skills architecture in the overview.
 
 **How this affects your authoring:**
 
@@ -782,7 +782,7 @@ bigquery-skill/
 
 When the user asks about revenue, Claude reads SKILL.md, sees the reference to `reference/finance.md`, and invokes bash to read just that file. The sales.md and product.md files remain on the filesystem, consuming zero context tokens until needed. This filesystem-based model is what enables progressive disclosure. Claude can navigate and selectively load exactly what each task requires.
 
-For complete details on the technical architecture, see [How Skills work](docs.claude.com/en/docs/agents-and-tools/agent-skills/overview#how-skills-work) in the Skills overview.
+For complete details on the technical architecture, see How Skills work in the Skills overview.
 
 ### MCP tool references
 
@@ -826,11 +826,11 @@ reader = PdfReader("file.pdf")
 
 ### YAML frontmatter requirements
 
-The SKILL.md frontmatter includes only `name` (64 characters max) and `description` (1024 characters max) fields. See the [Skills overview](docs.claude.com/en/docs/agents-and-tools/agent-skills/overview#skill-structure) for complete structure details.
+The SKILL.md frontmatter includes only `name` (64 characters max) and `description` (1024 characters max) fields. See the Skills overview for complete structure details.
 
 ### Token budgets
 
-Keep SKILL.md body under 500 lines for optimal performance. If your content exceeds this, split it into separate files using the progressive disclosure patterns described earlier. For architectural details, see the [Skills overview](docs.claude.com/en/docs/agents-and-tools/agent-skills/overview#how-skills-work).
+Keep SKILL.md body under 500 lines for optimal performance. If your content exceeds this, split it into separate files using the progressive disclosure patterns described earlier. For architectural details, see the Skills overview.
 
 ## Checklist for effective Skills
 

@@ -2,7 +2,7 @@
 name: performing-container-image-hardening
 description: "This skill covers hardening container images by minimizing attack surface, removing unnecessary packages, implementing multi-stage builds, configuring non-root users, and applying CIS Docker Benchm..."
 license: MIT
-tags: [devsecops, cicd, container-hardening, docker, cis-benchmark, secure-sdlc]
+tags: [devsecops, cicd, container-hardening, docker, cis-benchmark]
 domain: cybersecurity
 subdomain: devsecops
 version: 1.0.0

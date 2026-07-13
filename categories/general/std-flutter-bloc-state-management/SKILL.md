@@ -54,4 +54,4 @@ keywords: None
 
 ## References
 
-- [Templates](references/bloc_templates.md)
+- Templates

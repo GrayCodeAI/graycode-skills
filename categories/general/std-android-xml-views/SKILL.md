@@ -38,4 +38,4 @@ keywords: None
 
 ## References
 
-- [ViewBinding & Adapter](references/implementation.md)
+- ViewBinding & Adapter

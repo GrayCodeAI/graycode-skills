@@ -2,7 +2,7 @@
 name: research-knowledge-distillation
 description: "Compress large language models using knowledge distillation from teacher to student models. Use when deploying smaller models with retained performance, transferring GPT-4 capabilities to open-sour..."
 license: MIT
-tags: [emerging-techniques, knowledge-distillation, model-compression, teacher-student, minillm, reverse-kld, soft-targets, temperature-scaling, logit-distillation, model-transfer]
+tags: [emerging-techniques, knowledge-distillation, model-compression, teacher-student, minillm]
 version: 1.0.0
 author: Orchestra Research
 dependencies: [transformers, torch, datasets]

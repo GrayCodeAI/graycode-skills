@@ -19,7 +19,7 @@ This is the strongest criticism. Without benchmarks, before/after comparisons, d
 
 **Current status: weakly addressed, about 2/10 solved.**
 
-We partially improved measurability by adding the release matrix in [README.md](README.md), deterministic `full` / `mini` / `nano` outputs, and per-book [traceability]() plus section-by-section coverage in [_rule-workbench/PROCESS.md](PROCESS.md). This makes compression auditable, but it does not measure real coding outcomes yet. The core criticism still stands because the repo still lacks evals, before/after task comparisons, defect-rate data, and review-time data.
+We partially improved measurability by adding the release matrix in README.md, deterministic `full` / `mini` / `nano` outputs, and per-book [traceability]() plus section-by-section coverage in _rule-workbench/PROCESS.md. This makes compression auditable, but it does not measure real coding outcomes yet. The core criticism still stands because the repo still lacks evals, before/after task comparisons, defect-rate data, and review-time data.
 
 ### 2. This can burn tokens and pollute the context
 
@@ -29,7 +29,7 @@ Many of the generated rule files contain a large number of individual instructio
 
 **Current status: largely addressed, about 8/10 solved.**
 
-This was addressed through the three-level release model in [README.md](README.md): `mini` for the recommended working layer, `nano` for very tight always-on budgets, and `full` for reference only. [USAGE.md](USAGE.md) now explicitly recommends the smallest mechanism that still changes agent decisions, warns against global loading, and shows scoped and retrieval-based alternatives. The remaining gap is behavioral rather than structural: the repo cannot stop a user from still attaching too much at once.
+This was addressed through the three-level release model in README.md: `mini` for the recommended working layer, `nano` for very tight always-on budgets, and `full` for reference only. USAGE.md now explicitly recommends the smallest mechanism that still changes agent decisions, warns against global loading, and shows scoped and retrieval-based alternatives. The remaining gap is behavioral rather than structural: the repo cannot stop a user from still attaching too much at once.
 
 ### 3. Skills, RAG, or progressive loading may be better than putting everything into `AGENTS.md`
 
@@ -39,7 +39,7 @@ The rules are likely more useful when loaded selectively. Refactoring rules shou
 
 **Current status: largely addressed, about 9/10 solved.**
 
-This criticism directly shaped [USAGE.md](USAGE.md). The repo now recommends progressive loading, scoped rules, skills, nested files, MCP, retrieval, and editor-specific on-demand mechanisms instead of assuming one giant `AGENTS.md`. The current design treats large rule sets as material to be selected, scoped, or retrieved, not dumped globally.
+This criticism directly shaped USAGE.md. The repo now recommends progressive loading, scoped rules, skills, nested files, MCP, retrieval, and editor-specific on-demand mechanisms instead of assuming one giant `AGENTS.md`. The current design treats large rule sets as material to be selected, scoped, or retrieved, not dumped globally.
 
 ### 4. A short set of project-specific rules may work better
 
@@ -49,7 +49,7 @@ A compact `AGENTS.md` with 10–15 strong, testable, project-specific instructio
 
 **Current status: partially addressed, about 6/10 solved.**
 
-This is partly addressed by [README.md](README.md) and [USAGE.md](USAGE.md), which now recommend one primary `mini` layer when the context budget allows it, `nano` only as a compact fallback, and scoped or on-demand additions instead of stacking many generic books. That said, the repo still mainly ships book-derived rule packs, not automatically generated project-specific rules based on one team's codebase, incidents, and conventions. So the criticism is mitigated operationally, but not fully solved at the content level.
+This is partly addressed by README.md and USAGE.md, which now recommend one primary `mini` layer when the context budget allows it, `nano` only as a compact fallback, and scoped or on-demand additions instead of stacking many generic books. That said, the repo still mainly ships book-derived rule packs, not automatically generated project-specific rules based on one team's codebase, incidents, and conventions. So the criticism is mitigated operationally, but not fully solved at the content level.
 
 ### 5. The model may ignore many of the rules anyway
 
@@ -59,7 +59,7 @@ LLMs do not reliably obey hundreds of instructions at the same time. More rules 
 
 **Current status: partially addressed, about 6/10 solved.**
 
-This is one of the main reasons [_rule-workbench/PROCESS.md](PROCESS.md) now compresses toward decision-equivalent `mini` and `nano` files instead of keeping everything. The process explicitly prioritizes decision-changing rules, micro-decisions, triggers, and known shortcut blockers, and it requires evidence before calling a rule a safe default. That reduces instruction overload, but we still do not have empirical obedience data showing how often models follow the final compressed sets.
+This is one of the main reasons _rule-workbench/PROCESS.md now compresses toward decision-equivalent `mini` and `nano` files instead of keeping everything. The process explicitly prioritizes decision-changing rules, micro-decisions, triggers, and known shortcut blockers, and it requires evidence before calling a rule a safe default. That reduces instruction overload, but we still do not have empirical obedience data showing how often models follow the final compressed sets.
 
 ### 6. Rules should also come from real project failures
 
@@ -69,7 +69,7 @@ Book-derived rules are a useful starting point, but the most valuable agent rule
 
 **Current status: weakly addressed, about 3/10 solved.**
 
-We moved slightly in this direction by making [_rule-workbench/PROCESS.md](PROCESS.md) demand evidence for `default` labels and by using review findings to strengthen missing rules. But the repository is still primarily book-derived, not incident-derived. There is still no first-class mechanism here for collecting production failures, failed agent runs, or postmortems and turning them into project rules.
+We moved slightly in this direction by making _rule-workbench/PROCESS.md demand evidence for `default` labels and by using review findings to strengthen missing rules. But the repository is still primarily book-derived, not incident-derived. There is still no first-class mechanism here for collecting production failures, failed agent runs, or postmortems and turning them into project rules.
 
 ### 7. Rules from different books may conflict
 
@@ -79,7 +79,7 @@ Different books operate at different abstraction levels and sometimes encourage 
 
 **Current status: partially addressed, about 7/10 solved.**
 
-This is now addressed much more explicitly in [README.md](README.md), [USAGE.md](USAGE.md), and [_rule-workbench/PROCESS.md](PROCESS.md). The repo recommends one primary always-on rule set, on-demand secondary rule sets, and source-faithful compression instead of cross-book best-practice aggregation. That greatly reduces accidental mixing. The unresolved part is that the repo still does not provide a formal conflict matrix between books; it relies on loading discipline instead.
+This is now addressed much more explicitly in README.md, USAGE.md, and _rule-workbench/PROCESS.md. The repo recommends one primary always-on rule set, on-demand secondary rule sets, and source-faithful compression instead of cross-book best-practice aggregation. That greatly reduces accidental mixing. The unresolved part is that the repo still does not provide a formal conflict matrix between books; it relies on loading discipline instead.
 
 ### 8. The approach may cause overengineering
 
@@ -89,7 +89,7 @@ If the agent applies heavyweight architecture rules to a small feature or simple
 
 **Current status: largely addressed, about 7/10 solved.**
 
-This was mitigated in several places. [README.md](README.md) and [USAGE.md](USAGE.md) now stress task-scoped loading and the smallest effective mechanism. The compressed books also preserve anti-ceremony and "use this only when warranted" pressure, especially in DDD-related rule sets. The remaining risk is user misuse: the repo can tell you not to load heavyweight rules for trivial tasks, but it cannot enforce good task selection.
+This was mitigated in several places. README.md and USAGE.md now stress task-scoped loading and the smallest effective mechanism. The compressed books also preserve anti-ceremony and "use this only when warranted" pressure, especially in DDD-related rule sets. The remaining risk is user misuse: the repo can tell you not to load heavyweight rules for trivial tasks, but it cannot enforce good task selection.
 
 ### 9. The project could include more AI-agent-specific material
 
@@ -99,7 +99,7 @@ Software engineering books teach good design, but AI coding agents also need ope
 
 **Current status: partially addressed, about 6/10 solved.**
 
-This is addressed more by delivery and process than by book content. [USAGE.md](USAGE.md) now contains editor-specific guidance for Codex, Claude Code, Cursor, skills, scoped rules, MCP, and retrieval. [_rule-workbench/PROCESS.md](PROCESS.md) is also explicitly agent-centered: it optimizes for changed decisions under context pressure, repeated local choices, and known model shortcuts. Still, the repository is not yet a full AI-agent operations handbook; most substantive rules remain software-engineering-first.
+This is addressed more by delivery and process than by book content. USAGE.md now contains editor-specific guidance for Codex, Claude Code, Cursor, skills, scoped rules, MCP, and retrieval. _rule-workbench/PROCESS.md is also explicitly agent-centered: it optimizes for changed decisions under context pressure, repeated local choices, and known model shortcuts. Still, the repository is not yet a full AI-agent operations handbook; most substantive rules remain software-engineering-first.
 
 ### 10. Too many abstract rules may lead to pseudo-compliance
 
@@ -109,7 +109,7 @@ The agent may produce code that appears architecturally “proper” while still
 
 **Current status: partially addressed, about 5/10 solved.**
 
-This has been reduced by the current compression process. [_rule-workbench/PROCESS.md](PROCESS.md) now prefers operational rules, triggers, micro-decisions, and conflict-resolvers over broad slogans, and every book has traceability showing what survived compression and why. That makes pseudo-compliance harder. But the repo still lacks direct outcome evals that would prove the agent is solving the user's actual task rather than merely sounding principled.
+This has been reduced by the current compression process. _rule-workbench/PROCESS.md now prefers operational rules, triggers, micro-decisions, and conflict-resolvers over broad slogans, and every book has traceability showing what survived compression and why. That makes pseudo-compliance harder. But the repo still lacks direct outcome evals that would prove the agent is solving the user's actual task rather than merely sounding principled.
 
 ### 11. There may be legal or licensing concerns
 
@@ -119,7 +119,7 @@ This is potentially important, but difficult to evaluate without legal analysis.
 
 **Current status: weakly addressed, about 3/10 solved.**
 
-We improved the framing in [README.md](README.md): the repository now says these files are practical engineering instructions inspired by the books, not official materials, not substitutes for the books, and not reproductions of book text. That is a safer product framing. But this is still not legal advice, and the repo still has no legal review. The underlying concern remains only partially addressed.
+We improved the framing in README.md: the repository now says these files are practical engineering instructions inspired by the books, not official materials, not substitutes for the books, and not reproductions of book text. That is a safer product framing. But this is still not legal advice, and the repo still has no legal review. The underlying concern remains only partially addressed.
 
 **Resolution policy: won't fix.**
 
@@ -133,7 +133,7 @@ This is partly true, but incomplete. Models may know the principles, yet still f
 
 **Current status: moderately addressed, about 6/10 solved.**
 
-The repository now essentially agrees with the criticism. [README.md](README.md) and [USAGE.md](USAGE.md) no longer imply that full-book-sized context is the default. Instead they push `mini` as the recommended targeted reminder, keep `nano` as the compact fallback, and treat `full` as reference material. So the value proposition shifted from "the model needs the whole book" to "the model benefits from a short, decision-changing reminder." What is still missing is experimental proof that these reminders outperform model priors alone.
+The repository now essentially agrees with the criticism. README.md and USAGE.md no longer imply that full-book-sized context is the default. Instead they push `mini` as the recommended targeted reminder, keep `nano` as the compact fallback, and treat `full` as reference material. So the value proposition shifted from "the model needs the whole book" to "the model benefits from a short, decision-changing reminder." What is still missing is experimental proof that these reminders outperform model priors alone.
 
 ### 13. Some principles may be outdated in the AI coding era
 
@@ -143,4 +143,4 @@ AI changes the economics of writing, rewriting, and refactoring code. However, m
 
 **Current status: partially addressed, about 5/10 solved.**
 
-This is addressed indirectly, not by rewriting the books, but by filtering them through an agent-oriented compression process. [_rule-workbench/PROCESS.md](PROCESS.md) now keeps only rules that still change agent decisions, block shortcuts, or protect risky hotspots, and it drops more framing and passive prose. That helps modernize delivery. But the source material is still rooted in classic books, so this criticism remains partly valid until more AI-native rules are added alongside them.
+This is addressed indirectly, not by rewriting the books, but by filtering them through an agent-oriented compression process. _rule-workbench/PROCESS.md now keeps only rules that still change agent decisions, block shortcuts, or protect risky hotspots, and it drops more framing and passive prose. That helps modernize delivery. But the source material is still rooted in classic books, so this criticism remains partly valid until more AI-native rules are added alongside them.

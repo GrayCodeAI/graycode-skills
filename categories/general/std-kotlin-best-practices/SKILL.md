@@ -36,4 +36,4 @@ keywords: None
 
 ## References
 
-- [Backing Property & Scope Function Examples](references/example.md)
+- Backing Property & Scope Function Examples

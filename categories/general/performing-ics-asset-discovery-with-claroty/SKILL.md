@@ -2,7 +2,7 @@
 name: performing-ics-asset-discovery-with-claroty
 description: "Perform comprehensive ICS/OT asset discovery using Claroty xDome platform, leveraging passive monitoring, Claroty Edge active queries, and integration ecosystem to gain full visibility into industr..."
 license: MIT
-tags: [ot-security, ics, asset-discovery, claroty, xdome, scada, network-visibility, iec62443]
+tags: [ot-security, ics, asset-discovery, claroty, xdome]
 domain: cybersecurity
 subdomain: ot-ics-security
 version: 1.0

@@ -2,7 +2,7 @@
 name: detecting-business-email-compromise
 description: "Business Email Compromise (BEC) is a sophisticated fraud scheme where attackers impersonate executives, vendors, or trusted partners to trick employees into transferring funds, sharing sensitive data,"
 license: MIT
-tags: [phishing, email-security, social-engineering, dmarc, awareness, bec, fraud]
+tags: [phishing, email-security, social-engineering, dmarc, awareness]
 domain: cybersecurity
 subdomain: phishing-defense
 version: 1.0

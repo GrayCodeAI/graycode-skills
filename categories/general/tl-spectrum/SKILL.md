@@ -158,5 +158,5 @@ const app = await client.spectrum.apps.create({
 
 ## See Also
 
-- [patterns.md](patterns.md) - Protocol examples
-- [configuration.md](configuration.md) - TLS/Proxy setup
+- patterns.md - Protocol examples
+- configuration.md - TLS/Proxy setup

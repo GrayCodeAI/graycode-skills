@@ -35,4 +35,4 @@ keywords: None
 
 ## References
 
-See [references/patterns.md](references/patterns.md) for Composition, Compound Components, and Render Props examples.
+See references/patterns.md for Composition, Compound Components, and Render Props examples.

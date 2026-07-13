@@ -10,9 +10,6 @@ tags:
 - access-control
 - least-privilege
 - security-hardening
-- iam
-- oidc
-- service-accounts
 domain: cybersecurity
 subdomain: container-security
 version: 1.0

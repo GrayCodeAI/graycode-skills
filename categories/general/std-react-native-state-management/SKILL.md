@@ -54,4 +54,4 @@ const count = useStore((state) => state.count);
 
 ## References
 
-See [references/REFERENCE.md](references/REFERENCE.md) for Context patterns, Zustand store setup, Redux Toolkit, and React Query.
+See references/REFERENCE.md for Context patterns, Zustand store setup, Redux Toolkit, and React Query.

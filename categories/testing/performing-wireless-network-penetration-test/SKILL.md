@@ -2,7 +2,7 @@
 name: performing-wireless-network-penetration-test
 description: "Execute a wireless network penetration test to assess WiFi security by capturing handshakes, cracking WPA2/WPA3 keys, detecting rogue access points, and testing wireless segmentation using Aircrack..."
 license: MIT
-tags: [wireless-pentest, wifi, aircrack-ng, wpa2, wpa3, rogue-ap, evil-twin, kismet]
+tags: [wireless-pentest, wifi, aircrack-ng, wpa2, wpa3]
 domain: cybersecurity
 subdomain: penetration-testing
 version: 1.0

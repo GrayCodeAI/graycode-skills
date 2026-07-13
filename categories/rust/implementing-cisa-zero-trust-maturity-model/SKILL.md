@@ -2,7 +2,7 @@
 name: implementing-cisa-zero-trust-maturity-model
 description: "Implement the CISA Zero Trust Maturity Model v2.0 across the five pillars of identity, devices, networks, applications, and data to achieve progressive organizational zero trust maturity."
 license: MIT
-tags: [zero-trust, cisa, maturity-model, federal-compliance, governance, nist-800-207, identity, devices, networks, applications, data-security]
+tags: [zero-trust, cisa, maturity-model, federal-compliance, governance]
 domain: cybersecurity
 subdomain: zero-trust-architecture
 version: 1.0

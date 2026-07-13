@@ -17,7 +17,7 @@ keywords: None
 
 - Keep internal signals private; expose publicly via `asReadonly()`.
 
-See [signal store pattern](references/signal-store.md) for signal-based service and store examples.
+See signal store pattern for signal-based service and store examples.
 
 ## 2. Derive State with computed()
 
@@ -42,4 +42,4 @@ See [signal store pattern](references/signal-store.md) for signal-based service 
 
 ## References
 
-- [Signal Store Pattern](references/signal-store.md)
+- Signal Store Pattern

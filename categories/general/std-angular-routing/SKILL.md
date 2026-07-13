@@ -17,13 +17,13 @@ keywords: None
 
 - Use `loadComponent` (standalone) or `loadChildren` (route file) for every feature route.
 
-See [routing patterns](references/routing-patterns.md) for lazy loading and guard examples.
+See routing patterns for lazy loading and guard examples.
 
 ## 2. Use Functional Guards
 
 - Create function-based guards (`CanActivateFn`) instead of deprecated class-based guards.
 
-See [routing patterns](references/routing-patterns.md) for functional guard implementation.
+See routing patterns for functional guard implementation.
 
 ## 3. Enable Component Input Binding
 
@@ -42,4 +42,4 @@ See [routing patterns](references/routing-patterns.md) for functional guard impl
 
 ## References
 
-- [Routing Patterns](references/routing-patterns.md)
+- Routing Patterns

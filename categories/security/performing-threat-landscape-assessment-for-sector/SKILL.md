@@ -2,7 +2,7 @@
 name: performing-threat-landscape-assessment-for-sector
 description: "Conduct a sector-specific threat landscape assessment by analyzing threat actor targeting patterns, common attack vectors, and industry-specific vulnerabilities to inform organizational risk manage..."
 license: MIT
-tags: [threat-landscape, sector-analysis, risk-assessment, threat-intelligence, industry-targeting, cti, strategic-intelligence]
+tags: [threat-landscape, sector-analysis, risk-assessment, threat-intelligence, industry-targeting]
 domain: cybersecurity
 subdomain: threat-intelligence
 version: 1.0
