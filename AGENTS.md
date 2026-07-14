@@ -8,6 +8,10 @@ alwaysApply: false
 
 Community skill packages for [hawk](https://github.com/GrayCodeAI/hawk).
 
+## Development workflow
+
+When starting any new work (feature, fix, refactor, chore), always create a feature branch from `main` first. Never commit directly to `main`. Use branch naming conventions like `feat/<description>`, `fix/<description>`, or `chore/<description>`. Open a PR, ensure CI is green, then merge.
+
 ## Structure
 
 ```
