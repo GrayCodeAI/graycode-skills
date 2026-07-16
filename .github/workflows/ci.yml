@@ -47,8 +47,53 @@ jobs:
         run: python -m pytest tests/ -v --cov --cov-report=term-missing --cov-fail-under=88
       - name: Security audit
         run: python3 tools/check_secrets.py --strict
+      - name: Shell-command audit
+        run: python3 tools/check_shell_commands.py --strict
       - name: Dependency security audit
         run: pip-audit -r tools/requirements.txt
+
+  # -------------------------------------------------------------------------
+  # Sandbox containment check for changed skill scripts. Deliberately scoped
+  # to changed files only (mirrors the ratchet job above) — see
+  # tools/sandbox_run_changed_scripts.py's module docstring for exactly what
+  # this does and does not prove: it checks that network/filesystem/
+  # resource isolation actually holds when a changed script is invoked with
+  # --help, not that the script's real business logic (which routinely
+  # needs cloud credentials, live network targets, or external binaries
+  # this CI must never provide) is safe or correct.
+  # -------------------------------------------------------------------------
+  sandbox:
+    name: sandbox (changed scripts containment check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.11'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
+      - name: Build sandbox image
+        # Built fresh (with layer caching) rather than pulled from a
+        # previously-published tag, so the sandbox always matches this
+        # exact commit's Dockerfile.sandbox / sandbox_requirements.txt —
+        # no version-skew risk between what's tested and what's pushed.
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          file: Dockerfile.sandbox
+          tags: hawk-community-skills-sandbox:ci
+          push: false
+          load: true
+          cache-from: type=gha,scope=sandbox
+          cache-to: type=gha,mode=max,scope=sandbox
+      - name: Sandbox-test changed scripts
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          changed="$(git diff --name-only "$BASE_REF" HEAD)"
+          python3 tools/sandbox_run_changed_scripts.py --image hawk-community-skills-sandbox:ci $changed
 
   # -------------------------------------------------------------------------
   # Duplication detection — jscpd (scan categories with reasonable thresholds).

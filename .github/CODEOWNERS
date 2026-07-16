@@ -1,13 +1,12 @@
 # CODEOWNERS for hawk-community-skills
+#
+# GitHub CODEOWNERS uses last-match-wins: more specific rules must come AFTER
+# more general ones to actually take effect. /categories/ and /registry.json
+# are deliberately listed after the blanket *.md rule below so skill content
+# (the vast majority of this repo, nearly all of it .md) is owned by
+# core-team, not docs-team — docs-team owns the repo's own docs, not the
+# ~12k community-submitted skill files.
 * @GrayCodeAI/maintainers
-
-# Skill definitions and categories
-/categories/     @GrayCodeAI/core-team
-/registry.json   @GrayCodeAI/core-team
-
-# Validation and tooling
-/tools/          @GrayCodeAI/core-team
-/tests/          @GrayCodeAI/core-team
 
 # CI / release / build tooling
 /.github/        @GrayCodeAI/devops-team
@@ -17,6 +16,14 @@
 /deploy/         @GrayCodeAI/devops-team
 /Dockerfile      @GrayCodeAI/devops-team
 
-# Documentation
+# Documentation (repo-level only — see /categories/ override below)
 *.md             @GrayCodeAI/docs-team
 /docs/           @GrayCodeAI/docs-team
+
+# Skill definitions and categories (wins over the blanket *.md rule above)
+/categories/     @GrayCodeAI/core-team
+/registry.json   @GrayCodeAI/core-team
+
+# Validation and tooling
+/tools/          @GrayCodeAI/core-team
+/tests/          @GrayCodeAI/core-team

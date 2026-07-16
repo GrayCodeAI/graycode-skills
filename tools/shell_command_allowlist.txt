@@ -1,0 +1,26 @@
+# Domains/URL substrings allowlisted for tools/check_shell_commands.py.
+#
+# A line is suppressed if any entry here appears in it, case-insensitively.
+# Only add an entry for a genuinely well-known, official installer — this
+# file is a trust boundary, not a place to silence a finding you haven't
+# actually verified.
+#
+# One entry per line. Lines starting with # are comments.
+
+get.docker.com
+sh.rustup.rs
+astral.sh/uv/install.sh
+fluxcd.io/install.sh
+raw.githubusercontent.com/trufflesecurity/trufflehog
+sdk.cloud.google.com
+carlospolop/peass-ng
+peass-ng/peass-ng
+cli.inference.sh
+sliver.sh/install
+aka.ms/installazureclideb
+app.factory.ai/cli
+aspire.dev/install.sh
+raw.githubusercontent.com/anchore/grype
+raw.githubusercontent.com/anchore/syft
+tailscale.com/install.sh
+parallel.ai/install.sh

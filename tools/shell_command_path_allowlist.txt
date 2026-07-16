@@ -1,0 +1,17 @@
+# Repo-relative file paths (or path prefixes) allowlisted for
+# tools/check_shell_commands.py.
+#
+# A whole file is suppressed if its path matches or starts with an entry
+# here, case-insensitively. Use this ONLY for security/forensics skills that
+# document the pipe-to-shell pattern as a worked example of what an attack
+# looks like, or code that detects the pattern in other people's files —
+# not as a shortcut around actually fixing a real recommendation to run
+# untrusted code.
+#
+# One entry per line. Lines starting with # are comments.
+
+categories/devops/detecting-supply-chain-attacks-in-ci-cd/references/api-reference.md
+categories/devops/detecting-supply-chain-attacks-in-ci-cd/scripts/agent.py
+categories/general/ag-audit-skills/SKILL.md
+categories/security/analyzing-supply-chain-malware-artifacts/references/api-reference.md
+categories/security/performing-linux-log-forensics-investigation/references/api-reference.md

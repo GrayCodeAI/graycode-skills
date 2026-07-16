@@ -1,0 +1,22 @@
+# Sandbox image for smoke-testing changed skill scripts in CI.
+#
+# NOT the same purpose as the root Dockerfile (which packages
+# tools/validate_skill.py + the skill corpus as a distributable artifact).
+# This image contains no skill content at all — the script under test is
+# bind-mounted read-only at container-run time by
+# tools/sandbox_run_changed_scripts.py. See that file and AGENTS.md/CI docs
+# for what this sandbox does and, just as importantly, does NOT prove: it
+# smoke-tests import-time and argument-parser-setup code (invoked with
+# --help), not a script's real runtime behavior, which routinely needs
+# credentials/network/external binaries this sandbox deliberately never
+# provides.
+FROM python:3.12-slim
+
+RUN adduser --disabled-password --gecos "" --uid 1000 sandbox
+
+COPY tools/sandbox_requirements.txt /tmp/sandbox_requirements.txt
+RUN pip install --no-cache-dir -r /tmp/sandbox_requirements.txt && \
+    rm /tmp/sandbox_requirements.txt
+
+USER sandbox
+WORKDIR /skill

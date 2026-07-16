@@ -1,0 +1,20 @@
+# Dependencies pre-installed in the sandbox image used to smoke-test changed
+# skill scripts (see Dockerfile.sandbox, tools/sandbox_run_changed_scripts.py).
+#
+# This is a deliberately SHORT, maintainer-curated list — seeded from the
+# corpus's own most-common third-party imports (import-frequency scan across
+# all 1016 scripts/*.py files: requests 98, boto3 18, pyyaml 9, cryptography
+# 42). It is NOT meant to cover every dependency any skill might use.
+# Exotic/rare imports (impacket, scapy, splunklib, azure-*, kubernetes,
+# scapy...) are deliberately left uninstalled — a script that needs one of
+# these will fail at import time inside the sandbox, which is expected and
+# safe (nothing unsafe happened; the sandbox just doesn't have that dep).
+#
+# Do not add a package here just because one script wants it — that turns
+# this file into an uncurated, contributor-influenced install list, which
+# defeats the point of pre-installing only what's genuinely common.
+
+requests>=2.31,<3
+pyyaml>=6.0,<7
+boto3>=1.34,<2
+cryptography>=42.0,<43

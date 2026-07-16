@@ -59,6 +59,11 @@ jobs:
       - name: Secret scan
         # Strict mode makes any high-confidence credential finding fail CI.
         run: python3 tools/check_secrets.py --strict
+      - name: Shell-command audit
+        # Strict mode fails CI on any unallowlisted curl/wget-piped-to-shell
+        # pattern. See tools/shell_command_allowlist.txt and
+        # tools/shell_command_path_allowlist.txt to add legitimate cases.
+        run: python3 tools/check_shell_commands.py --strict
       - name: License compatibility gate
         # Strict: copyleft (GPL/LGPL/AGPL) content must not be vendored into the
         # MIT-rooted repo. See NOTICE for the policy.
