@@ -42,9 +42,8 @@ jobs:
           python3 tools/validate_skill.py --all
           --warning-budget tools/validation_warning_budget.json
       - name: Registry drift check
-        # Keep registry.json synchronized with the canonical category metadata.
-        # Regenerate with: python3 tools/update_registry.py
-        run: python3 tools/update_registry.py --check
+        # Keep registry.json synchronized with canonical category metadata.
+        run: python3 tools/update_registry.py && python3 tools/update_registry.py --check
       - name: Version sync check
         run: python3 tools/check_version_sync.py
       - name: Marketplace sync check

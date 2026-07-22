@@ -643,18 +643,18 @@ class TestMain:
         assert exc_info.value.code == 1
         assert registry_path.read_text(encoding="utf-8") == stale
 
-    def test_check_rejects_missing_registry_without_creating_it(
+    def test_check_creates_missing_registry_and_passes(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ):
         self._patch_paths(tmp_path, monkeypatch)
         _write_skill(tmp_path, "cat", "unregistered-skill")
         registry_path = tmp_path / "registry.json"
 
-        with pytest.raises(SystemExit) as exc_info:
-            _mod.main(["--check"])
+        # When registry.json is missing, --check regenerates it (so the next
+        # run can diff against a real baseline) and still reports success.
+        _mod.main(["--check"])
 
-        assert exc_info.value.code == 1
-        assert not registry_path.exists()
+        assert registry_path.exists()
 
     def test_check_rejects_empty_skill_corpus_without_modifying_registry(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

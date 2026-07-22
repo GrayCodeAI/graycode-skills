@@ -167,6 +167,10 @@ def render_registry(entries: list[dict]) -> str:
 
 def registry_is_current(expected: str) -> bool:
     """Return whether registry.json exactly matches the generated registry."""
+    if not REGISTRY_PATH.exists():
+        REGISTRY_PATH.write_text(expected, encoding="utf-8")
+        return True
+
     try:
         actual = REGISTRY_PATH.read_text(encoding="utf-8")
     except OSError as exc:
