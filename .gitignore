@@ -46,6 +46,8 @@ Thumbs.db
 # Large skill categories can be selectively ignored if needed, but we keep them
 # Tools build artifacts
 tools/__pycache__/
+# Generated registry — do not commit; regenerate with: python tools/update_registry.py
+registry.json
 
 # Temporary
 *.tmp

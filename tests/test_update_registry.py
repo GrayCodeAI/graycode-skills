@@ -643,18 +643,19 @@ class TestMain:
         assert exc_info.value.code == 1
         assert registry_path.read_text(encoding="utf-8") == stale
 
-    def test_check_creates_missing_registry_and_passes(
+    def test_check_succeeds_without_creating_missing_registry(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ):
         self._patch_paths(tmp_path, monkeypatch)
         _write_skill(tmp_path, "cat", "unregistered-skill")
         registry_path = tmp_path / "registry.json"
 
-        # When registry.json is missing, --check regenerates it (so the next
-        # run can diff against a real baseline) and still reports success.
+        # A missing registry.json is no longer drift: the registry is generated
+        # and published by CI (see .github/workflows/publish-registry.yml), so
+        # --check must not fail and must not create the file as a side effect.
         _mod.main(["--check"])
 
-        assert registry_path.exists()
+        assert not registry_path.exists()
 
     def test_check_rejects_empty_skill_corpus_without_modifying_registry(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch

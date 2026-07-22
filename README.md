@@ -8,6 +8,9 @@ Skills are self-contained Markdown instruction packages that hawk loads into its
 
 ## Quick Start
 
+> **Note:** `registry.json` is a generated artifact and is not committed to git.
+> Run `python tools/update_registry.py` to regenerate it locally.
+
 ```bash
 # View available skills
 hawk skills list

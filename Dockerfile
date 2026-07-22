@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
     adduser --disabled-password --gecos "" --uid 1000 skills
 
 COPY --from=builder /build /opt/hawk-community-skills
-COPY registry.json /opt/hawk-community-skills/
 
 USER skills
 WORKDIR /opt/hawk-community-skills

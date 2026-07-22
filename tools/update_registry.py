@@ -166,9 +166,13 @@ def render_registry(entries: list[dict]) -> str:
 
 
 def registry_is_current(expected: str) -> bool:
-    """Return whether registry.json exactly matches the generated registry."""
+    """Return whether registry.json exactly matches the generated registry.
+
+    A missing registry.json is treated as current: the registry is now
+    generated and published by CI (see .github/workflows/publish-registry.yml)
+    rather than committed to the repo, so its absence is not drift.
+    """
     if not REGISTRY_PATH.exists():
-        REGISTRY_PATH.write_text(expected, encoding="utf-8")
         return True
 
     try:

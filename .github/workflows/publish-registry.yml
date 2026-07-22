@@ -1,0 +1,52 @@
+name: Publish Skill Registry
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'categories/**'
+      - 'tools/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f tools/requirements.txt ]; then pip install -r tools/requirements.txt; fi
+
+      - name: Validate skills
+        run: |
+          python tools/validate_skill.py
+
+      - name: Generate registry artifact
+        run: |
+          python tools/update_registry.py
+
+      - name: Sign registry manifest
+        env:
+          SIGNING_KEY: ${{ secrets.SKILLS_SIGNING_KEY || 'dev-fallback-key' }}
+        run: |
+          python tools/sign_manifest.py sign registry.json --key "$SIGNING_KEY" > registry-signature.json
+          cat registry-signature.json
+
+      - name: Upload registry artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-registry
+          path: |
+            registry.json
+            registry-signature.json
+          retention-days: 90
