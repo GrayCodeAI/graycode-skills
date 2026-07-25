@@ -58,6 +58,9 @@ python tools/validate_skill.py --all \
 # Update the registry after adding/removing skills
 python tools/update_registry.py
 
+# Project the full public registry as a portable category/skill/tag graph
+python tools/skill_graph.py
+
 # Run the full test suite
 pytest
 
@@ -71,6 +74,12 @@ Validation checks include frontmatter integrity, required field presence, tag fo
 The full-corpus warning budget is zero in every category. CI compares live counts
 with `tools/validation_warning_budget.json` exactly, so any warning fails. New
 warning categories start at zero, and the checked-in budget must never increase.
+
+`tools/skill_graph.py` creates the generated, uncommitted `skill-graph.json`
+projection. It uses the ecosystem graph vocabulary without importing another
+Hawk repository: the registry is the source of truth, while the projection adds
+stable category hierarchy and cross-cutting tag relationships. Use `--limit N`
+for a bounded sample and `--generated-at` for reproducible builds.
 
 The maintenance tools are conservative and dry-run by default:
 

@@ -13,7 +13,11 @@ VERSION_FILE = REPO_ROOT / "VERSION"
 
 
 def bump(version, part):
-    major, minor, patch = [int(x) for x in version.split(".")]
+    parts = [int(x) for x in version.split(".")]
+    # Normalize to 3 segments so "1.0" and "1" don't crash.
+    while len(parts) < 3:
+        parts.append(0)
+    major, minor, patch = parts[:3]
     if part == "major":
         return f"{major + 1}.0.0"
     elif part == "minor":

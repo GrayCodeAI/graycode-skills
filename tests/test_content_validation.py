@@ -17,9 +17,9 @@ from content_validation import (
     _extract_headings,
     _section_display,
     _strip_comments_and_whitespace,
-    parse_frontmatter,
     validate_content_body,
 )
+from frontmatter import parse_frontmatter
 
 # ---------------------------------------------------------------------------
 # Fixtures

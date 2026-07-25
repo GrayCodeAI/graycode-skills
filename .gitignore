@@ -60,3 +60,4 @@ registry.json
 .antigravitycli/
 .pi/
 .coverage
+uv.lock
