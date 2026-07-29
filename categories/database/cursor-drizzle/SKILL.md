@@ -3,9 +3,17 @@ name: cursor-drizzle
 description: "Cursor IDE rules for drizzle"
 license: MIT
 tags: [cursor, ide-rules]
-domain: engineering
+domain: coding
 version: 1.0
 author: cursorrules-collection
+category: engineering
+auto_invoke: false
+compatibility: "node>=20 typescript>=5"
+allowed_tools: "bash file_search"
+agents: [hawk, claude-code, cursor]
+invoke: "cursor:drizzle"
+chain_after: [cursor-rules]
+chain_enhances: [mdc-drizzle]
 ---
 
 # Drizzle ORM Rules

@@ -24,7 +24,9 @@ ROOT = Path(__file__).parent.parent
 
 # ── Schema (hand-coded from manifest-schema.toml for zero-dep validation) ─────
 
-REQUIRED = {"name", "description", "version", "author", "license", "domain", "tags"}
+# version and domain are agentskills.io v2.0 fields — optional but validated
+# when present. Not in REQUIRED to avoid breaking existing v1.1 skills.
+REQUIRED = {"name", "description", "author", "license", "tags"}
 
 DOMAIN_ENUM = {
     "coding",
@@ -48,6 +50,27 @@ LICENSE_ENUM = {
 }
 
 PHASE_ENUM = {"localize", "repair", "validate", "review", "planning", "any"}
+
+# Agent Skills spec (agentskills.io) enums
+CATEGORY_ENUM = {
+    "engineering",
+    "ops",
+    "testing",
+    "security",
+    "devtools",
+    "workflow",
+}
+
+AGENT_ENUM = {
+    "hawk",
+    "claude-code",
+    "codex",
+    "cursor",
+    "windsurf",
+    "github-actions",
+}
+
+INVOKE_RE = re.compile(r"^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
 
 MODEL_ENUM = {"haiku", "sonnet", "opus", "any"}
 
@@ -123,6 +146,42 @@ def validate(data: dict[str, Any], path: Path) -> list[str]:
     ctx = data.get("context_tokens")
     if ctx is not None and (not isinstance(ctx, int) or ctx < 256 or ctx > 200_000):
         errors.append(f"context_tokens must be an integer in [256, 200000], got {ctx!r}")
+
+    # ── Agent Skills spec (agentskills.io) validation ──────────────────────
+
+    category = data.get("category")
+    if category is not None and category not in CATEGORY_ENUM:
+        errors.append(f"category {category!r} not in {sorted(CATEGORY_ENUM)}")
+
+    auto_invoke = data.get("auto_invoke")
+    if auto_invoke is not None and not isinstance(auto_invoke, bool):
+        errors.append(f"auto_invoke must be a boolean, got {type(auto_invoke).__name__}")
+
+    compatibility = data.get("compatibility")
+    if compatibility is not None and len(str(compatibility)) > 200:
+        errors.append(f"compatibility exceeds 200 chars ({len(str(compatibility))})")
+
+    allowed_tools = data.get("allowed_tools")
+    if allowed_tools is not None and not isinstance(allowed_tools, str):
+        errors.append(f"allowed_tools must be a string, got {type(allowed_tools).__name__}")
+
+    agents = data.get("agents")
+    if agents is not None:
+        if not isinstance(agents, list):
+            errors.append("agents must be a list")
+        else:
+            for agent in agents:
+                if agent not in AGENT_ENUM:
+                    errors.append(f"agent {agent!r} not in {sorted(AGENT_ENUM)}")
+
+    invoke = data.get("invoke")
+    if invoke is not None and not INVOKE_RE.match(str(invoke)):
+        errors.append(f"invoke {invoke!r} must match ^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
+
+    for chain_field in ("chain_after", "chain_before", "chain_conflicts", "chain_enhances"):
+        val = data.get(chain_field)
+        if val is not None and not isinstance(val, list):
+            errors.append(f"{chain_field} must be a list")
 
     return errors
 

@@ -10,7 +10,7 @@
 # Allowed values are listed under "enum" where applicable.
 
 [schema]
-version = "1.1"
+version = "2.0"
 
 # ── Identity ──────────────────────────────────────────────────────────────────
 
@@ -128,3 +128,74 @@ description = "Set to true to mark the skill as deprecated; it will be hidden fr
 type        = "string"
 required    = false
 description = "Name of the skill that replaces this one. Only meaningful when deprecated=true."
+
+# ── Agent Skills Spec (agentskills.io) ────────────────────────────────────────
+# The following fields implement the agentskills.io specification for
+# cross-agent skill interoperability. They are optional but strongly
+# recommended for skills that should work across hawk, Claude Code,
+# Codex, and other agent runtimes.
+
+[fields.category]
+type        = "string"
+required    = false
+enum        = ["engineering", "ops", "testing", "security", "devtools", "workflow"]
+description = "Agent Skills spec category. Maps to hawk's SmartSkill.Category field."
+
+[fields.auto_invoke]
+type        = "boolean"
+required    = false
+default     = false
+description = "If true, the model may trigger this skill without an explicit /command. Maps to SmartSkill.AutoInvoke."
+
+[fields.compatibility]
+type        = "string"
+required    = false
+max_length  = 200
+description = "Environment requirements string (e.g. 'node>=20 python>=3.9'). Maps to SmartSkill.Compatibility."
+
+[fields.allowed_tools]
+type        = "string"
+required    = false
+description = "Space-separated list of pre-approved tool names. Maps to SmartSkill.AllowedTools."
+
+[fields.agents]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Cross-agent compatibility list (e.g. ['hawk', 'claude-code', 'codex']). Maps to SmartSkill.Agents."
+
+[fields.invoke]
+type        = "string"
+required    = false
+pattern     = "^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$"
+description = "Namespaced invocation pattern (e.g. 'vendor:skill'). Maps to SmartSkill.Invoke."
+
+[fields.refs]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Declared @ref() references to other skills or resources. Maps to SmartSkill.Refs."
+
+[fields.chain_after]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Skills that should run before this one. Part of SmartSkill.Chain.After."
+
+[fields.chain_before]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Skills to suggest after this one completes. Part of SmartSkill.Chain.Before."
+
+[fields.chain_conflicts]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Skills that cannot be active simultaneously. Part of SmartSkill.Chain.Conflicts."
+
+[fields.chain_enhances]
+type        = "array"
+items.type  = "string"
+required    = false
+description = "Skills that work well together (advisory). Part of SmartSkill.Chain.Enhances."

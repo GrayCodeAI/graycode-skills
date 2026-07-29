@@ -5199,7 +5199,7 @@
         {
           "name": "cursor-drizzle",
           "path": "categories/database/cursor-drizzle",
-          "invoke": "/hawk:cursor-drizzle"
+          "invoke": "cursor:drizzle"
         },
         {
           "name": "cursor-firebase",

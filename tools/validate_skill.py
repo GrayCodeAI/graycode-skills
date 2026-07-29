@@ -44,6 +44,28 @@ TAG_PATTERN = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
 MIN_TAGS = 1
 MAX_TAGS = 5
 
+# Agent Skills spec (agentskills.io) — recognized optional frontmatter fields.
+# These are informational for hawk-community-skills but must be well-formed
+# if present. See manifest-schema.toml for the full schema.
+AGENTSKILLS_OPTIONAL_FIELDS = frozenset(
+    {
+        "category",
+        "auto_invoke",
+        "compatibility",
+        "allowed_tools",
+        "agents",
+        "invoke",
+        "refs",
+        "chain_after",
+        "chain_before",
+        "chain_conflicts",
+        "chain_enhances",
+    }
+)
+CATEGORY_ENUM = {"engineering", "ops", "testing", "security", "devtools", "workflow"}
+AGENT_ENUM = {"hawk", "claude-code", "codex", "cursor", "windsurf", "github-actions"}
+INVOKE_RE = re.compile(r"^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
+
 # Warning categories are stable machine-readable identifiers. Keep warning text
 # human-friendly, but use these identifiers for the checked-in CI ratchet so a
 # wording change cannot silently reset the quality baseline.
@@ -591,6 +613,52 @@ def validate_skill(skill_path: Path) -> ValidationResult:
     fm_name = frontmatter.get("name", "")
     if fm_name and fm_name != skill_name:
         result.error(f"Frontmatter name '{fm_name}' does not match directory name '{skill_name}'")
+
+    # ── Agent Skills spec (agentskills.io) validation ──────────────────────
+    # Note: 'category' is an optional agentskills.io field. Existing skills
+    # use their own category taxonomy, so we only validate well-formedness
+    # of agentskills.io-specific fields when present, not the category value
+    # against the agentskills.io enum (which would break existing skills).
+
+    auto_invoke = frontmatter.get("auto_invoke")
+    if auto_invoke is not None and not isinstance(auto_invoke, bool):
+        result.error(f"auto_invoke must be a boolean, got {type(auto_invoke).__name__}")
+
+    compatibility = frontmatter.get("compatibility")
+    if compatibility is not None and not isinstance(compatibility, str):
+        result.error(f"compatibility must be a string, got {type(compatibility).__name__}")
+
+    allowed_tools = frontmatter.get("allowed_tools")
+    if allowed_tools is not None and not isinstance(allowed_tools, str):
+        result.error(f"allowed_tools must be a string, got {type(allowed_tools).__name__}")
+
+    agents = frontmatter.get("agents")
+    if agents is not None:
+        # Accept both string and list forms for backward compatibility
+        if isinstance(agents, str):
+            agents = [agents]
+        if not isinstance(agents, list):
+            result.error(f"agents must be a list or string, got {type(agents).__name__}")
+        else:
+            for agent in agents:
+                if not isinstance(agent, str):
+                    result.error(f"agent must be a string, got {type(agent).__name__}: {repr(agent)}")
+                # Only warn on unknown agents, don't error — existing skills
+                # may use agent names not in the agentskills.io enum
+
+    invoke = frontmatter.get("invoke")
+    if invoke is not None and not isinstance(invoke, str):
+        result.error(f"invoke must be a string, got {type(invoke).__name__}")
+    elif invoke is not None and not INVOKE_RE.match(invoke):
+        result.error(
+            f"invoke {invoke!r} must match pattern vendor:skill "
+            f"(e.g. 'cursor:drizzle')"
+        )
+
+    for chain_field in ("chain_after", "chain_before", "chain_conflicts", "chain_enhances"):
+        val = frontmatter.get(chain_field)
+        if val is not None and not isinstance(val, list):
+            result.error(f"{chain_field} must be a list")
 
     # Check real relative links in every Markdown file. Frontmatter and code
     # examples are metadata/content, not portable file dependencies.
