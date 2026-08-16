@@ -36,10 +36,20 @@ jobs:
           python tools/update_registry.py
 
       - name: Sign registry manifest
+        # Ed25519 (asymmetric) is preferred when the SKILLS_ED25519_PRIVATE_KEY
+        # secret is configured (generate once with: python tools/sign_manifest.py
+        # keygen). Pin the matching public key for verifiers. Until that secret
+        # exists, fall back to the legacy shared-secret HMAC scheme so CI keeps
+        # working — migration follow-up: make Ed25519 mandatory.
         env:
           SIGNING_KEY: ${{ secrets.SKILLS_SIGNING_KEY || 'dev-fallback-key' }}
+          SKILLS_ED25519_PRIVATE_KEY: ${{ secrets.SKILLS_ED25519_PRIVATE_KEY }}
         run: |
-          python tools/sign_manifest.py sign registry.json --key "$SIGNING_KEY" > registry-signature.json
+          if [ -n "$SKILLS_ED25519_PRIVATE_KEY" ]; then
+            python tools/sign_manifest.py sign registry.json --ed25519 > registry-signature.json
+          else
+            python tools/sign_manifest.py sign registry.json --key "$SIGNING_KEY" > registry-signature.json
+          fi
           cat registry-signature.json
 
       - name: Upload registry artifacts
