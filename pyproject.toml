@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "hawk-community-skills"
 version = "0.1.0"
 description = "Community skill packages for hawk"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 dependencies = [
     "pyyaml>=6.0",
     "rich>=13.0",
