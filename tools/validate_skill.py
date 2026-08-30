@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate one or all skills against hawk-community-skills quality standards."""
+"""Validate one or all skills against starling quality standards."""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ MIN_TAGS = 1
 MAX_TAGS = 5
 
 # Agent Skills spec (agentskills.io) — recognized optional frontmatter fields.
-# These are informational for hawk-community-skills but must be well-formed
+# These are informational for starling but must be well-formed
 # if present. See manifest-schema.toml for the full schema.
 AGENTSKILLS_OPTIONAL_FIELDS = frozenset(
     {
@@ -732,7 +732,7 @@ def find_all_skills() -> list[Path]:
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(description="Validate hawk-community-skills")
+    parser = argparse.ArgumentParser(description="Validate starling")
     parser.add_argument("path", nargs="?", help="Path to a specific skill directory")
     parser.add_argument("--all", action="store_true", help="Validate all skills")
     parser.add_argument(

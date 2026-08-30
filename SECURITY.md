@@ -1,4 +1,4 @@
-# Security Policy — hawk-community-skills
+# Security Policy — starling
 
 ## Reporting a Vulnerability
 

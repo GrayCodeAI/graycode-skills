@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Content/body validation for hawk-community-skills SKILL.md files.
+"""Content/body validation for starling SKILL.md files.
 
 Checks that the markdown body after frontmatter contains required sections
 and follows expected formatting conventions.

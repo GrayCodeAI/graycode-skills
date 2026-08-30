@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive CLI to scaffold a new skill in hawk-community-skills."""
+"""Interactive CLI to scaffold a new skill in starling."""
 
 import re
 import sys

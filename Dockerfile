@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
     rm -rf /var/lib/apt/lists/* && \
     adduser --disabled-password --gecos "" --uid 1000 skills
 
-COPY --from=builder /build /opt/hawk-community-skills
+COPY --from=builder /build /opt/starling
 
 USER skills
-WORKDIR /opt/hawk-community-skills
+WORKDIR /opt/starling
 ENTRYPOINT ["tini", "--"]
 CMD ["python", "tools/validate_skill.py", "."]

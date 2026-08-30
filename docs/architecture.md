@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎯 hawk-community-skills Architecture
+# 🎯 starling Architecture
 
 **Modular Instruction Packages for hawk**
 
@@ -22,7 +22,7 @@ A registry of modular instruction packages (**skills**) that teach hawk speciali
 ## 🧱 Repository Structure
 
 ```
-hawk-community-skills/
+starling/
 ├── api/openapi.yaml           📜 Skill format reference
 ├── categories/                📂 All skills organized by domain
 │   ├── aws/                   ☁️ AWS-related skills

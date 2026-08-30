@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""JSON schema validation for hawk-community-skills registry entries."""
+"""JSON schema validation for starling registry entries."""
 
 from __future__ import annotations
 

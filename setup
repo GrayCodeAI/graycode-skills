@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Universal installer for hawk-community-skills
+# Universal installer for starling
 # Detects agent host and symlinks skills into the correct location.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -30,7 +30,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ! -d "$SCRIPT_DIR/categories" ]]; then
-    echo -e "${RED}Error: Run from hawk-community-skills repo root${NC}"; exit 1
+    echo -e "${RED}Error: Run from starling repo root${NC}"; exit 1
 fi
 
 detect_host() {

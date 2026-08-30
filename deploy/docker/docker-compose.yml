@@ -1,11 +1,11 @@
-name: hawk-community-skills
+name: starling
 
 services:
-  hawk-community-skills:
+  starling:
     build:
       context: ../../
       dockerfile: Dockerfile
-    image: ghcr.io/graycodeai/hawk-community-skills:dev
+    image: ghcr.io/graycodeai/starling:dev
     env_file:
       - path: ../../.env.example
         required: false
