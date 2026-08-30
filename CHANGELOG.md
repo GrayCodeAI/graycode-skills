@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to hawk-community-skills are documented in this file.
+All notable changes to starling are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -18,5 +18,5 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 - Initial release with validation infrastructure
 
-[Unreleased]: https://github.com/GrayCodeAI/hawk-community-skills/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/GrayCodeAI/hawk-community-skills/releases/tag/v0.1.0
+[Unreleased]: https://github.com/GrayCodeAI/starling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/GrayCodeAI/starling/releases/tag/v0.1.0

@@ -18,7 +18,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: graycodeai/hawk-community-skills
+  IMAGE_NAME: graycodeai/starling
 
 jobs:
   build-and-push:

@@ -1,6 +1,6 @@
 openapi: "3.1.0"
 info:
-  title: hawk-community-skills — Skill Registry Reference
+  title: starling — Skill Registry Reference
   description: |
     Community skill packages for hawk. Each skill is a Markdown file with YAML
     frontmatter that hawk loads into its system prompt when activated.
@@ -10,9 +10,9 @@ info:
   version: "0.1.0"
   license:
     name: MIT
-    url: https://github.com/GrayCodeAI/hawk-community-skills/blob/main/LICENSE
+    url: https://github.com/GrayCodeAI/starling/blob/main/LICENSE
   contact:
-    url: https://github.com/GrayCodeAI/hawk-community-skills
+    url: https://github.com/GrayCodeAI/starling
 
 # No servers — skills are installed via hawk CLI, not over HTTP.
 

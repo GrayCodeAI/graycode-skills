@@ -34,7 +34,7 @@ def marketplace_env(tmp_path: Path):
     marketplace = plugin_dir / "marketplace.json"
     marketplace.write_text(
         json.dumps(
-            {"plugins": [{"name": "hawk-community-skills", "skills": []}]},
+            {"plugins": [{"name": "starling", "skills": []}]},
             indent=2,
         )
         + "\n",

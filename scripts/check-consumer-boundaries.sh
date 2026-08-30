@@ -15,7 +15,7 @@ if [[ -n "${violations}" ]]; then
   echo "forbidden Hawk consumer references found:"
   echo "${violations}"
   echo
-  echo "hawk-community-skills must target Hawk public skill/plugin surfaces only; do not reference support engine repos, hawk/internal, or removed hawk/shared/types"
+  echo "starling must target Hawk public skill/plugin surfaces only; do not reference support engine repos, hawk/internal, or removed hawk/shared/types"
   exit 1
 fi
 

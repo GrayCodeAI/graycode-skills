@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hawk-community-skills"
+name = "starling"
 version = "0.1.0"
 description = "Community skill packages for hawk"
 requires-python = ">=3.13"

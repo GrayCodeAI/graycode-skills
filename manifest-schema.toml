@@ -1,4 +1,4 @@
-# hawk-community-skills manifest schema
+# starling manifest schema
 #
 # Every skill in this registry MUST include a SKILL.md file with YAML
 # frontmatter that conforms to this schema. The schema is expressed in TOML
@@ -81,7 +81,7 @@ type        = "string"
 required    = false
 enum        = ["localize", "repair", "validate", "review", "planning", "any"]
 default     = "any"
-description = "Pipeline phase where this skill is most useful. Maps to hawk-core-contracts/sessions.Phase."
+description = "Pipeline phase where this skill is most useful. Maps to eagle/sessions.Phase."
 
 [fields.min_model]
 type        = "string"
