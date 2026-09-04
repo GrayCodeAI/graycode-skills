@@ -7,7 +7,7 @@ info:
 
     This is a skill registry — no HTTP server is exposed.
     Skills are installed via the hawk CLI: `hawk skills install <name>`.
-  version: "0.1.0"
+  version: "0.0.1"
   license:
     name: MIT
     url: https://github.com/GrayCodeAI/starling/blob/main/LICENSE
