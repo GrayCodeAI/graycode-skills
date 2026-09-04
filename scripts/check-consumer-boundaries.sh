@@ -7,7 +7,7 @@ cd "$ROOT_DIR"
 violations="$(
   grep -RInE \
     --include='*.py' --include='*.md' --include='*.json' --include='*.yaml' --include='*.yml' --include='*.toml' \
-    'github\.com/GrayCodeAI/(eyrie|inspect|sight|tok|trace|yaad)(/|")|github\.com/GrayCodeAI/hawk/(internal/|shared/types)' \
+    'github\.com/GrayCodeAI/(graycode-router|inspect|sight|tok|trace|yaad)(/|")|github\.com/GrayCodeAI/hawk/(internal/|shared/types)' \
     README.md docs api tests tools .claude-plugin .codex-plugin .cursor-plugin 2>/dev/null || true
 )"
 

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "starling"
-version = "0.1.0"
+version = "0.0.1"
 description = "Community skill packages for hawk"
 requires-python = ">=3.13"
 dependencies = [

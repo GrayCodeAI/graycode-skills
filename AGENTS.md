@@ -42,7 +42,7 @@ ruff format --check .
 ## Ecosystem Boundaries
 
 - Extends Hawk through public skill and plugin surfaces only
-- Do not reference support engine repos (`eyrie`, `yaad`, `tok`, `trace`, `sight`, `inspect`)
+- Do not reference support engine repos (`graycode-router`, `yaad`, `tok`, `trace`, `sight`, `inspect`)
 - Do not reference `hawk/internal/*` or removed legacy paths
 
 For full hawk-eco extension guidelines, see [hawk/AGENTS.md](https://github.com/GrayCodeAI/hawk/blob/main/AGENTS.md).
