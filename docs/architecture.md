@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🎯 starling Architecture
+# 🎯 graycode-skills Architecture
 
-**Modular Instruction Packages for hawk**
+**Modular Instruction Packages for Graycode**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://python.org/)
 [![Type](https://img.shields.io/badge/Type-Registry-purple)]()
@@ -13,16 +13,16 @@
 
 ## 🎯 Overview
 
-A registry of modular instruction packages (**skills**) that teach hawk specialized workflows. Each skill is a **Markdown file with YAML frontmatter** that hawk loads into its system prompt when activated.
+A registry of modular instruction packages (**skills**) that teach Graycode specialized workflows. Each skill is a **Markdown file with YAML frontmatter** that Graycode loads into its system prompt when activated.
 
-> 💡 Install with: `hawk skills install <name>`
+> 💡 Install with: `graycode skills install <owner/repo> <name>`
 
 ---
 
 ## 🧱 Repository Structure
 
 ```
-starling/
+graycode-skills/
 ├── api/openapi.yaml           📜 Skill format reference
 ├── categories/                📂 All skills organized by domain
 │   ├── aws/                   ☁️ AWS-related skills
@@ -42,7 +42,7 @@ starling/
 │   ├── check_self_contained.py📦 Self-containedness check
 │   ├── bump_version.py        📈 Semantic version bump
 │   ├── check_version_sync.py  🔢 Version consistency check
-│   └── sync_marketplace.py    🏪 Sync to hawk marketplace
+│   └── sync_marketplace.py    🏪 Sync to Graycode marketplace
 └── tests/                     🧪 Test suite
 ```
 
