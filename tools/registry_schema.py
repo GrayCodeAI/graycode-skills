@@ -77,13 +77,22 @@ REGISTRY_ENTRY_SCHEMA: dict[str, Any] = {
             "type": "string",
             "description": "SPDX license identifier of the ingested skill",
         },
+        "repo": {
+            "type": "string",
+            "description": "GitHub owner/repo slug the skill is installed from",
+        },
     },
     "additionalProperties": False,
 }
 
 REGISTRY_SCHEMA: dict[str, Any] = {
-    "type": "array",
-    "items": REGISTRY_ENTRY_SCHEMA,
+    "type": "object",
+    "properties": {
+        "version": {"type": "integer"},
+        "skills": {"type": "array", "items": REGISTRY_ENTRY_SCHEMA},
+    },
+    "required": ["version", "skills"],
+    "additionalProperties": False,
 }
 
 
@@ -207,13 +216,13 @@ def validate_registry_entry(entry: Any, path: str = "$") -> list[SchemaError]:
 
 
 def validate_registry(data: Any) -> list[SchemaError]:
-    """Validate the full registry (must be a list of entries)."""
+    """Validate the full registry document ({version, skills[]})."""
     return _validate_value(data, REGISTRY_SCHEMA, "$")
 
 
 def load_and_validate_registry(
     registry_path: Path | None = None,
-) -> tuple[list[dict] | None, list[SchemaError]]:
+) -> tuple[dict | None, list[SchemaError]]:
     """Load registry.json and validate it. Returns (data_or_None, errors)."""
     path = registry_path or REGISTRY_PATH
     try:
