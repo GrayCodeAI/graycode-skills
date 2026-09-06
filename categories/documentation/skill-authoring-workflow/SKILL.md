@@ -1,5 +1,5 @@
 ---
-name: agent-skill-authoring
+name: skill-authoring-workflow
 description: "Create, synthesize, and improve agent skills following the Agent Skills specification. Use when asked to create, write, or synthesize sources into a skill, including registration and validation."
 license: Apache-2.0
 tags:
