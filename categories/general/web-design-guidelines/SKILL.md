@@ -1,9 +1,8 @@
 ---
 name: web-design-guidelines
-description: "Review UI code for Web Interface Guidelines compliance. Use when asked to \"review my UI\", \"check accessibility\", \"audit design\", \"review UX\", or \"check my site against best practices\"."
+description: 'Review UI code for Web Interface Guidelines compliance. Use when asked to "review my UI", "check accessibility", "audit design", "review UX", or "check my site against best practices".'
 license: MIT
 tags: [general]
-metadata: None
 author: vercel
 version: 1.0.0
 argument-hint: <file-or-pattern>

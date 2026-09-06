@@ -4,7 +4,7 @@ description: "Comprehensive testing strategies with Vitest, Jest, and Testing Li
 license: MIT
 tags: [testing]
 compatibility: vitest 1+, jest 29+, testing-library/react 14+
-allowed-tools: read_file write_file apply_patch search_with_context run_command
+allowed_tools: read_file write_file apply_patch search_with_context run_command
 ---
 
 # Testing Strategies

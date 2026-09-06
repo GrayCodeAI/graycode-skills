@@ -1,6 +1,6 @@
 ---
 name: frontend-design
-description: "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples in..."
+description: "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Use when creating web components, pages, posters, or applications."
 license: Complete terms in LICENSE.txt
 tags: [general]
 ---
