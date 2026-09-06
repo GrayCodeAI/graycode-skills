@@ -1,0 +1,45 @@
+---
+name: site-bulk-extraction
+description: "Use to bulk-extract many pages from one site or section, such as everything under /docs, following links up to a depth or limit."
+license: ISC
+tags:
+- crawling
+- web-scraping
+- bulk-extraction
+---
+
+# firecrawl crawl
+
+Bulk extract content from a website. Crawls pages following links up to a depth/limit.
+
+**Prerequisite:** `crawl` requires authentication (no keyless free tier); without credentials the CLI prompts an interactive login.
+
+## Quick start
+
+```bash
+# Crawl a docs section
+firecrawl crawl "<url>" --include-paths /docs --limit 50 --wait -o .firecrawl/crawl.json
+
+# Full crawl with depth limit
+firecrawl crawl "<url>" --max-depth 3 --wait --progress -o .firecrawl/crawl.json
+
+# Check status of a running crawl
+firecrawl crawl <job-id>
+```
+
+Run `firecrawl crawl --help` for the full option list.
+
+**Done when:** the crawl reaches a terminal status and the saved output under `.firecrawl/` contains the expected pages.
+
+## Tips
+
+- Use `--wait` when you need the results immediately. It has no default timeout; use `--timeout <seconds>` to bound polling. Without `--wait`, crawl returns a job ID for async polling.
+- **Scope crawls with `--include-paths`** whenever the request names a section — crawl only the pages you need.
+- Crawl consumes credits per page. Check `firecrawl credit-usage` before large crawls (`credit-usage` requires authentication).
+
+## See also
+
+- firecrawl-scrape — scrape individual pages
+- firecrawl-map — discover URLs before deciding to crawl
+- firecrawl-download — download site to local files (uses map + scrape)
+- [firecrawl-build-scrape](https://github.com/firecrawl/skills/tree/main/skills/build/firecrawl-build-scrape) — building bulk extraction into an app instead of running it here
