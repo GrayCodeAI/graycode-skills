@@ -75,7 +75,7 @@ Create a committed `<packages-root>/example/` as a copy-me template:
 
 - `index.ts` is an entry point. Export one function that delegates to an internal file (so the package is visibly *deep*, not a pass-through).
 - `lib/impl.ts`: an internal file in a **subfolder**, imported by `index.ts`, not reachable from outside.
-- `tests/example.test.ts` imports **only** `../index` (an entry point) and asserts against the public function.
+- `tests/example.test.ts` imports **only** the root `index` entry point and asserts against the public function.
 
 Tell the user this is a starter template to copy or delete.
 
@@ -86,7 +86,7 @@ Tell the user this is a starter template to copy or delete.
 This is the completion criterion for the whole skill: a config that doesn't fail on a violation is worthless.
 
 1. Run `lint:boundaries`. It must **pass** on the clean example.
-2. Temporarily add a deep import to `tests/example.test.ts` (e.g. `import { thing } from "../lib/impl"`). Run `lint:boundaries` again; it must **fail** with `tests-through-entrypoints`.
+2. Temporarily add a deep import to `tests/example.test.ts` (e.g. `import { thing } from "lib/impl"`). Run `lint:boundaries` again; it must **fail** with `tests-through-entrypoints`.
 3. Revert the deep import. Run once more, and it must **pass**.
 
 **Done when:** you have observed a pass, then a fail on the deep import, then a pass again. If step 2 does not fail, the rules are not wired correctly, so fix before finishing.

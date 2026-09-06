@@ -110,7 +110,7 @@ Give every collection endpoint defined bounds and a consistent set of query conv
 - Choose cursor-based pagination by default (offsets only for small static datasets; keyset for explicit ordering), with default and max page sizes.
 - Define filter operators on explicit filterable fields; reject unsupported filters with 400.
 - Set a sorting convention (`-` prefix for descending), with indexed sortable fields.
-- Define what "search" means (full-text, prefix, fuzzy) and consider a dedicated `POST .../search` for complex queries.
+- Define what "search" means (full-text, prefix, fuzzy) and consider a dedicated `POST …/search` for complex queries.
 
 See references/phase-04-06-request-contract.md for pagination strategies and schemas, plus the full filtering/sorting/search rules (steps 17-20).
 

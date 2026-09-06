@@ -123,7 +123,7 @@ After ALL synthetic logs are generated for ALL TDOs across all
 
     -   Each call to `evaluate_rule_coverage_long_running` returns a
         `google.longrunning.Operation` object containing an operation `name`
-        (e.g., `projects/.../operations/dea-12345`) and `done: false`. Because
+        (e.g., `projects/…/operations/dea-12345`) and `done: false`. Because
         you called `evaluate_rule_coverage_long_running` once for each TDO, you
         will receive multiple operation names to track.
     -   **Polling Strategy:** Use the `schedule` tool to set a 60-second (1

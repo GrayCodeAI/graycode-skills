@@ -150,7 +150,7 @@ After applying, output:
 - `Third-party library noise — echarts tooltip; not actionable in our code.`
 - `Browser API permission noise — Clipboard writeText denied by user agent.`
 - `Customer-environment proxy interference — 200 response treated as error (HTML body from corporate proxy).`
-- `Transient backend 5xx — InternalServerError on /api/0/organizations/.../events-meta/; backend transient.`
+- `Transient backend 5xx — InternalServerError on /api/0/organizations/…/events-meta/; backend transient.`
 - `Test/synthetic event — smoke test or security probe, not production traffic.`
 - `Wrong project — Prisma/Python error mis-routed to frontend project.`
 - `Single-event fluke — 1 event, 1 user, no recurrence in 30+ days.`

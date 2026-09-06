@@ -141,7 +141,7 @@ RunComfy's guidance for this model family is to validate the reference stack at 
 
 1. Assemble candidate references. Run 3-5 variants on `bytedance/seedance-2.5/reference-to-video/480p` at `duration: 5`.
 2. Judge identity hold, camera match, and audio fit — not sharpness.
-3. Re-run the winning body verbatim against `.../reference-to-video/1080p`, raising `duration` only once the beat is right.
+3. Re-run the winning body verbatim against `…/reference-to-video/1080p`, raising `duration` only once the beat is right.
 
 At $0.12 per counted second on 480p versus $0.53 on 1080p, five drafts cost roughly what one 1080p final costs.
 

@@ -188,9 +188,9 @@ Full reference: [docs.runcomfy.com/cli/troubleshooting](https://docs.runcomfy.co
 
 1. The skill invokes `runcomfy run openai/gpt-image-2/<endpoint>` with a JSON body matching the schema above.
 2. The CLI POSTs to `https://model-api.runcomfy.net/v1/models/openai/gpt-image-2/<endpoint>` with the user's bearer token.
-3. The Model API returns a `request_id`; the CLI polls `GET .../requests/<id>/status` every 2 seconds.
-4. On terminal status, the CLI fetches `GET .../requests/<id>/result` and downloads any URL whose host ends with `.runcomfy.net` or `.runcomfy.com` into `--output-dir`. Other URLs are listed but not fetched.
-5. `Ctrl-C` while polling sends `POST .../requests/<id>/cancel` so you don't get billed for GPU you stopped.
+3. The Model API returns a `request_id`; the CLI polls `GET …/requests/<id>/status` every 2 seconds.
+4. On terminal status, the CLI fetches `GET …/requests/<id>/result` and downloads any URL whose host ends with `.runcomfy.net` or `.runcomfy.com` into `--output-dir`. Other URLs are listed but not fetched.
+5. `Ctrl-C` while polling sends `POST …/requests/<id>/cancel` so you don't get billed for GPU you stopped.
 
 
 ## What this skill is not

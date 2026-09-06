@@ -90,8 +90,8 @@ the requirements, and outputs a Terraform configuration.
     metric, you **MUST** know the underlying Google Cloud resource type.
 
     *   If the user only provides a logical name or an App Hub Service/Workload
-        name such as `projects/.../services/frontend` or
-        `projects/.../workloads/backend`, you still need to know the underlying
+        name such as `projects/…/services/frontend` or
+        `projects/…/workloads/backend`, you still need to know the underlying
         infrastructure.
     *   If the prompt provides the underlying infrastructure, use that
         information. Do **NOT** attempt to discover it.
@@ -103,7 +103,7 @@ the requirements, and outputs a Terraform configuration.
 4.  **Label Scoping**:
 
     *   If the user explicitly mentions the resource is in App Hub or provides
-        an App Hub URI like `projects/.../locations/.../applications/...`, use
+        an App Hub URI like `projects/…/locations/…/applications/...`, use
         App Hub labels and consult `references/app_hub_labels.md` to identify
         the correct group-by fields.
     *   Otherwise, assume it is a standard Google Cloud resource and use

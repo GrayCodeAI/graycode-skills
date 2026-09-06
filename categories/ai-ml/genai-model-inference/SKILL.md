@@ -17,7 +17,7 @@ Cloud Agent Platform to use Generative AI models. It covers:
 *   **First-Party publisher models** (Gemini) — section 2.
 *   **Third-Party publisher models** (OpenMaaS: Llama, DeepSeek, Qwen, etc.)
     — section 3.
-*   **Custom endpoints** (any model on a numeric `projects/.../endpoints/<id>`
+*   **Custom endpoints** (any model on a numeric `projects/…/endpoints/<id>`
     resource — tuned Gemini models, OSS LLMs self-deployed from Model Garden
     via the `agent-platform-deploy` skill, and legacy custom models) —
     section 4.
@@ -195,7 +195,7 @@ all necessary parameters are grounded:
     *   **OpenMaaS** (e.g., `deepseek-ai/*`, `meta/llama-*`, `qwen/*`) ->
         Preferred: **OpenAI SDK** (`openai`). Proceed to [2. OpenMaaS Models].
     *   **Custom Endpoint** (numeric endpoint ID
-        `projects/.../endpoints/<id>`) -> Proceed to [4. Custom Endpoints].
+        `projects/…/endpoints/<id>`) -> Proceed to [4. Custom Endpoints].
 
 3.  **Troubleshooting**: Is the user reporting an error (429 Resource Exhausted,
     400 User Validation, 404 Not Found, empty response due to token limits,
@@ -210,7 +210,7 @@ all necessary parameters are grounded:
 > [!NOTE] **Skip this section** if either of these applies:
 >
 > - The user is calling a custom endpoint (§4) — a tuned Gemini model served on
->   a numeric `projects/.../endpoints/<id>`, a self-deployed OSS LLM (Llama,
+>   a numeric `projects/…/endpoints/<id>`, a self-deployed OSS LLM (Llama,
 >   DeepSeek, Qwen, Gemma, etc.), or a legacy custom model. Those requests hit
 >   a specific endpoint resource whose region is fixed at deploy time; if the
 >   caller-side region doesn't match, the endpoint lookup returns a clean 404
@@ -484,9 +484,9 @@ Model Family  | Model ID Examples                              | Location      |
 This section covers how to invoke a model on an Agent Platform
 **Endpoint** that belongs to your project — i.e., something with a
 numeric resource name like
-`projects/.../endpoints/5875254126916403200`. This is distinct from
+`projects/…/endpoints/5875254126916403200`. This is distinct from
 calling the publisher MaaS surfaces in sections 2 and 3 (which hit
-`publishers/.../models/...` or `endpoints/openapi`, not your endpoint
+`publishers/…/models/...` or `endpoints/openapi`, not your endpoint
 ID).
 
 > [!IMPORTANT]
@@ -494,8 +494,8 @@ ID).
 > **Publisher MaaS vs your endpoint (don't confuse them).** Section 3's
 > OpenMaaS examples (e.g. `meta/llama-3.3-70b-instruct-maas`) hit a
 > **shared publisher URL** at
-> `/v1/projects/.../locations/.../endpoints/openapi`. This section's
-> recipes hit **YOUR** endpoint at `/v1/projects/.../endpoints/<id>`.
+> `/v1/projects/…/locations/…/endpoints/openapi`. This section's
+> recipes hit **YOUR** endpoint at `/v1/projects/…/endpoints/<id>`.
 > If you have a Llama / Gemma / etc. model deployed via Model Garden
 > "Deploy" (NOT the MaaS publisher product), follow this section — not
 > section 3.
@@ -555,7 +555,7 @@ ID).
 > if it's set, use it as the host; otherwise use the shared host.
 >
 > **Path is always
-> `/v1/projects/.../locations/.../endpoints/<id>/...`** on both hosts.
+> `/v1/projects/…/locations/…/endpoints/<id>/...`** on both hosts.
 > Both `/v1/` (GA) and `/v1beta1/` (beta) route to the same backend; the
 > recipes in this skill use `/v1/`. The public
 > [Gemma deployment notebook](https://github.com/GoogleCloudPlatform/vertex-ai-samples/blob/main/notebooks/community/model_garden/model_garden_gemma_deployment_on_vertex.ipynb)
@@ -672,7 +672,7 @@ aiplatform.init(project=PROJECT_ID, location=REGION)
 endpoint = aiplatform.Endpoint(
     f"projects/{PROJECT_ID}/locations/{REGION}/endpoints/{ENDPOINT_ID}"
 )
-endpoint_resource_name = endpoint.resource_name  # full projects/.../endpoints/<id>
+endpoint_resource_name = endpoint.resource_name  # full projects/…/endpoints/<id>
 dedicated_dns = endpoint.gca_resource.dedicated_endpoint_dns  # empty if shared
 
 host = dedicated_dns if dedicated_dns else f"{REGION}-aiplatform.googleapis.com"

@@ -200,11 +200,11 @@ python3 scripts/nfs_browser.py stat \
 :                     : restrict read      : permissions.                                :
 :                     : access.            :                                             :
 | `HTTPException: 403 | Path parameter     | Use clean paths (e.g. `/logs/app.log`)      |
-: Access denied\:     : contains `../` or  : anchored to the NFS mount root.             :
-: path traversal`     : a symlink          :                                             :
-:                     : attempting escape  :                                             :
-:                     : outside mount      :                                             :
-:                     : point.             :                                             :
+: Access denied\:     : contains a parent- : anchored to the NFS mount root.             :
+: path traversal`     : directory or a    :                                             :
+:                     : symlink attempting :                                             :
+:                     : escape outside     :                                             :
+:                     : mount point.       :                                             :
 | `Jump Host          | VM is stopped or   | Verify VM status with `gcloud compute       |
 : connection timed    : IAP firewall rule  : instances list` and verify firewall rules   :
 : out / SSH failed`   : (`tcp\:22` from    : allow `tcp\:22` from the specific IAP       :

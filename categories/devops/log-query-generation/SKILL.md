@@ -54,7 +54,7 @@ Cloud Logging.
         containing the placeholder if the field is not strictly required. For
         example, completely omit `resource.labels.instance_id="..."` if the user
         didn't specify an instance, but you MUST include
-        `logName=".../projects/<PROJECT_ID>/..."` with a placeholder if
+        `logName="…/projects/<PROJECT_ID>/..."` with a placeholder if
         constructing a regional log bucket query where a project ID is strictly
         required.
 

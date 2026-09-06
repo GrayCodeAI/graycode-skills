@@ -21,7 +21,7 @@ tags:
 - Use `sentry schema <resource>` to discover API endpoints quickly.
 
 If the CLI is not installed, give the user these steps:
-1. Install the Sentry CLI: `curl https://cli.sentry.dev/install -fsS | bash`
+1. Install the Sentry CLI (see https://cli.sentry.dev/install)
 2. Authenticate: `sentry auth login`
 3. Confirm authentication: `sentry auth status`
 - Never ask the user to paste the full token in chat. Ask them to set it locally and confirm when ready.

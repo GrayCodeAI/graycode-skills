@@ -353,5 +353,5 @@ interaction = client.interactions.create(
 }
 ```
 
-Refer to the **`gemini-interactions-api`** skill guide (`../gemini-interactions-api/SKILL.md`) for full instructions, Python and TS/JS code blocks, and streaming setups to run conversations with your provisioned agents.
+Refer to the **`gemini-interactions-api`** skill guide for full instructions, Python and TS/JS code blocks, and streaming setups to run conversations with your provisioned agents.
 

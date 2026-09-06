@@ -525,7 +525,7 @@ Once the tuning job is `SUCCEEDED`, deploy the model.
 
 Deployment requires a real region — `--region=global` is not valid here. If the
 job ran on `global`, read the region out of the tuned model's resource name
-(`projects/.../locations/<REGION>/models/...`) and deploy there; do not guess.
+(`projects/…/locations/<REGION>/models/...`) and deploy there; do not guess.
 
 ```bash
 ARTIFACTS="gs://YOUR_BUCKET/tuning_agent_job_<datetime>/output/postprocess/node-0/checkpoints/final"

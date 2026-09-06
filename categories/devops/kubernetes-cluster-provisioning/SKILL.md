@@ -104,7 +104,7 @@ practices:
 ### 1. Golden Path Autopilot (Production)
 
 This is the default. All settings match
-`../gke-golden-path/assets/golden-path-autopilot.yaml`.
+`gke-golden-path/assets/golden-path-autopilot.yaml`.
 
 **Via gcloud:**
 
