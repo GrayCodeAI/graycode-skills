@@ -1,4 +1,4 @@
-# starling manifest schema
+# graycode-skills manifest schema
 #
 # Every skill in this registry MUST include a SKILL.md file with YAML
 # frontmatter that conforms to this schema. The schema is expressed in TOML
@@ -132,14 +132,14 @@ description = "Name of the skill that replaces this one. Only meaningful when de
 # ── Agent Skills Spec (agentskills.io) ────────────────────────────────────────
 # The following fields implement the agentskills.io specification for
 # cross-agent skill interoperability. They are optional but strongly
-# recommended for skills that should work across hawk, Claude Code,
+# recommended for skills that should work across graycode, Claude Code,
 # Codex, and other agent runtimes.
 
 [fields.category]
 type        = "string"
 required    = false
 enum        = ["engineering", "ops", "testing", "security", "devtools", "workflow"]
-description = "Agent Skills spec category. Maps to hawk's SmartSkill.Category field."
+description = "Agent Skills spec category. Maps to graycode's SmartSkill.Category field."
 
 [fields.auto_invoke]
 type        = "boolean"
@@ -162,7 +162,7 @@ description = "Space-separated list of pre-approved tool names. Maps to SmartSki
 type        = "array"
 items.type  = "string"
 required    = false
-description = "Cross-agent compatibility list (e.g. ['hawk', 'claude-code', 'codex']). Maps to SmartSkill.Agents."
+description = "Cross-agent compatibility list (e.g. ['graycode', 'claude-code', 'codex']). Maps to SmartSkill.Agents."
 
 [fields.invoke]
 type        = "string"

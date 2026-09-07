@@ -18,7 +18,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: graycodeai/starling
+  IMAGE_NAME: graycodeai/graycode-skills
 
 jobs:
   build-and-push:

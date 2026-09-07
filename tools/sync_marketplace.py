@@ -62,7 +62,7 @@ def build_skills() -> list[dict[str, str]]:
         if name in seen_names:
             raise SystemExit(f"✗ Duplicate skill name '{name}': {seen_names[name]} and {path}")
         seen_names[name] = path
-        invoke = fm.get("invoke", f"/hawk:{name}")
+        invoke = fm.get("invoke", f"/graycode:{name}")
         skills.append(
             {
                 "name": name,

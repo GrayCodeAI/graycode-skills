@@ -11,12 +11,12 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Automated validation tooling for frontmatter, references, scripts, and content
 - Registry generation from SKILL.md frontmatter
 - CI/CD workflows for PR checks
-- 12,171+ community skill packages across 31 categories
+- 14,016+ community skill packages across 27 categories
 
 ## [0.1.0] - 2026-05-26
 
 ### Changed
 - Initial release with validation infrastructure
 
-[Unreleased]: https://github.com/GrayCodeAI/starling/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/GrayCodeAI/starling/releases/tag/v0.1.0
+[Unreleased]: https://github.com/GrayCodeAI/graycode-skills/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/GrayCodeAI/graycode-skills/releases/tag/v0.1.0

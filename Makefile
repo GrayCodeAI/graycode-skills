@@ -1,6 +1,6 @@
 .PHONY: boundary-guard lint format registry-check validate test help
 
-boundary-guard: ## Fail if the skills repo references support engines or Hawk private packages
+boundary-guard: ## Fail if the skills repo references support engines or Graycode private packages
 	bash ./scripts/check-consumer-boundaries.sh
 
 lint: ## Run Ruff over all repository Python code

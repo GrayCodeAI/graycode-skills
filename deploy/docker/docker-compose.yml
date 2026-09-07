@@ -1,11 +1,11 @@
-name: starling
+name: graycode-skills
 
 services:
-  starling:
+  graycode-skills:
     build:
       context: ../../
       dockerfile: Dockerfile
-    image: ghcr.io/graycodeai/starling:dev
+    image: ghcr.io/graycodeai/graycode-skills:dev
     env_file:
       - path: ../../.env.example
         required: false

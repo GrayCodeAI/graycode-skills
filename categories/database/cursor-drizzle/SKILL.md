@@ -10,7 +10,7 @@ category: engineering
 auto_invoke: false
 compatibility: "node>=20 typescript>=5"
 allowed_tools: "bash file_search"
-agents: [hawk, claude-code, cursor]
+agents: [graycode, claude-code, cursor]
 invoke: "cursor:drizzle"
 chain_after: [cursor-rules]
 chain_enhances: [mdc-drizzle]

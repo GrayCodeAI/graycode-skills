@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate one or all skills against starling quality standards."""
+"""Validate one or all skills against graycode-skills quality standards."""
 
 from __future__ import annotations
 
@@ -45,7 +45,7 @@ MIN_TAGS = 1
 MAX_TAGS = 5
 
 # Agent Skills spec (agentskills.io) — recognized optional frontmatter fields.
-# These are informational for starling but must be well-formed
+# These are informational for graycode-skills but must be well-formed
 # if present. See manifest-schema.toml for the full schema.
 AGENTSKILLS_OPTIONAL_FIELDS = frozenset(
     {
@@ -63,7 +63,7 @@ AGENTSKILLS_OPTIONAL_FIELDS = frozenset(
     }
 )
 CATEGORY_ENUM = {"engineering", "ops", "testing", "security", "devtools", "workflow"}
-AGENT_ENUM = {"hawk", "claude-code", "codex", "cursor", "windsurf", "github-actions"}
+AGENT_ENUM = {"graycode", "claude-code", "codex", "cursor", "windsurf", "github-actions"}
 INVOKE_RE = re.compile(r"^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
 
 # Warning categories are stable machine-readable identifiers. Keep warning text
@@ -732,7 +732,7 @@ def find_all_skills() -> list[Path]:
 def main():
     import argparse
 
-    parser = argparse.ArgumentParser(description="Validate starling")
+    parser = argparse.ArgumentParser(description="Validate graycode-skills")
     parser.add_argument("path", nargs="?", help="Path to a specific skill directory")
     parser.add_argument("--all", action="store_true", help="Validate all skills")
     parser.add_argument(

@@ -34,7 +34,7 @@ def marketplace_env(tmp_path: Path):
     marketplace = plugin_dir / "marketplace.json"
     marketplace.write_text(
         json.dumps(
-            {"plugins": [{"name": "starling", "skills": []}]},
+            {"plugins": [{"name": "graycode-skills", "skills": []}]},
             indent=2,
         )
         + "\n",
@@ -110,7 +110,7 @@ class TestMain:
             ---
             name: code-review
             description: Reviews code
-            invoke: /hawk:code-review
+            invoke: /graycode:code-review
             ---
 
             Body.
@@ -129,7 +129,7 @@ class TestMain:
         assert len(skills) == 1
         assert skills[0]["name"] == "code-review"
         assert skills[0]["path"] == "categories/python/code-review"
-        assert skills[0]["invoke"] == "/hawk:code-review"
+        assert skills[0]["invoke"] == "/graycode:code-review"
 
     def test_syncs_multiple_skills_across_categories(self, marketplace_env: tuple):
         repo, marketplace = marketplace_env
@@ -137,13 +137,13 @@ class TestMain:
             repo,
             "python",
             "skill-a",
-            "---\nname: skill-a\ndescription: A\ninvoke: /hawk:a\n---\n\nBody.\n",
+            "---\nname: skill-a\ndescription: A\ninvoke: /graycode:a\n---\n\nBody.\n",
         )
         _create_skill(
             repo,
             "devops",
             "skill-b",
-            "---\nname: skill-b\ndescription: B\ninvoke: /hawk:b\n---\n\nBody.\n",
+            "---\nname: skill-b\ndescription: B\ninvoke: /graycode:b\n---\n\nBody.\n",
         )
 
         with (
@@ -180,7 +180,7 @@ class TestMain:
         assert paths[0] == "categories/a-cat/zzz-skill"
         assert paths[1] == "categories/z-cat/aaa-skill"
 
-    def test_missing_invoke_defaults_to_hawk_prefix(self, marketplace_env: tuple):
+    def test_missing_invoke_defaults_to_graycode_prefix(self, marketplace_env: tuple):
         repo, marketplace = marketplace_env
         _create_skill(
             repo,
@@ -198,7 +198,7 @@ class TestMain:
 
         data = json.loads(marketplace.read_text())
         skills = data["plugins"][0]["skills"]
-        assert skills[0]["invoke"] == "/hawk:my-tool"
+        assert skills[0]["invoke"] == "/graycode:my-tool"
 
     def test_name_from_frontmatter_over_directory(self, marketplace_env: tuple):
         """If frontmatter has a name, use it instead of the directory name."""
