@@ -28,3 +28,8 @@ raw.githubusercontent.com/render-oss/cli
 raw.githubusercontent.com/colbymchenry/codegraph
 hf.co/cli/install.sh
 cli.genkit.dev
+raw.githubusercontent.com/higgsfield-ai/cli
+snyk.io/cli/install
+get.pnpm.io/install.sh
+composio.dev/install
+ntn.dev
