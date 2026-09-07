@@ -447,7 +447,7 @@ Deploying a Python web app?
 - **SQL injection defense**: Use parameterized queries with SQLAlchemy/psycopg2 — never f-string interpolation in SQL.
 - **`pydantic.SecretStr`**: Sensitive data like API keys and passwords — `SecretStr` never serializes by default, masks in repr.
 - **`python-jose` / `PyJWT`**: JWT validation with proper audience checking. Never accept `alg: 'none'` tokens.
-- **`httpx` with TLS verification**: Never set `verify=False` in production. Use custom CA bundles if needed.
+- **`httpx` with TLS verification**: Never disable TLS certificate verification in production. Use custom CA bundles if needed.
 - **Rate limiting**: `slowapi` for FastAPI middleware rate limiting. Per-user/IP with Redis backend for distributed apps.
 
 ## References
