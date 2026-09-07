@@ -1,0 +1,23 @@
+---
+name: scoped-feature-build
+description: "Build feature work with strict scope and an explicit stop condition; use for new behavior or integrations where overbuilding is a risk."
+license: MIT
+tags:
+- feature-development
+- scope
+- lean
+---
+
+# Lean build
+
+Native Core's architecture-first simplicity remains mandatory. Turn feature into complete narrow outcome fitting system.
+
+- Derive observable acceptance and explicit non-goals from request and repository.
+- Trace entry point through layers owning invariants.
+- Deliver coherent end-to-end path across responsible layers; never force work into one file, direct expression, or local patch.
+- Reuse fitting seam. Refactor when patching duplicates behavior, weakens ownership, or hides root cause.
+- Omit modes, providers, config, extensibility, and polish unless acceptance needs them.
+- Add surface, dependency, service, config, or migration only for lifecycle design or acceptance; state material tradeoff.
+- Keep work runnable; preserve Core safety.
+
+Exercise path. Run focused proof. Stop when acceptance passes. Report only material omissions and trigger.

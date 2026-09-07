@@ -1,0 +1,586 @@
+---
+name: search-indexing-relevance
+description: "Use when designing search functionality — indexing strategy, field mapping with analyzers, query design, and relevance tuning."
+license: MIT
+tags:
+- search
+- indexing
+- relevance
+- elasticsearch
+---
+
+# Backend Search Patterns
+
+## Purpose
+Design search architecture with indexing strategy, query design, and relevance tuning.
+
+## Agent Protocol
+
+### Trigger
+Exact user phrases: "search", "Elasticsearch", "Meilisearch", "Algolia", "full-text search", "search index", "search query", "faceted search", "autocomplete", "search ranking", "search relevance", "indexing strategy", "search aggregation", "synonym search", "fuzzy search".
+
+### Input Context
+Before activating, verify:
+- Data volume (documents count, average document size, growth rate)
+- Search requirements (full-text, faceted navigation, geo-spatial, autocomplete)
+- Update frequency (real-time CDC, hourly batch, daily reindex)
+- Consistency requirements (eventual consistency acceptable, or need read-your-writes)
+
+### Output Artifact
+Search architecture design as formatted text.
+
+### Response Format
+```yaml
+# Index mapping with analyzers
+# Indexing strategy (CDC/batch/webhook)
+```
+```json
+# Query DSL template
+# Aggregation patterns
+```
+```yaml
+# Cluster config and resource limits
+```
+
+No preamble. No postamble. No explanations. No filler/hedging/transitions. Compress output — why use many token when few do trick.
+
+### Completion Criteria
+- [ ] Search provider selected based on requirements
+- [ ] Index mapping defined with field types, analyzers, and doc values
+- [ ] Indexing strategy chosen (CDC/batch/webhook) with sync mechanism
+- [ ] Search query patterns designed (full-text, faceted, autocomplete, geo)
+- [ ] Relevance tuning configured (BM25, field boosting, function scoring)
+- [ ] Operational concerns addressed (aliases, shards, snapshots, monitoring)
+
+### Max Response Length
+300 lines of mapping, queries, and configuration.
+
+## Decision Tree
+
+### Which Search Engine?
+
+```
+What kind of search do you need?
+  ├── Complex search: aggregations, geo, custom scoring, multi-language
+  │   └── Elasticsearch / OpenSearch — full control, steep learning curve
+  ├── Simple typo-tolerant full-text search, instant setup
+  │   └── Meilisearch — excellent out-of-box relevance, minimal config
+  ├── Managed, no ops, global edge network, per-query pricing
+  │   └── Algolia — fastest time-to-value for e-commerce and content
+  ├── Fast, simpler alternative to Elasticsearch, lower resource usage
+  │   └── Typesense — REST-first, good relevance, low memory footprint
+  └── Already using AWS ecosystem, simple search needs
+      └── OpenSearch Service — managed, familiar if coming from ES 6.x
+```
+
+### How to Index?
+
+```
+How fresh does search data need to be?
+  ├── Real-time (seconds), high throughput
+  │   └── CDC (Debezium) → Kafka → search consumer
+  ├── Near real-time (seconds-minutes), moderate throughput
+  │   └── Webhook / event-driven index updates
+  ├── Near real-time, strong consistency (read-your-writes)
+  │   └── Dual-write: DB + search in same operation (with outbox pattern)
+  ├── Batch (hours-days), small dataset, infrequent changes
+  │   └── Periodic full reindex — truncate and retransform all data
+  └── I don't know yet
+      └── Start with batch reindex daily. Add CDC when freshness requirement emerges
+```
+
+## Workflow
+
+### Step 1: Search Provider Selection
+| Provider | Type | Hosting | Query Complexity | Relevance | Performance | Cost |
+|----------|------|---------|-----------------|-----------|-------------|------|
+| Elasticsearch | Self-managed/SaaS | Cloud/on-prem | Full DSL | Custom BM25 | High | Infra cost |
+| OpenSearch | Self-managed/SaaS | Cloud/on-prem | Full DSL | Custom BM25 | High | Infra cost |
+| Meilisearch | Self-managed/SaaS | Cloud/on-prem | Simple REST | High OOTB | Very high | Open source |
+| Typesense | Self-managed/SaaS | Cloud/on-prem | Simple REST | High OOTB | Very high | Open source |
+| Algolia | SaaS | Managed | Simple REST | Very high OOTB | Edge-cached | Per search op |
+
+Elasticsearch for complex search with aggregations, geo, custom scoring. Meilisearch for simple typo-tolerant search, instant setup. Algolia for managed high relevance out-of-box, global CDN, no ops. Typesense as a faster simpler alternative to Elasticsearch. OpenSearch as the open-source fork of Elasticsearch (after license change).
+
+### Step 2: Index Mapping
+Define every field with explicit type: `keyword` for exact match/filtering/sorting, `text` with analyzer for full-text, `integer`/`float`/`date` for range queries, `geo_point` for geo-spatial, `boolean` for flags. Set language-specific analyzers per field. Use `doc_values: true` on fields used for aggregations and sorting (critical for performance). `nested` type for arrays of objects (maintains document boundaries). `enabled: false` on fields not searched (saves index space).
+
+```json
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 2,
+    "refresh_interval": "30s",
+    "analysis": {
+      "analyzer": {
+        "autocomplete": { "type": "custom", "tokenizer": "edge_ngram", "filter": ["lowercase"] },
+        "english_custom": { "type": "standard", "stopwords": "_english_", "filter": ["lowercase", "porter_stem", "product_synonyms"] }
+      },
+      "tokenizer": { "edge_ngram": { "type": "edge_ngram", "min_gram": 2, "max_gram": 15 } },
+      "filter": { "product_synonyms": { "type": "synonym", "synonyms": ["laptop, notebook, ultrabook", "mobile, phone, smartphone"] } }
+    }
+  },
+  "mappings": {
+    "dynamic": "strict",
+    "properties": {
+      "title": { "type": "text", "analyzer": "english_custom", "fields": { "keyword": { "type": "keyword" }, "autocomplete": { "type": "text", "analyzer": "autocomplete" } } },
+      "description": { "type": "text", "analyzer": "english_custom" },
+      "price": { "type": "float", "doc_values": true },
+      "category": { "type": "keyword", "doc_values": true },
+      "tags": { "type": "keyword" },
+      "createdAt": { "type": "date", "format": "strict_date_optional_time" },
+      "location": { "type": "geo_point" },
+      "inStock": { "type": "boolean" },
+      "reviews": { "type": "nested", "properties": { "score": { "type": "byte" }, "comment": { "type": "text" } } },
+      "metadata": { "enabled": false }
+    }
+  }
+}
+```
+
+### Step 3: Indexing Strategy
+| Strategy | Latency | Consistency | Operational Load | Use Case |
+|----------|---------|-------------|-----------------|----------|
+| CDC (Debezium) | Seconds | Near real-time | High | E-commerce catalogs, real-time feeds |
+| Bulk batch | Hours | Eventual | Low | Nightly rebuild, small datasets |
+| Webhook/event | Milliseconds | Near real-time | Medium | CMS, content management |
+| Dual-write | Real-time | Strong | Medium | Read-your-writes required |
+| Queue-based | Seconds-minutes | At-least-once | Medium | High-throughput systems |
+
+CDC: Debezium captures DB changes, emits to Kafka, consumer updates search index. Bulk: periodic batch job reads all data, truncates index, rebulks. Webhook: app emits events on data change, consumer updates index. Dual-write: app writes to both DB and search in same transaction. Queue-based: app enqueues index event, consumer processes.
+
+### Step 4: Search Query DSL
+Full-text: `match` and `multi_match` with field boosting (`title^3`, `description^2`). Filters: `term`/`terms` for exact, `range` for numeric/date, `geo_distance` for geo, `exists` for field presence. Faceted: `terms` aggregation with `size` limit, `range` aggregation for price buckets, nested aggregations for drill-down. Autocomplete: `match_phrase_prefix` or edge-ngram analyzer + `completion` suggester. Post-filters: apply after aggregation calculation (filter UI without affecting facet counts).
+
+```json
+{
+  "query": {
+    "bool": {
+      "must": [{ "multi_match": { "query": "wireless headphones", "fields": ["title^3", "description^2", "tags^1.5"], "fuzziness": "AUTO", "minimum_should_match": "75%" } }],
+      "filter": [{ "term": { "category": "electronics" } }, { "range": { "price": { "gte": 10, "lte": 500 } } }, { "term": { "inStock": true } }]
+    }
+  },
+  "aggs": {
+    "by_category": { "terms": { "field": "category", "size": 20 } },
+    "price_ranges": { "range": { "field": "price", "ranges": [{ "to": 25 }, { "from": 25, "to": 100 }, { "from": 100 }] } }
+  },
+  "post_filter": { "term": { "brand": "sony" } }
+}
+```
+
+### Step 5: Relevance Tuning
+BM25 parameters: `k1` (1.2 default) controls term frequency saturation — increase to 2.0 for long descriptions, decrease to 0.5 for short titles. `b` (0.75 default) controls length normalization — decrease to 0.3 for uniform-length fields. Field boosting: `title^5`, `description^2`, `tags^1.5`. Function scoring: recency (Gaussian on date), popularity (field_value_factor), personalization (script score for user history). Synonyms: configure as analyzer filter for query expansion. Rescore: run expensive scoring on top-100 results only.
+
+```json
+{
+  "query": {
+    "function_score": {
+      "query": { "multi_match": { "query": "wireless headphones", "fields": ["title^5", "description^2"] } },
+      "functions": [
+        { "gauss": { "createdAt": { "origin": "now", "scale": "30d", "decay": 0.5 } } },
+        { "field_value_factor": { "field": "popularity", "factor": 1.5, "modifier": "log1p" } }
+      ],
+      "score_mode": "multiply",
+      "boost_mode": "multiply"
+    }
+  }
+}
+```
+
+### Step 6: Index Aliases for Zero-Downtime Reindex
+Always use aliases for production reads/writes. Reindex: create new index with updated mappings → bulk load data → atomically swap alias from old to new → delete old index. Write alias points to index accepting writes. Read alias points to index serving queries.
+
+```json
+POST /_aliases
+{
+  "actions": [
+    { "remove": { "index": "products-v2", "alias": "products-write" } },
+    { "remove": { "index": "products-v2", "alias": "products-read" } },
+    { "add": { "index": "products-v3", "alias": "products-write" } },
+    { "add": { "index": "products-v3", "alias": "products-read" } }
+  ]
+}
+```
+
+### Step 7: Cluster Operations
+Shard strategy: 20-40GB per shard, shard count = `cluster_nodes * 2` minimum. Heap: 50% of RAM, max 31GB per node (JVM pointer compression limit). Thread pools: search (13 threads, 1000 queue), write (8 threads, 200 queue). Circuit breakers: 95% heap for request, 75% for fielddata. Snapshots: daily to S3, retention 30 days. Monitoring: query latency p95/p99, indexing rate, merge rate, GC pauses.
+
+```yaml
+cluster:
+  heap: "50% RAM, max 31GB"
+  thread_pools: { search: { threads: 13, queue: 1000 }, write: { threads: 8, queue: 200 } }
+  circuit_breaker: { request: 0.95, fielddata: 0.75 }
+  field_limit: { default: 1000, max: 2000 }
+  shard_limit: { max_per_node: 1000, target_size_gb: 20-40 }
+monitoring:
+  alert_on:
+    - query_p99 > 2000ms
+    - heap > 85%
+    - circuit_breaker_triggered > 1
+    - shard_count > node_count * 20
+```
+
+### Step 8: Autocomplete Implementation
+
+```json
+// Edge n-gram based autocomplete (built into mapping above)
+// Query:
+{
+  "query": {
+    "match": { "title.autocomplete": "wirel" }
+  }
+}
+
+// Completion suggester (faster, prefix-based):
+{
+  "mappings": {
+    "properties": {
+      "title_suggest": { "type": "completion" }
+    }
+  }
+}
+// Query:
+{
+  "suggest": {
+    "title_suggest": {
+      "prefix": "wirel",
+      "completion": { "field": "title_suggest", "size": 5 }
+    }
+  }
+}
+```
+
+### Step 9: Meilisearch Integration (Simpler Alternative)
+
+```bash
+# Meilisearch — minimal config, excellent out-of-box relevance
+# Index settings:
+curl -X PATCH 'http://localhost:7700/indexes/products/settings' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "searchableAttributes": ["title", "description", "brand"],
+    "filterableAttributes": ["category", "price", "inStock"],
+    "sortableAttributes": ["price", "createdAt"],
+    "rankingRules": ["words", "typo", "proximity", "attribute", "sort", "exactness"]
+  }'
+
+# Meilisearch — Node.js client
+import { MeiliSearch } from 'meilisearch';
+
+const client = new MeiliSearch({ host: 'http://localhost:7700', apiKey: 'masterKey' });
+await client.index('products').updateSettings({
+  searchableAttributes: ['title', 'description', 'brand'],
+  filterableAttributes: ['category', 'price', 'inStock'],
+  sortableAttributes: ['price', 'createdAt'],
+});
+
+// Search
+const results = await client.index('products').search('wireless', {
+  filter: ['price > 10 AND price < 500', 'inStock = true'],
+  sort: ['price:asc'],
+});
+```
+
+## Query Performance Optimization
+
+### Profiling Slow Queries
+```json
+// Elasticsearch Query Profiler
+{
+  "profile": true,
+  "query": {
+    "bool": {
+      "must": [{ "match": { "title": "wireless headphones" } }],
+      "filter": [{ "term": { "category": "electronics" } }]
+    }
+  }
+}
+// Returns breakdown: which clause took the most time, lucene rewrite time
+// Common issues: wildcard queries, regex queries, script_score on large datasets
+```
+
+### Index Sorting for Faster Range Queries
+```json
+{
+  "settings": {
+    "index": {
+      "sort.field": ["created_at", "price"],
+      "sort.order": ["desc", "asc"]
+    }
+  }
+}
+// Pre-sorts segments for faster range queries on created_at
+// Benefits: 2-5x faster range + sort queries, smaller segment merges
+// Cost: slightly slower indexing
+```
+
+## Multi-Language Search
+
+```json
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "multi_language": {
+          "type": "standard",
+          "filter": ["lowercase", "asciifolding"]
+        },
+        "vietnamese_analyzer": {
+          "type": "custom",
+          "tokenizer": "icu_tokenizer",
+          "filter": ["icu_folding", "icu_normalizer"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "vi": { "type": "text", "analyzer": "vietnamese_analyzer" },
+          "ja": { "type": "text", "analyzer": "kuromoji" },
+          "en": { "type": "text", "analyzer": "english" }
+        }
+      }
+    }
+  }
+}
+```
+
+## Search-as-You-Type / Autocomplete Patterns
+
+```typescript
+// 1. Edge n-gram (best for "prefix search")
+// Index time: tokenizes "wireless" -> "wi", "wir", "wire", "wirel", "wirele", "wireles", "wireless"
+// Query: match against same analyzer
+// Pros: fast at query time, works with any query DSL
+// Cons: larger index, more disk space
+
+// 2. Completion suggester (best for "search suggestions")
+// Index time: stores prefix tree (FST) in memory
+// Query: suggest endpoint, prefix-based lookup
+// Pros: very fast (>100K QPS), returns full documents
+// Cons: in-memory only, limited to prefix matching
+const suggestQuery = {
+  suggest: {
+    product_suggest: {
+      prefix: 'wire',
+      completion: {
+        field: 'title_suggest',
+        size: 5,
+        skip_duplicates: true,
+        fuzzy: { fuzziness: 2 },
+      },
+    },
+  },
+};
+
+// 3. Search-as-you-type field type (ES 7.7+)
+// Combines both approaches with automatic n-gram generation
+{
+  "mappings": {
+    "properties": {
+      "title": {
+        "type": "search_as_you_type",
+        "analyzer": "standard"
+      }
+    }
+  }
+}
+// Supports: n-gram, shingle, prefix matching in single field type
+```
+
+## Production Considerations
+
+| Concern | Practice |
+|---------|----------|
+| Reindex during traffic | Use aliases. Build new index in background, swap atomically |
+| GC pauses (Elasticsearch) | Set heap ≤ 31GB, use G1GC, monitor GC pauses > 1s |
+| Mapping explosion | `dynamic: strict` in production. Never auto-map unknown fields |
+| Slow queries | Use query profiler. Common fix: too many shards, missing filters, large aggregations |
+| Disk space | Guardrail: trigger alert at 85% disk usage. ES stops allocating at 95% |
+| Security | Enable auth, use TLS, restrict to VPC/private network |
+| Bulk indexing rate | Throttle bulk requests. Use `refresh_interval: -1` during reindex, restore after |
+| Shard rebalancing | Hot spots from uneven shard distribution. Use `_rebalance` API or ILM |
+| Snapshot/restore | Daily snapshots to S3. Test restore monthly. Snapshot before upgrade |
+| Cross-cluster search | For multi-region deployments. Manages 10+ remote clusters |
+
+## Security
+
+| Risk | Mitigation |
+|------|-----------|
+| Unauthorized search access | API key auth (Elasticsearch), token-based (Meilisearch), restrict network |
+| Data exposure in search results | Field-level security (Elasticsearch), document-level security |
+| Injection via query parameters | Never pass raw user input to search DSL without sanitization |
+| Cluster hijacking | Disable public access, use mTLS or VPN |
+| Index deletion | Snapshot before any destructive operation, RBAC to restrict delete |
+| Data exfiltration via scroll API | Rate-limit scroll requests, restrict scroll API to service accounts |
+| Audit trail | Enable audit logging for all cluster operations |
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It's Bad | Fix |
+|-------------|-------------|-----|
+| Searching primary database | Expensive, slow, no relevance ranking | Use dedicated search engine |
+| Index as source of truth | Rebuildable = better | Derive index from source of truth DB |
+| Dynamic mappings | Mapping explosions, unexpected field types | Use `dynamic: strict` |
+| No index aliases | Downtime on reindex | Always use aliases for production |
+| Over-sharding | Too many small shards = poor performance | 20-40GB per shard |
+| Ignoring analyzers | Wrong stemming, bad relevance for language | Set language-specific analyzers per field |
+| No synonyms | Users search 'laptop' but data says 'notebook' | Configure synonym filter |
+| Everything filterable | Too many filterableAttributes hurts indexing performance | Only make attributes filterable if used in queries |
+| Ignoring typos | Users make typos — search should handle them | Enable fuzziness (AUTO) or typo tolerance |
+
+## Rules
+- Search index is derived data — rebuildable from source of truth
+- Never search the primary database
+- Index aliases for all production reads, write to specific alias, swap on reindex
+- Set resource limits: max shards per node, field count limit
+- Monitor search latency p95/p99
+- Tune refresh interval for write-heavy workloads (30s default, increase to 60-120s for bulk)
+- Use `dynamic: strict` for production mappings
+- Synonyms should be content-managed, not hardcoded
+- Always use field-level doc_values for aggregation/sorting fields
+- Test relevance changes with A/B testing before rolling to all users
+- Snapshot indices daily for disaster recovery
+- Set language-specific analyzers per field for multi-language search
+- Never allow raw query DSL from user input — wrap in parameterized template
+- Use search-as-you-type or completion suggester for autocomplete, not wildcard prefix queries
+
+## References
+  - references/indexing-strategies.md — Indexing Strategies and Relevance
+  - references/search-architecture.md — Search Architecture
+  - references/search-engines.md — Search Engines Reference
+  - references/search-faceted-navigation.md — Faceted Search Navigation
+  - references/search-implementation.md — Search Implementation Patterns
+  - references/search-optimization.md — Search Optimization and Performance
+  - references/search-performance.md — Search Performance
+  - references/search-synonyms.md — Search Synonyms
+## Handoff
+`backend-database-patterns` for indexing source data schema design
+## Implementation Patterns
+
+### Observer Pattern for Event Handling
+`
+interface EventObserver<T> {
+  onEvent(event: T): Promise<void>;
+}
+
+class EventBus<T> {
+  private observers: Set<EventObserver<T>> = new Set();
+  subscribe(observer: EventObserver<T>): void {
+    this.observers.add(observer);
+  }
+  unsubscribe(observer: EventObserver<T>): void {
+    this.observers.delete(observer);
+  }
+  async emit(event: T): Promise<void> {
+    const results = Array.from(this.observers).map(o => o.onEvent(event));
+    await Promise.allSettled(results);
+  }
+}
+`
+
+### Configuration-Driven Approach
+`
+config:
+  defaults:
+    timeout: 30s
+    retryCount: 3
+  overrides:
+    production:
+      timeout: 60s
+      retryCount: 5
+    development:
+      timeout: 300s
+      retryCount: 1
+`
+
+## Production Considerations
+
+### Deployment Checklist
+- [ ] Configuration validated against schema before startup
+- [ ] Health check endpoints registered and monitored
+- [ ] Graceful shutdown with draining period (30s timeout)
+- [ ] Resource limits configured (CPU, memory, file descriptors)
+- [ ] Log level set appropriate for environment
+- [ ] Metrics endpoint secured and exposed
+- [ ] Rate limiting configured per-tier
+- [ ] TLS certificates valid and auto-renewing
+- [ ] Database migrations run as separate deployment step
+- [ ] Feature flags ready for gradual rollout
+
+### Monitoring and Alerting
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| Error rate | > 1% over 5min | Critical | Page on-call |
+| p99 latency | > 2s over 5min | Warning | Investigate |
+| Throughput drop | > 50% over 1min | Critical | Check upstream |
+| Queue depth | > 1000 over 1min | Warning | Scale consumers |
+| Disk usage | > 85% | Warning | Clean or expand |
+| Memory usage | > 90% heap | Critical | Restart or scale |
+
+## Anti-Patterns
+
+| Anti-Pattern | Symptom | Root Cause | Solution |
+|-------------|---------|------------|----------|
+| Premature optimization | Complex code for no measured benefit | Guessing instead of profiling | Measure first, optimize based on data |
+| Copy-paste reuse | Duplicate code across codebase | Lack of abstraction | Extract shared logic into libraries |
+| Gold-plating | Features with no current requirement | Over-engineering | YAGNI — build what's needed now |
+| Magical thinking | Assumptions without validation | Skipping error handling | Handle all failure modes explicitly |
+
+## Performance Optimization
+
+### Caching Strategy
+Cache hierarchy: L1 (in-memory local) → L2 (distributed Redis/Memcached) → L3 (CDN/Edge).
+Cache invalidation: TTL-based (simple, stale), event-based (complex, fresh), write-through (consistent, higher write latency), write-behind (fast writes, eventual consistency).
+
+### Resource Pooling
+- Database connections: Pool of reusable connections (HikariCP, pgBouncer)
+- HTTP connections: Keep-alive + connection pooling for external calls
+- Thread pool: Bounded thread pools for async task execution
+
+### Profiling Methodology
+1. Establish baseline with production traffic profile
+2. Profile CPU with sampling profiler (pprof, perf, async-profiler)
+3. Profile memory with heap dumps and allocation tracking
+4. Profile I/O with strace/perf trace for syscall analysis
+5. Profile latency with distributed tracing (OpenTelemetry)
+6. Identify bottleneck, formulate hypothesis, implement fix
+7. Re-profile to verify improvement, repeat
+
+## Security Considerations
+
+### Threat Modeling (STRIDE)
+- Spoofing: Identity validation, authentication
+- Tampering: Integrity checks, digital signatures
+- Repudiation: Audit logs, non-repudiation
+- Information disclosure: Encryption, access control
+- Denial of service: Rate limiting, resource quotas
+- Elevation of privilege: Principle of least privilege
+
+### Supply Chain Security
+- Dependency scanning: Snyk, Dependabot, Trivy
+- SBOM generation: CycloneDX or SPDX format
+- Signed commits: GPG or SSH commit signing
+- Artifact verification: Checksum validation, signature verification
+
+### Secrets Management
+- Secrets never in code — always in secrets manager (Vault, AWS Secrets Manager)
+- Rotation policy: Rotate database credentials every 90 days
+- Access audit: Log every secrets access, alert on anomalies
+- Encryption at rest and in transit for all secrets
+- Principle of least privilege: each service gets only its own secrets
+
+## Rules
+- Default-deny security posture — allow only explicitly required access.
+- All inputs validated, all outputs encoded, all errors handled.
+- Defend in depth — multiple layers of security controls.
+- Fail securely — errors default to safe behavior.
+- Log security-relevant events for audit and investigation.
+- Keep dependencies updated — automate vulnerability scanning.
+- Design for observability from day one, not as an afterthought.
+- Document all architectural decisions with rationale.
+- Review code for security, performance, and correctness before merging.

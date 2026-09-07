@@ -1,0 +1,567 @@
+---
+name: windows-universal-app-development
+description: "Use to build Universal Windows Platform apps with XAML, WinRT APIs, adaptive layout, background tasks, and Store deployment."
+license: MIT
+tags:
+- windows
+- desktop
+- xaml
+- store
+---
+
+# UWP
+
+## Purpose
+Build Universal Windows Platform (UWP) applications — Microsoft's modern Windows app platform with XAML UI, WinRT APIs, adaptive layout, and secure sandboxed deployment via the Microsoft Store. UWP emphasizes responsive design, touch-first interaction, and Windows 10/11 integration.
+
+## Agent Protocol
+
+### Trigger
+Exact user phrases: "UWP", "Universal Windows Platform", "WinRT", "Windows Store app", "UWP XAML", "Windows Runtime", "AppContainer", "UWP lifecycle", "adaptive trigger", "VisualStateManager".
+
+### Input Context
+- Target SDK (Windows 10 1809+, Windows 11)
+- Language (C#, C++/WinRT, JavaScript)
+- XAML technologies (UWP XAML, WinUI 2.x)
+- App features (notifications, background tasks, in-app purchases, tiles, share target)
+- Form factor (desktop, tablet, Xbox, IoT, HoloLens)
+- Deployment (Microsoft Store, sideloading, enterprise)
+
+### Output Artifact
+UWP application architecture with pages, navigation, data model, adaptive layout, and background tasks.
+
+### Completion Criteria
+- [ ] App project created with Package.appxmanifest
+- [ ] Navigation framework selected (Frame, NavigationView, or TabView)
+- [ ] Page hierarchy designed (main pages, dialogs, flyouts)
+- [ ] Data binding strategy (x:Bind, Binding, or MVVM with INotifyPropertyChanged)
+- [ ] Adaptive layout triggers (VisualStateManager, AdaptiveTrigger)
+- [ ] Background tasks registered (Timer trigger, system event, push notification)
+- [ ] Live tiles and notifications configured
+- [ ] App lifecycle handled (Launching, Suspending, Resuming, OnBackgroundActivated)
+- [ ] Store integration (licensing, trial, in-app purchases, ads)
+- [ ] Accessibility (UIA, narrator, keyboard navigation, high contrast)
+
+### Max Response Length
+250 lines.
+
+## Framework/Methodology
+
+### UWP App Decision Tree
+```
+What kind of UWP app?
+├── Standard Windows app → NavigationView + Pages
+│   → Frame-based navigation with ShellPage
+│   → MVVM with Template 10 or Community Toolkit
+├── Media/content app → MediaPlayerElement + in-app toolbar
+│   → SystemMediaTransportControls, SMTC integration
+│   → Background audio, playlist management
+├── IoT/embedded → Headless app with background tasks
+│   → Windows IoT Core, GPIO, I2C, SPI
+│   → App service for communication
+├── Xbox app → Gamepad navigation, 10ft UI
+│   → Focus visual, XY focus navigation
+│   → High contrast, large target sizes
+└── Line-of-business → Forms + data + printing + sharing
+    → Content dialog, AppBar, Share contract
+    → Enterprise sideloading, AppLocker
+```
+
+### UWP App Lifecycle
+```
+Launch → OnLaunched (SplashScreen → MainPage)
+   ↓
+Running (active, full interaction)
+   ↓ (user switches away / Windows suspends)
+Suspending → OnSuspending (save state, release resources)
+   ↓ (5 second limit, app may be terminated)
+Terminated → (if resumed: OnLaunched with PreviousExecutionState)
+   ↓ (user switches back, app not terminated)
+Resuming → OnResumed (restore state, refresh network)
+```
+
+## Workflow
+
+### Step 1: Set Up UWP Project
+
+```xml
+<!-- Package.appxmanifest (key settings) -->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  Identity Name="MyCompany.MyApp" Publisher="CN=MyCompany" Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>My App</DisplayName>
+    <PublisherDisplayName>My Company</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <DeviceCapability Name="microphone" />
+    <DeviceCapability Name="webcam" />
+  </Capabilities>
+```
+
+### Step 2: Navigation and Shell
+
+```xml
+<!-- ShellPage.xaml - NavigationView layout -->
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Grid>
+    <NavigationView x:Name="NavView"
+                    PaneDisplayMode="LeftCompact"
+                    IsSettingsVisible="True"
+                    ItemInvoked="NavView_ItemInvoked">
+      <NavigationView.MenuItems>
+        <NavigationViewItem Icon="Home" Content="Home" Tag="home" />
+        <NavigationViewItem Icon="Library" Content="Library" Tag="library" />
+        <NavigationViewItemSeparator />
+        <NavigationViewItem Icon="Folder" Content="Projects" Tag="projects" />
+      </NavigationView.MenuItems>
+
+      <Frame x:Name="ContentFrame" />
+    </NavigationView>
+  </Grid>
+</Page>
+```
+
+```csharp
+// ShellPage.xaml.cs - Navigation
+private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+{
+    if (args.IsSettingsInvoked)
+    {
+        ContentFrame.Navigate(typeof(SettingsPage));
+        return;
+    }
+
+    var tag = (args.InvokedItemContainer as NavigationViewItem)?.Tag?.ToString();
+    switch (tag)
+    {
+        case "home":
+            ContentFrame.Navigate(typeof(HomePage));
+            break;
+        case "library":
+            ContentFrame.Navigate(typeof(LibraryPage));
+            break;
+        case "projects":
+            ContentFrame.Navigate(typeof(ProjectsPage));
+            break;
+    }
+}
+```
+
+### Step 3: MVVM with Community Toolkit
+
+```csharp
+// ViewModel.cs
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+
+public partial class MainViewModel : ObservableObject
+{
+    [ObservableProperty]
+    private string title = "My UWP App";
+
+    [ObservableProperty]
+    private Item? selectedItem;
+
+    public ObservableCollection<Item> Items { get; } = new();
+
+    [RelayCommand]
+    private async Task LoadItemsAsync()
+    {
+        // Simulate async load
+        await Task.Delay(500);
+        Items.Clear();
+        foreach (var item in await _dataService.GetItemsAsync())
+        {
+            Items.Add(item);
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteItemAsync(Item item)
+    {
+        Items.Remove(item);
+        await _dataService.DeleteItemAsync(item.Id);
+    }
+}
+```
+
+### Step 4: Adaptive Layout
+
+```xml
+<!-- Adaptive page with VisualStateManager -->
+<Page>
+  <Grid>
+    <VisualStateManager.VisualStateGroups>
+      <VisualStateGroup>
+        <VisualState x:Name="WideLayout">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="1024" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="ItemGrid.Columns" Value="4" />
+            <Setter Target="DetailPanel.Visibility" Value="Visible" />
+          </VisualState.Setters>
+        </VisualState>
+
+        <VisualState x:Name="MediumLayout">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="600" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="ItemGrid.Columns" Value="2" />
+            <Setter Target="DetailPanel.Visibility" Value="Collapsed" />
+          </VisualState.Setters>
+        </VisualState>
+
+        <VisualState x:Name="NarrowLayout">
+          <VisualState.StateTriggers>
+            <AdaptiveTrigger MinWindowWidth="0" />
+          </VisualState.StateTriggers>
+          <VisualState.Setters>
+            <Setter Target="ItemGrid.Columns" Value="1" />
+            <Setter Target="DetailPanel.Visibility" Value="Collapsed" />
+          </VisualState.Setters>
+        </VisualState>
+      </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
+
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2*" />
+      <ColumnDefinition x:Name="DetailPanel" Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <GridView x:Name="ItemGrid" Grid.Column="0">
+      <GridView.ItemTemplate>
+        <DataTemplate>
+          <StackPanel>
+            <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextBlockStyle}" />
+            <TextBlock Text="{Binding Subtitle}" Style="{StaticResource CaptionTextBlockStyle}" />
+          </StackPanel>
+        </DataTemplate>
+      </GridView.ItemTemplate>
+    </GridView>
+
+    <ScrollViewer Grid.Column="1" x:Name="DetailPanel">
+      <!-- Detail content -->
+    </ScrollViewer>
+  </Grid>
+</Page>
+```
+
+### Step 5: Background Tasks
+
+```csharp
+// WindowsRuntimeComponent/BackgroundTask.cs
+public sealed class MyBackgroundTask : IBackgroundTask
+{
+    private BackgroundTaskDeferral? _deferral;
+
+    public async void Run(IBackgroundTaskInstance taskInstance)
+    {
+        _deferral = taskInstance.GetDeferral();
+
+        try
+        {
+            // Do background work
+            var settings = ApplicationData.Current.LocalSettings;
+            settings.Values["LastRunTime"] = DateTime.Now.ToString();
+
+            // Update tile
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            var tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquare150x150Text04);
+            updater.Update(new TileNotification(tileXml));
+
+            // Send toast if needed
+            var toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText02);
+            var toast = new ToastNotification(toastXml);
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
+        finally
+        {
+            _deferral?.Complete();
+        }
+    }
+}
+```
+
+### Step 6: App Lifecycle
+
+```csharp
+// App.xaml.cs
+sealed partial class App : Application
+{
+    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        // Check for previous execution state
+        if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
+        {
+            // Restore saved state
+            RestoreState();
+        }
+
+        var shell = new ShellPage();
+        Window.Current.Content = shell;
+        Window.Current.Activate();
+
+        // Register for lifecycle events
+        Application.Current.Suspending += OnSuspending;
+        Application.Current.Resuming += OnResuming;
+    }
+
+    private async void OnSuspending(object sender, SuspendingEventArgs e)
+    {
+        var deferral = e.SuspendingOperation.GetDeferral();
+        await SaveStateAsync();
+        deferral.Complete();
+    }
+
+    private void OnResuming(object sender, object e)
+    {
+        RefreshNetworkState();
+    }
+}
+```
+
+### Step 7: Windows 11 Integration
+
+```csharp
+// Mica/acrylic backgrounds
+using Windows.UI.Composition;
+using Windows.UI.ViewManagement;
+
+// Enable Mica (Win11 22000+)
+var settings = new UISettings();
+var accentColor = settings.GetColorValue(UIColorType.Accent);
+
+// Title bar customization
+var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+titleBar.ButtonBackgroundColor = Colors.Transparent;
+
+// Snap layout integration
+ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(400, 300));
+```
+
+## Common Pitfalls
+
+| Pitfall | Description | Prevention |
+|---------|-------------|------------|
+| App suspension data loss | State not saved before suspend | Save critical state in OnSuspending with deferral |
+| .NET Native issues | Missing serialization, reflection | Use DataContractJsonSerializer, avoid late binding |
+| Package limitations | File system, registry access restricted | Use ApplicationData, FutureAccessList for known folders |
+| x:Bind limitations | Can't bind to methods, indexers, nested properties | Use Binding with converter as fallback |
+| UI thread blocking | Async void instead of Task | Always async Task, not async void (except event handlers) |
+| No adaptive layout | App looks wrong on different screens | AdaptiveTrigger, VisualStateManager, RelativePanel |
+| Missing capability | App crashes when accessing camera, location, etc. | Declare required capabilities in manifest |
+| Background task timeout | Tasks killed after 30 seconds | Use deferral, stay under 30s wall-clock time |
+| Large package size | Including unnecessary WinMD references | Remove unused SDKs, optimize assets |
+
+## Best Practices
+
+| Practice | Rationale |
+|----------|-----------|
+| Use CommunityToolkit.Mvvm | MVVM source generators, no boilerplate |
+| Prefer x:Bind over Binding | Compiled bindings are faster, type-safe |
+| Use AdaptiveTrigger for layout | Automatic responsive design without code-behind |
+| Store state in OnSuspending | 5-second limit, use deferral for async |
+| Use Connected Animation | Native-feeling page transitions |
+| Register background tasks with conditions | Battery, internet, user-present to extend lifetime |
+| Use DesignTimeData | Better XAML designer experience |
+| Version package manifest | Store updates require incrementing version |
+| Test with App Analysis Kit | Detect perf issues, missing capabilities |
+| Use WinUI 2.x controls | Modern UI over built-in UWP controls |
+
+## Architecture Patterns
+
+### Share Target
+```xml
+<Extensions>
+  <uap:Extension Category="windows.shareTarget">
+    <uap:ShareTarget Description="Share to My App">
+      <uap:DataFormat>Text</uap:DataFormat>
+      <uap:DataFormat>Bitmap</uap:DataFormat>
+      <uap:DataFormat>StorageItems</uap:DataFormat>
+    </uap:ShareTarget>
+  </uap:Extension>
+</Extensions>
+```
+
+### Toast Notifications
+```csharp
+var builder = new ToastContentBuilder()
+    .AddText("Hello from UWP!")
+    .AddButton(new ToastButton()
+        .SetContent("Reply")
+        .AddArgument("action", "reply"))
+    .AddInlineImage(new Uri("ms-appx:///Assets/logo.png"));
+
+builder.Show();
+```
+
+## References
+  - references/uwp-advanced.md — UWP Advanced Topics
+  - references/uwp-fundamentals.md — UWP Fundamentals
+  - references/uwp-lifecycle.md — UWP Lifecycle Reference
+  - references/uwp-xaml-patterns.md — UWP XAML Patterns Reference
+## Handoff
+Hand off to `desktop-winui3` for WinUI 3 migration. Hand off to `design-accessibility` for UIA/Narrator testing.
+## Implementation Patterns
+
+### Observer Pattern for Event Handling
+`
+interface EventObserver<T> {
+  onEvent(event: T): Promise<void>;
+}
+
+class EventBus<T> {
+  private observers: Set<EventObserver<T>> = new Set();
+  subscribe(observer: EventObserver<T>): void {
+    this.observers.add(observer);
+  }
+  unsubscribe(observer: EventObserver<T>): void {
+    this.observers.delete(observer);
+  }
+  async emit(event: T): Promise<void> {
+    const results = Array.from(this.observers).map(o => o.onEvent(event));
+    await Promise.allSettled(results);
+  }
+}
+`
+
+### Configuration-Driven Approach
+`
+config:
+  defaults:
+    timeout: 30s
+    retryCount: 3
+  overrides:
+    production:
+      timeout: 60s
+      retryCount: 5
+    development:
+      timeout: 300s
+      retryCount: 1
+`
+
+## Production Considerations
+
+### Deployment Checklist
+- [ ] Configuration validated against schema before startup
+- [ ] Health check endpoints registered and monitored
+- [ ] Graceful shutdown with draining period (30s timeout)
+- [ ] Resource limits configured (CPU, memory, file descriptors)
+- [ ] Log level set appropriate for environment
+- [ ] Metrics endpoint secured and exposed
+- [ ] Rate limiting configured per-tier
+- [ ] TLS certificates valid and auto-renewing
+- [ ] Database migrations run as separate deployment step
+- [ ] Feature flags ready for gradual rollout
+
+### Monitoring and Alerting
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| Error rate | > 1% over 5min | Critical | Page on-call |
+| p99 latency | > 2s over 5min | Warning | Investigate |
+| Throughput drop | > 50% over 1min | Critical | Check upstream |
+| Queue depth | > 1000 over 1min | Warning | Scale consumers |
+| Disk usage | > 85% | Warning | Clean or expand |
+| Memory usage | > 90% heap | Critical | Restart or scale |
+
+## Anti-Patterns
+
+| Anti-Pattern | Symptom | Root Cause | Solution |
+|-------------|---------|------------|----------|
+| Premature optimization | Complex code for no measured benefit | Guessing instead of profiling | Measure first, optimize based on data |
+| Copy-paste reuse | Duplicate code across codebase | Lack of abstraction | Extract shared logic into libraries |
+| Gold-plating | Features with no current requirement | Over-engineering | YAGNI — build what's needed now |
+| Magical thinking | Assumptions without validation | Skipping error handling | Handle all failure modes explicitly |
+
+## Performance Optimization
+
+### Caching Strategy
+Cache hierarchy: L1 (in-memory local) → L2 (distributed Redis/Memcached) → L3 (CDN/Edge).
+Cache invalidation: TTL-based (simple, stale), event-based (complex, fresh), write-through (consistent, higher write latency), write-behind (fast writes, eventual consistency).
+
+### Resource Pooling
+- Database connections: Pool of reusable connections (HikariCP, pgBouncer)
+- HTTP connections: Keep-alive + connection pooling for external calls
+- Thread pool: Bounded thread pools for async task execution
+
+### Profiling Methodology
+1. Establish baseline with production traffic profile
+2. Profile CPU with sampling profiler (pprof, perf, async-profiler)
+3. Profile memory with heap dumps and allocation tracking
+4. Profile I/O with strace/perf trace for syscall analysis
+5. Profile latency with distributed tracing (OpenTelemetry)
+6. Identify bottleneck, formulate hypothesis, implement fix
+7. Re-profile to verify improvement, repeat
+
+## Security Considerations
+
+### Threat Modeling (STRIDE)
+- Spoofing: Identity validation, authentication
+- Tampering: Integrity checks, digital signatures
+- Repudiation: Audit logs, non-repudiation
+- Information disclosure: Encryption, access control
+- Denial of service: Rate limiting, resource quotas
+- Elevation of privilege: Principle of least privilege
+
+### Supply Chain Security
+- Dependency scanning: Snyk, Dependabot, Trivy
+- SBOM generation: CycloneDX or SPDX format
+- Signed commits: GPG or SSH commit signing
+- Artifact verification: Checksum validation, signature verification
+
+### Secrets Management
+- Secrets never in code — always in secrets manager (Vault, AWS Secrets Manager)
+- Rotation policy: Rotate database credentials every 90 days
+- Access audit: Log every secrets access, alert on anomalies
+- Encryption at rest and in transit for all secrets
+- Principle of least privilege: each service gets only its own secrets
+
+## Rules
+- Default-deny security posture — allow only explicitly required access.
+- All inputs validated, all outputs encoded, all errors handled.
+- Defend in depth — multiple layers of security controls.
+- Fail securely — errors default to safe behavior.
+- Log security-relevant events for audit and investigation.
+- Keep dependencies updated — automate vulnerability scanning.
+- Design for observability from day one, not as an afterthought.
+- Document all architectural decisions with rationale.
+- Review code for security, performance, and correctness before merging.
+
+## Architecture Decision Trees
+
+### UWP vs WinUI 3
+
+| Decision | UWP | WinUI 3 |
+|---|---|---|
+| Platform | Windows 10+ Universal | Windows 10+ Desktop |
+| Deployment | Store, sideload | MSIX, EXE |
+| WinRT access | Full | Partial (limited APIs) |
+| .NET version | .NET Native / WinRT | .NET 6+ (desktop) |
+| XAML stack | Built-in UWP XAML | WinUI 3 NuGet package |
+| Future | Maintenance mode | Active development |
+| Best for | Existing UWP apps, Store | New Windows desktop apps |
+
+### MVVM vs Code-Behind
+
+| Aspect | MVVM | Code-Behind |
+|---|---|---|
+| Testability | ViewModel is testable | Difficult (UI coupling) |
+| Separation | Clear (View/ViewModel/Model) | Mixed |
+| Data binding | Full XAML binding | Event handlers |
+| Complexity | Higher (bindings, commands) | Lower (direct access) |
+| Team scale | Large teams | Small projects, prototypes |
