@@ -1,0 +1,538 @@
+---
+name: angular-app-structure
+description: "Use when structuring Angular 17+ apps with standalone components, Signals, lazy-loaded features, and inject()."
+license: MIT
+tags:
+- angular
+- standalone
+---
+
+# Angular Architecture
+
+## Purpose
+Structure Angular 17+ applications with standalone components, Signals for state, and feature-based lazy loading. No NgModules. No RxJS for local state. New control flow syntax.
+
+## Agent Protocol
+
+### Trigger
+Exact user phrases: "Angular structure", "Angular architecture", "Angular folder", "Angular standalone", "Angular signals", "Angular clean arch", "Angular feature", "Angular project layout", "NgModule vs standalone".
+
+### Input Context
+Before activating, verify:
+- angular.json exists (Angular 17+).
+- Whether the project uses standalone components or NgModules.
+
+### Output Artifact
+No file output. Produces folder structure and component code as text.
+
+### Response Format
+Folder structure:
+```
+src/app/
+  features/{feature}/
+    pages/, components/, services/, store/
+  shared/components/
+  core/
+```
+
+Code: TypeScript component and template (inline or separate). No import statements.
+
+No preamble. No postamble. No explanations. No filler/hedging/transitions. Compress output — why use many token when few do trick.
+
+### Completion Criteria
+- [ ] Standalone components by default. NgModule only for NgRx or specific lazy-loading needs.
+- [ ] Signals used for component state (signal(), computed()).
+- [ ] inject() used for DI instead of constructor injection.
+- [ ] New control flow syntax used (@if, @for, @switch).
+- [ ] Feature routes are lazy-loaded.
+- [ ] OnPush change detection (default for standalone).
+- [ ] No *ngIf, *ngFor, *ngSwitch in new code.
+
+### Max Response Length
+Folder structure: unlimited. Code: 20 lines per example.
+
+## Architecture Decision Trees
+
+### Module vs Standalone Decision
+```
+Is this a new Angular 17+ project?
+  Yes -> Standalone components only. No NgModule.
+  No (migrating from NgModule) ->
+    Is the NgModule shared across many features?
+      Yes -> Keep as shared module for now, migrate incrementally
+      No -> Refactor to standalone + imports array
+
+Does the feature need lazy loading?
+  Yes -> loadChildren or loadComponent in route config
+  No -> Keep in same chunk
+```
+
+### State Management Decision
+```
+What type of state?
+  Local component state -> signal() or BehaviorSubject
+  Derived/computed state -> computed()
+  Cross-component within feature -> Signal-based service (injectable with signals)
+  Cross-feature global state -> Signal Store (@ngrx/signals) or NgRx
+  Async streams (HTTP, WebSocket) -> RxJS Observable -> toSignal() conversion
+  URL/route state -> ActivatedRoute params as signals
+
+State + async mixed?
+  Use RxJS for the async part, convert with toSignal() for template consumption
+```
+
+### DI Strategy Decision
+```
+Is the service singleton or scoped?
+  Application-wide singleton -> providedIn: 'root'
+  Feature-scoped -> provided in standalone component or route providers
+  Per-component instance -> provided in component decorator
+
+Does the service have multiple implementations?
+  Yes -> InjectionToken + useClass/useFactory
+  No -> Direct injectable class
+```
+
+## Workflow
+
+### Step 1: Standalone Component Structure
+```
+src/
+  app/
+    app.component.ts                    -- Standalone root
+    app.config.ts                       -- Providers (provideRouter, provideHttpClient)
+    app.routes.ts                       -- Root route definitions
+    features/
+      users/
+        users.routes.ts                 -- Lazy-loaded feature routes
+        pages/
+          user-list/
+            user-list.component.ts
+            user-list.component.html
+            user-list.component.scss
+          user-detail/
+            user-detail.component.ts
+            user-detail.component.html
+        components/
+          user-card/
+            user-card.component.ts
+            user-card.component.html
+        services/
+          user.service.ts
+        store/
+          user.store.ts                  -- Signal store or NgRx feature state
+        models/
+          user.model.ts
+    shared/
+      components/
+        button/
+          button.component.ts
+      directives/
+        has-permission.directive.ts
+      pipes/
+        truncate.pipe.ts
+    core/
+      auth/
+      interceptors/
+      guards/
+```
+
+### Step 2: Standalone Component Pattern
+```typescript
+@Component({
+  selector: 'app-user-list',
+  standalone: true,
+  imports: [CommonModule, RouterLink],
+  templateUrl: './user-list.component.html',
+  styleUrls: ['./user-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UserListComponent {
+  private readonly userService = inject(UserService)
+
+  readonly users = signal<User[]>([])
+  readonly isLoading = signal(false)
+
+  ngOnInit() {
+    this.loadUsers()
+  }
+
+  async loadUsers() {
+    this.isLoading.set(true)
+    try {
+      const users = await this.userService.getAll()
+      this.users.set(users)
+    } finally {
+      this.isLoading.set(false)
+    }
+  }
+}
+```
+
+### Step 3: Signals for State
+```typescript
+@Component({
+  template: `
+    @if (isLoading()) {
+      <app-spinner />
+    } @else {
+      @for (user of users(); track user.id) {
+        <app-user-card [user]="user" (select)="selectUser($event)" />
+      } @empty {
+        <p>No users found</p>
+      }
+    }
+  `,
+})
+export class UsersComponent {
+  // Writable signal
+  count = signal(0)
+
+  // Computed signal (derived)
+  doubled = computed(() => this.count() * 2)
+
+  // Effect (side effect — use sparingly, avoid in most cases)
+  constructor() {
+    effect(() => {
+      console.log(`Count: ${this.count()}`)
+    })
+  }
+
+  increment() {
+    this.count.update(c => c + 1)
+  }
+}
+```
+
+### Step 4: New Control Flow (v17+)
+```html
+@if (isLoading()) {
+  <app-spinner />
+} @else if (error()) {
+  <app-error [message]="error()" />
+} @else {
+  @for (user of users(); track user.id) {
+    <div>{{ user.name }}</div>
+  } @empty {
+    <p>No users yet</p>
+  }
+}
+
+@switch (status()) {
+  @case ('active') { <span class="badge">Active</span> }
+  @case ('inactive') { <span class="badge">Inactive</span> }
+  @default { <span>Unknown</span> }
+}
+```
+
+### Step 5: Lazy-Loaded Feature Routes
+```typescript
+// app.routes.ts
+export const routes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./features/home/home-page.component')
+      .then(m => m.HomePageComponent),
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./features/users/users.routes')
+      .then(m => m.userRoutes),
+  },
+]
+
+// features/users/users.routes.ts
+export const userRoutes: Routes = [
+  {
+    path: '',
+    loadComponent: () => import('./pages/user-list/user-list.component')
+      .then(m => m.UserListComponent),
+  },
+  {
+    path: ':id',
+    loadComponent: () => import('./pages/user-detail/user-detail.component')
+      .then(m => m.UserDetailComponent),
+  },
+]
+```
+
+### Step 6: Modern DI (inject function)
+```typescript
+// inject() function (v14+) — preferred over constructor injection
+export class UserService {
+  private readonly http = inject(HttpClient)
+  private readonly config = inject(APP_CONFIG)
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.config.apiUrl}/users`)
+  }
+}
+```
+
+## State Management: NgRx Signals vs Signal Store
+
+```yaml
+state_management_comparison:
+  signal_store:
+    description: "Lightweight state management using Signals — part of Angular core (since v16+)"
+    setup: "Injectable service with public signals and private state"
+    best_for: "Feature-level state, component communication within a feature"
+    complexity: "Low — no actions, reducers, effects to learn"
+    boilerplate: "Minimal — signals are built into Angular"
+    example:
+      code: |
+        @Injectable({ providedIn: 'root' })
+        export class UserStore {
+          private readonly userService = inject(UserService)
+          readonly users = signal<User[]>([])
+          readonly selectedUser = signal<User | null>(null)
+          readonly isLoading = signal(false)
+          
+          async loadUsers() {
+            this.isLoading.set(true)
+            try {
+              const users = await this.userService.getAll()
+              this.users.set(users)
+            } finally {
+              this.isLoading.set(false)
+            }
+          }
+        }
+    
+  ngrx_signals:
+    description: "NgRx's signal-based state management (@ngrx/signals) — opinionated store pattern"
+    setup: "signalStore with withState, withMethods, withComputed, withHooks"
+    best_for: "Shared state across multiple features, complex state with computed derivations"
+    complexity: "Medium — store definition is structured but straightforward"
+    boilerplate: "Moderate — structured but less than classic NgRx"
+    example:
+      code: |
+        export const UserStore = signalStore(
+          { providedIn: 'root' },
+          withState({ users: [] as User[], isLoading: false }),
+          withComputed((store) => ({
+            userCount: computed(() => store.users().length)
+          })),
+          withMethods((store, userService = inject(UserService)) => ({
+            async loadUsers() {
+              store.isLoading.set(true)
+              try {
+                const users = await userService.getAll()
+                store.users.set(users)
+              } finally {
+                store.isLoading.set(false)
+              }
+            }
+          }))
+        )
+    
+  classic_ngrx:
+    description: "Traditional NgRx (actions, reducers, effects, selectors)"
+    setup: "Multiple files per feature — actions.ts, reducer.ts, effects.ts, selectors.ts"
+    best_for: "Complex state with undo/redo, extensive side effect orchestration, large teams"
+    complexity: "High — many concepts, boilerplate, ceremony"
+    boilerplate: "High — 10+ files per feature is common"
+    recommendation: "Prefer @ngrx/signals or signal stores for new Angular 17+ projects"
+```
+
+## Micro-Frontend Patterns with Angular
+
+```yaml
+angular_micro_frontends:
+  module_federation:
+    tool: "@angular-architects/module-federation — Webpack Module Federation wrapper"
+    approach: "Each micro-frontend is a standalone Angular app, composed at runtime"
+    sharing:
+      - "Shared Angular runtime (singleton — prevent duplicate instances)"
+      - "Shared libraries (component library, auth library, utility library)"
+      - "Route-based loading — each MF loads on-demand"
+    communication:
+      - "Custom events (window.dispatchEvent) for simple cross-MF messaging"
+      - "Shared service (injected from shell) for complex state sharing"
+      - "URL/route params for navigation between MFs"
+    
+  composition_patterns:
+    shell_host:
+      responsibility: "Auth shell, top-level navigation, MF loading, shared DI setup"
+      implementation: "LoadRemoteComponent from @angular-architects/module-federation"
+      
+    micro_frontend:
+      responsibility: "Self-contained feature — pages, routing, state, API calls"
+      independence: "Can be developed, tested, and deployed independently"
+      integration: "Exposes routes and components via Module Federation exposes"
+```
+
+## Performance Optimization
+
+```yaml
+angular_performance:
+  change_detection:
+    default: "OnPush — standalone components use OnPush by default"
+    signals: "Signals trigger change detection only on their reactive consumers"
+    zone_less: "Angular 18+ experimental zoneless change detection — signals-only change detection"
+    
+  lazy_loading:
+    - "Every feature route must be lazy-loaded"
+    - "Defer loadable views (@defer block) for below-the-fold content"
+    - "Preload strategy: PreloadAllModules for small apps, custom for large"
+    
+  bundle_optimization:
+    - "Standalone components reduce bundle size (no NgModule overhead)"
+    - "Defer heavy third-party components with @defer placeholder"
+    - "Image optimization — ngSrc with automatic srcset and lazy loading"
+    
+  runtime:
+    - "trackBy / track function for @for — prevents unnecessary DOM recreation"
+    - "Virtual scrolling (cdk-virtual-scroll-viewport) for large lists"
+    - "Unsubscribe from observables — takeUntilDestroyed() (Angular 16+)"
+```
+
+## Testing Strategies
+
+```yaml
+angular_testing:
+  component_tests:
+    tool: "Jest + Angular Testing Library or Jasmine/Karma"
+    patterns:
+      - "Use TestBed.configureTestingModule with standalone component imports"
+      - "Test signal-based state by asserting on rendered output"
+      - "Use @angular/cdk/testing for component harness patterns"
+    example:
+      code: |
+        import { render, screen } from '@testing-library/angular'
+        import { UsersComponent } from './users.component'
+
+        test('renders users list', async () => {
+          const view = await render(UsersComponent, {
+            componentProviders: [provideMockStore({ initialState })]
+          })
+          expect(screen.getByText('User List')).toBeInTheDocument()
+        })
+
+  service_tests:
+    pattern: "Test services with signal state directly"
+    code: |
+      const service = TestBed.inject(UserStore)
+      await service.loadUsers()
+      expect(service.users().length).toBe(10)
+
+  e2e:
+    tool: "Playwright or Cypress"
+    focus: "Critical user journeys — auth flow, CRUD operations"
+```
+
+## Migration Patterns
+
+### Standalone Migration Path
+1. Create new components with `standalone: true` always.
+2. Convert existing root AppModule to use `bootstrapApplication` + `appConfig`.
+3. Convert feature NgModules: move declarations to component imports, add `standalone: true`.
+4. Replace `*ngIf`, `*ngFor`, `*ngSwitch` with `@if`, `@for`, `@switch`.
+5. Replace constructor DI with `inject()`.
+6. Replace RxJS local state with `signal()` / `computed()`.
+
+### NgModule to Standalone Conversion
+| NgModule Pattern | Standalone Equivalent |
+|------------------|----------------------|
+| `declarations: [Comp]` | `standalone: true` on component |
+| `imports: [CommonModule]` | `imports: [CommonModule]` on component |
+| `providers: [Service]` | `providers: [Service]` on component or `providedIn: 'root'` |
+| `bootstrap: [AppComponent]` | `bootstrapApplication(AppComponent, appConfig)` |
+| Lazy load NgModule | `loadComponent: () => import(...)` |
+
+## Build/Bundle Considerations
+
+- Standalone components reduce bundle size (no NgModule runtime overhead).
+- `@defer` blocks enable lazy loading of component dependencies.
+- `provideHttpClient(withFetch())` enables the newer, smaller fetch-based HTTP client.
+- `provideZoneChangeDetection({ eventCoalescing: true })` reduces change detection cycles.
+- `ng build --configuration production` enables AOT, minification, and tree-shaking.
+- `sourceMap: false` and `namedChunks: false` in production.
+- Use `@angular/build` (Vite-based) in Angular 17+ for faster builds.
+
+## Rules
+- Standalone components by default. NgModules only for NgRx feature states or backward compatibility.
+- Signals for component and local state. RxJS only for complex async streams (HTTP, WebSocket, debounced inputs).
+- inject() over constructor injection. Cleaner, less boilerplate, tree-shakable.
+- New control flow syntax (@if, @for, @switch) in all new code. No *ngIf, *ngFor, *ngSwitch.
+- Every feature route is lazy-loaded. No eager-loaded features in production bundles.
+- OnPush change detection is default for standalone components.
+- Prefer signalStore or service-based signal stores over classic NgRx for new Angular 17+ projects.
+- Use takeUntilDestroyed() for automatic RxJS cleanup — not manual unsubscribe.
+- Defer non-critical content with @defer blocks for initial bundle reduction.
+
+## References
+  - references/angular-module-architecture.md — Angular Module Architecture
+  - references/angular-performance.md — Angular Performance
+  - references/angular-routing.md — Angular Modules & Routing
+  - references/module-structure.md — Angular Module Structure
+  - references/signals-guide.md — Angular Signals Guide
+  - references/standalone-components.md — Angular Standalone Components
+  - references/angular-micro-frontends.md — Angular Micro-Frontends Reference
+
+## Handoff
+No artifact produced.
+Next skill: angular-patterns — DI, interceptors, guards, NgRx vs Signal Store.
+Carry forward: standalone setup, signal patterns, feature organization.
+## Implementation Patterns
+
+### Factory Pattern for Module Creation
+`
+function createModule<T>(config: ModuleConfig): T {
+  const dependencies = initializeDependencies(config);
+  const module = new Module(dependencies);
+  module.hooks.onInit();
+  return module as T;
+}
+`
+
+### Builder Pattern for Complex Configuration
+`
+class ConfigBuilder {
+  private config: AppConfig = new AppConfig();
+  withDatabase(url: string): ConfigBuilder { ... }
+  withCache(ttl: number): ConfigBuilder { ... }
+  withLogging(level: string): ConfigBuilder { ... }
+  build(): AppConfig { return this.config; }
+}
+`
+
+## Production Considerations
+
+### Deployment Checklist
+- [ ] Production build with optimizations enabled
+- [ ] Environment variables configured per environment
+- [ ] Health check endpoint responds correctly
+- [ ] Error tracking and monitoring integrated
+- [ ] Logging level configured (not debug in production)
+- [ ] Resource limits configured
+- [ ] Database migrations applied
+- [ ] Static assets built and served from CDN or cache
+- [ ] Feature flags toggled appropriately
+- [ ] Rollback plan documented and tested
+
+### Monitoring and Alerting
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| Error rate | > 1% | Critical | Rollback or fix |
+| p95 latency | > 500ms | Warning | Profile and optimize |
+| Uptime | < 99.9% | Critical | Investigate infrastructure |
+| Memory usage | > 80% | Warning | Check for leaks |
+| CPU usage | > 80% | Warning | Scale up or optimize |
+
+## Anti-Patterns
+
+| Anti-Pattern | Why It Fails | Correct Approach |
+|---|---|---|
+| Heavy ngOnInit logic | Blocks component initialization | Move to signal factories or async constructors |
+| Overusing async pipes | Multiple subscriptions per template | Use `toSignal()` or signal-based state |
+| Direct DOM manipulation | Bypasses Angular change detection | Use Renderer2 or @ViewChild with signals |
+| Giant NgModules | Tight coupling, slow compilation | Standalone components, lazy-loaded feature modules |
+| Subscriptions without cleanup | Memory leaks from orphaned observables | `takeUntilDestroyed()` or `async` pipe |
+
+## Security Considerations
+
+- **DomSanitizer for trusted content**: Never bypass security with `bypassSecurityTrustHtml` for user content. Use `DomSanitizer.sanitize(SecurityContext.HTML, value)`. Sanitize all `[innerHTML]` bindings.
+- **Interceptors for CSRF/XSRF**: Angular `HttpClientXsrfModule` handles XSRF token injection. Ensure backend sends `XSRF-TOKEN` cookie readable by JS. Use HTTP interceptor to add `X-XSRF-TOKEN` header automatically.
+- **Route guards for authorization**: Implement `CanActivate` and `CanMatch` guards. Use `inject()` in functional guards. Never trust client-only guards for sensitive routes - always validate server-side.
+- **Prevent template injection**: Use `{{ }}` interpolation which auto-escapes HTML. Avoid `[innerHTML]` with user content. For rich text, use a sanitized rich text component with DomPurify integration.

@@ -1,0 +1,627 @@
+---
+name: component-story-development
+description: "Use when writing Storybook stories in CSF 3.x with interaction tests, accessibility checks, and visual regression."
+license: MIT
+tags:
+- storybook
+- testing
+---
+
+# Frontend Storybook
+
+## Purpose
+Create, maintain, and optimize Storybook stories using CSF 3.x format with interaction tests, accessibility checks, and addon-driven workflows. Covers setup across React/Vue/Angular/Svelte, visual testing via Chromatic, custom theming, and documentation mode.
+
+## Agent Protocol
+
+### Trigger
+Exact phrases: "write stories", "storybook", "CSF", "component story", "storybook addon", "visual test", "story for", "stories for", "storybook setup", "interaction test", "chromatic", "storybook docs", "storybook theme", "storybook decorator"
+
+### Input Context
+- Check for `.storybook/main.js` or `main.ts` to detect existing Storybook config
+- Determine CSF version (2.x vs 3.x) from existing stories or package.json Storybook version
+- Identify the component framework (React, Vue, Angular, Svelte, Web Components) for framework-specific story patterns
+- Check for existing addons in `.storybook/main.js` under `addons` array
+- Verify whether `autodocs` is enabled globally or per-component
+- Check for existing Chromatic or visual testing setup
+
+### Output Artifact
+No file output unless requested.
+
+### Response Format
+1. Output stories in CSF 3.x `.stories.tsx`/`.stories.ts` format (default export with `meta`, named exports for stories)
+2. Include `import` statements and `meta` object with `component`, `title`, `tags`, `argTypes`
+3. For interactive stories, use `play` function from `@storybook/test`
+4. When suggesting addon config, output the full addon registration snippet
+5. When configuring Chromatic, output the full CI workflow YAML
+6. No preamble. No postamble. No explanations. No filler/hedging/transitions. Compress output — why use many token when few do trick.
+
+### Completion Criteria
+- [ ] Story follows CSF 3.x: `const meta = { component } satisfies Meta<typeof Component>` with named story exports
+- [ ] Stories cover default/empty state, loading state, error state, edge cases (long text, missing props, zero data)
+- [ ] Accessibility tests via `@storybook/addon-a11y` included in at least one story per component
+- [ ] Interaction tests via `play` function for any component with user input or animations
+- [ ] Responsive/layout stories use `parameters.viewport` to test mobile/tablet/desktop
+- [ ] Documentation tab (`@storybook/addon-docs`) configured with autodocs for the component
+- [ ] No hardcoded strings — use `args` mapping for story variations
+- [ ] Chromatic or visual regression tests configured for PR pipeline
+
+### Max Response Length
+120 lines per component story set.
+
+## Storybook Architecture / Decision Trees
+
+### Story Organization Decision Tree
+```
+How many components?
+  |-- 1-10 components -->
+  |     Simple structure: Components/Button, Components/Card
+  |     Co-locate stories with components (Button.stories.tsx next to Button.tsx)
+  |
+  |-- 10-50 components -->
+  |     Feature-based grouping: Feature/Orders/OrderList, Feature/Orders/OrderCard
+  |     Group by domain, not by type
+  |
+  |-- 50+ components (design system) -->
+        Nested structure: DesignSystem/Buttons/Primary, DesignSystem/Buttons/Secondary
+        Each variant gets its own story
+        Atomic structure: Atoms, Molecules, Organisms
+```
+
+### Story Coverage Decision Tree
+```
+What states does the component have?
+  |-- Default / empty state -->
+  |     STORY REQUIRED: shows component with no data
+  |     Example: empty list, empty card, placeholder text
+  |
+  |-- Loading state -->
+  |     STORY REQUIRED: skeleton or spinner
+  |     Example: SkeletonList, LoadingButton
+  |
+  |-- Error state -->
+  |     STORY REQUIRED: error message, retry action
+  |     Example: ErrorCard, ErrorForm
+  |
+  |-- Edge cases -->
+  |     STORY REQUIRED: long text, missing props, zero data, overflow
+  |     Example: VeryLongText, MissingImage, SingleItem
+  |
+  |-- Interactive behavior -->
+  |     STORY REQUIRED if component has user input
+  |     Use play() function to simulate clicks, typing, hover
+  |
+  |-- Responsive variants -->
+        STORY REQUIRED: mobile (375px), tablet (768px), desktop (1280px)
+        Use parameters.viewport
+```
+
+---
+
+## Workflow
+
+### Step 1: Initialize or Verify Setup
+```bash
+npx storybook@latest init --type react    # or vue3, angular, nextjs, sveltekit
+```
+Check `.storybook/main.ts` for required addons:
+
+| Addon | Package | Purpose |
+|-------|---------|---------|
+| Essentials | `@storybook/addon-essentials` | Docs, Controls, Actions, Viewport, Backgrounds |
+| Interactions | `@storybook/addon-interactions` | Play function testing |
+| Accessibility | `@storybook/addon-a11y` | aXe-based accessibility audits |
+| Themes | `@storybook/addon-themes` | Theme switching toolbar |
+| Designs | `@storybook/addon-designs` | Figma design embeds |
+
+### Step 2: Configure Preview
+```ts
+// .storybook/preview.ts
+const preview: Preview = {
+  parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
+    controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } },
+    viewport: { viewports: NEW_VIEWPORTS },
+    a11y: { config: { rules: [{ id: 'color-contrast', enabled: true }] } },
+  },
+  decorators: [withThemeFromJSXProvider({ themes: { light, dark }, defaultTheme: 'light', Provider: ThemeProvider })],
+  tags: ['autodocs'],
+};
+```
+
+### Step 3: Write Stories (CSF 3.x)
+```tsx
+const meta = {
+  title: 'Components/Button',
+  component: Button,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: { control: 'select', options: ['primary', 'secondary', 'ghost'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    disabled: { control: 'boolean' },
+    onClick: { action: 'clicked' },
+  },
+} satisfies Meta<typeof Button>;
+
+export const Primary: Story = { args: { variant: 'primary', children: 'Click Me' } };
+export const Disabled: Story = { args: { ...Primary.args, disabled: true } };
+export const Loading: Story = { args: { ...Primary.args, loading: true } };
+```
+
+### Step 4: Add Interaction Tests
+```tsx
+import { userEvent, within, expect, fn } from '@storybook/test';
+
+export const Interactive: Story = {
+  args: { onClick: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button'));
+    expect(args.onClick).toHaveBeenCalled();
+  },
+};
+```
+
+### Step 5: Visual Testing with Chromatic
+```bash
+npm i -D chromatic
+npx chromatic --project-token=<token>
+```
+```yml
+# .github/workflows/chromatic.yml
+- run: npx chromatic --project-token=${{ secrets.CHROMATIC_TOKEN }}
+```
+
+### Step 6: Verify Accessibility
+Run `a11y` plugin scan in Storybook UI or via CLI:
+```bash
+npx test-storybook --coverage
+```
+Fix violations: missing ARIA labels, insufficient color contrast, missing focus indicators.
+
+### Step 7: Documentation Mode
+Enable `autodocs: 'tag'` in `main.ts`. Add `tags: ['autodocs']` to each meta. For custom docs:
+
+```tsx
+// Button.docs.mdx
+import { Meta, Story, Canvas, Controls } from '@storybook/blocks';
+<Meta of={ButtonStories} />
+<Canvas><Story of={ButtonStories.Primary} /></Canvas>
+<Controls of={ButtonStories.Primary} />
+```
+
+### Step 8: MSW Integration for Data Stories
+```tsx
+import { http, HttpResponse } from 'msw'
+import { initialize, mswLoader } from 'msw-storybook-addon'
+
+initialize()
+
+const meta = {
+  component: OrderList,
+  loaders: [mswLoader],
+} satisfies Meta<typeof OrderList>
+
+export const WithOrders: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/orders', () => {
+          return HttpResponse.json([{ id: '1', name: 'Order 1', total: 100 }])
+        }),
+      ],
+    },
+  },
+}
+
+export const Empty: Story = {
+  parameters: {
+    msw: {
+      handlers: [
+        http.get('/api/orders', () => {
+          return HttpResponse.json([])
+        }),
+      ],
+    },
+  },
+}
+```
+
+## Common Pitfalls
+
+1. **CSF 2.x `storiesOf` API**: Always use CSF 3.x. Never use `storiesOf` — removed in Storybook 8.
+2. **Direct addon imports in stories**: Use `parameters` or `decorators` in meta — never `import from '@storybook/addon-*'`.
+3. **Missing `autodocs` tag**: Without `tags: ['autodocs']` or global enable, docs tab won't generate.
+4. **Real API calls in stories**: Always mock data/services. Use MSW or static fixtures.
+5. **`any` type for props**: Derive from component's props type. Use `StoryObj<typeof meta>`.
+6. **Hardcoded viewport sizes**: Use `parameters.viewport` with named viewports from config.
+7. **Skipping a11y**: Run aXe on every component — catch contrast, label, and ARIA issues early.
+
+## Compared With
+
+| Feature | Storybook | Ladle | Histoire | Catalog |
+|---------|----------|-------|----------|---------|
+| Framework support | React, Vue, Angular, Svelte, Web Components | React only | Vue only | Any (static) |
+| CSF 3.x | Yes | Yes | No | N/A |
+| Interaction testing | Built-in | Limited | Limited | No |
+| A11y addon | Yes | No | No | No |
+| Visual testing (Chromatic) | Built-in | Third-party | Third-party | No |
+| Bundle size (SB) | Large | Small | Small | Minimal |
+| MSW integration | Yes | Yes | No | No |
+
+## Theming in Storybook
+
+```tsx
+// .storybook/preview.ts — theme switching
+import { withThemeFromJSXProvider } from '@storybook/addon-themes';
+import { ThemeProvider } from 'src/lib/ThemeProvider';
+import { lightTheme, darkTheme } from 'src/lib/themes';
+
+export const decorators = [
+  withThemeFromJSXProvider({
+    themes: {
+      light: lightTheme,
+      dark: darkTheme,
+    },
+    defaultTheme: 'light',
+    Provider: ThemeProvider,
+    GlobalStyles: () => null,
+  }),
+];
+```
+
+## Story Composition and Reuse
+
+```tsx
+// Composing stories from other stories
+import { Primary as ButtonPrimary } from 'Button/Button.stories';
+
+const meta = {
+  title: 'Components/Dialog',
+  component: Dialog,
+} satisfies Meta<typeof Dialog>;
+
+// Reuse Button story inside Dialog story
+export const WithButton: Story = {
+  args: {
+    title: 'Confirm',
+    children: <Button {...ButtonPrimary.args}>OK</Button>,
+    onClose: fn(),
+  },
+};
+
+// Args composition for complex components
+export const WithForm: Story = {
+  args: {
+    ...Default.args,
+    children: (
+      <Form>
+        <TextField label="Name" />
+        <Button {...ButtonPrimary.args}>Submit</Button>
+      </Form>
+    ),
+  },
+};
+```
+
+## Design System Integration
+
+```tsx
+// Theming with design tokens
+// .storybook/preview.ts
+import { globalTypes } from '@storybook/addons';
+
+export const globalTypes = {
+  theme: {
+    name: 'Theme',
+    description: 'Global theme for components',
+    defaultValue: 'light',
+    toolbar: {
+      icon: 'circlehue',
+      items: ['light', 'dark', 'high-contrast'],
+      showName: true,
+      dynamicTitle: true,
+    },
+  },
+  locale: {
+    name: 'Locale',
+    description: 'Internationalization locale',
+    defaultValue: 'en-US',
+    toolbar: {
+      icon: 'globe',
+      items: ['en-US', 'de-DE', 'vi-VN', 'ja-JP'],
+      showName: true,
+    },
+  },
+};
+
+// With Figma design specs
+export const ButtonStory = {
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/…/Button',
+    },
+  },
+};
+```
+
+## Visual Regression Testing with Chromatic
+
+```yaml
+# .github/workflows/chromatic.yml
+name: Chromatic
+on: [pull_request]
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for Chromatic to detect changed stories
+      - run: npm ci
+      - uses: chromaui/action@v1
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          onlyChanged: true  # Only snapshot changed stories
+          exitOnceUploaded: true
+          buildScriptName: build-storybook
+          # Auto-accept changes from dependabot
+          autoAcceptChanges: 'dependabot/**'
+          # Prevent false positives for specific branches
+          skip: '@(renovate/**|docs/**)'
+```
+
+```typescript
+// Chromatic mode: only globally accessible styles
+// Prevent Chromatic from crashing on theme provider issues
+export const decorators = [
+  (Story) => (
+    <div style={{ padding: '1rem', fontFamily: 'sans-serif' }}>
+      <Story />
+    </div>
+  ),
+];
+```
+
+## Storybook Test Runner
+
+```typescript
+// .storybook/test-runner.ts
+// Custom test runner for a11y and interaction testing
+import { getStoryContext, type TestRunnerConfig } from '@storybook/test-runner';
+import { checkA11y, injectAxe } from 'axe-playwright';
+
+const config: TestRunnerConfig = {
+  async preVisit(page) {
+    await injectAxe(page);
+  },
+  async postVisit(page, context) {
+    const storyContext = await getStoryContext(page, context);
+    
+    // Skip a11y tests for stories that opt out
+    if (storyContext.parameters?.a11y?.disable) return;
+
+    // Run aXe and fail on critical violations
+    const results = await checkA11y(page, 'storybook-root', {
+      detailedReport: false,
+      includedImpacts: ['critical', 'serious'],
+    });
+    expect(results).toHaveNoViolations();
+  },
+};
+
+export default config;
+```
+
+## Performance Considerations
+
+- Storybook dev server can be slow for large component libraries (500+ stories). Use `storyStoreV7: true` for lazy compilation
+- Chromatic snapshots run on CI — limit to changed stories per PR to reduce snapshot time
+- MSW handlers intercept API calls in stories — no real network requests during testing
+- Bundle size of Storybook itself is irrelevant to production (dev-only tool)
+- `@storybook/test` package is small (~3KB) and only used in story files
+- Lazy compilation: `storyStoreV7: true` reduces dev startup time by 60% for large libraries
+- Chromatic `onlyChanged: true` reduces snapshot time by 80%+ on typical PRs
+
+## Accessibility Considerations
+
+- `@storybook/addon-a11y` runs aXe on every story automatically — fix violations before merging
+- Test with keyboard navigation in the Stories panel (Tab, Enter, Escape)
+- Ensure color contrast passes WCAG AA (4.5:1) for all stories
+- Test focus management in interactive stories (play functions)
+- Verify ARIA labels and roles in the Accessibility panel
+- Add a11y-focused stories: LongText, MissingAltText, FocusTrap, ReducedMotion
+
+```tsx
+// Accessibility-focused stories
+export const A11yViolations: Story = {
+  name: 'Accessibility Check',
+  parameters: {
+    a11y: {
+      config: { rules: [{ id: 'color-contrast', enabled: true }] },
+      element: '#storybook-root',
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const results = await axe(canvasElement);
+    expect(results).toHaveNoViolations();
+  },
+};
+```
+
+## Storybook Anti-Patterns
+
+| Anti-Pattern | Problem | Fix |
+|---|---|---|
+| No stories for empty/loading states | Missing test coverage for edge cases | Add stories for every component state |
+| Stories that make real API calls | Flaky, slow, require network | Use MSW to mock all API calls |
+| Using `storiesOf` API (CSF 2.x) | Deprecated, removed in SB 8 | Use CSF 3.x `const meta = { ... }` |
+| Hardcoded viewports in stories | Inconsistent across components | Use `parameters.viewport` with named viewports |
+| Skipping a11y addon | Accessibility issues caught late | Add `@storybook/addon-a11y` to every project |
+| Too many stories per component | Maintenance burden | Cover: default, loading, error, edge cases. Not every prop combination |
+| Missing `autodocs` tag | Docs tab not generated | Add `tags: ['autodocs']` to meta |
+
+## Rules
+- Always use CSF 3.x syntax — never CSF 2.x `storiesOf` API
+- Never import from `@storybook/addon-*` directly in story files — use `parameters` or `decorators` in the meta export
+- Always set `tags: ['autodocs']` in meta to generate documentation automatically
+- Always mock external data/service calls in stories — never hit real APIs
+- Never use `any` type for story props — derive from the component's props type
+- Keep stories co-located with the component (`Button.stories.tsx` next to `Button.tsx`) unless the project centralizes them
+- Always test at minimum 3 viewports: mobile (375px), tablet (768px), desktop (1280px)
+- Always wrap async interactions in `play` with `await` — missing await = flaky tests
+- Every component has: default, loading (if applicable), error (if applicable), empty (if applicable), and edge case stories
+- Use Chromatic `onlyChanged: true` in CI to minimize snapshot time
+- Run aXe on every story — fail CI on critical/serious violations
+
+## References
+  - references/addons-testing.md — Addons & Testing Reference
+  - references/addons.md — Storybook Addons Reference
+  - references/story-writing.md — Story Writing Reference
+  - references/storybook-setup.md — Storybook Setup Reference
+  - references/visual-testing.md — Visual Testing Reference
+  - references/writing-stories.md — Writing Stories Reference
+## Handoff
+No artifact produced unless requested.
+Next skill: `frontend-pwa` (if the component needs offline support or a service worker)
+Carry forward: Component prop types, existing story examples, addon list from config
+## Implementation Patterns
+
+### Observer Pattern for Event Handling
+`
+interface EventObserver<T> {
+  onEvent(event: T): Promise<void>;
+}
+
+class EventBus<T> {
+  private observers: Set<EventObserver<T>> = new Set();
+  subscribe(observer: EventObserver<T>): void {
+    this.observers.add(observer);
+  }
+  unsubscribe(observer: EventObserver<T>): void {
+    this.observers.delete(observer);
+  }
+  async emit(event: T): Promise<void> {
+    const results = Array.from(this.observers).map(o => o.onEvent(event));
+    await Promise.allSettled(results);
+  }
+}
+`
+
+### Configuration-Driven Approach
+`
+config:
+  defaults:
+    timeout: 30s
+    retryCount: 3
+  overrides:
+    production:
+      timeout: 60s
+      retryCount: 5
+    development:
+      timeout: 300s
+      retryCount: 1
+`
+
+## Production Considerations
+
+### Deployment Checklist
+- [ ] Configuration validated against schema before startup
+- [ ] Health check endpoints registered and monitored
+- [ ] Graceful shutdown with draining period (30s timeout)
+- [ ] Resource limits configured (CPU, memory, file descriptors)
+- [ ] Log level set appropriate for environment
+- [ ] Metrics endpoint secured and exposed
+- [ ] Rate limiting configured per-tier
+- [ ] TLS certificates valid and auto-renewing
+- [ ] Database migrations run as separate deployment step
+- [ ] Feature flags ready for gradual rollout
+
+### Monitoring and Alerting
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| Error rate | > 1% over 5min | Critical | Page on-call |
+| p99 latency | > 2s over 5min | Warning | Investigate |
+| Throughput drop | > 50% over 1min | Critical | Check upstream |
+| Queue depth | > 1000 over 1min | Warning | Scale consumers |
+| Disk usage | > 85% | Warning | Clean or expand |
+| Memory usage | > 90% heap | Critical | Restart or scale |
+
+## Anti-Patterns
+
+| Anti-Pattern | Symptom | Root Cause | Solution |
+|-------------|---------|------------|----------|
+| Premature optimization | Complex code for no measured benefit | Guessing instead of profiling | Measure first, optimize based on data |
+| Copy-paste reuse | Duplicate code across codebase | Lack of abstraction | Extract shared logic into libraries |
+| Gold-plating | Features with no current requirement | Over-engineering | YAGNI — build what's needed now |
+| Magical thinking | Assumptions without validation | Skipping error handling | Handle all failure modes explicitly |
+
+## Performance Optimization
+
+### Caching Strategy
+Cache hierarchy: L1 (in-memory local) → L2 (distributed Redis/Memcached) → L3 (CDN/Edge).
+Cache invalidation: TTL-based (simple, stale), event-based (complex, fresh), write-through (consistent, higher write latency), write-behind (fast writes, eventual consistency).
+
+### Resource Pooling
+- Database connections: Pool of reusable connections (HikariCP, pgBouncer)
+- HTTP connections: Keep-alive + connection pooling for external calls
+- Thread pool: Bounded thread pools for async task execution
+
+### Profiling Methodology
+1. Establish baseline with production traffic profile
+2. Profile CPU with sampling profiler (pprof, perf, async-profiler)
+3. Profile memory with heap dumps and allocation tracking
+4. Profile I/O with strace/perf trace for syscall analysis
+5. Profile latency with distributed tracing (OpenTelemetry)
+6. Identify bottleneck, formulate hypothesis, implement fix
+7. Re-profile to verify improvement, repeat
+
+## Security Considerations
+
+### Threat Modeling (STRIDE)
+- Spoofing: Identity validation, authentication
+- Tampering: Integrity checks, digital signatures
+- Repudiation: Audit logs, non-repudiation
+- Information disclosure: Encryption, access control
+- Denial of service: Rate limiting, resource quotas
+- Elevation of privilege: Principle of least privilege
+
+### Supply Chain Security
+- Dependency scanning: Snyk, Dependabot, Trivy
+- SBOM generation: CycloneDX or SPDX format
+- Signed commits: GPG or SSH commit signing
+- Artifact verification: Checksum validation, signature verification
+
+### Secrets Management
+- Secrets never in code — always in secrets manager (Vault, AWS Secrets Manager)
+- Rotation policy: Rotate database credentials every 90 days
+- Access audit: Log every secrets access, alert on anomalies
+- Encryption at rest and in transit for all secrets
+- Principle of least privilege: each service gets only its own secrets
+
+## Architecture Decision Trees
+
+### Documentation Strategy Decision Tree
+`
+Who is the primary audience?
+  ├── Developers → Component API docs, code snippets, prop tables
+  ├── Designers → Design system preview, design token values, variants
+  └── PM/QA → Interaction tests, visual regression reports, state coverage
+       What level of documentation is needed?
+       ├── Basic → Props table + default story
+       ├── Standard → All states + accessibility report + code snippet
+       └── Comprehensive → Design guidelines + usage rules + migration guide
+`
+
+### Testing Strategy Decision Tree
+`
+What type of validation is needed?
+  ├── Visual → Chromatic/Percy for screenshot comparison per PR
+  ├── Accessibility → axe-core on every story, fail CI on violations
+  └── Interaction → Playwright/Cypress component tests for user flows
+       How often do stories change?
+       ├── Every PR → Automate visual + a11y tests in CI pipeline
+       └── Infrequent → Manual review + scheduled snapshot updates
+`

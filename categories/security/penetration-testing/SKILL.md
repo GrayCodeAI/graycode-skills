@@ -1,0 +1,500 @@
+---
+name: penetration-testing
+description: "Use to plan and report penetration tests with methodology, severity-classified findings, CVSS scoring, evidence, and remediation tracking."
+license: MIT
+tags:
+- security
+- pentest
+- vulnerability
+- cve
+---
+
+# Penetration Testing
+
+## Purpose
+Produce structured penetration testing reports with methodology, severity-classified findings, evidence format, and remediation tracking.
+
+## Agent Protocol
+
+### Trigger
+User request includes: `pentest`, `penetration test`, `security test`, `bug bounty`, `vulnerability assessment`, `ethical hacking`, `red team`, `security assessment`.
+
+### Input Context
+- Scope (internal/external, web/mobile/api/infrastructure)
+- Previous pentest reports (if any)
+- Threat model and security requirements
+- Compliance framework (PCI-DSS, SOC2, HIPAA)
+
+### Output Artifact
+A markdown document containing:
+- Pentest methodology (OSSTMM, OWASP, PTES)
+- Test scope and exclusions
+- Findings table with severity, CVSS, status
+- Each finding: title, description, impact, reproduction steps, screenshot/evidence, recommendation
+- Risk scoring methodology
+- Remediation timeline with owner
+
+### Response Format
+Produce the artifact directly. No preamble. No postamble. No explanations. No filler/hedging/transitions. Compress output — why use many token when few do trick.
+
+---
+
+### Completion Criteria
+- Methodology documented with references
+- All findings classified by severity with CVSS scores
+- Each finding includes: reproduction steps, evidence, remediation
+- Executive summary for non-technical stakeholders
+- Remediation tracking with SLA per severity
+
+### Max Response Length
+4096 tokens
+
+## Workflow
+
+### Step 1: Define Scope
+Document in-scope and out-of-scope targets, testing methodology (black/grey/white box), timeframe, and tools.
+
+### Step 2: Execute Tests
+Follow OWASP/OSSTMM methodology, covering injection, auth, access control, XSS, SSRF, misconfiguration, crypto, and info leakage.
+
+### Step 3: Classify Findings
+Score each finding using CVSS 3.1 and assign severity (Critical/High/Medium/Low/Info).
+
+### Step 4: Write Executive Summary
+Summarize scope, overall risk rating, key findings count, and business impact for non-technical stakeholders.
+
+### Step 5: Document Each Finding
+Each finding includes: title, severity, CVSS score, status, location, description, impact, reproduction steps, evidence, recommendation.
+
+### Step 6: Assign Remediation
+Map each finding to an owner with a fix timeline per severity SLA.
+
+### Step 7: Threat Modeling
+Perform threat modeling using STRIDE or PASTA before testing. Identify assets, threat agents, attack vectors, and security controls. Prioritize testing based on threat model findings. Map test cases to threats.
+
+### Step 8: Reconnaissance and Enumeration
+Gather information about targets: DNS enumeration, subdomain discovery, technology fingerprinting, endpoint discovery, directory brute force, parameter discovery. Document all discovered surface area.
+
+### Step 9: Vulnerability Analysis
+Correlate findings across test types. Eliminate false positives. Chain vulnerabilities to demonstrate realistic impact. Validate each finding manually. Prioritize chained attack paths.
+
+### Step 10: Reporting and Remediation Tracking
+Generate structured report. Hold findings review with development team. Track remediation in issue tracker. Schedule retesting after fixes. Update risk register.
+
+## Framework / Methodologies
+
+### Pentest Methodology Comparison
+
+| Aspect | OWASP | PTES | OSSTMM | NIST SP 800-115 |
+|--------|-------|------|--------|-----------------|
+| Focus | Web applications | Full penetration test | Security metrics | Technical assessment |
+| Structure | 12 testing categories | 7 phases | 5 channels (physical, human, wireless, telecom, data) | 4 phases |
+| Scoring | Risk rating methodology | CVSS + custom | STAR (Security Test Audit Report) | N/A |
+| Best For | Web app pentesting | Comprehensive pentest | Audit/compliance | Government/enterprise |
+| Maturity | Highly mature | Moderate | Very mature | Highly mature |
+| Industry adoption | Most widely adopted | Common | Less common | Government standard |
+
+### Decision Tree: Pentest Type Selection
+
+```
+What is being tested?
+  ├── Web application
+  │   ├── Internal app → Grey box, OWASP methodology
+  │   └── External app → Black box + grey box, OWASP, DAST + manual
+  ├── Mobile application
+  │   ├── iOS → IPA analysis, runtime manipulation, network interception
+  │   └── Android → APK analysis, rooted device testing, intent fuzzing
+  ├── API / Microservices
+  │   └── Grey box, OpenAPI-based testing, auth testing, injection, rate limiting
+  ├── Cloud infrastructure
+  │   ├── AWS → IAM analysis, S3 permissions, CloudTrail audit
+  │   ├── GCP → IAM, GKE security, Cloud SQL audit
+  │   └── Azure → RBAC, Key Vault, App Service, AKS security
+  ├── Network infrastructure
+  │   ├── Internal → Lateral movement, AD security, network segmentation
+  │   └── External → Port scanning, service enumeration, exploit testing
+  └── Physical / Social engineering
+      └── OSSTMM methodology, physical access testing, phishing simulation
+```
+
+### Testing Types Comparison
+
+| Type | Reconnaissance | Access | Knowledge | Accuracy | Coverage | Cost |
+|------|---------------|--------|-----------|----------|----------|------|
+| Black box | Full | None | None | Medium | Low | High |
+| Grey box | Targeted | Some | Architecture | High | Medium | Medium |
+| White box | Technical docs | Full access | Full code | Very high | High | Low |
+| DAST | None | None | None | High | Medium | Low |
+| SAST | Full source | Full code | Full | Medium | High | Low-medium |
+| Bug bounty | None | None | None | High | Variable | Pay per finding |
+
+## Common Pitfalls
+
+### Pitfall 1: Testing Without a Clear Scope
+Starting a pentest without clearly documented scope leads to disputes about what was included, missed targets, and wasted effort. Always define in-scope and out-of-scope in writing. Include URL/IP lists and explicit exclusions.
+
+### Pitfall 2: Relying Only on Automated Scanners
+Automated scanners produce high false-positive rates and miss logic flaws, business logic vulnerabilities, and chained attacks. DAST tools only catch known patterns. Manual testing is essential for high-severity findings.
+
+### Pitfall 3: Not Validating Findings
+Reporting scanner output without manual validation produces reports full of false positives that teams learn to ignore. Manually validate every finding before including it in the report. Document validation steps in the finding.
+
+### Pitfall 4: Incomplete Evidence Documentation
+Findings without clear reproduction steps, request/response pairs, or screenshots cannot be reproduced or fixed. Document evidence as you go — recreating evidence later is time-consuming and error-prone.
+
+### Pitfall 5: CVSS Without Vector String
+Reporting a CVSS score without the vector string makes the score meaningless — it cannot be verified or recalculated if the environment changes. Always include the full vector string.
+
+### Pitfall 6: Not Testing Authentication and Authorization Thoroughly
+Many testers check basic login/logout but miss IDOR, privilege escalation, session fixation, and JWT vulnerabilities. These are often the highest-impact findings. Dedicate significant testing time to auth and access control.
+
+### Pitfall 7: Ignoring Business Logic
+Automated scanners don't test business logic — multi-step workflows, approval chains, financial calculations, and user role interactions. Manual business logic testing frequently finds critical vulnerabilities.
+
+### Pitfall 8: Reporting Without Remediation Guidance
+Finding vulnerabilities without actionable remediation guidance frustrates development teams and delays fixes. Every finding must include specific, actionable recommendation code snippets where possible.
+
+### Pitfall 9: Not Sanitizing Evidence
+Including live credentials, real customer data, or internal IP addresses in reports creates a secondary security incident. Sanitize all evidence before including it in the report.
+
+### Pitfall 10: Missing Retesting After Fixes
+Remediation verification is as important as initial testing. Without retesting, you cannot confirm that fixes are effective or that they haven't introduced new issues. Schedule retesting as part of the engagement.
+
+## Best Practices
+
+- **Define scope in writing before testing begins**: Document in-scope targets, testing methods, time window, and emergency contacts. Get written authorization.
+- **Use a consistent methodology**: Follow OWASP or PTES formally. Document which tests were performed and which were not.
+- **Score every finding with CVSS 3.1 including vector string**: Enables verification, recalculation, and consistent severity communication.
+- **Validate every finding manually**: Automated findings are leads, not confirmed vulnerabilities. Manual validation separates real issues from false positives.
+- **Document reproduction steps in detail**: A developer should be able to reproduce and verify the finding from your documentation alone.
+- **Chain vulnerabilities to demonstrate real impact**: A low-severity info leak combined with another finding may create a critical risk.
+- **Write executive summaries for non-technical stakeholders**: Business impact, risk level, and remediation priorities — no technical jargon.
+- **Sanitize all evidence**: Remove credentials, tokens, internal IPs, and customer data before including in reports.
+- **Schedule retesting as part of the engagement**: Initial fix is not enough — verify effectiveness and check for regression.
+- **Track findings in the project's issue tracker**: Integrate with development workflow for assignment, prioritization, and closure tracking.
+- **Establish remediation SLAs per severity**: Critical in 24 hours, High in 7 days, Medium in 30 days, Low in 90 days.
+- **Maintain a findings library**: Reusable finding descriptions save time and ensure consistency across engagements.
+- **Update methodology regularly**: The threat landscape evolves. Review and update test cases quarterly.
+
+## Templates & Tools
+
+### Pentest Scope Definition
+
+```yaml
+engagement:
+  title: External Web Application Pentest
+  client: Acme Corp
+  date: 2026-04-15 to 2026-04-26
+  methodology: OWASP Web Application Testing Guide v4.2
+  testing_type: Grey box
+  in_scope:
+    targets:
+      - https://app.acme.com
+      - https://api.acme.com/v2
+      - https://admin.acme.com
+    testing_allowed:
+      - Authentication and session testing
+      - Injection testing
+      - Business logic testing
+      - Access control testing
+  out_of_scope:
+    - Third-party services (Auth0, Stripe, AWS)
+    - Denial of Service attacks
+    - Physical security
+    - Social engineering
+    - Employee accounts (testing accounts provided)
+  rules_of_engagement:
+    - Testing hours: 08:00 - 18:00 local time only
+    - No destructive testing without approval
+    - Emergency contact: security@acme.com / +1-555-0123
+    - Report critical findings immediately, not in final report
+    - Data handling: all data destroyed 30 days after report delivery
+```
+
+### Finding Template
+
+```yaml
+finding:
+  id: PENTEST-2026-001
+  title: SQL Injection in Order Search
+  severity: Critical
+  cvss: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+  cvss_score: 9.8
+  status: Open
+  location: "POST /api/v2/orders/search (order-service)"
+  discovered: 2026-04-16
+  description: |
+    The `q` parameter in the order search endpoint is directly concatenated
+    into SQL queries without parameterization or sanitization.
+  impact: |
+    An unauthenticated attacker can extract, modify, or delete all database
+    records, including user credentials, payment information, and order data.
+  reproduction:
+    - Step 1: Intercept request to POST /api/v2/orders/search
+    - Step 2: Set payload: q=1' OR '1'='1
+    - Step 3: Observe that all orders are returned instead of user's orders
+    - Step 4: Extract data using UNION-based injection
+  evidence:
+    request: "POST /api/v2/orders/search HTTP/1.1\nContent-Type: application/json\n\n{\"q\":\"1' OR '1'='1\"}"
+    response: "HTTP/1.1 200 OK\n... (150 orders returned, including orders from other users)"
+  recommendation: |
+    Replace string concatenation with parameterized queries:
+    ```python
+    cursor.execute("SELECT * FROM orders WHERE user_id = %s AND search LIKE %s",
+                   (user_id, f"%{search_term}%"))
+    ```
+  remediation:
+    owner: team-orders
+    due_date: 2026-04-17
+    verification: Re-test after deployment to staging
+  references:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    - https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
+```
+
+### Tool Selection Matrix
+
+| Tool Category | Recommended Tools | Use Case | Cost |
+|---------------|-------------------|----------|------|
+| Scanner (web) | Burp Suite Professional, OWASP ZAP | Web app scanning | $$ / Free |
+| Scanner (network) | Nessus, OpenVAS | Network vulnerabilities | $$ / Free |
+| Scanner (cloud) | ScoutSuite, Prowler, CloudSploit | Cloud config review | Free |
+| Reconnaissance | Amass, Sublist3r, ffuf, gau, httpx | Subdomain and endpoint discovery | Free |
+| Exploitation | Metasploit, Cobalt Strike | Post-exploitation | Free / $$$ |
+| Mobile | MobSF, Frida, objection, jadx | Mobile app analysis | Free |
+| Wireless | Aircrack-ng, Kismet, Reaver | Wireless security | Free |
+| Password | Hashcat, John the Ripper, Hydra | Password cracking | Free |
+| OSINT | Maltego, theHarvester, Shodan | Intelligence gathering | Free / $$ |
+| DAST | Burp Scanner, Acunetix, Netsparker | Automated web scanning | $$ / $$$ |
+| SAST | Semgrep, CodeQL, SonarQube | Source code analysis | Free / $$ |
+| API | Postman, Insomnia, Burp | API security testing | Free / $ |
+
+## Case Studies
+
+### Case Study 1: E-Commerce SQL Injection
+During a grey-box pentest of an e-commerce platform, the tester found a SQL injection in the order search endpoint. The automated scanner flagged the parameter but the test team validated it manually by extracting database version and table structure. Chaining this with an information disclosure finding (debug endpoint exposed database schema) demonstrated complete database compromise. Remediation: parameterized queries implemented within 4 hours of the finding being reported.
+
+### Case Study 2: Cloud Misconfiguration Leading to Data Breach
+An infrastructure pentest of an AWS environment using ScoutSuite found 47 S3 buckets with public read access. Manual validation confirmed that 12 buckets contained PII (customer names, emails, purchase history). The finding was escalated to CISO within 24 hours. Remediation: S3 bucket policies updated, CloudTrail enhanced, and automated compliance scanning implemented.
+
+### Case Study 3: Business Logic Flaw in Payment Processing
+During an API pentest, manual business logic testing revealed that a payment API did not validate that the requesting user owned the order they were paying for. An attacker could change another user's order amount from $100 to $0.01 and pay the reduced amount. No automated scanner would catch this. Remediation: server-side ownership validation was added.
+
+### Case Study 4: JWT Authentication Bypass
+A mobile app pentest using Frida and runtime manipulation discovered that the app accepted unsigned JWTs with arbitrary user IDs. The finding was validated by creating a JWT with `{"sub": "admin", "role": "admin"}` and no signature, which the server accepted. Root cause: the server verification library was misconfigured in "debug mode". Remediation: JWT signature verification properly configured, production configs reviewed.
+
+## Rules
+
+- Every finding must include a CVSS 3.1 score with the vector string
+- Reproduction steps must be detailed enough for another tester to replicate
+- Evidence must be sanitized (no live credentials, customer data, or internal IPs)
+- False positives must be documented with reasoning, not simply removed
+- Retesting after fix must use the same methodology as the original test
+- Remediation SLA starts from the report delivery date, not the finding date
+- Critical findings require CISO notification within 24 hours of discovery
+- Scope must be documented in writing before testing starts
+- Automated findings must be manually validated before inclusion
+- Business logic must be tested manually, not just via automated scanning
+- Executive summary must be suitable for non-technical audience
+- All evidence must be collected during testing, not reconstructed after
+- Test methodology must be documented with references
+- Remediation guidance must be actionable and specific
+
+## Report Structure
+
+### 1. Executive Summary
+- Scope overview
+- Overall risk rating (Critical / High / Medium / Low)
+- Key findings summary (count per severity)
+- Business impact statement
+
+### 2. Scope
+- In-scope: URLs, IP ranges, API endpoints, mobile apps, source code
+- Out-of-scope: explicitly listed
+- Testing methodology (black/grey/white box)
+- Timeframe and tools used
+
+### 3. Risk Scoring
+
+| Severity | CVSS 3.1 | Impact | Exploitability | Count |
+|----------|----------|--------|----------------|-------|
+| Critical | 9.0-10.0 | Complete compromise | Easy, public exploit | # |
+| High | 7.0-8.9 | Significant data/access | Moderate | # |
+| Medium | 4.0-6.9 | Limited impact | Complex | # |
+| Low | 0.1-3.9 | Minimal | Very complex | # |
+| Info | 0.0 | No direct risk | N/A | # |
+
+### 4. Finding Format
+
+Each finding MUST contain:
+
+## [CRITICAL] SQL Injection in Order Search
+
+**ID:** PENTEST-2026-001
+**Severity:** Critical (CVSS 9.8)
+**Status:** Open / Fixed / Accepted / Mitigated
+**Location:** POST /api/v2/orders/search (order-service)
+
+### Description
+The `q` parameter is directly concatenated into SQL query without parameterization.
+
+### Impact
+An attacker can extract, modify, or delete all database records.
+
+### Reproduction
+1. Intercept request to POST /api/v2/orders/search
+2. Set payload: `q=1' OR '1'='1`
+3. Observe that all orders are returned
+
+### Evidence
+Request: POST /api/orders/search
+Payload: q=1' OR '1'='1
+Response: 200 OK (150 orders returned, including orders from other users)
+
+### Recommendation
+Replace string concatenation with parameterized queries.
+
+### Remediation
+- **Owner:** team-orders
+- **Due:** 2026-05-16
+- **Verification:** Re-test after deployment
+
+## Remediation SLA
+
+| Severity | Fix Timeline | Verification | Escalation |
+|----------|-------------|--------------|------------|
+| Critical | 24 hours | Re-test required | CISO |
+| High | 7 days | Re-test required | Security lead |
+| Medium | 30 days | Code review | Engineering manager |
+| Low | 90 days | Code review | Team lead |
+
+## Common Findings Catalog
+
+| Category | Finding | Typical Severity |
+|----------|---------|-----------------|
+| Injection | SQL, NoSQL, Command, LDAP injection | Critical/High |
+| Auth | Broken authentication, session fixation, weak password policy | Critical/High |
+| Access Control | IDOR, privilege escalation, missing function-level access control | High |
+| XSS | Stored, Reflected, DOM-based | Medium/High |
+| SSRF | Server-side request forgery | High |
+| Misconfiguration | Default credentials, debug endpoints, CORS misconfig | Medium |
+| Crypto | Weak TLS, hardcoded keys, weak hashing | Medium |
+| Info Leakage | Stack traces, error messages, directory listing | Low/Info |
+
+## References
+
+- references/findings-library.md — Pentest Findings Library
+- references/pentest-methodology.md — Pentest Methodology Reference
+- references/pentesting-advanced.md — Pentesting Advanced Topics
+- references/pentesting-fundamentals.md — Pentesting Fundamentals
+- references/pentesting-methodology.md — Pentesting Methodology
+- references/report-template.md — Pentest Report Template
+- references/pentesting-methodology-guide.md — Comprehensive pentesting methodology guide
+- references/pentesting-tools-automation.md — Pentesting tools and automation reference
+
+## Handoff
+Hand off to `management/security/SKILL.md` for vulnerability remediation workflow. Hand off to `management/alerting/SKILL.md` for detection rule creation.
+
+## Architecture Decision Trees
+
+### Testing Approach
+| Decision Point | Option A | Option B | Decision Criteria |
+|---|---|---|---|
+| Knowledge level | Black box (realistic external) | White box (thorough coverage) | Budget, compliance requirements |
+| Methodology | OWASP WSTG (web-focused) | PTES (comprehensive) | Application type, org maturity |
+| Tool selection | Automated scanners (efficient) | Manual testing (deep findings) | Time constraints, finding quality needs |
+
+### Scope Definition
+- External-facing apps → Full external pentest with auth bypass attempts
+- Internal apps → Internal network pentest with privilege escalation
+- Mobile apps → API + device-side testing with traffic interception
+- APIs → Authorization + injection + rate limiting tests
+
+## Implementation Patterns
+
+### Pentest Report Template
+`markdown
+# Pentest Report: {target}
+
+## Executive Summary
+- Scope: {systems tested}
+- Duration: {dates}
+- Finding count: {critical}/{high}/{medium}/{low}
+
+## Critical Findings
+### {finding title}
+- **CVE/CWE**: {reference}
+- **CVSS**: {score}
+- **Impact**: {business risk}
+- **Reproduction**: {steps}
+- **Evidence**: {screenshot/log}
+- **Recommendation**: {fix}
+
+## Risk Summary
+| Risk Level | Count | Examples |
+|---|---|---|
+| Critical | {n} | {titles} |
+| High | {n} | {titles} |
+| Medium | {n} | {titles} |
+| Low | {n} | {titles} |
+`
+
+### Vulnerability Reproduction Steps
+`markdown
+## SQL Injection in /api/users endpoint
+
+1. Login as standard user
+2. Intercept request to GET /api/users?id=1
+3. Modify id parameter: 1 UNION SELECT username,password FROM admin_users
+4. Observe admin credentials in response
+
+## Remediation
+- Use parameterized queries
+- Implement WAF rule to block SQLi patterns
+`
+`
+## Production Considerations
+
+### Rules of Engagement
+- **Authorization**: Obtain signed authorization letter before testing. Define scope, methods, and exclusions explicitly.
+- **Communication**: Designate emergency contact for immediate critical findings. Define escalation path for production impact.
+- **Rollback plan**: Have system rollback procedures ready. Test during maintenance windows when possible.
+
+### Quality Assurance
+- **Validation**: Verify each finding manually to eliminate false positives. Attempt exploitation to confirm impact.
+- **Peer review**: Have findings reviewed by second pentester. Validate remediation steps are practical and complete.
+- **Retesting**: Schedule retest after remediation within agreed timeframe. Test only fixed scope, not full re-pentest.
+
+## Anti-Patterns
+
+| Anti-Pattern | Symptom | Solution |
+|---|---|---|
+| Scanner-only testing | 50+ false positives, no real findings | Always manually verify scanner findings |
+| No retest window | Findings never get validated | Contractually require retest within 30 days |
+| Scope creep | Missed critical areas due to unfocused testing | Strictly define scope and stick to it |
+| Findings without business context | Management ignores report | Add business impact, regulatory risk, remediation cost |
+| No evidence | Cannot reproduce findings | Screenshots, request/response pairs, proof of concept |
+
+## Performance Optimization
+
+### Efficiency Techniques
+- **Automated reconnaissance**: Use subdomain enumeration, port scanning, tech fingerprinting upfront. Prioritize attack surface.
+- **Tool chaining**: Automate scanner output to feed manual testing. Use Burp Collaborator for out-of-band detection.
+- **Templated reports**: Auto-generate report skeleton from tooling output. Manually enrich critical findings only.
+
+### Time Management
+- **Day 1-2**: Reconnaissance and automated scanning. Gather intelligence on target.
+- **Day 3-4**: Deep manual testing of critical functionality. Exploit automation findings.
+- **Day 5**: Report writing, evidence collection, retest verification. Deliverable preparation.
+
+## Security Considerations
+
+### Operational Security
+- **Testing infrastructure**: Use isolated VPS for scanning. Never conduct tests from corporate network without authorization.
+- **Data handling**: Encrypt findings in transit and at rest. Never exfiltrate real customer PII — use synthetic test data.
+- **Tool security**: Keep testing tools updated. Use reputable sources for tool downloads.
+
+### Confidentiality
+- **Report distribution**: Share reports only with authorized stakeholders. Use DRM-protected PDF for distribution.
+- **Finding disclosure**: Follow responsible disclosure timelines. Notify vendor before public disclosure of zero-days.
+- **Non-disclosure**: Sign NDA before receiving target documentation. Maintain confidentiality of system details.

@@ -1,0 +1,513 @@
+---
+name: cross-chain-interoperability
+description: "Use when designing cross-chain protocols and bridges, covering IBC, LayerZero, Wormhole, trust models, and bridge security."
+license: MIT
+tags:
+- blockchain
+- bridge
+- interoperability
+- cross-chain
+---
+
+# Blockchain Cross-Chain
+
+## Purpose
+Guide cross-chain protocol selection, bridge architecture, and interoperability design. Covers all major cross-chain protocols with their trust models, security implications, and integration patterns.
+
+## Agent Protocol
+
+### Trigger Keywords
+"cross-chain", "bridge", "IBC", "LayerZero", "Wormhole", "Axelar", "CCIP", "interop", "atomic swap", "shared sequencer", "cross-chain message", "wrapped token", "canonical bridge", "light client bridge", "GMP", "interchain", "multichain"
+
+### Input Context
+- Problem type (asset transfer/message passing/data query/atomic execution)
+- Source and destination chains with finality models
+- Security requirements (trust minimization, audit level, value secured)
+- Performance needs (latency, throughput, cost budget)
+- Existing infrastructure (current bridge usage, token standards)
+
+### Output Artifact
+Cross-chain architecture specification: protocol selection, trust model, fee model, security analysis, implementation plan.
+
+### Response Format
+```
+## Cross-Chain Analysis
+
+**Protocol**: <IBC | LayerZero | Wormhole | Axelar | CCIP | ZK-Bridge | Custom>
+
+**Source Chain**: <chain + finality model>
+**Destination Chain**: <chain + finality model>
+
+**Mechanism**:
+- <transport layer: light client / oracle / guardian / DON / ZK proof>
+- <message delivery: relayer / executor / keeper>
+- <security: verification type + trust assumptions>
+
+**Considerations**:
+- <finality mismatch> | <token representation> | <fee model> | <failure handling>
+
+**Recommendation**:
+- <contract changes, relayer setup, timeout config, rate limit, pause mechanism>
+```
+
+### Completion Criteria
+- Protocol selection justified against alternatives with trust model comparison
+- Finality divergence modeled with confirmation depth specification
+- Fee model covers relayer economics on both sides
+- Failure modes documented: timeouts, reorgs, rate limits, paused state
+- Security analysis identifies bridge-specific attack vectors
+
+### Max Response Length
+4000 tokens
+
+## Decision Trees
+
+### Cross-Chain Protocol Selection
+```
+Cross-chain problem:
+├── Asset transfer between chains?
+│   ├── Same ecosystem (Cosmos IBC, ETH L1↔L2)?
+│   │   ├── YES → Native bridge (IBC for Cosmos, canonical for L2)
+│   │   └── NO → External bridge
+│   │       ├── Maximum security → ZK-bridge (trustless, slow, expensive)
+│   │       ├── Balanced → Light client bridge (trustless, complex to deploy)
+│   │       └── Fast + flexible → External validator bridge (trusted, fast)
+├── Generalized message passing?
+│   ├── IBC-enabled chains → IBC (light client, trustless)
+│   ├── EVM chains → LayerZero, CCIP, or Axelar
+│   │   ├── Configurable security → LayerZero (oracle + relayer choice)
+│   │   ├── Decentralized oracle network → CCIP (DON + ARM)
+│   │   └── Cross-chain execution → Axelar GMP (gas service)
+│   └── Solana + EVM → Wormhole (guardian quorum)
+├── Data query across chains?
+│   ├── On-demand → Oracle bridge (Chainlink CCIP)
+│   └── Streaming → Event indexing + relayer
+└── Atomic execution across chains?
+    ├── Same sequencer → Shared sequencer (Espresso, Astria)
+    └── Different sequencers → Atomic commit protocol (two-phase commit with timeouts)
+```
+
+### Trust Model Comparison
+```
+Bridge type:
+├── Light client bridge (IBC, Rainbow)
+│   ├── Trust: Source chain consensus rules (1 trust assumption)
+│   ├── Security: Validator set of source chain
+│   ├── Latency: Finality time of source chain
+│   ├── Cost: High (on-chain header verification, ~500K gas per header)
+│   └── Best for: High-value, security-critical transfers
+├── External validator bridge (Wormhole, Multichain)
+│   ├── Trust: Validator set of bridge protocol (N-of-M multi-sig)
+│   ├── Security: Slashing conditions, economic security of bridge token
+│   ├── Latency: Fast (after validator confirmation, ~seconds)
+│   ├── Cost: Low (signature verification)
+│   └── Best for: Fast, frequent transfers with accepted trust tradeoff
+├── Oracle + relayer (LayerZero)
+│   ├── Trust: Oracle does not collude with relayer
+│   ├── Security: 2-of-2 model (Oracle + Relayer independent)
+│   ├── Latency: Configurable (confirmations per chain)
+│   ├── Cost: Medium (block header verification + tx proof)
+│   └── Best for: Flexible cross-chain messaging
+├── DON + ARM (CCIP)
+│   ├── Trust: Chainlink DON + ARM (risk management network)
+│   ├── Security: Redundant DON verification + ARM circuit breaker
+│   ├── Latency: ~minutes (DON consensus)
+│   ├── Cost: Medium (DON computation)
+│   └── Best for: Enterprise, regulated (built-in rate limits, pause)
+└── ZK-bridge (zkBridge, Polyhedra)
+    ├── Trust: None (mathematical verification)
+    ├── Security: Proof system security (Groth16, PLONK)
+    ├── Latency: Slow (proving time minutes-hours)
+    ├── Cost: High (proof verification on destination)
+    └── Best for: Maximum security, large batched transfers
+```
+
+### Finality Divergence Handling
+```
+Source finality model:
+├── Instant finality (Cosmos, Solana, Avalanche)
+│   ├── Confirm immediately after block
+│   └── No reorg risk → no confirmation delay needed
+├── Probabilistic finality (Ethereum PoW → PoS merge)
+│   ├── PoS: 1-2 epochs (~6-13 min) for economic finality
+│   ├── Configure: 32-64 slots for safe relay
+│   └── Risk: reorgs of 1-3 slots are possible
+├── Weak finality (rollups with challenge period)
+│   ├── Optimistic: 7d challenge window (absolute finality)
+│   ├── Fast bridge mode: assume no fraud (trusts not challenged)
+│   └── Defense: decentralized watchers monitor challenge period
+└── Adaptive confirmation (most bridges)
+    ├── Low-value: 1-6 confirmations
+    ├── High-value: finalization
+    └── Emergency: finalization + additional delay
+```
+
+## Bridge Security
+
+### Common Attack Vectors
+| Attack | Description | Mitigation |
+|--------|-------------|------------|
+| Validator compromise | Bridge validators collude to sign fraudulent message | Distributed validator set, slashing, threshold signatures |
+| Replay attack | Same message replayed on different chains/destinations | Nonce + chain ID + contract address in message |
+| Reorg exploit | Chain reorganization invalidates source chain confirmation | Wait for finality (or risk threshold confirmations) |
+| Smart contract bug | Bridge contract vulnerability (reentrancy, access control) | Audits, formal verification, bug bounties |
+| Oracle manipulation | Price feed manipulation during bridge operation | Redundant oracles, TWAP pricing |
+| Griefing | Relayer stops processing messages | Permissionless relayer set, economic incentives |
+| MEV extraction | Sandwiching bridge transactions | Commit-reveal, slippage protection |
+| Bridge draining | Flash loan + oracle manipulation to drain bridge | Rate limits, tiered withdrawal, circuit breakers |
+| Phantom token | Attacker creates fake representation token | Verified token registry, canonical token lists |
+| Governance attack | Bridge governance taken over | Timelock, multi-sig, progressive decentralization |
+
+### Historical Bridge Exploits
+| Incident | Bridge | Loss | Cause | Date |
+|----------|--------|------|-------|------|
+| Wormhole | Wormhole | $326M | Guardian signature compromise | Feb 2022 |
+| Ronin | Ronin | $646M | Private key compromise of 5/9 validators | Mar 2022 |
+| BNB Chain | BSC Token Hub | $570M | Light client proof verification bug | Oct 2022 |
+| Nomad | Nomad | $190M | Trusted root not initialized (default = zero) | Aug 2022 |
+| Multichain | Multichain | $1.5B | Private key compromise, bridge halted | Jul 2023 |
+| Orbit Bridge | Orbit | $81M | Smart contract vulnerability | Jan 2024 |
+
+### Message Format Security
+```solidity
+// Secure cross-chain message format
+struct CrossChainMessage {
+    uint256 sourceChainId;      // Prevent replay across forks
+    uint256 destinationChainId; // Prevent misrouting
+    address sourceContract;     // Verify sender
+    address targetContract;     // Ensure correct recipient
+    uint256 nonce;              // Prevent replay on same chain
+    uint256 deadline;           // Prevent time-dilated execution
+    bytes payload;              // Encoded function call
+    bytes32 sourceHash;         // Bind to source transaction
+}
+```
+
+### Rate Limiting Implementation
+```solidity
+contract RateLimiter {
+    // Per-asset rate limits
+    mapping(address => uint256) public maxWithdrawPerPeriod;
+    mapping(address => uint256) public withdrawnThisPeriod;
+    mapping(address => uint256) public periodStart;
+
+    uint256 public constant PERIOD = 1 hours;
+
+    function checkRateLimit(address token, uint256 amount) internal {
+        if (block.timestamp >= periodStart[token] + PERIOD) {
+            withdrawnThisPeriod[token] = 0;
+            periodStart[token] = block.timestamp;
+        }
+        uint256 newTotal = withdrawnThisPeriod[token] + amount;
+        require(newTotal <= maxWithdrawPerPeriod[token], "rate limit exceeded");
+        withdrawnThisPeriod[token] = newTotal;
+    }
+
+    // Tiered security: lower limits for fast path, higher for slow path
+    function withdraw(bytes calldata message, uint256 amount, bool useFastPath) external {
+        if (useFastPath) {
+            require(amount <= fastPathLimit[token], "fast path limit");
+            // Fast: relayer observed, less confirmations
+        } else {
+            checkRateLimit(token, amount);
+            // Slow: full finality, higher limit
+        }
+    }
+}
+```
+
+## Implementation Patterns
+
+### IBC (Inter-Blockchain Communication)
+```go
+// IBC packet flow: source chain → relayer → destination chain
+// 1. Source app calls IBC core to send packet
+// 2. IBC core stores commitment in state
+// 3. Relayer observes commitment, submits to destination
+// 4. Destination IBC core validates light client proof
+// 5. Destination app receives packet via OnRecvPacket callback
+
+type Packet struct {
+    Sequence           uint64
+    SourcePort         string
+    SourceChannel      string
+    DestinationPort    string
+    DestinationChannel string
+    Data               []byte
+    TimeoutHeight      Height
+    TimeoutTimestamp   uint64
+}
+
+// ICS-20 (fungible token transfer):
+// - Source chain: escrow tokens
+// - IBC packet: { amount, denom, sender, receiver }
+// - Destination chain: mint voucher tokens
+// - Return flow: burn voucher, release escrowed tokens
+```
+
+### LayerZero ULN (Ultra Light Node)
+```solidity
+// LayerZero message flow
+// 1. User sends message with fees for oracle + relayer
+// 2. Oracle submits block hash to destination (BlockHeaderStore)
+// 3. Relayer submits transaction proof + payload
+// 4. Destination validates: block hash matches oracle, proof matches relayer
+
+function lzReceive(
+    uint16 _srcChainId,
+    bytes calldata _srcAddress,
+    uint64 _nonce,
+    bytes calldata _payload
+) external {
+    require(oracleConfirmed[_srcChainId][_nonce], "oracle not confirmed");
+    require(relayerConfirmed[_srcChainId][_nonce], "relayer not confirmed");
+    _executeMessage(_srcChainId, _srcAddress, _payload);
+}
+```
+
+### Wormhole Guardian Quorum
+```typescript
+// Wormhole uses 19 guardians (N=19, threshold=13/19)
+// Each guardian observes emitted messages on each chain
+// Guardian signs verified Observation → VAAs (Verified Action Approval)
+
+interface VAA {
+    version: number;        // Current: 1
+    guardianSetIndex: number;
+    signatures: GuardianSignature[]; // 13 of 19 guardian signatures
+    timestamp: number;
+    nonce: number;
+    emitterChain: number;
+    emitterAddress: string;
+    sequence: number;
+    consistencyLevel: number;  // Confirmations waited before observation
+    payload: bytes;
+}
+```
+
+### Axelar GMP (General Message Passing)
+```solidity
+// Axelar cross-chain contract call
+// 1. Call gateway.callContract() on source chain
+// 2. Axelar validators confirm via PoS consensus
+// 3. Relayer executes on destination via gateway.execute()
+
+contract CrossChainMessenger {
+    IAxelarGateway public gateway;
+    IAxelarGasService public gasService;
+
+    function sendMessage(
+        string calldata destChain,
+        string calldata destContract,
+        bytes calldata payload
+    ) external payable {
+        gasService.payNativeGasForContractCall{value: msg.value}(
+            address(this), destChain, destContract, payload, msg.sender
+        );
+        gateway.callContract(destChain, destContract, payload);
+    }
+
+    function execute(
+        bytes32 commandId,
+        string calldata sourceChain,
+        string calldata sourceAddress,
+        bytes calldata payload
+    ) external {
+        require(gateway.validateContractCall(commandId, sourceChain, sourceAddress, payload));
+        // Process the cross-chain message
+    }
+}
+```
+
+## Token Representation Patterns
+| Pattern | Description | Example |
+|---------|-------------|---------|
+| Canonical | Native bridge (L1 → L2 standard bridge) | Arbitrum/OP canonical bridge |
+| Wrapped | Mint-burn on destination (locked on source) | wBTC, wETH |
+| Synthetic | Minted on destination, backed by collateral | stETH on L2 |
+| Native | Deployed natively on both chains | USDC on multiple chains |
+
+### Canonical vs Synthetic Comparison
+```
+├── Canonical (native L1↔L2 bridge)
+│   ├── Pros: Simple, well-audited, built-in by rollup
+│   ├── Cons: Only works for that specific L1↔L2 pair, 7d withdrawal (optimistic)
+│   └── Flow: L1 deposit → bridge contract → L2 mint → L2 → bridge → L1 release
+├── Third-party bridge
+│   ├── Pros: Fast (external validator), multi-chain support
+│   ├── Cons: Trust in third-party, bridge hack risk
+│   └── Flow: L1 → bridge contract (lock) → bridge validators → L2 → bridge contract (mint)
+└── Native cross-chain (USDC CCTP)
+    ├── Pros: First-party, no wrapped token, burn-mint
+    ├── Cons: Only works for USDC, requires Circle infrastructure
+    └── Flow: L1 → burn USDC → CCTP message → L2 → mint USDC
+```
+
+## Relayer Economics
+
+### Incentive Model
+```
+Relayer costs:
+├── Source chain: gas for observing events (read operations, cheap)
+├── Destination chain: gas for submitting messages (write operations)
+├── Infrastructure: node operation, monitoring, alerting
+└── Capital: pre-funded gas on destination chains
+
+Revenue models:
+├── Fixed fee per message (Bridge protocol sets)
+├── Dynamic fee based on destination gas price
+├── Subscription: users pay recurring fee for relay access
+└── Fee market: relayers bid for message execution, user picks
+
+Relayer sustainability:
+├── Multi-asset gas management (keep balance on each chain)
+├── MEV extraction from message ordering
+├── Batch submission: multiple messages in one tx (lower avg cost)
+└── Cross-subsidization: profitable routes subsidize unprofitable ones
+```
+
+## Rules
+1. **Identify the cross-chain problem first**: asset transfer, message passing, data query, or atomic execution determines protocol choice
+2. **Match trust model to risk tolerance**: IBC (light client, trustless) > ZK-bridge (trustless, expensive) > CCIP (DON+ARM) > LayerZero (2-of-2) > Wormhole (guardian quorum)
+3. **Prefer GMP over custom bridges**: Generalized message passing (Axelar, LayerZero, CCIP) enables arbitrary contract calls
+4. **Account for finality divergence**: Probabilistic (ETH) vs instant (Cosmos, Solana) affects security and latency
+5. **Model relayer economics**: Relayers pay source gas, earn on destination. Incentives must cover liveness costs
+6. **Design for failure modes, not just happy path**: timeouts, reorgs, rate limits, paused ARM, guardian changes, replay protection
+7. **Always implement rate limiting**: Prevents single-exploit loss of entire bridge TVL
+8. **Use tiered security**: Low-value messages (fast, cheap), high-value messages (slow, secure)
+9. **Handle token representation correctly**: Understand canonical vs wrapped vs synthetic implications
+10. **Monitor bridge health**: Relayer uptime, pending message queue, timeout expiry, rate limit proximity
+11. **Rate limits should be adaptive**: Reduce limits during periods of high volatility or suspicious activity
+12. **Message timeout must exceed max finality time**: Prevent premature timeout during slow finality
+13. **Bridge governance changes must have extended timelock**: 7+ days for guardian/verifier set changes
+14. **Never use single hash for bridge security**: Always include nonce, chain ID, and contract address in signed message
+15. **Token pairs on bridges must be verified**: Only allow canonical + verified wrapped token lists
+
+## References
+  - references/atomic-composability.md — Atomic Composability Across Chains
+  - references/blockchain-cross-chain-advanced.md — Blockchain Cross Chain Advanced Topics
+  - references/blockchain-cross-chain-fundamentals.md — Blockchain Cross Chain Fundamentals
+  - references/bridge-incident-response.md — Bridge Incident Response
+  - references/bridge-monitoring-alerting.md — Bridge Monitoring and Alerting
+  - references/bridge-security.md — Bridge Security
+  - references/ccip-chainlink.md — Chainlink CCIP (Cross-Chain Interoperability Protocol)
+  - references/ibc-deep.md — IBC (Inter-Blockchain Communication) Deep Dive
+  - references/layerzero-wormhole.md — LayerZero, Wormhole, Axelar
+  - references/message-replay-protection.md — Message Replay Protection
+  - references/shared-sequencer.md — Shared Sequencing
+  - references/cross-chain-token-representation.md — Cross-Chain Token Standards & Representation
+  - references/bridge-fee-models.md — Bridge Fee Models & Relayer Economics
+
+## Architecture Decision Trees
+
+```
+Cross-Chain Bridge Selection
+├── Security model?
+│   ├── Trust-minimized → Light client / ZK bridge (IBC, zkBridge)
+│   ├── External validator → PoS oracle bridge (LayerZero, Wormhole)
+│   └── Liquidity network → Atomic swap / HTLC-based (ThorChain, Connext)
+├── Finality requirement?
+│   ├── Fast (< 30 min) → Optimistic bridge (Nomad, Synapse)
+│   ├── Instant → Liquidity network (Celer, Connext)
+│   └── Slow but secure → ZK bridge with light client verification
+├── Asset type?
+│   ├── Native token → Wrapped asset / canonical bridge
+│   ├── ERC-20 → Liquidity pool bridge (Stargate, Hop)
+│   └── NFT → Specialized NFT bridge (deBridge, LiFi)
+└── Message passing?
+    ├── Generic → LayerZero (omni-chain messaging)
+    └── App-specific → Custom bridge with application logic
+```
+
+**Decision criteria**: Evaluate trust tradeoffs, latency requirements, asset types, and ecosystem compatibility.
+
+## Implementation Patterns
+
+### Atomic Swap (HTLC)
+```solidity
+// blockchain-cross-chain/contracts/HTLC.sol
+pragma solidity ^0.8.20;
+
+contract HTLC {
+    struct Swap {
+        bytes32 hashLock;
+        uint256 timeout;
+        address payable sender;
+        address payable receiver;
+        uint256 amount;
+        bool redeemed;
+    }
+
+    mapping(bytes32 => Swap) public swaps;
+
+    function initiate(bytes32 hashLock, address payable receiver, uint256 timeout) external payable {
+        bytes32 id = keccak256(abi.encodePacked(msg.sender, receiver, hashLock, block.timestamp));
+        swaps[id] = Swap(hashLock, block.timestamp + timeout, payable(msg.sender), receiver, msg.value, false);
+    }
+
+    function redeem(bytes32 id, string memory secret) external {
+        Swap storage swap = swaps[id];
+        require(keccak256(abi.encodePacked(secret)) == swap.hashLock, "Invalid secret");
+        require(!swap.redeemed, "Already redeemed");
+        swap.redeemed = true;
+        swap.receiver.transfer(swap.amount);
+    }
+}
+```
+
+### Relayer Verification
+```python
+# blockchain-cross-chain/relayer_verification.py
+class CrossChainRelayer:
+    def __init__(self, source_rpc: str, dest_rpc: str):
+        self.source = Web3(Web3.HTTPProvider(source_rpc))
+        self.dest = Web3(Web3.HTTPProvider(dest_rpc))
+
+    def verify_and_forward(self, tx_hash: str, source_chain: int, dest_chain: int) -> bool:
+        receipt = self.source.eth.get_transaction_receipt(tx_hash)
+        logs = receipt.get("logs", [])
+        for log in logs:
+            if log["address"] == self.bridge_address:
+                payload = self.decode_log(log)
+                if self.verify_merkle_proof(tx_hash, receipt["blockNumber"]):
+                    self.submit_to_dest(payload, dest_chain)
+                    return True
+        return False
+```
+
+## Production Considerations
+
+- **Validator set rotation**: Rotate bridge validators periodically; enforce quorum threshold (2/3+).
+- **Rate limiting**: Implement daily transfer caps per asset; increase with additional validator approvals.
+- **Pause mechanism**: Emergency pause on anomaly detection; multisig with timelock for unpause.
+- **Monitor relayer health**: Alert on relayer missed messages; failover to backup relayers.
+- **Slippage protection**: Protect against MEV during swaps; use dynamic slippage based on pool depth.
+- **Cross-chain finality**: Wait for sufficient confirmations based on chain finality (32 slots for Ethereum).
+
+## Anti-Patterns
+
+| Anti-Pattern | Consequence | Solution |
+|---|---|---|
+| Single validator set | Centralization, single point of failure | Use distributed validator technology |
+| No rate limiting | Drain in single attack | Per-asset daily caps with gradual release |
+| Trusting source chain finality | Reorg leads to false message | Wait for probabilistic finality (32 slots) |
+| Ignoring message replay | Double-spend across chains | Include nonce + chain ID in message hash |
+| Centralized sequencer | Censorship risk | Decentralize to multiple relayers |
+
+## Performance Optimization
+
+- **Batch messages**: Batch multiple cross-chain messages into single transaction to amortize gas cost.
+- **Async verification**: Verify proofs in background; forward messages in parallel across relayers.
+- **Compressed calldata**: Use packed encoding (abi.encodePacked) for cross-chain messages.
+- **Caching validators**: Cache validator signature sets in memory; verify batch signatures in single call.
+- **Optimistic batching**: Batch outgoing messages; challenge period covers batch, not individual messages.
+
+## Security Considerations
+
+- **Validator set management**: Stake-based validator selection; slash on misbehavior (equivocation, false messages).
+- **Message replay protection**: Include originating chain ID, nonce, and block number in message digest.
+- **Oracle manipulation**: Use multiple oracle sources for exchange rates; TWAP-based pricing.
+- **Bridge contract upgradeability**: Timelock + multisig for bridge upgrades; pause before upgrade.
+- **Audit requirements**: Bridge contracts require multiple audits; formal verification for critical paths.
+
+## Phase: blockchain → blockchain-cross-chain

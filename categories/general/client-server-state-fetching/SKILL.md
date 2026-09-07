@@ -1,0 +1,572 @@
+---
+name: client-server-state-fetching
+description: "Use when managing server state on the client with TanStack Query or SWR — caching, optimistic updates, pagination, and invalidation."
+license: MIT
+tags:
+- data-fetching
+- caching
+---
+
+# Frontend Data Fetching
+
+## Purpose
+Manage server state efficiently on the client — eliminating boilerplate, providing caching, deduplication, background refetching, and optimistic mutations while keeping server state out of global client stores.
+
+## Agent Protocol
+
+### Trigger
+User request includes any of: "data fetching", "TanStack Query", "SWR", "React Query", "server state", "API client", "data fetching pattern", "cache invalidation", "optimistic update", "pagination data", "infinite scroll", "stale-while-revalidate".
+
+### Input Context
+- Framework (React, Vue, Solid, Svelte)
+- Existing state management library
+- API patterns (REST, GraphQL, tRPC)
+- Auth / token handling approach
+
+### Output Artifact
+Data fetching architecture with query/mutation patterns and caching strategy.
+
+### Response Format
+```
+## Strategy
+<library, cache-key-design, staleTime>
+
+## Query Layer
+<query-hooks, pagination, revalidation>
+
+## Mutation Layer
+<optimistic-updates, invalidation, error-handling>
+
+## Cache Config
+<staleTime, cacheTime, persistence>
+
+—
+Compression footer: frontend-data-fetching/v1 | 4 sections | lib: <selected> | cache: <persisted|memory>
+```
+
+No preamble. No postamble. No explanations. No filler/hedging/transitions. Compress output — why use many token when few do trick.
+
+### Completion Criteria
+- All server data queries cached with appropriate staleTime
+- Mutations invalidate related queries or apply optimistic updates
+- Pagination / infinite scroll working with loading states
+- Error states handled globally and per-query
+- Refetch on focus / reconnect configured
+
+### Max Response Length
+4096 tokens
+
+## Data Fetching Decision Trees
+
+### Library Selection Decision Tree
+```
+Project type?
+  |-- Complex app with mutations, pagination, optimistic updates?
+  |     |-- YES --> TanStack Query v5
+  |     |-- NO  --> Read-heavy, minimal mutations?
+  |           |-- YES --> SWR
+  |           |-- NO  --> Using Redux already? --> RTK Query
+  |-- GraphQL API?
+        |-- YES --> Apollo Client or urql
+        |-- NO  --> tRPC available? --> tRPC client
+
+Consider: bundle size (~13KB TanStack vs ~4KB SWR), framework support,
+          devtools quality, cache persistence requirements.
+```
+
+### Caching Strategy Decision Tree
+```
+Data volatility?
+  |-- Real-time (chat, notifications) -->
+  |     |-- Polling: refetchInterval: 5000
+  |     |-- WebSocket: integrate with queryClient.setQueryData
+  |-- Frequently changing (dashboard, feed) -->
+  |     |-- staleTime: 30s, refetchOnWindowFocus: true
+  |-- Rarely changing (config, reference data) -->
+  |     |-- staleTime: 5min, gcTime: 30min
+  |-- Never changes (static content) -->
+        |-- staleTime: Infinity (fetch once, never refetch)
+```
+
+### Error Handling Decision Tree
+```
+Query error received?
+  |-- Network error (no response) -->
+  |     |-- Show stale data if available
+  |     |-- Show offline message if no stale data
+  |-- 4xx (client error) -->
+  |     |-- Do NOT retry (client mistake)
+  |     |-- Show validation error or permission denied
+  |-- 5xx (server error) -->
+        |-- Retry with exponential backoff (default 3 times)
+        |-- Show error state after all retries exhausted
+```
+
+## Workflow
+
+### 1. Library Selection
+- **TanStack Query (React Query):** Complex apps with mutations, optimistic updates, pagination, infinite scroll. Rich devtools. Best for: most production apps.
+- **SWR:** Lightweight, simple API. Good for: small apps, read-heavy, minimal mutation needs.
+- **RTK Query:** Redux ecosystem apps. Tight integration with Redux DevTools. Best for: projects already using Redux.
+
+### 2. Query Patterns
+- Stale-while-revalidate: show cached data, refetch in background.
+- Cache-first to network: use cache until explicitly invalidated.
+- Refetch on window focus configurable per query (default: true).
+- Polling for real-time data via `refetchInterval`.
+- Dependent queries: enable second query only when first has data.
+
+```typescript
+// TanStack Query v5 — basic setup
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,           // 30s before considered stale
+      gcTime: 5 * 60_000,          // 5min unused data stays in cache
+      retry: 3,                    // retry 3 times with backoff
+      refetchOnWindowFocus: true,  // refetch when user returns
+      refetchOnReconnect: true,    // refetch on network recovery
+    },
+  },
+})
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppContent />
+    </QueryClientProvider>
+  )
+}
+```
+
+### 3. Mutations
+- Optimistic updates: apply new data immediately, rollback on error.
+- Invalidate related queries after mutation success.
+- Mutation side effects via callbacks: `onMutate`, `onError`, `onSettled`.
+- Show optimistic UI state during mutation.
+
+```typescript
+// Optimistic update pattern
+function useAddTodo() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (newTodo: Todo) => api.post('/todos', newTodo),
+    onMutate: async (newTodo) => {
+      // Cancel outgoing refetches to avoid overwriting optimistic update
+      await queryClient.cancelQueries({ queryKey: ['todos'] })
+
+      // Snapshot previous value for rollback
+      const previousTodos = queryClient.getQueryData<Todo[]>(['todos'])
+
+      // Optimistically update cache
+      queryClient.setQueryData<Todo[]>(['todos'], (old = []) => [...old, newTodo])
+
+      return { previousTodos }
+    },
+    onError: (err, newTodo, context) => {
+      // Rollback on error
+      queryClient.setQueryData(['todos'], context?.previousTodos)
+      showToast('Failed to add todo', 'error')
+    },
+    onSettled: () => {
+      // Always refetch to ensure server consistency
+      queryClient.invalidateQueries({ queryKey: ['todos'] })
+    },
+  })
+}
+```
+
+### 4. Pagination
+- Offset-based: `useQuery` with page param, prefetch next page.
+- Cursor-based: `useInfiniteQuery` with `getNextPageParam`.
+- Infinite scroll: IntersectionObserver triggers `fetchNextPage`.
+- Loading states: `isFetchingNextPage` vs `isLoading`.
+
+```typescript
+// Infinite scroll with cursor pagination
+function useInfiniteProducts() {
+  return useInfiniteQuery({
+    queryKey: ['products'],
+    queryFn: ({ pageParam }) => api.getProducts({ cursor: pageParam }),
+    initialPageParam: null as string | null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
+  })
+}
+
+function ProductList() {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteProducts()
+  const observerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!observerRef.current) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) fetchNextPage()
+      },
+      { threshold: 0.5 }
+    )
+    observer.observe(observerRef.current)
+    return () => observer.disconnect()
+  }, [hasNextPage, fetchNextPage])
+
+  return (
+    <div>
+      {data?.pages.map(page => page.items.map(item => <ProductCard key={item.id} item={item} />))}
+      {isFetchingNextPage && <Spinner />}
+      <div ref={observerRef} />
+    </div>
+  )
+}
+```
+
+### 5. Error Handling
+- Global error handler via `QueryCache.onError` / `MutationCache.onError`.
+- Retry with exponential backoff configurable (default: 3 retries).
+- Error boundaries catch unhandled query errors.
+- Display stale data when refetch fails — never show blank screen.
+- Refetch on reconnect via `refetchOnReconnect: true`.
+
+```typescript
+// Global error handling
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      if (error instanceof AuthenticationError) {
+        // Redirect to login
+        window.location.href = '/login'
+      }
+      console.error(`Query ${query.queryKey} failed:`, error)
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => {
+      showToast(error.message, 'error')
+    },
+  }),
+})
+```
+
+### 6. Caching Strategy
+- `staleTime`: how long data is considered fresh (default 0). Set per query based on update frequency.
+- `gcTime` (v5) / `cacheTime` (v4): how long unused data stays in cache (default 5 min).
+- Cache key uniquely identifies data — include all params.
+- Persist cache to localStorage for offline resilience.
+
+```typescript
+// Per-query staleTime configuration
+const useUser = (id: string) => useQuery({
+  queryKey: ['users', id],
+  queryFn: () => api.getUser(id),
+  staleTime: 5 * 60_000,     // user data fresh for 5min
+  gcTime: 30 * 60_000,       // keep in cache for 30min after unmount
+})
+
+const useStockPrice = (symbol: string) => useQuery({
+  queryKey: ['stocks', symbol],
+  queryFn: () => api.getStockPrice(symbol),
+  staleTime: 10_000,          // 10 seconds
+  refetchInterval: 30_000,    // poll every 30s
+})
+```
+
+### 7. Query Key Design
+```typescript
+// Hierarchical key structure
+['todos']                          // All todos
+['todos', todoId]                  // Single todo
+['todos', { status: 'done' }]     // Filtered todos
+['todos', todoId, 'comments']       // Comments on a todo
+['users', userId, 'posts', postFilters]  // Nested resources
+```
+
+### 8. Prefetching for Instant UX
+```typescript
+// Prefetch on hover
+function ProductLink({ id }: { id: string }) {
+  const queryClient = useQueryClient()
+
+  const prefetch = () => {
+    queryClient.prefetchQuery({
+      queryKey: ['products', id],
+      queryFn: () => api.getProduct(id),
+      staleTime: 60_000,
+    })
+  }
+
+  return (
+    <Link to={`/products/${id}`} onMouseEnter={prefetch} onFocus={prefetch}>
+      View Product
+    </Link>
+  )
+}
+
+// Prefetch next page
+useEffect(() => {
+  if (hasNextPage) {
+    queryClient.prefetchInfiniteQuery({
+      queryKey: ['products'],
+      pages: 1,
+    })
+  }
+}, [hasNextPage, queryClient])
+```
+
+### 9. Cache Persistence (Offline Support)
+```typescript
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { persistQueryClient } from '@tanstack/react-query-persist-client'
+
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+  maxAge: 24 * 60 * 60 * 1000, // 24 hours
+})
+
+persistQueryClient({
+  queryClient,
+  persister,
+  dehydrateOptions: {
+    shouldDehydrateQuery: (query) => {
+      return query.queryKey[0] !== 'sensitive-data' // Don't persist sensitive data
+    },
+  },
+})
+```
+
+## Component Architecture
+
+### Data Flow Decision Tree
+```
+Is the data from a server?
+  No -> Use client state (Zustand, Context, Redux)
+  Yes -> Does it need caching/deduplication?
+    No -> Plain fetch in useEffect
+    Yes -> Is app complex with mutations?
+      Yes -> TanStack Query
+      No -> SWR
+
+Is the data user-specific?
+  Yes -> Include userId in query key
+  No -> Global cache key, longer staleTime
+
+Does the data need to update in real-time?
+  Yes -> Polling or WebSocket integration
+  No -> Stale-while-revalidate
+```
+
+## Common Pitfalls
+
+1. **Putting server state in global stores**: Server data in Redux/Zustand duplicates cache and causes sync issues.
+2. **Global staleTime of 0**: Zero staleTime means refetch on every mount — wastes bandwidth.
+3. **Not handling mutation errors**: On mutation failure, UI shows success state while data is stale.
+4. **Missing query key dependencies**: Omitting filter params from keys causes cache collisions.
+5. **Infinite queries without getNextPageParam**: Without it, fetchNextPage has no cursor to paginate with.
+6. **Retrying on 4xx errors**: Only retry 5xx and network errors; 4xx means client error.
+7. **Not canceling query on unmount**: In-flight requests may update state on unmounted component.
+8. **Over-fetching with refetchOnWindowFocus**: Consider disabling for reference data that rarely changes.
+
+## Best Practices
+
+1. Set sensible global defaults (staleTime: 30s, retry: 3, refetchOnWindowFocus: true).
+2. Override staleTime per query based on how often data changes.
+3. Use structured query keys (array hierarchy) for targeted invalidation.
+4. Prefetch next page or detail view on hover for instant UX.
+5. Keep query functions pure — same input always produces same output.
+6. Invalidate queries after mutations, not after manual delay.
+7. Display stale data during refetch — avoid loading spinners for background updates.
+8. Use optimistic updates for fast UI but always provide rollback.
+
+## Compared With
+
+| Feature | TanStack Query v5 | SWR | RTK Query |
+|---------|-------------------|-----|-----------|
+| Bundle size | ~13KB | ~4KB | ~12KB (with Redux) |
+| Pagination | useInfiniteQuery | useSWRInfinite | endpoints with pagination |
+| Optimistic updates | onMutate + rollback | mutate with revalidate | onQueryStarted |
+| Devtools | Rich UI | Basic | Redux DevTools |
+| Cache persistence | @tanstack/query-persist-client-key | LocalStorage plugin | Redux persist |
+| Framework agnostic | Yes (React, Vue, Solid) | React only | Redux only |
+
+## Performance
+
+1. **Request deduplication**: Identical in-flight queries are merged into one request.
+2. **Background refetching**: Data refreshes without blocking UI interaction.
+3. **Cache garbage collection**: Unused data is evicted after gcTime.
+4. **Window focus refetch**: Automatically keeps data fresh when user returns to tab.
+5. **Pagination prefetching**: Load next page data before user scrolls to it.
+6. **Selective subscriptions**: Components re-render only when their selected data changes.
+
+## Tooling
+
+1. `@tanstack/react-query-devtools` — visual cache inspector, query toggle, data explorer.
+2. `@sentry` integration — capture query failures as breadcrumbs.
+3. React Query ESLint plugin — enforce query key naming conventions.
+4. `@tanstack/query-sync-storage-persister` — persist cache to localStorage/AsyncStorage.
+5. `@tanstack/query-broadcast-client-experimental` — sync cache across tabs.
+6. `msw` (Mock Service Worker) — mock API responses for development and testing.
+7. `@tanstack/react-query-network-devtools` — inspect network requests for queries.
+
+## Rules
+
+1. Server state is not client state — never put server data in global stores (Redux, Zustand).
+2. Cache key must uniquely identify the data (include params, filters).
+3. `staleTime` reflects how fresh data needs to be — set per query, not globally.
+4. Optimistic updates must always have rollback logic.
+5. Error boundaries should catch query errors gracefully (show fallback UI).
+6. Prefetch next page / detail views for instant navigation.
+7. Retry only on transient errors (network, 5xx) — never on 4xx.
+8. Persist cache to localStorage only when offline support is required.
+9. Mutations always invalidate related queries on success.
+10. Queries never write to server state directly — use mutation hooks.
+
+## References
+  - references/data-fetching-caching.md — Data Fetching Caching
+  - references/data-fetching-patterns.md — Data Fetching Patterns
+  - references/fetching-patterns.md — Fetching Patterns
+  - references/react-query-patterns.md — React Query Patterns
+  - references/swr-patterns.md — SWR Patterns
+  - references/tanstack-query.md — TanStack Query
+  - references/data-fetching-caching-strategies.md — Caching Strategies Reference
+  - references/data-fetching-error-handling.md — Error Handling Reference
+
+## Handoff
+If data fetching requires complex WebSocket sync, optimistic offline queue with conflict resolution, or server-side data hydration beyond basic SSR, flag for senior engineer review. Otherwise implement complete fetching layer.
+## Implementation Patterns
+
+### Observer Pattern for Event Handling
+`
+interface EventObserver<T> {
+  onEvent(event: T): Promise<void>;
+}
+
+class EventBus<T> {
+  private observers: Set<EventObserver<T>> = new Set();
+  subscribe(observer: EventObserver<T>): void {
+    this.observers.add(observer);
+  }
+  unsubscribe(observer: EventObserver<T>): void {
+    this.observers.delete(observer);
+  }
+  async emit(event: T): Promise<void> {
+    const results = Array.from(this.observers).map(o => o.onEvent(event));
+    await Promise.allSettled(results);
+  }
+}
+`
+
+### Configuration-Driven Approach
+`
+config:
+  defaults:
+    timeout: 30s
+    retryCount: 3
+  overrides:
+    production:
+      timeout: 60s
+      retryCount: 5
+    development:
+      timeout: 300s
+      retryCount: 1
+`
+
+## Production Considerations
+
+### Deployment Checklist
+- [ ] Configuration validated against schema before startup
+- [ ] Health check endpoints registered and monitored
+- [ ] Graceful shutdown with draining period (30s timeout)
+- [ ] Resource limits configured (CPU, memory, file descriptors)
+- [ ] Log level set appropriate for environment
+- [ ] Metrics endpoint secured and exposed
+- [ ] Rate limiting configured per-tier
+- [ ] TLS certificates valid and auto-renewing
+- [ ] Database migrations run as separate deployment step
+- [ ] Feature flags ready for gradual rollout
+
+### Monitoring and Alerting
+| Metric | Threshold | Severity | Action |
+|--------|-----------|----------|--------|
+| Error rate | > 1% over 5min | Critical | Page on-call |
+| p99 latency | > 2s over 5min | Warning | Investigate |
+| Throughput drop | > 50% over 1min | Critical | Check upstream |
+| Queue depth | > 1000 over 1min | Warning | Scale consumers |
+| Disk usage | > 85% | Warning | Clean or expand |
+| Memory usage | > 90% heap | Critical | Restart or scale |
+
+## Anti-Patterns
+
+| Anti-Pattern | Symptom | Root Cause | Solution |
+|-------------|---------|------------|----------|
+| Premature optimization | Complex code for no measured benefit | Guessing instead of profiling | Measure first, optimize based on data |
+| Copy-paste reuse | Duplicate code across codebase | Lack of abstraction | Extract shared logic into libraries |
+| Gold-plating | Features with no current requirement | Over-engineering | YAGNI — build what's needed now |
+| Magical thinking | Assumptions without validation | Skipping error handling | Handle all failure modes explicitly |
+
+## Performance Optimization
+
+### Caching Strategy
+Cache hierarchy: L1 (in-memory local) → L2 (distributed Redis/Memcached) → L3 (CDN/Edge).
+Cache invalidation: TTL-based (simple, stale), event-based (complex, fresh), write-through (consistent, higher write latency), write-behind (fast writes, eventual consistency).
+
+### Resource Pooling
+- Database connections: Pool of reusable connections (HikariCP, pgBouncer)
+- HTTP connections: Keep-alive + connection pooling for external calls
+- Thread pool: Bounded thread pools for async task execution
+
+### Profiling Methodology
+1. Establish baseline with production traffic profile
+2. Profile CPU with sampling profiler (pprof, perf, async-profiler)
+3. Profile memory with heap dumps and allocation tracking
+4. Profile I/O with strace/perf trace for syscall analysis
+5. Profile latency with distributed tracing (OpenTelemetry)
+6. Identify bottleneck, formulate hypothesis, implement fix
+7. Re-profile to verify improvement, repeat
+
+## Security Considerations
+
+### Threat Modeling (STRIDE)
+- Spoofing: Identity validation, authentication
+- Tampering: Integrity checks, digital signatures
+- Repudiation: Audit logs, non-repudiation
+- Information disclosure: Encryption, access control
+- Denial of service: Rate limiting, resource quotas
+- Elevation of privilege: Principle of least privilege
+
+### Supply Chain Security
+- Dependency scanning: Snyk, Dependabot, Trivy
+- SBOM generation: CycloneDX or SPDX format
+- Signed commits: GPG or SSH commit signing
+- Artifact verification: Checksum validation, signature verification
+
+### Secrets Management
+- Secrets never in code — always in secrets manager (Vault, AWS Secrets Manager)
+- Rotation policy: Rotate database credentials every 90 days
+- Access audit: Log every secrets access, alert on anomalies
+- Encryption at rest and in transit for all secrets
+- Principle of least privilege: each service gets only its own secrets
+
+## Architecture Decision Trees
+
+### Fetch Strategy Decision Tree
+```
+Is the data required for page load?
+  ├── No  → Lazy fetch with useQuery/useSWR (on interaction or viewport)
+  └── Yes → Is it user-specific?
+       ├── Yes → SSR fetch in load function or getServerSideProps
+       └── No  → Static generation (SSG) with revalidation (ISR)
+            Does the data change frequently?
+            ├── Yes → SWR/stale-while-revalidate with refetch interval
+            └── No  → Cache-First with background revalidation
+```
+
+### Mutation Strategy Decision Tree
+```
+Does the mutation need optimistic UI?
+  ├── No  → Standard mutation with refetch on success
+  └── Yes → Can you predict the response?
+       ├── Yes → Optimistic update with rollback on error
+       └── No  → Show loading state, replace on response
+            Does the mutation affect multiple queries?
+            ├── Yes → Invalidate all affected query keys after mutation
+            └── No  → Invalidate single query key on success
+```
