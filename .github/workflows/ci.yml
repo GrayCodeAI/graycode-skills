@@ -83,7 +83,7 @@ jobs:
         with:
           context: .
           file: Dockerfile.sandbox
-          tags: graycode-skills-sandbox:ci
+          tags: starling-sandbox:ci
           push: false
           load: true
           cache-from: type=gha,scope=sandbox
@@ -93,7 +93,7 @@ jobs:
           BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           changed="$(git diff --name-only "$BASE_REF" HEAD)"
-          python3 tools/sandbox_run_changed_scripts.py --image graycode-skills-sandbox:ci $changed
+          python3 tools/sandbox_run_changed_scripts.py --image starling-sandbox:ci $changed
 
   # -------------------------------------------------------------------------
   # Duplication detection — jscpd (scan categories with reasonable thresholds).

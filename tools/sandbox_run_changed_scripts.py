@@ -38,7 +38,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from check_changed_scripts import changed_scripts
 
-DEFAULT_IMAGE = "ghcr.io/graycodeai/graycode-skills-sandbox:latest"
+DEFAULT_IMAGE = "ghcr.io/graycodeai/starling-sandbox:latest"
 DEFAULT_TIMEOUT_SECONDS = 20
 
 # The `timeout` coreutil's own exit code when it kills the wrapped process —
