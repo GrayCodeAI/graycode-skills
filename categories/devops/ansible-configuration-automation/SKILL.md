@@ -358,7 +358,7 @@ http {
 vault_db_password: "s3cur3p@ssw0rd!"
 vault_api_key: "ak-abc123def456"
 vault_ssl_private_key: |
-  -----BEGIN PRIVATE KEY-----
+  -----BEGIN PRIVATE KEY-----  # example, redacted
   MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC...
   -----END PRIVATE KEY-----
 
