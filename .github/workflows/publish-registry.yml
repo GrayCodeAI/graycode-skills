@@ -12,6 +12,8 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -60,3 +62,21 @@ jobs:
             registry.json
             registry-signature.json
           retention-days: 90
+
+      - name: Publish registry to the rolling release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # One moving release holds the current registry. The Actions
+          # artifact above is retained separately for 90-day forensics.
+          # --latest=false keeps this rolling tag from displacing real
+          # version tags in the GitHub UI; the CLI addresses the tag
+          # directly, not /releases/latest/.
+          if ! gh release view registry-latest >/dev/null 2>&1; then
+            gh release create registry-latest \
+              --title "Skill registry (rolling)" \
+              --notes "Generated registry.json for the current main. Updated automatically; do not delete." \
+              --latest=false
+          fi
+          gh release upload registry-latest \
+            registry.json registry-signature.json --clobber

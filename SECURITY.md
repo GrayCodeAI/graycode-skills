@@ -1,4 +1,4 @@
-# Security Policy — starling
+# Security Policy — graycode-skills
 
 ## Reporting a Vulnerability
 

@@ -7,15 +7,15 @@ cd "$ROOT_DIR"
 violations="$(
   grep -RInE \
     --include='*.py' --include='*.md' --include='*.json' --include='*.yaml' --include='*.yml' --include='*.toml' \
-    'github\.com/GrayCodeAI/(graycode-router|inspect|sight|tok|trace|yaad)(/|")|github\.com/GrayCodeAI/hawk/(internal/|shared/types)' \
+    'github\.com/GrayCodeAI/(graycode-router|harrier|shrike|swift|kestrel|merlin)(/|")|github\.com/GrayCodeAI/graycode-cli/(internal/|shared/types)' \
     README.md docs api tests tools .claude-plugin .codex-plugin .cursor-plugin 2>/dev/null || true
 )"
 
 if [[ -n "${violations}" ]]; then
-  echo "forbidden Hawk consumer references found:"
+  echo "forbidden Graycode consumer references found:"
   echo "${violations}"
   echo
-  echo "starling must target Hawk public skill/plugin surfaces only; do not reference support engine repos, hawk/internal, or removed hawk/shared/types"
+  echo "graycode-skills must target Graycode public skill/plugin surfaces only; do not reference support engine repos, graycode-cli/internal, or removed graycode/shared/types"
   exit 1
 fi
 

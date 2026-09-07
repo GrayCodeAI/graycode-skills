@@ -4,7 +4,7 @@ description: "Advanced Git workflows, branching strategies, and commit conventio
 license: MIT
 tags: [git]
 compatibility: git 2.30+
-allowed-tools: run_command read_file write_file
+allowed_tools: run_command read_file write_file
 ---
 
 # Git Workflow Mastery

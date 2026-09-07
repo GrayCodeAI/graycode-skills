@@ -1,20 +1,20 @@
 openapi: "3.1.0"
 info:
-  title: starling — Skill Registry Reference
+  title: graycode-skills — Skill Registry Reference
   description: |
-    Community skill packages for hawk. Each skill is a Markdown file with YAML
-    frontmatter that hawk loads into its system prompt when activated.
+    Community skill packages for Graycode. Each skill is a Markdown file with YAML
+    frontmatter that Graycode loads into its system prompt when activated.
 
     This is a skill registry — no HTTP server is exposed.
-    Skills are installed via the hawk CLI: `hawk skills install <name>`.
+    Skills are installed via the graycode CLI: `graycode skills install <owner/repo> <name>`.
   version: "0.0.1"
   license:
     name: MIT
-    url: https://github.com/GrayCodeAI/starling/blob/main/LICENSE
+    url: https://github.com/GrayCodeAI/graycode-skills/blob/main/LICENSE
   contact:
-    url: https://github.com/GrayCodeAI/starling
+    url: https://github.com/GrayCodeAI/graycode-skills
 
-# No servers — skills are installed via hawk CLI, not over HTTP.
+# No servers — skills are installed via the graycode CLI, not over HTTP.
 
 x-skill-format:
   required_frontmatter:
@@ -35,11 +35,11 @@ x-skill-format:
 
 x-cli-commands:
   install:
-    description: Install a skill into hawk
-    usage: hawk skills install <skill-name>
+    description: Install a skill into Graycode
+    usage: graycode skills install <owner/repo> <skill-name>
   search:
     description: Search the skill registry
-    usage: hawk skills search <query>
+    usage: graycode skills search <query>
   list:
     description: List installed skills
-    usage: hawk skills list
+    usage: graycode skills list

@@ -56,7 +56,7 @@ def get_categories() -> list:
 
 
 def main():
-    console.print(Panel("[bold cyan]Hawk Community Skills - New Skill Scaffolder[/bold cyan]"))
+    console.print(Panel("[bold cyan]Graycode Community Skills - New Skill Scaffolder[/bold cyan]"))
 
     existing = get_existing_skills()
     categories = get_categories()

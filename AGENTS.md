@@ -1,12 +1,12 @@
 ---
-description: starling — validation, registry, and contribution conventions.
+description: graycode-skills — validation, registry, and contribution conventions.
 globs: "*.md,*.py,*.toml,*.yaml,*.yml"
 alwaysApply: false
 ---
 
-# starling Conventions
+# graycode-skills Conventions
 
-Community skill packages for [hawk](https://github.com/GrayCodeAI/hawk).
+Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli).
 
 ## Development workflow
 
@@ -41,11 +41,11 @@ ruff format --check .
 
 ## Ecosystem Boundaries
 
-- Extends Hawk through public skill and plugin surfaces only
-- Do not reference support engine repos (`graycode-router`, `yaad`, `tok`, `trace`, `sight`, `inspect`)
-- Do not reference `hawk/internal/*` or removed legacy paths
+- Extends Graycode through public skill and plugin surfaces only
+- Do not reference support engine repos (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, `merlin`)
+- Do not reference `graycode-cli/internal/*` or removed legacy paths
 
-For full hawk-eco extension guidelines, see [hawk/AGENTS.md](https://github.com/GrayCodeAI/hawk/blob/main/AGENTS.md).
+For full graycode-eco extension guidelines, see [graycode-cli/AGENTS.md](https://github.com/GrayCodeAI/graycode-cli/blob/main/AGENTS.md).
 
 <!-- gitnexus:start -->
 ## GitNexus — Code Intelligence

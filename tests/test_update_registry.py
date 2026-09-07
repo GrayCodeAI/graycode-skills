@@ -588,9 +588,10 @@ class TestMain:
         registry_path = tmp_path / "registry.json"
         assert registry_path.exists()
         data = json.loads(registry_path.read_text(encoding="utf-8"))
-        assert isinstance(data, list)
-        assert len(data) == 1
-        assert data[0]["name"] == "test-skill"
+        assert isinstance(data, dict)
+        assert data["version"] == 1
+        assert len(data["skills"]) == 1
+        assert data["skills"][0]["name"] == "test-skill"
 
     def test_main_registry_ends_with_newline(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         """The written JSON file should end with a trailing newline."""
@@ -670,3 +671,58 @@ class TestMain:
 
         assert exc_info.value.code == 1
         assert registry_path.read_text(encoding="utf-8") == original
+
+
+# ---------------------------------------------------------------------------
+# Canonical on-disk shape
+#
+# graycode-cli parses {version, updated_at, skills[]} (internal/plugin/
+# registry.go). The generator previously emitted a bare array, so FetchIndex
+# failed with "invalid index" regardless of URL.
+# ---------------------------------------------------------------------------
+
+
+class TestCanonicalRenderShape:
+    def test_render_wraps_entries_in_object(self):
+        doc = json.loads(_mod.render_registry([{"name": "a", "description": "d"}]))
+        assert isinstance(doc, dict), "top level must be an object, not an array"
+        assert doc["version"] == 1
+        assert doc["skills"] == [{"name": "a", "description": "d"}]
+
+    def test_render_omits_updated_at_for_determinism(self):
+        first = _mod.render_registry([{"name": "a"}])
+        second = _mod.render_registry([{"name": "a"}])
+        assert first == second
+        assert "updated_at" not in json.loads(first)
+
+    def test_entries_carry_repo_slug(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+        skill_dir = tmp_path / "categories" / "python" / "demo-skill"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\nname: demo-skill\ndescription: A demo skill\n---\n\nBody\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setattr(_mod, "REPO_ROOT", tmp_path)
+        monkeypatch.setattr(_mod, "CATEGORIES_DIR", tmp_path / "categories")
+
+        entries = _mod.build_registry()
+        assert entries, "expected the demo skill to be discovered"
+        assert entries[0]["repo"] == "GrayCodeAI/graycode-skills"
+
+    def test_schema_accepts_repo_field(self):
+        from registry_schema import validate_registry_entry
+
+        errors = validate_registry_entry(
+            {
+                "name": "demo",
+                "description": "d",
+                "category": "python",
+                "tags": ["python"],
+                "path": "categories/python/demo",
+                "file_count": 1,
+                "has_scripts": False,
+                "repo": "GrayCodeAI/graycode-skills",
+            },
+            path="demo",
+        )
+        assert errors == []

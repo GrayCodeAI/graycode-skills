@@ -3,7 +3,6 @@ name: vercel-composition-patterns
 description: "Skill: vercel-composition-patterns"
 license: MIT
 tags: [general]
-metadata: None
 author: vercel
 version: 1.0.0
 ---

@@ -23,6 +23,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES_DIR = REPO_ROOT / "categories"
 REGISTRY_PATH = REPO_ROOT / "registry.json"
 
+# The GitHub slug every skill in this repo is installed from. graycode-cli
+# builds its clone URL from this field (internal/plugin/auto_skill.go).
+REGISTRY_REPO = "GrayCodeAI/graycode-skills"
+
 console = Console()
 
 
@@ -119,6 +123,7 @@ def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, 
             "category": category_name,
             "tags": tags,
             "path": path,
+            "repo": REGISTRY_REPO,
             "file_count": count_files(skill_dir),
             "has_scripts": has_scripts_dir(skill_dir),
         }
@@ -161,8 +166,14 @@ def validate_entries(entries: list[dict]) -> list[str]:
 
 
 def render_registry(entries: list[dict]) -> str:
-    """Render registry entries in the canonical on-disk format."""
-    return json.dumps(entries, indent=2, ensure_ascii=False) + "\n"
+    """Render registry entries in the canonical on-disk format.
+
+    The top level is an object, not an array: graycode-cli parses
+    {version, updated_at, skills[]} (internal/plugin/registry.go). No
+    timestamp is emitted so that ``--check`` stays deterministic.
+    """
+    document = {"version": 1, "skills": entries}
+    return json.dumps(document, indent=2, ensure_ascii=False) + "\n"
 
 
 def registry_is_current(expected: str) -> bool:

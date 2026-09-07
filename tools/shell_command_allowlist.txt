@@ -24,3 +24,7 @@ raw.githubusercontent.com/anchore/grype
 raw.githubusercontent.com/anchore/syft
 tailscale.com/install.sh
 parallel.ai/install.sh
+raw.githubusercontent.com/render-oss/cli
+raw.githubusercontent.com/colbymchenry/codegraph
+hf.co/cli/install.sh
+cli.genkit.dev

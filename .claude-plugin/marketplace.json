@@ -12,9 +12,99 @@
       "version": "0.0.1",
       "skills": [
         {
+          "name": "agent-development-cli",
+          "path": "categories/ai-ml/agent-development-cli",
+          "invoke": "/hawk:agent-development-cli"
+        },
+        {
+          "name": "agent-interactions-api",
+          "path": "categories/ai-ml/agent-interactions-api",
+          "invoke": "/hawk:agent-interactions-api"
+        },
+        {
+          "name": "agent-platform-tuning",
+          "path": "categories/ai-ml/agent-platform-tuning",
+          "invoke": "/hawk:agent-platform-tuning"
+        },
+        {
+          "name": "agentic-ai-data-science",
+          "path": "categories/ai-ml/agentic-ai-data-science",
+          "invoke": "/hawk:agentic-ai-data-science"
+        },
+        {
+          "name": "agentic-analytics-multicloud",
+          "path": "categories/ai-ml/agentic-analytics-multicloud",
+          "invoke": "/hawk:agentic-analytics-multicloud"
+        },
+        {
+          "name": "ai-agent-alerting-policies",
+          "path": "categories/ai-ml/ai-agent-alerting-policies",
+          "invoke": "/hawk:ai-agent-alerting-policies"
+        },
+        {
+          "name": "ai-agent-build-deploy",
+          "path": "categories/ai-ml/ai-agent-build-deploy",
+          "invoke": "/hawk:ai-agent-build-deploy"
+        },
+        {
+          "name": "ai-agent-platform-troubleshooting",
+          "path": "categories/ai-ml/ai-agent-platform-troubleshooting",
+          "invoke": "/hawk:ai-agent-platform-troubleshooting"
+        },
+        {
+          "name": "ai-agent-skill-registry",
+          "path": "categories/ai-ml/ai-agent-skill-registry",
+          "invoke": "/hawk:ai-agent-skill-registry"
+        },
+        {
+          "name": "ai-api-migration-cloud",
+          "path": "categories/ai-ml/ai-api-migration-cloud",
+          "invoke": "/hawk:ai-api-migration-cloud"
+        },
+        {
+          "name": "ai-app-development-python",
+          "path": "categories/ai-ml/ai-app-development-python",
+          "invoke": "/hawk:ai-app-development-python"
+        },
+        {
+          "name": "ai-app-sdk-dart",
+          "path": "categories/ai-ml/ai-app-sdk-dart",
+          "invoke": "/hawk:ai-app-sdk-dart"
+        },
+        {
+          "name": "ai-app-sdk-javascript",
+          "path": "categories/ai-ml/ai-app-sdk-javascript",
+          "invoke": "/hawk:ai-app-sdk-javascript"
+        },
+        {
+          "name": "ai-eval-quality-flywheel",
+          "path": "categories/ai-ml/ai-eval-quality-flywheel",
+          "invoke": "/hawk:ai-eval-quality-flywheel"
+        },
+        {
+          "name": "ai-image-creation",
+          "path": "categories/ai-ml/ai-image-creation",
+          "invoke": "/hawk:ai-image-creation"
+        },
+        {
           "name": "ai-image-generation",
           "path": "categories/ai-ml/ai-image-generation",
           "invoke": "/hawk:ai-image-generation"
+        },
+        {
+          "name": "ai-model-cli",
+          "path": "categories/ai-ml/ai-model-cli",
+          "invoke": "/hawk:ai-model-cli"
+        },
+        {
+          "name": "ai-music-router",
+          "path": "categories/ai-ml/ai-music-router",
+          "invoke": "/hawk:ai-music-router"
+        },
+        {
+          "name": "ai-video-creation",
+          "path": "categories/ai-ml/ai-video-creation",
+          "invoke": "/hawk:ai-video-creation"
         },
         {
           "name": "ai-video-generation",
@@ -22,9 +112,49 @@
           "invoke": "/hawk:ai-video-generation"
         },
         {
+          "name": "audio-transcription",
+          "path": "categories/ai-ml/audio-transcription",
+          "invoke": "/hawk:audio-transcription"
+        },
+        {
+          "name": "avatar-talking-head",
+          "path": "categories/ai-ml/avatar-talking-head",
+          "invoke": "/hawk:avatar-talking-head"
+        },
+        {
+          "name": "best-model-recommendation",
+          "path": "categories/ai-ml/best-model-recommendation",
+          "invoke": "/hawk:best-model-recommendation"
+        },
+        {
+          "name": "bidirectional-streaming-ai-solution",
+          "path": "categories/ai-ml/bidirectional-streaming-ai-solution",
+          "invoke": "/hawk:bidirectional-streaming-ai-solution"
+        },
+        {
+          "name": "borderless-data-lakehouse",
+          "path": "categories/ai-ml/borderless-data-lakehouse",
+          "invoke": "/hawk:borderless-data-lakehouse"
+        },
+        {
           "name": "building-ai-agent-on-cloudflare",
           "path": "categories/ai-ml/building-ai-agent-on-cloudflare",
           "invoke": "/hawk:building-ai-agent-on-cloudflare"
+        },
+        {
+          "name": "cinematic-short-video",
+          "path": "categories/ai-ml/cinematic-short-video",
+          "invoke": "/hawk:cinematic-short-video"
+        },
+        {
+          "name": "cinematic-video-generation",
+          "path": "categories/ai-ml/cinematic-video-generation",
+          "invoke": "/hawk:cinematic-video-generation"
+        },
+        {
+          "name": "cloud-gpu-model-finetuning",
+          "path": "categories/ai-ml/cloud-gpu-model-finetuning",
+          "invoke": "/hawk:cloud-gpu-model-finetuning"
         },
         {
           "name": "cr-next-type-llm",
@@ -47,9 +177,154 @@
           "invoke": "/hawk:cursor-tensorflow"
         },
         {
+          "name": "dataset-viewer-api",
+          "path": "categories/ai-ml/dataset-viewer-api",
+          "invoke": "/hawk:dataset-viewer-api"
+        },
+        {
+          "name": "desktop-pet-spritesheet",
+          "path": "categories/ai-ml/desktop-pet-spritesheet",
+          "invoke": "/hawk:desktop-pet-spritesheet"
+        },
+        {
+          "name": "enterprise-genai-api",
+          "path": "categories/ai-ml/enterprise-genai-api",
+          "invoke": "/hawk:enterprise-genai-api"
+        },
+        {
+          "name": "face-swap",
+          "path": "categories/ai-ml/face-swap",
+          "invoke": "/hawk:face-swap"
+        },
+        {
+          "name": "fast-text-to-image",
+          "path": "categories/ai-ml/fast-text-to-image",
+          "invoke": "/hawk:fast-text-to-image"
+        },
+        {
+          "name": "genai-model-inference",
+          "path": "categories/ai-ml/genai-model-inference",
+          "invoke": "/hawk:genai-model-inference"
+        },
+        {
+          "name": "hybrid-search-architecture",
+          "path": "categories/ai-ml/hybrid-search-architecture",
+          "invoke": "/hawk:hybrid-search-architecture"
+        },
+        {
+          "name": "image-canvas-extension",
+          "path": "categories/ai-ml/image-canvas-extension",
+          "invoke": "/hawk:image-canvas-extension"
+        },
+        {
+          "name": "image-edit-batch",
+          "path": "categories/ai-ml/image-edit-batch",
+          "invoke": "/hawk:image-edit-batch"
+        },
+        {
+          "name": "image-edit-text",
+          "path": "categories/ai-ml/image-edit-text",
+          "invoke": "/hawk:image-edit-text"
+        },
+        {
+          "name": "image-editing-router",
+          "path": "categories/ai-ml/image-editing-router",
+          "invoke": "/hawk:image-editing-router"
+        },
+        {
+          "name": "image-local-edit",
+          "path": "categories/ai-ml/image-local-edit",
+          "invoke": "/hawk:image-local-edit"
+        },
+        {
+          "name": "image-region-inpainting",
+          "path": "categories/ai-ml/image-region-inpainting",
+          "invoke": "/hawk:image-region-inpainting"
+        },
+        {
+          "name": "image-relighting",
+          "path": "categories/ai-ml/image-relighting",
+          "invoke": "/hawk:image-relighting"
+        },
+        {
+          "name": "image-text-generation",
+          "path": "categories/ai-ml/image-text-generation",
+          "invoke": "/hawk:image-text-generation"
+        },
+        {
+          "name": "image-to-video",
+          "path": "categories/ai-ml/image-to-video",
+          "invoke": "/hawk:image-to-video"
+        },
+        {
+          "name": "javascript-ml-runtime",
+          "path": "categories/ai-ml/javascript-ml-runtime",
+          "invoke": "/hawk:javascript-ml-runtime"
+        },
+        {
+          "name": "kubernetes-llm-inference",
+          "path": "categories/ai-ml/kubernetes-llm-inference",
+          "invoke": "/hawk:kubernetes-llm-inference"
+        },
+        {
+          "name": "lipsync-avatar",
+          "path": "categories/ai-ml/lipsync-avatar",
+          "invoke": "/hawk:lipsync-avatar"
+        },
+        {
+          "name": "llm-api-integration",
+          "path": "categories/ai-ml/llm-api-integration",
+          "invoke": "/hawk:llm-api-integration"
+        },
+        {
           "name": "llm-council",
           "path": "categories/ai-ml/llm-council",
           "invoke": "/hawk:llm-council"
+        },
+        {
+          "name": "llm-fine-tuning",
+          "path": "categories/ai-ml/llm-fine-tuning",
+          "invoke": "/hawk:llm-fine-tuning"
+        },
+        {
+          "name": "llm-inference-migration",
+          "path": "categories/ai-ml/llm-inference-migration",
+          "invoke": "/hawk:llm-inference-migration"
+        },
+        {
+          "name": "llm-prompt-management",
+          "path": "categories/ai-ml/llm-prompt-management",
+          "invoke": "/hawk:llm-prompt-management"
+        },
+        {
+          "name": "llm-tuning-job-management",
+          "path": "categories/ai-ml/llm-tuning-job-management",
+          "invoke": "/hawk:llm-tuning-job-management"
+        },
+        {
+          "name": "local-llm-inference",
+          "path": "categories/ai-ml/local-llm-inference",
+          "invoke": "/hawk:local-llm-inference"
+        },
+        {
+          "name": "local-model-evaluation",
+          "path": "categories/ai-ml/local-model-evaluation",
+          "invoke": "/hawk:local-model-evaluation"
+        },
+        {
+          "name": "lora-demo-space-builder",
+          "path": "categories/ai-ml/lora-demo-space-builder",
+          "invoke": "/hawk:lora-demo-space-builder"
+        },
+        {
+          "name": "machine-learning-pipeline-engineering",
+          "path": "categories/ai-ml/machine-learning-pipeline-engineering",
+          "invoke": "/hawk:machine-learning-pipeline-engineering"
+        },
+        {
+          "name": "managed-agent-resources-api",
+          "path": "categories/ai-ml/managed-agent-resources-api",
+          "invoke": "/hawk:managed-agent-resources-api"
         },
         {
           "name": "mdc-chemistry-ml---pytorch-models",
@@ -102,9 +377,94 @@
           "invoke": "/hawk:mdc-vllm"
         },
         {
+          "name": "ml-experiment-tracking",
+          "path": "categories/ai-ml/ml-experiment-tracking",
+          "invoke": "/hawk:ml-experiment-tracking"
+        },
+        {
+          "name": "ml-model-registry-management",
+          "path": "categories/ai-ml/ml-model-registry-management",
+          "invoke": "/hawk:ml-model-registry-management"
+        },
+        {
+          "name": "model-context-protocol-development",
+          "path": "categories/ai-ml/model-context-protocol-development",
+          "invoke": "/hawk:model-context-protocol-development"
+        },
+        {
+          "name": "model-garden-deployment",
+          "path": "categories/ai-ml/model-garden-deployment",
+          "invoke": "/hawk:model-garden-deployment"
+        },
+        {
+          "name": "model-hub-mcp-integration",
+          "path": "categories/ai-ml/model-hub-mcp-integration",
+          "invoke": "/hawk:model-hub-mcp-integration"
+        },
+        {
+          "name": "model-memory-estimation",
+          "path": "categories/ai-ml/model-memory-estimation",
+          "invoke": "/hawk:model-memory-estimation"
+        },
+        {
+          "name": "model-serving-endpoint-management",
+          "path": "categories/ai-ml/model-serving-endpoint-management",
+          "invoke": "/hawk:model-serving-endpoint-management"
+        },
+        {
+          "name": "music-generation-edit",
+          "path": "categories/ai-ml/music-generation-edit",
+          "invoke": "/hawk:music-generation-edit"
+        },
+        {
+          "name": "music-song-generation",
+          "path": "categories/ai-ml/music-song-generation",
+          "invoke": "/hawk:music-song-generation"
+        },
+        {
           "name": "openai-docs-skill",
           "path": "categories/ai-ml/openai-docs-skill",
           "invoke": "/hawk:openai-docs-skill"
+        },
+        {
+          "name": "pose-conditioned-generation",
+          "path": "categories/ai-ml/pose-conditioned-generation",
+          "invoke": "/hawk:pose-conditioned-generation"
+        },
+        {
+          "name": "prompt-design-optimization",
+          "path": "categories/ai-ml/prompt-design-optimization",
+          "invoke": "/hawk:prompt-design-optimization"
+        },
+        {
+          "name": "prompt-optimization",
+          "path": "categories/ai-ml/prompt-optimization",
+          "invoke": "/hawk:prompt-optimization"
+        },
+        {
+          "name": "rag-engine-management",
+          "path": "categories/ai-ml/rag-engine-management",
+          "invoke": "/hawk:rag-engine-management"
+        },
+        {
+          "name": "rag-enterprise-search-architecture",
+          "path": "categories/ai-ml/rag-enterprise-search-architecture",
+          "invoke": "/hawk:rag-enterprise-search-architecture"
+        },
+        {
+          "name": "realtime-model-client",
+          "path": "categories/ai-ml/realtime-model-client",
+          "invoke": "/hawk:realtime-model-client"
+        },
+        {
+          "name": "reference-guided-video",
+          "path": "categories/ai-ml/reference-guided-video",
+          "invoke": "/hawk:reference-guided-video"
+        },
+        {
+          "name": "reference-to-video",
+          "path": "categories/ai-ml/reference-to-video",
+          "invoke": "/hawk:reference-to-video"
         },
         {
           "name": "research-0-autoresearch-skill",
@@ -592,6 +952,11 @@
           "invoke": "/hawk:research-whisper"
         },
         {
+          "name": "retrieval-augmented-generation",
+          "path": "categories/ai-ml/retrieval-augmented-generation",
+          "invoke": "/hawk:retrieval-augmented-generation"
+        },
+        {
           "name": "sci-bgpt-paper-search",
           "path": "categories/ai-ml/sci-bgpt-paper-search",
           "invoke": "/hawk:sci-bgpt-paper-search"
@@ -600,6 +965,101 @@
           "name": "sci-pytorch-lightning",
           "path": "categories/ai-ml/sci-pytorch-lightning",
           "invoke": "/hawk:sci-pytorch-lightning"
+        },
+        {
+          "name": "sentence-embedding-training",
+          "path": "categories/ai-ml/sentence-embedding-training",
+          "invoke": "/hawk:sentence-embedding-training"
+        },
+        {
+          "name": "sql-machine-learning-queries",
+          "path": "categories/ai-ml/sql-machine-learning-queries",
+          "invoke": "/hawk:sql-machine-learning-queries"
+        },
+        {
+          "name": "still-image-animation",
+          "path": "categories/ai-ml/still-image-animation",
+          "invoke": "/hawk:still-image-animation"
+        },
+        {
+          "name": "text-to-image",
+          "path": "categories/ai-ml/text-to-image",
+          "invoke": "/hawk:text-to-image"
+        },
+        {
+          "name": "text-to-speech-generation",
+          "path": "categories/ai-ml/text-to-speech-generation",
+          "invoke": "/hawk:text-to-speech-generation"
+        },
+        {
+          "name": "text-to-video",
+          "path": "categories/ai-ml/text-to-video",
+          "invoke": "/hawk:text-to-video"
+        },
+        {
+          "name": "text-to-video-generation",
+          "path": "categories/ai-ml/text-to-video-generation",
+          "invoke": "/hawk:text-to-video-generation"
+        },
+        {
+          "name": "tpu-metrics-monitoring",
+          "path": "categories/ai-ml/tpu-metrics-monitoring",
+          "invoke": "/hawk:tpu-metrics-monitoring"
+        },
+        {
+          "name": "tpu-slice-monitoring",
+          "path": "categories/ai-ml/tpu-slice-monitoring",
+          "invoke": "/hawk:tpu-slice-monitoring"
+        },
+        {
+          "name": "transformer-reinforcement-training",
+          "path": "categories/ai-ml/transformer-reinforcement-training",
+          "invoke": "/hawk:transformer-reinforcement-training"
+        },
+        {
+          "name": "video-canvas-extension",
+          "path": "categories/ai-ml/video-canvas-extension",
+          "invoke": "/hawk:video-canvas-extension"
+        },
+        {
+          "name": "video-clip-extension",
+          "path": "categories/ai-ml/video-clip-extension",
+          "invoke": "/hawk:video-clip-extension"
+        },
+        {
+          "name": "video-editing",
+          "path": "categories/ai-ml/video-editing",
+          "invoke": "/hawk:video-editing"
+        },
+        {
+          "name": "video-region-editing",
+          "path": "categories/ai-ml/video-region-editing",
+          "invoke": "/hawk:video-region-editing"
+        },
+        {
+          "name": "vision-model-training",
+          "path": "categories/ai-ml/vision-model-training",
+          "invoke": "/hawk:vision-model-training"
+        },
+        {
+          "name": "zerogpu-demo-optimization",
+          "path": "categories/ai-ml/zerogpu-demo-optimization",
+          "invoke": "/hawk:zerogpu-demo-optimization"
+        },
+        {
+          "name": "angular-app-scaffolding",
+          "path": "categories/angular/angular-app-scaffolding",
+          "invoke": "/hawk:angular-app-scaffolding"
+        },
+        {
+          "name": "angular-application-development",
+          "path": "categories/angular/angular-application-development",
+          "invoke": "/hawk:angular-application-development"
+        },
+        {
+          "name": "angular-development-guidance",
+          "path": "categories/angular/angular-development-guidance",
+          "invoke": "/hawk:angular-development-guidance"
         },
         {
           "name": "cr-angular-novo-elements",
@@ -675,6 +1135,11 @@
           "name": "aws-agentic-ai",
           "path": "categories/aws/aws-agentic-ai",
           "invoke": "/hawk:aws-agentic-ai"
+        },
+        {
+          "name": "aws-context-discovery",
+          "path": "categories/aws/aws-context-discovery",
+          "invoke": "/hawk:aws-context-discovery"
         },
         {
           "name": "aws-cost-operations",
@@ -1172,6 +1637,11 @@
           "invoke": "/hawk:mdc-general-cloud-native-documentation-rules"
         },
         {
+          "name": "multi-cloud-architecture",
+          "path": "categories/aws/multi-cloud-architecture",
+          "invoke": "/hawk:multi-cloud-architecture"
+        },
+        {
           "name": "performing-aws-account-enumeration-with-scout-suite",
           "path": "categories/aws/performing-aws-account-enumeration-with-scout-suite",
           "invoke": "/hawk:performing-aws-account-enumeration-with-scout-suite"
@@ -1240,6 +1710,31 @@
           "name": "research-lambda-labs",
           "path": "categories/aws/research-lambda-labs",
           "invoke": "/hawk:research-lambda-labs"
+        },
+        {
+          "name": "sagemaker-deployment-planner",
+          "path": "categories/aws/sagemaker-deployment-planner",
+          "invoke": "/hawk:sagemaker-deployment-planner"
+        },
+        {
+          "name": "sagemaker-iam-preflight",
+          "path": "categories/aws/sagemaker-iam-preflight",
+          "invoke": "/hawk:sagemaker-iam-preflight"
+        },
+        {
+          "name": "sagemaker-production-endpoints",
+          "path": "categories/aws/sagemaker-production-endpoints",
+          "invoke": "/hawk:sagemaker-production-endpoints"
+        },
+        {
+          "name": "sagemaker-python-environment",
+          "path": "categories/aws/sagemaker-python-environment",
+          "invoke": "/hawk:sagemaker-python-environment"
+        },
+        {
+          "name": "sagemaker-serving-image-selection",
+          "path": "categories/aws/sagemaker-serving-image-selection",
+          "invoke": "/hawk:sagemaker-serving-image-selection"
         },
         {
           "name": "sci-ginkgo-cloud-lab",
@@ -1320,6 +1815,11 @@
           "name": "caveman-stats",
           "path": "categories/caveman/caveman-stats",
           "invoke": "/hawk:caveman-stats"
+        },
+        {
+          "name": "agent-rule-management",
+          "path": "categories/cursor-rules/agent-rule-management",
+          "invoke": "/hawk:agent-rule-management"
         },
         {
           "name": "blef-000-cursor-rules",
@@ -5242,14 +5742,69 @@
           "invoke": "/hawk:cursor-supabase"
         },
         {
+          "name": "data-lineage-impact-analysis",
+          "path": "categories/database/data-lineage-impact-analysis",
+          "invoke": "/hawk:data-lineage-impact-analysis"
+        },
+        {
+          "name": "data-lineage-summary",
+          "path": "categories/database/data-lineage-summary",
+          "invoke": "/hawk:data-lineage-summary"
+        },
+        {
+          "name": "data-warehouse-querying",
+          "path": "categories/database/data-warehouse-querying",
+          "invoke": "/hawk:data-warehouse-querying"
+        },
+        {
+          "name": "database-architecture-design",
+          "path": "categories/database/database-architecture-design",
+          "invoke": "/hawk:database-architecture-design"
+        },
+        {
+          "name": "database-performance-engineering",
+          "path": "categories/database/database-performance-engineering",
+          "invoke": "/hawk:database-performance-engineering"
+        },
+        {
+          "name": "database-query-optimization",
+          "path": "categories/database/database-query-optimization",
+          "invoke": "/hawk:database-query-optimization"
+        },
+        {
+          "name": "database-selection-onboarding",
+          "path": "categories/database/database-selection-onboarding",
+          "invoke": "/hawk:database-selection-onboarding"
+        },
+        {
           "name": "detecting-sql-injection-via-waf-logs",
           "path": "categories/database/detecting-sql-injection-via-waf-logs",
           "invoke": "/hawk:detecting-sql-injection-via-waf-logs"
         },
         {
+          "name": "distributed-dataframe-analytics",
+          "path": "categories/database/distributed-dataframe-analytics",
+          "invoke": "/hawk:distributed-dataframe-analytics"
+        },
+        {
+          "name": "distributed-sql-database",
+          "path": "categories/database/distributed-sql-database",
+          "invoke": "/hawk:distributed-sql-database"
+        },
+        {
           "name": "firebase-ai-logic",
           "path": "categories/database/firebase-ai-logic",
           "invoke": "/hawk:firebase-ai-logic"
+        },
+        {
+          "name": "managed-postgres-database",
+          "path": "categories/database/managed-postgres-database",
+          "invoke": "/hawk:managed-postgres-database"
+        },
+        {
+          "name": "managed-relational-database",
+          "path": "categories/database/managed-relational-database",
+          "invoke": "/hawk:managed-relational-database"
         },
         {
           "name": "mdc-drizzle",
@@ -5327,9 +5882,24 @@
           "invoke": "/hawk:mdc-supabase-specific-rules"
         },
         {
+          "name": "nosql-table-design",
+          "path": "categories/database/nosql-table-design",
+          "invoke": "/hawk:nosql-table-design"
+        },
+        {
           "name": "performing-second-order-sql-injection",
           "path": "categories/database/performing-second-order-sql-injection",
           "invoke": "/hawk:performing-second-order-sql-injection"
+        },
+        {
+          "name": "postgresql-administration",
+          "path": "categories/database/postgresql-administration",
+          "invoke": "/hawk:postgresql-administration"
+        },
+        {
+          "name": "sql-query-optimization",
+          "path": "categories/database/sql-query-optimization",
+          "invoke": "/hawk:sql-query-optimization"
         },
         {
           "name": "supabase-postgres-best-practices",
@@ -5342,14 +5912,159 @@
           "invoke": "/hawk:tl-r2-sql"
         },
         {
+          "name": "branch-bug-hunting",
+          "path": "categories/debugging/branch-bug-hunting",
+          "invoke": "/hawk:branch-bug-hunting"
+        },
+        {
+          "name": "browser-automation-tracing",
+          "path": "categories/debugging/browser-automation-tracing",
+          "invoke": "/hawk:browser-automation-tracing"
+        },
+        {
+          "name": "bug-diagnosis-loop",
+          "path": "categories/debugging/bug-diagnosis-loop",
+          "invoke": "/hawk:bug-diagnosis-loop"
+        },
+        {
+          "name": "dag-run-troubleshooting",
+          "path": "categories/debugging/dag-run-troubleshooting",
+          "invoke": "/hawk:dag-run-troubleshooting"
+        },
+        {
           "name": "debugging-and-error-recovery",
           "path": "categories/debugging/debugging-and-error-recovery",
           "invoke": "/hawk:debugging-and-error-recovery"
         },
         {
+          "name": "error-monitoring-inspection",
+          "path": "categories/debugging/error-monitoring-inspection",
+          "invoke": "/hawk:error-monitoring-inspection"
+        },
+        {
+          "name": "evidence-led-debugging",
+          "path": "categories/debugging/evidence-led-debugging",
+          "invoke": "/hawk:evidence-led-debugging"
+        },
+        {
+          "name": "gpu-tpu-disruption-handling",
+          "path": "categories/debugging/gpu-tpu-disruption-handling",
+          "invoke": "/hawk:gpu-tpu-disruption-handling"
+        },
+        {
+          "name": "issue-queue-triage",
+          "path": "categories/debugging/issue-queue-triage",
+          "invoke": "/hawk:issue-queue-triage"
+        },
+        {
+          "name": "jobset-interruption-troubleshooting",
+          "path": "categories/debugging/jobset-interruption-troubleshooting",
+          "invoke": "/hawk:jobset-interruption-troubleshooting"
+        },
+        {
+          "name": "kubernetes-workload-troubleshooting",
+          "path": "categories/debugging/kubernetes-workload-troubleshooting",
+          "invoke": "/hawk:kubernetes-workload-troubleshooting"
+        },
+        {
+          "name": "mobile-performance-monitoring",
+          "path": "categories/debugging/mobile-performance-monitoring",
+          "invoke": "/hawk:mobile-performance-monitoring"
+        },
+        {
+          "name": "systematic-bug-resolution",
+          "path": "categories/debugging/systematic-bug-resolution",
+          "invoke": "/hawk:systematic-bug-resolution"
+        },
+        {
+          "name": "tpu-memory-troubleshooting",
+          "path": "categories/debugging/tpu-memory-troubleshooting",
+          "invoke": "/hawk:tpu-memory-troubleshooting"
+        },
+        {
+          "name": "blueprint-cloud-deploy",
+          "path": "categories/deployment/blueprint-cloud-deploy",
+          "invoke": "/hawk:blueprint-cloud-deploy"
+        },
+        {
+          "name": "cloud-landing-zone-foundation",
+          "path": "categories/deployment/cloud-landing-zone-foundation",
+          "invoke": "/hawk:cloud-landing-zone-foundation"
+        },
+        {
+          "name": "component-deploy-troubleshooting",
+          "path": "categories/deployment/component-deploy-troubleshooting",
+          "invoke": "/hawk:component-deploy-troubleshooting"
+        },
+        {
+          "name": "component-deployment-guide",
+          "path": "categories/deployment/component-deployment-guide",
+          "invoke": "/hawk:component-deployment-guide"
+        },
+        {
+          "name": "component-pre-deploy-validation",
+          "path": "categories/deployment/component-pre-deploy-validation",
+          "invoke": "/hawk:component-pre-deploy-validation"
+        },
+        {
+          "name": "edge-platform-deploy",
+          "path": "categories/deployment/edge-platform-deploy",
+          "invoke": "/hawk:edge-platform-deploy"
+        },
+        {
+          "name": "hosted-ml-app-deployment",
+          "path": "categories/deployment/hosted-ml-app-deployment",
+          "invoke": "/hawk:hosted-ml-app-deployment"
+        },
+        {
+          "name": "infrastructure-design-deploy-workflow",
+          "path": "categories/deployment/infrastructure-design-deploy-workflow",
+          "invoke": "/hawk:infrastructure-design-deploy-workflow"
+        },
+        {
+          "name": "kubernetes-app-onboarding",
+          "path": "categories/deployment/kubernetes-app-onboarding",
+          "invoke": "/hawk:kubernetes-app-onboarding"
+        },
+        {
+          "name": "mobile-web-hosting",
+          "path": "categories/deployment/mobile-web-hosting",
+          "invoke": "/hawk:mobile-web-hosting"
+        },
+        {
+          "name": "n-tier-serverless-web-app",
+          "path": "categories/deployment/n-tier-serverless-web-app",
+          "invoke": "/hawk:n-tier-serverless-web-app"
+        },
+        {
+          "name": "preview-deployment-publishing",
+          "path": "categories/deployment/preview-deployment-publishing",
+          "invoke": "/hawk:preview-deployment-publishing"
+        },
+        {
+          "name": "serverless-app-deployment",
+          "path": "categories/deployment/serverless-app-deployment",
+          "invoke": "/hawk:serverless-app-deployment"
+        },
+        {
           "name": "shipping-and-launch",
           "path": "categories/deployment/shipping-and-launch",
           "invoke": "/hawk:shipping-and-launch"
+        },
+        {
+          "name": "web-static-deployment",
+          "path": "categories/deployment/web-static-deployment",
+          "invoke": "/hawk:web-static-deployment"
+        },
+        {
+          "name": "airflow-dag-authoring",
+          "path": "categories/devops/airflow-dag-authoring",
+          "invoke": "/hawk:airflow-dag-authoring"
+        },
+        {
+          "name": "airflow-dag-migration",
+          "path": "categories/devops/airflow-dag-migration",
+          "invoke": "/hawk:airflow-dag-migration"
         },
         {
           "name": "analyze_terraform_plan",
@@ -5387,9 +6102,49 @@
           "invoke": "/hawk:building-mcp-server-on-cloudflare"
         },
         {
+          "name": "chaos-engineering",
+          "path": "categories/devops/chaos-engineering",
+          "invoke": "/hawk:chaos-engineering"
+        },
+        {
+          "name": "ci-build-triggers",
+          "path": "categories/devops/ci-build-triggers",
+          "invoke": "/hawk:ci-build-triggers"
+        },
+        {
           "name": "ci-cd-and-automation",
           "path": "categories/devops/ci-cd-and-automation",
           "invoke": "/hawk:ci-cd-and-automation"
+        },
+        {
+          "name": "ci-workflow-engineering",
+          "path": "categories/devops/ci-workflow-engineering",
+          "invoke": "/hawk:ci-workflow-engineering"
+        },
+        {
+          "name": "cloud-cli-operations",
+          "path": "categories/devops/cloud-cli-operations",
+          "invoke": "/hawk:cloud-cli-operations"
+        },
+        {
+          "name": "cloud-cost-optimization-framework",
+          "path": "categories/devops/cloud-cost-optimization-framework",
+          "invoke": "/hawk:cloud-cost-optimization-framework"
+        },
+        {
+          "name": "cloud-operational-excellence",
+          "path": "categories/devops/cloud-operational-excellence",
+          "invoke": "/hawk:cloud-operational-excellence"
+        },
+        {
+          "name": "cloud-service-provisioning",
+          "path": "categories/devops/cloud-service-provisioning",
+          "invoke": "/hawk:cloud-service-provisioning"
+        },
+        {
+          "name": "command-line-tool-development",
+          "path": "categories/devops/command-line-tool-development",
+          "invoke": "/hawk:command-line-tool-development"
         },
         {
           "name": "cr-elixir-phoenix-docker-setup",
@@ -5400,6 +6155,11 @@
           "name": "cr-kubernetes-mkdocs-documentation",
           "path": "categories/devops/cr-kubernetes-mkdocs-documentation",
           "invoke": "/hawk:cr-kubernetes-mkdocs-documentation"
+        },
+        {
+          "name": "cross-project-log-routing",
+          "path": "categories/devops/cross-project-log-routing",
+          "invoke": "/hawk:cross-project-log-routing"
         },
         {
           "name": "cursor-ansible",
@@ -5427,6 +6187,11 @@
           "invoke": "/hawk:cursor-terraform"
         },
         {
+          "name": "custom-node-image-discovery",
+          "path": "categories/devops/custom-node-image-discovery",
+          "invoke": "/hawk:custom-node-image-discovery"
+        },
+        {
           "name": "detecting-privilege-escalation-in-kubernetes-pods",
           "path": "categories/devops/detecting-privilege-escalation-in-kubernetes-pods",
           "invoke": "/hawk:detecting-privilege-escalation-in-kubernetes-pods"
@@ -5435,6 +6200,16 @@
           "name": "detecting-supply-chain-attacks-in-ci-cd",
           "path": "categories/devops/detecting-supply-chain-attacks-in-ci-cd",
           "invoke": "/hawk:detecting-supply-chain-attacks-in-ci-cd"
+        },
+        {
+          "name": "devops-platform-engineering",
+          "path": "categories/devops/devops-platform-engineering",
+          "invoke": "/hawk:devops-platform-engineering"
+        },
+        {
+          "name": "file-storage-autoscaling",
+          "path": "categories/devops/file-storage-autoscaling",
+          "invoke": "/hawk:file-storage-autoscaling"
         },
         {
           "name": "hardening-docker-containers-for-production",
@@ -5477,9 +6252,129 @@
           "invoke": "/hawk:implementing-secrets-scanning-in-ci-cd"
         },
         {
+          "name": "infrastructure-as-code",
+          "path": "categories/devops/infrastructure-as-code",
+          "invoke": "/hawk:infrastructure-as-code"
+        },
+        {
           "name": "integrating-sast-into-github-actions-pipeline",
           "path": "categories/devops/integrating-sast-into-github-actions-pipeline",
           "invoke": "/hawk:integrating-sast-into-github-actions-pipeline"
+        },
+        {
+          "name": "interactive-setup-wizard",
+          "path": "categories/devops/interactive-setup-wizard",
+          "invoke": "/hawk:interactive-setup-wizard"
+        },
+        {
+          "name": "kubernetes-alerting-policies",
+          "path": "categories/devops/kubernetes-alerting-policies",
+          "invoke": "/hawk:kubernetes-alerting-policies"
+        },
+        {
+          "name": "kubernetes-backup-recovery",
+          "path": "categories/devops/kubernetes-backup-recovery",
+          "invoke": "/hawk:kubernetes-backup-recovery"
+        },
+        {
+          "name": "kubernetes-batch-hpc",
+          "path": "categories/devops/kubernetes-batch-hpc",
+          "invoke": "/hawk:kubernetes-batch-hpc"
+        },
+        {
+          "name": "kubernetes-cluster-autoscaling",
+          "path": "categories/devops/kubernetes-cluster-autoscaling",
+          "invoke": "/hawk:kubernetes-cluster-autoscaling"
+        },
+        {
+          "name": "kubernetes-cluster-basics",
+          "path": "categories/devops/kubernetes-cluster-basics",
+          "invoke": "/hawk:kubernetes-cluster-basics"
+        },
+        {
+          "name": "kubernetes-cluster-golden-path",
+          "path": "categories/devops/kubernetes-cluster-golden-path",
+          "invoke": "/hawk:kubernetes-cluster-golden-path"
+        },
+        {
+          "name": "kubernetes-cluster-provisioning",
+          "path": "categories/devops/kubernetes-cluster-provisioning",
+          "invoke": "/hawk:kubernetes-cluster-provisioning"
+        },
+        {
+          "name": "kubernetes-cluster-upgrades",
+          "path": "categories/devops/kubernetes-cluster-upgrades",
+          "invoke": "/hawk:kubernetes-cluster-upgrades"
+        },
+        {
+          "name": "kubernetes-compute-classes",
+          "path": "categories/devops/kubernetes-compute-classes",
+          "invoke": "/hawk:kubernetes-compute-classes"
+        },
+        {
+          "name": "kubernetes-cost-analysis",
+          "path": "categories/devops/kubernetes-cost-analysis",
+          "invoke": "/hawk:kubernetes-cost-analysis"
+        },
+        {
+          "name": "kubernetes-cost-optimization",
+          "path": "categories/devops/kubernetes-cost-optimization",
+          "invoke": "/hawk:kubernetes-cost-optimization"
+        },
+        {
+          "name": "kubernetes-manifest-generation",
+          "path": "categories/devops/kubernetes-manifest-generation",
+          "invoke": "/hawk:kubernetes-manifest-generation"
+        },
+        {
+          "name": "kubernetes-multitenancy",
+          "path": "categories/devops/kubernetes-multitenancy",
+          "invoke": "/hawk:kubernetes-multitenancy"
+        },
+        {
+          "name": "kubernetes-node-troubleshooting",
+          "path": "categories/devops/kubernetes-node-troubleshooting",
+          "invoke": "/hawk:kubernetes-node-troubleshooting"
+        },
+        {
+          "name": "kubernetes-observability-config",
+          "path": "categories/devops/kubernetes-observability-config",
+          "invoke": "/hawk:kubernetes-observability-config"
+        },
+        {
+          "name": "kubernetes-production-readiness",
+          "path": "categories/devops/kubernetes-production-readiness",
+          "invoke": "/hawk:kubernetes-production-readiness"
+        },
+        {
+          "name": "kubernetes-storage-configuration",
+          "path": "categories/devops/kubernetes-storage-configuration",
+          "invoke": "/hawk:kubernetes-storage-configuration"
+        },
+        {
+          "name": "kubernetes-workload-autoscaling",
+          "path": "categories/devops/kubernetes-workload-autoscaling",
+          "invoke": "/hawk:kubernetes-workload-autoscaling"
+        },
+        {
+          "name": "kubernetes-workload-management",
+          "path": "categories/devops/kubernetes-workload-management",
+          "invoke": "/hawk:kubernetes-workload-management"
+        },
+        {
+          "name": "kubernetes-workload-reliability",
+          "path": "categories/devops/kubernetes-workload-reliability",
+          "invoke": "/hawk:kubernetes-workload-reliability"
+        },
+        {
+          "name": "log-query-generation",
+          "path": "categories/devops/log-query-generation",
+          "invoke": "/hawk:log-query-generation"
+        },
+        {
+          "name": "logging-configuration-basics",
+          "path": "categories/devops/logging-configuration-basics",
+          "invoke": "/hawk:logging-configuration-basics"
         },
         {
           "name": "mdc-ansible",
@@ -5527,9 +6422,39 @@
           "invoke": "/hawk:mdc-terraform"
         },
         {
+          "name": "metrics-time-series-query",
+          "path": "categories/devops/metrics-time-series-query",
+          "invoke": "/hawk:metrics-time-series-query"
+        },
+        {
+          "name": "mobile-ci-cd-workflows",
+          "path": "categories/devops/mobile-ci-cd-workflows",
+          "invoke": "/hawk:mobile-ci-cd-workflows"
+        },
+        {
+          "name": "monitoring-chart-generation",
+          "path": "categories/devops/monitoring-chart-generation",
+          "invoke": "/hawk:monitoring-chart-generation"
+        },
+        {
+          "name": "monitoring-metric-discovery",
+          "path": "categories/devops/monitoring-metric-discovery",
+          "invoke": "/hawk:monitoring-metric-discovery"
+        },
+        {
           "name": "observability-and-instrumentation",
           "path": "categories/devops/observability-and-instrumentation",
           "invoke": "/hawk:observability-and-instrumentation"
+        },
+        {
+          "name": "observability-design",
+          "path": "categories/devops/observability-design",
+          "invoke": "/hawk:observability-design"
+        },
+        {
+          "name": "over-the-air-update-health",
+          "path": "categories/devops/over-the-air-update-health",
+          "invoke": "/hawk:over-the-air-update-health"
         },
         {
           "name": "performing-docker-bench-security-assessment",
@@ -5550,6 +6475,31 @@
           "name": "performing-kubernetes-penetration-testing",
           "path": "categories/devops/performing-kubernetes-penetration-testing",
           "invoke": "/hawk:performing-kubernetes-penetration-testing"
+        },
+        {
+          "name": "pr-ci-check-fixing",
+          "path": "categories/devops/pr-ci-check-fixing",
+          "invoke": "/hawk:pr-ci-check-fixing"
+        },
+        {
+          "name": "pre-commit-hook-setup",
+          "path": "categories/devops/pre-commit-hook-setup",
+          "invoke": "/hawk:pre-commit-hook-setup"
+        },
+        {
+          "name": "promql-query-generation",
+          "path": "categories/devops/promql-query-generation",
+          "invoke": "/hawk:promql-query-generation"
+        },
+        {
+          "name": "roadmap-issue-tracking",
+          "path": "categories/devops/roadmap-issue-tracking",
+          "invoke": "/hawk:roadmap-issue-tracking"
+        },
+        {
+          "name": "saas-production-operations",
+          "path": "categories/devops/saas-production-operations",
+          "invoke": "/hawk:saas-production-operations"
         },
         {
           "name": "scanning-docker-images-with-trivy",
@@ -5577,14 +6527,189 @@
           "invoke": "/hawk:securing-kubernetes-on-cloud"
         },
         {
+          "name": "site-reliability-engineering",
+          "path": "categories/devops/site-reliability-engineering",
+          "invoke": "/hawk:site-reliability-engineering"
+        },
+        {
+          "name": "slo-alert-configuration",
+          "path": "categories/devops/slo-alert-configuration",
+          "invoke": "/hawk:slo-alert-configuration"
+        },
+        {
           "name": "tl-terraform",
           "path": "categories/devops/tl-terraform",
           "invoke": "/hawk:tl-terraform"
         },
         {
+          "name": "workload-compliance-evaluations",
+          "path": "categories/devops/workload-compliance-evaluations",
+          "invoke": "/hawk:workload-compliance-evaluations"
+        },
+        {
+          "name": "agent-facing-documentation",
+          "path": "categories/documentation/agent-facing-documentation",
+          "invoke": "/hawk:agent-facing-documentation"
+        },
+        {
+          "name": "agent-friendly-web-content",
+          "path": "categories/documentation/agent-friendly-web-content",
+          "invoke": "/hawk:agent-friendly-web-content"
+        },
+        {
+          "name": "agent-instructions-file",
+          "path": "categories/documentation/agent-instructions-file",
+          "invoke": "/hawk:agent-instructions-file"
+        },
+        {
+          "name": "ai-writing-pattern-removal",
+          "path": "categories/documentation/ai-writing-pattern-removal",
+          "invoke": "/hawk:ai-writing-pattern-removal"
+        },
+        {
+          "name": "api-endpoint-documentation",
+          "path": "categories/documentation/api-endpoint-documentation",
+          "invoke": "/hawk:api-endpoint-documentation"
+        },
+        {
+          "name": "article-beat-writing",
+          "path": "categories/documentation/article-beat-writing",
+          "invoke": "/hawk:article-beat-writing"
+        },
+        {
+          "name": "article-structuring",
+          "path": "categories/documentation/article-structuring",
+          "invoke": "/hawk:article-structuring"
+        },
+        {
+          "name": "code-documentation-authoring",
+          "path": "categories/documentation/code-documentation-authoring",
+          "invoke": "/hawk:code-documentation-authoring"
+        },
+        {
+          "name": "codebase-spec-extraction",
+          "path": "categories/documentation/codebase-spec-extraction",
+          "invoke": "/hawk:codebase-spec-extraction"
+        },
+        {
+          "name": "collaborative-doc-authoring",
+          "path": "categories/documentation/collaborative-doc-authoring",
+          "invoke": "/hawk:collaborative-doc-authoring"
+        },
+        {
+          "name": "developer-docs-retrieval",
+          "path": "categories/documentation/developer-docs-retrieval",
+          "invoke": "/hawk:developer-docs-retrieval"
+        },
+        {
+          "name": "developer-source-search",
+          "path": "categories/documentation/developer-source-search",
+          "invoke": "/hawk:developer-source-search"
+        },
+        {
+          "name": "docs-portal-ingestion",
+          "path": "categories/documentation/docs-portal-ingestion",
+          "invoke": "/hawk:docs-portal-ingestion"
+        },
+        {
           "name": "documentation-and-adrs",
           "path": "categories/documentation/documentation-and-adrs",
           "invoke": "/hawk:documentation-and-adrs"
+        },
+        {
+          "name": "documentation-coauthoring",
+          "path": "categories/documentation/documentation-coauthoring",
+          "invoke": "/hawk:documentation-coauthoring"
+        },
+        {
+          "name": "internal-company-comms",
+          "path": "categories/documentation/internal-company-comms",
+          "invoke": "/hawk:internal-company-comms"
+        },
+        {
+          "name": "knowledge-base-building",
+          "path": "categories/documentation/knowledge-base-building",
+          "invoke": "/hawk:knowledge-base-building"
+        },
+        {
+          "name": "llm-api-documentation",
+          "path": "categories/documentation/llm-api-documentation",
+          "invoke": "/hawk:llm-api-documentation"
+        },
+        {
+          "name": "note-taking-management",
+          "path": "categories/documentation/note-taking-management",
+          "invoke": "/hawk:note-taking-management"
+        },
+        {
+          "name": "payment-docs-lookup",
+          "path": "categories/documentation/payment-docs-lookup",
+          "invoke": "/hawk:payment-docs-lookup"
+        },
+        {
+          "name": "pdf-document-processing",
+          "path": "categories/documentation/pdf-document-processing",
+          "invoke": "/hawk:pdf-document-processing"
+        },
+        {
+          "name": "plain-technical-writing",
+          "path": "categories/documentation/plain-technical-writing",
+          "invoke": "/hawk:plain-technical-writing"
+        },
+        {
+          "name": "product-copy-authoring",
+          "path": "categories/documentation/product-copy-authoring",
+          "invoke": "/hawk:product-copy-authoring"
+        },
+        {
+          "name": "product-technical-docs",
+          "path": "categories/documentation/product-technical-docs",
+          "invoke": "/hawk:product-technical-docs"
+        },
+        {
+          "name": "skill-authoring-workflow",
+          "path": "categories/documentation/skill-authoring-workflow",
+          "invoke": "/hawk:skill-authoring-workflow"
+        },
+        {
+          "name": "skill-catalog-routing",
+          "path": "categories/documentation/skill-catalog-routing",
+          "invoke": "/hawk:skill-catalog-routing"
+        },
+        {
+          "name": "spec-to-implementation-planning",
+          "path": "categories/documentation/spec-to-implementation-planning",
+          "invoke": "/hawk:spec-to-implementation-planning"
+        },
+        {
+          "name": "technical-blog-writing",
+          "path": "categories/documentation/technical-blog-writing",
+          "invoke": "/hawk:technical-blog-writing"
+        },
+        {
+          "name": "technical-documentation-authoring",
+          "path": "categories/documentation/technical-documentation-authoring",
+          "invoke": "/hawk:technical-documentation-authoring"
+        },
+        {
+          "name": "wiki-knowledge-capture",
+          "path": "categories/documentation/wiki-knowledge-capture",
+          "invoke": "/hawk:wiki-knowledge-capture"
+        },
+        {
+          "name": "wiki-research-reporting",
+          "path": "categories/documentation/wiki-research-reporting",
+          "invoke": "/hawk:wiki-research-reporting"
+        },
+        {
+          "name": "word-document-authoring",
+          "path": "categories/documentation/word-document-authoring",
+          "invoke": "/hawk:word-document-authoring"
+        },
+        {
+          "name": "writing-fragment-mining",
+          "path": "categories/documentation/writing-fragment-mining",
+          "invoke": "/hawk:writing-fragment-mining"
         },
         {
           "name": "analyze_answers",
@@ -6435,6 +7560,31 @@
           "name": "acquiring-disk-image-with-dd-and-dcfldd",
           "path": "categories/general/acquiring-disk-image-with-dd-and-dcfldd",
           "invoke": "/hawk:acquiring-disk-image-with-dd-and-dcfldd"
+        },
+        {
+          "name": "ad-creative-generation",
+          "path": "categories/general/ad-creative-generation",
+          "invoke": "/hawk:ad-creative-generation"
+        },
+        {
+          "name": "adversarial-decision-review",
+          "path": "categories/general/adversarial-decision-review",
+          "invoke": "/hawk:adversarial-decision-review"
+        },
+        {
+          "name": "advertising-account-diagnostics",
+          "path": "categories/general/advertising-account-diagnostics",
+          "invoke": "/hawk:advertising-account-diagnostics"
+        },
+        {
+          "name": "advertising-api-mcp-setup",
+          "path": "categories/general/advertising-api-mcp-setup",
+          "invoke": "/hawk:advertising-api-mcp-setup"
+        },
+        {
+          "name": "advertising-api-quickstart",
+          "path": "categories/general/advertising-api-quickstart",
+          "invoke": "/hawk:advertising-api-quickstart"
         },
         {
           "name": "ag-00-andruia-consultant",
@@ -14107,9 +15257,19 @@
           "invoke": "/hawk:agent-browser-toolshell"
         },
         {
+          "name": "agent-config-migration",
+          "path": "categories/general/agent-config-migration",
+          "invoke": "/hawk:agent-config-migration"
+        },
+        {
           "name": "agent-configuration",
           "path": "categories/general/agent-configuration",
           "invoke": "/hawk:agent-configuration"
+        },
+        {
+          "name": "agent-context-setup",
+          "path": "categories/general/agent-context-setup",
+          "invoke": "/hawk:agent-context-setup"
         },
         {
           "name": "agent-email-cli",
@@ -14120,6 +15280,46 @@
           "name": "agent-evaluation",
           "path": "categories/general/agent-evaluation",
           "invoke": "/hawk:agent-evaluation"
+        },
+        {
+          "name": "agent-handoff-summary",
+          "path": "categories/general/agent-handoff-summary",
+          "invoke": "/hawk:agent-handoff-summary"
+        },
+        {
+          "name": "agent-permission-settings-audit",
+          "path": "categories/general/agent-permission-settings-audit",
+          "invoke": "/hawk:agent-permission-settings-audit"
+        },
+        {
+          "name": "agent-skill-authoring",
+          "path": "categories/general/agent-skill-authoring",
+          "invoke": "/hawk:agent-skill-authoring"
+        },
+        {
+          "name": "agent-skill-development",
+          "path": "categories/general/agent-skill-development",
+          "invoke": "/hawk:agent-skill-development"
+        },
+        {
+          "name": "agent-skill-discovery",
+          "path": "categories/general/agent-skill-discovery",
+          "invoke": "/hawk:agent-skill-discovery"
+        },
+        {
+          "name": "agent-skill-quality-evaluation",
+          "path": "categories/general/agent-skill-quality-evaluation",
+          "invoke": "/hawk:agent-skill-quality-evaluation"
+        },
+        {
+          "name": "agent-skill-quality-selfcheck",
+          "path": "categories/general/agent-skill-quality-selfcheck",
+          "invoke": "/hawk:agent-skill-quality-selfcheck"
+        },
+        {
+          "name": "agent-skill-spec-compliance",
+          "path": "categories/general/agent-skill-spec-compliance",
+          "invoke": "/hawk:agent-skill-spec-compliance"
         },
         {
           "name": "agent-tools",
@@ -14147,14 +15347,34 @@
           "invoke": "/hawk:ai"
         },
         {
+          "name": "ai-search-optimization",
+          "path": "categories/general/ai-search-optimization",
+          "invoke": "/hawk:ai-search-optimization"
+        },
+        {
           "name": "algorithmic-art",
           "path": "categories/general/algorithmic-art",
           "invoke": "/hawk:algorithmic-art"
         },
         {
+          "name": "analytics-admin-configuration",
+          "path": "categories/general/analytics-admin-configuration",
+          "invoke": "/hawk:analytics-admin-configuration"
+        },
+        {
+          "name": "analytics-reporting-queries",
+          "path": "categories/general/analytics-reporting-queries",
+          "invoke": "/hawk:analytics-reporting-queries"
+        },
+        {
           "name": "analytics-tracking",
           "path": "categories/general/analytics-tracking",
           "invoke": "/hawk:analytics-tracking"
+        },
+        {
+          "name": "analytics-tracking-setup",
+          "path": "categories/general/analytics-tracking-setup",
+          "invoke": "/hawk:analytics-tracking-setup"
         },
         {
           "name": "analyzing-active-directory-acl-abuse",
@@ -14382,6 +15602,71 @@
           "invoke": "/hawk:analyzing-windows-shellbag-artifacts"
         },
         {
+          "name": "animated-gif-creation",
+          "path": "categories/general/animated-gif-creation",
+          "invoke": "/hawk:animated-gif-creation"
+        },
+        {
+          "name": "animated-pet-spritesheet",
+          "path": "categories/general/animated-pet-spritesheet",
+          "invoke": "/hawk:animated-pet-spritesheet"
+        },
+        {
+          "name": "animation-code-review",
+          "path": "categories/general/animation-code-review",
+          "invoke": "/hawk:animation-code-review"
+        },
+        {
+          "name": "animation-codebase-audit",
+          "path": "categories/general/animation-codebase-audit",
+          "invoke": "/hawk:animation-codebase-audit"
+        },
+        {
+          "name": "animation-frame-loop",
+          "path": "categories/general/animation-frame-loop",
+          "invoke": "/hawk:animation-frame-loop"
+        },
+        {
+          "name": "animation-opportunity-audit",
+          "path": "categories/general/animation-opportunity-audit",
+          "invoke": "/hawk:animation-opportunity-audit"
+        },
+        {
+          "name": "animation-performance-optimization",
+          "path": "categories/general/animation-performance-optimization",
+          "invoke": "/hawk:animation-performance-optimization"
+        },
+        {
+          "name": "animation-plugin-ecosystem",
+          "path": "categories/general/animation-plugin-ecosystem",
+          "invoke": "/hawk:animation-plugin-ecosystem"
+        },
+        {
+          "name": "animation-term-glossary",
+          "path": "categories/general/animation-term-glossary",
+          "invoke": "/hawk:animation-term-glossary"
+        },
+        {
+          "name": "animation-timeline-sequencing",
+          "path": "categories/general/animation-timeline-sequencing",
+          "invoke": "/hawk:animation-timeline-sequencing"
+        },
+        {
+          "name": "animation-utility-functions",
+          "path": "categories/general/animation-utility-functions",
+          "invoke": "/hawk:animation-utility-functions"
+        },
+        {
+          "name": "annual-work-summary",
+          "path": "categories/general/annual-work-summary",
+          "invoke": "/hawk:annual-work-summary"
+        },
+        {
+          "name": "answer-discernment-check",
+          "path": "categories/general/answer-discernment-check",
+          "invoke": "/hawk:answer-discernment-check"
+        },
+        {
           "name": "answer_interview_question",
           "path": "categories/general/answer_interview_question",
           "invoke": "/hawk:answer_interview_question"
@@ -14480,6 +15765,11 @@
           "name": "api-and-interface-design",
           "path": "categories/general/api-and-interface-design",
           "invoke": "/hawk:api-and-interface-design"
+        },
+        {
+          "name": "api-contract-design",
+          "path": "categories/general/api-contract-design",
+          "invoke": "/hawk:api-contract-design"
         },
         {
           "name": "api-design",
@@ -16462,6 +17752,11 @@
           "invoke": "/hawk:arezv-x-twitter-growth"
         },
         {
+          "name": "artifact-theme-styling",
+          "path": "categories/general/artifact-theme-styling",
+          "invoke": "/hawk:artifact-theme-styling"
+        },
+        {
           "name": "ask_secure_by_design_questions",
           "path": "categories/general/ask_secure_by_design_questions",
           "invoke": "/hawk:ask_secure_by_design_questions"
@@ -16470,6 +17765,16 @@
           "name": "ask_uncle_duke",
           "path": "categories/general/ask_uncle_duke",
           "invoke": "/hawk:ask_uncle_duke"
+        },
+        {
+          "name": "assistant-app-development",
+          "path": "categories/general/assistant-app-development",
+          "invoke": "/hawk:assistant-app-development"
+        },
+        {
+          "name": "audience-data-ingestion",
+          "path": "categories/general/audience-data-ingestion",
+          "invoke": "/hawk:audience-data-ingestion"
         },
         {
           "name": "audit-website",
@@ -16490,6 +17795,26 @@
           "name": "automating-ioc-enrichment",
           "path": "categories/general/automating-ioc-enrichment",
           "invoke": "/hawk:automating-ioc-enrichment"
+        },
+        {
+          "name": "autonomous-iteration-loop",
+          "path": "categories/general/autonomous-iteration-loop",
+          "invoke": "/hawk:autonomous-iteration-loop"
+        },
+        {
+          "name": "award-winning-web-design",
+          "path": "categories/general/award-winning-web-design",
+          "invoke": "/hawk:award-winning-web-design"
+        },
+        {
+          "name": "baas-cli-onboarding",
+          "path": "categories/general/baas-cli-onboarding",
+          "invoke": "/hawk:baas-cli-onboarding"
+        },
+        {
+          "name": "backend-architecture-design",
+          "path": "categories/general/backend-architecture-design",
+          "invoke": "/hawk:backend-architecture-design"
         },
         {
           "name": "bmad-orchestrator",
@@ -17332,6 +18657,31 @@
           "invoke": "/hawk:brand-guidelines"
         },
         {
+          "name": "brand-messaging-framework",
+          "path": "categories/general/brand-messaging-framework",
+          "invoke": "/hawk:brand-messaging-framework"
+        },
+        {
+          "name": "brand-visual-styling",
+          "path": "categories/general/brand-visual-styling",
+          "invoke": "/hawk:brand-visual-styling"
+        },
+        {
+          "name": "browser-3d-engine",
+          "path": "categories/general/browser-3d-engine",
+          "invoke": "/hawk:browser-3d-engine"
+        },
+        {
+          "name": "browser-page-interaction",
+          "path": "categories/general/browser-page-interaction",
+          "invoke": "/hawk:browser-page-interaction"
+        },
+        {
+          "name": "browser-performance-optimization",
+          "path": "categories/general/browser-performance-optimization",
+          "invoke": "/hawk:browser-performance-optimization"
+        },
+        {
           "name": "browser-use",
           "path": "categories/general/browser-use",
           "invoke": "/hawk:browser-use"
@@ -17437,9 +18787,19 @@
           "invoke": "/hawk:building-soc-playbook-for-ransomware"
         },
         {
+          "name": "caching-architecture-design",
+          "path": "categories/general/caching-architecture-design",
+          "invoke": "/hawk:caching-architecture-design"
+        },
+        {
           "name": "canvas-design",
           "path": "categories/general/canvas-design",
           "invoke": "/hawk:canvas-design"
+        },
+        {
+          "name": "canvas-text-rendering",
+          "path": "categories/general/canvas-text-rendering",
+          "invoke": "/hawk:canvas-text-rendering"
         },
         {
           "name": "capture_thinkers_work",
@@ -17462,14 +18822,74 @@
           "invoke": "/hawk:check_falsifiability"
         },
         {
+          "name": "churn-prevention",
+          "path": "categories/general/churn-prevention",
+          "invoke": "/hawk:churn-prevention"
+        },
+        {
           "name": "clean_text",
           "path": "categories/general/clean_text",
           "invoke": "/hawk:clean_text"
         },
         {
+          "name": "cli-browser-automation",
+          "path": "categories/general/cli-browser-automation",
+          "invoke": "/hawk:cli-browser-automation"
+        },
+        {
           "name": "cli-tool-development",
           "path": "categories/general/cli-tool-development",
           "invoke": "/hawk:cli-tool-development"
+        },
+        {
+          "name": "client-side-video-ads",
+          "path": "categories/general/client-side-video-ads",
+          "invoke": "/hawk:client-side-video-ads"
+        },
+        {
+          "name": "cloud-account-onboarding",
+          "path": "categories/general/cloud-account-onboarding",
+          "invoke": "/hawk:cloud-account-onboarding"
+        },
+        {
+          "name": "cloud-performance-optimization",
+          "path": "categories/general/cloud-performance-optimization",
+          "invoke": "/hawk:cloud-performance-optimization"
+        },
+        {
+          "name": "cloud-reliability-guidance",
+          "path": "categories/general/cloud-reliability-guidance",
+          "invoke": "/hawk:cloud-reliability-guidance"
+        },
+        {
+          "name": "cloud-sustainability-guidance",
+          "path": "categories/general/cloud-sustainability-guidance",
+          "invoke": "/hawk:cloud-sustainability-guidance"
+        },
+        {
+          "name": "cms-architecture-patterns",
+          "path": "categories/general/cms-architecture-patterns",
+          "invoke": "/hawk:cms-architecture-patterns"
+        },
+        {
+          "name": "cms-content-collections",
+          "path": "categories/general/cms-content-collections",
+          "invoke": "/hawk:cms-content-collections"
+        },
+        {
+          "name": "co-marketing-partnerships",
+          "path": "categories/general/co-marketing-partnerships",
+          "invoke": "/hawk:co-marketing-partnerships"
+        },
+        {
+          "name": "code-generation-scaffolding",
+          "path": "categories/general/code-generation-scaffolding",
+          "invoke": "/hawk:code-generation-scaffolding"
+        },
+        {
+          "name": "code-knowledge-graph",
+          "path": "categories/general/code-knowledge-graph",
+          "invoke": "/hawk:code-knowledge-graph"
         },
         {
           "name": "code-refactoring",
@@ -17487,14 +18907,34 @@
           "invoke": "/hawk:code-review-and-quality"
         },
         {
+          "name": "code-review-assistant",
+          "path": "categories/general/code-review-assistant",
+          "invoke": "/hawk:code-review-assistant"
+        },
+        {
+          "name": "code-review-guidelines",
+          "path": "categories/general/code-review-guidelines",
+          "invoke": "/hawk:code-review-guidelines"
+        },
+        {
           "name": "codebase-search",
           "path": "categories/general/codebase-search",
           "invoke": "/hawk:codebase-search"
         },
         {
+          "name": "coding-session-retrospective",
+          "path": "categories/general/coding-session-retrospective",
+          "invoke": "/hawk:coding-session-retrospective"
+        },
+        {
           "name": "coding_master",
           "path": "categories/general/coding_master",
           "invoke": "/hawk:coding_master"
+        },
+        {
+          "name": "cold-email-outreach",
+          "path": "categories/general/cold-email-outreach",
+          "invoke": "/hawk:cold-email-outreach"
         },
         {
           "name": "collecting-indicators-of-compromise",
@@ -17512,6 +18952,16 @@
           "invoke": "/hawk:collecting-volatile-evidence-from-compromised-host"
         },
         {
+          "name": "community-growth",
+          "path": "categories/general/community-growth",
+          "invoke": "/hawk:community-growth"
+        },
+        {
+          "name": "company-directory-extraction",
+          "path": "categories/general/company-directory-extraction",
+          "invoke": "/hawk:company-directory-extraction"
+        },
+        {
           "name": "compare_and_contrast",
           "path": "categories/general/compare_and_contrast",
           "invoke": "/hawk:compare_and_contrast"
@@ -17525,6 +18975,36 @@
           "name": "competitor-alternatives",
           "path": "categories/general/competitor-alternatives",
           "invoke": "/hawk:competitor-alternatives"
+        },
+        {
+          "name": "competitor-comparison-pages",
+          "path": "categories/general/competitor-comparison-pages",
+          "invoke": "/hawk:competitor-comparison-pages"
+        },
+        {
+          "name": "competitor-monitoring-intel",
+          "path": "categories/general/competitor-monitoring-intel",
+          "invoke": "/hawk:competitor-monitoring-intel"
+        },
+        {
+          "name": "competitor-research-profiling",
+          "path": "categories/general/competitor-research-profiling",
+          "invoke": "/hawk:competitor-research-profiling"
+        },
+        {
+          "name": "component-local-development",
+          "path": "categories/general/component-local-development",
+          "invoke": "/hawk:component-local-development"
+        },
+        {
+          "name": "component-scaffolding",
+          "path": "categories/general/component-scaffolding",
+          "invoke": "/hawk:component-scaffolding"
+        },
+        {
+          "name": "composable-cli-builder",
+          "path": "categories/general/composable-cli-builder",
+          "invoke": "/hawk:composable-cli-builder"
         },
         {
           "name": "composio--21risk-automation",
@@ -21972,6 +23452,11 @@
           "invoke": "/hawk:content-strategy"
         },
         {
+          "name": "content-strategy-planning",
+          "path": "categories/general/content-strategy-planning",
+          "invoke": "/hawk:content-strategy-planning"
+        },
+        {
           "name": "context-engineering",
           "path": "categories/general/context-engineering",
           "invoke": "/hawk:context-engineering"
@@ -21980,6 +23465,21 @@
           "name": "context7",
           "path": "categories/general/context7",
           "invoke": "/hawk:context7"
+        },
+        {
+          "name": "conversation-to-spec",
+          "path": "categories/general/conversation-to-spec",
+          "invoke": "/hawk:conversation-to-spec"
+        },
+        {
+          "name": "conversion-copywriting",
+          "path": "categories/general/conversion-copywriting",
+          "invoke": "/hawk:conversion-copywriting"
+        },
+        {
+          "name": "conversion-rate-optimization",
+          "path": "categories/general/conversion-rate-optimization",
+          "invoke": "/hawk:conversion-rate-optimization"
         },
         {
           "name": "convert_to_markdown",
@@ -23875,6 +25375,11 @@
           "name": "copywriting",
           "path": "categories/general/copywriting",
           "invoke": "/hawk:copywriting"
+        },
+        {
+          "name": "core-tween-animation",
+          "path": "categories/general/core-tween-animation",
+          "invoke": "/hawk:core-tween-animation"
         },
         {
           "name": "cpa-_root",
@@ -25832,6 +27337,21 @@
           "invoke": "/hawk:cpa-zones"
         },
         {
+          "name": "critical-reasoning-challenge",
+          "path": "categories/general/critical-reasoning-challenge",
+          "invoke": "/hawk:critical-reasoning-challenge"
+        },
+        {
+          "name": "crm-platform-development",
+          "path": "categories/general/crm-platform-development",
+          "invoke": "/hawk:crm-platform-development"
+        },
+        {
+          "name": "cro-page-optimization",
+          "path": "categories/general/cro-page-optimization",
+          "invoke": "/hawk:cro-page-optimization"
+        },
+        {
           "name": "cursor-accessibility",
           "path": "categories/general/cursor-accessibility",
           "invoke": "/hawk:cursor-accessibility"
@@ -26167,9 +27687,24 @@
           "invoke": "/hawk:cursor-zustand"
         },
         {
+          "name": "customer-research-insights",
+          "path": "categories/general/customer-research-insights",
+          "invoke": "/hawk:customer-research-insights"
+        },
+        {
+          "name": "dashboard-metrics-reporting",
+          "path": "categories/general/dashboard-metrics-reporting",
+          "invoke": "/hawk:dashboard-metrics-reporting"
+        },
+        {
           "name": "data-analysis",
           "path": "categories/general/data-analysis",
           "invoke": "/hawk:data-analysis"
+        },
+        {
+          "name": "data-ingestion-api-setup",
+          "path": "categories/general/data-ingestion-api-setup",
+          "invoke": "/hawk:data-ingestion-api-setup"
         },
         {
           "name": "database-schema-design",
@@ -26185,6 +27720,16 @@
           "name": "debugging",
           "path": "categories/general/debugging",
           "invoke": "/hawk:debugging"
+        },
+        {
+          "name": "decision-questionnaire",
+          "path": "categories/general/decision-questionnaire",
+          "invoke": "/hawk:decision-questionnaire"
+        },
+        {
+          "name": "deep-analytical-research",
+          "path": "categories/general/deep-analytical-research",
+          "invoke": "/hawk:deep-analytical-research"
         },
         {
           "name": "deploying-edr-agent-with-crowdstrike",
@@ -26217,9 +27762,64 @@
           "invoke": "/hawk:deprecation-and-migration"
         },
         {
+          "name": "design-component-code-mapping",
+          "path": "categories/general/design-component-code-mapping",
+          "invoke": "/hawk:design-component-code-mapping"
+        },
+        {
+          "name": "design-engineering-principles",
+          "path": "categories/general/design-engineering-principles",
+          "invoke": "/hawk:design-engineering-principles"
+        },
+        {
+          "name": "design-file-creation",
+          "path": "categories/general/design-file-creation",
+          "invoke": "/hawk:design-file-creation"
+        },
+        {
+          "name": "design-handoff-conversion",
+          "path": "categories/general/design-handoff-conversion",
+          "invoke": "/hawk:design-handoff-conversion"
+        },
+        {
           "name": "design-md",
           "path": "categories/general/design-md",
           "invoke": "/hawk:design-md"
+        },
+        {
+          "name": "design-plugin-api",
+          "path": "categories/general/design-plugin-api",
+          "invoke": "/hawk:design-plugin-api"
+        },
+        {
+          "name": "design-system-builder",
+          "path": "categories/general/design-system-builder",
+          "invoke": "/hawk:design-system-builder"
+        },
+        {
+          "name": "design-system-rule-generation",
+          "path": "categories/general/design-system-rule-generation",
+          "invoke": "/hawk:design-system-rule-generation"
+        },
+        {
+          "name": "design-system-screen-builder",
+          "path": "categories/general/design-system-screen-builder",
+          "invoke": "/hawk:design-system-screen-builder"
+        },
+        {
+          "name": "design-to-code-implementation",
+          "path": "categories/general/design-to-code-implementation",
+          "invoke": "/hawk:design-to-code-implementation"
+        },
+        {
+          "name": "design-tree-interview",
+          "path": "categories/general/design-tree-interview",
+          "invoke": "/hawk:design-tree-interview"
+        },
+        {
+          "name": "desktop-screenshot-capture",
+          "path": "categories/general/desktop-screenshot-capture",
+          "invoke": "/hawk:desktop-screenshot-capture"
         },
         {
           "name": "detect_mind_virus",
@@ -26507,9 +28107,19 @@
           "invoke": "/hawk:detecting-wmi-persistence"
         },
         {
+          "name": "developer-portfolio-builder",
+          "path": "categories/general/developer-portfolio-builder",
+          "invoke": "/hawk:developer-portfolio-builder"
+        },
+        {
           "name": "dialog_with_socrates",
           "path": "categories/general/dialog_with_socrates",
           "invoke": "/hawk:dialog_with_socrates"
+        },
+        {
+          "name": "directory-submission-campaign",
+          "path": "categories/general/directory-submission-campaign",
+          "invoke": "/hawk:directory-submission-campaign"
         },
         {
           "name": "dispatching-parallel-agents",
@@ -26517,9 +28127,24 @@
           "invoke": "/hawk:dispatching-parallel-agents"
         },
         {
+          "name": "distributed-data-processing",
+          "path": "categories/general/distributed-data-processing",
+          "invoke": "/hawk:distributed-data-processing"
+        },
+        {
+          "name": "document-to-markdown",
+          "path": "categories/general/document-to-markdown",
+          "invoke": "/hawk:document-to-markdown"
+        },
+        {
           "name": "document-writer",
           "path": "categories/general/document-writer",
           "invoke": "/hawk:document-writer"
+        },
+        {
+          "name": "documentation-grounded-development",
+          "path": "categories/general/documentation-grounded-development",
+          "invoke": "/hawk:documentation-grounded-development"
         },
         {
           "name": "documentation-writing",
@@ -26532,9 +28157,34 @@
           "invoke": "/hawk:docx"
         },
         {
+          "name": "domain-modeling",
+          "path": "categories/general/domain-modeling",
+          "invoke": "/hawk:domain-modeling"
+        },
+        {
+          "name": "dotnet-csharp-web-development",
+          "path": "categories/general/dotnet-csharp-web-development",
+          "invoke": "/hawk:dotnet-csharp-web-development"
+        },
+        {
+          "name": "dotnet-microservice-development",
+          "path": "categories/general/dotnet-microservice-development",
+          "invoke": "/hawk:dotnet-microservice-development"
+        },
+        {
+          "name": "dotnet-web-development",
+          "path": "categories/general/dotnet-web-development",
+          "invoke": "/hawk:dotnet-web-development"
+        },
+        {
           "name": "doubt-driven-development",
           "path": "categories/general/doubt-driven-development",
           "invoke": "/hawk:doubt-driven-development"
+        },
+        {
+          "name": "earned-media-strategy",
+          "path": "categories/general/earned-media-strategy",
+          "invoke": "/hawk:earned-media-strategy"
         },
         {
           "name": "ecom-affiliate-marketing-strategy",
@@ -27347,9 +28997,39 @@
           "invoke": "/hawk:ecom-woocommerce-seo"
         },
         {
+          "name": "ecommerce-storefront-development",
+          "path": "categories/general/ecommerce-storefront-development",
+          "invoke": "/hawk:ecommerce-storefront-development"
+        },
+        {
           "name": "email-sequence",
           "path": "categories/general/email-sequence",
           "invoke": "/hawk:email-sequence"
+        },
+        {
+          "name": "email-sequence-design",
+          "path": "categories/general/email-sequence-design",
+          "invoke": "/hawk:email-sequence-design"
+        },
+        {
+          "name": "embedded-codebase-integration",
+          "path": "categories/general/embedded-codebase-integration",
+          "invoke": "/hawk:embedded-codebase-integration"
+        },
+        {
+          "name": "embedded-firmware-development",
+          "path": "categories/general/embedded-firmware-development",
+          "invoke": "/hawk:embedded-firmware-development"
+        },
+        {
+          "name": "end-to-end-product-design",
+          "path": "categories/general/end-to-end-product-design",
+          "invoke": "/hawk:end-to-end-product-design"
+        },
+        {
+          "name": "engineering-workspace-setup",
+          "path": "categories/general/engineering-workspace-setup",
+          "invoke": "/hawk:engineering-workspace-setup"
         },
         {
           "name": "enhance-prompt",
@@ -27382,6 +29062,26 @@
           "invoke": "/hawk:error-handling-patterns"
         },
         {
+          "name": "ethical-persuasion-principles",
+          "path": "categories/general/ethical-persuasion-principles",
+          "invoke": "/hawk:ethical-persuasion-principles"
+        },
+        {
+          "name": "event-data-ingestion",
+          "path": "categories/general/event-data-ingestion",
+          "invoke": "/hawk:event-data-ingestion"
+        },
+        {
+          "name": "event-driven-messaging-architecture",
+          "path": "categories/general/event-driven-messaging-architecture",
+          "invoke": "/hawk:event-driven-messaging-architecture"
+        },
+        {
+          "name": "event-marketing",
+          "path": "categories/general/event-marketing",
+          "invoke": "/hawk:event-marketing"
+        },
+        {
           "name": "executing-active-directory-attack-simulation",
           "path": "categories/general/executing-active-directory-attack-simulation",
           "invoke": "/hawk:executing-active-directory-attack-simulation"
@@ -27412,9 +29112,19 @@
           "invoke": "/hawk:executing-red-team-exercise"
         },
         {
+          "name": "exercise-directory-scaffolding",
+          "path": "categories/general/exercise-directory-scaffolding",
+          "invoke": "/hawk:exercise-directory-scaffolding"
+        },
+        {
           "name": "export_data_as_csv",
           "path": "categories/general/export_data_as_csv",
           "invoke": "/hawk:export_data_as_csv"
+        },
+        {
+          "name": "external-provider-discovery",
+          "path": "categories/general/external-provider-discovery",
+          "invoke": "/hawk:external-provider-discovery"
         },
         {
           "name": "extracting-browser-history-artifacts",
@@ -27442,6 +29152,16 @@
           "invoke": "/hawk:extracting-windows-event-logs-artifacts"
         },
         {
+          "name": "feature-specification-workshop",
+          "path": "categories/general/feature-specification-workshop",
+          "invoke": "/hawk:feature-specification-workshop"
+        },
+        {
+          "name": "figma-design-implementation",
+          "path": "categories/general/figma-design-implementation",
+          "invoke": "/hawk:figma-design-implementation"
+        },
+        {
           "name": "file-organization",
           "path": "categories/general/file-organization",
           "invoke": "/hawk:file-organization"
@@ -27450,6 +29170,11 @@
           "name": "find-skills",
           "path": "categories/general/find-skills",
           "invoke": "/hawk:find-skills"
+        },
+        {
+          "name": "find-skills-discovery",
+          "path": "categories/general/find-skills-discovery",
+          "invoke": "/hawk:find-skills-discovery"
         },
         {
           "name": "fix_typos",
@@ -28657,14 +30382,39 @@
           "invoke": "/hawk:flow-workflow-run"
         },
         {
+          "name": "fluid-interface-design",
+          "path": "categories/general/fluid-interface-design",
+          "invoke": "/hawk:fluid-interface-design"
+        },
+        {
           "name": "form-cro",
           "path": "categories/general/form-cro",
           "invoke": "/hawk:form-cro"
         },
         {
+          "name": "framework-animation-lifecycle",
+          "path": "categories/general/framework-animation-lifecycle",
+          "invoke": "/hawk:framework-animation-lifecycle"
+        },
+        {
+          "name": "free-tool-lead-generation",
+          "path": "categories/general/free-tool-lead-generation",
+          "invoke": "/hawk:free-tool-lead-generation"
+        },
+        {
           "name": "free-tool-strategy",
           "path": "categories/general/free-tool-strategy",
           "invoke": "/hawk:free-tool-strategy"
+        },
+        {
+          "name": "frontend-architecture-engineering",
+          "path": "categories/general/frontend-architecture-engineering",
+          "invoke": "/hawk:frontend-architecture-engineering"
+        },
+        {
+          "name": "frontend-build-tool",
+          "path": "categories/general/frontend-build-tool",
+          "invoke": "/hawk:frontend-build-tool"
         },
         {
           "name": "frontend-design",
@@ -28675,6 +30425,11 @@
           "name": "frontend-design-amwill",
           "path": "categories/general/frontend-design-amwill",
           "invoke": "/hawk:frontend-design-amwill"
+        },
+        {
+          "name": "frontend-performance-engineering",
+          "path": "categories/general/frontend-performance-engineering",
+          "invoke": "/hawk:frontend-performance-engineering"
         },
         {
           "name": "frontend-responsive-design-standards",
@@ -28692,6 +30447,11 @@
           "invoke": "/hawk:fun-brainstorming"
         },
         {
+          "name": "game-systems-development",
+          "path": "categories/general/game-systems-development",
+          "invoke": "/hawk:game-systems-development"
+        },
+        {
           "name": "gemini-computer-use",
           "path": "categories/general/gemini-computer-use",
           "invoke": "/hawk:gemini-computer-use"
@@ -28700,6 +30460,11 @@
           "name": "generate_code_rules",
           "path": "categories/general/generate_code_rules",
           "invoke": "/hawk:generate_code_rules"
+        },
+        {
+          "name": "generative-algorithmic-art",
+          "path": "categories/general/generative-algorithmic-art",
+          "invoke": "/hawk:generative-algorithmic-art"
         },
         {
           "name": "get_wow_per_minute",
@@ -36042,6 +37807,11 @@
           "invoke": "/hawk:glfr-workflow-director"
         },
         {
+          "name": "goal-definition",
+          "path": "categories/general/goal-definition",
+          "invoke": "/hawk:goal-definition"
+        },
+        {
           "name": "google-style-code_of_conduct",
           "path": "categories/general/google-style-code_of_conduct",
           "invoke": "/hawk:google-style-code_of_conduct"
@@ -42227,9 +43997,19 @@
           "invoke": "/hawk:gpt-zz5ilyapw_coinflipper-game"
         },
         {
+          "name": "graphql-schema-design",
+          "path": "categories/general/graphql-schema-design",
+          "invoke": "/hawk:graphql-schema-design"
+        },
+        {
           "name": "greybeard_secure_prompt_engineer",
           "path": "categories/general/greybeard_secure_prompt_engineer",
           "invoke": "/hawk:greybeard_secure_prompt_engineer"
+        },
+        {
+          "name": "handoff-summary-workflow",
+          "path": "categories/general/handoff-summary-workflow",
+          "invoke": "/hawk:handoff-summary-workflow"
         },
         {
           "name": "hardening-linux-endpoint-with-cis-benchmark",
@@ -42245,6 +44025,21 @@
           "name": "heal_person",
           "path": "categories/general/heal_person",
           "invoke": "/hawk:heal_person"
+        },
+        {
+          "name": "hub-api-tool-builder",
+          "path": "categories/general/hub-api-tool-builder",
+          "invoke": "/hawk:hub-api-tool-builder"
+        },
+        {
+          "name": "hub-cli-operations",
+          "path": "categories/general/hub-cli-operations",
+          "invoke": "/hawk:hub-cli-operations"
+        },
+        {
+          "name": "human-crafted-ui-design",
+          "path": "categories/general/human-crafted-ui-design",
+          "invoke": "/hawk:human-crafted-ui-design"
         },
         {
           "name": "humanize",
@@ -42420,6 +44215,11 @@
           "name": "idea-refine",
           "path": "categories/general/idea-refine",
           "invoke": "/hawk:idea-refine"
+        },
+        {
+          "name": "idea-refinement-workshop",
+          "path": "categories/general/idea-refinement-workshop",
+          "invoke": "/hawk:idea-refinement-workshop"
         },
         {
           "name": "identify_dsrp_distinctions",
@@ -42837,9 +44637,24 @@
           "invoke": "/hawk:implementing-zero-standing-privilege-with-cyberark"
         },
         {
+          "name": "in-app-paywall-optimization",
+          "path": "categories/general/in-app-paywall-optimization",
+          "invoke": "/hawk:in-app-paywall-optimization"
+        },
+        {
           "name": "incremental-implementation",
           "path": "categories/general/incremental-implementation",
           "invoke": "/hawk:incremental-implementation"
+        },
+        {
+          "name": "incremental-implementation-method",
+          "path": "categories/general/incremental-implementation-method",
+          "invoke": "/hawk:incremental-implementation-method"
+        },
+        {
+          "name": "influencer-partnerships",
+          "path": "categories/general/influencer-partnerships",
+          "invoke": "/hawk:influencer-partnerships"
         },
         {
           "name": "inst-01-next-shadcn",
@@ -43642,6 +45457,21 @@
           "invoke": "/hawk:inst-vue3"
         },
         {
+          "name": "integration-example-library",
+          "path": "categories/general/integration-example-library",
+          "invoke": "/hawk:integration-example-library"
+        },
+        {
+          "name": "intent-discovery-interview",
+          "path": "categories/general/intent-discovery-interview",
+          "invoke": "/hawk:intent-discovery-interview"
+        },
+        {
+          "name": "interactive-teaching",
+          "path": "categories/general/interactive-teaching",
+          "invoke": "/hawk:interactive-teaching"
+        },
+        {
           "name": "internal-comms",
           "path": "categories/general/internal-comms",
           "invoke": "/hawk:internal-comms"
@@ -43652,6 +45482,11 @@
           "invoke": "/hawk:interview-me"
         },
         {
+          "name": "intuitive-product-design",
+          "path": "categories/general/intuitive-product-design",
+          "invoke": "/hawk:intuitive-product-design"
+        },
+        {
           "name": "investigating-phishing-email-incident",
           "path": "categories/general/investigating-phishing-email-incident",
           "invoke": "/hawk:investigating-phishing-email-incident"
@@ -43660,6 +45495,11 @@
           "name": "investigating-ransomware-attack-artifacts",
           "path": "categories/general/investigating-ransomware-attack-artifacts",
           "invoke": "/hawk:investigating-ransomware-attack-artifacts"
+        },
+        {
+          "name": "irresistible-offer-creation",
+          "path": "categories/general/irresistible-offer-creation",
+          "invoke": "/hawk:irresistible-offer-creation"
         },
         {
           "name": "isc-docx",
@@ -43722,6 +45562,26 @@
           "invoke": "/hawk:isc-xlsx"
         },
         {
+          "name": "issue-tracker-management",
+          "path": "categories/general/issue-tracker-management",
+          "invoke": "/hawk:issue-tracker-management"
+        },
+        {
+          "name": "issue-triage-workflow",
+          "path": "categories/general/issue-triage-workflow",
+          "invoke": "/hawk:issue-triage-workflow"
+        },
+        {
+          "name": "java-spring-backend-development",
+          "path": "categories/general/java-spring-backend-development",
+          "invoke": "/hawk:java-spring-backend-development"
+        },
+        {
+          "name": "javascript-web-animation",
+          "path": "categories/general/javascript-web-animation",
+          "invoke": "/hawk:javascript-web-animation"
+        },
+        {
           "name": "judge_output",
           "path": "categories/general/judge_output",
           "invoke": "/hawk:judge_output"
@@ -43732,14 +45592,39 @@
           "invoke": "/hawk:label_and_rate"
         },
         {
+          "name": "laravel-web-application-development",
+          "path": "categories/general/laravel-web-application-development",
+          "invoke": "/hawk:laravel-web-application-development"
+        },
+        {
+          "name": "large-effort-wayfinding",
+          "path": "categories/general/large-effort-wayfinding",
+          "invoke": "/hawk:large-effort-wayfinding"
+        },
+        {
           "name": "launch-strategy",
           "path": "categories/general/launch-strategy",
           "invoke": "/hawk:launch-strategy"
         },
         {
+          "name": "lead-magnet-planning",
+          "path": "categories/general/lead-magnet-planning",
+          "invoke": "/hawk:lead-magnet-planning"
+        },
+        {
           "name": "lead-research-assistant",
           "path": "categories/general/lead-research-assistant",
           "invoke": "/hawk:lead-research-assistant"
+        },
+        {
+          "name": "learning-course-recommender",
+          "path": "categories/general/learning-course-recommender",
+          "invoke": "/hawk:learning-course-recommender"
+        },
+        {
+          "name": "level-based-repository-scaffolding",
+          "path": "categories/general/level-based-repository-scaffolding",
+          "invoke": "/hawk:level-based-repository-scaffolding"
         },
         {
           "name": "lira-3-help",
@@ -50077,9 +51962,44 @@
           "invoke": "/hawk:markdown-url"
         },
         {
+          "name": "market-financial-research",
+          "path": "categories/general/market-financial-research",
+          "invoke": "/hawk:market-financial-research"
+        },
+        {
+          "name": "marketing-advisor-simulation",
+          "path": "categories/general/marketing-advisor-simulation",
+          "invoke": "/hawk:marketing-advisor-simulation"
+        },
+        {
+          "name": "marketing-attribution-analysis",
+          "path": "categories/general/marketing-attribution-analysis",
+          "invoke": "/hawk:marketing-attribution-analysis"
+        },
+        {
+          "name": "marketing-copy-editing",
+          "path": "categories/general/marketing-copy-editing",
+          "invoke": "/hawk:marketing-copy-editing"
+        },
+        {
+          "name": "marketing-idea-library",
+          "path": "categories/general/marketing-idea-library",
+          "invoke": "/hawk:marketing-idea-library"
+        },
+        {
           "name": "marketing-ideas",
           "path": "categories/general/marketing-ideas",
           "invoke": "/hawk:marketing-ideas"
+        },
+        {
+          "name": "marketing-image-creation",
+          "path": "categories/general/marketing-image-creation",
+          "invoke": "/hawk:marketing-image-creation"
+        },
+        {
+          "name": "marketing-plan-generation",
+          "path": "categories/general/marketing-plan-generation",
+          "invoke": "/hawk:marketing-plan-generation"
         },
         {
           "name": "marketing-psychology",
@@ -50087,9 +52007,24 @@
           "invoke": "/hawk:marketing-psychology"
         },
         {
+          "name": "marketing-psychology-principles",
+          "path": "categories/general/marketing-psychology-principles",
+          "invoke": "/hawk:marketing-psychology-principles"
+        },
+        {
           "name": "mcp-builder",
           "path": "categories/general/mcp-builder",
           "invoke": "/hawk:mcp-builder"
+        },
+        {
+          "name": "mcp-builder-guide",
+          "path": "categories/general/mcp-builder-guide",
+          "invoke": "/hawk:mcp-builder-guide"
+        },
+        {
+          "name": "mcp-server-development",
+          "path": "categories/general/mcp-server-development",
+          "invoke": "/hawk:mcp-server-development"
         },
         {
           "name": "md_callout",
@@ -50100,6 +52035,26 @@
           "name": "meeting-insights-analyzer",
           "path": "categories/general/meeting-insights-analyzer",
           "invoke": "/hawk:meeting-insights-analyzer"
+        },
+        {
+          "name": "meeting-preparation",
+          "path": "categories/general/meeting-preparation",
+          "invoke": "/hawk:meeting-preparation"
+        },
+        {
+          "name": "merchant-kyc-requirements",
+          "path": "categories/general/merchant-kyc-requirements",
+          "invoke": "/hawk:merchant-kyc-requirements"
+        },
+        {
+          "name": "microinteraction-design",
+          "path": "categories/general/microinteraction-design",
+          "invoke": "/hawk:microinteraction-design"
+        },
+        {
+          "name": "microservices-architecture-design",
+          "path": "categories/general/microservices-architecture-design",
+          "invoke": "/hawk:microservices-architecture-design"
         },
         {
           "name": "microsoft-foundry",
@@ -50207,9 +52162,44 @@
           "invoke": "/hawk:minimax-vision-analysis"
         },
         {
+          "name": "mobile-data-fetching",
+          "path": "categories/general/mobile-data-fetching",
+          "invoke": "/hawk:mobile-data-fetching"
+        },
+        {
+          "name": "mobile-design-system",
+          "path": "categories/general/mobile-design-system",
+          "invoke": "/hawk:mobile-design-system"
+        },
+        {
+          "name": "mobile-development-overview",
+          "path": "categories/general/mobile-development-overview",
+          "invoke": "/hawk:mobile-development-overview"
+        },
+        {
           "name": "model_as_sherlock_freud",
           "path": "categories/general/model_as_sherlock_freud",
           "invoke": "/hawk:model_as_sherlock_freud"
+        },
+        {
+          "name": "modern-cpp-systems-development",
+          "path": "categories/general/modern-cpp-systems-development",
+          "invoke": "/hawk:modern-cpp-systems-development"
+        },
+        {
+          "name": "modern-javascript-development",
+          "path": "categories/general/modern-javascript-development",
+          "invoke": "/hawk:modern-javascript-development"
+        },
+        {
+          "name": "modern-php-development",
+          "path": "categories/general/modern-php-development",
+          "invoke": "/hawk:modern-php-development"
+        },
+        {
+          "name": "modern-swift-development",
+          "path": "categories/general/modern-swift-development",
+          "invoke": "/hawk:modern-swift-development"
         },
         {
           "name": "monitoring-darkweb-sources",
@@ -50220,6 +52210,11 @@
           "name": "monitoring-observability",
           "path": "categories/general/monitoring-observability",
           "invoke": "/hawk:monitoring-observability"
+        },
+        {
+          "name": "multi-product-solution-design",
+          "path": "categories/general/multi-product-solution-design",
+          "invoke": "/hawk:multi-product-solution-design"
         },
         {
           "name": "nano-banana",
@@ -50557,6 +52552,26 @@
           "invoke": "/hawk:next-best-practices"
         },
         {
+          "name": "nfs-file-browser",
+          "path": "categories/general/nfs-file-browser",
+          "invoke": "/hawk:nfs-file-browser"
+        },
+        {
+          "name": "node-http-server-development",
+          "path": "categories/general/node-http-server-development",
+          "invoke": "/hawk:node-http-server-development"
+        },
+        {
+          "name": "node-rest-api-development",
+          "path": "categories/general/node-rest-api-development",
+          "invoke": "/hawk:node-rest-api-development"
+        },
+        {
+          "name": "node-runtime-best-practices",
+          "path": "categories/general/node-runtime-best-practices",
+          "invoke": "/hawk:node-runtime-best-practices"
+        },
+        {
           "name": "noiz-characteristic-voice",
           "path": "categories/general/noiz-characteristic-voice",
           "invoke": "/hawk:noiz-characteristic-voice"
@@ -50597,6 +52612,31 @@
           "invoke": "/hawk:noiz-video-translation"
         },
         {
+          "name": "object-storage-architecture",
+          "path": "categories/general/object-storage-architecture",
+          "invoke": "/hawk:object-storage-architecture"
+        },
+        {
+          "name": "object-storage-basics",
+          "path": "categories/general/object-storage-basics",
+          "invoke": "/hawk:object-storage-basics"
+        },
+        {
+          "name": "object-storage-bucket-architecture",
+          "path": "categories/general/object-storage-bucket-architecture",
+          "invoke": "/hawk:object-storage-bucket-architecture"
+        },
+        {
+          "name": "object-storage-fuse-mounts",
+          "path": "categories/general/object-storage-fuse-mounts",
+          "invoke": "/hawk:object-storage-fuse-mounts"
+        },
+        {
+          "name": "offer-design",
+          "path": "categories/general/offer-design",
+          "invoke": "/hawk:offer-design"
+        },
+        {
           "name": "official_pattern_template",
           "path": "categories/general/official_pattern_template",
           "invoke": "/hawk:official_pattern_template"
@@ -50607,6 +52647,11 @@
           "invoke": "/hawk:onboarding-cro"
         },
         {
+          "name": "one-page-marketing-plan",
+          "path": "categories/general/one-page-marketing-plan",
+          "invoke": "/hawk:one-page-marketing-plan"
+        },
+        {
           "name": "opencontext",
           "path": "categories/general/opencontext",
           "invoke": "/hawk:opencontext"
@@ -50615,6 +52660,16 @@
           "name": "page-cro",
           "path": "categories/general/page-cro",
           "invoke": "/hawk:page-cro"
+        },
+        {
+          "name": "page-transition-library",
+          "path": "categories/general/page-transition-library",
+          "invoke": "/hawk:page-transition-library"
+        },
+        {
+          "name": "paid-ad-campaign-management",
+          "path": "categories/general/paid-ad-campaign-management",
+          "invoke": "/hawk:paid-ad-campaign-management"
         },
         {
           "name": "paid-ads",
@@ -50632,6 +52687,26 @@
           "invoke": "/hawk:parallel-task-spark"
         },
         {
+          "name": "payment-api-version-upgrades",
+          "path": "categories/general/payment-api-version-upgrades",
+          "invoke": "/hawk:payment-api-version-upgrades"
+        },
+        {
+          "name": "payment-app-development",
+          "path": "categories/general/payment-app-development",
+          "invoke": "/hawk:payment-app-development"
+        },
+        {
+          "name": "payment-integration-guidance",
+          "path": "categories/general/payment-integration-guidance",
+          "invoke": "/hawk:payment-integration-guidance"
+        },
+        {
+          "name": "payment-platform-config-recommender",
+          "path": "categories/general/payment-platform-config-recommender",
+          "invoke": "/hawk:payment-platform-config-recommender"
+        },
+        {
           "name": "paywall-upgrade-cro",
           "path": "categories/general/paywall-upgrade-cro",
           "invoke": "/hawk:paywall-upgrade-cro"
@@ -50640,6 +52715,11 @@
           "name": "pdf",
           "path": "categories/general/pdf",
           "invoke": "/hawk:pdf"
+        },
+        {
+          "name": "pdf-processing",
+          "path": "categories/general/pdf-processing",
+          "invoke": "/hawk:pdf-processing"
         },
         {
           "name": "performance-optimization",
@@ -51272,9 +53352,44 @@
           "invoke": "/hawk:persona-virtual-travel-planner"
         },
         {
+          "name": "pixi-asset-loading",
+          "path": "categories/general/pixi-asset-loading",
+          "invoke": "/hawk:pixi-asset-loading"
+        },
+        {
+          "name": "pixi-filter-effects",
+          "path": "categories/general/pixi-filter-effects",
+          "invoke": "/hawk:pixi-filter-effects"
+        },
+        {
+          "name": "pixi-renderer-core",
+          "path": "categories/general/pixi-renderer-core",
+          "invoke": "/hawk:pixi-renderer-core"
+        },
+        {
+          "name": "pixi-sprite-rendering",
+          "path": "categories/general/pixi-sprite-rendering",
+          "invoke": "/hawk:pixi-sprite-rendering"
+        },
+        {
           "name": "plan-harder",
           "path": "categories/general/plan-harder",
           "invoke": "/hawk:plan-harder"
+        },
+        {
+          "name": "plan-interview-with-docs",
+          "path": "categories/general/plan-interview-with-docs",
+          "invoke": "/hawk:plan-interview-with-docs"
+        },
+        {
+          "name": "plan-stress-test",
+          "path": "categories/general/plan-stress-test",
+          "invoke": "/hawk:plan-stress-test"
+        },
+        {
+          "name": "plan-to-tickets",
+          "path": "categories/general/plan-to-tickets",
+          "invoke": "/hawk:plan-to-tickets"
         },
         {
           "name": "planner",
@@ -51287,9 +53402,19 @@
           "invoke": "/hawk:planning-and-task-breakdown"
         },
         {
+          "name": "pointer-input-handling",
+          "path": "categories/general/pointer-input-handling",
+          "invoke": "/hawk:pointer-input-handling"
+        },
+        {
           "name": "pollinations-ai",
           "path": "categories/general/pollinations-ai",
           "invoke": "/hawk:pollinations-ai"
+        },
+        {
+          "name": "popup-conversion-optimization",
+          "path": "categories/general/popup-conversion-optimization",
+          "invoke": "/hawk:popup-conversion-optimization"
         },
         {
           "name": "popup-cro",
@@ -51302,6 +53427,11 @@
           "invoke": "/hawk:pptx"
         },
         {
+          "name": "pre-meeting-lead-intelligence",
+          "path": "categories/general/pre-meeting-lead-intelligence",
+          "invoke": "/hawk:pre-meeting-lead-intelligence"
+        },
+        {
           "name": "predict_person_actions",
           "path": "categories/general/predict_person_actions",
           "invoke": "/hawk:predict_person_actions"
@@ -51312,9 +53442,19 @@
           "invoke": "/hawk:prepare_7s_strategy"
         },
         {
+          "name": "presentation-deck-authoring",
+          "path": "categories/general/presentation-deck-authoring",
+          "invoke": "/hawk:presentation-deck-authoring"
+        },
+        {
           "name": "pricing-strategy",
           "path": "categories/general/pricing-strategy",
           "invoke": "/hawk:pricing-strategy"
+        },
+        {
+          "name": "primary-source-research",
+          "path": "categories/general/primary-source-research",
+          "invoke": "/hawk:primary-source-research"
         },
         {
           "name": "processing-stix-taxii-feeds",
@@ -51322,14 +53462,64 @@
           "invoke": "/hawk:processing-stix-taxii-feeds"
         },
         {
+          "name": "product-architecture-design",
+          "path": "categories/general/product-architecture-design",
+          "invoke": "/hawk:product-architecture-design"
+        },
+        {
+          "name": "product-design-review",
+          "path": "categories/general/product-design-review",
+          "invoke": "/hawk:product-design-review"
+        },
+        {
+          "name": "product-launch-strategy",
+          "path": "categories/general/product-launch-strategy",
+          "invoke": "/hawk:product-launch-strategy"
+        },
+        {
           "name": "product-marketing-context",
           "path": "categories/general/product-marketing-context",
           "invoke": "/hawk:product-marketing-context"
         },
         {
+          "name": "product-marketing-context-doc",
+          "path": "categories/general/product-marketing-context-doc",
+          "invoke": "/hawk:product-marketing-context-doc"
+        },
+        {
+          "name": "product-shopping-research",
+          "path": "categories/general/product-shopping-research",
+          "invoke": "/hawk:product-shopping-research"
+        },
+        {
+          "name": "product-ux-walkthrough",
+          "path": "categories/general/product-ux-walkthrough",
+          "invoke": "/hawk:product-ux-walkthrough"
+        },
+        {
+          "name": "production-backend-implementation",
+          "path": "categories/general/production-backend-implementation",
+          "invoke": "/hawk:production-backend-implementation"
+        },
+        {
           "name": "programmatic-seo",
           "path": "categories/general/programmatic-seo",
           "invoke": "/hawk:programmatic-seo"
+        },
+        {
+          "name": "programmatic-seo-page-generation",
+          "path": "categories/general/programmatic-seo-page-generation",
+          "invoke": "/hawk:programmatic-seo-page-generation"
+        },
+        {
+          "name": "project-report-formatting",
+          "path": "categories/general/project-report-formatting",
+          "invoke": "/hawk:project-report-formatting"
+        },
+        {
+          "name": "project-tracking-documentation-automation",
+          "path": "categories/general/project-tracking-documentation-automation",
+          "invoke": "/hawk:project-tracking-documentation-automation"
         },
         {
           "name": "prompt-AGENTS",
@@ -51432,9 +53622,24 @@
           "invoke": "/hawk:prompt-taste"
         },
         {
+          "name": "prospect-lead-generation",
+          "path": "categories/general/prospect-lead-generation",
+          "invoke": "/hawk:prospect-lead-generation"
+        },
+        {
+          "name": "prospect-list-building",
+          "path": "categories/general/prospect-list-building",
+          "invoke": "/hawk:prospect-list-building"
+        },
+        {
           "name": "provide_guidance",
           "path": "categories/general/provide_guidance",
           "invoke": "/hawk:provide_guidance"
+        },
+        {
+          "name": "quiz-lead-generation",
+          "path": "categories/general/quiz-lead-generation",
+          "invoke": "/hawk:quiz-lead-generation"
         },
         {
           "name": "qwen-image-2",
@@ -51445,6 +53650,11 @@
           "name": "qwen-image-2-pro",
           "path": "categories/general/qwen-image-2-pro",
           "invoke": "/hawk:qwen-image-2-pro"
+        },
+        {
+          "name": "rails-web-application-development",
+          "path": "categories/general/rails-web-application-development",
+          "invoke": "/hawk:rails-web-application-development"
         },
         {
           "name": "ralph",
@@ -51942,9 +54152,24 @@
           "invoke": "/hawk:recovering-from-ransomware-attack"
         },
         {
+          "name": "recurring-marketing-automation",
+          "path": "categories/general/recurring-marketing-automation",
+          "invoke": "/hawk:recurring-marketing-automation"
+        },
+        {
+          "name": "reddit-engagement",
+          "path": "categories/general/reddit-engagement",
+          "invoke": "/hawk:reddit-engagement"
+        },
+        {
           "name": "referral-program",
           "path": "categories/general/referral-program",
           "invoke": "/hawk:referral-program"
+        },
+        {
+          "name": "referral-program-design",
+          "path": "categories/general/referral-program-design",
+          "invoke": "/hawk:referral-program-design"
         },
         {
           "name": "refine_design_document",
@@ -51962,14 +54187,29 @@
           "invoke": "/hawk:remotion-render"
         },
         {
+          "name": "rephrase-clarification",
+          "path": "categories/general/rephrase-clarification",
+          "invoke": "/hawk:rephrase-clarification"
+        },
+        {
           "name": "requesting-code-review",
           "path": "categories/general/requesting-code-review",
           "invoke": "/hawk:requesting-code-review"
         },
         {
+          "name": "requirements-elicitation",
+          "path": "categories/general/requirements-elicitation",
+          "invoke": "/hawk:requirements-elicitation"
+        },
+        {
           "name": "responsive-design",
           "path": "categories/general/responsive-design",
           "invoke": "/hawk:responsive-design"
+        },
+        {
+          "name": "revenue-operations",
+          "path": "categories/general/revenue-operations",
+          "invoke": "/hawk:revenue-operations"
         },
         {
           "name": "review_code",
@@ -51987,9 +54227,24 @@
           "invoke": "/hawk:role-creator"
         },
         {
+          "name": "saas-pricing-strategy",
+          "path": "categories/general/saas-pricing-strategy",
+          "invoke": "/hawk:saas-pricing-strategy"
+        },
+        {
+          "name": "sales-enablement-collateral",
+          "path": "categories/general/sales-enablement-collateral",
+          "invoke": "/hawk:sales-enablement-collateral"
+        },
+        {
           "name": "sanitize_broken_html_to_markdown",
           "path": "categories/general/sanitize_broken_html_to_markdown",
           "invoke": "/hawk:sanitize_broken_html_to_markdown"
+        },
+        {
+          "name": "scalable-architecture-design",
+          "path": "categories/general/scalable-architecture-design",
+          "invoke": "/hawk:scalable-architecture-design"
         },
         {
           "name": "scanning-container-images-with-grype",
@@ -52012,9 +54267,29 @@
           "invoke": "/hawk:scanning-network-with-nmap-advanced"
         },
         {
+          "name": "scene-graph-container",
+          "path": "categories/general/scene-graph-container",
+          "invoke": "/hawk:scene-graph-container"
+        },
+        {
           "name": "schema-markup",
           "path": "categories/general/schema-markup",
           "invoke": "/hawk:schema-markup"
+        },
+        {
+          "name": "scroll-driven-animation",
+          "path": "categories/general/scroll-driven-animation",
+          "invoke": "/hawk:scroll-driven-animation"
+        },
+        {
+          "name": "sdlc-feature-pipeline",
+          "path": "categories/general/sdlc-feature-pipeline",
+          "invoke": "/hawk:sdlc-feature-pipeline"
+        },
+        {
+          "name": "search-engine-optimization",
+          "path": "categories/general/search-engine-optimization",
+          "invoke": "/hawk:search-engine-optimization"
         },
         {
           "name": "securing-container-registry-images",
@@ -52045,6 +54320,26 @@
           "name": "seo-audit",
           "path": "categories/general/seo-audit",
           "invoke": "/hawk:seo-audit"
+        },
+        {
+          "name": "seo-technical-audit",
+          "path": "categories/general/seo-technical-audit",
+          "invoke": "/hawk:seo-technical-audit"
+        },
+        {
+          "name": "seo-website-audit",
+          "path": "categories/general/seo-website-audit",
+          "invoke": "/hawk:seo-website-audit"
+        },
+        {
+          "name": "session-handoff",
+          "path": "categories/general/session-handoff",
+          "invoke": "/hawk:session-handoff"
+        },
+        {
+          "name": "session-wrap-up",
+          "path": "categories/general/session-wrap-up",
+          "invoke": "/hawk:session-wrap-up"
         },
         {
           "name": "shopify-CLAUDE",
@@ -52602,9 +54897,64 @@
           "invoke": "/hawk:signup-flow-cro"
         },
         {
+          "name": "signup-flow-optimization",
+          "path": "categories/general/signup-flow-optimization",
+          "invoke": "/hawk:signup-flow-optimization"
+        },
+        {
+          "name": "single-page-content-extraction",
+          "path": "categories/general/single-page-content-extraction",
+          "invoke": "/hawk:single-page-content-extraction"
+        },
+        {
+          "name": "site-bulk-extraction",
+          "path": "categories/general/site-bulk-extraction",
+          "invoke": "/hawk:site-bulk-extraction"
+        },
+        {
+          "name": "site-download",
+          "path": "categories/general/site-download",
+          "invoke": "/hawk:site-download"
+        },
+        {
+          "name": "site-script-management",
+          "path": "categories/general/site-script-management",
+          "invoke": "/hawk:site-script-management"
+        },
+        {
+          "name": "site-url-discovery",
+          "path": "categories/general/site-url-discovery",
+          "invoke": "/hawk:site-url-discovery"
+        },
+        {
+          "name": "skill-awesome-authoring",
+          "path": "categories/general/skill-awesome-authoring",
+          "invoke": "/hawk:skill-awesome-authoring"
+        },
+        {
           "name": "skill-creator",
           "path": "categories/general/skill-creator",
           "invoke": "/hawk:skill-creator"
+        },
+        {
+          "name": "skill-feedback-submission",
+          "path": "categories/general/skill-feedback-submission",
+          "invoke": "/hawk:skill-feedback-submission"
+        },
+        {
+          "name": "skill-flow-router",
+          "path": "categories/general/skill-flow-router",
+          "invoke": "/hawk:skill-flow-router"
+        },
+        {
+          "name": "skill-package-management",
+          "path": "categories/general/skill-package-management",
+          "invoke": "/hawk:skill-package-management"
+        },
+        {
+          "name": "skill-reliability-analysis",
+          "path": "categories/general/skill-reliability-analysis",
+          "invoke": "/hawk:skill-reliability-analysis"
         },
         {
           "name": "skill-standardization",
@@ -52612,9 +54962,24 @@
           "invoke": "/hawk:skill-standardization"
         },
         {
+          "name": "sms-marketing-campaigns",
+          "path": "categories/general/sms-marketing-campaigns",
+          "invoke": "/hawk:sms-marketing-campaigns"
+        },
+        {
           "name": "social-content",
           "path": "categories/general/social-content",
           "invoke": "/hawk:social-content"
+        },
+        {
+          "name": "social-media-content",
+          "path": "categories/general/social-media-content",
+          "invoke": "/hawk:social-media-content"
+        },
+        {
+          "name": "sop-workflow-composer",
+          "path": "categories/general/sop-workflow-composer",
+          "invoke": "/hawk:sop-workflow-composer"
         },
         {
           "name": "source-driven-development",
@@ -52625,6 +54990,31 @@
           "name": "spec-driven-development",
           "path": "categories/general/spec-driven-development",
           "invoke": "/hawk:spec-driven-development"
+        },
+        {
+          "name": "spec-driven-engineering",
+          "path": "categories/general/spec-driven-engineering",
+          "invoke": "/hawk:spec-driven-engineering"
+        },
+        {
+          "name": "spec-implementation-orchestration",
+          "path": "categories/general/spec-implementation-orchestration",
+          "invoke": "/hawk:spec-implementation-orchestration"
+        },
+        {
+          "name": "spec-ticket-implementation",
+          "path": "categories/general/spec-ticket-implementation",
+          "invoke": "/hawk:spec-ticket-implementation"
+        },
+        {
+          "name": "spreadsheet-processing",
+          "path": "categories/general/spreadsheet-processing",
+          "invoke": "/hawk:spreadsheet-processing"
+        },
+        {
+          "name": "spring-boot-enterprise-development",
+          "path": "categories/general/spring-boot-enterprise-development",
+          "invoke": "/hawk:spring-boot-enterprise-development"
         },
         {
           "name": "sr-.cursorrules",
@@ -53967,9 +56357,29 @@
           "invoke": "/hawk:std-verify-bug"
         },
         {
+          "name": "sticky-message-crafting",
+          "path": "categories/general/sticky-message-crafting",
+          "invoke": "/hawk:sticky-message-crafting"
+        },
+        {
           "name": "stitch-loop",
           "path": "categories/general/stitch-loop",
           "invoke": "/hawk:stitch-loop"
+        },
+        {
+          "name": "structured-brainstorming",
+          "path": "categories/general/structured-brainstorming",
+          "invoke": "/hawk:structured-brainstorming"
+        },
+        {
+          "name": "structured-data-markup",
+          "path": "categories/general/structured-data-markup",
+          "invoke": "/hawk:structured-data-markup"
+        },
+        {
+          "name": "structured-web-extraction",
+          "path": "categories/general/structured-web-extraction",
+          "invoke": "/hawk:structured-web-extraction"
         },
         {
           "name": "subagent-driven-development",
@@ -54612,6 +57022,11 @@
           "invoke": "/hawk:sys-xai-grok_telegrambot_20250823"
         },
         {
+          "name": "system-architecture-design",
+          "path": "categories/general/system-architecture-design",
+          "invoke": "/hawk:system-architecture-design"
+        },
+        {
           "name": "system-environment-setup",
           "path": "categories/general/system-environment-setup",
           "invoke": "/hawk:system-environment-setup"
@@ -54697,9 +57112,19 @@
           "invoke": "/hawk:t_year_in_review"
         },
         {
+          "name": "task-breakdown-planning",
+          "path": "categories/general/task-breakdown-planning",
+          "invoke": "/hawk:task-breakdown-planning"
+        },
+        {
           "name": "task-estimation",
           "path": "categories/general/task-estimation",
           "invoke": "/hawk:task-estimation"
+        },
+        {
+          "name": "task-lifecycle-orchestration",
+          "path": "categories/general/task-lifecycle-orchestration",
+          "invoke": "/hawk:task-lifecycle-orchestration"
         },
         {
           "name": "task-planning",
@@ -54717,9 +57142,24 @@
           "invoke": "/hawk:template-skill"
         },
         {
+          "name": "terse-communication-mode",
+          "path": "categories/general/terse-communication-mode",
+          "invoke": "/hawk:terse-communication-mode"
+        },
+        {
           "name": "theme-factory",
           "path": "categories/general/theme-factory",
           "invoke": "/hawk:theme-factory"
+        },
+        {
+          "name": "third-party-integration-engineering",
+          "path": "categories/general/third-party-integration-engineering",
+          "invoke": "/hawk:third-party-integration-engineering"
+        },
+        {
+          "name": "throwaway-prototype",
+          "path": "categories/general/throwaway-prototype",
+          "invoke": "/hawk:throwaway-prototype"
         },
         {
           "name": "tl-.nx",
@@ -55422,9 +57862,34 @@
           "invoke": "/hawk:twitter-automation"
         },
         {
+          "name": "two-axis-code-review",
+          "path": "categories/general/two-axis-code-review",
+          "invoke": "/hawk:two-axis-code-review"
+        },
+        {
+          "name": "two-d-app-initialization",
+          "path": "categories/general/two-d-app-initialization",
+          "invoke": "/hawk:two-d-app-initialization"
+        },
+        {
+          "name": "two-d-rendering-entry-point",
+          "path": "categories/general/two-d-rendering-entry-point",
+          "invoke": "/hawk:two-d-rendering-entry-point"
+        },
+        {
           "name": "ui-component-patterns",
           "path": "categories/general/ui-component-patterns",
           "invoke": "/hawk:ui-component-patterns"
+        },
+        {
+          "name": "ui-design-system-refactoring",
+          "path": "categories/general/ui-design-system-refactoring",
+          "invoke": "/hawk:ui-design-system-refactoring"
+        },
+        {
+          "name": "ui-prototype-variants",
+          "path": "categories/general/ui-prototype-variants",
+          "invoke": "/hawk:ui-prototype-variants"
         },
         {
           "name": "ui-ux-pro-max",
@@ -55432,14 +57897,44 @@
           "invoke": "/hawk:ui-ux-pro-max"
         },
         {
+          "name": "ui-visual-design",
+          "path": "categories/general/ui-visual-design",
+          "invoke": "/hawk:ui-visual-design"
+        },
+        {
+          "name": "ui-wireframe-mockup",
+          "path": "categories/general/ui-wireframe-mockup",
+          "invoke": "/hawk:ui-wireframe-mockup"
+        },
+        {
           "name": "ultimate_law_safety",
           "path": "categories/general/ultimate_law_safety",
           "invoke": "/hawk:ultimate_law_safety"
         },
         {
+          "name": "url-content-extraction",
+          "path": "categories/general/url-content-extraction",
+          "invoke": "/hawk:url-content-extraction"
+        },
+        {
+          "name": "usability-heuristic-audit",
+          "path": "categories/general/usability-heuristic-audit",
+          "invoke": "/hawk:usability-heuristic-audit"
+        },
+        {
+          "name": "user-facing-copy-writing",
+          "path": "categories/general/user-facing-copy-writing",
+          "invoke": "/hawk:user-facing-copy-writing"
+        },
+        {
           "name": "user-guide-writing",
           "path": "categories/general/user-guide-writing",
           "invoke": "/hawk:user-guide-writing"
+        },
+        {
+          "name": "user-onboarding",
+          "path": "categories/general/user-onboarding",
+          "invoke": "/hawk:user-onboarding"
         },
         {
           "name": "userinterface-wiki",
@@ -55460,6 +57955,16 @@
           "name": "using-superpowers",
           "path": "categories/general/using-superpowers",
           "invoke": "/hawk:using-superpowers"
+        },
+        {
+          "name": "vector-animation-playback",
+          "path": "categories/general/vector-animation-playback",
+          "invoke": "/hawk:vector-animation-playback"
+        },
+        {
+          "name": "vector-shape-drawing",
+          "path": "categories/general/vector-shape-drawing",
+          "invoke": "/hawk:vector-shape-drawing"
         },
         {
           "name": "vercel-composition-patterns",
@@ -55495,6 +58000,26 @@
           "name": "vet",
           "path": "categories/general/vet",
           "invoke": "/hawk:vet"
+        },
+        {
+          "name": "video-content-production",
+          "path": "categories/general/video-content-production",
+          "invoke": "/hawk:video-content-production"
+        },
+        {
+          "name": "video-dynamic-ad-insertion",
+          "path": "categories/general/video-dynamic-ad-insertion",
+          "invoke": "/hawk:video-dynamic-ad-insertion"
+        },
+        {
+          "name": "visual-art-design",
+          "path": "categories/general/visual-art-design",
+          "invoke": "/hawk:visual-art-design"
+        },
+        {
+          "name": "visual-identity-development",
+          "path": "categories/general/visual-identity-development",
+          "invoke": "/hawk:visual-identity-development"
         },
         {
           "name": "wayn-changelog",
@@ -55562,9 +58087,34 @@
           "invoke": "/hawk:web-accessibility"
         },
         {
+          "name": "web-animation-craft",
+          "path": "categories/general/web-animation-craft",
+          "invoke": "/hawk:web-animation-craft"
+        },
+        {
           "name": "web-artifacts-builder",
           "path": "categories/general/web-artifacts-builder",
           "invoke": "/hawk:web-artifacts-builder"
+        },
+        {
+          "name": "web-change-monitoring",
+          "path": "categories/general/web-change-monitoring",
+          "invoke": "/hawk:web-change-monitoring"
+        },
+        {
+          "name": "web-data-app-integration",
+          "path": "categories/general/web-data-app-integration",
+          "invoke": "/hawk:web-data-app-integration"
+        },
+        {
+          "name": "web-data-sdk-setup",
+          "path": "categories/general/web-data-sdk-setup",
+          "invoke": "/hawk:web-data-sdk-setup"
+        },
+        {
+          "name": "web-data-workflows",
+          "path": "categories/general/web-data-workflows",
+          "invoke": "/hawk:web-data-workflows"
         },
         {
           "name": "web-design-guidelines",
@@ -55577,9 +58127,104 @@
           "invoke": "/hawk:web-design-guidelines-supercent"
         },
         {
+          "name": "web-font-typography",
+          "path": "categories/general/web-font-typography",
+          "invoke": "/hawk:web-font-typography"
+        },
+        {
+          "name": "web-page-interaction-integration",
+          "path": "categories/general/web-page-interaction-integration",
+          "invoke": "/hawk:web-page-interaction-integration"
+        },
+        {
+          "name": "web-research-cli",
+          "path": "categories/general/web-research-cli",
+          "invoke": "/hawk:web-research-cli"
+        },
+        {
+          "name": "web-search-discovery-integration",
+          "path": "categories/general/web-search-discovery-integration",
+          "invoke": "/hawk:web-search-discovery-integration"
+        },
+        {
+          "name": "web-search-with-content",
+          "path": "categories/general/web-search-with-content",
+          "invoke": "/hawk:web-search-with-content"
+        },
+        {
+          "name": "webgl-game-engine",
+          "path": "categories/general/webgl-game-engine",
+          "invoke": "/hawk:webgl-game-engine"
+        },
+        {
+          "name": "webgl-scene-optimization",
+          "path": "categories/general/webgl-scene-optimization",
+          "invoke": "/hawk:webgl-scene-optimization"
+        },
+        {
+          "name": "website-builder-development",
+          "path": "categories/general/website-builder-development",
+          "invoke": "/hawk:website-builder-development"
+        },
+        {
+          "name": "website-creation-journey",
+          "path": "categories/general/website-creation-journey",
+          "invoke": "/hawk:website-creation-journey"
+        },
+        {
+          "name": "website-design-extraction",
+          "path": "categories/general/website-design-extraction",
+          "invoke": "/hawk:website-design-extraction"
+        },
+        {
+          "name": "website-growth-journey",
+          "path": "categories/general/website-growth-journey",
+          "invoke": "/hawk:website-growth-journey"
+        },
+        {
+          "name": "website-improvement-journey",
+          "path": "categories/general/website-improvement-journey",
+          "invoke": "/hawk:website-improvement-journey"
+        },
+        {
+          "name": "website-information-architecture",
+          "path": "categories/general/website-information-architecture",
+          "invoke": "/hawk:website-information-architecture"
+        },
+        {
+          "name": "website-structure-audit",
+          "path": "categories/general/website-structure-audit",
+          "invoke": "/hawk:website-structure-audit"
+        },
+        {
+          "name": "webxr-scene-building",
+          "path": "categories/general/webxr-scene-building",
+          "invoke": "/hawk:webxr-scene-building"
+        },
+        {
+          "name": "winui-desktop-app-development",
+          "path": "categories/general/winui-desktop-app-development",
+          "invoke": "/hawk:winui-desktop-app-development"
+        },
+        {
+          "name": "word-of-mouth-virality",
+          "path": "categories/general/word-of-mouth-virality",
+          "invoke": "/hawk:word-of-mouth-virality"
+        },
+        {
+          "name": "wordpress-theme-plugin-development",
+          "path": "categories/general/wordpress-theme-plugin-development",
+          "invoke": "/hawk:wordpress-theme-plugin-development"
+        },
+        {
           "name": "workflow-automation",
           "path": "categories/general/workflow-automation",
           "invoke": "/hawk:workflow-automation"
+        },
+        {
+          "name": "workflow-spec-grilling",
+          "path": "categories/general/workflow-spec-grilling",
+          "invoke": "/hawk:workflow-spec-grilling"
         },
         {
           "name": "writing-plans",
@@ -55602,6 +58247,21 @@
           "invoke": "/hawk:youtube_summary"
         },
         {
+          "name": "branch-creation-conventions",
+          "path": "categories/git/branch-creation-conventions",
+          "invoke": "/hawk:branch-creation-conventions"
+        },
+        {
+          "name": "conventional-commit-messages",
+          "path": "categories/git/conventional-commit-messages",
+          "invoke": "/hawk:conventional-commit-messages"
+        },
+        {
+          "name": "conventional-commit-workflow",
+          "path": "categories/git/conventional-commit-workflow",
+          "invoke": "/hawk:conventional-commit-workflow"
+        },
+        {
           "name": "cr-git-conventional-commit-messages",
           "path": "categories/git/cr-git-conventional-commit-messages",
           "invoke": "/hawk:cr-git-conventional-commit-messages"
@@ -55620,6 +58280,16 @@
           "name": "git-commit",
           "path": "categories/git/git-commit",
           "invoke": "/hawk:git-commit"
+        },
+        {
+          "name": "git-push-pr-workflow",
+          "path": "categories/git/git-push-pr-workflow",
+          "invoke": "/hawk:git-push-pr-workflow"
+        },
+        {
+          "name": "git-safety-guardrails",
+          "path": "categories/git/git-safety-guardrails",
+          "invoke": "/hawk:git-safety-guardrails"
         },
         {
           "name": "git-workflow",
@@ -55652,6 +58322,46 @@
           "invoke": "/hawk:mdc-commit-message-guidelines"
         },
         {
+          "name": "merge-conflict-resolution",
+          "path": "categories/git/merge-conflict-resolution",
+          "invoke": "/hawk:merge-conflict-resolution"
+        },
+        {
+          "name": "open-source-governance",
+          "path": "categories/git/open-source-governance",
+          "invoke": "/hawk:open-source-governance"
+        },
+        {
+          "name": "pr-issue-linking",
+          "path": "categories/git/pr-issue-linking",
+          "invoke": "/hawk:pr-issue-linking"
+        },
+        {
+          "name": "pr-review-comment-handling",
+          "path": "categories/git/pr-review-comment-handling",
+          "invoke": "/hawk:pr-review-comment-handling"
+        },
+        {
+          "name": "pr-review-queue",
+          "path": "categories/git/pr-review-queue",
+          "invoke": "/hawk:pr-review-queue"
+        },
+        {
+          "name": "pull-request-ci-iteration",
+          "path": "categories/git/pull-request-ci-iteration",
+          "invoke": "/hawk:pull-request-ci-iteration"
+        },
+        {
+          "name": "pull-request-writing",
+          "path": "categories/git/pull-request-writing",
+          "invoke": "/hawk:pull-request-writing"
+        },
+        {
+          "name": "version-control-management",
+          "path": "categories/git/version-control-management",
+          "invoke": "/hawk:version-control-management"
+        },
+        {
           "name": "analyzing-golang-malware-with-ghidra",
           "path": "categories/go/analyzing-golang-malware-with-ghidra",
           "invoke": "/hawk:analyzing-golang-malware-with-ghidra"
@@ -55670,6 +58380,16 @@
           "name": "cr-go-temporal-dsl-prompt-file",
           "path": "categories/go/cr-go-temporal-dsl-prompt-file",
           "invoke": "/hawk:cr-go-temporal-dsl-prompt-file"
+        },
+        {
+          "name": "genkit-go-ai-development",
+          "path": "categories/go/genkit-go-ai-development",
+          "invoke": "/hawk:genkit-go-ai-development"
+        },
+        {
+          "name": "idiomatic-golang-development",
+          "path": "categories/go/idiomatic-golang-development",
+          "invoke": "/hawk:idiomatic-golang-development"
         },
         {
           "name": "mdc-go",
@@ -55727,6 +58447,26 @@
           "invoke": "/hawk:mdc-google-style-docstrings"
         },
         {
+          "name": "android-mobile-ads-sdk-migration",
+          "path": "categories/mobile/android-mobile-ads-sdk-migration",
+          "invoke": "/hawk:android-mobile-ads-sdk-migration"
+        },
+        {
+          "name": "app-store-listing-optimization",
+          "path": "categories/mobile/app-store-listing-optimization",
+          "invoke": "/hawk:app-store-listing-optimization"
+        },
+        {
+          "name": "brownfield-native-integration",
+          "path": "categories/mobile/brownfield-native-integration",
+          "invoke": "/hawk:brownfield-native-integration"
+        },
+        {
+          "name": "cloud-simulator-testing",
+          "path": "categories/mobile/cloud-simulator-testing",
+          "invoke": "/hawk:cloud-simulator-testing"
+        },
+        {
           "name": "cr-android-jetpack-compose",
           "path": "categories/mobile/cr-android-jetpack-compose",
           "invoke": "/hawk:cr-android-jetpack-compose"
@@ -55772,6 +58512,11 @@
           "invoke": "/hawk:cursor-swift"
         },
         {
+          "name": "flutter-cross-platform-apps",
+          "path": "categories/mobile/flutter-cross-platform-apps",
+          "invoke": "/hawk:flutter-cross-platform-apps"
+        },
+        {
           "name": "implementing-mobile-application-management",
           "path": "categories/mobile/implementing-mobile-application-management",
           "invoke": "/hawk:implementing-mobile-application-management"
@@ -55780,6 +58525,16 @@
           "name": "intercepting-mobile-traffic-with-burpsuite",
           "path": "categories/mobile/intercepting-mobile-traffic-with-burpsuite",
           "invoke": "/hawk:intercepting-mobile-traffic-with-burpsuite"
+        },
+        {
+          "name": "ios-app-clip",
+          "path": "categories/mobile/ios-app-clip",
+          "invoke": "/hawk:ios-app-clip"
+        },
+        {
+          "name": "kotlin-multiplatform-development",
+          "path": "categories/mobile/kotlin-multiplatform-development",
+          "invoke": "/hawk:kotlin-multiplatform-development"
         },
         {
           "name": "mdc-android---project-structure",
@@ -55892,6 +58647,86 @@
           "invoke": "/hawk:minimax-ios-application-dev"
         },
         {
+          "name": "mobile-ads-integration-validation",
+          "path": "categories/mobile/mobile-ads-integration-validation",
+          "invoke": "/hawk:mobile-ads-integration-validation"
+        },
+        {
+          "name": "mobile-ads-sdk-setup",
+          "path": "categories/mobile/mobile-ads-sdk-setup",
+          "invoke": "/hawk:mobile-ads-sdk-setup"
+        },
+        {
+          "name": "mobile-animation",
+          "path": "categories/mobile/mobile-animation",
+          "invoke": "/hawk:mobile-animation"
+        },
+        {
+          "name": "mobile-app-animations",
+          "path": "categories/mobile/mobile-app-animations",
+          "invoke": "/hawk:mobile-app-animations"
+        },
+        {
+          "name": "mobile-app-store-deployment",
+          "path": "categories/mobile/mobile-app-store-deployment",
+          "invoke": "/hawk:mobile-app-store-deployment"
+        },
+        {
+          "name": "mobile-banner-ads",
+          "path": "categories/mobile/mobile-banner-ads",
+          "invoke": "/hawk:mobile-banner-ads"
+        },
+        {
+          "name": "mobile-dev-client-builds",
+          "path": "categories/mobile/mobile-dev-client-builds",
+          "invoke": "/hawk:mobile-dev-client-builds"
+        },
+        {
+          "name": "mobile-interstitial-ads",
+          "path": "categories/mobile/mobile-interstitial-ads",
+          "invoke": "/hawk:mobile-interstitial-ads"
+        },
+        {
+          "name": "mobile-navigation",
+          "path": "categories/mobile/mobile-navigation",
+          "invoke": "/hawk:mobile-navigation"
+        },
+        {
+          "name": "mobile-over-the-air-updates",
+          "path": "categories/mobile/mobile-over-the-air-updates",
+          "invoke": "/hawk:mobile-over-the-air-updates"
+        },
+        {
+          "name": "mobile-project-structure",
+          "path": "categories/mobile/mobile-project-structure",
+          "invoke": "/hawk:mobile-project-structure"
+        },
+        {
+          "name": "mobile-rewarded-ads",
+          "path": "categories/mobile/mobile-rewarded-ads",
+          "invoke": "/hawk:mobile-rewarded-ads"
+        },
+        {
+          "name": "native-module-development",
+          "path": "categories/mobile/native-module-development",
+          "invoke": "/hawk:native-module-development"
+        },
+        {
+          "name": "native-module-migration",
+          "path": "categories/mobile/native-module-migration",
+          "invoke": "/hawk:native-module-migration"
+        },
+        {
+          "name": "native-ui-components",
+          "path": "categories/mobile/native-ui-components",
+          "invoke": "/hawk:native-ui-components"
+        },
+        {
+          "name": "native-ui-guidelines",
+          "path": "categories/mobile/native-ui-guidelines",
+          "invoke": "/hawk:native-ui-guidelines"
+        },
+        {
           "name": "performing-android-app-static-analysis-with-mobsf",
           "path": "categories/mobile/performing-android-app-static-analysis-with-mobsf",
           "invoke": "/hawk:performing-android-app-static-analysis-with-mobsf"
@@ -55907,9 +58742,19 @@
           "invoke": "/hawk:performing-mobile-app-certificate-pinning-bypass"
         },
         {
+          "name": "remote-device-testing-platform",
+          "path": "categories/mobile/remote-device-testing-platform",
+          "invoke": "/hawk:remote-device-testing-platform"
+        },
+        {
           "name": "reverse-engineering-ios-app-with-frida",
           "path": "categories/mobile/reverse-engineering-ios-app-with-frida",
           "invoke": "/hawk:reverse-engineering-ios-app-with-frida"
+        },
+        {
+          "name": "sdk-upgrade",
+          "path": "categories/mobile/sdk-upgrade",
+          "invoke": "/hawk:sdk-upgrade"
         },
         {
           "name": "sleek-design-mobile-apps",
@@ -55917,14 +58762,59 @@
           "invoke": "/hawk:sleek-design-mobile-apps"
         },
         {
+          "name": "swift-apple-platform-development",
+          "path": "categories/mobile/swift-apple-platform-development",
+          "invoke": "/hawk:swift-apple-platform-development"
+        },
+        {
           "name": "swiftui-expert-skill",
           "path": "categories/mobile/swiftui-expert-skill",
           "invoke": "/hawk:swiftui-expert-skill"
         },
         {
+          "name": "web-to-native-migration",
+          "path": "categories/mobile/web-to-native-migration",
+          "invoke": "/hawk:web-to-native-migration"
+        },
+        {
+          "name": "webview-dom-components",
+          "path": "categories/mobile/webview-dom-components",
+          "invoke": "/hawk:webview-dom-components"
+        },
+        {
+          "name": "cloud-networking-diagnostics",
+          "path": "categories/networking/cloud-networking-diagnostics",
+          "invoke": "/hawk:cloud-networking-diagnostics"
+        },
+        {
+          "name": "global-load-balancer-config",
+          "path": "categories/networking/global-load-balancer-config",
+          "invoke": "/hawk:global-load-balancer-config"
+        },
+        {
+          "name": "kubernetes-cluster-networking",
+          "path": "categories/networking/kubernetes-cluster-networking",
+          "invoke": "/hawk:kubernetes-cluster-networking"
+        },
+        {
+          "name": "kubernetes-service-networking",
+          "path": "categories/networking/kubernetes-service-networking",
+          "invoke": "/hawk:kubernetes-service-networking"
+        },
+        {
+          "name": "real-time-websocket-engineering",
+          "path": "categories/networking/real-time-websocket-engineering",
+          "invoke": "/hawk:real-time-websocket-engineering"
+        },
+        {
           "name": "analyzing-windows-prefetch-with-python",
           "path": "categories/python/analyzing-windows-prefetch-with-python",
           "invoke": "/hawk:analyzing-windows-prefetch-with-python"
+        },
+        {
+          "name": "async-python-api-development",
+          "path": "categories/python/async-python-api-development",
+          "invoke": "/hawk:async-python-api-development"
         },
         {
           "name": "cr-fastapi-production-architecture",
@@ -56060,6 +58950,21 @@
           "name": "cursor-python",
           "path": "categories/python/cursor-python",
           "invoke": "/hawk:cursor-python"
+        },
+        {
+          "name": "django-performance-review",
+          "path": "categories/python/django-performance-review",
+          "invoke": "/hawk:django-performance-review"
+        },
+        {
+          "name": "django-web-application-development",
+          "path": "categories/python/django-web-application-development",
+          "invoke": "/hawk:django-web-application-development"
+        },
+        {
+          "name": "gradio-web-ui-building",
+          "path": "categories/python/gradio-web-ui-building",
+          "invoke": "/hawk:gradio-web-ui-building"
         },
         {
           "name": "lt-pytest-skill",
@@ -56602,9 +59507,19 @@
           "invoke": "/hawk:mdc-testing-framework-pytest"
         },
         {
+          "name": "pandas-data-wrangling",
+          "path": "categories/python/pandas-data-wrangling",
+          "invoke": "/hawk:pandas-data-wrangling"
+        },
+        {
           "name": "python-fastapi-patterns",
           "path": "categories/python/python-fastapi-patterns",
           "invoke": "/hawk:python-fastapi-patterns"
+        },
+        {
+          "name": "python-typing-debt",
+          "path": "categories/python/python-typing-debt",
+          "invoke": "/hawk:python-typing-debt"
         },
         {
           "name": "sci-biopython",
@@ -56615,6 +59530,11 @@
           "name": "sci-zarr-python",
           "path": "categories/python/sci-zarr-python",
           "invoke": "/hawk:sci-zarr-python"
+        },
+        {
+          "name": "type-safe-python-development",
+          "path": "categories/python/type-safe-python-development",
+          "invoke": "/hawk:type-safe-python-development"
         },
         {
           "name": "cr-cursor-ai-react-typescript-shadcn-ui",
@@ -56885,6 +59805,21 @@
           "name": "cursor-react-native",
           "path": "categories/react/cursor-react-native",
           "invoke": "/hawk:cursor-react-native"
+        },
+        {
+          "name": "data-slide-deck",
+          "path": "categories/react/data-slide-deck",
+          "invoke": "/hawk:data-slide-deck"
+        },
+        {
+          "name": "gsap-react-animation",
+          "path": "categories/react/gsap-react-animation",
+          "invoke": "/hawk:gsap-react-animation"
+        },
+        {
+          "name": "interactive-web-artifact-builder",
+          "path": "categories/react/interactive-web-artifact-builder",
+          "invoke": "/hawk:interactive-web-artifact-builder"
         },
         {
           "name": "mdc-frontend-react-rule",
@@ -57397,9 +60332,39 @@
           "invoke": "/hawk:react-component-architecture"
         },
         {
+          "name": "react-component-development",
+          "path": "categories/react/react-component-development",
+          "invoke": "/hawk:react-component-development"
+        },
+        {
           "name": "react-components",
           "path": "categories/react/react-components",
           "invoke": "/hawk:react-components"
+        },
+        {
+          "name": "react-motion-animation",
+          "path": "categories/react/react-motion-animation",
+          "invoke": "/hawk:react-motion-animation"
+        },
+        {
+          "name": "react-physics-animation",
+          "path": "categories/react/react-physics-animation",
+          "invoke": "/hawk:react-physics-animation"
+        },
+        {
+          "name": "react-server-rendering-framework",
+          "path": "categories/react/react-server-rendering-framework",
+          "invoke": "/hawk:react-server-rendering-framework"
+        },
+        {
+          "name": "react-three-scene-optimization",
+          "path": "categories/react/react-three-scene-optimization",
+          "invoke": "/hawk:react-three-scene-optimization"
+        },
+        {
+          "name": "react-toast-notifications",
+          "path": "categories/react/react-toast-notifications",
+          "invoke": "/hawk:react-toast-notifications"
         },
         {
           "name": "tl-react-best-practices",
@@ -57415,6 +60380,16 @@
           "name": "tl-react-native-expert",
           "path": "categories/react/tl-react-native-expert",
           "invoke": "/hawk:tl-react-native-expert"
+        },
+        {
+          "name": "ui-component-management",
+          "path": "categories/react/ui-component-management",
+          "invoke": "/hawk:ui-component-management"
+        },
+        {
+          "name": "ui-library-selection",
+          "path": "categories/react/ui-library-selection",
+          "invoke": "/hawk:ui-library-selection"
         },
         {
           "name": "vercel-react-best-practices",
@@ -57437,9 +60412,44 @@
           "invoke": "/hawk:vercel-react-view-transitions"
         },
         {
+          "name": "code-clarity-refactoring",
+          "path": "categories/refactoring/code-clarity-refactoring",
+          "invoke": "/hawk:code-clarity-refactoring"
+        },
+        {
+          "name": "code-clarity-simplification",
+          "path": "categories/refactoring/code-clarity-simplification",
+          "invoke": "/hawk:code-clarity-simplification"
+        },
+        {
           "name": "code-simplification",
           "path": "categories/refactoring/code-simplification",
           "invoke": "/hawk:code-simplification"
+        },
+        {
+          "name": "codebase-deepening-scan",
+          "path": "categories/refactoring/codebase-deepening-scan",
+          "invoke": "/hawk:codebase-deepening-scan"
+        },
+        {
+          "name": "codebase-design-principles",
+          "path": "categories/refactoring/codebase-design-principles",
+          "invoke": "/hawk:codebase-design-principles"
+        },
+        {
+          "name": "deep-module-design",
+          "path": "categories/refactoring/deep-module-design",
+          "invoke": "/hawk:deep-module-design"
+        },
+        {
+          "name": "legacy-system-modernization",
+          "path": "categories/refactoring/legacy-system-modernization",
+          "invoke": "/hawk:legacy-system-modernization"
+        },
+        {
+          "name": "pull-request-code-review",
+          "path": "categories/refactoring/pull-request-code-review",
+          "invoke": "/hawk:pull-request-code-review"
         },
         {
           "name": "configuring-microsegmentation-for-zero-trust",
@@ -57465,6 +60475,11 @@
           "name": "deploying-tailscale-for-zero-trust-vpn",
           "path": "categories/rust/deploying-tailscale-for-zero-trust-vpn",
           "invoke": "/hawk:deploying-tailscale-for-zero-trust-vpn"
+        },
+        {
+          "name": "idiomatic-rust-development",
+          "path": "categories/rust/idiomatic-rust-development",
+          "invoke": "/hawk:idiomatic-rust-development"
         },
         {
           "name": "implementing-beyondcorp-zero-trust-access-model",
@@ -57545,6 +60560,31 @@
           "name": "reverse-engineering-rust-malware",
           "path": "categories/rust/reverse-engineering-rust-malware",
           "invoke": "/hawk:reverse-engineering-rust-malware"
+        },
+        {
+          "name": "ai-research-papers-api",
+          "path": "categories/scientific/ai-research-papers-api",
+          "invoke": "/hawk:ai-research-papers-api"
+        },
+        {
+          "name": "literature-review-research",
+          "path": "categories/scientific/literature-review-research",
+          "invoke": "/hawk:literature-review-research"
+        },
+        {
+          "name": "notebook-scaffolding",
+          "path": "categories/scientific/notebook-scaffolding",
+          "invoke": "/hawk:notebook-scaffolding"
+        },
+        {
+          "name": "research-paper-publishing",
+          "path": "categories/scientific/research-paper-publishing",
+          "invoke": "/hawk:research-paper-publishing"
+        },
+        {
+          "name": "research-paper-search",
+          "path": "categories/scientific/research-paper-search",
+          "invoke": "/hawk:research-paper-search"
         },
         {
           "name": "sci-adaptyv",
@@ -58197,6 +61237,11 @@
           "invoke": "/hawk:sci-xlsx"
         },
         {
+          "name": "agent-skill-security-scan",
+          "path": "categories/security/agent-skill-security-scan",
+          "invoke": "/hawk:agent-skill-security-scan"
+        },
+        {
           "name": "analyze_malware",
           "path": "categories/security/analyze_malware",
           "invoke": "/hawk:analyze_malware"
@@ -58342,6 +61387,16 @@
           "invoke": "/hawk:authentication-setup"
         },
         {
+          "name": "authentication-system-design",
+          "path": "categories/security/authentication-system-design",
+          "invoke": "/hawk:authentication-system-design"
+        },
+        {
+          "name": "backend-security-engineering",
+          "path": "categories/security/backend-security-engineering",
+          "invoke": "/hawk:backend-security-engineering"
+        },
+        {
           "name": "better-auth-best-practices",
           "path": "categories/security/better-auth-best-practices",
           "invoke": "/hawk:better-auth-best-practices"
@@ -58410,6 +61465,21 @@
           "name": "bypassing-authentication-with-forced-browsing",
           "path": "categories/security/bypassing-authentication-with-forced-browsing",
           "invoke": "/hawk:bypassing-authentication-with-forced-browsing"
+        },
+        {
+          "name": "cloud-authentication-guide",
+          "path": "categories/security/cloud-authentication-guide",
+          "invoke": "/hawk:cloud-authentication-guide"
+        },
+        {
+          "name": "cloud-security-architecture",
+          "path": "categories/security/cloud-security-architecture",
+          "invoke": "/hawk:cloud-security-architecture"
+        },
+        {
+          "name": "code-ownership-risk-analysis",
+          "path": "categories/security/code-ownership-risk-analysis",
+          "invoke": "/hawk:code-ownership-risk-analysis"
         },
         {
           "name": "collecting-threat-intelligence-with-misp",
@@ -58502,6 +61572,11 @@
           "invoke": "/hawk:cursor-security"
         },
         {
+          "name": "data-protection-compliance",
+          "path": "categories/security/data-protection-compliance",
+          "invoke": "/hawk:data-protection-compliance"
+        },
+        {
           "name": "deobfuscating-javascript-malware",
           "path": "categories/security/deobfuscating-javascript-malware",
           "invoke": "/hawk:deobfuscating-javascript-malware"
@@ -58555,6 +61630,16 @@
           "name": "detecting-suspicious-oauth-application-consent",
           "path": "categories/security/detecting-suspicious-oauth-application-consent",
           "invoke": "/hawk:detecting-suspicious-oauth-application-consent"
+        },
+        {
+          "name": "detection-coverage-evaluation",
+          "path": "categories/security/detection-coverage-evaluation",
+          "invoke": "/hawk:detection-coverage-evaluation"
+        },
+        {
+          "name": "django-access-control-review",
+          "path": "categories/security/django-access-control-review",
+          "invoke": "/hawk:django-access-control-review"
         },
         {
           "name": "doc-coauthoring",
@@ -58745,6 +61830,11 @@
           "name": "hunting-advanced-persistent-threats",
           "path": "categories/security/hunting-advanced-persistent-threats",
           "invoke": "/hawk:hunting-advanced-persistent-threats"
+        },
+        {
+          "name": "iam-policy-simulation",
+          "path": "categories/security/iam-policy-simulation",
+          "invoke": "/hawk:iam-policy-simulation"
         },
         {
           "name": "implementing-aes-encryption-for-data-at-rest",
@@ -58972,6 +62062,16 @@
           "invoke": "/hawk:investigating-insider-threat-indicators"
         },
         {
+          "name": "kubernetes-platform-security",
+          "path": "categories/security/kubernetes-platform-security",
+          "invoke": "/hawk:kubernetes-platform-security"
+        },
+        {
+          "name": "kubernetes-workload-hardening",
+          "path": "categories/security/kubernetes-workload-hardening",
+          "invoke": "/hawk:kubernetes-workload-hardening"
+        },
+        {
           "name": "lt-api-security-patterns",
           "path": "categories/security/lt-api-security-patterns",
           "invoke": "/hawk:lt-api-security-patterns"
@@ -59015,6 +62115,16 @@
           "name": "mdc-tauri-security-rules",
           "path": "categories/security/mdc-tauri-security-rules",
           "invoke": "/hawk:mdc-tauri-security-rules"
+        },
+        {
+          "name": "multi-agent-gateway-security",
+          "path": "categories/security/multi-agent-gateway-security",
+          "invoke": "/hawk:multi-agent-gateway-security"
+        },
+        {
+          "name": "oauth-dpop-token-constraining",
+          "path": "categories/security/oauth-dpop-token-constraining",
+          "invoke": "/hawk:oauth-dpop-token-constraining"
         },
         {
           "name": "performing-active-directory-vulnerability-assessment",
@@ -59312,9 +62422,19 @@
           "invoke": "/hawk:prioritizing-vulnerabilities-with-cvss-scoring"
         },
         {
+          "name": "privileged-access-management",
+          "path": "categories/security/privileged-access-management",
+          "invoke": "/hawk:privileged-access-management"
+        },
+        {
           "name": "profiling-threat-actor-groups",
           "path": "categories/security/profiling-threat-actor-groups",
           "invoke": "/hawk:profiling-threat-actor-groups"
+        },
+        {
+          "name": "repository-threat-modeling",
+          "path": "categories/security/repository-threat-modeling",
+          "invoke": "/hawk:repository-threat-modeling"
         },
         {
           "name": "reverse-engineering-android-malware-with-jadx",
@@ -59342,6 +62462,16 @@
           "invoke": "/hawk:sci-scvelo"
         },
         {
+          "name": "secure-application-coding",
+          "path": "categories/security/secure-application-coding",
+          "invoke": "/hawk:secure-application-coding"
+        },
+        {
+          "name": "secure-coding-review",
+          "path": "categories/security/secure-coding-review",
+          "invoke": "/hawk:secure-coding-review"
+        },
+        {
           "name": "security-and-hardening",
           "path": "categories/security/security-and-hardening",
           "invoke": "/hawk:security-and-hardening"
@@ -59350,6 +62480,21 @@
           "name": "security-best-practices",
           "path": "categories/security/security-best-practices",
           "invoke": "/hawk:security-best-practices"
+        },
+        {
+          "name": "security-findings-query",
+          "path": "categories/security/security-findings-query",
+          "invoke": "/hawk:security-findings-query"
+        },
+        {
+          "name": "security-focused-fullstack-development",
+          "path": "categories/security/security-focused-fullstack-development",
+          "invoke": "/hawk:security-focused-fullstack-development"
+        },
+        {
+          "name": "security-vulnerability-review",
+          "path": "categories/security/security-vulnerability-review",
+          "invoke": "/hawk:security-vulnerability-review"
         },
         {
           "name": "t_threat_model_plans",
@@ -59475,6 +62620,11 @@
           "name": "triaging-vulnerabilities-with-ssvc-framework",
           "path": "categories/security/triaging-vulnerabilities-with-ssvc-framework",
           "invoke": "/hawk:triaging-vulnerabilities-with-ssvc-framework"
+        },
+        {
+          "name": "workflow-security-review",
+          "path": "categories/security/workflow-security-review",
+          "invoke": "/hawk:workflow-security-review"
         },
         {
           "name": "cr-svelte-5-vs-svelte-4",
@@ -59610,6 +62760,11 @@
           "name": "mdc-typescript-rules-for-svelte-components",
           "path": "categories/svelte/mdc-typescript-rules-for-svelte-components",
           "invoke": "/hawk:mdc-typescript-rules-for-svelte-components"
+        },
+        {
+          "name": "svelte-5-development",
+          "path": "categories/svelte/svelte-5-development",
+          "invoke": "/hawk:svelte-5-development"
         },
         {
           "name": "cr-html-tailwind-css-javascript",
@@ -59757,9 +62912,24 @@
           "invoke": "/hawk:tailwind-ui-patterns"
         },
         {
+          "name": "utility-first-css-styling",
+          "path": "categories/tailwind/utility-first-css-styling",
+          "invoke": "/hawk:utility-first-css-styling"
+        },
+        {
+          "name": "ab-test-experimentation",
+          "path": "categories/testing/ab-test-experimentation",
+          "invoke": "/hawk:ab-test-experimentation"
+        },
+        {
           "name": "ab-test-setup",
           "path": "categories/testing/ab-test-setup",
           "invoke": "/hawk:ab-test-setup"
+        },
+        {
+          "name": "backend-test-engineering",
+          "path": "categories/testing/backend-test-engineering",
+          "invoke": "/hawk:backend-test-engineering"
         },
         {
           "name": "backend-testing",
@@ -59767,9 +62937,24 @@
           "invoke": "/hawk:backend-testing"
         },
         {
+          "name": "browser-automation-cli",
+          "path": "categories/testing/browser-automation-cli",
+          "invoke": "/hawk:browser-automation-cli"
+        },
+        {
+          "name": "browser-e2e-testing",
+          "path": "categories/testing/browser-e2e-testing",
+          "invoke": "/hawk:browser-e2e-testing"
+        },
+        {
           "name": "browser-testing-with-devtools",
           "path": "categories/testing/browser-testing-with-devtools",
           "invoke": "/hawk:browser-testing-with-devtools"
+        },
+        {
+          "name": "comprehensive-test-strategy",
+          "path": "categories/testing/comprehensive-test-strategy",
+          "invoke": "/hawk:comprehensive-test-strategy"
         },
         {
           "name": "conducting-internal-network-penetration-test",
@@ -59910,6 +63095,21 @@
           "name": "implementing-fuzz-testing-in-cicd-with-aflplusplus",
           "path": "categories/testing/implementing-fuzz-testing-in-cicd-with-aflplusplus",
           "invoke": "/hawk:implementing-fuzz-testing-in-cicd-with-aflplusplus"
+        },
+        {
+          "name": "interactive-browser-qa",
+          "path": "categories/testing/interactive-browser-qa",
+          "invoke": "/hawk:interactive-browser-qa"
+        },
+        {
+          "name": "live-browser-verification",
+          "path": "categories/testing/live-browser-verification",
+          "invoke": "/hawk:live-browser-verification"
+        },
+        {
+          "name": "live-site-qa-testing",
+          "path": "categories/testing/live-site-qa-testing",
+          "invoke": "/hawk:live-site-qa-testing"
         },
         {
           "name": "lt-ai-based-api",
@@ -60412,9 +63612,19 @@
           "invoke": "/hawk:performing-wireless-network-penetration-test"
         },
         {
+          "name": "skill-evaluation-harness",
+          "path": "categories/testing/skill-evaluation-harness",
+          "invoke": "/hawk:skill-evaluation-harness"
+        },
+        {
           "name": "test-driven-development",
           "path": "categories/testing/test-driven-development",
           "invoke": "/hawk:test-driven-development"
+        },
+        {
+          "name": "test-driven-development-practice",
+          "path": "categories/testing/test-driven-development-practice",
+          "invoke": "/hawk:test-driven-development-practice"
         },
         {
           "name": "testing-cors-misconfiguration",
@@ -60455,6 +63665,16 @@
           "name": "tl-playwright-skill",
           "path": "categories/testing/tl-playwright-skill",
           "invoke": "/hawk:tl-playwright-skill"
+        },
+        {
+          "name": "type-safe-test-fixtures",
+          "path": "categories/testing/type-safe-test-fixtures",
+          "invoke": "/hawk:type-safe-test-fixtures"
+        },
+        {
+          "name": "web-app-testing",
+          "path": "categories/testing/web-app-testing",
+          "invoke": "/hawk:web-app-testing"
         },
         {
           "name": "webapp-testing",
@@ -60545,6 +63765,11 @@
           "name": "cursor-zod",
           "path": "categories/typescript/cursor-zod",
           "invoke": "/hawk:cursor-zod"
+        },
+        {
+          "name": "enterprise-typescript-development",
+          "path": "categories/typescript/enterprise-typescript-development",
+          "invoke": "/hawk:enterprise-typescript-development"
         },
         {
           "name": "mdc-form-validation-with-zod",
@@ -60747,6 +63972,16 @@
           "invoke": "/hawk:typescript-advanced-types"
         },
         {
+          "name": "typescript-backend-framework",
+          "path": "categories/typescript/typescript-backend-framework",
+          "invoke": "/hawk:typescript-backend-framework"
+        },
+        {
+          "name": "typescript-deep-module-boundaries",
+          "path": "categories/typescript/typescript-deep-module-boundaries",
+          "invoke": "/hawk:typescript-deep-module-boundaries"
+        },
+        {
           "name": "typescript-refactoring-patterns",
           "path": "categories/typescript/typescript-refactoring-patterns",
           "invoke": "/hawk:typescript-refactoring-patterns"
@@ -60845,6 +64080,21 @@
           "name": "mdc-vueuse-library-rule",
           "path": "categories/vue/mdc-vueuse-library-rule",
           "invoke": "/hawk:mdc-vueuse-library-rule"
+        },
+        {
+          "name": "vue-composable-utilities",
+          "path": "categories/vue/vue-composable-utilities",
+          "invoke": "/hawk:vue-composable-utilities"
+        },
+        {
+          "name": "vue-fullstack-framework",
+          "path": "categories/vue/vue-fullstack-framework",
+          "invoke": "/hawk:vue-fullstack-framework"
+        },
+        {
+          "name": "vue3-composition-development",
+          "path": "categories/vue/vue3-composition-development",
+          "invoke": "/hawk:vue3-composition-development"
         }
       ]
     }

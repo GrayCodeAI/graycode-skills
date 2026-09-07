@@ -1,11 +1,9 @@
 ---
 name: code-review
-description: "Conduct thorough, constructive code reviews for quality and security. Use when reviewing pull requests, checking code quality, identifying bugs, or auditing security. Handles best practices, SOLID ..."
+description: "Conduct thorough, constructive code reviews for quality and security. Use when reviewing pull requests, checking code quality, identifying bugs, or auditing security."
 license: MIT
 tags: [code-review, code-quality, security, best-practices, pr-review]
-allowed-tools: Read Grep Glob
-metadata: None
-platforms: Claude, ChatGPT, Gemini
+allowed_tools: Read Grep Glob
 ---
 
 # Code Review
@@ -382,11 +380,3 @@ API_KEY = os.environ.get("API_KEY")
 - [Google Code Review Guidelines](https://google.github.io/eng-practices/review/)
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [Clean Code by Robert C. Martin](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
-
-## Examples
-
-### Example 1: Basic usage
-<!-- Add example content here -->
-
-### Example 2: Advanced usage
-<!-- Add advanced example content here -->

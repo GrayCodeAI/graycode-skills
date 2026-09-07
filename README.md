@@ -1,10 +1,10 @@
-# hawk Community Skills
+# Graycode Community Skills
 
-Community skill packages for [hawk](https://github.com/GrayCodeAI/hawk) — the AI coding agent. This repository contains 12,171+ modular instruction packages that teach hawk specialized workflows across 31 categories.
+Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 12,167 modular instruction packages that teach Graycode specialized workflows across 27 categories.
 
 ## What are Skills?
 
-Skills are self-contained Markdown instruction packages that hawk loads into its system prompt when activated. Each skill is a single `SKILL.md` file with YAML frontmatter, containing structured guidance for a specific workflow or technology. Skills are organized by domain under `categories/`.
+Skills are self-contained Markdown instruction packages that Graycode loads into its system prompt when activated. Each skill is a single `SKILL.md` file with YAML frontmatter, containing structured guidance for a specific workflow or technology. Skills are organized by domain under `categories/`.
 
 ## Quick Start
 
@@ -13,15 +13,15 @@ Skills are self-contained Markdown instruction packages that hawk loads into its
 
 ```bash
 # View available skills
-hawk skills list
+graycode skills list
 
 # Search for a skill
-hawk skills search api-testing
+graycode skills search api-testing
 
 # Install a skill
-hawk skills install python-pandas
+graycode skills install GrayCodeAI/graycode-skills python-pandas   # syntax is `install <owner/repo> [name]`
 
-# Use a skill in the hawk REPL
+# Use a skill in the graycode REPL
 /skills use python-pandas
 ```
 
@@ -96,10 +96,10 @@ gate.
 
 ## Ecosystem Boundaries
 
-- `starling` extends Hawk through public skill and plugin surfaces.
-- Do not reference support engine repos (`graycode-router`, `yaad`, `tok`, `trace`, `sight`, or `inspect`) as direct dependencies.
-- Do not reference `hawk/internal/*` or the removed legacy path `hawk/shared/types`.
-- Skills should assume Hawk is the product boundary.
+- `graycode-skills` extends Graycode through public skill and plugin surfaces.
+- Do not reference support engine repos (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, or `merlin`) as direct dependencies.
+- Do not reference `graycode-cli/internal/*` or the removed legacy path `graycode/shared/types`.
+- Skills should assume Graycode is the product boundary.
 
 ## Contributing
 

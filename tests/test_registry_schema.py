@@ -250,37 +250,53 @@ class TestEdgeCases:
 
 
 class TestValidateRegistry:
+    """The registry document is {version, skills[]} - the shape graycode-cli
+    parses in internal/plugin/registry.go."""
+
     def test_valid_registry(self):
-        data = [
-            {"name": "a", "description": "d", "category": "c", "path": "p"},
-            {"name": "b", "description": "d", "category": "c", "path": "p"},
-        ]
+        data = {
+            "version": 1,
+            "skills": [
+                {"name": "a", "description": "d", "category": "c", "path": "p"},
+                {"name": "b", "description": "d", "category": "c", "path": "p"},
+            ],
+        }
         errors = validate_registry(data)
         assert errors == []
 
     def test_empty_registry(self):
-        errors = validate_registry([])
+        errors = validate_registry({"version": 1, "skills": []})
         assert errors == []
 
-    def test_not_a_list(self):
-        errors = validate_registry({"name": "x"})
-        assert any("array" in e.message for e in errors)
+    def test_not_an_object(self):
+        errors = validate_registry([{"name": "x"}])
+        assert any("object" in e.message for e in errors)
+
+    def test_missing_skills_key(self):
+        errors = validate_registry({"version": 1})
+        assert any("skills" in e.message for e in errors)
 
     def test_invalid_entry_in_list(self):
-        data = [
-            {"name": "good", "description": "d", "category": "c", "path": "p"},
-            {"name": 123},  # bad entry
-        ]
+        data = {
+            "version": 1,
+            "skills": [
+                {"name": "good", "description": "d", "category": "c", "path": "p"},
+                {"name": 123},  # bad entry
+            ],
+        }
         errors = validate_registry(data)
         assert len(errors) > 0
         # Should reference the second entry
         assert any("[1]" in e.path for e in errors)
 
     def test_multiple_errors_across_entries(self):
-        data = [
-            {},  # missing all required
-            {"name": "x"},  # missing some required
-        ]
+        data = {
+            "version": 1,
+            "skills": [
+                {},  # missing all required
+                {"name": "x"},  # missing some required
+            ],
+        }
         errors = validate_registry(data)
         assert len(errors) >= 5  # at least 4 from first + some from second
 
@@ -292,7 +308,10 @@ class TestValidateRegistry:
 
 class TestLoadAndValidateRegistry:
     def test_load_valid_file(self, tmp_path: Path):
-        data = [{"name": "x", "description": "d", "category": "c", "path": "p"}]
+        data = {
+            "version": 1,
+            "skills": [{"name": "x", "description": "d", "category": "c", "path": "p"}],
+        }
         path = tmp_path / "registry.json"
         path.write_text(json.dumps(data), encoding="utf-8")
         result, errors = load_and_validate_registry(path)
@@ -313,7 +332,7 @@ class TestLoadAndValidateRegistry:
         assert any("invalid JSON" in e.message for e in errors)
 
     def test_invalid_schema(self, tmp_path: Path):
-        data = [{"name": 123}]  # wrong type
+        data = {"version": 1, "skills": [{"name": 123}]}  # wrong type
         path = tmp_path / "registry.json"
         path.write_text(json.dumps(data), encoding="utf-8")
         result, errors = load_and_validate_registry(path)

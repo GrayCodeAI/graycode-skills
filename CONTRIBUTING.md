@@ -1,6 +1,6 @@
 # Contributing to hawk Community Skills
 
-Thank you for your interest in contributing! Every skill helps make hawk smarter for everyone. This repository contains 12,171+ community-contributed skill packages organized into 31 domain categories.
+Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 12,167 community-contributed skill packages organized into 27 domain categories.
 
 ## Ways to Contribute
 

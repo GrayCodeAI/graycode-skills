@@ -138,7 +138,7 @@ def resolve_key(cli_value: str | None, env_name: str, purpose: str) -> str:
     return value
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Sign or verify Hawk community skills.")
+    parser = argparse.ArgumentParser(description="Sign or verify Graycode community skills.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # Keygen command
