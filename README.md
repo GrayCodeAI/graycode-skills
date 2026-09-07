@@ -1,6 +1,6 @@
 # Graycode Community Skills
 
-Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 14,016 modular instruction packages that teach Graycode specialized workflows across 27 categories.
+Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 14,015 modular instruction packages that teach Graycode specialized workflows across 27 categories.
 
 ## What are Skills?
 

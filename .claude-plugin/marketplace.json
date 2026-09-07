@@ -35197,11 +35197,6 @@
           "invoke": "/graycode:ghcp-agents-stackhawk-security-onboarding"
         },
         {
-          "name": "ghcp-agents-stackhawk-security-onboarding.",
-          "path": "categories/general/ghcp-agents-stackhawk-security-onboarding.",
-          "invoke": "/graycode:ghcp-agents-stackhawk-security-onboarding."
-        },
-        {
           "name": "ghcp-agents-swe-subagent",
           "path": "categories/general/ghcp-agents-swe-subagent",
           "invoke": "/graycode:ghcp-agents-swe-subagent"
