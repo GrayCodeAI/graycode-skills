@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Universal installer for starling
+# Universal installer for graycode-skills
 # Detects agent host and symlinks skills into the correct location.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -11,7 +11,7 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; NC='\033[0m'
 
 usage() {
     echo "Usage: ./setup [OPTIONS]"
-    echo "  --host <agent>       Target: hawk, claude, cursor, codex (auto-detected)"
+    echo "  --host <agent>       Target: graycode, claude, cursor, codex (auto-detected)"
     echo "  --scope <scope>      user (default) or project"
     echo "  --categories <list>  Comma-separated categories (default: all)"
     echo "  --help               Show this help"
@@ -30,20 +30,20 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ! -d "$SCRIPT_DIR/categories" ]]; then
-    echo -e "${RED}Error: Run from starling repo root${NC}"; exit 1
+    echo -e "${RED}Error: Run from graycode-skills repo root${NC}"; exit 1
 fi
 
 detect_host() {
-    [[ -d "$HOME/.hawk" ]] && echo "hawk" && return
+    [[ -d "$HOME/.graycode" ]] && echo "graycode" && return
     [[ -d "$HOME/.claude" ]] && echo "claude" && return
     [[ -d "$HOME/.cursor" ]] && echo "cursor" && return
-    echo "hawk"
+    echo "graycode"
 }
 
 [[ -z "$HOST" ]] && HOST=$(detect_host) && echo -e "${YELLOW}Auto-detected host: ${HOST}${NC}"
 
 case "$HOST" in
-    hawk)   TARGET="${SCOPE:+.hawk/skills}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.hawk/skills" ;;
+    graycode) TARGET="${SCOPE:+.graycode/skills}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.graycode/skills" ;;
     claude) TARGET="${SCOPE:+.claude/skills}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.claude/skills" ;;
     cursor) TARGET="${SCOPE:+.cursor/plugins}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.cursor/plugins" ;;
     codex)  TARGET="${SCOPE:+.codex/plugins}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.codex/plugins" ;;

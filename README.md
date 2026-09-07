@@ -1,6 +1,6 @@
 # Graycode Community Skills
 
-Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 12,167 modular instruction packages that teach Graycode specialized workflows across 27 categories.
+Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 14,016 modular instruction packages that teach Graycode specialized workflows across 27 categories.
 
 ## What are Skills?
 
@@ -77,7 +77,7 @@ warning categories start at zero, and the checked-in budget must never increase.
 
 `tools/skill_graph.py` creates the generated, uncommitted `skill-graph.json`
 projection. It uses the ecosystem graph vocabulary without importing another
-Hawk repository: the registry is the source of truth, while the projection adds
+Graycode repository: the registry is the source of truth, while the projection adds
 stable category hierarchy and cross-cutting tag relationships. Use `--limit N`
 for a bounded sample and `--generated-at` for reproducible builds.
 

@@ -62,7 +62,7 @@ CATEGORY_ENUM = {
 }
 
 AGENT_ENUM = {
-    "hawk",
+    "graycode",
     "claude-code",
     "codex",
     "cursor",

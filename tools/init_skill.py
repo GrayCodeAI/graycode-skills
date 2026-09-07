@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive CLI to scaffold a new skill in starling."""
+"""Interactive CLI to scaffold a new skill in graycode-skills."""
 
 import re
 import sys

@@ -14,7 +14,7 @@ from update_registry import REPO_ROOT, build_registry, validate_entries
 
 DEFAULT_OUTPUT = REPO_ROOT / "skill-graph.json"
 SCHEMA_VERSION = "community-skills.graph/v1"
-PRODUCER = "starling"
+PRODUCER = "graycode-skills"
 
 
 def _stable_id(prefix: str, *parts: str) -> str:

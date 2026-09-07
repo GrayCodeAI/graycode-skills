@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "starling"
+name = "graycode-skills"
 version = "0.0.1"
 description = "Community skill packages for Graycode"
 requires-python = ">=3.13"

@@ -1,4 +1,4 @@
-# CODEOWNERS for starling
+# CODEOWNERS for graycode-skills
 #
 # GitHub CODEOWNERS uses last-match-wins: more specific rules must come AFTER
 # more general ones to actually take effect. /categories/ and /registry.json

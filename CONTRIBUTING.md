@@ -1,6 +1,6 @@
-# Contributing to hawk Community Skills
+# Contributing to graycode Community Skills
 
-Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 12,167 community-contributed skill packages organized into 27 domain categories.
+Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 14,016 community-contributed skill packages organized into 27 domain categories.
 
 ## Ways to Contribute
 
@@ -79,7 +79,7 @@ author: your-github-username
 
 # Skill Title
 
-Instructions that hawk follows when this skill is active...
+Instructions that graycode follows when this skill is active...
 ```
 
 For the complete frontmatter schema, see [`manifest-schema.toml`](manifest-schema.toml).
@@ -172,7 +172,7 @@ Add your skill to `registry.json`:
 
 ### Registry Entry
 
-`registry.json` is auto-generated from all `SKILL.md` frontmatter files. When you add a skill, run `python tools/update_registry.py` to regenerate it. The registry is consumed by the hawk client for skill discovery and installation.
+`registry.json` is auto-generated from all `SKILL.md` frontmatter files. When you add a skill, run `python tools/update_registry.py` to regenerate it. The registry is consumed by the graycode client for skill discovery and installation.
 
 The `category` field in `registry.json` is derived from the `domain` field in frontmatter. Valid values are: `coding`, `cybersecurity`, `data-science`, `devops`, `documentation`, `research`, `testing`, or `other`.
 

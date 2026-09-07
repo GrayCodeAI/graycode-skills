@@ -1,8 +1,8 @@
 {
-  "name": "starling",
+  "name": "graycode-skills",
   "version": "0.0.1",
-  "description": "Community skill packages for hawk \u2014 security, code review, DevOps, and more.",
+  "description": "Community skill packages for graycode \u2014 security, code review, DevOps, and more.",
   "author": "GrayCode AI",
-  "repository": "https://github.com/GrayCodeAI/starling",
+  "repository": "https://github.com/GrayCodeAI/graycode-skills",
   "license": "MIT"
 }
