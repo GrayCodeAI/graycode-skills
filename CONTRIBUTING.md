@@ -1,6 +1,6 @@
 # Contributing to graycode Community Skills
 
-Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 14,016 community-contributed skill packages organized into 27 domain categories.
+Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 14,015 community-contributed skill packages organized into 27 domain categories.
 
 ## Ways to Contribute
 
