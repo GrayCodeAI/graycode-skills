@@ -96,7 +96,7 @@ Each task follows this structure:
 
 **Verification:**
 - [ ] Tests pass: `go test -race ./...`
-- [ ] Build succeeds: `go build ./cmd/hawk`
+- [ ] Build succeeds: `go build ./cmd/graycode`
 - [ ] Manual check: [description of what to verify]
 
 **Dependencies:** [Task numbers this depends on, or "None"]

@@ -59,7 +59,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 
 2. **Commands** — Full executable commands with flags, not just tool names.
    ```
-   Build: go build ./cmd/hawk
+   Build: go build ./cmd/graycode
    Test: go test -race ./...
    Lint: go vet ./...
    ```

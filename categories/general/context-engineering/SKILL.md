@@ -84,7 +84,7 @@ Use `Read` to load the specific section:
 
 Before editing a file, read it. Before implementing a pattern, find an existing example in the codebase.
 
-**Pre-task context loading with hawk tools:**
+**Pre-task context loading with graycode tools:**
 1. `Read` the file(s) you'll modify
 2. `Read` related test files
 3. Use `Grep` to find one example of a similar pattern already in the codebase

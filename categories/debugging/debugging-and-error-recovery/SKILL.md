@@ -168,7 +168,7 @@ go test -run TestSpecificName -v ./...
 go test -race ./...
 
 # Build the project (check for compilation errors)
-go build ./cmd/hawk
+go build ./cmd/graycode
 ```
 
 ## Error-Specific Patterns
