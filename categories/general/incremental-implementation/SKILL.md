@@ -194,7 +194,7 @@ When directing an agent to implement incrementally:
 Start with just the database schema change and the API endpoint.
 Don't touch the UI yet — we'll do that in the next increment.
 
-After implementing, run `go test ./...` and `go build ./cmd/hawk` to verify
+After implementing, run `go test ./...` and `go build ./cmd/graycode` to verify
 nothing is broken."
 ```
 
@@ -206,7 +206,7 @@ After each increment, verify:
 
 - [ ] The change does one thing and does it completely
 - [ ] All existing tests still pass (`go test -race ./...`)
-- [ ] The build succeeds (`go build ./cmd/hawk`)
+- [ ] The build succeeds (`go build ./cmd/graycode`)
 - [ ] Linting passes (`go vet ./...`)
 - [ ] The new functionality works as expected
 - [ ] The change is committed with a descriptive message

@@ -20,11 +20,11 @@ Use Keep a Changelog format with structured entries:
 ## [1.2.0] - 2025-06-15
 
 ### Added
-- New CLI command for database migrations (`hawk db migrate`) (#245)
+- New CLI command for database migrations (`graycode db migrate`) (#245)
 - Support for TypeScript 5.4 in IDE linting
 
 ### Fixed
-- Crash when parsing malformed JSON in `.hawkrc` config file (#243)
+- Crash when parsing malformed JSON in `.graycoderc` config file (#243)
 - Memory leak in long-running agent sessions
 
 ### Changed
