@@ -19,6 +19,7 @@ from validate_skill import (
     ValidationResult,
     compare_warning_budget,
     find_all_skills,
+    load_enforced_schema,
     load_warning_budget,
     main,
     path_exists_with_exact_case,
@@ -809,3 +810,23 @@ class TestFileSize:
         (skill_dir / "screenshot.png").write_bytes(large_asset)
         result = validate_skill(skill_dir)
         assert not any("exceeds 100KB" in w for w in result.warnings)
+
+
+class TestEnforcedSchema:
+    def test_loader_reads_manifest_schema_toml(self):
+        """load_enforced_schema must read the [enforced] section of
+        manifest-schema.toml (the single source of truth) so the corpus gate
+        and the schema document cannot drift."""
+        enforced = load_enforced_schema()
+        assert set(enforced["required_fields"]) == {"name", "description", "license"}
+        assert enforced["max_description_length"] == 200
+        assert enforced["min_tags"] == 1
+        assert enforced["max_tags"] == 5
+
+    def test_loader_falls_back_on_missing_file(self, monkeypatch, tmp_path):
+        """A missing/unparseable schema must fall back to the historical
+        defaults rather than relaxing validation."""
+        monkeypatch.setattr("validate_skill.REPO_ROOT", tmp_path)
+        enforced = load_enforced_schema()
+        assert set(enforced["required_fields"]) == {"name", "description", "license"}
+        assert enforced["max_tags"] == 5

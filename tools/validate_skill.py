@@ -13,6 +13,8 @@ from collections.abc import Iterator, Mapping
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+import tomllib
+
 try:
     from rich.console import Console
     from rich.table import Table
@@ -28,8 +30,34 @@ from skill_discovery import iter_skills
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES_DIR = REPO_ROOT / "categories"
 
-REQUIRED_FIELDS = {"name", "description", "license"}
-MAX_DESCRIPTION_LEN = 200
+
+def load_enforced_schema() -> dict:
+    """Load the enforced-schema section from manifest-schema.toml, the single
+    source of truth for the corpus gate. Falls back to the historical hardcoded
+    values if the file or section is missing, so a schema parse problem can
+    never silently relax validation."""
+    defaults = {
+        "required_fields": ["name", "description", "license"],
+        "max_description_length": 200,
+        "min_tags": 1,
+        "max_tags": 5,
+    }
+    try:
+        with open(REPO_ROOT / "manifest-schema.toml", "rb") as fh:
+            data = tomllib.load(fh)
+        enforced = data.get("enforced", {})
+        merged = dict(defaults)
+        for key in defaults:
+            if key in enforced:
+                merged[key] = enforced[key]
+        return merged
+    except (OSError, tomllib.TOMLDecodeError):
+        return defaults
+
+
+_ENFORCED = load_enforced_schema()
+REQUIRED_FIELDS = set(_ENFORCED["required_fields"])
+MAX_DESCRIPTION_LEN = _ENFORCED["max_description_length"]
 MAX_FILE_SIZE = 100 * 1024  # 100KB — warning threshold
 # Hard limit for SKILL.md itself: a skill definition this large is almost
 # certainly bulk content that belongs in reference files, and it bloats every
@@ -41,8 +69,8 @@ MAX_SKILL_MD_SIZE = 500 * 1024  # 500KB — error threshold
 SIZE_ALLOWLIST_PATH = Path(__file__).resolve().parent / "skill_size_allowlist.txt"
 ASSET_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".pdf"}
 TAG_PATTERN = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
-MIN_TAGS = 1
-MAX_TAGS = 5
+MIN_TAGS = _ENFORCED["min_tags"]
+MAX_TAGS = _ENFORCED["max_tags"]
 
 # Agent Skills spec (agentskills.io) — recognized optional frontmatter fields.
 # These are informational for graycode-skills but must be well-formed
