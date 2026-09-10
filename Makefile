@@ -18,7 +18,10 @@ validate: registry-check ## Validate all skills in the registry
 pytest: ## Run pytest unit tests
 	python3 -m pytest tests/ -v
 
-test: boundary-guard lint validate pytest ## Run all checks
+package-check: ## Smoke-package a sample skill and verify the archive + metadata
+	python3 tools/package_skill.py categories/python/ai-sdk-python --skip-validate --output-dir /tmp/graycode-skill-pkg
+
+test: boundary-guard lint validate pytest package-check ## Run all checks
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'

@@ -2,8 +2,11 @@
 #
 # Every skill in this registry MUST include a SKILL.md file with YAML
 # frontmatter that conforms to this schema. The schema is expressed in TOML
-# for human readability; the CI validation script (scripts/validate-skill.py)
-# enforces it programmatically.
+# for human readability; the CI validation tool (tools/validate_skill.py)
+# enforces the *enforced* schema recorded under [enforced] below, which is the
+# single source of truth for the corpus gate. The per-field `required = true`
+# markers under [fields] describe the forward (v2.0) target and are NOT yet
+# required of the existing corpus.
 #
 # Required fields are marked  required = true.
 # Optional fields default to the value shown under "default".
@@ -199,3 +202,14 @@ type        = "array"
 items.type  = "string"
 required    = false
 description = "Skills that work well together (advisory). Part of SmartSkill.Chain.Enhances."
+
+# ── Enforced schema (single source of truth for the CI gate) ──────────────
+# tools/validate_skill.py reads these values so the corpus gate and this
+# document cannot drift. These are the fields/limits the 14k-skill corpus
+# actually satisfies today. The aspirational v2.0 fields (version, author,
+# domain, tags) under [fields] are the forward target, not yet enforced.
+[enforced]
+required_fields        = ["name", "description", "license"]
+max_description_length = 200
+min_tags               = 1
+max_tags               = 5
