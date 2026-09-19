@@ -24,13 +24,13 @@ tags: [general]
 - Update documentation in the same PR that changes the code.
 - Review docs in code review. Stale docs are worse than no docs.
 - Use CI to verify that documentation examples compile or run.
-- Keep CLAUDE.md or AGENTS.md updated with current project context.
+- Keep AGENTS.md updated with current project context.
 
 ## Documentation Formats
 - Inline code comments: explain **why**, not what. One line, placed above the code.
 - JSDoc/docstrings: for public APIs. Include parameters, returns, throws, and an example.
 - README: installation, quick start, configuration, contribution guidelines.
-- CLAUDE.md: project context, conventions, build commands, key architecture decisions.
+- AGENTS.md: project context, conventions, build commands, key architecture decisions.
 - ADRs: date, status, context, decision, consequences. Store in `docs/adr/`.
 
 ## Style Guidelines

@@ -70,9 +70,9 @@ After installation, verify codemap works:
 codemap .
 ```
 
-## 6. Update CLAUDE.md file
+## 6. Update AGENTS.md file
 
-Use the path determined in step 1. Once Codemap is successfully installed, update the appropriate CLAUDE.md file with the following content:
+Use the path determined in step 1. Once Codemap is successfully installed, update the appropriate AGENTS.md file with the following content:
 
 ```markdown
 ## Use Codemap CLI for Codebase Navigation

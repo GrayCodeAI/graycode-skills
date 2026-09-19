@@ -33,7 +33,7 @@ For each in-scope file, emit a record with the role taxonomy below. The judgment
 2. A diagnosis of the likely root cause
 3. A proposed fix shape (do NOT apply it)
 
-Do NOT patch QPB source code yourself. QPB source changes go through Council review (see `~/Documents/AI-Driven Development/CLAUDE.md`). A structural backstop captures the QPB source tree's git SHA at run start and verifies it unchanged at every phase boundary; an autonomous source patch will fail the gate with a diagnostic naming the modified files.
+Do NOT patch QPB source code yourself. QPB source changes go through Council review (see `~/Documents/AI-Driven Development/AGENTS.md`). A structural backstop captures the QPB source tree's git SHA at run start and verifies it unchanged at every phase boundary; an autonomous source patch will fail the gate with a diagnostic naming the modified files.
 
 Role taxonomy (single source of truth: `bin/role_map.py::ROLE_DESCRIPTIONS`):
 {role_taxonomy}

@@ -26,7 +26,7 @@ Wraps `getTokenOptimizer().getCompactContext()` from `@claude-flow/integration` 
 
 ## Caveats — claimed upstream, not yet verified
 
-CLAUDE.md root claims `ReasoningBank retrieval: -32%` tokens. The bridge's `tokensSaved` is `query_tokens − compact_prompt_tokens` (token-optimizer.ts:141–143) — a heuristic, **not** a baseline-measured saving. token-optimizer.ts:9–10 itself says: *"No fabricated metrics are reported — all stats reflect real measurements"*. This skill carries that disclaimer forward.
+AGENTS.md root claims `ReasoningBank retrieval: -32%` tokens. The bridge's `tokensSaved` is `query_tokens − compact_prompt_tokens` (token-optimizer.ts:141–143) — a heuristic, **not** a baseline-measured saving. token-optimizer.ts:9–10 itself says: *"No fabricated metrics are reported — all stats reflect real measurements"*. This skill carries that disclaimer forward.
 
 Booster-specific availability is **not** exposed as a getter — observable only through `optimizedEdit()` returning `method: 'agent-booster'`. The canonical Tier 1 signal is `[AGENT_BOOSTER_AVAILABLE]` (see `cost-booster-route`).
 

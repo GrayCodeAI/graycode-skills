@@ -8,8 +8,8 @@ tags:
 
 ## Best Practices
 
-1. **Root CLAUDE.md defines the map** — document every package, its purpose, and dependency rules
-2. **Per-package CLAUDE.md defines the rules** — what's allowed, what's forbidden, testing commands
+1. **Root AGENTS.md defines the map** — document every package, its purpose, and dependency rules
+2. **Per-package AGENTS.md defines the rules** — what's allowed, what's forbidden, testing commands
 3. **Always scope commands with --filter** — running everything on every change defeats the purpose
 4. **Remote cache is not optional** — without it, monorepo CI is slower than multi-repo CI
 5. **Changesets over manual versioning** — never hand-edit package.json versions in a monorepo

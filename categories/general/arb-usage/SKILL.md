@@ -92,7 +92,7 @@ If your team uses more than one editor, use a portable baseline:
 - Keep one canonical `AGENTS.md` with a single `mini` rule set when the supported tools can handle it.
 - Use `nano` as the portable fallback only when `mini` is too large for one of the tools.
 - Let Codex read that file directly.
-- Let Claude Code import it from `CLAUDE.md`.
+- Let Claude Code import it from `AGENTS.md`.
 - Let Cursor either read `AGENTS.md` directly for simple projects or translate the same content into `.cursor/rules` for better scoping.
 - Add editor-specific on-demand mechanisms next to that baseline instead of duplicating a large global rule file.
 
@@ -164,7 +164,7 @@ project/
 
 - `CLAUDE.md` or `.claude/CLAUDE.md`
 - `CLAUDE.local.md` for private local additions
-- `@path` imports inside `CLAUDE.md`
+- `@path` imports inside `AGENTS.md`
 - `.claude/rules/` for scoped project rules
 - `.claude/skills/<name>/SKILL.md`
 - subagents
@@ -178,13 +178,13 @@ Claude Code works best with a small root memory file plus scoped additions.
 
 Preferred order:
 
-1. Keep root `CLAUDE.md` short.
+1. Keep root `AGENTS.md` short.
 2. If you want one shared cross-tool base file, put the chosen repo file at `AGENTS.md` and import it from `CLAUDE.md`.
 3. Use Claude Code skills for book-specific workflows.
 4. Use one `mini` rule set for always-on project context when the file stays short enough for the team.
 5. Use `.claude/rules/` or path-scoped skills for `mini`.
 6. Use `nano` only when the shared root file has to be much smaller.
-7. Put procedures, large checklists, and long references into skills instead of the root `CLAUDE.md`.
+7. Put procedures, large checklists, and long references into skills instead of the root `AGENTS.md`.
 8. Use `disable-model-invocation: true` for side-effectful manual workflows such as deploy or release flows.
 9. Use subagents or `context: fork` skills when a side task would otherwise flood the main context.
 
@@ -199,13 +199,13 @@ Preferred order:
 ```text
 project/
   AGENTS.md
-  CLAUDE.md
+  AGENTS.md
   .claude/
     rules/
     skills/
 ```
 
-Example `CLAUDE.md`:
+Example `AGENTS.md`:
 
 Import the shared root `AGENTS.md` baseline by adding this line to `CLAUDE.md` in order to reuse the same project-wide rules in Claude Code.
 
@@ -226,7 +226,7 @@ Import the shared root `AGENTS.md` baseline by adding this line to `CLAUDE.md` i
 
 ### Avoid
 
-- pasting a long `full` rule file into root `CLAUDE.md`
+- pasting a long `full` rule file into root `AGENTS.md`
 - mixing many conflicting imports
 - relying on auto memory instead of reviewed project instructions
 

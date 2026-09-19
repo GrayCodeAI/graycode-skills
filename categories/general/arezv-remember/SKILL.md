@@ -23,7 +23,7 @@ Writes an explicit entry to auto-memory when something is important enough that 
 | Situation | Example |
 |-----------|---------|
 | Hard-won debugging insight | "CORS errors on /api/upload are caused by the CDN, not the backend" |
-| Project convention not in CLAUDE.md | "We use barrel exports in src/components/" |
+| Project convention not in AGENTS.md | "We use barrel exports in src/components/" |
 | Tool-specific gotcha | "Jest needs `--forceExit` flag or it hangs on DB tests" |
 | Architecture decision | "We chose Drizzle over Prisma for type-safe SQL" |
 | Preference you want Claude to learn | "Don't add comments explaining obvious code" |
@@ -69,7 +69,7 @@ If MEMORY.md is over 180 lines, warn the user:
 If the knowledge sounds like a rule (imperative, always/never, convention):
 
 ```
-💡 This sounds like it could be a CLAUDE.md rule rather than a memory entry.
+💡 This sounds like it could be a AGENTS.md rule rather than a memory entry.
    Rules are enforced with higher priority. Want to /si:promote it instead?
 ```
 
@@ -87,7 +87,7 @@ If the knowledge sounds like a rule (imperative, always/never, convention):
 ## What NOT to use /si:remember for
 
 - **Temporary context**: Use session memory or just tell Claude in conversation
-- **Enforced rules**: Use `/si:promote` to write directly to CLAUDE.md
+- **Enforced rules**: Use `/si:promote` to write directly to AGENTS.md
 - **Cross-project knowledge**: Use `~/.claude/CLAUDE.md` for global rules
 - **Sensitive data**: Never store credentials, tokens, or secrets in memory files
 
@@ -97,4 +97,4 @@ If the knowledge sounds like a rule (imperative, always/never, convention):
 - Include the concrete command or value, not just the concept
   - ✅ "Build with `pnpm build`, tests with `pnpm test:e2e`"
   - ❌ "The project uses pnpm for building and testing"
-- If you're remembering the same thing twice, promote it to CLAUDE.md
+- If you're remembering the same thing twice, promote it to AGENTS.md

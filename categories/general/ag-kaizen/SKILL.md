@@ -356,7 +356,7 @@ Follow established patterns. Document what works. Make good practices easy to fo
 
 **Documentation lives with code:**
 - README for setup and architecture
-- CLAUDE.md for AI coding conventions
+- AGENTS.md for AI coding conventions
 - Comments for "why", not "what"
 - Examples for complex patterns
 
@@ -466,7 +466,7 @@ Documents why, when, and how
 **Before adding new patterns:**
 
 - Search codebase for similar problems solved
-- Check CLAUDE.md for project conventions
+- Check AGENTS.md for project conventions
 - Discuss with team if breaking from pattern
 - Update docs when introducing new pattern
 
@@ -482,7 +482,7 @@ Documents why, when, and how
 - Check consistency with existing code
 - Point to examples in codebase
 - Suggest aligning with standards
-- Update CLAUDE.md if new standard emerges
+- Update AGENTS.md if new standard emerges
 
 ### 4. Just-In-Time (JIT)
 

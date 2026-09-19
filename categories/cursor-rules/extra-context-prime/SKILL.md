@@ -11,7 +11,7 @@ Prime Claude with comprehensive project understanding.
 
 ## Standard Context Loading:
 1. Read README.md for project overview
-2. Read CLAUDE.md for AI-specific instructions
+2. Read AGENTS.md for AI-specific instructions
 3. List project files excluding ignored paths
 4. Review key configuration files
 5. Understand project structure and conventions
@@ -23,7 +23,7 @@ Prime Claude with comprehensive project understanding.
    - Note key technologies and dependencies
 
 2. **AI Guidelines**:
-   - Read CLAUDE.md if present
+   - Read AGENTS.md if present
    - Load project-specific AI instructions
    - Note coding standards and preferences
 

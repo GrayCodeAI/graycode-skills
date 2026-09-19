@@ -507,8 +507,8 @@ echo "Template: project-management/senior-pm/assets/executive_report_template.md
 - **Jira Expert Skill:** [project-management/jira-expert/SKILL.md](SKILL.md)
 - **Confluence Expert Skill:** [project-management/confluence-expert/SKILL.md](SKILL.md)
 - **Atlassian Admin Skill:** [project-management/atlassian-admin/SKILL.md](SKILL.md)
-- **PM Domain Guide:** project-management/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **PM Domain Guide:** project-management/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 
 ---
 

@@ -336,23 +336,9 @@ Fill in the real section names, technologies, and project-specific conventions.
 
 Agents read the nearest AGENTS.md in the directory tree. Nested files take precedence, so they should contain folder-specific details, not global ones.
 
-## CLAUDE.md Companion File
+## No Companion Files
 
-Whenever you generate an `AGENTS.md` in a folder, also generate a `CLAUDE.md` in the same folder — **only if `CLAUDE.md` does not already exist**.
-
-The `CLAUDE.md` content is always exactly:
-
-```markdown
-# CLAUDE.md
-
-<!-- Generated for repository development workflows. Do not edit directly. -->
-
-Before beginning work in this repository, read `AGENTS.md` and follow all scoped AGENTS guidance.
-```
-
-This ensures Claude Code (and similar tools that look for `CLAUDE.md`) are redirected to the authoritative `AGENTS.md` instructions.
-
-**Same guard applies:** check if `CLAUDE.md` exists before writing. If it exists, skip it.
+`AGENTS.md` is the single source of truth. Do not generate a `CLAUDE.md`, `GEMINI.md`, or any other per-tool companion or pointer file alongside it — agents that support `AGENTS.md` read it directly, and a second file only drifts from the first.
 
 ## Quality Principles
 
