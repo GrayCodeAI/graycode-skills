@@ -63,7 +63,7 @@ Audit Progress:
 
 ```bash
 find . \( -name "AGENTS.md" -o -name "AGENTS.override.md" -o -name "CLAUDE.md" -o -name "CLAUDE.local.md" \) -not -path "*/node_modules/*" 2>/dev/null | sort
-ls -la CLAUDE.md .claude/rules .cursor/rules 2>/dev/null
+ls -la AGENTS.md .claude/rules .cursor/rules 2>/dev/null
 ```
 
 Also check `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`; both load in every repo. `ls -la CLAUDE.md` tells you whether it is a symlink, an `@AGENTS.md` pointer, or a second copy, and a copy is a finding on its own. For monorepos, include workspace-level files. Audit each level independently: root holds universal rules, child files hold directory-specific rules (see the placement hierarchy in `references/root-content-guidance.md`).
@@ -117,7 +117,7 @@ Apply approved edits, re-score with the same checklist, report before/after scor
 ## Gotchas
 
 - Claude Code reads `CLAUDE.md`, not `AGENTS.md`. A repo with only `AGENTS.md` gives Claude Code no instructions and nothing warns; `/context` shows an empty Memory files list. Add a `CLAUDE.md` containing `@AGENTS.md`.
-- `@import` moves text, not cost. Imported files are expanded into context at launch, so splitting a 400-line `CLAUDE.md` into five imports still loads 400 lines every session. Only nested files, path-scoped `.claude/rules/`, and skills load on demand.
+- `@import` moves text, not cost. Imported files are expanded into context at launch, so splitting a 400-line `AGENTS.md` into five imports still loads 400 lines every session. Only nested files, path-scoped `.claude/rules/`, and skills load on demand.
 - `@import` reaches Claude Code only. Codex and Cursor pass the line through as text without warning, so an imported safety or format rule is absent from most sessions while the file still looks correct.
 - `@import` lines inside backticks or fenced blocks are literal text: a real import wrapped in a code span silently never loads. The same rule makes example imports inside fences safe to show.
 - Import chains stop at four hops; deeper content disappears with no error.
@@ -135,9 +135,9 @@ Apply approved edits, re-score with the same checklist, report before/after scor
 ## Related Skills
 
 - `agent-skills-creator`: authoring and improving SKILL.md files (different format and rules).
-- External `cadence-advise` skill where installed: proposes AGENTS.md/CLAUDE.md edits from observed session history; complements this skill's file-first audit.
+- External `cadence-advise` skill where installed: proposes AGENTS.md edits from observed session history; complements this skill's file-first audit.
 - `readme-creator` / `docs-writing`: human-facing documentation; AGENTS.md content that belongs in docs should move there.
 - `codebase-architecture` (Harden mode): the rest of the repo an agent works in. A rule a linter can enforce belongs there as an exit code, not here as prose, and it owns the docs tree this file indexes.
-- Claude Code's `/doctor` checkup: proposes trims for a checked-in `CLAUDE.md`, cutting what Claude can derive from the codebase and migrating always-loaded procedures into skills and nested files. Complementary automated triage; it doesn't run the commands, so it never replaces Step 6.
+- Claude Code's `/doctor` checkup: proposes trims for a checked-in `AGENTS.md`, cutting what Claude can derive from the codebase and migrating always-loaded procedures into skills and nested files. Complementary automated triage; it doesn't run the commands, so it never replaces Step 6.
 
 Maintenance only: `evals/evals.json` contains regression scenarios for changes to this skill; it does not load during a user task.

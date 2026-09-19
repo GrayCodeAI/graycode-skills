@@ -71,11 +71,11 @@ Verify the server is working by searching for papers:
 mcp-exec name: "search_arxiv" arguments: {"query": "test query", "max_results": 2}
 ```
 
-## 5. Update CLAUDE.md file
+## 5. Update AGENTS.md file
 
 Use the path determined in step 1:
 
-Once the paper-search MCP server is successfully set up, update CLAUDE.md file with the following content:
+Once the paper-search MCP server is successfully set up, update AGENTS.md file with the following content:
 
 ```markdown
 ### Use Paper Search MCP for Academic Research

@@ -138,7 +138,7 @@ Already have AI context files?
 ```bash
 # Migrates existing context
 faf migrate --from .cursorrules
-faf migrate --from CLAUDE.md  
+faf migrate --from AGENTS.md  
 faf migrate --from README.md
 
 # One format, works everywhere

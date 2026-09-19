@@ -1,6 +1,6 @@
 ---
 name: ag-ai-md
-description: Convert human-written CLAUDE.md into AI-native structured-label format.
+description: Convert human-written AGENTS.md into AI-native structured-label format.
   Battle-tested across 4 models. Same rules, fewer tokens, higher compliance.
 license: MIT
 tags:
@@ -12,7 +12,7 @@ date_added: 2026-03-11
 
 ## Real-World Results
 
-Tested 2026-03, washinmura.jp CLAUDE.md, 5 rounds, 4 models:
+Tested 2026-03, washinmura.jp AGENTS.md, 5 rounds, 4 models:
 
 | Round | Change | Codex (GPT-5.3) | Gemini 2.5 Pro | Claude Opus 4.6 |
 |-------|--------|-----------------|----------------|-----------------|
@@ -27,7 +27,7 @@ Key findings:
 3. **Cross-model consistency**: Format that works for one model works for all (except Grok)
 4. **Semantic anchoring**: The `new-api:` label fix was the single most impactful change
 
-**The uncomfortable truth: Your beautiful, carefully-written CLAUDE.md
+**The uncomfortable truth: Your beautiful, carefully-written AGENTS.md
 might be HURTING your AI's performance. Structure > Prose. Always.**
 
 ## Limitations

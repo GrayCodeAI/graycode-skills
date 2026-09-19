@@ -106,7 +106,7 @@ User question
 
 - persona-voices.md
 - llm-wiki-bridge.md
-- Parent c-level CLAUDE.md
+- Parent c-level AGENTS.md
 - [Existing executive-mentor sibling]()
 
 ---

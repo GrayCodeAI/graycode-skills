@@ -83,11 +83,11 @@ When `--json` flag is set, output results in this JSON structure:
 - **Be Pragmatic**: Focus on real issues and high-impact improvements
 - **Skip Trivial Issues** in large changes (>500 lines):
   - Focus on architectural and security issues
-  - Ignore minor naming conventions unless CLAUDE.md explicitly requires them
+  - Ignore minor naming conventions unless AGENTS.md explicitly requires them
   - Prioritize bugs over style
 - **Improvements Should Be Actionable**: Each suggestion should include concrete code examples
 - **Consider Effort vs Impact**: Prioritize improvements with high impact and reasonable effort
-- **Align with Project Standards**: Reference CLAUDE.md and project guidelines when suggesting improvements
+- **Align with Project Standards**: Reference AGENTS.md and project guidelines when suggesting improvements
 - **Terminal Readability**: The report is consumed in a terminal/console. Use fixed-width-friendly formatting: short lines, clear section separators (`---`), and concise tables. Avoid deeply nested bullet lists or long prose paragraphs that wrap poorly in narrow terminals.
 
 ## Remember

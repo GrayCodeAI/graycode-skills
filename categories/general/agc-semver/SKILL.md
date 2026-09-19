@@ -110,7 +110,7 @@ version ver:
 
 Use `npm run version:bump 0.2.0`.
 
-## CLAUDE.md snippet
+## AGENTS.md snippet
 
 ```markdown
 Update CHANGELOG.md under the [Unreleased] section with concise bullet points grouped under Added/Changed/Fixed/Removed. Combine or update items refined within the same session. Don't add version numbers; at release time use `make version V=X.Y.Z` to bump the canonical version source and freeze the changelog (or `make stamp-version` to freeze using the existing version). Truncate when the file exceeds 2000 lines.

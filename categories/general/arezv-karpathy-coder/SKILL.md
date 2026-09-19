@@ -119,7 +119,7 @@ Installs via plugin for Claude Code. For other tools, copy the principles into y
 
 | Tool | Schema file |
 |---|---|
-| Claude Code | `CLAUDE.md` (auto-loaded by plugin) |
+| Claude Code | `AGENTS.md` (auto-loaded by plugin) |
 | Codex CLI | `AGENTS.md` |
 | Cursor | `AGENTS.md` or `.cursorrules` |
 | Antigravity / OpenCode / Gemini CLI | `AGENTS.md` |

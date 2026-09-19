@@ -407,8 +407,8 @@ echo "Location: product-team/agile-product-owner/references/user-story-templates
 
 - **Primary Skill:** [product-team/agile-product-owner/SKILL.md](SKILL.md)
 - **RICE Framework:** [product-team/product-manager-toolkit/SKILL.md](SKILL.md)
-- **Product Domain Guide:** product-team/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Product Domain Guide:** product-team/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 - **Scrum Master Skill:** [project-management/scrum-master/SKILL.md](SKILL.md)
 
 ---

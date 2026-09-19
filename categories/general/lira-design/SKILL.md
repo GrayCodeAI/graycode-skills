@@ -24,7 +24,7 @@ tags:
 
 #### 2.5.4. Claude Code-Specific Processing
 - Copies template files without frontmatter transformation (preserves original format)
-- Generates main context file (`CLAUDE.md`) with @ imports for template inclusion
+- Generates main context file (`AGENTS.md`) with @ imports for template inclusion
 - Organizes imports by topic categories with user-friendly labels
 - Implements duplicate detection to avoid redundant imports
 - Uses simple string-based content management for efficient processing
@@ -171,7 +171,7 @@ The project currently supports three AI coding assistants, each with unique char
 - **File Extension**: `.md`
 - **Processing Strategy**: Main context file management with @ imports
 - **Special Features**:
-  - Creates/updates main `CLAUDE.md` context file at project root
+  - Creates/updates main `AGENTS.md` context file at project root
   - Organizes imports by topic categories with user-friendly labels
   - Implements duplicate detection to avoid redundant imports
   - Uses @ syntax for file imports (e.g., `@./.claude/rules/filename.md`)

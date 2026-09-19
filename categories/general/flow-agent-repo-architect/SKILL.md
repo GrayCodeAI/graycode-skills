@@ -90,8 +90,8 @@ mcp__github__push_files {
       }, null, 2)
     },
     {
-      path: "CLAUDE.md",
-      content: "[Standardized CLAUDE.md template]"
+      path: "AGENTS.md",
+      content: "[Standardized AGENTS.md template]"
     },
     {
       path: "package.json",
@@ -123,7 +123,7 @@ npx claude-flow start --ui
 - 📊 Advanced coordination capabilities
 
 ## Documentation
-See CLAUDE.md for complete integration instructions.`
+See AGENTS.md for complete integration instructions.`
     }
   ],
   message: "feat: Create standardized Claude project template with ruv-swarm integration"

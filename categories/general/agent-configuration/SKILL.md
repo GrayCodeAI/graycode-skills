@@ -26,7 +26,7 @@ source: Claude Code Complete Guide 70 Tips (ykdojo + Ado Kukic)
 .claude/settings.json       # Project settings
 .claude/skills/             # Project skills
 .agent-skills/              # Universal skills
-CLAUDE.md                   # Project AI manual
+AGENTS.md                   # Project AI manual
 ```
 
 ### Security Priority

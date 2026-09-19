@@ -29,8 +29,7 @@ Goal: concise, actionable agent instructions. Target under 60 lines; never excee
 ## File Setup
 
 - Create `AGENTS.md` at the repository root.
-- If a Claude-compatible entrypoint is required, symlink `CLAUDE.md` to `AGENTS.md`.
-- Do not maintain divergent `AGENTS.md` and `CLAUDE.md` copies.
+- Do not create per-tool companion files or symlinks alongside it; `AGENTS.md` is the single source of truth.
 
 ## Default Sections
 
