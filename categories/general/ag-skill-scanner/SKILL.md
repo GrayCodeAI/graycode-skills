@@ -91,7 +91,7 @@ This phase is agent-only — no pattern matching. Read the full SKILL.md instruc
 - A skill described as "code formatter" that instructs the agent to read ~/.ssh is misaligned
 
 **Config/memory poisoning**:
-- Instructions to modify `CLAUDE.md`, `MEMORY.md`, `settings.json`, `.mcp.json`, or hook configurations
+- Instructions to modify `AGENTS.md`, `MEMORY.md`, `settings.json`, `.mcp.json`, or hook configurations
 - Instructions to add itself to allowlists or auto-approve permissions
 - Writing to `~/.claude/` or any agent configuration directory
 

@@ -38,13 +38,13 @@ Check whether you have access to Context7 MCP server by making request.
 
 if no, load <https://raw.githubusercontent.com/upstash/context7/refs/heads/master/README.md> file and guide user through setup process that applicable to agent/operation system.
 
-## 3. Update CLAUDE.md file
+## 3. Update AGENTS.md file
 
 Use the path determined in step 1:
 
 - Parse user input, if it empty read current project structure and used technologies, if project empty ask user to provide list of languages and frameworks that planned to be used in this project.
 - Search through context7 MCP for relevant technologies documentation
-- Update the appropriate CLAUDE.md file with following content:
+- Update the appropriate AGENTS.md file with following content:
 
 ```markdown
 ### Use Context7 MCP for Loading Documentation

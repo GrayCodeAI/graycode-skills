@@ -46,7 +46,7 @@ This bridges the active kubeconfig context to any MCP-compatible coding agent. D
 
 ### Step 3: Use built-in agent skills
 
-The project ships with agent skills accessible via `CLAUDE.md` and `AGENTS.md`:
+The project ships with agent skills accessible via `AGENTS.md`:
 
 - **@perf-test** — Dashboard performance testing and TTFI analysis
 - **@cache-test** — Card cache compliance testing (IndexedDB warm return)
@@ -97,5 +97,4 @@ The project ships with agent skills accessible via `CLAUDE.md` and `AGENTS.md`:
 
 - [GitHub](https://github.com/kubestellar/console)
 - [Website](https://console.kubestellar.io)
-- [CLAUDE.md](https://github.com/kubestellar/console/blob/main/CLAUDE.md)
 - [AGENTS.md](https://github.com/kubestellar/console/blob/main/AGENTS.md)

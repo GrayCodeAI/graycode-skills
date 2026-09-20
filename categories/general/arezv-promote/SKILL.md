@@ -1,6 +1,6 @@
 ---
 name: arezv-promote
-description: Graduate a proven pattern from auto-memory (MEMORY.md) to CLAUDE.md or
+description: Graduate a proven pattern from auto-memory (MEMORY.md) to AGENTS.md or
   .claude/rules/ for permanent enforcement.
 license: MIT
 tags:
@@ -51,9 +51,9 @@ The pattern is now an enforced instruction. Claude will follow it in all future 
 - It might change soon (e.g., during a migration)
 - It's already covered by existing rules
 
-### CLAUDE.md vs .claude/rules/
+### AGENTS.md vs .claude/rules/
 
-| Use CLAUDE.md for | Use .claude/rules/ for |
+| Use AGENTS.md for | Use .claude/rules/ for |
 |---|---|
 | Global project rules | File-type-specific patterns |
 | Build commands | Testing conventions |
@@ -62,7 +62,7 @@ The pattern is now an enforced instruction. Claude will follow it in all future 
 
 ## Tips
 
-- Keep CLAUDE.md under 200 lines — use rules/ for overflow
+- Keep AGENTS.md under 200 lines — use rules/ for overflow
 - One rule per line is easier to maintain than paragraphs
 - Include the concrete command, not just the concept
 - Review promoted rules quarterly — remove what's no longer relevant

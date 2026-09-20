@@ -69,7 +69,7 @@ Conflict order, highest first:
 
 1. The user's explicit goal and constraints.
 2. Verified user and product evidence, and what the system actually does.
-3. Project-canonical guidance: `AGENTS.md` or `CLAUDE.md`, the project's design system, routed sibling skills.
+3. Project-canonical guidance: `AGENTS.md`, the project's design system, routed sibling skills.
 4. Sibling-skill ownership: route, do not duplicate.
 5. This skill's standards (below).
 6. General interface and platform conventions (WCAG 2.2, NN/g, Apple HIG, Material, GOV.UK), which `references/rules.md` cites per rule.

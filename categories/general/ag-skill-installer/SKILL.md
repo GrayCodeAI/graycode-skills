@@ -17,7 +17,7 @@ tools: None
 Esta skill e auto-detectada pelo `scan_registry.py` e matchada pelo `match_skills.py`
 quando o usuario menciona keywords de instalacao. Nenhuma configuracao manual necessaria.
 
-Alem disso, o CLAUDE.md global contem instrucao para rodar o instalador automaticamente
+Alem disso, o AGENTS.md global contem instrucao para rodar o instalador automaticamente
 apos o skill-creator finalizar uma skill.
 
 ## Best Practices

@@ -126,7 +126,7 @@ For the full rule list per category, read `rules/_sections.md`. The `*-defaults.
 ## Related skills
 
 - `readme-creator`: a README from scratch or a full rewrite; this skill audits and fixes existing ones in place.
-- `agents-md`: AGENTS.md/CLAUDE.md instruction files (execution-first, not reader-facing docs).
+- `agents-md`: AGENTS.md instruction files (execution-first, not reader-facing docs).
 - `copywriting`: marketing, landing-page, and product copy.
 - `dx-audit`: the product's own error messages, CLI output, and API ergonomics; this skill covers how the docs describe them.
 - `optimise-seo`: implementing `llms.txt`, AI-crawler policy, and Markdown routes in a Next.js App Router site; `nav-agent-readable` says what the docs should expose, that skill builds it.

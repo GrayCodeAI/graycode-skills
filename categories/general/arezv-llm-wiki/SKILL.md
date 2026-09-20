@@ -44,7 +44,7 @@ vault/
 │   ├── sources/            # One summary page per ingested source
 │   ├── comparisons/        # Cross-source analysis pages
 │   └── synthesis/          # High-level syntheses, theses, overviews
-├── CLAUDE.md               # Schema + conventions (Claude Code)
+├── AGENTS.md               # Schema + conventions (Claude Code)
 └── AGENTS.md               # Same content, for Codex/Cursor/Antigravity
 ```
 

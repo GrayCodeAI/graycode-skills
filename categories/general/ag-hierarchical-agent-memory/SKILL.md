@@ -1,6 +1,6 @@
 ---
 name: ag-hierarchical-agent-memory
-description: "Scoped CLAUDE.md memory system that reduces context token spend. Creates directory-level context files, tracks savings via dashboard, and routes agents to the right sub-context."
+description: "Scoped AGENTS.md memory system that reduces context token spend. Creates directory-level context files, tracks savings via dashboard, and routes agents to the right sub-context."
 license: MIT
 tags: [general]
 risk: safe
@@ -10,13 +10,13 @@ date_added: 2026-02-27
 
 # Hierarchical Agent Memory (HAM)
 
-Scoped memory system that gives AI coding agents a cheat sheet for each directory instead of re-reading your entire project every prompt. Root CLAUDE.md holds global context (~200 tokens), subdirectory CLAUDE.md files hold scoped context (~250 tokens each), and a `.memory/` layer stores decisions, patterns, and an inbox for unconfirmed inferences.
+Scoped memory system that gives AI coding agents a cheat sheet for each directory instead of re-reading your entire project every prompt. Root AGENTS.md holds global context (~200 tokens), subdirectory AGENTS.md files hold scoped context (~250 tokens each), and a `.memory/` layer stores decisions, patterns, and an inbox for unconfirmed inferences.
 
 ## When to Use This Skill
 
 - Use when you want to reduce input token costs across Claude Code sessions
 - Use when your project has 3+ directories and the agent keeps re-reading the same files
-- Use when you want directory-scoped context instead of one monolithic CLAUDE.md
+- Use when you want directory-scoped context instead of one monolithic AGENTS.md
 - Use when you want a dashboard to visualize token savings, session history, and context health
 - Use when setting up a new project and want structured agent memory from day one
 
@@ -28,28 +28,28 @@ Auto-detects your project platform and maturity, then generates the memory struc
 
 ```
 project/
-├── CLAUDE.md              # Root context (~200 tokens)
+├── AGENTS.md              # Root context (~200 tokens)
 ├── .memory/
 │   ├── decisions.md       # Architecture Decision Records
 │   ├── patterns.md        # Reusable patterns
 │   ├── inbox.md           # Inferred items awaiting confirmation
 │   └── audit-log.md       # Audit history
 └── src/
-    ├── api/CLAUDE.md      # Scoped context for api/
-    ├── components/CLAUDE.md
-    └── lib/CLAUDE.md
+    ├── api/AGENTS.md      # Scoped context for api/
+    ├── components/AGENTS.md
+    └── lib/AGENTS.md
 ```
 
 ### Step 2: Context Routing
 
-The root CLAUDE.md includes a routing section that tells the agent exactly which sub-context to load:
+The root AGENTS.md includes a routing section that tells the agent exactly which sub-context to load:
 
 ```markdown
 ## Context Routing
 
-→ api: src/api/CLAUDE.md
-→ components: src/components/CLAUDE.md
-→ lib: src/lib/CLAUDE.md
+→ api: src/api/AGENTS.md
+→ components: src/components/AGENTS.md
+→ lib: src/lib/AGENTS.md
 ```
 
 The agent reads root, then immediately loads the relevant subdirectory context — no guessing.
@@ -60,7 +60,7 @@ Launches a web dashboard at localhost:7777 that visualizes:
 - Token savings (HAM-on vs HAM-off sessions)
 - Daily token and cost trends
 - Per-directory session breakdown
-- Context file health (missing/stale/inherited CLAUDE.md coverage)
+- Context file health (missing/stale/inherited AGENTS.md coverage)
 - Routing compliance (how often the agent follows the routing map)
 - Carbon/energy estimates
 
@@ -68,12 +68,12 @@ Launches a web dashboard at localhost:7777 that visualizes:
 
 | Trigger | What it does |
 |---|---|
-| `go ham` | Set up HAM — auto-detect platform, generate CLAUDE.md files |
+| `go ham` | Set up HAM — auto-detect platform, generate AGENTS.md files |
 | `ham savings` | Show token and cost savings report |
 | `ham dashboard` | Launch the interactive web dashboard |
 | `ham audit` | Health check on memory files |
 | `ham insights` | Generate actionable insights from session data |
-| `ham route` | Add/update Context Routing section in root CLAUDE.md |
+| `ham route` | Add/update Context Routing section in root AGENTS.md |
 | `ham carbon` | Show energy and carbon efficiency data |
 
 ## Examples
@@ -84,14 +84,14 @@ Launches a web dashboard at localhost:7777 that visualizes:
 User: go ham
 
 Agent: HAM setup complete. Created 8 files.
-  - CLAUDE.md (root)
+  - AGENTS.md (root)
   - .memory/decisions.md
   - .memory/patterns.md
   - .memory/inbox.md
-  - src/api/CLAUDE.md
-  - src/components/CLAUDE.md
-  - src/lib/CLAUDE.md
-  - src/utils/CLAUDE.md
+  - src/api/AGENTS.md
+  - src/components/AGENTS.md
+  - src/lib/AGENTS.md
+  - src/utils/AGENTS.md
 
 Baseline captured in .memory/baseline.json
 Run "HAM savings" to see your token and cost savings.
@@ -114,8 +114,8 @@ Agent:
 
 ## Best Practices
 
-- Keep root CLAUDE.md under 60 lines / 250 tokens
-- Keep subdirectory CLAUDE.md files under 75 lines each
+- Keep root AGENTS.md under 60 lines / 250 tokens
+- Keep subdirectory AGENTS.md files under 75 lines each
 - Run `ham audit` every 2 weeks to catch stale or missing context files
 - Use `ham route` after adding new directories to keep routing current
 - Review `.memory/inbox.md` periodically — confirm or reject inferred items
@@ -125,8 +125,8 @@ Agent:
 - Token estimates use ~4 chars = 1 token approximation, not a real tokenizer
 - Baseline savings comparisons are estimates based on typical agent behavior
 - Dashboard requires Node.js 18+ and reads session data from `~/.claude/projects/`
-- Context routing detection relies on CLAUDE.md read order in session JSONL files
-- Does not auto-update subdirectory CLAUDE.md content — you maintain those manually or via `ham audit`
+- Context routing detection relies on AGENTS.md read order in session JSONL files
+- Does not auto-update subdirectory AGENTS.md content — you maintain those manually or via `ham audit`
 - Carbon estimates use regional grid averages, not real-time energy data
 
 ## Related Skills

@@ -149,7 +149,7 @@ Re-open every touched or cited location, rerun the same probes and focused proje
 - `pr-reviewer`: general correctness and structure of a diff
 - `docs-writing`: documentation prose and information quality
 - `readme-creator`: README structure and first-reader narrative
-- `agents-md`: AGENTS.md and CLAUDE.md instruction files
+- `agents-md`: AGENTS.md instruction files
 - `codebase-architecture`: repository structure and module contracts inside the repo, rather than the surface a package ships outward
 
 Maintenance only: `evals/evals.json` contains regression scenarios for changes to this skill; it does not load during a user task.

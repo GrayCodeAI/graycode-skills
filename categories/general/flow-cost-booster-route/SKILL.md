@@ -34,9 +34,9 @@ Before a batch of similar tasks, or when `cost-report` shows Sonnet/Opus spend o
 ## Caveats — claimed upstream, not yet verified
 
 - `[AGENT_BOOSTER_AVAILABLE]` fires only when the upstream router populates `routeResult.agentBoosterIntent.type` (`v3/@claude-flow/cli/src/mcp-tools/hooks-tools.ts:1228`). The published CLI's semantic-VectorDb path does not always trigger the classifier — treat the partition as a **lower bound** on Tier 1 eligibility.
-- CLAUDE.md root claims `<1ms` latency and `352× faster` than LLM. `<1ms` and `$0` are structural; `352×` is **claimed upstream, not yet verified** here. Report what the router actually returns.
+- AGENTS.md root claims `<1ms` latency and `352× faster` than LLM. `<1ms` and `$0` are structural; `352×` is **claimed upstream, not yet verified** here. Report what the router actually returns.
 - See `docs/benchmarks/0002-baseline.md` for the full upstream-claims-vs-measured table.
 
 ## Cross-references
 
-ADR-0002 Decision #1 · ruflo-intelligence ADR-0001 §"Neutral" (closes the routing-outcomes loop via `cost-optimize` step 8) · CLAUDE.md root §"3-Tier Model Routing (ADR-026)".
+ADR-0002 Decision #1 · ruflo-intelligence ADR-0001 §"Neutral" (closes the routing-outcomes loop via `cost-optimize` step 8) · AGENTS.md root §"3-Tier Model Routing (ADR-026)".

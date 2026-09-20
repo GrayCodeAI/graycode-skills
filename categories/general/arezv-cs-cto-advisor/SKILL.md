@@ -403,8 +403,8 @@ echo "- Process improvements identified"
 ## References
 
 - **Skill Documentation:** [c-level-advisor/skills/cto-advisor/SKILL.md](SKILL.md)
-- **C-Level Domain Guide:** c-level-advisor/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **C-Level Domain Guide:** c-level-advisor/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 
 ---
 

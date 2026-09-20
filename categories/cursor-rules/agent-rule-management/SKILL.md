@@ -20,7 +20,7 @@ Creates rules at project or user level and manages the rule set at both.
 | "create / add / new rule", "convention", "standard", or a declarative description with no verb | create.md |
 | "list / show rules", "what rules exist" | list.md |
 | "edit / update / change rule X" | edit.md |
-| "extract / split / move from AGENTS.md / CLAUDE.md", "AGENTS.md / CLAUDE.md is too big" | extract.md |
+| "extract / split / move from AGENTS.md", "AGENTS.md is too big" | extract.md |
 | "delete / remove rule X" | delete.md |
 
 ## Workflow

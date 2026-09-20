@@ -479,8 +479,8 @@ python product-team/product-strategist/scripts/okr_cascade_generator.py growth
 - **Competitive Teardown Skill:** [product-team/competitive-teardown/SKILL.md](SKILL.md)
 - **OKR Framework:** product-team/product-strategist/references/okr_framework.md
 - **Strategy Types:** product-team/product-strategist/references/strategy_types.md
-- **Product Domain Guide:** product-team/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Product Domain Guide:** product-team/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 
 ---
 

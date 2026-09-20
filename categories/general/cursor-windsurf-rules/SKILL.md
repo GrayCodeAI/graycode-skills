@@ -15,7 +15,7 @@ Windsurf (formerly Codeium) has two customization systems: Rules (persistent con
 ## Rules (Persistent Context)
 - **Current format (Wave 8+)**: Markdown files in `.windsurf/rules/` at the project root. Each file gets a descriptive name and contains rules in plain markdown
 - **Legacy format**: Single `.windsurfrules` file at the project root (still supported, but the new format is preferred)
-- Rules provide persistent context to Cascade (Windsurf's AI agent) for every interaction — similar to .cursorrules or CLAUDE.md
+- Rules provide persistent context to Cascade (Windsurf's AI agent) for every interaction — similar to .cursorrules or AGENTS.md
 - The GUI provides a visual editor wrapper around the markdown files, but you can edit them directly
 
 ## Rules Discovery

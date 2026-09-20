@@ -1,7 +1,7 @@
 ---
 name: arezv-self-improving-agent
 description: Curate Claude Code's auto-memory into durable project knowledge. Analyze
-  MEMORY.md for patterns, promote proven learnings to CLAUDE.md and .claude/rules/,
+  MEMORY.md for patterns, promote proven learnings to AGENTS.md and .claude/rules/,
   extract recurring solutions into reusable ...
 license: MIT
 tags:
@@ -22,7 +22,7 @@ Analyzes MEMORY.md and topic files to identify:
 - Entries that recur across sessions (promotion candidates)
 - Stale entries referencing deleted files or old patterns
 - Related entries that should be consolidated
-- Gaps between what MEMORY.md knows and what CLAUDE.md enforces
+- Gaps between what MEMORY.md knows and what AGENTS.md enforces
 
 ### skill-extractor
 Takes a proven pattern and generates a complete skill:

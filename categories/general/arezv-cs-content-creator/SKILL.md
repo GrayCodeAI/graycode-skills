@@ -237,8 +237,8 @@ cat marketing-skill/content-creator/references/analytics_guide.md
 ## References
 
 - **Skill Documentation:** [marketing-skill/content-creator/SKILL.md](SKILL.md)
-- **Marketing Domain Guide:** marketing-skill/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Marketing Domain Guide:** marketing-skill/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 - **Marketing Roadmap:** marketing-skill/marketing_skills_roadmap.md
 
 ---

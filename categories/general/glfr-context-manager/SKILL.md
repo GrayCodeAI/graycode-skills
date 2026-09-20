@@ -92,7 +92,7 @@ When passing context to another agent:
 
 ## Memory Management
 
-- Use CLAUDE.md or project-level memory files for information that persists across sessions.
+- Use AGENTS.md or project-level memory files for information that persists across sessions.
 - Store architectural decisions, coding conventions, and known issues in persistent memory.
 - Do not store implementation details that will become stale.
 - Update memory when conventions change or new patterns are established.

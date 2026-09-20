@@ -21,7 +21,7 @@ This skill provides a structured workflow for translating Figma designs into pro
 - If the user asks to create/edit/delete nodes inside Figma itself, switch to figma-use.
 - If the user asks to build or update a full-page screen in Figma from code or a description, switch to figma-generate-design.
 - If the user asks only for Code Connect mappings, switch to figma-code-connect-components.
-- If the user asks to author reusable agent rules (`CLAUDE.md`/`AGENTS.md`), switch to figma-create-design-system-rules.
+- If the user asks to author reusable agent rules (`AGENTS.md`), switch to figma-create-design-system-rules.
 
 ## Prerequisites
 

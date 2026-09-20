@@ -50,7 +50,7 @@ Analyze each entry for:
 2. **Staleness indicators**
    - References files that no longer exist (`find` to verify)
    - Mentions outdated tools, versions, or commands
-   - Contradicts current CLAUDE.md rules
+   - Contradicts current AGENTS.md rules
 
 3. **Consolidation opportunities**
    - Multiple entries about the same topic (e.g., three lines about testing)
@@ -60,7 +60,7 @@ Analyze each entry for:
    - Appeared in 2+ sessions (check wording patterns)
    - Not project-specific trivia (broadly useful)
    - Actionable (can be written as a concrete rule)
-   - Not already in CLAUDE.md or `.claude/rules/`
+   - Not already in AGENTS.md or `.claude/rules/`
 
 ### Step 3: Read topic files
 
@@ -69,12 +69,12 @@ If `MEMORY.md` references or the directory contains additional files (`debugging
 - Cross-reference with MEMORY.md for duplicates
 - Check for entries that belong in the main file (high value) vs. topic files (details)
 
-### Step 4: Cross-reference with CLAUDE.md
+### Step 4: Cross-reference with AGENTS.md
 
-Read the project's `CLAUDE.md` (if it exists) and compare:
-- Are there MEMORY.md entries that duplicate CLAUDE.md rules? (→ remove from memory)
-- Are there MEMORY.md entries that contradict CLAUDE.md? (→ flag conflict)
-- Are there MEMORY.md patterns not yet in CLAUDE.md that should be? (→ promotion candidate)
+Read the project's `AGENTS.md` (if it exists) and compare:
+- Are there MEMORY.md entries that duplicate AGENTS.md rules? (→ remove from memory)
+- Are there MEMORY.md entries that contradict AGENTS.md? (→ flag conflict)
+- Are there MEMORY.md patterns not yet in AGENTS.md that should be? (→ promotion candidate)
 
 Also check `.claude/rules/` directory for existing scoped rules.
 
@@ -88,12 +88,12 @@ Output format:
 Memory Health:
   MEMORY.md:        {{lines}}/200 lines ({{percent}}%)
   Topic files:      {{count}} ({{names}})
-  CLAUDE.md:        {{lines}} lines
+  AGENTS.md:        {{lines}} lines
   Rules:            {{count}} files in .claude/rules/
 
 🎯 Promotion Candidates ({{count}}):
   1. "{{pattern}}" — seen {{n}}x, applies broadly
-     → Suggest: {{target}} (CLAUDE.md / .claude/rules/{{name}}.md)
+     → Suggest: {{target}} (AGENTS.md / .claude/rules/{{name}}.md)
   2. ...
 
 🗑️ Stale Entries ({{count}}):
@@ -105,7 +105,7 @@ Memory Health:
   2. ...
 
 ⚠️ Conflicts ({{count}}):
-  1. MEMORY.md line {{n}} contradicts CLAUDE.md: {{detail}}
+  1. MEMORY.md line {{n}} contradicts AGENTS.md: {{detail}}
 
 💡 Recommendations:
   - {{actionable suggestion}}

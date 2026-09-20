@@ -523,8 +523,8 @@ echo "See: product-team/ui-design-system/references/developer-handoff.md"
 - **Journey Mapping Guide:** product-team/ux-researcher-designer/references/journey-mapping-guide.md
 - **Usability Testing:** product-team/ux-researcher-designer/references/usability-testing-frameworks.md
 - **Design System:** [product-team/ui-design-system/SKILL.md](SKILL.md)
-- **Product Domain Guide:** product-team/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Product Domain Guide:** product-team/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 
 ---
 
