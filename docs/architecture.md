@@ -2,7 +2,7 @@
 
 # 🎯 graycode-skills Architecture
 
-**Modular Instruction Packages for Graycode**
+**Modular Instruction Packages for Rho**
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://python.org/)
 [![Type](https://img.shields.io/badge/Type-Registry-purple)]()
@@ -13,9 +13,9 @@
 
 ## 🎯 Overview
 
-A registry of modular instruction packages (**skills**) that teach Graycode specialized workflows. Each skill is a **Markdown file with YAML frontmatter** that Graycode loads into its system prompt when activated.
+A registry of modular instruction packages (**skills**) that teach Rho specialized workflows. Each skill is a **Markdown file with YAML frontmatter** that Rho loads into its system prompt when activated.
 
-> 💡 Install with: `graycode skills install <owner/repo> <name>`
+> 💡 Install with: `rho skills install <owner/repo> <name>`
 
 ---
 
