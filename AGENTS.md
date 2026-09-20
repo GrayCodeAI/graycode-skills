@@ -6,7 +6,7 @@ alwaysApply: false
 
 # graycode-skills Conventions
 
-Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli).
+Community skill packages for [Rho](https://github.com/GrayCodeAI/rho).
 
 ## Development workflow
 
@@ -41,11 +41,11 @@ ruff format --check .
 
 ## Ecosystem Boundaries
 
-- Extends Graycode through public skill and plugin surfaces only
-- Do not reference support engine repos (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, `merlin`)
-- Do not reference `graycode-cli/internal/*` or removed legacy paths
+- Extends Rho through public skill and plugin surfaces only (`rho skills install` → `~/.rho/skills`, `./.zero/skills`)
+- Do not reference support engine internals (`flux/client`, `flux/catalog`, `flux/credentials`, `rho/internal/*`) — consume only `flux/engine`, `flux/llm`, `flux/graph`, `flux/tools`
+- Removed legacy paths (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, `merlin`, `graycode-cli/internal/*`) must not be referenced
 
-For full graycode-eco extension guidelines, see [graycode-cli/AGENTS.md](https://github.com/GrayCodeAI/graycode-cli/blob/main/AGENTS.md).
+For full graycode-eco extension guidelines, see [rho/AGENTS.md](https://github.com/GrayCodeAI/rho/blob/main/AGENTS.md).
 
 <!-- gitnexus:start -->
 ## GitNexus — Code Intelligence

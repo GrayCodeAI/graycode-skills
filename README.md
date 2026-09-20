@@ -1,10 +1,10 @@
 # Graycode Community Skills
 
-Community skill packages for [Graycode](https://github.com/GrayCodeAI/graycode-cli) — the AI coding agent. This repository contains 14,015 modular instruction packages that teach Graycode specialized workflows across 27 categories.
+Community skill packages for [Rho](https://github.com/GrayCodeAI/rho) — the AI coding agent. This repository contains 14,015 modular instruction packages that teach Rho specialized workflows across 27 categories.
 
 ## What are Skills?
 
-Skills are self-contained Markdown instruction packages that Graycode loads into its system prompt when activated. Each skill is a single `SKILL.md` file with YAML frontmatter, containing structured guidance for a specific workflow or technology. Skills are organized by domain under `categories/`.
+Skills are self-contained Markdown instruction packages that Rho loads into its system prompt when activated. Each skill is a single `SKILL.md` file with YAML frontmatter, containing structured guidance for a specific workflow or technology. Skills are organized by domain under `categories/`.
 
 ## Quick Start
 
@@ -13,15 +13,15 @@ Skills are self-contained Markdown instruction packages that Graycode loads into
 
 ```bash
 # View available skills
-graycode skills list
+rho skills list
 
 # Search for a skill
-graycode skills search api-testing
+rho skills search api-testing
 
 # Install a skill
-graycode skills install GrayCodeAI/graycode-skills python-pandas   # syntax is `install <owner/repo> [name]`
+rho skills install GrayCodeAI/graycode-skills python-pandas   # syntax is `install <owner/repo> [name]`
 
-# Use a skill in the graycode REPL
+# Use a skill in the rho REPL
 /skills use python-pandas
 ```
 
@@ -96,8 +96,9 @@ gate.
 
 ## Ecosystem Boundaries
 
-- `graycode-skills` extends Graycode through public skill and plugin surfaces.
-- Do not reference support engine repos (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, or `merlin`) as direct dependencies.
+- `graycode-skills` extends Rho through public skill and plugin surfaces (`rho skills install`, `~/.rho/skills`, `./.zero/skills`).
+- Do not reference support engine internals (`flux/client`, `flux/catalog`, `flux/credentials`, `rho/internal/*`) — consume only the published `flux/engine`, `flux/llm`, `flux/graph`, `flux/tools` facade.
+- Removed legacy paths (`graycode-router`, `harrier`, `shrike`, `swift`, `kestrel`, `merlin`, `graycode-cli/internal/*`) must not be referenced.
 - Do not reference `graycode-cli/internal/*` or the removed legacy path `graycode/shared/types`.
 - Skills should assume Graycode is the product boundary.
 
