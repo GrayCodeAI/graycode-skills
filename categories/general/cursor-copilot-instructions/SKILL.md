@@ -19,7 +19,7 @@ author: cursorrules-collection
 ## Agent Instructions (AGENTS.md)
 - Copilot coding agent also reads AGENTS.md files (the OpenAI Codex format)
 - Nearest AGENTS.md in the directory tree takes precedence over others
-- Copilot also supports CLAUDE.md and GEMINI.md at the repo root as alternatives
+- Copilot also supports AGENTS.md and GEMINI.md at the repo root as alternatives
 - If you have both `copilot-instructions.md` and AGENTS.md, both are used
 
 ## What Works Well

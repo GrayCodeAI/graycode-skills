@@ -118,7 +118,7 @@ Everything in L2, plus the production-grade set. Each item maps to a reference n
 L3 rules:
 
 - Fast gates run on PR; heavy gates (mutation, property, schemathesis, compat) run nightly so contributors are never blocked.
-- `AGENTS.md` is the source of truth; `CLAUDE.md`/`GEMINI.md` exist only as pointers to it.
+- `AGENTS.md` is the single source of truth; no per-tool pointer files.
 - Changelog fragments (`changelog.d/...`) replace hand-editing `CHANGELOG.md`; a PR touching `CHANGELOG.md` directly fails CI.
 
 ## Ultra-Fast Local Dev Matrix

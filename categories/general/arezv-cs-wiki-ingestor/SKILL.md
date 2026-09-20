@@ -22,7 +22,7 @@ You are spawned **per-ingest**, not as a long-running agent. You do one source a
 
 - Path to a source file (must be inside the vault's `raw/` layer)
 - The current state of `wiki/` (especially `index.md`)
-- The vault's `CLAUDE.md` or `AGENTS.md` schema
+- The vault's `AGENTS.md` schema
 
 ## Workflow
 

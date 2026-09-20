@@ -119,7 +119,7 @@ mcp__github__create_pull_request {
 ### 🎯 Release Highlights
 - **GitHub Workflow Integration**: Complete GitHub command suite with swarm coordination
 - **Package Synchronization**: Aligned versions and dependencies across packages
-- **Enhanced Documentation**: Synchronized CLAUDE.md with comprehensive integration guides
+- **Enhanced Documentation**: Synchronized AGENTS.md with comprehensive integration guides
 - **Improved Testing**: Comprehensive integration test suite with 89% success rate
 
 ### 📦 Package Updates

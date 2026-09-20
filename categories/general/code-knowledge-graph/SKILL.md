@@ -139,7 +139,7 @@ codegraph install
 2. **`codegraph init -i` 是必需的** — 每个项目首次使用前必须初始化索引，否则所有 MCP 工具失败
 3. **防抖窗口（2s）内的数据可能过时** — 编辑后立即查询可能返回旧数据，检查 `⚠️` banner
 4. **WSL/Windows 共享检出** — 不要共享同一 `.codegraph/`，使用 `CODEGRAPH_DIR` 区分
-5. **MCP 服务器自行交付使用指南** — 无需手动编辑 CLAUDE.md，指南通过 MCP initialize 自动交付
+5. **MCP 服务器自行交付使用指南** — 无需手动编辑 AGENTS.md，指南通过 MCP initialize 自动交付
 6. **排除目录** — `node_modules`、`dist`、`build` 等默认排除，通过 `.gitignore` 管理
 7. **信息不足时不要笼统提问** — 先输出假设版本，再列具体缺少项（见 Workflow Step 3 模板）
 

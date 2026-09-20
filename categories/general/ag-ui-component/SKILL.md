@@ -30,7 +30,7 @@ Part of [StyleSeed](https://github.com/bitjaru/styleseed), this skill generates 
 ### Step 1: Read the Local Design Context
 
 Before generating code, inspect the seed's source of truth:
-- `CLAUDE.md` for conventions
+- `AGENTS.md` for conventions
 - `css/theme.css` for semantic tokens
 - at least one representative component from `components/ui/`
 

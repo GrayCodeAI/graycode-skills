@@ -49,7 +49,7 @@ Before proposing a fix, you may run: caveman learn simulate <sink_id>. Show it o
 as scale over scanned history: it sums over scanned history and never projects
 forward.
 
-REDUCIBLE (a heavy CLAUDE.md, a never-invoked skill):
+REDUCIBLE (a heavy AGENTS.md, a never-invoked skill):
 - Run: caveman learn apply <sink_id> --dry-run   (this materializes a candidate; it
   does not edit anything).
 - Propose a concrete diff and show before -> after tokens/turn.
@@ -77,7 +77,7 @@ re-pasted every turn. The candidate carries only a LOCATOR — never the block b
   running caveman mem recall "<topic>" and reading tokens_added on the hit. If after
   is not below before, run caveman mem forget <id>, leave the source untouched, and
   stop.
-- Trim the source and write the pointer. Remove the block from its CLAUDE.md or
+- Trim the source and write the pointer. Remove the block from its AGENTS.md or
   AGENTS.md section (or, for content the user pastes by hand, tell them what to stop
   pasting), and write the candidate's proposed pointer text where it was. The pointer
   names the recall path: caveman mem recall "<topic>" for the compact form, and

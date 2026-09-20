@@ -110,7 +110,7 @@ The project has the following key dependencies:
 
 **Acceptance Criteria:**
 
-- The system must be able to create and update main context files (e.g., `CLAUDE.md`) at the project root.
+- The system must be able to create and update main context files (e.g., `AGENTS.md`) at the project root.
 - The system must support @ import syntax for referencing template files (e.g., `@./.claude/rules/filename.md`).
 - The system must organize imports by topic categories with user-friendly labels.
 - The system must implement duplicate detection to avoid redundant imports when processing the same topic multiple times.

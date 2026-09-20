@@ -91,7 +91,7 @@ Expert setup of claude-faf-mcp with 33 tools:
 
 ### 🔄 Bi-Directional Sync
 Keep context synchronized across platforms:
-- `.faf` ↔ `CLAUDE.md` 
+- `.faf` ↔ `AGENTS.md` 
 - `.faf` ↔ `.cursorrules`
 - `.faf` ↔ `GEMINI.md`
 - `.faf` ↔ `AGENTS.md`

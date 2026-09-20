@@ -280,8 +280,8 @@ fi
 ## References
 
 - **Skill Documentation:** [marketing-skill/marketing-demand-acquisition/SKILL.md](SKILL.md)
-- **Marketing Domain Guide:** marketing-skill/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Marketing Domain Guide:** marketing-skill/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 - **Marketing Roadmap:** marketing-skill/marketing_skills_roadmap.md
 
 ---

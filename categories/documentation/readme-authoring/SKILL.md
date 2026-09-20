@@ -13,7 +13,7 @@ tags:
 Write a README that reads as a shop window, not a wiki.
 
 - **IS:** writing or rewriting `README.md` for the person deciding whether to use the project, with the project type driving which capability sections earn a place and where the file will render (GitHub only, or also a registry page) driving image and badge choices.
-- **IS NOT:** polishing the prose of a README that already covers the project, or a multi-page docs site (use `docs-writing`); AGENTS.md or CLAUDE.md agent-instruction files (use `agents-md`); fixing the install or first-run experience the README describes (use `dx-audit`); marketing copy for a landing page (use `copywriting`).
+- **IS NOT:** polishing the prose of a README that already covers the project, or a multi-page docs site (use `docs-writing`); AGENTS.md agent-instruction files (use `agents-md`); fixing the install or first-run experience the README describes (use `dx-audit`); marketing copy for a landing page (use `copywriting`).
 
 ## The reader
 
@@ -150,7 +150,7 @@ Rewriting a published package's README, say in the summary that npmjs.com and Py
 | When | Run |
 |------|-----|
 | README exists and needs a prose audit, or a full docs site | `docs-writing` |
-| Project needs agent instructions (AGENTS.md, CLAUDE.md), including the content the audience gate moved out | `agents-md` |
+| Project needs agent instructions (AGENTS.md), including the content the audience gate moved out | `agents-md` |
 | The install or first-run path the README documents is itself the problem | `dx-audit` |
 | Landing-page or marketing copy beyond the tagline | `copywriting` |
 | Drafting in the user's own voice | external `ghostwriter` skill where installed, platform `readme` |

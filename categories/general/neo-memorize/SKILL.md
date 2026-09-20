@@ -1,19 +1,19 @@
 ---
 name: neo-memorize
-description: "Curates insights from reflections and critiques into CLAUDE.md using Agentic Context Engineering"
+description: "Curates insights from reflections and critiques into AGENTS.md using Agentic Context Engineering"
 license: MIT
 tags: [general]
 argument-hint: Optional source specification (last, selection, chat:<id>) or --dry-run for preview
 ---
 
-# Memory Consolidation: Curate and Update CLAUDE.md
+# Memory Consolidation: Curate and Update AGENTS.md
 
 <role>
-You are a memory consolidation specialist implementing Agentic Context Engineering (ACE). Your role is to capture insights from reflection and debate processes, then curate and organize these learnings into CLAUDE.md to create an evolving context playbook that improves future agent performance through structured knowledge accumulation.
+You are a memory consolidation specialist implementing Agentic Context Engineering (ACE). Your role is to capture insights from reflection and debate processes, then curate and organize these learnings into AGENTS.md to create an evolving context playbook that improves future agent performance through structured knowledge accumulation.
 </role>
 
 <task>
-Transform reflections, critiques, verification outcomes, and execution feedback into durable, reusable guidance by updating `CLAUDE.md`. Use Agentic Context Engineering (ACE) principles to grow-and-refine a living playbook that improves over time without collapsing into vague summaries.
+Transform reflections, critiques, verification outcomes, and execution feedback into durable, reusable guidance by updating `AGENTS.md`. Use Agentic Context Engineering (ACE) principles to grow-and-refine a living playbook that improves over time without collapsing into vague summaries.
 </task>
 
 <context>
@@ -73,7 +73,7 @@ Prefer specifics over generalities. If you cannot back a claim with either code 
 
 ### Phase 2: Memory Curation Process
 
-#### Step 1: Analyze Current CLAUDE.md Context
+#### Step 1: Analyze Current AGENTS.md Context
 
 ```bash
 # Read current context file
@@ -103,7 +103,7 @@ For each insight identified in Phase 1 apply ACE’s “grow‑and‑refine” p
 **Generation → Curation Mapping**:
 
 - Raw insight: [What was learned]
-- Context category: [Where it fits in CLAUDE.md structure]
+- Context category: [Where it fits in AGENTS.md structure]
 - Actionable format: [How to phrase it for future use]
 - Validation criteria: [How to know if it's being applied correctly]
 
@@ -136,11 +136,11 @@ Ensure new memories don't dilute existing quality context:
 
 If a potential bullet conflicts with an existing one, prefer the more specific, evidence‑backed rule and mark the older one for future consolidation (but do not auto‑delete).
 
-### Phase 3: CLAUDE.md Updates
+### Phase 3: AGENTS.md Updates
 
 Update the context file with curated insights:
 
-#### Where to Write in `CLAUDE.md`
+#### Where to Write in `AGENTS.md`
 
 Create the file if missing with these sections (top‑level headings):
 
@@ -214,7 +214,7 @@ examples:
 
 #### Quality Gates (Must Pass)
 
-After updating CLAUDE.md:
+After updating AGENTS.md:
 
 1. **Coherence Check**:
    - Do new entries fit with existing context?
@@ -258,7 +258,7 @@ Track the effectiveness of memory updates:
 2. **Evidence-Based**: Only memorize patterns with clear supporting evidence
 3. **Context-Aware**: Consider project phase, team size, constraints when curating
 4. **Version Awareness**: Note when insights become obsolete due to tech changes
-5. **Cross-Reference**: Link related concepts within CLAUDE.md for better navigation
+5. **Cross-Reference**: Link related concepts within AGENTS.md for better navigation
 
 ##### Expected Outcomes
 
@@ -276,7 +276,7 @@ After effective memory consolidation:
 # Memorize from most recent reflections and outputs
 /reflexion:memorize
 
-# Dry‑run: show proposed bullets without writing to CLAUDE.md
+# Dry‑run: show proposed bullets without writing to AGENTS.md
 /reflexion:memorize --dry-run
 
 # Limit number of bullets
@@ -292,7 +292,7 @@ After effective memory consolidation:
 ## Output
 
 1) Short summary of additions (counts by section)  
-2) Confirmation that `CLAUDE.md` was created/updated
+2) Confirmation that `AGENTS.md` was created/updated
 
 ## Notes
 

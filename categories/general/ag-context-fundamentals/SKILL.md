@@ -95,7 +95,7 @@ The file system itself provides structure that agents can navigate. File sizes s
 
 ### Hybrid Strategies
 
-The most effective agents employ hybrid strategies. Pre-load some context for speed (like CLAUDE.md files or project rules), but enable autonomous exploration for additional context as needed. The decision boundary depends on task characteristics and context dynamics.
+The most effective agents employ hybrid strategies. Pre-load some context for speed (like AGENTS.md files or project rules), but enable autonomous exploration for additional context as needed. The decision boundary depends on task characteristics and context dynamics.
 
 For contexts with less dynamic content, pre-loading more upfront makes sense. For rapidly changing or highly specific information, just-in-time loading avoids stale context.
 

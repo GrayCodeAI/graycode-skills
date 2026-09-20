@@ -40,7 +40,7 @@ Bootstrap a new LLM Wiki vault. Creates `raw/`, `wiki/{entities,concepts,sources
 │   ├── comparisons/
 │   ├── synthesis/
 │   └── .templates/           # page templates for reference
-├── CLAUDE.md                 # if --tool claude-code or all
+├── AGENTS.md                 # if --tool claude-code or all
 ├── AGENTS.md                 # if --tool codex|cursor|antigravity|opencode|gemini-cli|all
 ├── .cursorrules              # if --tool cursor or all
 └── .gitignore

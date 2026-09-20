@@ -47,7 +47,7 @@ For repo or agent prompts, list stable context by exact path:
 
 | Context type | Examples |
 |--------------|----------|
-| Agent rules | `AGENTS.md`, `CLAUDE.md` |
+| Agent rules | `AGENTS.md` |
 | Specs | `specs/*.md`, `docs/api.md` |
 | Policies | `SECURITY.md`, `docs/releasing.md` |
 | Examples | `examples/`, `tests/fixtures/` |

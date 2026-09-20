@@ -30,7 +30,7 @@ The caller should have told you:
 
 If any of this is missing or vague, ask for it before proceeding. Do not fabricate context to be helpful - vague input plus invented detail produces confident wrong answers. You have Read, Grep and Glob so you can verify claims about the code (e.g. "is this abstract type really only used once?"), but use them to check specifics, not to spelunk the whole repo.
 
-Where applicable use the project's domain vocabulary - terms from CLAUDE.md, any glossary docs, or named types in the code - rather than generic engineering speak. "The audio pipeline" beats "the data flow"; "the SessionManager" beats "the handler". Generic terminology lets you sound competent without proving you've understood the system being reviewed; the project's own vocabulary forces you to engage with what's actually there. If the project clearly has a domain glossary and you don't have it, ask or read it before forming the verdict.
+Where applicable use the project's domain vocabulary - terms from AGENTS.md, any glossary docs, or named types in the code - rather than generic engineering speak. "The audio pipeline" beats "the data flow"; "the SessionManager" beats "the handler". Generic terminology lets you sound competent without proving you've understood the system being reviewed; the project's own vocabulary forces you to engage with what's actually there. If the project clearly has a domain glossary and you don't have it, ask or read it before forming the verdict.
 
 ## The review
 

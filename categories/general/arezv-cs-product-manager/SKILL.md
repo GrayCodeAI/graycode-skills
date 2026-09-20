@@ -676,8 +676,8 @@ echo "Report: $QUARTER-roadmap.txt"
 ## References
 
 - **Skill Documentation:** [product-team/product-manager-toolkit/SKILL.md](SKILL.md)
-- **Product Domain Guide:** product-team/CLAUDE.md
-- **Agent Development Guide:** CLAUDE.md
+- **Product Domain Guide:** product-team/AGENTS.md
+- **Agent Development Guide:** AGENTS.md
 
 ---
 

@@ -43,6 +43,6 @@ AGENTS.md is the instruction file for OpenAI Codex (and increasingly, other tool
 
 ## AGENTS.md Is Becoming a Standard
 - GitHub Copilot coding agent now reads AGENTS.md files (announced July 2025)
-- GitHub also supports CLAUDE.md and GEMINI.md at the repo root as alternatives
+- GitHub also supports AGENTS.md and GEMINI.md at the repo root as alternatives
 - Copilot has its own format too: `.github/copilot-instructions.md` and path-specific `.github/instructions/*.instructions.md`
 - The ecosystem is fragmenting — if you support multiple tools, you may need multiple instruction files. AGENTS.md has the broadest adoption beyond its origin tool

@@ -78,9 +78,9 @@ You must restart Claude Code to load the new MCP server:
 
 ```
 
-## 5. Update CLAUDE.md file
+## 5. Update AGENTS.md file
 
-Use the path determined in step 1. Once Serena is successfully set up, update the appropriate CLAUDE.md file with the following content EXACTLY:
+Use the path determined in step 1. Once Serena is successfully set up, update the appropriate AGENTS.md file with the following content EXACTLY:
 
 ```markdown
 ### Use Serena MCP for Semantic Code Analysis instead of regular code search and editing

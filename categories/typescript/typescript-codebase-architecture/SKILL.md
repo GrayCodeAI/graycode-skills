@@ -205,7 +205,7 @@ Each rebuttal redirects to the step being skipped.
 
 ## Related skills
 
-- `agents-md`: the AGENTS.md / CLAUDE.md file itself. This skill owns the checks and docs tree that file points at; a rule a linter can enforce goes here as an exit code, not there as prose.
+- `agents-md`: the AGENTS.md file itself. This skill owns the checks and docs tree that file points at; a rule a linter can enforce goes here as an exit code, not there as prose.
 - `tidy`: the diff-scoped cleanup that Harden's guardrails keep small; `pr-reviewer`: read-only review of a local diff.
 - `planning`: a plan for one feature; architecture briefs from Design mode feed into it.
 - `scaffold-nextjs`, `scaffold-cli`: creating the repo this skill then structures.

@@ -129,6 +129,6 @@ Flag the audit `INCOMPLETE` if any of these hold, and include the counts as evid
 - `ui-design` Audit mode: traditional frontend UX around agentic surfaces; run both on agentic feature PRs
 - `dx-audit`: same files, different reader. This skill asks whether an agent can operate and recover; `dx-audit` asks whether a human adopting the API, CLI, or types finds it ergonomic
 - `product-design`: what the agentic feature should do, before this audit
-- `agents-md`: CLAUDE.md / AGENTS.md instruction files
+- `agents-md`: AGENTS.md instruction files
 
 Maintenance only: `evals/evals.json` contains regression scenarios for changes to this skill; it does not load during a user task.

@@ -237,7 +237,7 @@ Files created during a session that track progress:
 ### Long-Term Memory
 
 Persistent files that survive across sessions:
-- CLAUDE.md for project-level context
+- AGENTS.md for project-level context
 - Memory files in designated directories
 - Structured knowledge bases in markdown or JSON
 
