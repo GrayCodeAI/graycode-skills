@@ -19,6 +19,14 @@ node .gitnexus/run.cjs analyze
 
 Run from the project root. This parses all source files, builds the knowledge graph, writes it to `.gitnexus/`, and generates CLAUDE.md / AGENTS.md context files.
 
+> **These repos are AGENTS.md-only.** `analyze` always writes both context files and has no flag to suppress one. A root `CLAUDE.md` takes precedence over `AGENTS.md` in tools that read both, and the generated `CLAUDE.md` carries only the GitNexus block — so it would shadow the repo's actual conventions. Remove it after every `analyze`:
+>
+> ```bash
+> rm -f CLAUDE.md
+> ```
+>
+> It is gitignored, so it will not slip back into a commit.
+
 | Flag           | Effect                                                           |
 | -------------- | ---------------------------------------------------------------- |
 | `--force`      | Force full re-index even if up to date                           |
