@@ -46,8 +46,8 @@ description = "GitHub username or real name of the primary author."
 [fields.license]
 type        = "string"
 required    = true
-enum        = ["MIT", "Apache-2.0", "GPL-3.0", "BSD-2-Clause", "BSD-3-Clause", "CC0-1.0", "MPL-2.0"]
-description = "SPDX license identifier."
+enum        = ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "CC0-1.0", "CC-BY-4.0", "MPL-2.0"]
+description = "SPDX license identifier of the skill itself. Copyleft (GPL/LGPL/AGPL) is not accepted; see NOTICE and tools/check_licenses.py."
 
 # ── Classification ────────────────────────────────────────────────────────────
 

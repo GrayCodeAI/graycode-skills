@@ -13,21 +13,24 @@ individual skill directory may carry its own upstream license in a LICENSE file
 inside that directory. Where present, that per-skill LICENSE governs the
 contents of that directory.
 
-Provenance for ingested skills (upstream source URL, version/commit, and SPDX
-license) is recorded in registry.json via the optional `source`, `source_ref`,
-`source_commit`, and `license` fields. Contributors ingesting third-party
-content should populate these fields and include the upstream LICENSE in the
-skill directory.
+Provenance for ingested skills is declared in each SKILL.md frontmatter and
+copied into the generated registry.json: `license` (required), `author`, and
+`source` (the upstream URL; recorded only when it is an http(s) URL).
+Contributors ingesting third-party content should set these fields and include
+the upstream LICENSE in the skill directory.
 
 --------------------------------------------------------------------------------
 License compatibility policy
 --------------------------------------------------------------------------------
 
 To keep the MIT-rooted repository redistributable, copyleft-licensed source
-(GPL and LGPL family) MUST NOT be copied into skill directories. Skills must be
-permissively licensed (e.g. MIT, BSD, Apache-2.0, ISC, Unlicense, CC0,
-CC-BY/CC-BY-SA for prose) or original work. The `tools/check_licenses.py` check
-enforces this in CI.
+(GPL, LGPL and AGPL family) MUST NOT be copied into skill directories. Skills
+must be permissively licensed (e.g. MIT, BSD, Apache-2.0, ISC, Unlicense, CC0,
+CC-BY/CC-BY-SA for prose) or original work. `tools/check_licenses.py` enforces
+this in CI for both per-skill LICENSE files and frontmatter `license` values.
+Skills already in the corpus that declare a copyleft value are listed, with
+the reason, in `tools/license_exceptions.txt` pending review; that list may
+only shrink.
 
 If you believe a skill's attribution or license is incorrect, please open an
 issue so it can be corrected or removed.
