@@ -423,7 +423,7 @@ def _validate_existing_migration(
         )
     first_line = 1
     indexed_parts: list[ReferencePart] = []
-    for path, content in zip(expected_paths, contents):
+    for path, content in zip(expected_paths, contents, strict=True):
         text = content.decode("utf-8")
         line_breaks = tuple(LINE_BREAK_RE.finditer(text))
         ends_with_line_break = bool(line_breaks and line_breaks[-1].end() == len(text))

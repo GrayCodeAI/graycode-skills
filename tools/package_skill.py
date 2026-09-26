@@ -8,7 +8,7 @@ import re
 import subprocess
 import sys
 import tarfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 try:
@@ -150,7 +150,7 @@ def main():
     metadata = {
         "name": skill_name,
         "version": version,
-        "packaged_at": datetime.now(timezone.utc).isoformat(),
+        "packaged_at": datetime.now(UTC).isoformat(),
         "archive": archive_name,
         "sha256": checksum,
         "file_count": sum(len(files) for _, _, files in os.walk(skill_path)),

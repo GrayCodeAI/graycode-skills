@@ -8,12 +8,11 @@ import os
 import re
 import stat
 import sys
+import tomllib
 from collections import Counter
 from collections.abc import Iterator, Mapping
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
-
-import tomllib
 
 try:
     from rich.console import Console
