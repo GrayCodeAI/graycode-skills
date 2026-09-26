@@ -104,6 +104,17 @@ def test_all_mode_reports_without_failing(tmp_path, monkeypatch, capsys):
     assert "unexpected-field: 1" in out
 
 
+def test_first_party_ecosystem_skills_conform():
+    """categories/graycode holds GrayCode's own skills; they must follow the spec."""
+    graycode = ca.CATEGORIES_DIR / "graycode"
+    assert sorted(p.name for p in graycode.iterdir() if (p / "SKILL.md").is_file()) == [
+        "across-checkpoint",
+        "rho-workflow",
+        "rover-verify",
+    ]
+    assert ca.main(["--strict", str(graycode)]) == 0
+
+
 # ---------------------------------------------------------------------------
 # metadata.tags: spec-conformant skills keep tags out of the top level
 # ---------------------------------------------------------------------------

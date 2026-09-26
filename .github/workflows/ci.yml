@@ -65,6 +65,10 @@ jobs:
         # Copyleft (GPL/LGPL/AGPL) content must not be vendored into the
         # MIT-rooted repo, in LICENSE files or frontmatter. See NOTICE.
         run: python3 tools/check_licenses.py
+      - name: Agent Skills conformance (first-party skills)
+        # GrayCode's own skills must follow agentskills.io exactly; the
+        # legacy corpus gap is reported by --all (see docs/AGENT_SKILLS.md).
+        run: python3 tools/check_agentskills.py --strict categories/graycode
       - name: Run tests
         run: python -m pytest tests/ -v --cov --cov-report=term-missing --cov-fail-under=88
       - name: Packaging smoke check

@@ -133,6 +133,15 @@
       ]
     },
     {
+      "name": "graycode-skills-graycode",
+      "source": "./categories/graycode",
+      "description": "GrayCode Skills, graycode category: 3 skills.",
+      "version": "0.0.1",
+      "skills": [
+        "./"
+      ]
+    },
+    {
       "name": "graycode-skills-mobile",
       "source": "./categories/mobile",
       "description": "GrayCode Skills, mobile category: 101 skills.",
