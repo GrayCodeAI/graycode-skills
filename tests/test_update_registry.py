@@ -762,3 +762,51 @@ class TestCanonicalRenderShape:
             path="demo",
         )
         assert errors == []
+
+
+# ---------------------------------------------------------------------------
+# Provenance (F116): NOTICE/CONTRIBUTING promise license/author/source in
+# registry.json; the generator must actually emit them.
+# ---------------------------------------------------------------------------
+
+
+class TestProvenanceFields:
+    def test_license_author_and_url_source_are_emitted(self):
+        assert _mod.provenance_fields(
+            {
+                "license": "Apache-2.0",
+                "author": "  octo\n cat ",
+                "source": "https://github.com/example/skills",
+            }
+        ) == {
+            "license": "Apache-2.0",
+            "author": "octo cat",
+            "source": "https://github.com/example/skills",
+        }
+
+    @pytest.mark.parametrize("source", ["community", "self", "vibeship (Apache 2.0)", "ftp://x", ""])
+    def test_non_url_sources_are_not_provenance(self, source: str):
+        assert "source" not in _mod.provenance_fields({"license": "MIT", "source": source})
+
+    def test_non_string_values_are_skipped(self):
+        assert _mod.provenance_fields({"license": None, "author": ["a", "b"], "source": 3}) == {}
+
+    def test_registry_entry_carries_provenance_and_passes_schema(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        cats = tmp_path / "categories"
+        monkeypatch.setattr(_mod, "CATEGORIES_DIR", cats)
+        _write_skill(
+            tmp_path,
+            "cat",
+            "prov-skill",
+            frontmatter=(
+                "---\nname: prov-skill\ndescription: d\nlicense: MIT\nauthor: jane\n"
+                "source: https://github.com/jane/skills\ntags: [a]\n---\nBody\n"
+            ),
+        )
+        entries = _mod.build_registry()
+        assert entries[0]["license"] == "MIT"
+        assert entries[0]["author"] == "jane"
+        assert entries[0]["source"] == "https://github.com/jane/skills"
+        assert _mod.validate_entries(entries) == []

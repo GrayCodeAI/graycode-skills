@@ -71,6 +71,36 @@ def has_scripts_dir(path: Path) -> bool:
     return count_files(scripts_dir) > 0
 
 
+def _single_line(value: object) -> str | None:
+    """Return a non-empty string with whitespace collapsed, else None."""
+    if not isinstance(value, str):
+        return None
+    text = " ".join(value.split())
+    return text or None
+
+
+def provenance_fields(frontmatter: dict) -> dict[str, str]:
+    """Provenance a registry entry carries, taken from the skill's frontmatter.
+
+    * ``license``: the frontmatter ``license`` value (a required field).
+    * ``author``: the frontmatter ``author`` value, when it is a string.
+    * ``source``: the frontmatter ``source`` value, only when it is an
+      http(s) URL (the corpus also uses labels such as "community", which
+      are not provenance).
+    """
+    fields: dict[str, str] = {}
+    license_value = _single_line(frontmatter.get("license"))
+    if license_value:
+        fields["license"] = license_value
+    author = _single_line(frontmatter.get("author"))
+    if author:
+        fields["author"] = author
+    source = _single_line(frontmatter.get("source"))
+    if source and source.startswith(("https://", "http://")) and " " not in source:
+        fields["source"] = source
+    return fields
+
+
 def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, str]]]:
     """Walk all categories and build registry entries.
 
@@ -144,6 +174,7 @@ def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, 
             "file_count": count_files(skill_dir),
             "has_scripts": has_scripts_dir(skill_dir),
         }
+        entry.update(provenance_fields(frontmatter))
         entries.append(entry)
 
     # Sort alphabetically by name
