@@ -1,6 +1,6 @@
-# Contributing to graycode Community Skills
+# Contributing to GrayCode Skills
 
-Thank you for your interest in contributing! Every skill helps make Graycode smarter for everyone. This repository contains 14,015 community-contributed skill packages organized into 27 domain categories.
+Thank you for your interest in contributing! Every skill helps make Rho, GrayCode's terminal AI coding agent, more capable for everyone. This repository contains more than 14,000 community-contributed skill packages in 28 domain categories.
 
 ## Ways to Contribute
 
@@ -13,110 +13,111 @@ Thank you for your interest in contributing! Every skill helps make Graycode sma
 
 ## Creating a New Skill
 
-### Option 1: Submit via Issue Template (Recommended)
+### Option 1: Submit via Issue Template
 
-The easiest way to contribute. [Open a new skill issue](../../issues/new?template=new-skill.yml) and fill out the form. A maintainer will create the PR for you.
+[Open a new skill issue](../../issues/new?template=new-skill.yml) and fill out the form. A maintainer will create the PR for you.
 
-### Option 2: Submit via Web
-
-Use the [guided submission form](https://skilled.autohand.ai/submit) on skilled.autohand.ai.
-
-### Option 3: Submit a Pull Request
+### Option 2: Submit a Pull Request
 
 1. **Fork** this repository
-2. **Pick a category** — Choose the most relevant domain from `categories/`:
-   - `general/` — framework-agnostic skills, workflows, tooling
-   - `cursor-rules/` — Cursor Modular Design Coding conventions (776 skills)
-   - `react/` — React ecosystem skills
-   - `python/` — Python ecosystem skills
-   - `typescript/` — TypeScript ecosystem skills
-   - `security/` — cybersecurity skills
-   - `testing/` — quality assurance and testing
-   - `scientific/` — scientific computing and research
-   - `aws/` — cloud and AWS skills
-   - Or one of the other 21 categories
-   
-   If unsure, check `registry.json` for existing skills in your domain, or ask in the `#contributing` channel on Discord.
+2. **Pick a category**: choose the most relevant directory under `categories/`
+   (`ls categories/` lists all 28), for example:
+   - `general/`: framework-agnostic skills, workflows, tooling
+   - `cursor-rules/`: Cursor Modular Design Coding conventions
+   - `python/`, `typescript/`, `react/`, `go/`, `rust/`: language and framework skills
+   - `security/`, `testing/`, `devops/`, `aws/`, `scientific/`: domain skills
+   - `graycode/`: first-party skills for Rho, Rover and Across (maintainers)
+
+   If unsure, search first: `rho skills search <topic>`.
 
 3. **Create** your skill directory:
    ```bash
    mkdir -p categories/<category>/<skill-name>
-   cd categories/<category>/<skill-name>
-   touch SKILL.md
+   $EDITOR categories/<category>/<skill-name>/SKILL.md
    ```
 4. **Write** your `SKILL.md` following the format below
 5. **Validate** your skill:
    ```bash
-   # Run the validation tool
+   # Validate your skill (pass the directory)
    python tools/validate_skill.py categories/<category>/<skill-name>
 
    # Run the full-corpus zero-warning gate
    python tools/validate_skill.py --all \
      --warning-budget tools/validation_warning_budget.json
-   
-   # Update the registry (generates registry.json from all skills)
+
+   # Regenerate the Claude Code marketplace (CI fails if it is stale)
+   python tools/sync_marketplace.py
+
+   # Build the registry (fails on duplicate names or schema violations)
    python tools/update_registry.py
-   
-   # Run the full test suite to ensure nothing is broken
-   pytest
+
+   # Run the test suite
+   python -m pytest tests/
    ```
 6. **Submit** a pull request with title: `feat: add <skill-name> skill`
 
 ## SKILL.md Format
 
-Every skill requires a `SKILL.md` file with YAML frontmatter. The frontmatter must include all required fields from the schema:
+Every skill requires a `SKILL.md` file with YAML frontmatter. The fields CI
+enforces come from the `[enforced]` section of
+[`manifest-schema.toml`](manifest-schema.toml); `tools/validate_skill.py`
+reads that file directly, so this table and the gate cannot disagree.
 
 ```markdown
 ---
 name: my-skill-name
-description: "Brief description of what this skill does"
-domain: coding
-tags: [my-category, technology]
-version: "1.0.0"
+description: "What this skill does and when to use it"
 license: MIT
-author: your-github-username
+tags: [my-category, technology]
 ---
 
 # Skill Title
 
-Instructions that graycode follows when this skill is active...
+Instructions Rho follows when this skill is active...
 ```
-
-For the complete frontmatter schema, see [`manifest-schema.toml`](manifest-schema.toml).
 
 ### Frontmatter Fields
 
-All fields must be present in the YAML frontmatter block:
+| Field | Required | Rule |
+|-------|----------|------|
+| `name` | Yes | Must equal the directory name. Prefer 1-64 lowercase letters/digits with single hyphens (the Agent Skills rule). |
+| `description` | Yes | At most 200 characters. Say what the skill does and when to use it. |
+| `license` | Yes | Your skill's license: a permissive one such as `MIT`, `Apache-2.0`, `BSD-3-Clause`, `ISC`, `CC0-1.0`, `CC-BY-4.0`. GPL/LGPL/AGPL is rejected (see NOTICE). |
+| `tags` | Yes | 1-5 lowercase kebab-case tags (`^[a-z][a-z0-9]*(-[a-z0-9]+)*$`), as a top-level list or as a comma-separated `metadata.tags` string |
+| `metadata` | No | String-to-string map (e.g. `author`, `version`, `tags`) |
+| `compatibility` | No | Environment requirements, up to 500 characters |
+| `allowed-tools` | No | Space-separated pre-approved tools |
+| `author` | No | Your GitHub username; recorded in `registry.json` |
+| `source` | No | Upstream URL for ingested content; recorded in `registry.json` |
+| `invoke` | No | `vendor:skill` pattern |
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `name` | Yes | kebab-case identifier (2-80 chars). Must match directory name. |
-| `description` | Yes | One-sentence summary (max 280 chars, shown in skill catalogue) |
-| `domain` | Yes | Primary domain: `coding`, `cybersecurity`, `data-science`, `devops`, `documentation`, `research`, `testing`, or `other` |
-| `version` | Yes | Semantic version string (e.g., `"1.0"`, `"2.3.1"`) |
-| `license` | Yes | OSI-approved license: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, GPL-3.0, or CC0-1.0 |
-| `author` | Yes | GitHub username or real name |
-| `tags` | Yes | 1-12 searchable tags, lowercase kebab-case |
-| `subdomain` | No | Finer-grained category (e.g., `cloud-security`, `ai-ml`) |
-| `phase` | No | Pipeline phase: `localize`, `repair`, `validate`, `review`, `planning`, or `any` |
-| `tools_required` | No | Tools the skill depends on (e.g., `[bash]`, `[read, edit]`) |
-| `min_model` | No | Minimum capable model tier: `haiku`, `sonnet`, `opus`, or `any` |
+Fields such as `version`, `domain`, `phase` and `min_model` are described in
+`manifest-schema.toml` `[fields]` as the forward target but are not required
+today.
 
-### SKILL.md Body Format
-
-Every `SKILL.md` follows this structure:
+**Portable (Agent Skills-conformant) form.** The open standard allows only
+`name`, `description`, `license`, `compatibility`, `metadata` and
+`allowed-tools` at the top level, so put tags and other fields under
+`metadata`. Check with `python tools/check_agentskills.py --strict
+categories/<category>/<skill-name>`. See [docs/AGENT_SKILLS.md](docs/AGENT_SKILLS.md).
 
 ```markdown
 ---
 name: my-skill-name
-description: "Brief description..."
-domain: coding
-version: "1.0"
+description: "What this skill does and when to use it"
 license: MIT
-author: your-github-username
-tags: [tag1, tag2]
+metadata:
+  author: your-github-username
+  version: "1.0"
+  tags: my-category, technology
 ---
+```
 
+### SKILL.md Body Format
+
+A good body follows this structure:
+
+```markdown
 # Skill Title
 
 ## Overview
@@ -137,44 +138,23 @@ How to verify the skill works correctly (tests, checklists, etc.).
 
 ### Content Guidelines
 
-- **Be concise** — Focus on practical patterns and examples
-- **Use code blocks** — Show real, working code with language identifiers
-- **Structure clearly** — Use headers for scanability (`## Overview`, `## Prerequisites`, `## Instructions`, `## References`)
-- **Stay current** — Reference latest stable versions
-- **Be opinionated** — Share best practices, not just options
-- **One focus per skill** — Each skill should cover a single technology or pattern
-- **Include a Verification section** — Helps ensure the skill produces consistent, testable results
+- **Be concise**: focus on practical patterns and examples
+- **Use code blocks**: show real, working code with language identifiers
+- **Structure clearly**: use headers for scanability (`## Overview`, `## Prerequisites`, `## Instructions`, `## References`)
+- **Stay current**: reference latest stable versions
+- **Be opinionated**: share best practices, not just options
+- **One focus per skill**: each skill should cover a single technology or pattern
+- **Include a Verification section**: helps ensure the skill produces consistent, testable results
 
-## Registry Entry
+## Registry
 
-Add your skill to `registry.json`:
-
-```json
-{
-  "id": "my-skill-name",
-  "name": "my-skill-name",
-  "description": "Brief description",
-  "category": "frameworks",
-  "tags": ["tag1", "tag2", "tag3"],
-  "languages": ["typescript"],
-  "frameworks": ["react"],
-  "isFeatured": false,
-  "isCurated": false,
-  "rating": 0,
-  "downloadCount": 0,
-  "directory": "my-skill-name",
-  "files": ["SKILL.md"],
-  "version": "1.0.0",
-  "license": "MIT",
-  "author": "your-github-username"
-}
-```
-
-### Registry Entry
-
-`registry.json` is auto-generated from all `SKILL.md` frontmatter files. When you add a skill, run `python tools/update_registry.py` to regenerate it. The registry is consumed by the graycode client for skill discovery and installation.
-
-The `category` field in `registry.json` is derived from the `domain` field in frontmatter. Valid values are: `coding`, `cybersecurity`, `data-science`, `devops`, `documentation`, `research`, `testing`, or `other`.
+`registry.json` is **generated; do not edit it and do not add it to a PR**
+(it is gitignored). `python tools/update_registry.py` builds it from the
+`SKILL.md` files, and CI publishes it on the `registry-latest` release, where
+Rho's `skills search` reads it. Each entry records `name`, `description`,
+`category` (the directory under `categories/`), `tags`, `path`, `repo`,
+`file_count`, `has_scripts`, plus `license`, `author` and `source` (when an
+http(s) URL) from your frontmatter. See [docs/REGISTRY.md](docs/REGISTRY.md).
 
 ### Multi-File Skills
 
@@ -183,80 +163,34 @@ Skills can include additional files beyond `SKILL.md`:
 ```
 my-skill/
 ├── SKILL.md              # Required
+├── references/           # Optional: longer docs the skill links to
 ├── templates/            # Optional: templates referenced by the skill
 ├── examples/             # Optional: usage examples
-└── scripts/              # Optional: shell scripts
+└── scripts/              # Optional: helper scripts (shebang + executable bit)
 ```
 
-Update the `files` array in your registry entry when adding extra files:
-```json
-"files": ["SKILL.md", "templates/component.tsx", "templates/test.tsx"]
-```
+Link extra files with relative paths from `SKILL.md` (no `../`). There is no
+file list to maintain; the registry counts files automatically.
 
 ### Quality Standards
 
-#### Code Examples
-- Must be syntactically correct
-- Include necessary imports
-- Show realistic use cases
-- Add comments for clarity
-
-#### Documentation
-- Clear, concise writing
-- Proper Markdown formatting
-- Working links
-- No spelling errors
-
-#### General Requirements
+- Code examples are syntactically correct, include imports, and show realistic use
+- Clear, concise writing with working links
 - No sensitive information (API keys, credentials, etc.)
-- Each skill should cover a single technology or pattern
-- License must be specified in frontmatter
-
-## Multi-File Skills
-
-Skills can include additional files beyond `SKILL.md`:
-
-```
-my-skill/
-├── SKILL.md              # Required
-├── templates/
-│   ├── component.tsx
-│   └── test.tsx
-├── examples/
-│   └── advanced-usage.md
-└── README.md
-```
-
-Update the `files` array in your registry entry:
-```json
-"files": ["SKILL.md", "templates/component.tsx", "templates/test.tsx"]
-```
-
-## Quality Standards
-
-### Code Examples
-- Must be syntactically correct
-- Include necessary imports
-- Show realistic use cases
-- Add comments for clarity
-
-### Documentation
-- Clear, concise writing
-- Proper markdown formatting
-- Working links
-- No spelling errors
+- One technology or pattern per skill
+- A license in the frontmatter
 
 ## Pull Request Process
 
 1. **Title**: `feat: add <skill-name> skill`
-2. **Description**: Include what the skill covers, why it's useful, and any prerequisites
+2. **Description**: what the skill covers, why it is useful, any prerequisites
 3. **Checklist**:
-   - [ ] `SKILL.md` follows the format with valid frontmatter
-   - [ ] Skill added to `registry.json` with all required fields
+   - [ ] `SKILL.md` has valid frontmatter (validator passes)
+   - [ ] `python tools/sync_marketplace.py` was run and its change committed
    - [ ] Code examples are syntactically correct
    - [ ] No sensitive information (API keys, credentials, etc.)
    - [ ] Skill focuses on a single technology or pattern
-   - [ ] License specified in frontmatter
+   - [ ] Permissive license specified in frontmatter
    - [ ] Full-corpus warning count is zero in every category
 
 ### Zero-Warning Gate
@@ -287,9 +221,8 @@ entry to avoid fixing an oversized skill.
 ## Updating Existing Skills
 
 1. Fork and create a branch
-2. Make your changes
-3. Update `version` in the registry entry if the change is significant
-4. Submit a PR with a clear description of what changed and why
+2. Make your changes (bump `metadata.version` if the skill has one and the change is significant)
+3. Submit a PR with a clear description of what changed and why
 
 ## Licensing
 
@@ -297,10 +230,10 @@ This repository is licensed under the [MIT License](./LICENSE). The repository i
 
 **For contributed skills:**
 
-- You retain authorship credit for skills you create — your GitHub username is recorded in the `author` field of `registry.json`
-- You choose the license for your skill by specifying it in the `license` field of your `SKILL.md` frontmatter and `registry.json` entry
-- Your chosen license must be an [OSI-approved open source license](https://opensource.org/licenses) (MIT, Apache-2.0, ISC, BSD-2-Clause, etc.)
-- If no license is specified, MIT is assumed
+- Authorship credit: put your GitHub username in `author` (or `metadata.author`); a top-level `author` string is copied into `registry.json`
+- You choose the license for your skill in the `license` field of your `SKILL.md` frontmatter; it is copied into `registry.json`
+- The license must be a permissive, [OSI-approved](https://opensource.org/licenses) license (MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause, etc.) or CC0/CC-BY for prose. Copyleft (GPL, LGPL, AGPL) is rejected by `tools/check_licenses.py`; see [NOTICE](NOTICE)
+- `license` is required; the validator fails a skill without it
 - By submitting a skill, you confirm that you have the right to license the content under your chosen license
 - GrayCode AI may distribute, index, and serve your skill through the registry under the terms of your chosen license
 
@@ -308,17 +241,17 @@ This repository is licensed under the [MIT License](./LICENSE). The repository i
 
 Submissions are reviewed for:
 
-- **Accuracy** — Code examples work correctly
-- **Quality** — Well-written, clear documentation
-- **Relevance** — Useful to the community
-- **Originality** — Not duplicating existing skills
-- **License** — Valid OSI-approved license specified
+- **Accuracy**: code examples work correctly
+- **Quality**: well-written, clear documentation
+- **Relevance**: useful to the community
+- **Originality**: not duplicating existing skills
+- **License**: a permissive license is specified
 
 ## Getting Help
 
 - [Open an issue](../../issues/new/choose) for questions
 - Check existing skills for format examples
-- Join our [Discord community](https://discord.gg/MWTNudaj8E)
+- Email hello@graycodeai.com
 
 ## Code of Conduct
 
