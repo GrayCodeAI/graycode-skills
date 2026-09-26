@@ -822,11 +822,71 @@ class TestEnforcedSchema:
         assert enforced["max_description_length"] == 200
         assert enforced["min_tags"] == 1
         assert enforced["max_tags"] == 5
+        assert enforced["tag_pattern"] == TAG_PATTERN.pattern
+        assert enforced["invoke_pattern"] == "^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$"
 
-    def test_loader_falls_back_on_missing_file(self, monkeypatch, tmp_path):
-        """A missing/unparseable schema must fall back to the historical
-        defaults rather than relaxing validation."""
-        monkeypatch.setattr("validate_skill.REPO_ROOT", tmp_path)
-        enforced = load_enforced_schema()
-        assert set(enforced["required_fields"]) == {"name", "description", "license"}
-        assert enforced["max_tags"] == 5
+    def test_loader_fails_on_missing_file(self, tmp_path):
+        """A missing schema must stop validation, never fall back (F110)."""
+        with pytest.raises(ValueError, match="cannot read"):
+            load_enforced_schema(tmp_path / "manifest-schema.toml")
+
+    def test_loader_fails_on_invalid_toml(self, tmp_path):
+        bad = tmp_path / "manifest-schema.toml"
+        bad.write_text("[enforced\nmax_tags = 5\n", encoding="utf-8")
+        with pytest.raises(ValueError, match="not valid TOML"):
+            load_enforced_schema(bad)
+
+    def test_loader_fails_without_enforced_table(self, tmp_path):
+        bad = tmp_path / "manifest-schema.toml"
+        bad.write_text('[schema]\nversion = "2.0"\n', encoding="utf-8")
+        with pytest.raises(ValueError, match=r"no \[enforced\] table"):
+            load_enforced_schema(bad)
+
+    @pytest.mark.parametrize(
+        "enforced, message",
+        [
+            ('required_fields = ["name"]\nmax_description_length = 200\nmin_tags = 1\nmax_tags = 5\n',
+             "tag_pattern must be a str"),
+            ('required_fields = ["name"]\nmax_description_length = true\nmin_tags = 1\n'
+             'max_tags = 5\ntag_pattern = "^a$"\n', "max_description_length must be a int"),
+            ('required_fields = [1]\nmax_description_length = 200\nmin_tags = 1\nmax_tags = 5\n'
+             'tag_pattern = "^a$"\n', "must list strings"),
+            ('required_fields = ["name"]\nmax_description_length = 200\nmin_tags = 1\nmax_tags = 5\n'
+             'tag_pattern = "("\n', "invalid regular expression"),
+        ],
+    )
+    def test_loader_rejects_incomplete_or_malformed_enforced(self, tmp_path, enforced, message):
+        bad = tmp_path / "manifest-schema.toml"
+        bad.write_text(
+            '[fields.invoke]\npattern = "^a:b$"\n\n[enforced]\n' + enforced, encoding="utf-8"
+        )
+        with pytest.raises(ValueError, match=message):
+            load_enforced_schema(bad)
+
+    def test_loader_requires_invoke_pattern(self, tmp_path):
+        bad = tmp_path / "manifest-schema.toml"
+        bad.write_text(
+            '[enforced]\nrequired_fields = ["name"]\nmax_description_length = 200\n'
+            'min_tags = 1\nmax_tags = 5\ntag_pattern = "^a$"\n',
+            encoding="utf-8",
+        )
+        with pytest.raises(ValueError, match=r"\[fields.invoke\].pattern"):
+            load_enforced_schema(bad)
+
+    def test_validator_exits_when_schema_is_missing(self, tmp_path):
+        """Importing the validator without its schema is a hard error."""
+        import shutil
+        import subprocess
+
+        tools = Path(__file__).resolve().parent.parent / "tools"
+        shutil.copytree(tools, tmp_path / "tools", ignore=shutil.ignore_patterns("__pycache__"))
+        (tmp_path / "categories").mkdir()
+        proc = subprocess.run(
+            [sys.executable, str(tmp_path / "tools" / "validate_skill.py"), "--all"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        assert proc.returncode == 2
+        assert "manifest-schema.toml" in proc.stderr
+

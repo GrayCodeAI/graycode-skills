@@ -1,15 +1,18 @@
 # graycode-skills manifest schema
 #
 # Every skill in this registry MUST include a SKILL.md file with YAML
-# frontmatter that conforms to this schema. The schema is expressed in TOML
-# for human readability; the CI validation tool (tools/validate_skill.py)
-# enforces the *enforced* schema recorded under [enforced] below, which is the
-# single source of truth for the corpus gate. The per-field `required = true`
-# markers under [fields] describe the forward (v2.0) target and are NOT yet
-# required of the existing corpus.
+# frontmatter. Two layers live in this file:
 #
-# Required fields are marked  required = true.
-# Optional fields default to the value shown under "default".
+# * [enforced] (at the bottom) is the gate CI runs today. tools/validate_skill.py
+#   reads it at start-up and refuses to run if it is missing or malformed, so
+#   the gate and this document cannot drift. It is what CONTRIBUTING.md
+#   documents.
+# * [fields] describes every recognized field and the forward (v2.0) target.
+#   `required = true` there is NOT yet required of the existing corpus; only
+#   the [enforced] required_fields are. Patterns and enums under [fields] are
+#   guidance for new skills unless [enforced] or the validator applies them
+#   ([fields.invoke].pattern is enforced when `invoke` is present).
+#
 # Allowed values are listed under "enum" where applicable.
 
 [schema]
@@ -204,12 +207,15 @@ required    = false
 description = "Skills that work well together (advisory). Part of SmartSkill.Chain.Enhances."
 
 # ── Enforced schema (single source of truth for the CI gate) ──────────────
-# tools/validate_skill.py reads these values so the corpus gate and this
-# document cannot drift. These are the fields/limits the 14k-skill corpus
-# actually satisfies today. The aspirational v2.0 fields (version, author,
-# domain, tags) under [fields] are the forward target, not yet enforced.
+# tools/validate_skill.py reads these values at start-up and exits with an
+# error if any is missing or has the wrong type. These are the fields/limits
+# the 14k-skill corpus actually satisfies today. The v2.0 fields marked
+# `required = true` under [fields] (version, author, domain) are the forward
+# target, not yet enforced. Tags are effectively required too: min_tags = 1
+# makes a skill without tags an error.
 [enforced]
 required_fields        = ["name", "description", "license"]
 max_description_length = 200
 min_tags               = 1
 max_tags               = 5
+tag_pattern            = "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
