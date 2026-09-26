@@ -7,65 +7,127 @@ on:
     paths:
       - 'categories/**'
       - 'tools/**'
+      - 'keys/**'
+      - 'manifest-schema.toml'
+      - '.github/workflows/publish-registry.yml'
   workflow_dispatch:
 
+# Two quick merges must not race on `gh release upload --clobber` and leave a
+# registry.json / registry-signature.json pair from different commits on the
+# rolling release. Queue runs (never cancel one mid-upload) so the newest main
+# always publishes last.
+concurrency:
+  group: publish-registry
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
 jobs:
-  build-and-publish:
+  # Builds registry.json without any secret and without write access. The
+  # validator and generator need pyyaml/rich, which never run next to the
+  # signing key.
+  build:
+    name: Build registry
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.11'
+
+      - name: Install hash-locked dependencies
+        run: python -m pip install --require-hashes --no-deps -r tools/requirements.lock
+
+      - name: Validate skills (zero-warning gate)
+        run: >-
+          python tools/validate_skill.py --all
+          --warning-budget tools/validation_warning_budget.json
+
+      - name: Generate registry
+        run: python tools/update_registry.py
+
+      - name: Hand the unsigned registry to the signing job
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: registry-unsigned
+          path: registry.json
+          if-no-files-found: error
+          retention-days: 1
+
+  # The only job that sees SKILLS_ED25519_PRIVATE_KEY or holds contents:write.
+  # It installs nothing but the hash-locked cryptography stack.
+  sign-and-publish:
+    name: Sign, verify and publish registry
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: '3.11'
-          cache: 'pip'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f tools/requirements.txt ]; then pip install -r tools/requirements.txt; fi
+      - name: Install hash-locked signing dependencies
+        run: python -m pip install --require-hashes --no-deps -r tools/requirements-sign.lock
 
-      - name: Validate skills
-        run: |
-          python tools/validate_skill.py --all
+      - name: Download unsigned registry
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: registry-unsigned
+          path: .
 
-      - name: Generate registry artifact
-        run: |
-          python tools/update_registry.py
-
-      - name: Sign registry manifest
-        # Ed25519 (asymmetric) is preferred when the SKILLS_ED25519_PRIVATE_KEY
-        # secret is configured (generate once with: python tools/sign_manifest.py
-        # keygen). Pin the matching public key for verifiers. Until that secret
-        # exists, fall back to the legacy shared-secret HMAC scheme so CI keeps
-        # working — migration follow-up: make Ed25519 mandatory.
+      - name: Sign registry (Ed25519)
+        # Ed25519 is the only scheme. There is deliberately no fallback: an
+        # unset secret fails the run instead of publishing an unsigned or
+        # forgeable registry-signature.json (the old shared-secret path fell
+        # back to a literal key anyone could read in this file).
         env:
-          SIGNING_KEY: ${{ secrets.SKILLS_SIGNING_KEY || 'dev-fallback-key' }}
           SKILLS_ED25519_PRIVATE_KEY: ${{ secrets.SKILLS_ED25519_PRIVATE_KEY }}
         run: |
-          if [ -n "$SKILLS_ED25519_PRIVATE_KEY" ]; then
-            python tools/sign_manifest.py sign registry.json --ed25519 > registry-signature.json
-          else
-            python tools/sign_manifest.py sign registry.json --key "$SIGNING_KEY" > registry-signature.json
+          if [ -z "${SKILLS_ED25519_PRIVATE_KEY}" ]; then
+            echo "::error::SKILLS_ED25519_PRIVATE_KEY is not set; refusing to publish an unsigned registry."
+            exit 1
           fi
+          python tools/sign_manifest.py sign registry.json --ed25519 > registry-signature.json
           cat registry-signature.json
 
+      - name: Verify signature with the committed public key
+        # Proves the secret matches keys/registry-ed25519.pub (the key Rho
+        # pins) before anything is uploaded; a mismatched or rotated secret
+        # fails here instead of breaking every client.
+        run: >-
+          python tools/sign_manifest.py verify registry.json
+          --signature-file registry-signature.json
+          --key keys/registry-ed25519.pub
+
       - name: Upload registry artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: skill-registry
           path: |
             registry.json
             registry-signature.json
+          if-no-files-found: error
           retention-days: 90
 
       - name: Publish registry to the rolling release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           # One moving release holds the current registry. The Actions
           # artifact above is retained separately for 90-day forensics.
@@ -75,7 +137,7 @@ jobs:
           if ! gh release view registry-latest >/dev/null 2>&1; then
             gh release create registry-latest \
               --title "Skill registry (rolling)" \
-              --notes "Generated registry.json for the current main. Updated automatically; do not delete." \
+              --notes "Generated registry.json for the current main, signed with the Ed25519 key in keys/registry-ed25519.pub. Updated automatically; do not delete." \
               --latest=false
           fi
           gh release upload registry-latest \

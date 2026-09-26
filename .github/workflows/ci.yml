@@ -53,6 +53,10 @@ jobs:
         run: python3 tools/check_shell_commands.py --strict
       - name: Dependency security audit
         run: pip-audit -r tools/requirements.txt
+      - name: Dependency security audit (publish lock files)
+        # The hash-locked sets publish-registry.yml installs, including the
+        # signing job's cryptography stack.
+        run: pip-audit --require-hashes -r tools/requirements.lock -r tools/requirements-sign.lock
 
   # -------------------------------------------------------------------------
   # Sandbox containment check for changed skill scripts. Deliberately scoped
