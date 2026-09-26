@@ -1,0 +1,5 @@
+# Minimal dependency set for the registry signing job in
+# .github/workflows/publish-registry.yml (the only job that sees the signing key).
+# Keep it to the cryptography package; regenerate the lock with the command in
+# tools/requirements-sign.lock.
+cryptography
