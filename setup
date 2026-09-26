@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Universal installer for graycode-skills
-# Detects agent host and symlinks skills into the correct location.
+# Symlink GrayCode Skills into an agent's skills directory.
+#
+# For Rho, prefer `rho skills install GrayCodeAI/graycode-skills <name>`, which
+# installs a single skill; this script links every skill (or whole categories)
+# from a local checkout.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VERSION=$(cat "$SCRIPT_DIR/VERSION" 2>/dev/null || echo "unknown")
@@ -11,7 +14,7 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; NC='\033[0m'
 
 usage() {
     echo "Usage: ./setup [OPTIONS]"
-    echo "  --host <agent>       Target: graycode, claude, cursor, codex (auto-detected)"
+    echo "  --host <agent>       Target: rho, claude, cursor, codex (auto-detected)"
     echo "  --scope <scope>      user (default) or project"
     echo "  --categories <list>  Comma-separated categories (default: all)"
     echo "  --help               Show this help"
@@ -33,22 +36,58 @@ if [[ ! -d "$SCRIPT_DIR/categories" ]]; then
     echo -e "${RED}Error: Run from graycode-skills repo root${NC}"; exit 1
 fi
 
+if [[ "$SCOPE" != "user" && "$SCOPE" != "project" ]]; then
+    echo -e "${RED}Unknown scope: $SCOPE (use user or project)${NC}"; exit 1
+fi
+
+# Rho's per-user state directory, resolved the way Rho resolves it
+# (internal/storage/paths.go): RHO_STATE_DIR, then $XDG_STATE_HOME/rho, then
+# the OS config directory + rho/state. `rho skills install` (user scope)
+# installs into <state dir>/skills, and Rho loads skills from there.
+rho_state_dir() {
+    if [[ -n "${RHO_STATE_DIR:-}" ]]; then
+        echo "$RHO_STATE_DIR"
+    elif [[ -n "${XDG_STATE_HOME:-}" ]]; then
+        echo "$XDG_STATE_HOME/rho"
+    elif [[ "$(uname -s)" == "Darwin" ]]; then
+        echo "$HOME/Library/Application Support/rho/state"
+    else
+        echo "${XDG_CONFIG_HOME:-$HOME/.config}/rho/state"
+    fi
+}
+
 detect_host() {
-    [[ -d "$HOME/.graycode" ]] && echo "graycode" && return
+    if command -v rho >/dev/null 2>&1 || [[ -d "$(rho_state_dir)" ]]; then
+        echo "rho"; return
+    fi
     [[ -d "$HOME/.claude" ]] && echo "claude" && return
     [[ -d "$HOME/.cursor" ]] && echo "cursor" && return
-    echo "graycode"
+    echo "rho"
 }
 
 [[ -z "$HOST" ]] && HOST=$(detect_host) && echo -e "${YELLOW}Auto-detected host: ${HOST}${NC}"
 
-case "$HOST" in
-    graycode) TARGET="${SCOPE:+.graycode/skills}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.graycode/skills" ;;
-    claude) TARGET="${SCOPE:+.claude/skills}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.claude/skills" ;;
-    cursor) TARGET="${SCOPE:+.cursor/plugins}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.cursor/plugins" ;;
-    codex)  TARGET="${SCOPE:+.codex/plugins}"; [[ "$SCOPE" == "user" ]] && TARGET="$HOME/.codex/plugins" ;;
+if [[ "$HOST" == "graycode" ]]; then
+    echo -e "${YELLOW}--host graycode is deprecated; the agent is now Rho. Using --host rho.${NC}"
+    HOST="rho"
+fi
+
+case "$HOST:$SCOPE" in
+    rho:user)       TARGET="$(rho_state_dir)/skills" ;;
+    rho:project)    TARGET=".rho/skills" ;;  # loaded only in folders trusted with `rho trust add`
+    claude:user)    TARGET="$HOME/.claude/skills" ;;
+    claude:project) TARGET=".claude/skills" ;;
+    cursor:user)    TARGET="$HOME/.cursor/plugins" ;;
+    cursor:project) TARGET=".cursor/plugins" ;;
+    codex:user)     TARGET="$HOME/.codex/plugins" ;;
+    codex:project)  TARGET=".codex/plugins" ;;
     *) echo -e "${RED}Unknown host: $HOST${NC}"; exit 1 ;;
 esac
+
+# Rho skips symlinked skill directories when it scans for skills, so Rho gets
+# copies; the other hosts get symlinks back into this checkout.
+MODE="link"
+[[ "$HOST" == "rho" ]] && MODE="copy"
 
 mkdir -p "$TARGET"
 installed=0; skipped=0
@@ -63,21 +102,27 @@ for cat_dir in "$SCRIPT_DIR"/categories/*/; do
         skill_name=$(basename "$skill_dir")
         target="$TARGET/$skill_name"
 
-        if [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$skill_dir" ]]; then
-            ((skipped++)); continue
+        if [[ "$MODE" == "link" ]] && [[ -L "$target" ]] && [[ "$(readlink "$target")" == "$skill_dir" ]]; then
+            skipped=$((skipped + 1)); continue
         fi
         # Validate skill name contains no path separators to prevent traversal.
         if [[ "$skill_name" == *..* ]] || [[ "$skill_name" == */* ]]; then
             echo -e "${RED}  ✗ Skipping unsafe skill name: $skill_name${NC}"
             continue
         fi
-        [[ -e "$target" ]] && rm -rf "$target"
-        ln -s "$skill_dir" "$target"
-        ((installed++))
+        [[ -e "$target" || -L "$target" ]] && rm -rf "$target"
+        if [[ "$MODE" == "copy" ]]; then
+            cp -R "${skill_dir%/}" "$target"
+        else
+            ln -s "$skill_dir" "$target"
+        fi
+        # Not ((installed++)): under `set -e` that returns 1 when the old
+        # value is 0 and aborted the script after the first skill.
+        installed=$((installed + 1))
     done
 done
 
 echo ""
 echo -e "${GREEN}✓ Setup complete${NC}"
-echo "  Host: $HOST | Target: $TARGET"
+echo "  Host: $HOST | Target: $TARGET | Mode: $MODE"
 echo "  Installed: $installed | Skipped: $skipped | Version: $VERSION"
