@@ -13,6 +13,15 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - CI/CD workflows for PR checks
 - 14,015+ community skill packages across 27 categories
 
+### Security
+- `publish-registry.yml` no longer falls back to the literal `dev-fallback-key`
+  when `SKILLS_ED25519_PRIVATE_KEY` / `SKILLS_SIGNING_KEY` are unconfigured. It
+  previously published a `registry-signature.json` that looked authoritative but
+  was forgeable by anyone who could read the workflow. `tools/sign_manifest.py`
+  already exited non-zero without a key, so removing the fallback makes an
+  unconfigured secret fail the release loudly instead of shipping a meaningless
+  signature.
+
 ## [0.1.0] - 2026-05-26
 
 ### Changed

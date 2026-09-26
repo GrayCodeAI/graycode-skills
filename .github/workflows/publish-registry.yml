@@ -40,11 +40,17 @@ jobs:
       - name: Sign registry manifest
         # Ed25519 (asymmetric) is preferred when the SKILLS_ED25519_PRIVATE_KEY
         # secret is configured (generate once with: python tools/sign_manifest.py
-        # keygen). Pin the matching public key for verifiers. Until that secret
-        # exists, fall back to the legacy shared-secret HMAC scheme so CI keeps
-        # working — migration follow-up: make Ed25519 mandatory.
+        # keygen). Pin the matching public key for verifiers.
+        #
+        # There is deliberately NO fallback key. This step previously fell back
+        # to the literal 'dev-fallback-key', which published a
+        # registry-signature.json that looked authoritative but was forgeable by
+        # anyone who read this file. sign_manifest.py already exits non-zero
+        # when no key is supplied, so omitting the fallback makes an unconfigured
+        # secret fail the release loudly instead of shipping a meaningless
+        # signature.
         env:
-          SIGNING_KEY: ${{ secrets.SKILLS_SIGNING_KEY || 'dev-fallback-key' }}
+          SIGNING_KEY: ${{ secrets.SKILLS_SIGNING_KEY }}
           SKILLS_ED25519_PRIVATE_KEY: ${{ secrets.SKILLS_ED25519_PRIVATE_KEY }}
         run: |
           if [ -n "$SKILLS_ED25519_PRIVATE_KEY" ]; then
