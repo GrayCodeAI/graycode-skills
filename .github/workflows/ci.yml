@@ -143,6 +143,15 @@ jobs:
         with:
           node-version: '20'
       - name: jscpd
+        # An enforced ceiling. This step used to pipe into `tail` without
+        # pipefail, so `--threshold 5` never failed the job: main reported
+        # "found too many duplicates (9.3%) over threshold (5.0%)" and still
+        # passed. jscpd 5.3.2 measures 11.4% duplicated lines on 2026-09-27,
+        # mostly in ingested prompt collections. Lower the ceiling as
+        # duplication is removed; never raise it. The version is pinned
+        # because percentages differ between jscpd releases.
+        shell: bash
         run: |
-          npx jscpd --min-lines 15 --min-tokens 150 --threshold 5 --reporters console \
+          set -o pipefail
+          npx --yes jscpd@5.3.2 --min-lines 15 --min-tokens 150 --threshold 12 --reporters console \
             --ignore "docs/**,plans/**,tools/**" . 2>&1 | tail -30
