@@ -65,3 +65,6 @@ registry.json
 # `gitnexus analyze` regenerates a root CLAUDE.md that would shadow AGENTS.md
 # for tools that prefer it; keep the regenerated copy out of git.
 /CLAUDE.md
+
+# GitNexus code-intelligence index (regenerated locally; see AGENTS.md).
+/.gitnexus/
