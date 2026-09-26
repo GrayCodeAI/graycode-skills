@@ -56,8 +56,10 @@ decision on Rho's search behavior, so it is tracked as follow-up work.
   ---
   ```
 
-- `allowed-tools` (the spec spelling) is type-checked like the legacy
-  `allowed_tools`.
+- `allowed-tools` must be a space-separated string in the spec. Two ingested
+  skills use a YAML list, because their tool names contain spaces. The corpus
+  gate accepts that form (as Claude Code does); only `check_agentskills.py`
+  reports it.
 
 ## Checking a skill
 

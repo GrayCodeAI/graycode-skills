@@ -148,8 +148,14 @@ def test_validator_still_requires_some_tags(tmp_path):
     assert any("at least 1 tag" in e for e in validate_skill(skill).errors)
 
 
-def test_validator_type_checks_spec_allowed_tools(tmp_path):
+def test_list_allowed_tools_passes_the_gate_but_not_the_spec(tmp_path):
+    """Two ingested skills use a YAML list (tool names with spaces); the corpus
+    gate accepts it, the conformance checker flags it."""
     skill = _skill(
-        tmp_path, "tools-list", "name: tools-list\ndescription: d\nlicense: MIT\ntags: [a]\nallowed-tools: [Read]\n"
+        tmp_path,
+        "tools-list",
+        "name: tools-list\ndescription: d\nlicense: MIT\ntags: [a]\n"
+        "allowed-tools: [Azure MCP/documentation]\n",
     )
-    assert "allowed-tools must be a string, got list" in validate_skill(skill).errors
+    assert validate_skill(skill).errors == []
+    assert "allowed-tools" in {rule for rule, _ in ca.check_skill(skill)}

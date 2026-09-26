@@ -671,12 +671,13 @@ def validate_skill(skill_path: Path) -> ValidationResult:
     if compatibility is not None and not isinstance(compatibility, str):
         result.error(f"compatibility must be a string, got {type(compatibility).__name__}")
 
-    for tools_field in ("allowed_tools", "allowed-tools"):
-        allowed_tools = frontmatter.get(tools_field)
-        if allowed_tools is not None and not isinstance(allowed_tools, str):
-            result.error(
-                f"{tools_field} must be a string, got {type(allowed_tools).__name__}"
-            )
+    # Only the legacy underscore spelling is type-checked here. The spec's
+    # `allowed-tools` also appears as a YAML list in ingested skills (tool
+    # names can contain spaces), which Claude Code accepts; strict spec
+    # conformance for it is reported by tools/check_agentskills.py instead.
+    allowed_tools = frontmatter.get("allowed_tools")
+    if allowed_tools is not None and not isinstance(allowed_tools, str):
+        result.error(f"allowed_tools must be a string, got {type(allowed_tools).__name__}")
 
     agents = frontmatter.get("agents")
     if agents is not None:
