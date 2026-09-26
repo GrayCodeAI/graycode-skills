@@ -35,14 +35,36 @@ jobs:
         env:
           BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          changed="$(git diff --name-only "$BASE_REF" HEAD)"
-          python3 tools/check_changed_scripts.py $changed
+          # github.event.before is all zeros for a new branch or a force-push,
+          # and may be missing from history; fall back to the parent commit.
+          if [ -z "$BASE_REF" ] || ! git cat-file -e "${BASE_REF}^{commit}" 2>/dev/null; then
+            BASE_REF="$(git rev-parse HEAD~1)"
+          fi
+          mapfile -t changed < <(git diff --name-only "$BASE_REF" HEAD)
+          python3 tools/check_changed_scripts.py "${changed[@]}"
       - name: Validate all skills
         run: >-
           python3 tools/validate_skill.py --all
           --warning-budget tools/validation_warning_budget.json
-      - name: Registry drift check
-        run: python3 tools/update_registry.py --check
+      - name: Registry build (schema and duplicate-name check)
+        # registry.json is generated, not committed, so there is no drift to
+        # detect here. Building it fails on duplicate skill names and on any
+        # entry that violates tools/registry_schema.py.
+        run: python3 tools/update_registry.py
+      - name: Version sync check
+        run: python3 tools/check_version_sync.py
+      - name: Marketplace sync check
+        # Fail if .claude-plugin/marketplace.json is stale vs categories/.
+        # Regenerate with: python3 tools/sync_marketplace.py
+        run: python3 tools/sync_marketplace.py --check
+      - name: Reference integrity
+        run: python3 tools/check_references.py
+      - name: Self-containment check
+        run: python3 tools/check_self_contained.py
+      - name: License compatibility gate
+        # Copyleft (GPL/LGPL/AGPL) content must not be vendored into the
+        # MIT-rooted repo, in LICENSE files or frontmatter. See NOTICE.
+        run: python3 tools/check_licenses.py
       - name: Run tests
         run: python -m pytest tests/ -v --cov --cov-report=term-missing --cov-fail-under=88
       - name: Packaging smoke check
@@ -98,8 +120,12 @@ jobs:
         env:
           BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          changed="$(git diff --name-only "$BASE_REF" HEAD)"
-          python3 tools/sandbox_run_changed_scripts.py --image graycode-skills-sandbox:ci $changed
+          # Same zero-SHA / force-push guard as the validate job.
+          if [ -z "$BASE_REF" ] || ! git cat-file -e "${BASE_REF}^{commit}" 2>/dev/null; then
+            BASE_REF="$(git rev-parse HEAD~1)"
+          fi
+          mapfile -t changed < <(git diff --name-only "$BASE_REF" HEAD)
+          python3 tools/sandbox_run_changed_scripts.py --image graycode-skills-sandbox:ci "${changed[@]}"
 
   # -------------------------------------------------------------------------
   # Duplication detection — jscpd (scan categories with reasonable thresholds).
