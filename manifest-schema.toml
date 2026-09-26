@@ -88,7 +88,7 @@ type        = "string"
 required    = false
 enum        = ["localize", "repair", "validate", "review", "planning", "any"]
 default     = "any"
-description = "Pipeline phase where this skill is most useful. Maps to eagle/sessions.Phase."
+description = "Pipeline phase where this skill is most useful."
 
 [fields.min_model]
 type        = "string"
@@ -182,7 +182,7 @@ description = "Legacy underscore spelling of allowed-tools. Maps to SmartSkill.A
 type        = "array"
 items.type  = "string"
 required    = false
-description = "Cross-agent compatibility list (e.g. ['graycode', 'claude-code', 'codex']). Maps to SmartSkill.Agents."
+description = "Cross-agent compatibility list (e.g. ['rho', 'claude-code', 'codex']; 'graycode' is a legacy alias for 'rho'). Maps to SmartSkill.Agents."
 
 [fields.invoke]
 type        = "string"

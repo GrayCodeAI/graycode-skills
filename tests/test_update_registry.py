@@ -712,7 +712,7 @@ class TestMain:
 # ---------------------------------------------------------------------------
 # Canonical on-disk shape
 #
-# graycode-cli parses {version, updated_at, skills[]} (internal/plugin/
+# Rho parses {version, updated_at, skills[]} (rho internal/plugin/
 # registry.go). The generator previously emitted a bare array, so FetchIndex
 # failed with "invalid index" regardless of URL.
 # ---------------------------------------------------------------------------

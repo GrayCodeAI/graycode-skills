@@ -1,5 +1,5 @@
 name: Submit a New Skill
-description: Propose a new community skill for the Autohand registry
+description: Propose a new community skill for GrayCode Skills
 title: "[New Skill]: "
 labels: ["new-skill", "triage"]
 assignees: []
@@ -7,9 +7,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for contributing a new skill to the Autohand community! Please fill out the details below.
+        Thanks for contributing a new skill to GrayCode Skills! Please fill out the details below.
 
-        Before submitting, please check [existing skills](https://skilled.autohand.ai) to make sure your skill doesn't duplicate one that already exists.
+        Before submitting, search the existing skills (`rho skills search <topic>`, or browse [`categories/`](https://github.com/GrayCodeAI/graycode-skills/tree/main/categories)) to make sure your skill doesn't duplicate one that already exists.
 
   - type: input
     id: skill-name
@@ -117,7 +117,7 @@ body:
     id: license
     attributes:
       label: License
-      description: "License for your skill (must be an OSI-approved license)"
+      description: "License for your skill: a permissive OSI-approved license such as MIT or Apache-2.0 (copyleft GPL/LGPL/AGPL is not accepted, see NOTICE)"
       placeholder: MIT
     validations:
       required: true
@@ -146,4 +146,4 @@ body:
         ---
         **What happens next?**
 
-        A maintainer will review your submission. If approved, we'll create the skill directory, add it to `registry.json`, and credit you as the author. You can also submit a PR directly — see [CONTRIBUTING.md](../CONTRIBUTING.md).
+        A maintainer will review your submission. If approved, we'll create the skill directory and record you as the author; `registry.json` is generated from it automatically. You can also submit a PR directly — see [CONTRIBUTING.md](../CONTRIBUTING.md).

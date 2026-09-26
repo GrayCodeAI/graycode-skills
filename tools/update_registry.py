@@ -23,8 +23,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES_DIR = REPO_ROOT / "categories"
 REGISTRY_PATH = REPO_ROOT / "registry.json"
 
-# The GitHub slug every skill in this repo is installed from. graycode-cli
-# builds its clone URL from this field (internal/plugin/auto_skill.go).
+# The GitHub slug every skill in this repo is installed from. Rho builds its
+# clone URL from this field (`rho skills install <repo> <name>`).
 REGISTRY_REPO = "GrayCodeAI/graycode-skills"
 
 console = Console()
@@ -216,8 +216,8 @@ def validate_entries(entries: list[dict]) -> list[str]:
 def render_registry(entries: list[dict]) -> str:
     """Render registry entries in the canonical on-disk format.
 
-    The top level is an object, not an array: graycode-cli parses
-    {version, updated_at, skills[]} (internal/plugin/registry.go). No
+    The top level is an object, not an array: Rho parses
+    {version, updated_at, skills[]} (rho internal/plugin/registry.go). No
     timestamp is emitted so that ``--check`` stays deterministic.
     """
     document = {"version": 1, "skills": entries}
