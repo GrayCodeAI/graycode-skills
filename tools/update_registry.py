@@ -41,17 +41,34 @@ def _display_path(path: Path) -> str:
 # parse_frontmatter is now imported from frontmatter module
 
 
+# Local build/OS artifacts that are gitignored and never shipped. CI runs
+# `python -m compileall categories` before generating the registry, so without
+# this filter `file_count` depended on whether bytecode happened to exist.
+# Tracked dotfiles such as .gitkeep are real skill files and still count.
+GENERATED_DIR_NAMES = frozenset({"__pycache__"})
+GENERATED_FILE_NAMES = frozenset({".DS_Store"})
+GENERATED_FILE_SUFFIXES = (".pyc", ".pyo")
+
+
+def _is_generated_file(name: str) -> bool:
+    return name in GENERATED_FILE_NAMES or name.endswith(GENERATED_FILE_SUFFIXES)
+
+
 def count_files(path: Path) -> int:
-    """Count files in a directory recursively."""
-    return sum(len(files) for _, _, files in os.walk(path))
+    """Count shipped files in a directory recursively (bytecode excluded)."""
+    total = 0
+    for _root, dirnames, filenames in os.walk(path):
+        dirnames[:] = [d for d in dirnames if d not in GENERATED_DIR_NAMES]
+        total += sum(1 for name in filenames if not _is_generated_file(name))
+    return total
 
 
 def has_scripts_dir(path: Path) -> bool:
-    """Check if skill has a scripts/ directory with files."""
+    """Check if skill has a scripts/ directory with shipped files."""
     scripts_dir = path / "scripts"
-    if not scripts_dir.exists():
+    if not scripts_dir.is_dir():
         return False
-    return any(scripts_dir.iterdir())
+    return count_files(scripts_dir) > 0
 
 
 def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, str]]]:
