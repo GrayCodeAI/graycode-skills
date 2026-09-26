@@ -23,7 +23,7 @@ except ImportError:
 
 # Add tools directory to path for shared imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from frontmatter import parse_frontmatter
+from frontmatter import frontmatter_tags, parse_frontmatter
 from skill_discovery import iter_skills
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -622,8 +622,11 @@ def validate_skill(skill_path: Path) -> ValidationResult:
             category="description-too-long",
         )
 
-    # Validate tags
-    tags = frontmatter.get("tags", [])
+    # Validate tags (top-level `tags`, or `metadata.tags` for skills that
+    # follow the Agent Skills spec's top-level field list).
+    tags = frontmatter_tags(frontmatter)
+    if tags is None:
+        tags = []
     if isinstance(tags, str):
         tags = [t.strip() for t in tags.split(",")]
     if not isinstance(tags, list):
@@ -668,9 +671,12 @@ def validate_skill(skill_path: Path) -> ValidationResult:
     if compatibility is not None and not isinstance(compatibility, str):
         result.error(f"compatibility must be a string, got {type(compatibility).__name__}")
 
-    allowed_tools = frontmatter.get("allowed_tools")
-    if allowed_tools is not None and not isinstance(allowed_tools, str):
-        result.error(f"allowed_tools must be a string, got {type(allowed_tools).__name__}")
+    for tools_field in ("allowed_tools", "allowed-tools"):
+        allowed_tools = frontmatter.get(tools_field)
+        if allowed_tools is not None and not isinstance(allowed_tools, str):
+            result.error(
+                f"{tools_field} must be a string, got {type(allowed_tools).__name__}"
+            )
 
     agents = frontmatter.get("agents")
     if agents is not None:

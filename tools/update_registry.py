@@ -15,7 +15,7 @@ except ImportError:
 
 # Add tools directory to path for shared imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from frontmatter import parse_frontmatter
+from frontmatter import frontmatter_tags, parse_frontmatter
 from registry_schema import validate_registry_entry
 from skill_discovery import iter_skills
 
@@ -149,7 +149,7 @@ def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, 
         if isinstance(description, str):
             description = " ".join(description.split())[:200]
 
-        tags = frontmatter.get("tags", [])
+        tags = frontmatter_tags(frontmatter) or []
         if isinstance(tags, str):
             tags = [t.strip() for t in tags.split(",") if t.strip()]
         # Generate a default tag from category if tags are empty

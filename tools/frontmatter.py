@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 import yaml
@@ -43,3 +44,22 @@ def parse_frontmatter_dict(content: str) -> dict[str, Any] | None:
     """
     fm, _ = parse_frontmatter(content)
     return fm
+
+
+def frontmatter_tags(frontmatter: dict[str, Any]) -> Any:
+    """Return a skill's raw tags value.
+
+    Top-level ``tags`` (a list or comma-separated string) is the corpus
+    convention. The Agent Skills specification (agentskills.io) allows only
+    name, description, license, compatibility, metadata and allowed-tools at
+    the top level, so a spec-conformant skill may instead put a comma- or
+    space-separated string in ``metadata.tags``. Top-level ``tags`` wins when
+    both are present. Returns None when neither is set; other types are
+    returned unchanged so callers can report them.
+    """
+    if "tags" in frontmatter:
+        return frontmatter["tags"]
+    metadata = frontmatter.get("metadata")
+    if isinstance(metadata, dict) and isinstance(metadata.get("tags"), str):
+        return [tag for tag in re.split(r"[,\s]+", metadata["tags"]) if tag]
+    return None
