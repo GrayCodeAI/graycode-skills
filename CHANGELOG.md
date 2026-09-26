@@ -11,7 +11,10 @@ and this project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Automated validation tooling for frontmatter, references, scripts, and content
 - Registry generation from SKILL.md frontmatter
 - CI/CD workflows for PR checks
-- 14,015+ community skill packages across 27 categories
+- 14,011 community skill packages across 27 categories
+
+### Fixed
+- README and this changelog claimed 14,015 skills; the registry indexes 14,011.
 
 ### Security
 - `publish-registry.yml` no longer falls back to the literal `dev-fallback-key`

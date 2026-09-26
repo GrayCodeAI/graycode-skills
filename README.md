@@ -1,6 +1,6 @@
 # Graycode Community Skills
 
-Community skill packages for [Rho](https://github.com/GrayCodeAI/rho) — the AI coding agent. This repository contains 14,015 modular instruction packages that teach Rho specialized workflows across 27 categories.
+Community skill packages for [Rho](https://github.com/GrayCodeAI/rho) — the AI coding agent. This repository contains 14,011 modular instruction packages that teach Rho specialized workflows across 27 categories.
 
 ## What are Skills?
 
