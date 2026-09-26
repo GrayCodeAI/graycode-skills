@@ -10,7 +10,7 @@ info:
     with the Rho CLI: `rho skills install GrayCodeAI/graycode-skills <name>`.
     The generated index is published as registry.json on the rolling
     `registry-latest` GitHub release (see docs/REGISTRY.md).
-  version: "0.0.1"
+  version: "0.2.0"
   license:
     name: MIT
     url: https://github.com/GrayCodeAI/graycode-skills/blob/main/LICENSE

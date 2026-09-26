@@ -10,7 +10,7 @@
       "name": "graycode-skills-ai-ml",
       "source": "./categories/ai-ml",
       "description": "GrayCode Skills, ai-ml category: 420 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -19,7 +19,7 @@
       "name": "graycode-skills-angular",
       "source": "./categories/angular",
       "description": "GrayCode Skills, angular category: 13 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -28,7 +28,7 @@
       "name": "graycode-skills-aws",
       "source": "./categories/aws",
       "description": "GrayCode Skills, aws category: 140 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -37,7 +37,7 @@
       "name": "graycode-skills-caveman",
       "source": "./categories/caveman",
       "description": "GrayCode Skills, caveman category: 7 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -46,7 +46,7 @@
       "name": "graycode-skills-cursor-rules",
       "source": "./categories/cursor-rules",
       "description": "GrayCode Skills, cursor-rules category: 775 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -55,7 +55,7 @@
       "name": "graycode-skills-database",
       "source": "./categories/database",
       "description": "GrayCode Skills, database category: 114 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -64,7 +64,7 @@
       "name": "graycode-skills-debugging",
       "source": "./categories/debugging",
       "description": "GrayCode Skills, debugging category: 27 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -73,7 +73,7 @@
       "name": "graycode-skills-deployment",
       "source": "./categories/deployment",
       "description": "GrayCode Skills, deployment category: 35 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -82,7 +82,7 @@
       "name": "graycode-skills-devops",
       "source": "./categories/devops",
       "description": "GrayCode Skills, devops category: 204 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -91,7 +91,7 @@
       "name": "graycode-skills-documentation",
       "source": "./categories/documentation",
       "description": "GrayCode Skills, documentation category: 60 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -100,7 +100,7 @@
       "name": "graycode-skills-fabric-patterns",
       "source": "./categories/fabric-patterns",
       "description": "GrayCode Skills, fabric-patterns category: 168 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -109,7 +109,7 @@
       "name": "graycode-skills-general",
       "source": "./categories/general",
       "description": "GrayCode Skills, general category: 10580 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -118,7 +118,7 @@
       "name": "graycode-skills-git",
       "source": "./categories/git",
       "description": "GrayCode Skills, git category: 37 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -127,7 +127,7 @@
       "name": "graycode-skills-go",
       "source": "./categories/go",
       "description": "GrayCode Skills, go category: 20 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -136,7 +136,7 @@
       "name": "graycode-skills-graycode",
       "source": "./categories/graycode",
       "description": "GrayCode Skills, graycode category: 3 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -145,7 +145,7 @@
       "name": "graycode-skills-mobile",
       "source": "./categories/mobile",
       "description": "GrayCode Skills, mobile category: 101 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -154,7 +154,7 @@
       "name": "graycode-skills-networking",
       "source": "./categories/networking",
       "description": "GrayCode Skills, networking category: 23 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -163,7 +163,7 @@
       "name": "graycode-skills-python",
       "source": "./categories/python",
       "description": "GrayCode Skills, python category: 167 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -172,7 +172,7 @@
       "name": "graycode-skills-react",
       "source": "./categories/react",
       "description": "GrayCode Skills, react category: 214 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -181,7 +181,7 @@
       "name": "graycode-skills-refactoring",
       "source": "./categories/refactoring",
       "description": "GrayCode Skills, refactoring category: 14 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -190,7 +190,7 @@
       "name": "graycode-skills-rust",
       "source": "./categories/rust",
       "description": "GrayCode Skills, rust category: 27 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -199,7 +199,7 @@
       "name": "graycode-skills-scientific",
       "source": "./categories/scientific",
       "description": "GrayCode Skills, scientific category: 152 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -208,7 +208,7 @@
       "name": "graycode-skills-security",
       "source": "./categories/security",
       "description": "GrayCode Skills, security category: 358 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -217,7 +217,7 @@
       "name": "graycode-skills-svelte",
       "source": "./categories/svelte",
       "description": "GrayCode Skills, svelte category: 31 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -226,7 +226,7 @@
       "name": "graycode-skills-tailwind",
       "source": "./categories/tailwind",
       "description": "GrayCode Skills, tailwind category: 31 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -235,7 +235,7 @@
       "name": "graycode-skills-testing",
       "source": "./categories/testing",
       "description": "GrayCode Skills, testing category: 195 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -244,7 +244,7 @@
       "name": "graycode-skills-typescript",
       "source": "./categories/typescript",
       "description": "GrayCode Skills, typescript category: 73 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]
@@ -253,7 +253,7 @@
       "name": "graycode-skills-vue",
       "source": "./categories/vue",
       "description": "GrayCode Skills, vue category: 25 skills.",
-      "version": "0.0.1",
+      "version": "0.2.0",
       "skills": [
         "./"
       ]

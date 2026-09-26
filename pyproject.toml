@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "graycode-skills"
-version = "0.0.1"
+version = "0.2.0"
 description = "GrayCode Skills: community skill packages for Rho, the terminal AI coding agent"
 requires-python = ">=3.11"
 dependencies = [

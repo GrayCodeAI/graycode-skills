@@ -1,6 +1,6 @@
 {
   "name": "graycode-skills",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "GrayCode Skills: community Agent Skills (SKILL.md) packages for Rho, the terminal AI coding agent, and other skill-aware agents. Security, code review, DevOps and more.",
   "author": {
     "name": "GrayCode AI",
