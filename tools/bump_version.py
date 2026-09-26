@@ -32,8 +32,10 @@ def update_json_version(path, new_version):
     data = json.loads(path.read_text())
     if "version" in data:
         data["version"] = new_version
-    if "plugins" in data and len(data["plugins"]) > 0:
-        data["plugins"][0]["version"] = new_version
+    # marketplace.json lists one plugin per category; keep them all in step.
+    for plugin in data.get("plugins", []):
+        if isinstance(plugin, dict):
+            plugin["version"] = new_version
     path.write_text(json.dumps(data, indent=2) + "\n")
 
 
