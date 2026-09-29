@@ -6,7 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Optional
 
@@ -260,7 +260,7 @@ def main(argv: Optional[list[str]] = None) -> int:  # noqa: UP045 -- Python 3.9
     )
     args = parser.parse_args(argv)
 
-    generated_at = args.generated_at or datetime.now(timezone.utc).isoformat().replace(
+    generated_at = args.generated_at or datetime.now(UTC).isoformat().replace(
         "+00:00", "Z"
     )
     version = (REPO_ROOT / "VERSION").read_text(encoding="utf-8").strip()

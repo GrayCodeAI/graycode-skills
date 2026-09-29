@@ -33,9 +33,9 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: "Autohand version, OS, and any relevant context"
+      description: "Rho (or other client) version, OS, and any relevant context"
       placeholder: |
-        - Autohand version: 1.x.x
+        - Rho version: output of `rho version`
         - OS: macOS 15
     validations:
       required: false

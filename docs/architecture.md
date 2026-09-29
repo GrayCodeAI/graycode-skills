@@ -1,122 +1,122 @@
 <div align="center">
 
-# 🎯 graycode-skills Architecture
+# graycode-skills Architecture
 
-**Modular Instruction Packages for Rho**
+**Modular instruction packages for Rho**
 
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python)](https://python.org/)
-[![Type](https://img.shields.io/badge/Type-Registry-purple)]()
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)](https://python.org/)
 
 </div>
 
 ---
 
-## 🎯 Overview
+## Overview
 
-A registry of modular instruction packages (**skills**) that teach Rho specialized workflows. Each skill is a **Markdown file with YAML frontmatter** that Rho loads into its system prompt when activated.
+A registry of modular instruction packages (**skills**) that teach Rho, GrayCode's
+terminal AI coding agent, specialized workflows. Each skill is a directory with a
+`SKILL.md` file (YAML frontmatter plus Markdown instructions) in the
+[Agent Skills](https://agentskills.io/specification) layout.
 
-> 💡 Install with: `rho skills install <owner/repo> <name>`
+Install one with `rho skills install GrayCodeAI/graycode-skills <name>`.
 
 ---
 
-## 🧱 Repository Structure
+## Repository structure
 
 ```
 graycode-skills/
-├── api/openapi.yaml           📜 Skill format reference
-├── categories/                📂 All skills organized by domain
-│   ├── aws/                   ☁️ AWS-related skills
-│   ├── database/              🗄️ Database skills
-│   ├── general/               📋 General-purpose skills
-│   ├── rust/                  🦀 Rust-related skills
-│   ├── security/              🔒 Security-focused skills
-│   └── workflows/             🔄 Workflow automation
-├── registry.json              📇 Machine-readable skill index
-├── tools/                     🛠️ Python tooling
-│   ├── frontmatter.py         📄 YAML frontmatter parser
-│   ├── validate_skill.py      ✅ Skill validation pipeline
-│   ├── update_registry.py     🔄 Registry regeneration
-│   ├── init_skill.py          🆕 Scaffold a new skill
-│   ├── content_validation.py  📋 Content quality checks
-│   ├── check_references.py    🔗 Internal link resolution
-│   ├── check_self_contained.py📦 Self-containedness check
-│   ├── bump_version.py        📈 Semantic version bump
-│   ├── check_version_sync.py  🔢 Version consistency check
-│   └── sync_marketplace.py    🏪 Sync to Graycode marketplace
-└── tests/                     🧪 Test suite
+├── api/openapi.yaml           Skill format reference (no HTTP API)
+├── categories/                All skills, one directory per category (28)
+│   ├── general/               General-purpose skills (largest category)
+│   ├── graycode/              First-party skills for Rho, Rover and Across
+│   ├── security/              Security skills
+│   └── ...                    See `ls categories/`
+├── manifest-schema.toml       Frontmatter schema; [enforced] is the CI gate
+├── .claude-plugin/            Claude Code marketplace (one plugin per category)
+├── tools/                     Python tooling
+│   ├── frontmatter.py         YAML frontmatter parser
+│   ├── validate_skill.py      Skill validation (zero-warning gate)
+│   ├── update_registry.py     Registry generation
+│   ├── sync_marketplace.py    Regenerates .claude-plugin/marketplace.json
+│   ├── check_agentskills.py   Agent Skills standard conformance
+│   ├── check_licenses.py      Copyleft license gate
+│   ├── check_references.py    Internal link resolution
+│   ├── check_self_contained.py  No ../ references
+│   ├── bump_version.py        Semantic version bump
+│   └── check_version_sync.py  VERSION vs plugin manifests
+└── tests/                     Test suite (pytest, >= 88% coverage in CI)
 ```
+
+`registry.json` is generated, not committed (see [REGISTRY.md](REGISTRY.md)).
 
 ---
 
-## 📄 Skill Format
+## Skill format
 
 Each skill lives in `categories/<category>/<skill-name>/SKILL.md`:
 
 ```markdown
 ---
 name: go-review
-description: Expert Go code review following effective Go and project conventions
-version: 1.0.0
-author: GrayCode Team
+description: Review Go code against Effective Go and project conventions. Use for Go pull requests.
 license: MIT
 tags: [go, review, code-quality]
 ---
 
-# Go Review Skill
+# Go Review
 
 ## When to activate
 ...
-
-## Review checklist
-...
 ```
 
-### Frontmatter Rules
+### Frontmatter rules (enforced)
+
+The values come from `manifest-schema.toml` `[enforced]`; the validator refuses to
+run if that file is missing or malformed.
 
 | Field | Required | Constraints |
 |-------|:--------:|-------------|
-| `name` | ✅ | Must match directory name |
-| `description` | ✅ | ≤ 200 characters |
-| `license` | ✅ | e.g. `MIT` |
-| `tags` | ❌ | 1–5 items, lowercase kebab-case |
-| `version` | ❌ | Semver string |
-| `author` | ❌ | Free text |
+| `name` | yes | Must match the directory name |
+| `description` | yes | Up to 200 characters (longer is a warning, and CI allows zero warnings) |
+| `license` | yes | For example `MIT`; copyleft is rejected by the license gate |
+| `tags` | yes | 1-5 lowercase kebab-case tags, as a top-level list or `metadata.tags` |
+| `invoke` | no | `vendor:skill` pattern when present |
+
+Other fields are optional. See [AGENT_SKILLS.md](AGENT_SKILLS.md) for
+conformance with the Agent Skills standard.
 
 ---
 
-## ✅ Validation Pipeline
+## Validation pipeline
 
-`tools/validate_skill.py` runs **9 checks** in order:
+`tools/validate_skill.py` checks, per skill:
 
-| # | Check | Type |
-|---|-------|:----:|
-| 1 | `SKILL.md` exists and is valid UTF-8 | ❌ Error |
-| 2 | Frontmatter present and parseable | ❌ Error |
-| 3 | Required fields present | ❌ Error |
-| 4 | Description length ≤ 200 chars | ⚠️ Warning |
-| 5 | Tag format validation (`^[a-z][a-z0-9]*(-[a-z0-9]+)*$`) | ❌ Error |
-| 6 | `name` matches directory name | ❌ Error |
-| 7 | Internal link resolution (path traversal protection) | ❌ Error |
-| 8 | Script shebang lines + executable bits | ⚠️ Warning |
-| 9 | No non-asset file > 100KB | ⚠️ Warning |
+| Check | Type |
+|-------|:----:|
+| `SKILL.md` exists, resolves inside the skill, and is UTF-8 | error |
+| Frontmatter present and parseable | error |
+| Required fields present | error |
+| Description length | warning |
+| 1-5 tags matching `^[a-z][a-z0-9]*(-[a-z0-9]+)*$` | error (too many: warning) |
+| `name` matches directory | error |
+| Field types for `invoke`, `allowed-tools`, `compatibility`, chain fields | error |
+| Local Markdown links resolve and stay inside the skill | warning |
+| Scripts have a shebang and the executable bit | warning |
+| `SKILL.md` over 500 KB | error (grandfathered allowlist: warning) |
+| Non-asset file over 100 KB | warning |
+
+With `--all --warning-budget tools/validation_warning_budget.json` the run must
+also match the checked-in per-category warning budget, which is zero everywhere.
 
 ---
 
-## 📇 Registry
-
-`registry.json` is **auto-generated** — do not edit manually.
+## Contributing a skill
 
 ```bash
-python tools/update_registry.py    # 🔄 Regenerate after adding/editing skills
+mkdir -p categories/general/my-skill-name                          # create the skill directory
+$EDITOR categories/general/my-skill-name/SKILL.md                  # write frontmatter + instructions
+python tools/validate_skill.py categories/general/my-skill-name    # validate
+python tools/sync_marketplace.py                                   # refresh the marketplace
 ```
 
----
-
-## 🆕 Contributing a Skill
-
-```bash
-python tools/init_skill.py my-skill-name categories/general  # 🆕 Scaffold
-# ✏️ Edit categories/general/my-skill-name/SKILL.md
-python tools/validate_skill.py categories/general/my-skill-name  # ✅ Validate
-python tools/update_registry.py    # 📇 Update registry
-```
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full checklist.

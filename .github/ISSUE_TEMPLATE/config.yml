@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Browse Existing Skills
-    url: https://skilled.autohand.ai
-    about: Search and browse all community skills before submitting
-  - name: Submit via Web
-    url: https://skilled.autohand.ai/submit
-    about: Use the guided web form to submit a skill
-  - name: Discord Community
-    url: https://discord.gg/MWTNudaj8E
-    about: Ask questions and get help from the community
+  - name: Browse existing skills
+    url: https://github.com/GrayCodeAI/graycode-skills/tree/main/categories
+    about: Browse the categories (or run `rho skills search <topic>`) before proposing a skill
+  - name: Contribution guide
+    url: https://github.com/GrayCodeAI/graycode-skills/blob/main/CONTRIBUTING.md
+    about: How to submit a skill as a pull request
+  - name: Security reports
+    url: https://github.com/GrayCodeAI/graycode-skills/blob/main/SECURITY.md
+    about: Report vulnerabilities privately; do not open a public issue

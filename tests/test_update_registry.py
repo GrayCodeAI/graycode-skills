@@ -121,6 +121,36 @@ class TestCountFiles:
         (tmp_path / "subdir").mkdir()
         assert _mod.count_files(tmp_path) == 1
 
+    def test_ignores_python_bytecode_and_os_artifacts(self, tmp_path: Path):
+        (tmp_path / "SKILL.md").write_text("x")
+        (tmp_path / ".gitkeep").write_text("")  # tracked dotfiles still count
+        cache = tmp_path / "scripts" / "__pycache__"
+        cache.mkdir(parents=True)
+        (cache / "tool.cpython-311.pyc").write_bytes(b"\0")
+        (tmp_path / "scripts" / "stale.pyo").write_bytes(b"\0")
+        (tmp_path / ".DS_Store").write_bytes(b"\0")
+        assert _mod.count_files(tmp_path) == 2
+
+    def test_compileall_does_not_change_the_rendered_registry(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        """Regression: CI runs compileall before the registry step (F111)."""
+        import compileall
+
+        cats = tmp_path / "categories"
+        monkeypatch.setattr(_mod, "CATEGORIES_DIR", cats)
+        skill = _write_skill(tmp_path, "cat", "py-skill")
+        (skill / "scripts").mkdir()
+        (skill / "scripts" / "tool.py").write_text("#!/usr/bin/env python3\nprint(1)\n")
+
+        before = _mod.render_registry(_mod.build_registry())
+        assert compileall.compile_dir(str(cats), quiet=1)
+        assert list(cats.rglob("*.pyc")), "compileall should have produced bytecode"
+        after = _mod.render_registry(_mod.build_registry())
+
+        assert after == before
+        assert json.loads(after)["skills"][0]["file_count"] == 2
+
 
 # ===================================================================
 # has_scripts_dir
@@ -140,6 +170,12 @@ class TestHasScriptsDir:
         scripts.mkdir()
         (scripts / "run.sh").write_text("#!/bin/bash\n")
         assert _mod.has_scripts_dir(tmp_path) is True
+
+    def test_scripts_dir_with_only_bytecode(self, tmp_path: Path):
+        cache = tmp_path / "scripts" / "__pycache__"
+        cache.mkdir(parents=True)
+        (cache / "run.cpython-311.pyc").write_bytes(b"\0")
+        assert _mod.has_scripts_dir(tmp_path) is False
 
 
 # ===================================================================
@@ -676,7 +712,7 @@ class TestMain:
 # ---------------------------------------------------------------------------
 # Canonical on-disk shape
 #
-# graycode-cli parses {version, updated_at, skills[]} (internal/plugin/
+# Rho parses {version, updated_at, skills[]} (rho internal/plugin/
 # registry.go). The generator previously emitted a bare array, so FetchIndex
 # failed with "invalid index" regardless of URL.
 # ---------------------------------------------------------------------------
@@ -726,3 +762,51 @@ class TestCanonicalRenderShape:
             path="demo",
         )
         assert errors == []
+
+
+# ---------------------------------------------------------------------------
+# Provenance (F116): NOTICE/CONTRIBUTING promise license/author/source in
+# registry.json; the generator must actually emit them.
+# ---------------------------------------------------------------------------
+
+
+class TestProvenanceFields:
+    def test_license_author_and_url_source_are_emitted(self):
+        assert _mod.provenance_fields(
+            {
+                "license": "Apache-2.0",
+                "author": "  octo\n cat ",
+                "source": "https://github.com/example/skills",
+            }
+        ) == {
+            "license": "Apache-2.0",
+            "author": "octo cat",
+            "source": "https://github.com/example/skills",
+        }
+
+    @pytest.mark.parametrize("source", ["community", "self", "vibeship (Apache 2.0)", "ftp://x", ""])
+    def test_non_url_sources_are_not_provenance(self, source: str):
+        assert "source" not in _mod.provenance_fields({"license": "MIT", "source": source})
+
+    def test_non_string_values_are_skipped(self):
+        assert _mod.provenance_fields({"license": None, "author": ["a", "b"], "source": 3}) == {}
+
+    def test_registry_entry_carries_provenance_and_passes_schema(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ):
+        cats = tmp_path / "categories"
+        monkeypatch.setattr(_mod, "CATEGORIES_DIR", cats)
+        _write_skill(
+            tmp_path,
+            "cat",
+            "prov-skill",
+            frontmatter=(
+                "---\nname: prov-skill\ndescription: d\nlicense: MIT\nauthor: jane\n"
+                "source: https://github.com/jane/skills\ntags: [a]\n---\nBody\n"
+            ),
+        )
+        entries = _mod.build_registry()
+        assert entries[0]["license"] == "MIT"
+        assert entries[0]["author"] == "jane"
+        assert entries[0]["source"] == "https://github.com/jane/skills"
+        assert _mod.validate_entries(entries) == []

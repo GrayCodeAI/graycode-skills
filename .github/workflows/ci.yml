@@ -35,14 +35,40 @@ jobs:
         env:
           BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          changed="$(git diff --name-only "$BASE_REF" HEAD)"
-          python3 tools/check_changed_scripts.py $changed
+          # github.event.before is all zeros for a new branch or a force-push,
+          # and may be missing from history; fall back to the parent commit.
+          if [ -z "$BASE_REF" ] || ! git cat-file -e "${BASE_REF}^{commit}" 2>/dev/null; then
+            BASE_REF="$(git rev-parse HEAD~1)"
+          fi
+          mapfile -t changed < <(git diff --name-only "$BASE_REF" HEAD)
+          python3 tools/check_changed_scripts.py "${changed[@]}"
       - name: Validate all skills
         run: >-
           python3 tools/validate_skill.py --all
           --warning-budget tools/validation_warning_budget.json
-      - name: Registry drift check
-        run: python3 tools/update_registry.py --check
+      - name: Registry build (schema and duplicate-name check)
+        # registry.json is generated, not committed, so there is no drift to
+        # detect here. Building it fails on duplicate skill names and on any
+        # entry that violates tools/registry_schema.py.
+        run: python3 tools/update_registry.py
+      - name: Version sync check
+        run: python3 tools/check_version_sync.py
+      - name: Marketplace sync check
+        # Fail if .claude-plugin/marketplace.json is stale vs categories/.
+        # Regenerate with: python3 tools/sync_marketplace.py
+        run: python3 tools/sync_marketplace.py --check
+      - name: Reference integrity
+        run: python3 tools/check_references.py
+      - name: Self-containment check
+        run: python3 tools/check_self_contained.py
+      - name: License compatibility gate
+        # Copyleft (GPL/LGPL/AGPL) content must not be vendored into the
+        # MIT-rooted repo, in LICENSE files or frontmatter. See NOTICE.
+        run: python3 tools/check_licenses.py
+      - name: Agent Skills conformance (first-party skills)
+        # GrayCode's own skills must follow agentskills.io exactly; the
+        # legacy corpus gap is reported by --all (see docs/AGENT_SKILLS.md).
+        run: python3 tools/check_agentskills.py --strict categories/graycode
       - name: Run tests
         run: python -m pytest tests/ -v --cov --cov-report=term-missing --cov-fail-under=88
       - name: Packaging smoke check
@@ -98,8 +124,12 @@ jobs:
         env:
           BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          changed="$(git diff --name-only "$BASE_REF" HEAD)"
-          python3 tools/sandbox_run_changed_scripts.py --image graycode-skills-sandbox:ci $changed
+          # Same zero-SHA / force-push guard as the validate job.
+          if [ -z "$BASE_REF" ] || ! git cat-file -e "${BASE_REF}^{commit}" 2>/dev/null; then
+            BASE_REF="$(git rev-parse HEAD~1)"
+          fi
+          mapfile -t changed < <(git diff --name-only "$BASE_REF" HEAD)
+          python3 tools/sandbox_run_changed_scripts.py --image graycode-skills-sandbox:ci "${changed[@]}"
 
   # -------------------------------------------------------------------------
   # Duplication detection — jscpd (scan categories with reasonable thresholds).
@@ -113,6 +143,15 @@ jobs:
         with:
           node-version: '20'
       - name: jscpd
+        # An enforced ceiling. This step used to pipe into `tail` without
+        # pipefail, so `--threshold 5` never failed the job: main reported
+        # "found too many duplicates (9.3%) over threshold (5.0%)" and still
+        # passed. jscpd 5.3.2 measures 11.4% duplicated lines on 2026-09-27,
+        # mostly in ingested prompt collections. Lower the ceiling as
+        # duplication is removed; never raise it. The version is pinned
+        # because percentages differ between jscpd releases.
+        shell: bash
         run: |
-          npx jscpd --min-lines 15 --min-tokens 150 --threshold 5 --reporters console \
+          set -o pipefail
+          npx --yes jscpd@5.3.2 --min-lines 15 --min-tokens 150 --threshold 12 --reporters console \
             --ignore "docs/**,plans/**,tools/**" . 2>&1 | tail -30

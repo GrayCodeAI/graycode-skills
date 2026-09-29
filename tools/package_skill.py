@@ -8,7 +8,7 @@ import re
 import subprocess
 import sys
 import tarfile
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 try:
@@ -40,7 +40,7 @@ def _display_path(path: Path) -> str:
 # (archive_path, meta_path), so they must be constrained to safe filename
 # characters before use — otherwise a frontmatter version like
 # "../../../../tmp/pwned" writes the archive outside dist/. These match the
-# same shape enforced in manifest-schema.toml / scripts/validate-skill-manifest.py.
+# shape of the name/version patterns in manifest-schema.toml [fields].
 SAFE_NAME_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,119}$")
 SAFE_VERSION_RE = re.compile(r"^\d+\.\d+(\.\d+)?$")
 
@@ -150,7 +150,7 @@ def main():
     metadata = {
         "name": skill_name,
         "version": version,
-        "packaged_at": datetime.now(timezone.utc).isoformat(),
+        "packaged_at": datetime.now(UTC).isoformat(),
         "archive": archive_name,
         "sha256": checksum,
         "file_count": sum(len(files) for _, _, files in os.walk(skill_path)),

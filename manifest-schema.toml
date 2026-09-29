@@ -1,15 +1,18 @@
 # graycode-skills manifest schema
 #
 # Every skill in this registry MUST include a SKILL.md file with YAML
-# frontmatter that conforms to this schema. The schema is expressed in TOML
-# for human readability; the CI validation tool (tools/validate_skill.py)
-# enforces the *enforced* schema recorded under [enforced] below, which is the
-# single source of truth for the corpus gate. The per-field `required = true`
-# markers under [fields] describe the forward (v2.0) target and are NOT yet
-# required of the existing corpus.
+# frontmatter. Two layers live in this file:
 #
-# Required fields are marked  required = true.
-# Optional fields default to the value shown under "default".
+# * [enforced] (at the bottom) is the gate CI runs today. tools/validate_skill.py
+#   reads it at start-up and refuses to run if it is missing or malformed, so
+#   the gate and this document cannot drift. It is what CONTRIBUTING.md
+#   documents.
+# * [fields] describes every recognized field and the forward (v2.0) target.
+#   `required = true` there is NOT yet required of the existing corpus; only
+#   the [enforced] required_fields are. Patterns and enums under [fields] are
+#   guidance for new skills unless [enforced] or the validator applies them
+#   ([fields.invoke].pattern is enforced when `invoke` is present).
+#
 # Allowed values are listed under "enum" where applicable.
 
 [schema]
@@ -20,14 +23,15 @@ version = "2.0"
 [fields.name]
 type        = "string"
 required    = true
-pattern     = "^[a-z0-9][a-z0-9-]{2,79}$"
-description = "URL-safe kebab-case identifier. Must be unique in the registry."
+max_length  = 64
+pattern     = "^[a-z0-9]+(-[a-z0-9]+)*$"
+description = "Agent Skills name: 1-64 lowercase letters/digits with single inner hyphens, equal to the directory name, unique in the registry. (Enforced today: must match the directory; about 3,300 legacy names do not meet the pattern, see docs/AGENT_SKILLS.md.)"
 
 [fields.description]
 type        = "string"
 required    = true
-max_length  = 280
-description = "One-sentence summary shown in the skill catalogue."
+max_length  = 200
+description = "What the skill does and when to use it, shown in the skill catalogue. The Agent Skills spec allows 1024 characters; this catalogue caps it at [enforced].max_description_length."
 
 [fields.version]
 type        = "string"
@@ -43,8 +47,8 @@ description = "GitHub username or real name of the primary author."
 [fields.license]
 type        = "string"
 required    = true
-enum        = ["MIT", "Apache-2.0", "GPL-3.0", "BSD-2-Clause", "BSD-3-Clause", "CC0-1.0", "MPL-2.0"]
-description = "SPDX license identifier."
+enum        = ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "CC0-1.0", "CC-BY-4.0", "MPL-2.0"]
+description = "SPDX license identifier of the skill itself. Copyleft (GPL/LGPL/AGPL) is not accepted; see NOTICE and tools/check_licenses.py."
 
 # ── Classification ────────────────────────────────────────────────────────────
 
@@ -74,8 +78,8 @@ type        = "array"
 items.type  = "string"
 required    = true
 min_items   = 1
-max_items   = 12
-description = "Searchable tags. Use lowercase kebab-case. At least one tag required."
+max_items   = 5
+description = "Searchable tags, lowercase kebab-case. Either a top-level list (corpus convention) or, for Agent Skills-conformant skills, a comma- or space-separated string in metadata.tags."
 
 # ── Capability metadata ───────────────────────────────────────────────────────
 
@@ -84,7 +88,7 @@ type        = "string"
 required    = false
 enum        = ["localize", "repair", "validate", "review", "planning", "any"]
 default     = "any"
-description = "Pipeline phase where this skill is most useful. Maps to eagle/sessions.Phase."
+description = "Pipeline phase where this skill is most useful."
 
 [fields.min_model]
 type        = "string"
@@ -132,11 +136,30 @@ type        = "string"
 required    = false
 description = "Name of the skill that replaces this one. Only meaningful when deprecated=true."
 
-# ── Agent Skills Spec (agentskills.io) ────────────────────────────────────────
-# The following fields implement the agentskills.io specification for
-# cross-agent skill interoperability. They are optional but strongly
-# recommended for skills that should work across graycode, Claude Code,
-# Codex, and other agent runtimes.
+# ── Agent Skills specification fields (agentskills.io) ────────────────────────
+# The open standard allows only name, description, license, compatibility,
+# metadata and allowed-tools at the top level of SKILL.md frontmatter.
+# tools/check_agentskills.py checks a skill against it.
+
+[fields.metadata]
+type        = "table"
+required    = false
+description = "Agent Skills metadata: a map of string keys to string values. Put non-spec fields here (author, version, tags) to stay spec-conformant."
+
+[fields.allowed-tools]
+type        = "string"
+required    = false
+description = "Agent Skills allowed-tools: space-separated pre-approved tools (experimental in the spec)."
+
+[fields.compatibility]
+type        = "string"
+required    = false
+max_length  = 500
+description = "Agent Skills compatibility: 1-500 characters of environment requirements (e.g. 'Requires git and the rho CLI'). Maps to SmartSkill.Compatibility."
+
+# ── GrayCode extensions (NOT part of the Agent Skills specification) ─────────
+# Optional fields some skills use. Clients that follow the spec strictly
+# ignore or reject them; prefer metadata for new skills.
 
 [fields.category]
 type        = "string"
@@ -150,22 +173,16 @@ required    = false
 default     = false
 description = "If true, the model may trigger this skill without an explicit /command. Maps to SmartSkill.AutoInvoke."
 
-[fields.compatibility]
-type        = "string"
-required    = false
-max_length  = 200
-description = "Environment requirements string (e.g. 'node>=20 python>=3.9'). Maps to SmartSkill.Compatibility."
-
 [fields.allowed_tools]
 type        = "string"
 required    = false
-description = "Space-separated list of pre-approved tool names. Maps to SmartSkill.AllowedTools."
+description = "Legacy underscore spelling of allowed-tools. Maps to SmartSkill.AllowedTools."
 
 [fields.agents]
 type        = "array"
 items.type  = "string"
 required    = false
-description = "Cross-agent compatibility list (e.g. ['graycode', 'claude-code', 'codex']). Maps to SmartSkill.Agents."
+description = "Cross-agent compatibility list (e.g. ['rho', 'claude-code', 'codex']; 'graycode' is a legacy alias for 'rho'). Maps to SmartSkill.Agents."
 
 [fields.invoke]
 type        = "string"
@@ -204,12 +221,15 @@ required    = false
 description = "Skills that work well together (advisory). Part of SmartSkill.Chain.Enhances."
 
 # ── Enforced schema (single source of truth for the CI gate) ──────────────
-# tools/validate_skill.py reads these values so the corpus gate and this
-# document cannot drift. These are the fields/limits the 14k-skill corpus
-# actually satisfies today. The aspirational v2.0 fields (version, author,
-# domain, tags) under [fields] are the forward target, not yet enforced.
+# tools/validate_skill.py reads these values at start-up and exits with an
+# error if any is missing or has the wrong type. These are the fields/limits
+# the 14k-skill corpus actually satisfies today. The v2.0 fields marked
+# `required = true` under [fields] (version, author, domain) are the forward
+# target, not yet enforced. Tags are effectively required too: min_tags = 1
+# makes a skill without tags an error.
 [enforced]
 required_fields        = ["name", "description", "license"]
 max_description_length = 200
 min_tags               = 1
 max_tags               = 5
+tag_pattern            = "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"

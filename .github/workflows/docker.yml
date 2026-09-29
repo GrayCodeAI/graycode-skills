@@ -8,9 +8,13 @@ on:
     branches: [main]
     paths:
       - "Dockerfile"
+      - ".dockerignore"
       - "categories/**"
       - "tools/**"
       - "pyproject.toml"
+      - "manifest-schema.toml"
+      - "VERSION"
+      - ".github/workflows/docker.yml"
 
 permissions:
   contents: read
@@ -48,6 +52,22 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=sha,prefix=sha-
+
+      - name: Build image for the smoke test
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0
+        with:
+          context: .
+          load: true
+          push: false
+          tags: graycode-skills:smoke
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test the default command
+        # The image's CMD is the full-corpus zero-warning gate; it must pass
+        # as shipped (it previously validated the repo root and always
+        # exited 1).
+        run: docker run --rm graycode-skills:smoke
 
       - name: Build and push
         uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7.2.0

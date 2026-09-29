@@ -1,0 +1,23 @@
+# Reviewed exceptions to tools/check_licenses.py (copyleft frontmatter values).
+#
+# One repo-relative skill directory per line; text after `#` is the reason.
+# This list may only shrink: an entry that no longer matches a violation fails
+# the check. Do not add entries to get CI green; relicense or remove the skill.
+# Each entry below is pending owner review (2026-09-27).
+
+# K-Dense scientific skills: the upstream repository
+# (K-Dense-AI/claude-scientific-skills) is MIT-licensed; its per-skill
+# `license` field names the license of the Python/Octave library the skill
+# teaches, not the skill text. Fix: relabel `license:` to the skill's own
+# license (MIT) and keep the library license in the body or `metadata`.
+categories/scientific/sci-bioservices  # library BioServices is GPLv3
+categories/scientific/sci-cobrapy  # library COBRApy is GPL-2.0/LGPL
+categories/scientific/sci-etetoolkit  # library ETE Toolkit is GPL-3.0
+categories/scientific/sci-matlab  # Octave is GPL-3.0; MATLAB is proprietary
+categories/scientific/sci-pathml  # library PathML is GPL-2.0
+categories/scientific/sci-scikit-survival  # library scikit-survival is GPL-3.0
+
+# Declares AGPL-3.0 for the skill itself. Needs a provenance decision:
+# relicense with the author's consent, or remove the skill.
+categories/general/ag-skyvern-browser-automation  # source_repo Skyvern-AI/skyvern (AGPL-3.0)
+categories/general/composio-twitter-algorithm-optimizer  # "referencing Twitter's algorithm source" (AGPL-3.0)

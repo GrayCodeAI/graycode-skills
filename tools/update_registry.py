@@ -15,7 +15,7 @@ except ImportError:
 
 # Add tools directory to path for shared imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from frontmatter import parse_frontmatter
+from frontmatter import frontmatter_tags, parse_frontmatter
 from registry_schema import validate_registry_entry
 from skill_discovery import iter_skills
 
@@ -23,8 +23,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES_DIR = REPO_ROOT / "categories"
 REGISTRY_PATH = REPO_ROOT / "registry.json"
 
-# The GitHub slug every skill in this repo is installed from. graycode-cli
-# builds its clone URL from this field (internal/plugin/auto_skill.go).
+# The GitHub slug every skill in this repo is installed from. Rho builds its
+# clone URL from this field (`rho skills install <repo> <name>`).
 REGISTRY_REPO = "GrayCodeAI/graycode-skills"
 
 console = Console()
@@ -41,17 +41,64 @@ def _display_path(path: Path) -> str:
 # parse_frontmatter is now imported from frontmatter module
 
 
+# Local build/OS artifacts that are gitignored and never shipped. CI runs
+# `python -m compileall categories` before generating the registry, so without
+# this filter `file_count` depended on whether bytecode happened to exist.
+# Tracked dotfiles such as .gitkeep are real skill files and still count.
+GENERATED_DIR_NAMES = frozenset({"__pycache__"})
+GENERATED_FILE_NAMES = frozenset({".DS_Store"})
+GENERATED_FILE_SUFFIXES = (".pyc", ".pyo")
+
+
+def _is_generated_file(name: str) -> bool:
+    return name in GENERATED_FILE_NAMES or name.endswith(GENERATED_FILE_SUFFIXES)
+
+
 def count_files(path: Path) -> int:
-    """Count files in a directory recursively."""
-    return sum(len(files) for _, _, files in os.walk(path))
+    """Count shipped files in a directory recursively (bytecode excluded)."""
+    total = 0
+    for _root, dirnames, filenames in os.walk(path):
+        dirnames[:] = [d for d in dirnames if d not in GENERATED_DIR_NAMES]
+        total += sum(1 for name in filenames if not _is_generated_file(name))
+    return total
 
 
 def has_scripts_dir(path: Path) -> bool:
-    """Check if skill has a scripts/ directory with files."""
+    """Check if skill has a scripts/ directory with shipped files."""
     scripts_dir = path / "scripts"
-    if not scripts_dir.exists():
+    if not scripts_dir.is_dir():
         return False
-    return any(scripts_dir.iterdir())
+    return count_files(scripts_dir) > 0
+
+
+def _single_line(value: object) -> str | None:
+    """Return a non-empty string with whitespace collapsed, else None."""
+    if not isinstance(value, str):
+        return None
+    text = " ".join(value.split())
+    return text or None
+
+
+def provenance_fields(frontmatter: dict) -> dict[str, str]:
+    """Provenance a registry entry carries, taken from the skill's frontmatter.
+
+    * ``license``: the frontmatter ``license`` value (a required field).
+    * ``author``: the frontmatter ``author`` value, when it is a string.
+    * ``source``: the frontmatter ``source`` value, only when it is an
+      http(s) URL (the corpus also uses labels such as "community", which
+      are not provenance).
+    """
+    fields: dict[str, str] = {}
+    license_value = _single_line(frontmatter.get("license"))
+    if license_value:
+        fields["license"] = license_value
+    author = _single_line(frontmatter.get("author"))
+    if author:
+        fields["author"] = author
+    source = _single_line(frontmatter.get("source"))
+    if source and source.startswith(("https://", "http://")) and " " not in source:
+        fields["source"] = source
+    return fields
 
 
 def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, str]]]:
@@ -102,7 +149,7 @@ def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, 
         if isinstance(description, str):
             description = " ".join(description.split())[:200]
 
-        tags = frontmatter.get("tags", [])
+        tags = frontmatter_tags(frontmatter) or []
         if isinstance(tags, str):
             tags = [t.strip() for t in tags.split(",") if t.strip()]
         # Generate a default tag from category if tags are empty
@@ -127,6 +174,7 @@ def _build_registry_with_duplicates() -> tuple[list[dict], list[tuple[str, str, 
             "file_count": count_files(skill_dir),
             "has_scripts": has_scripts_dir(skill_dir),
         }
+        entry.update(provenance_fields(frontmatter))
         entries.append(entry)
 
     # Sort alphabetically by name
@@ -168,8 +216,8 @@ def validate_entries(entries: list[dict]) -> list[str]:
 def render_registry(entries: list[dict]) -> str:
     """Render registry entries in the canonical on-disk format.
 
-    The top level is an object, not an array: graycode-cli parses
-    {version, updated_at, skills[]} (internal/plugin/registry.go). No
+    The top level is an object, not an array: Rho parses
+    {version, updated_at, skills[]} (rho internal/plugin/registry.go). No
     timestamp is emitted so that ``--check`` stays deterministic.
     """
     document = {"version": 1, "skills": entries}

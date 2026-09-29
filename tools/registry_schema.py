@@ -75,7 +75,11 @@ REGISTRY_ENTRY_SCHEMA: dict[str, Any] = {
         },
         "license": {
             "type": "string",
-            "description": "SPDX license identifier of the ingested skill",
+            "description": "License declared in the skill's frontmatter (ideally SPDX)",
+        },
+        "author": {
+            "type": "string",
+            "description": "Author declared in the skill's frontmatter",
         },
         "repo": {
             "type": "string",

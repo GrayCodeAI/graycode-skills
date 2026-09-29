@@ -8,12 +8,11 @@ import os
 import re
 import stat
 import sys
+import tomllib
 from collections import Counter
 from collections.abc import Iterator, Mapping
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
-
-import tomllib
 
 try:
     from rich.console import Console
@@ -24,38 +23,72 @@ except ImportError:
 
 # Add tools directory to path for shared imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from frontmatter import parse_frontmatter
+from frontmatter import frontmatter_tags, parse_frontmatter
 from skill_discovery import iter_skills
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CATEGORIES_DIR = REPO_ROOT / "categories"
+SCHEMA_PATH = REPO_ROOT / "manifest-schema.toml"
+
+# Keys that must be present in manifest-schema.toml [enforced], with the type
+# each value must have. There are deliberately no hard-coded fallbacks: a
+# missing or malformed schema stops validation instead of silently running a
+# different (possibly weaker) gate than the one the TOML documents.
+_ENFORCED_KEYS: dict[str, type] = {
+    "required_fields": list,
+    "max_description_length": int,
+    "min_tags": int,
+    "max_tags": int,
+    "tag_pattern": str,
+}
 
 
-def load_enforced_schema() -> dict:
-    """Load the enforced-schema section from manifest-schema.toml, the single
-    source of truth for the corpus gate. Falls back to the historical hardcoded
-    values if the file or section is missing, so a schema parse problem can
-    never silently relax validation."""
-    defaults = {
-        "required_fields": ["name", "description", "license"],
-        "max_description_length": 200,
-        "min_tags": 1,
-        "max_tags": 5,
-    }
+def load_enforced_schema(path: Path | None = None) -> dict:
+    """Load the gate configuration from manifest-schema.toml.
+
+    Returns the [enforced] values plus ``invoke_pattern`` from
+    [fields.invoke]. Raises ValueError when the file is missing, is not valid
+    TOML, or lacks a key, so the gate can never fall back to other values.
+    """
+    schema_path = SCHEMA_PATH if path is None else path
     try:
-        with open(REPO_ROOT / "manifest-schema.toml", "rb") as fh:
+        with open(schema_path, "rb") as fh:
             data = tomllib.load(fh)
-        enforced = data.get("enforced", {})
-        merged = dict(defaults)
-        for key in defaults:
-            if key in enforced:
-                merged[key] = enforced[key]
-        return merged
-    except (OSError, tomllib.TOMLDecodeError):
-        return defaults
+    except OSError as exc:
+        raise ValueError(f"cannot read {schema_path}: {exc}") from exc
+    except tomllib.TOMLDecodeError as exc:
+        raise ValueError(f"{schema_path} is not valid TOML: {exc}") from exc
+
+    enforced = data.get("enforced")
+    if not isinstance(enforced, dict):
+        raise ValueError(f"{schema_path} has no [enforced] table")
+    schema: dict = {}
+    for key, expected in _ENFORCED_KEYS.items():
+        value = enforced.get(key)
+        if isinstance(value, bool) or not isinstance(value, expected):
+            raise ValueError(
+                f"{schema_path} [enforced].{key} must be a {expected.__name__}, got {value!r}"
+            )
+        schema[key] = value
+    if not all(isinstance(field, str) for field in schema["required_fields"]):
+        raise ValueError(f"{schema_path} [enforced].required_fields must list strings")
+    invoke_pattern = data.get("fields", {}).get("invoke", {}).get("pattern")
+    if not isinstance(invoke_pattern, str):
+        raise ValueError(f"{schema_path} [fields.invoke].pattern must be a string")
+    schema["invoke_pattern"] = invoke_pattern
+    try:
+        re.compile(schema["tag_pattern"])
+        re.compile(invoke_pattern)
+    except re.error as exc:
+        raise ValueError(f"{schema_path} has an invalid regular expression: {exc}") from exc
+    return schema
 
 
-_ENFORCED = load_enforced_schema()
+try:
+    _ENFORCED = load_enforced_schema()
+except ValueError as _schema_error:
+    print(f"Error: {_schema_error}", file=sys.stderr)
+    sys.exit(2)
 REQUIRED_FIELDS = set(_ENFORCED["required_fields"])
 MAX_DESCRIPTION_LEN = _ENFORCED["max_description_length"]
 MAX_FILE_SIZE = 100 * 1024  # 100KB — warning threshold
@@ -68,31 +101,10 @@ MAX_SKILL_MD_SIZE = 500 * 1024  # 500KB — error threshold
 # entries; shrink these skills instead.
 SIZE_ALLOWLIST_PATH = Path(__file__).resolve().parent / "skill_size_allowlist.txt"
 ASSET_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp", ".ico", ".pdf"}
-TAG_PATTERN = re.compile(r"^[a-z][a-z0-9]*(-[a-z0-9]+)*$")
+TAG_PATTERN = re.compile(_ENFORCED["tag_pattern"])
 MIN_TAGS = _ENFORCED["min_tags"]
 MAX_TAGS = _ENFORCED["max_tags"]
-
-# Agent Skills spec (agentskills.io) — recognized optional frontmatter fields.
-# These are informational for graycode-skills but must be well-formed
-# if present. See manifest-schema.toml for the full schema.
-AGENTSKILLS_OPTIONAL_FIELDS = frozenset(
-    {
-        "category",
-        "auto_invoke",
-        "compatibility",
-        "allowed_tools",
-        "agents",
-        "invoke",
-        "refs",
-        "chain_after",
-        "chain_before",
-        "chain_conflicts",
-        "chain_enhances",
-    }
-)
-CATEGORY_ENUM = {"engineering", "ops", "testing", "security", "devtools", "workflow"}
-AGENT_ENUM = {"graycode", "claude-code", "codex", "cursor", "windsurf", "github-actions"}
-INVOKE_RE = re.compile(r"^[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*$")
+INVOKE_RE = re.compile(_ENFORCED["invoke_pattern"])
 
 # Warning categories are stable machine-readable identifiers. Keep warning text
 # human-friendly, but use these identifiers for the checked-in CI ratchet so a
@@ -610,8 +622,11 @@ def validate_skill(skill_path: Path) -> ValidationResult:
             category="description-too-long",
         )
 
-    # Validate tags
-    tags = frontmatter.get("tags", [])
+    # Validate tags (top-level `tags`, or `metadata.tags` for skills that
+    # follow the Agent Skills spec's top-level field list).
+    tags = frontmatter_tags(frontmatter)
+    if tags is None:
+        tags = []
     if isinstance(tags, str):
         tags = [t.strip() for t in tags.split(",")]
     if not isinstance(tags, list):
@@ -656,6 +671,10 @@ def validate_skill(skill_path: Path) -> ValidationResult:
     if compatibility is not None and not isinstance(compatibility, str):
         result.error(f"compatibility must be a string, got {type(compatibility).__name__}")
 
+    # Only the legacy underscore spelling is type-checked here. The spec's
+    # `allowed-tools` also appears as a YAML list in ingested skills (tool
+    # names can contain spaces), which Claude Code accepts; strict spec
+    # conformance for it is reported by tools/check_agentskills.py instead.
     allowed_tools = frontmatter.get("allowed_tools")
     if allowed_tools is not None and not isinstance(allowed_tools, str):
         result.error(f"allowed_tools must be a string, got {type(allowed_tools).__name__}")

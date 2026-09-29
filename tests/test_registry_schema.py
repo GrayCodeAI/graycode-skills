@@ -250,7 +250,7 @@ class TestEdgeCases:
 
 
 class TestValidateRegistry:
-    """The registry document is {version, skills[]} - the shape graycode-cli
+    """The registry document is {version, skills[]} - the shape Rho
     parses in internal/plugin/registry.go."""
 
     def test_valid_registry(self):

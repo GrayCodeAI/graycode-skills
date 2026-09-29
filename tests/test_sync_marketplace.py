@@ -99,202 +99,145 @@ class TestExtractFrontmatter:
 # ---------------------------------------------------------------------------
 
 
+def _run(repo: Path, marketplace: Path, *argv: str):
+    with (
+        patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
+        patch("sync_marketplace.MARKETPLACE", marketplace),
+        patch("sync_marketplace.REPO_ROOT", repo),
+        patch("sync_marketplace.VERSION_FILE", repo / "VERSION"),
+        patch("sys.argv", ["sync_marketplace.py", *argv]),
+    ):
+        main()
+    return json.loads(marketplace.read_text())
+
+
 class TestMain:
-    def test_syncs_single_skill(self, marketplace_env: tuple):
+    def test_one_plugin_per_category_with_directory_skills(self, marketplace_env: tuple):
         repo, marketplace = marketplace_env
-        _create_skill(
-            repo,
-            "python",
-            "code-review",
-            textwrap.dedent("""\
-            ---
-            name: code-review
-            description: Reviews code
-            invoke: /graycode:code-review
-            ---
+        (repo / "VERSION").write_text("1.2.3\n", encoding="utf-8")
+        _create_skill(repo, "python", "skill-a", "---\nname: skill-a\ndescription: A\n---\nBody.\n")
+        _create_skill(repo, "python", "skill-c", "---\nname: skill-c\ndescription: C\n---\nBody.\n")
+        _create_skill(repo, "devops", "skill-b", "---\nname: skill-b\ndescription: B\n---\nBody.\n")
 
-            Body.
-            """),
-        )
+        data = _run(repo, marketplace)
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
+        assert data["plugins"] == [
+            {
+                "name": "graycode-skills-devops",
+                "source": "./categories/devops",
+                "description": "GrayCode Skills, devops category: 1 skill.",
+                "version": "1.2.3",
+                "skills": ["./"],
+            },
+            {
+                "name": "graycode-skills-python",
+                "source": "./categories/python",
+                "description": "GrayCode Skills, python category: 2 skills.",
+                "version": "1.2.3",
+                "skills": ["./"],
+            },
+        ]
 
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert len(skills) == 1
-        assert skills[0]["name"] == "code-review"
-        assert skills[0]["path"] == "categories/python/code-review"
-        assert skills[0]["invoke"] == "/graycode:code-review"
-
-    def test_syncs_multiple_skills_across_categories(self, marketplace_env: tuple):
+    def test_skills_are_path_strings_not_objects(self, marketplace_env: tuple):
+        """Regression (F121): Claude Code rejects object entries in `skills`."""
         repo, marketplace = marketplace_env
-        _create_skill(
-            repo,
-            "python",
-            "skill-a",
-            "---\nname: skill-a\ndescription: A\ninvoke: /graycode:a\n---\n\nBody.\n",
-        )
-        _create_skill(
-            repo,
-            "devops",
-            "skill-b",
-            "---\nname: skill-b\ndescription: B\ninvoke: /graycode:b\n---\n\nBody.\n",
-        )
+        _create_skill(repo, "tools", "my-tool", "---\nname: my-tool\ninvoke: /x:y\n---\nBody.\n")
+        data = _run(repo, marketplace)
+        for plugin in data["plugins"]:
+            assert all(isinstance(entry, str) for entry in plugin["skills"])
+            for entry in plugin["skills"]:
+                assert (repo / plugin["source"] / entry).is_dir()
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert len(skills) == 2
-        names = [s["name"] for s in skills]
-        # Should be sorted by category then skill name
-        assert "skill-a" in names
-        assert "skill-b" in names
-
-    def test_sorted_output(self, marketplace_env: tuple):
-        """Skills should be sorted by category then by skill directory name."""
+    def test_top_level_keys_preserved_and_defaults_filled(self, marketplace_env: tuple):
         repo, marketplace = marketplace_env
-        _create_skill(repo, "z-cat", "aaa-skill", "---\nname: aaa-skill\n---\n\nBody.\n")
-        _create_skill(repo, "a-cat", "zzz-skill", "---\nname: zzz-skill\n---\n\nBody.\n")
-
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        paths = [s["path"] for s in skills]
-        assert paths[0] == "categories/a-cat/zzz-skill"
-        assert paths[1] == "categories/z-cat/aaa-skill"
-
-    def test_missing_invoke_defaults_to_graycode_prefix(self, marketplace_env: tuple):
-        repo, marketplace = marketplace_env
-        _create_skill(
-            repo,
-            "tools",
-            "my-tool",
-            "---\nname: my-tool\ndescription: A tool\n---\n\nBody.\n",
+        marketplace.write_text(
+            json.dumps({"name": "custom", "metadata": {"x": 1}, "plugins": []}), encoding="utf-8"
         )
+        _create_skill(repo, "tools", "t", "---\nname: t\n---\nBody.\n")
+        data = _run(repo, marketplace)
+        assert data["name"] == "custom"
+        assert data["metadata"] == {"x": 1}
+        assert data["owner"]["name"] == "GrayCode AI"
+        assert "Agent Skills" in data["description"]
+        assert list(data)[-1] == "plugins"
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert skills[0]["invoke"] == "/graycode:my-tool"
-
-    def test_name_from_frontmatter_over_directory(self, marketplace_env: tuple):
-        """If frontmatter has a name, use it instead of the directory name."""
+    def test_version_falls_back_to_template_without_version_file(self, marketplace_env: tuple):
         repo, marketplace = marketplace_env
-        _create_skill(
-            repo,
-            "tools",
-            "my-tool",
-            "---\nname: custom-name\ndescription: X\n---\n\nBody.\n",
+        marketplace.write_text(
+            json.dumps({"plugins": [{"name": "old", "version": "9.9.9"}]}), encoding="utf-8"
         )
+        _create_skill(repo, "tools", "t", "---\nname: t\n---\nBody.\n")
+        data = _run(repo, marketplace)
+        assert data["plugins"][0]["version"] == "9.9.9"
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert skills[0]["name"] == "custom-name"
+    def test_duplicate_skill_names_fail(self, marketplace_env: tuple):
+        repo, marketplace = marketplace_env
+        _create_skill(repo, "a", "one", "---\nname: same\n---\nBody.\n")
+        _create_skill(repo, "b", "two", "---\nname: same\n---\nBody.\n")
+        with pytest.raises(SystemExit, match="Duplicate skill name 'same'"):
+            _run(repo, marketplace)
 
     def test_name_falls_back_to_directory_name(self, marketplace_env: tuple):
-        """If frontmatter has no name, fall back to the directory name."""
         repo, marketplace = marketplace_env
-        _create_skill(
-            repo,
-            "tools",
-            "dir-name",
-            "---\ndescription: X\n---\n\nBody.\n",
-        )
+        _create_skill(repo, "tools", "dir-name", "---\ndescription: X\n---\n\nBody.\n")
+        from sync_marketplace import build_skills
 
         with (
             patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
             patch("sync_marketplace.REPO_ROOT", repo),
         ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert skills[0]["name"] == "dir-name"
+            skills = build_skills()
+        assert skills == [{"name": "dir-name", "category": "tools", "path": "categories/tools/dir-name"}]
 
     def test_skill_without_skill_md_skipped(self, marketplace_env: tuple):
-        """A skill directory without SKILL.md should be skipped."""
         repo, marketplace = marketplace_env
-        # Create a category directory with a skill that has no SKILL.md
         skill_dir = repo / "categories" / "empty-cat" / "no-skill"
         skill_dir.mkdir(parents=True)
         (skill_dir / "README.md").write_text("Not a skill.\n", encoding="utf-8")
-
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert len(skills) == 0
+        assert _run(repo, marketplace)["plugins"] == []
 
     def test_non_directory_files_in_categories_ignored(self, marketplace_env: tuple):
-        """Regular files in categories/ should be ignored, not treated as categories."""
         repo, marketplace = marketplace_env
-        # Put a file (not a directory) in categories/
         (repo / "categories" / "README.md").write_text("Categories readme.\n", encoding="utf-8")
-        _create_skill(
-            repo,
-            "real-cat",
-            "real-skill",
-            "---\nname: real-skill\n---\n\nBody.\n",
-        )
+        _create_skill(repo, "real-cat", "real-skill", "---\nname: real-skill\n---\n\nBody.\n")
+        data = _run(repo, marketplace)
+        assert [p["name"] for p in data["plugins"]] == ["graycode-skills-real-cat"]
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
-
-        data = json.loads(marketplace.read_text())
-        skills = data["plugins"][0]["skills"]
-        assert len(skills) == 1
-        assert skills[0]["name"] == "real-skill"
-
-    def test_empty_categories_produces_empty_skills(self, marketplace_env: tuple):
-        """With no skills, the marketplace should have an empty skills array."""
+    def test_check_mode(self, marketplace_env: tuple, capsys):
         repo, marketplace = marketplace_env
+        _create_skill(repo, "tools", "t", "---\nname: t\n---\nBody.\n")
+        _run(repo, marketplace)
+        _run(repo, marketplace, "--check")
+        assert "in sync" in capsys.readouterr().out
+        _create_skill(repo, "other", "u", "---\nname: u\n---\nBody.\n")
+        with pytest.raises(SystemExit) as exc:
+            _run(repo, marketplace, "--check")
+        assert exc.value.code == 1
 
-        with (
-            patch("sync_marketplace.CATEGORIES_DIR", repo / "categories"),
-            patch("sync_marketplace.MARKETPLACE", marketplace),
-            patch("sync_marketplace.REPO_ROOT", repo),
-        ):
-            main()
+    @pytest.mark.parametrize("content, message", [("{not json", "not valid JSON"), ("[]", "unexpected")])
+    def test_invalid_template_fails(self, marketplace_env: tuple, content: str, message: str):
+        repo, marketplace = marketplace_env
+        marketplace.write_text(content, encoding="utf-8")
+        with pytest.raises(SystemExit, match=message):
+            _run(repo, marketplace)
 
-        data = json.loads(marketplace.read_text())
-        assert data["plugins"][0]["skills"] == []
+
+def test_checked_in_marketplace_matches_claude_code_shape():
+    """The committed manifest keeps the shape `claude plugin validate --strict`
+    accepted and `claude plugin install` loaded (Claude Code 2.1.283,
+    2026-09-27): a top-level description and, per plugin, a category source
+    directory plus string `skills` paths that exist in the repo."""
+    repo = Path(__file__).resolve().parent.parent
+    data = json.loads((repo / ".claude-plugin" / "marketplace.json").read_text())
+    assert data["name"] == "graycode-skills"
+    assert data["description"]
+    names = set()
+    for plugin in data["plugins"]:
+        assert set(plugin) == {"name", "source", "description", "version", "skills"}
+        assert plugin["name"].startswith("graycode-skills-")
+        category = plugin["name"].removeprefix("graycode-skills-")
+        assert plugin["source"] == f"./categories/{category}"
+        assert plugin["skills"] == ["./"]
+        assert plugin["name"] not in names
+        names.add(plugin["name"])
+        assert any((repo / plugin["source"]).glob("*/SKILL.md"))
