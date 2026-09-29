@@ -1,26 +1,34 @@
 #!/usr/bin/env python3
 """
-Sign and verify community skill packages and registry manifests.
+Sign and verify the skill registry (and skill directories) with Ed25519.
 
-Two signature schemes are supported:
+Ed25519 is the only supported scheme. The private key signs; verifiers only
+need the pinned public key and cannot forge signatures. The public key that
+verifiers pin is committed at ``keys/registry-ed25519.pub``; the matching
+private key lives only in the ``SKILLS_ED25519_PRIVATE_KEY`` GitHub Actions
+secret. (The former shared-secret HMAC-SHA256 scheme was removed: anyone who
+could verify an HMAC signature could also forge one.)
 
-* HMAC-SHA256 (default, legacy): a symmetric shared-secret signature over the
-  SHA-256 digest of a skill directory or manifest file. Anyone who holds the
-  shared secret can forge signatures, so this scheme only proves possession
-  of the secret, not per-origin provenance.
-* Ed25519 (``--ed25519``): an asymmetric signature over the same digest. The
-  private key signs; verifiers only need the pinned public key and cannot
-  forge signatures. Generate a keypair with the ``keygen`` subcommand, keep
-  the private key in CI secrets, and commit or otherwise pin the public key
-  for verifiers.
+Registry signature contract (produced by publish-registry.yml, verified by
+Rho before it trusts the index):
 
-Key material may be passed via ``--key`` (literal PEM for Ed25519, secret
-string for HMAC, or a path to a PEM file for Ed25519) or through the
-``SKILLS_SIGNING_KEY`` (HMAC), ``SKILLS_ED25519_PRIVATE_KEY`` (Ed25519 sign)
-and ``SKILLS_ED25519_PUBLIC_KEY`` (Ed25519 verify) environment variables.
+* ``sha256`` is the lowercase hex SHA-256 digest of the exact bytes of the
+  signed file.
+* The signed message is the 64 ASCII bytes of that hex digest (not the raw
+  32-byte digest).
+* ``signature`` is the hex-encoded 64-byte Ed25519 signature.
+* ``sign`` prints ``{"target", "sha256", "algorithm": "ed25519", "signature"}``
+  as JSON; ``target`` is the signed file's base name (``registry.json``).
 
-Ed25519 requires the optional ``cryptography`` package; the legacy HMAC path
-uses only the standard library.
+A verifier must require ``algorithm == "ed25519"``, recompute the digest of the
+downloaded bytes and compare it with ``sha256``, then verify ``signature`` over
+the hex digest with the pinned public key. Any failure means the registry must
+not be used.
+
+Key material may be passed via ``--key`` (literal PEM or a path to a PEM
+file) or through ``SKILLS_ED25519_PRIVATE_KEY`` (sign) and
+``SKILLS_ED25519_PUBLIC_KEY`` (verify). ``verify`` falls back to the committed
+public key when neither is given. Requires the ``cryptography`` package.
 """
 
 from __future__ import annotations
@@ -28,17 +36,22 @@ from __future__ import annotations
 import argparse
 import contextlib
 import hashlib
-import hmac
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-HMAC_KEY_ENV = "SKILLS_SIGNING_KEY"
+ALGORITHM = "ed25519"
 ED25519_PRIVATE_KEY_ENV = "SKILLS_ED25519_PRIVATE_KEY"
 ED25519_PUBLIC_KEY_ENV = "SKILLS_ED25519_PUBLIC_KEY"
+# The public key Rho pins. Committed so anyone can verify a published registry.
+PINNED_PUBLIC_KEY_PATH = REPO_ROOT / "keys" / "registry-ed25519.pub"
+
+_HEX_DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
+
 
 def compute_content_hash(skill_dir: Path) -> str:
     """Compute deterministic SHA256 digest of all files in a skill directory."""
@@ -50,23 +63,28 @@ def compute_content_hash(skill_dir: Path) -> str:
             hasher.update(file_path.read_bytes())
     return hasher.hexdigest()
 
-def sign_hash(digest: str, secret: str) -> str:
-    """Sign a SHA256 digest with a secret key using HMAC-SHA256."""
-    return hmac.new(secret.encode("utf-8"), digest.encode("utf-8"), hashlib.sha256).hexdigest()
 
-def verify_hash(digest: str, signature: str, secret: str) -> bool:
-    """Verify an HMAC-SHA256 signature for a given digest."""
-    expected = sign_hash(digest, secret)
-    return hmac.compare_digest(expected, signature)
+def target_digest(target: Path) -> str | None:
+    """Return the hex SHA-256 digest of a file's bytes or a skill directory.
+
+    Returns None when the target does not exist.
+    """
+    if target.is_dir():
+        return compute_content_hash(target)
+    if target.is_file():
+        return hashlib.sha256(target.read_bytes()).hexdigest()
+    return None
+
 
 def load_key_material(value: str) -> str:
-    """Resolve a --key value that is either literal PEM/key text or a path to a file."""
+    """Resolve a --key value that is either literal PEM text or a path to a PEM file."""
     if "-----BEGIN" in value:
         return value
     path = Path(value)
     if path.is_file():
         return path.read_text(encoding="utf-8")
     return value
+
 
 def generate_ed25519_keypair() -> tuple[str, str]:
     """Generate an Ed25519 keypair and return (private_pem, public_pem).
@@ -89,8 +107,9 @@ def generate_ed25519_keypair() -> tuple[str, str]:
     ).decode("utf-8")
     return private_pem, public_pem
 
+
 def sign_hash_ed25519(digest: str, private_key_pem: str) -> str:
-    """Sign a SHA256 digest with an Ed25519 private key; returns hex-encoded signature."""
+    """Sign a hex digest (as ASCII bytes) with an Ed25519 private key; returns hex."""
     from cryptography.hazmat.primitives import serialization
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
@@ -98,6 +117,7 @@ def sign_hash_ed25519(digest: str, private_key_pem: str) -> str:
     if not isinstance(key, Ed25519PrivateKey):
         raise ValueError("key is not an Ed25519 private key")
     return key.sign(digest.encode("utf-8")).hex()
+
 
 def verify_hash_ed25519(digest: str, signature: str, public_key_pem: str) -> bool:
     """Verify a hex-encoded Ed25519 signature for a digest against a public key."""
@@ -114,6 +134,52 @@ def verify_hash_ed25519(digest: str, signature: str, public_key_pem: str) -> boo
     except (InvalidSignature, ValueError, TypeError):
         return False
 
+
+def build_signature_document(target: Path, digest: str, signature: str) -> dict[str, str]:
+    """Return the signature document published next to the signed target."""
+    return {
+        "target": target.resolve().name,
+        "sha256": digest,
+        "algorithm": ALGORITHM,
+        "signature": signature,
+    }
+
+
+def verify_signature_document(target: Path, document: object, public_key_pem: str) -> list[str]:
+    """Check a signature document against the target bytes and a public key.
+
+    Implements the verifier side of the registry signature contract. Returns
+    a list of human-readable problems; an empty list means the signature is
+    valid for exactly these bytes.
+    """
+    if not isinstance(document, dict):
+        return ["signature document must be a JSON object"]
+    problems: list[str] = []
+    algorithm = document.get("algorithm")
+    if algorithm != ALGORITHM:
+        problems.append(f"algorithm must be {ALGORITHM!r}, got {algorithm!r}")
+    expected_target = target.resolve().name
+    if document.get("target") != expected_target:
+        problems.append(
+            f"target must be {expected_target!r}, got {document.get('target')!r}"
+        )
+    claimed = document.get("sha256")
+    if not isinstance(claimed, str) or not _HEX_DIGEST_RE.match(claimed):
+        problems.append("sha256 must be a lowercase 64-character hex digest")
+        claimed = None
+    actual = target_digest(target)
+    if actual is None:
+        problems.append(f"{target} does not exist")
+    elif claimed is not None and claimed != actual:
+        problems.append(f"sha256 mismatch: document says {claimed}, file hashes to {actual}")
+    signature = document.get("signature")
+    if not isinstance(signature, str) or not signature:
+        problems.append("signature must be a non-empty hex string")
+    elif actual is not None and not verify_hash_ed25519(actual, signature, public_key_pem):
+        problems.append("Ed25519 signature does not verify with the given public key")
+    return problems
+
+
 def write_ed25519_keypair(private_out: Path | None, public_out: Path | None) -> tuple[str, str]:
     """Generate an Ed25519 keypair and optionally write the PEMs to files.
 
@@ -129,6 +195,7 @@ def write_ed25519_keypair(private_out: Path | None, public_out: Path | None) -> 
         public_out.write_text(public_pem, encoding="utf-8")
     return private_pem, public_pem
 
+
 def resolve_key(cli_value: str | None, env_name: str, purpose: str) -> str:
     """Fall back to an environment variable when --key is omitted."""
     value = cli_value or os.environ.get(env_name)
@@ -137,11 +204,37 @@ def resolve_key(cli_value: str | None, env_name: str, purpose: str) -> str:
         sys.exit(2)
     return value
 
+
+def resolve_public_key(cli_value: str | None) -> str:
+    """Return the verification key: --key, then the env var, then the pinned key."""
+    value = cli_value or os.environ.get(ED25519_PUBLIC_KEY_ENV)
+    if value:
+        return load_key_material(value)
+    try:
+        return PINNED_PUBLIC_KEY_PATH.read_text(encoding="utf-8")
+    except OSError:
+        print(
+            f"Error: no key provided for Ed25519 verification; pass --key, set "
+            f"{ED25519_PUBLIC_KEY_ENV}, or restore {PINNED_PUBLIC_KEY_PATH.name}",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
+
+def _require_digest(target: Path) -> str:
+    digest = target_digest(target)
+    if digest is None:
+        print(f"Error: {target} does not exist", file=sys.stderr)
+        sys.exit(1)
+    return digest
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Sign or verify Graycode community skills.")
+    parser = argparse.ArgumentParser(
+        description="Sign or verify GrayCode Skills registry manifests with Ed25519."
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    # Keygen command
     keygen_parser = subparsers.add_parser("keygen", help="Generate an Ed25519 signing keypair.")
     keygen_parser.add_argument(
         "--private-out", type=Path, default=None,
@@ -150,76 +243,72 @@ def main() -> None:
         "--public-out", type=Path, default=None,
         help="Optional path to write the public key PEM to (safe to commit/pin).")
 
-    # Sign command
     sign_parser = subparsers.add_parser("sign", help="Sign a skill directory or manifest.")
     sign_parser.add_argument("target", type=Path, help="Path to skill directory or registry.json")
-    sign_parser.add_argument("--key", default=None, help="HMAC secret or Ed25519 private key PEM (or PEM file path)")
+    sign_parser.add_argument(
+        "--key", default=None,
+        help=f"Ed25519 private key PEM or PEM file path (default: ${ED25519_PRIVATE_KEY_ENV})")
     sign_parser.add_argument(
         "--ed25519", action="store_true",
-        help="Sign with Ed25519 instead of legacy HMAC-SHA256 (requires the cryptography package).")
+        help="Accepted for compatibility; Ed25519 is the only scheme.")
 
-    # Verify command
     verify_parser = subparsers.add_parser("verify", help="Verify a signed skill package or manifest.")
     verify_parser.add_argument("target", type=Path, help="Path to skill directory or registry.json")
-    verify_parser.add_argument("--signature", required=True, help="Expected signature")
-    verify_parser.add_argument("--key", default=None, help="HMAC secret or Ed25519 public key PEM (or PEM file path)")
+    source = verify_parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--signature", help="Expected hex signature over the target's digest")
+    source.add_argument(
+        "--signature-file", type=Path,
+        help="Signature JSON printed by 'sign'; also checks algorithm, target and sha256")
+    verify_parser.add_argument(
+        "--key", default=None,
+        help=(f"Ed25519 public key PEM or PEM file path (default: ${ED25519_PUBLIC_KEY_ENV}, "
+              "then keys/registry-ed25519.pub)"))
     verify_parser.add_argument(
         "--ed25519", action="store_true",
-        help="Verify an Ed25519 signature instead of legacy HMAC-SHA256 (requires the cryptography package).")
+        help="Accepted for compatibility; Ed25519 is the only scheme.")
 
     args = parser.parse_args()
 
     if args.command == "keygen":
         private_pem, public_pem = write_ed25519_keypair(args.private_out, args.public_out)
-        print(json.dumps({"algorithm": "ed25519", "private_key": private_pem, "public_key": public_pem}, indent=2))
+        print(json.dumps({"algorithm": ALGORITHM, "private_key": private_pem, "public_key": public_pem}, indent=2))
         print(
-            "Keep the private key in CI secrets (SKILLS_ED25519_PRIVATE_KEY); "
+            f"Keep the private key in CI secrets ({ED25519_PRIVATE_KEY_ENV}); "
             "pin the public key for verifiers. Never commit the private key.",
             file=sys.stderr,
         )
 
     elif args.command == "sign":
-        if args.target.is_dir():
-            digest = compute_content_hash(args.target)
-        elif args.target.is_file():
-            digest = hashlib.sha256(args.target.read_bytes()).hexdigest()
-        else:
-            print(f"Error: {args.target} does not exist", file=sys.stderr)
-            sys.exit(1)
-
-        if args.ed25519:
-            key = load_key_material(
-                resolve_key(args.key, ED25519_PRIVATE_KEY_ENV, "Ed25519 signing"))
+        digest = _require_digest(args.target)
+        key = load_key_material(resolve_key(args.key, ED25519_PRIVATE_KEY_ENV, "Ed25519 signing"))
+        try:
             sig = sign_hash_ed25519(digest, key)
-            algorithm = "ed25519"
-        else:
-            key = resolve_key(args.key, HMAC_KEY_ENV, "HMAC signing")
-            sig = sign_hash(digest, key)
-            algorithm = "hmac-sha256"
-        print(json.dumps({"target": str(args.target), "sha256": digest, "algorithm": algorithm, "signature": sig}, indent=2))
+        except (ValueError, TypeError) as exc:
+            print(f"Error: invalid Ed25519 private key: {exc}", file=sys.stderr)
+            sys.exit(2)
+        print(json.dumps(build_signature_document(args.target, digest, sig), indent=2))
 
     elif args.command == "verify":
-        if args.target.is_dir():
-            digest = compute_content_hash(args.target)
-        elif args.target.is_file():
-            digest = hashlib.sha256(args.target.read_bytes()).hexdigest()
+        public_key = resolve_public_key(args.key)
+        if args.signature_file is not None:
+            try:
+                document = json.loads(args.signature_file.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError) as exc:
+                print(f"FAIL: cannot read {args.signature_file}: {exc}", file=sys.stderr)
+                sys.exit(1)
+            problems = verify_signature_document(args.target, document, public_key)
         else:
-            print(f"Error: {args.target} does not exist", file=sys.stderr)
+            digest = _require_digest(args.target)
+            problems = [] if verify_hash_ed25519(digest, args.signature, public_key) else [
+                "Ed25519 signature does not verify with the given public key"
+            ]
+        if problems:
+            for problem in problems:
+                print(f"FAIL: {problem}", file=sys.stderr)
             sys.exit(1)
+        print("OK: Signature verified successfully.")
+        sys.exit(0)
 
-        if args.ed25519:
-            key = load_key_material(
-                resolve_key(args.key, ED25519_PUBLIC_KEY_ENV, "Ed25519 verification"))
-            valid = verify_hash_ed25519(digest, args.signature, key)
-        else:
-            key = resolve_key(args.key, HMAC_KEY_ENV, "HMAC verification")
-            valid = verify_hash(digest, args.signature, key)
-        if valid:
-            print("OK: Signature verified successfully.")
-            sys.exit(0)
-        else:
-            print("FAIL: Signature mismatch!", file=sys.stderr)
-            sys.exit(1)
 
 if __name__ == "__main__":
     main()
